@@ -76,6 +76,8 @@ measuring every change on the Phase 2 cases. Background reading: `docs/research/
 - [ ] 2B.3 Try an agentic loop like PolicyLens: plan the questions, search, judge whether the
       results are good enough, search again if not.
 - [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
+- [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
+      their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
 
 Check: the retrieval and answer scores before and after each change are in the decision log.
 
@@ -147,6 +149,4 @@ Check: the live Pages link works in a fresh browser with no VPN.
 4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited.
 5. Where the explainer videos live (YouTube, or small files in the repo).
 6. Whether to mirror this checklist as GitHub issues and milestones.
-7. The four chromadb advisories (see the decision log): accept them for now, or change databases
-   in Phase 2B.
-8. Keep or cut the items marked "(suggested)", which were my additions.
+7. Keep or cut the items marked "(suggested)", which were my additions.
