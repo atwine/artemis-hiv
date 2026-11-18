@@ -1,6 +1,8 @@
-# HIV Clinical Nudge Engine (Streamlit Demo)
+# ARTEMIS-HIV
 
-A local-first clinical decision support demo for HIV care.
+A clinical decision support demo for HIV care, first built for the Kaggle MedGemma Impact
+Challenge (Jan to Feb 2026) and now being rebuilt. The revival plan is in `docs/PLAN.md`.
+Synthetic data only; not for clinical use.
 
 This app:
 - Runs **deterministic alert rules** on a patient encounter note + structured history.
@@ -34,10 +36,10 @@ Important: This is **decision support only**. Clinicians retain final authority.
 Choose a local folder where you want the project to live (for example: `C:\Users\<you>\OneDrive\Desktop\`). Then:
 
 ```bash
-git clone https://github.com/atwine/MedGemma_Kaggle_Competition_2026.git
+git clone https://github.com/atwine/artemis-hiv.git
 ```
 
-This creates a new folder named `MedGemma_Kaggle_Competition_2026/` containing the app.
+This creates a new folder named `artemis-hiv/` containing the app.
 
 ## Setup (Windows)
 
@@ -82,9 +84,21 @@ Then open the local URL Streamlit prints (usually `http://localhost:8501`).
    - **Override** (requires an override reason).
 8. **Finalize / Close visit** is disabled until all alerts are reviewed.
 
-## Local LLM (Ollama) setup
+## Model server
 
-The app can use Ollama for explanation generation.
+The app sends its model calls to any OpenAI-compatible server (vLLM, OpenRouter, or Ollama's
+`/v1` endpoint). Copy `.env.example` to `.env` (git ignores it) and set:
+
+- `LLM_BASE_URL`: the server address up to and including `/v1`
+- `LLM_MODEL`: the model id (empty means the first model the server lists)
+- `LLM_API_KEY`: only if the server checks a key (OpenRouter does)
+
+The settings panel shows which server and model are in use. If `LLM_BASE_URL` is empty, the app
+falls back to a local Ollama server, as described below.
+
+## Local LLM (Ollama) fallback
+
+Without `LLM_BASE_URL`, the app can use Ollama for explanation generation.
 
 1. Install and start Ollama.
 2. Pull the model:
@@ -93,7 +107,7 @@ The app can use Ollama for explanation generation.
 ollama pull aadide/medgemma-1.5-4b-it-Q4_K_S
 ```
 
-3. Run the app and keep **Use Ollama for explanations (if available)** enabled in the UI.
+3. Run the app and keep **Use the LLM for screening and explanations (if available)** enabled in the UI.
 
 ### Model selection
 
