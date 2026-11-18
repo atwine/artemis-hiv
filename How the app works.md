@@ -1,6 +1,6 @@
 # How the app works
 
-This document explains how to use the **HIV Clinical Nudge Engine (Demo)**.
+This document explains how to use **ARTEMIS-HIV** (formerly the HIV Clinical Nudge Engine demo).
 
 It is written for a **non-technical** audience (for example: clinicians, program staff, researchers) who want to interact with the app.
 

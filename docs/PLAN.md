@@ -27,12 +27,12 @@ Version 1 of the revival is done when all four are true:
 
 ## Phase 0: Foundations
 
-- [ ] 0.1 Pick the new name, rename the GitHub repo, update description, topics and README title.
-- [ ] 0.2 Commit the vLLM connection work (already done on `claude/kaggle-project-review-89c107`).
+- [x] 0.1 Rename to `artemis-hiv` (GitHub repo, description, README and on-screen title). Topics still to add.
+- [x] 0.2 Commit the vLLM connection work (on `claude/kaggle-project-review-89c107`).
 - [ ] 0.3 Security scanners: secret scan on every commit, dependency and code scans on every push.
 - [ ] 0.4 Create `development` and `staging` from `main`; first pull request goes through them.
 - [ ] 0.5 Fix the 5 failing tests; move the loose `test_*.py` scripts out of the test run; lock package versions.
-- [ ] 0.6 Stop storing the guideline PDFs in the repo; link to the official sources instead.
+- [ ] 0.6 (suggested) Stop storing the guideline PDFs in the repo; link to the official sources instead.
 
 Check: tests all pass; both branches exist; scanners run on a pull request.
 
@@ -52,15 +52,32 @@ Check: rerun the baseline script; the before/after difference shows each fix and
 Starts right after Phase 1 and can run alongside Phase 3. It comes before the rebuild because its
 numbers decide which parts of the pipeline earn their keep.
 
-- [ ] 2.1 Case set: the 7 existing patients plus the clinician-written example outputs, then 20 to
-      30 new short cases written and labelled by clinicians (each lists the alerts it should raise).
+- [ ] 2.1 Case set: the 7 existing patients, the clinician-written example outputs and Timothy's
+      test cases, then 20 to 30 new short cases written and labelled by clinicians (each lists the
+      alerts it should raise and the guideline passages that support them).
 - [ ] 2.2 Scoring: for each case, which expected alerts were caught and which alerts were false
       alarms. A model may help match wording, but a person spot-checks its matches.
-- [ ] 2.3 Run the models: Llama 3.3 70B on the A100, MedGemma on the A100, and 2 or 3 OpenRouter models.
+- [ ] 2.3 Run the models: Llama 3.3 70B on the A100 and 2 or 3 OpenRouter models (MedGemma optional,
+      as the original competition baseline).
 - [ ] 2.4 Results table plus all raw outputs saved (they feed the showcase in Phase 6).
-- [ ] 2.5 Optional: a knowledge check on the HIV questions in AfriMed-QA.
+- [ ] 2.5 (suggested) A knowledge check on the HIV questions in AfriMed-QA.
 
 Check: `python scripts/evaluate.py` rebuilds the table from saved outputs.
+
+## Phase 2B: Retrieval (RAG) revamp
+
+The old results were "sometimes good, sometimes bad". This phase finds out why and fixes it,
+measuring every change on the Phase 2 cases. Background reading: `docs/research/RAG-OPTIONS.md`.
+
+- [ ] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
+      This separates "looked in the wrong place" from "read the right page and reasoned badly".
+- [ ] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
+      a re-ranking step), one at a time, keeping each only if the scores improve.
+- [ ] 2B.3 Try an agentic loop like PolicyLens: plan the questions, search, judge whether the
+      results are good enough, search again if not.
+- [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
+
+Check: the retrieval and answer scores before and after each change are in the decision log.
 
 ## Phase 3: Designs in Paper
 
@@ -108,8 +125,8 @@ Check: the live Pages link works in a fresh browser with no VPN.
       OpenMRS-based UgandaEMR could call it.
 - [ ] 7.2 FHIR import (Patient, Condition, MedicationStatement, Observation), tested on Synthea's
       synthetic HIV patients.
-- [ ] 7.3 Rules-only mode that works with no model connection (winners of the challenge were offline-first).
-- [ ] 7.4 "Left in red" view: how often critical alerts are left unresolved (Penda's main lever).
+- [ ] 7.3 (suggested) Rules-only mode that works with no model connection (winners of the challenge were offline-first).
+- [ ] 7.4 (suggested) "Left in red" view: how often critical alerts are left unresolved (Penda's main lever).
 
 ## Ideas borrowed
 
@@ -124,10 +141,12 @@ Check: the live Pages link works in a fresh browser with no VPN.
 
 ## Decisions waiting on you
 
-1. The new repo name.
-2. The design direction (after the Phase 3 mockups).
-3. Database: Postgres on Neon (your default) or a single SQLite file (simpler for a demo).
-4. Which OpenRouter models, and a spending cap.
-5. Whether Timothy and Dr Kintu write and label the cases, and how they are credited.
-6. Where the explainer videos live (YouTube, or small files in the repo).
-7. Whether to mirror this checklist as GitHub issues and milestones.
+1. The design direction (after the Phase 3 mockups).
+2. Database: Postgres on Neon (your default) or a single SQLite file (simpler for a demo).
+3. Which OpenRouter models, and a spending cap.
+4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited.
+5. Where the explainer videos live (YouTube, or small files in the repo).
+6. Whether to mirror this checklist as GitHub issues and milestones.
+7. The four chromadb advisories (see the decision log): accept them for now, or change databases
+   in Phase 2B.
+8. Keep or cut the items marked "(suggested)", which were my additions.

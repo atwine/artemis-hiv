@@ -1,4 +1,4 @@
-"""Streamlit demo entrypoint for the HIV Clinical Nudge Engine.
+"""Streamlit demo entrypoint for ARTEMIS-HIV (formerly the HIV Clinical Nudge Engine).
  
  This app implements an initial local-first “Save vs Finalize” workflow:
  - Save runs deterministic alert rules + RAG retrieval (and optional Ollama explanation)
@@ -56,12 +56,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 # Rationale: model-server settings (LLM_BASE_URL, LLM_MODEL, LLM_API_KEY) live in a
 # gitignored .env, so the app finds the vLLM server without launch flags.
 # Real environment variables win over .env values (override=False).
-try:
-    from dotenv import load_dotenv
+from dotenv import load_dotenv  # noqa: E402
 
-    load_dotenv(PROJECT_ROOT / ".env", override=False)
-except ImportError:
-    pass
+load_dotenv(PROJECT_ROOT / ".env", override=False)
 
 CONSOLIDATED_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Consolidated-HIV-and-AIDS-Guidelines-20230516.pdf"
 LEGACY_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Uganda Clinical Guidelines 2023.pdf"
@@ -118,7 +115,7 @@ def _llm_name() -> str:
     """Display name of the model server in use, for status labels."""
 
     cfg = openai_compat_config_from_env()
-    if cfg is None:
+    if cfg is None or ":11434" in cfg.base_url:
         return "Ollama"
     return "OpenRouter" if "openrouter.ai" in cfg.base_url else "vLLM"
 
@@ -781,7 +778,7 @@ def _run_analysis(
 
 
 def main() -> None:
-    st.set_page_config(page_title="HIV Clinical Nudge Engine", layout="wide")
+    st.set_page_config(page_title="ARTEMIS-HIV", layout="wide")
     _init_session_state()
 
     # Rationale: avoid modifying widget-backed session_state keys after widgets are
@@ -805,7 +802,7 @@ def main() -> None:
     if isinstance(_flash, str) and _flash.strip():
         st.success(_flash)
 
-    st.title("HIV Clinical Nudge Engine")
+    st.title("ARTEMIS-HIV")
     st.caption(
         "Decision support only. Clinician retains final authority. Synthetic data only."
     )
@@ -1393,6 +1390,10 @@ def main() -> None:
             ollama_model_ui: Optional[str] = None
             num_ctx = 8192
         else:
+            st.warning(
+                "No model server is set (LLM_BASE_URL in .env), so the app falls back to a "
+                "local Ollama server."
+            )
             env_model = (os.getenv("OLLAMA_MODEL") or "").strip()
 
             discovered_models = _list_ollama_models()

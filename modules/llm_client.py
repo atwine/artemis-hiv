@@ -250,8 +250,12 @@ class OpenAICompatClient:
         resp = requests.get(f"{self._base_url}/models", headers=self._headers(), timeout=15)
         resp.raise_for_status()
         models = [m.get("id") for m in resp.json().get("data", []) if m.get("id")]
-        if not models:
-            raise RuntimeError(f"No models listed at {self._base_url}/models")
+        # Rationale: guessing is safe only when the server serves one model (vLLM).
+        # Hosted gateways such as OpenRouter list hundreds, so the first one is arbitrary.
+        if len(models) != 1:
+            raise RuntimeError(
+                f"{len(models)} models listed at {self._base_url}/models; set LLM_MODEL to pick one"
+            )
         self._resolved_model = models[0]
         return self._resolved_model
 
@@ -293,8 +297,9 @@ class OpenAICompatClient:
 
             url = f"{self._base_url}/chat/completions"
             resp = requests.post(url, json=body, headers=self._headers(), timeout=self._timeout_s)
-            if resp.status_code == 400 and "response_format" in body:
-                # Some servers reject schema-constrained output; the pipeline's JSON
+            if resp.status_code in (400, 404, 422) and "response_format" in body:
+                # Some servers reject schema-constrained output (vLLM: 400; OpenRouter:
+                # 404 "no endpoints found" for models without it); the pipeline's JSON
                 # parsers already cope with free-text JSON, so retry without it.
                 body.pop("response_format")
                 resp = requests.post(url, json=body, headers=self._headers(), timeout=self._timeout_s)

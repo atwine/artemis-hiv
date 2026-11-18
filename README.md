@@ -107,7 +107,7 @@ Without `LLM_BASE_URL`, the app can use Ollama for explanation generation.
 ollama pull aadide/medgemma-1.5-4b-it-Q4_K_S
 ```
 
-3. Run the app and keep **Use Ollama for explanations (if available)** enabled in the UI.
+3. Run the app and keep **Use the LLM for screening and explanations (if available)** enabled in the UI.
 
 ### Model selection
 
