@@ -36,7 +36,12 @@ ExplanationResult = explanation_generator.ExplanationResult
 generate_audit_checklist_alerts = explanation_generator.generate_audit_checklist_alerts
 generate_explanation = explanation_generator.generate_explanation
 generate_stage3_synthesis_issues = explanation_generator.generate_stage3_synthesis_issues
-from modules.llm_client import OllamaClient, OllamaConfig
+from modules.llm_client import (
+    OllamaClient,
+    OllamaConfig,
+    OpenAICompatClient,
+    openai_compat_config_from_env,
+)
 from modules.patient_parser import build_patient_context, load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
@@ -47,6 +52,17 @@ from modules.agentic_flow import QueryContext, run_agentic_flow
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
+
+# Rationale: model-server settings (LLM_BASE_URL, LLM_MODEL, LLM_API_KEY) live in a
+# gitignored .env, so the app finds the vLLM server without launch flags.
+# Real environment variables win over .env values (override=False).
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(PROJECT_ROOT / ".env", override=False)
+except ImportError:
+    pass
+
 CONSOLIDATED_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Consolidated-HIV-and-AIDS-Guidelines-20230516.pdf"
 LEGACY_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Uganda Clinical Guidelines 2023.pdf"
 NCD_GUIDELINE_PDF_PATH = (
@@ -96,6 +112,15 @@ def _resolve_ollama_host() -> str:
         "https://0.0.0.0", "http://localhost"
     )
     return host
+
+
+def _llm_name() -> str:
+    """Display name of the model server in use, for status labels."""
+
+    cfg = openai_compat_config_from_env()
+    if cfg is None:
+        return "Ollama"
+    return "OpenRouter" if "openrouter.ai" in cfg.base_url else "vLLM"
 
 
 def _list_ollama_models() -> List[str]:
@@ -434,8 +459,12 @@ def _run_analysis(
 
     llm_client = None
     if use_ollama:
-        cfg = OllamaConfig(model=(ollama_model or "aadide/medgemma-1.5-4b-it-Q4_K_S"), num_ctx=ollama_num_ctx)
-        llm_client = OllamaClient(cfg)
+        remote_llm = openai_compat_config_from_env()
+        if remote_llm is not None:
+            llm_client = OpenAICompatClient(remote_llm)
+        else:
+            cfg = OllamaConfig(model=(ollama_model or "aadide/medgemma-1.5-4b-it-Q4_K_S"), num_ctx=ollama_num_ctx)
+            llm_client = OllamaClient(cfg)
 
     # Optional: agentic planner + per-subtask retrieval (debug-only, no UI change).
     env_flag = (os.getenv("AGENTIC_RAG_DEBUG") or "").strip() == "1"
@@ -483,7 +512,7 @@ def _run_analysis(
     st.session_state["agentic_debug_result"] = agentic_debug_result
 
     # Status box for any LLM activity in this run.
-    ollama_status = st.status("Ollama: idle", expanded=False) if use_ollama else None
+    ollama_status = st.status(f"{_llm_name()}: idle", expanded=False) if use_ollama else None
 
     ollama_error: Optional[str] = None
 
@@ -521,7 +550,7 @@ def _run_analysis(
 
     if ollama_status is not None:
         # Rationale: the first LLM call is a good proxy for "Ollama connected".
-        ollama_status.update(label="Ollama: generating audit checklist…", state="running")
+        ollama_status.update(label=f"{_llm_name()}: generating audit checklist…", state="running")
     # Manage LLM calls by mode: checklist vs per‑alert explanations vs synthesis vs screening.
     # In Synthesis mode, skip the checklist LLM to keep a single LLM call later.
     checklist_llm = llm_client if (use_ollama and llm_mode == "Checklist only") else None
@@ -530,7 +559,7 @@ def _run_analysis(
     checklist_alerts: List[Alert] = []
     if llm_mode == "Checklist only":
         if ollama_status is not None and checklist_llm is not None:
-            ollama_status.update(label="Ollama: generating audit checklist…", state="running")
+            ollama_status.update(label=f"{_llm_name()}: generating audit checklist…", state="running")
         checklist_alerts = generate_audit_checklist_alerts(
             patient_context=context,
             retrieved_chunks=checklist_retrieved,
@@ -540,9 +569,9 @@ def _run_analysis(
         if ollama_status is not None and checklist_llm is not None:
             last_err = checklist_llm.last_error if checklist_llm is not None else None
             if last_err:
-                ollama_status.update(label=f"Ollama error: {last_err}", state="error")
+                ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
             else:
-                ollama_status.update(label="Ollama connected (response received)", state="complete")
+                ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
         if checklist_alerts:
             alerts = list(alerts) + checklist_alerts
 
@@ -555,7 +584,7 @@ def _run_analysis(
         and llm_client is not None
     ):
         if ollama_status is not None:
-            ollama_status.update(label="Ollama: screening for safety issues…", state="running")
+            ollama_status.update(label=f"{_llm_name()}: screening for safety issues…", state="running")
         screening_debug: Dict[str, Any] = {}
         screening_alerts = generate_llm_screening_alerts(
             patient_context=context,
@@ -584,9 +613,9 @@ def _run_analysis(
 
         if ollama_status is not None:
             if last_err:
-                ollama_status.update(label=f"Ollama error: {last_err}", state="error")
+                ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
             else:
-                ollama_status.update(label="Ollama connected (response received)", state="complete")
+                ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
         if ollama_error is None:
             ollama_error = last_err
 
@@ -641,7 +670,7 @@ def _run_analysis(
             if ollama_status is not None and explanation_llm is not None:
                 # Rationale: per-alert LLM calls may each take time; show which step is active.
                 ollama_status.update(
-                    label=f"Ollama: generating explanation for '{alert.title}'…",
+                    label=f"{_llm_name()}: generating explanation for '{alert.title}'…",
                     state="running",
                 )
             # Rationale: measure per‑alert LLM explanation time to track latency and surface it in the UI.
@@ -658,9 +687,9 @@ def _run_analysis(
             if ollama_status is not None and explanation_llm is not None:
                 last_err = explanation_llm.last_error if explanation_llm is not None else None
                 if last_err:
-                    ollama_status.update(label=f"Ollama error: {last_err}", state="error")
+                    ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
                 else:
-                    ollama_status.update(label="Ollama connected (response received)", state="complete")
+                    ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
 
         # Rationale: capture the first LLM failure reason so the UI can show why
         # it fell back to deterministic mode.
@@ -683,7 +712,7 @@ def _run_analysis(
     # Stage 3 synthesis: single LLM call producing structured issues as new Alerts.
     if use_ollama and llm_mode == "Synthesis" and llm_client is not None:
         if ollama_status is not None:
-            ollama_status.update(label="Ollama: generating synthesis issues…", state="running")
+            ollama_status.update(label=f"{_llm_name()}: generating synthesis issues…", state="running")
         try:
             synth_alerts = generate_stage3_synthesis_issues(
                 patient_context=context,
@@ -711,9 +740,9 @@ def _run_analysis(
         if ollama_status is not None:
             last_err = llm_client.last_error
             if last_err:
-                ollama_status.update(label=f"Ollama error: {last_err}", state="error")
+                ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
             else:
-                ollama_status.update(label="Ollama connected (response received)", state="complete")
+                ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
         # Capture first error if no LLM text returned.
         if ollama_error is None:
             ollama_error = llm_client.last_error
@@ -1338,13 +1367,13 @@ def main() -> None:
             value=_agentic_ui_default,
             help=(
                 "When enabled, runs the agentic planner using the LLM to generate a consolidated "
-                "patient-level management plan (JSON) and related debug info. Requires 'Use Ollama' above."
+                "patient-level management plan (JSON) and related debug info. Requires 'Use the LLM' above."
             ),
         )
         st.session_state["agentic_ui_debug_enabled"] = bool(agentic_ui_debug_enabled)
 
     with st.expander("LLM settings", expanded=False):
-        use_ollama = st.checkbox("Use Ollama for explanations (if available)", value=True)
+        use_ollama = st.checkbox("Use the LLM for screening and explanations (if available)", value=True)
         llm_mode = st.selectbox(
             "LLM mode",
             [
@@ -1352,38 +1381,50 @@ def main() -> None:
             ],
             index=0,
         )
-        env_model = (os.getenv("OLLAMA_MODEL") or "").strip()
-
-        discovered_models = _list_ollama_models()
-        base_options: List[str] = []
-        if discovered_models:
-            base_options = list(dict.fromkeys(discovered_models))  # preserve order, de-dup
+        remote_llm_cfg = openai_compat_config_from_env()
+        if remote_llm_cfg is not None:
+            # Rationale: an OpenAI-compatible server (vLLM now, OpenRouter later) is set,
+            # so the Ollama-only controls (local model list, num_ctx) do not apply.
+            st.caption(
+                f"{_llm_name()} server: {remote_llm_cfg.base_url}  \n"
+                f"Model: {remote_llm_cfg.model or 'first one the server lists'}  \n"
+                "Set in .env (LLM_BASE_URL, LLM_MODEL)."
+            )
+            ollama_model_ui: Optional[str] = None
+            num_ctx = 8192
         else:
-            base_options = ["aadide/medgemma-1.5-4b-it-Q4_K_S"]
+            env_model = (os.getenv("OLLAMA_MODEL") or "").strip()
 
-        # Ensure the default demo model is always present as a fallback.
-        if "aadide/medgemma-1.5-4b-it-Q4_K_S" not in base_options:
-            base_options.append("aadide/medgemma-1.5-4b-it-Q4_K_S")
+            discovered_models = _list_ollama_models()
+            base_options: List[str] = []
+            if discovered_models:
+                base_options = list(dict.fromkeys(discovered_models))  # preserve order, de-dup
+            else:
+                base_options = ["aadide/medgemma-1.5-4b-it-Q4_K_S"]
 
-        model_options = base_options + ["Custom..."]
-        default_index = 0
-        if env_model and env_model in base_options:
-            default_index = base_options.index(env_model)
+            # Ensure the default demo model is always present as a fallback.
+            if "aadide/medgemma-1.5-4b-it-Q4_K_S" not in base_options:
+                base_options.append("aadide/medgemma-1.5-4b-it-Q4_K_S")
 
-        model_choice = st.selectbox("Ollama model", model_options, index=default_index)
-        if model_choice == "Custom...":
-            ollama_model_ui = st.text_input("Custom model tag", value=(env_model or ""))
-        else:
-            ollama_model_ui = model_choice
-        if env_model:
-            st.caption(f"OLLAMA_MODEL is set: {env_model} (UI model selection will be ignored)")
-        num_ctx = st.number_input(
-            "Context window (num_ctx)",
-            min_value=1024,
-            max_value=131072,
-            value=8192,
-            step=1024,
-        )
+            model_options = base_options + ["Custom..."]
+            default_index = 0
+            if env_model and env_model in base_options:
+                default_index = base_options.index(env_model)
+
+            model_choice = st.selectbox("Ollama model", model_options, index=default_index)
+            if model_choice == "Custom...":
+                ollama_model_ui = st.text_input("Custom model tag", value=(env_model or ""))
+            else:
+                ollama_model_ui = model_choice
+            if env_model:
+                st.caption(f"OLLAMA_MODEL is set: {env_model} (UI model selection will be ignored)")
+            num_ctx = st.number_input(
+                "Context window (num_ctx)",
+                min_value=1024,
+                max_value=131072,
+                value=8192,
+                step=1024,
+            )
         st.session_state["llm_num_ctx"] = int(num_ctx)
 
     save_disabled = not bool(GUIDELINE_PDF_PATHS)
@@ -1495,10 +1536,10 @@ def main() -> None:
         elif _mode == "LLM screening (generate alerts)" and _use_ollama and _ollama_err:
             st.markdown(
                 "No alerts were generated. Deterministic rule-based checks did not trigger any alerts. "
-                "LLM screening was configured but the Ollama call failed, so it could not contribute "
+                "LLM screening was configured but the model call failed, so it could not contribute "
                 "additional alerts."
             )
-            st.caption(f"Ollama debug: {_ollama_err}")
+            st.caption(f"{_llm_name()} debug: {_ollama_err}")
         else:
             st.markdown(
                 "No alerts were generated because the deterministic rule-based checks evaluated the "
@@ -1898,7 +1939,7 @@ def main() -> None:
                             "Checklist item generated by LLM (single-call mode). Per‑alert explanation is disabled in this mode."
                         )
                     elif explanation.used_llm:
-                        st.caption("Generated with local LLM (Ollama) using retrieved excerpts.")
+                        st.caption(f"Generated with {_llm_name()} using retrieved excerpts.")
                         _elapsed = st.session_state.get(f"explain_time_{alert.alert_id}")
                         if isinstance(_elapsed, (int, float)):
                             st.caption(f"LLM time: {_elapsed:.2f}s")
@@ -1908,9 +1949,9 @@ def main() -> None:
                             model = st.session_state.get("analysis_ollama_model")
                             err = st.session_state.get("analysis_ollama_error")
                             if model:
-                                st.caption(f"Ollama model: {model}")
+                                st.caption(f"Model: {model}")
                             if err:
-                                st.caption(f"Ollama debug: {err}")
+                                st.caption(f"{_llm_name()} debug: {err}")
                         else:
                             st.caption("Deterministic fallback explanation (LLM disabled).")
 
