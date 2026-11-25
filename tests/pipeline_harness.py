@@ -15,8 +15,10 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -136,7 +138,21 @@ def _plain(obj: Any) -> Any:
     return json.loads(json.dumps(obj, default=lambda o: getattr(o, "__dict__", str(o)), ensure_ascii=False))
 
 
-def run_patient(patient: Dict[str, Any]) -> Dict[str, Any]:
+def run_patient(patient: Dict[str, Any], records_dir: Optional[Path] = None) -> Dict[str, Any]:
+    """Run one patient through the app. Visit records go to records_dir, or a throwaway folder."""
+    with tempfile.TemporaryDirectory() as tmp:
+        saved_env = os.environ.get("ARTEMIS_VISIT_RECORDS_DIR")
+        os.environ["ARTEMIS_VISIT_RECORDS_DIR"] = str(records_dir or tmp)
+        try:
+            return _run_patient(patient)
+        finally:
+            if saved_env is None:
+                os.environ.pop("ARTEMIS_VISIT_RECORDS_DIR", None)
+            else:
+                os.environ["ARTEMIS_VISIT_RECORDS_DIR"] = saved_env
+
+
+def _run_patient(patient: Dict[str, Any]) -> Dict[str, Any]:
     corpus = _load("corpus.json")
     replies = _load("replies.json")[str(patient["patient_id"])]
     client = ReplayClient(replies)

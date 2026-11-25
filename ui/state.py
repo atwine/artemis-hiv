@@ -27,6 +27,13 @@ ANALYSIS_DEFAULTS: Dict[str, Any] = {
     "agentic_debug_enabled": False,
     "agentic_debug_result": None,
     "agentic_debug_reasoner": None,
+    # The visit record (fix 9): this run's id and save time, whether it was reopened from the
+    # record, whether saving failed, and when it was finalized.
+    "analysis_visit_id": None,
+    "analysis_saved_at": None,
+    "analysis_restored": False,
+    "analysis_record_error": False,
+    "analysis_finalized_at": None,
 }
 
 # Per-alert review choices and timings are stored under these prefixes plus the alert id.

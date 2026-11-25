@@ -177,3 +177,13 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: fix 8. An AI alert lists only the passages it was shown and cited. A citation to anything
   else is kept but marked "not among the passages the AI was given". A rule alert's passages are
   labelled as search results.
+
+**19. A success message for work that never happened.**
+- Example: Finalize showed "Visit finalized." but only set a flag in the screen's memory. The
+  reviews, the override reasons and the note were never written anywhere, and a page reload
+  lost them all. An override with reason "Other" and no comment also passed.
+- Caught by: driving the real screen headlessly, pressing Finalize, and listing the files that
+  changed on disk (none).
+- Fix: fix 9. Each run of the checks and each Finalize adds a line to the patient's record file.
+  The screen says "finalized and saved" only after the line is written, and says so when saving
+  fails. "Other" needs a comment.

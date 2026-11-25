@@ -23,6 +23,7 @@ import re
 import statistics
 import subprocess
 import sys
+import tempfile
 import time
 from dataclasses import asdict, is_dataclass
 from datetime import datetime, timezone
@@ -287,6 +288,8 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     out_dir = (PROJECT_ROOT / args.out).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
+    # Baseline runs are not clinic visits: keep them out of the visit record (fix 9).
+    os.environ["ARTEMIS_VISIT_RECORDS_DIR"] = tempfile.mkdtemp(prefix="artemis_baseline_records_")
     secrets = _server_strings()
 
     patients = _load_patients()

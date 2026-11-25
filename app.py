@@ -8,8 +8,10 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
+import uuid
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -38,7 +40,9 @@ from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
 from ui.references import alert_references
+from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize
+from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
@@ -51,6 +55,7 @@ from artemis.visit import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
+logger = logging.getLogger(__name__)
 
 # Rationale: model-server settings (LLM_BASE_URL, LLM_MODEL, LLM_API_KEY) live in a
 # gitignored .env, so the app finds the vLLM server without launch flags.
@@ -362,6 +367,28 @@ def _run_analysis(
     st.session_state["analysis_use_ollama"] = bool(use_ollama)
     st.session_state["analysis_ollama_error"] = result.llm_error
     st.session_state["agentic_debug_reasoner"] = result.agentic_reasoner
+
+    # Save this run to the patient's visit record (fix 9). The results stay on screen even if
+    # saving fails; the screen says so.
+    visit_id, saved_at = uuid.uuid4().hex, visit_record.now_utc()
+    st.session_state["analysis_visit_id"] = visit_id
+    st.session_state["analysis_saved_at"] = saved_at
+    try:
+        visit_record.append_entry(
+            visit_record.records_dir(PROJECT_ROOT),
+            visit_record.checks_entry(
+                result,
+                note=today_note,
+                visit_date=str((patient.get("today_encounter") or {}).get("date") or ""),
+                model=llm_client.model if llm_client is not None else None,
+                app_version=visit_record.app_version(PROJECT_ROOT),
+                visit_id=visit_id,
+                saved_at=saved_at,
+            ),
+        )
+    except (OSError, TypeError, ValueError) as exc:
+        logger.warning("Visit record not saved: %s", type(exc).__name__)
+        st.session_state["analysis_record_error"] = True
 
 
 def main() -> None:
@@ -893,7 +920,15 @@ def main() -> None:
     st.subheader("Results")
     if not st.session_state.get("analysis_ran", False):
         st.info("Click 'Save encounter (run checks)' to run the analysis.")
+        offer_last_saved_results(visit_record.records_dir(PROJECT_ROOT), selected_patient_id)
         return
+    if st.session_state.get("analysis_restored"):
+        st.caption(
+            f"Saved results from {when(st.session_state.get('analysis_saved_at'))}. No new AI call was made. "
+            "Press 'Save encounter (run checks)' to run the checks again."
+        )
+    if st.session_state.get("analysis_record_error"):
+        st.warning("These results could not be saved to the visit record.")
     if note_changed(st.session_state, today_note):
         st.warning(
             "The clinician's note has changed since these results were produced. "
@@ -1177,7 +1212,7 @@ def main() -> None:
                     key=f"alert_override_reason_{alert.alert_id}",
                 )
                 st.text_area(
-                    "Override comment (optional)",
+                    "Override comment (required for Other)",
                     key=f"alert_override_comment_{alert.alert_id}",
                     height=80,
                 )
@@ -1185,12 +1220,15 @@ def main() -> None:
 
     can_finalize = review_can_finalize(st.session_state, alerts)
     if st.button("Finalize / Close visit", disabled=not can_finalize):
-        st.session_state["finalized"] = True
+        finalize_visit(visit_record.records_dir(PROJECT_ROOT), alerts)
 
     if st.session_state.get("finalized"):
-        st.success("Visit finalized.")
+        st.success(f"Visit finalized and saved ({when(st.session_state.get('analysis_finalized_at'))}).")
     elif st.session_state.get("analysis_ran") and alerts and not can_finalize:
-        st.info("Finalize is disabled until all alerts are acknowledged or overridden with a reason.")
+        st.info(
+            "Finalize is disabled until all alerts are acknowledged or overridden with a reason "
+            "(the reason 'Other' needs a comment)."
+        )
 
     st.markdown("""
         <div style='background-color: #E8F4F8; padding: 15px; border-radius: 8px; border-left: 4px solid #2E86AB; margin: 20px 0;'>
