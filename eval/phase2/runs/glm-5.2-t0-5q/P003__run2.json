@@ -1,0 +1,288 @@
+{
+ "case_id": "P003",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 14.1,
+ "calls": [
+  {
+   "prompt_tokens": 1400,
+   "completion_tokens": 619,
+   "total_tokens": 2019,
+   "cost": 0.00167896,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1024,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00167896,
+    "upstream_inference_prompt_cost": 0.00019336,
+    "upstream_inference_completions_cost": 0.0014856
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 573,
+   "completion_tokens": 94,
+   "total_tokens": 667,
+   "cost": 0.0012158,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0012158,
+    "upstream_inference_prompt_cost": 0.0008022,
+    "upstream_inference_completions_cost": 0.0004136
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2542,
+   "completion_tokens": 525,
+   "total_tokens": 3067,
+   "cost": 0.0036537984,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 512,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0036537984,
+    "upstream_inference_prompt_cost": 0.0020598984,
+    "upstream_inference_completions_cost": 0.0015939
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0065485584,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "EFV_CNS_TOXICITY_001",
+   "title": "EFV CNS toxicity: insomnia and vivid dreams",
+   "message": "Guidelines list persistent CNS toxicity including insomnia and abnormal dreams as EFV adverse effects warranting substitution. Patient reports poor sleep and vivid dreams for weeks after 23 months on EFV. EFV is the likely cause given the classic symptom profile and temporal relationship. No alternative explanations are evident in the clinical notes. Guidelines note EFV 400 mg has fewer adverse events than 600 mg, and DTG-based regimens are preferred first-line. The clinician's plan documents symptoms but proposes no regimen change.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Substitute EFV with DTG (transition to TLD) or reduce EFV dose to 400 mg if available, per guideline toxicity management recommendations.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "page_number": 39,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "page_number": 5,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EFV_CNS_TOXICITY_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+       "page_number": 39
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+       "page_number": 5
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines list persistent CNS toxicity including insomnia and abnormal dreams as EFV adverse effects warranting substitution. Patient reports poor sleep and vivid dreams for weeks after 23 months on EFV. EFV is the likely cause given the classic symptom profile and temporal relationship. No alternative explanations are evident in the clinical notes. Guidelines note EFV 400 mg has fewer adverse events than 600 mg, and DTG-based regimens are preferred first-line. The clinician's plan documents symptoms but proposes no regimen change.",
+     "recommended_action": "Substitute EFV with DTG (transition to TLD) or reduce EFV dose to 400 mg if available, per guideline toxicity management recommendations.",
+     "severity": "high",
+     "title": "EFV CNS toxicity: insomnia and vivid dreams"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MONITORING_GAP_001",
+   "title": "Missing renal and liver function monitoring on TDF",
+   "message": "Guidelines recommend routine viral load monitoring at 12-month intervals for adults on ART. The last viral load was 165 days ago, so it is not yet overdue. However, no renal function tests or liver function tests are documented despite TDF guidelines advising LFTs and RFTs to monitor for nephrotoxicity, Fanconi syndrome, and hepatotoxicity. The clinician's plan today includes no lab orders.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Verify and order baseline and periodic RFTs and LFTs for TDF safety monitoring. Continue annual viral load per schedule.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "page_number": 13,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 37,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MONITORING_GAP_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+       "page_number": 13
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 37
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines recommend routine viral load monitoring at 12-month intervals for adults on ART. The last viral load was 165 days ago, so it is not yet overdue. However, no renal function tests or liver function tests are documented despite TDF guidelines advising LFTs and RFTs to monitor for nephrotoxicity, Fanconi syndrome, and hepatotoxicity. The clinician's plan today includes no lab orders.",
+     "recommended_action": "Verify and order baseline and periodic RFTs and LFTs for TDF safety monitoring. Continue annual viral load per schedule.",
+     "severity": "moderate",
+     "title": "Missing renal and liver function monitoring on TDF"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "efv_sleep_disturbance": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ],
+  "EFV_CNS_TOXICITY_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "MONITORING_GAP_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Can efavirenz cause insomnia and vivid dreams?",
+   "When should efavirenz be switched for neuropsychiatric side effects?",
+   "Is a viral load of 60 copies/mL considered low-level viremia?",
+   "What viral load monitoring schedule applies after low-level viremia?",
+   "Are renal function tests due for patients on TDF?",
+   "Does efavirenz require any specific baseline or ongoing monitoring?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EFV_CNS_TOXICITY_001\",\n    \"citations\": [\n      {\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\", \"page_number\": 39},\n      {\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\", \"page_number\": 5}\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines list persistent CNS toxicity including insomnia and abnormal dreams as EFV adverse effects warranting substitution. Patient reports poor sleep and vivid dreams for weeks after 23 months on EFV. EFV is the likely cause given the classic symptom profile and temporal relationship. No alternative explanations are evident in the clinical notes. Guidelines note EFV 400 mg has fewer adverse events than 600 mg, and DTG-based regimens are preferred first-line. The clinician's plan documents symptoms but proposes no regimen change.\",\n    \"recommended_action\": \"Substitute EFV with DTG (transition to TLD) or reduce EFV dose to 400 mg if available, per guideline toxicity management recommendations.\",\n    \"severity\": \"high\",\n    \"title\": \"EFV CNS toxicity: insomnia and vivid dreams\"\n  },\n  {\n    \"alert_id\": \"MONITORING_GAP_001\",\n    \"citations\": [\n      {\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\", \"page_number\": 13},\n      {\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\", \"page_number\": 37}\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines recommend routine viral load monitoring at 12-month intervals for adults on ART. The last viral load was 165 days ago, so it is not yet overdue. However, no renal function tests or liver function tests are documented despite TDF guidelines advising LFTs and RFTs to monitor for nephrotoxicity, Fanconi syndrome, and hepatotoxicity. The clinician's plan today includes no lab orders.\",\n    \"recommended_action\": \"Verify and order baseline and periodic RFTs and LFTs for TDF safety monitoring. Continue annual viral load per schedule.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Missing renal and liver function monitoring on TDF\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 36,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+    "page_number": 12,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 virological monitoring provides an early and more accurate indication of treatment failure and indicates the need to switch from first line to second-line drugs, and from second- line to third-line drugs, toward reducing accumulation of drug-resistance mutations and improved clinical outcomes. Dolutegravir (DTG)-based regimens (e.g., tenofovir/lamivudine/dolutegravir [TLD]) have increase"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Patient has poor sleep and vivid dreams which are known EFV side effects, but the provided guideline excerpts do not contain specific EFV toxicity management or switching guidance.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"EFV-associated neuropsychiatric toxicity (insomnia and vivid dreams)\",\n      \"action\": \"Uncertain: guideline excerpts provided do not include EFV toxicity management steps; clinician should refer to full Uganda HIV guidelines for EFV substitution criteria.\",\n      \"reason\": \"Patient on EFV since Feb 2024 reports poor sleep and vivid dreams for several weeks, which are classic EFV neuropsychiatric adverse effects, but the excerpts only cover TDF screening procedures.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan documents the symptoms but does not propose any action such as evaluating for EFV toxicity or considering regimen modification.\"\n      }\n    },\n    {\n      \"problem\": \"Viral load of 60 copies/mL (low-level viremia) on current regimen\",\n      \"action\": \"Repeat viral load to confirm trend and assess for treatment failure per Uganda HIV guidelines.\",\n      \"reason\": \"Patient's latest viral load is 60 copies/mL from August 2025, which is above the undetectable threshold and warrants repeat testing, but the provided excerpts do not specify low-level viremia management thresholds.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention the viral load result or any plan for repeat testing.\"\n      }\n    },\n    {\n      \"problem\": \"No baseline or monitoring renal function labs recorded for TDF-containing regimen\",\n      \"action\": \"Order serum creatinine and eGFR to screen for TDF renal toxicity.\",\n      \"reason\": \"Patient is on TDF and the Uganda guidelines specify serum creatinine and eGFR screening for patients on TDF, but no renal labs are recorded.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not include any renal function monitoring despite the patient being on TDF.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Repeat viral load to assess trend of low-level viremia; order serum creatinine and eGFR for TDF renal monitoring; follow up on neuropsychiatric symptoms to assess severity and progression.\",\n  \"patient_counselling\": [\n    \"Reassure patient that insomnia and vivid dreams are recognized side effects of EFV and should be reported if they worsen or if mood changes occur.\",\n    \"Advise patient to immediately report any suicidal thoughts or severe mood changes.\",\n    \"Educate patient on importance of adherence to current regimen while toxicity evaluation is underway.\"\n  ]\n}",
+ "plan_issues": []
+}

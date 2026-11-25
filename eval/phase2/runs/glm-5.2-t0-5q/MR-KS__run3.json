@@ -1,0 +1,387 @@
+{
+ "case_id": "MR-KS",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 33.4,
+ "calls": [
+  {
+   "prompt_tokens": 2190,
+   "completion_tokens": 712,
+   "total_tokens": 2902,
+   "cost": 0.00190642,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2048,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00190642,
+    "upstream_inference_prompt_cost": 0.00019762,
+    "upstream_inference_completions_cost": 0.0017088
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1356,
+   "completion_tokens": 98,
+   "total_tokens": 1454,
+   "cost": 0.0003867856,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1220,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0003867856,
+    "upstream_inference_prompt_cost": 0.0002091312,
+    "upstream_inference_completions_cost": 0.0001776544
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3261,
+   "completion_tokens": 1270,
+   "total_tokens": 4531,
+   "cost": 0.003954547,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1536,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003954547,
+    "upstream_inference_prompt_cost": 0.001442487,
+    "upstream_inference_completions_cost": 0.00251206
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0062477526,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "TDF_FANCONI_LOW_PHOSPHATE_001",
+   "title": "TDF toxicity: low phosphate with back pain and proteinuria",
+   "message": "Guidelines list TDF toxicity as Fanconi syndrome, chronic kidney disease, lower back pain, change in urine volume, bone aches, and muscle cramps or pain, with recommended LFTs and RFTs if symptoms present. Patient on TDF for 6 years has serum phosphate 0.78 mmol/L (low), trace proteinuria, and 4 months of lower back pain with heavy thighs. Evidence for drug attribution: TDF causes proximal tubulopathy (Fanconi syndrome) with hypophosphataemia, proteinuria, bone pain, and myalgia; the symptom pattern and low phosphate fit. Evidence against: creatinine 112 umol/L is within normal limits, occupational truck driving plausibly explains back pain, and hypertension can cause trace proteinuria. However, the combination of low phosphate plus proteinuria plus bone/muscle pain on TDF warrants active exclusion of tubulopathy.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Evaluate for TDF-induced tubulopathy: repeat serum phosphate, urine protein/creatinine ratio, renal function, and consider switching TDF to tenofovir alafenamide or abacavir.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_FANCONI_LOW_PHOSPHATE_001",
+     "title": "TDF toxicity: low phosphate with back pain and proteinuria",
+     "message": "Guidelines list TDF toxicity as Fanconi syndrome, chronic kidney disease, lower back pain, change in urine volume, bone aches, and muscle cramps or pain, with recommended LFTs and RFTs if symptoms present. Patient on TDF for 6 years has serum phosphate 0.78 mmol/L (low), trace proteinuria, and 4 months of lower back pain with heavy thighs. Evidence for drug attribution: TDF causes proximal tubulopathy (Fanconi syndrome) with hypophosphataemia, proteinuria, bone pain, and myalgia; the symptom pattern and low phosphate fit. Evidence against: creatinine 112 umol/L is within normal limits, occupational truck driving plausibly explains back pain, and hypertension can cause trace proteinuria. However, the combination of low phosphate plus proteinuria plus bone/muscle pain on TDF warrants active exclusion of tubulopathy.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Evaluate for TDF-induced tubulopathy: repeat serum phosphate, urine protein/creatinine ratio, renal function, and consider switching TDF to tenofovir alafenamide or abacavir.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "TDF_IBUPROFEN_NEPHROTOXICITY_002",
+   "title": "TDF plus NSAID compounds kidney risk",
+   "message": "Guidelines require serum creatinine and eGFR monitoring for patients on TDF-containing regimens. Patient is on TDF long-term with creatinine 112 umol/L and trace proteinuria, and takes over-the-counter ibuprofen as needed. TDF and NSAIDs are both nephrotoxic; combined use in a patient with existing proteinuria compounds the risk of acute kidney injury and tubular dysfunction. The clinician's plan actively recommends PRN ibuprofen for back pain without renal assessment or caution. Creatinine is currently within normal limits, which argues against established renal failure, but the additive nephrotoxicity risk and the unexplained proteinuria and low phosphate make ongoing unsupervised NSAID use unsafe.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Avoid routine ibuprofen; use paracetamol for back pain. If NSAIDs are unavoidable, monitor renal function and phosphate closely.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_IBUPROFEN_NEPHROTOXICITY_002",
+     "title": "TDF plus NSAID compounds kidney risk",
+     "message": "Guidelines require serum creatinine and eGFR monitoring for patients on TDF-containing regimens. Patient is on TDF long-term with creatinine 112 umol/L and trace proteinuria, and takes over-the-counter ibuprofen as needed. TDF and NSAIDs are both nephrotoxic; combined use in a patient with existing proteinuria compounds the risk of acute kidney injury and tubular dysfunction. The clinician's plan actively recommends PRN ibuprofen for back pain without renal assessment or caution. Creatinine is currently within normal limits, which argues against established renal failure, but the additive nephrotoxicity risk and the unexplained proteinuria and low phosphate make ongoing unsupervised NSAID use unsafe.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Avoid routine ibuprofen; use paracetamol for back pain. If NSAIDs are unavoidable, monitor renal function and phosphate closely.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "TDF_MONITORING_GAP_003",
+   "title": "TDF renal monitoring not in clinician plan",
+   "message": "Guidelines specify serum creatinine and eGFR monitoring for patients on TDF-based regimens. Today's plan includes no renal function tests, no urine evaluation beyond dipstick, and no phosphate assessment despite trace proteinuria and a borderline creatinine of 112 umol/L. The 6-month review interval with no interim renal monitoring leaves TDF tubulopathy undetected, particularly given the patient's concurrent NSAID use and suboptimal blood pressure control. The low phosphate result was documented but not addressed in the plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Add serum creatinine, eGFR, and phosphate to the monitoring plan; repeat within weeks given current abnormalities, then per guideline schedule.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_MONITORING_GAP_003",
+     "title": "TDF renal monitoring not in clinician plan",
+     "message": "Guidelines specify serum creatinine and eGFR monitoring for patients on TDF-based regimens. Today's plan includes no renal function tests, no urine evaluation beyond dipstick, and no phosphate assessment despite trace proteinuria and a borderline creatinine of 112 umol/L. The 6-month review interval with no interim renal monitoring leaves TDF tubulopathy undetected, particularly given the patient's concurrent NSAID use and suboptimal blood pressure control. The low phosphate result was documented but not addressed in the plan.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Add serum creatinine, eGFR, and phosphate to the monitoring plan; repeat within weeks given current abnormalities, then per guideline schedule.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EFV_AMLODIPINE_INTERACTION_004",
+   "title": "Efavirenz may lower amlodipine levels; BP uncontrolled",
+   "message": "Guidelines note that efavirenz can potentially decrease dihydropyridine (amlodipine, nifedipine) drug levels, though no dose adjustments are required. Patient on EFV with amlodipine 5 mg has BP 146/94 today, suboptimally controlled. Contributing factors include missed amlodipine doses while travelling. The interaction may partly reduce antihypertensive efficacy, but adherence is the more likely dominant cause. Guidelines also list amlodipine side effects including lower limb oedema, headache, and palpitations; patient has no pedal oedema today.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "low",
+    "recommended_action": "Reinforce amlodipine adherence; if BP remains above target despite full adherence, uptitrate or add a second antihypertensive per guidelines.",
+    "citations": [
+     {
+      "page_number": 44,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 45,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EFV_AMLODIPINE_INTERACTION_004",
+     "title": "Efavirenz may lower amlodipine levels; BP uncontrolled",
+     "message": "Guidelines note that efavirenz can potentially decrease dihydropyridine (amlodipine, nifedipine) drug levels, though no dose adjustments are required. Patient on EFV with amlodipine 5 mg has BP 146/94 today, suboptimally controlled. Contributing factors include missed amlodipine doses while travelling. The interaction may partly reduce antihypertensive efficacy, but adherence is the more likely dominant cause. Guidelines also list amlodipine side effects including lower limb oedema, headache, and palpitations; patient has no pedal oedema today.",
+     "issue_type": "drug_interaction",
+     "severity": "low",
+     "recommended_action": "Reinforce amlodipine adherence; if BP remains above target despite full adherence, uptitrate or add a second antihypertensive per guidelines.",
+     "citations": [
+      {
+       "page_number": 44,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2"
+      },
+      {
+       "page_number": 45,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+  ],
+  "TDF_FANCONI_LOW_PHOSPHATE_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "TDF_IBUPROFEN_NEPHROTOXICITY_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "TDF_MONITORING_GAP_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "EFV_AMLODIPINE_INTERACTION_004": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does TDF cause proximal tubulopathy with proteinuria and low phosphate?",
+   "Does efavirenz interact with amlodipine affecting blood pressure control?",
+   "Does chronic ibuprofen use interact with TDF to increase kidney toxicity?",
+   "Does TDF require routine creatinine monitoring every six months?",
+   "Does trace proteinuria on TDF require further renal investigation?",
+   "Does efavirenz cause musculoskeletal symptoms or neuropathy in long-term use?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"TDF_FANCONI_LOW_PHOSPHATE_001\",\n    \"title\": \"TDF toxicity: low phosphate with back pain and proteinuria\",\n    \"message\": \"Guidelines list TDF toxicity as Fanconi syndrome, chronic kidney disease, lower back pain, change in urine volume, bone aches, and muscle cramps or pain, with recommended LFTs and RFTs if symptoms present. Patient on TDF for 6 years has serum phosphate 0.78 mmol/L (low), trace proteinuria, and 4 months of lower back pain with heavy thighs. Evidence for drug attribution: TDF causes proximal tubulopathy (Fanconi syndrome) with hypophosphataemia, proteinuria, bone pain, and myalgia; the symptom pattern and low phosphate fit. Evidence against: creatinine 112 umol/L is within normal limits, occupational truck driving plausibly explains back pain, and hypertension can cause trace proteinuria. However, the combination of low phosphate plus proteinuria plus bone/muscle pain on TDF warrants active exclusion of tubulopathy.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Evaluate for TDF-induced tubulopathy: repeat serum phosphate, urine protein/creatinine ratio, renal function, and consider switching TDF to tenofovir alafenamide or abacavir.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"TDF_IBUPROFEN_NEPHROTOXICITY_002\",\n    \"title\": \"TDF plus NSAID compounds kidney risk\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring for patients on TDF-containing regimens. Patient is on TDF long-term with creatinine 112 umol/L and trace proteinuria, and takes over-the-counter ibuprofen as needed. TDF and NSAIDs are both nephrotoxic; combined use in a patient with existing proteinuria compounds the risk of acute kidney injury and tubular dysfunction. The clinician's plan actively recommends PRN ibuprofen for back pain without renal assessment or caution. Creatinine is currently within normal limits, which argues against established renal failure, but the additive nephrotoxicity risk and the unexplained proteinuria and low phosphate make ongoing unsupervised NSAID use unsafe.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Avoid routine ibuprofen; use paracetamol for back pain. If NSAIDs are unavoidable, monitor renal function and phosphate closely.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"TDF_MONITORING_GAP_003\",\n    \"title\": \"TDF renal monitoring not in clinician plan\",\n    \"message\": \"Guidelines specify serum creatinine and eGFR monitoring for patients on TDF-based regimens. Today's plan includes no renal function tests, no urine evaluation beyond dipstick, and no phosphate assessment despite trace proteinuria and a borderline creatinine of 112 umol/L. The 6-month review interval with no interim renal monitoring leaves TDF tubulopathy undetected, particularly given the patient's concurrent NSAID use and suboptimal blood pressure control. The low phosphate result was documented but not addressed in the plan.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Add serum creatinine, eGFR, and phosphate to the monitoring plan; repeat within weeks given current abnormalities, then per guideline schedule.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EFV_AMLODIPINE_INTERACTION_004\",\n    \"title\": \"Efavirenz may lower amlodipine levels; BP uncontrolled\",\n    \"message\": \"Guidelines note that efavirenz can potentially decrease dihydropyridine (amlodipine, nifedipine) drug levels, though no dose adjustments are required. Patient on EFV with amlodipine 5 mg has BP 146/94 today, suboptimally controlled. Contributing factors include missed amlodipine doses while travelling. The interaction may partly reduce antihypertensive efficacy, but adherence is the more likely dominant cause. Guidelines also list amlodipine side effects including lower limb oedema, headache, and palpitations; patient has no pedal oedema today.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Reinforce amlodipine adherence; if BP remains above target despite full adherence, uptitrate or add a second antihypertensive per guidelines.\",\n    \"citations\": [\n      {\"page_number\": 44, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2\"},\n      {\"page_number\": 45, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2",
+    "page_number": 44,
+    "quote": "ome and less side effects (see tables 57 and 58). Table 57: Interactions of hypertension medicine INTERACTIONS OF HYPERTENSION MEDICINE WITH ARVs Hypertension Drug Interaction with ART Action required Dihydropyridines (amlodipine and Nifedipine) Efavirenz and Niverapine could potentially decrease drug levels No dose adjustments are required LPV/r, ATV/r and DRV/r increase drug levels Use Nifedipine with caution Losartan Efavirenz may reduce formation of active form of losarta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+    "page_number": 24,
+    "quote": "257 2 Peripheral neuropathy (numbness, tingling, feeling of pins and needles, burning sensation in hands and/or feet) Younger children: Ask for pain in hands and feet, regression in motor milestones - refusal to crawl, walk or run, reduced playfulness (in addition to the above symptoms) (e.g. H, DTG, LZD) 3 Abdominal symptoms (nausea & vomiting, diarrhea, abdominal pain) (e.g. ETO) 4 Hepatotoxicity (nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes) "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 45,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p28_c3",
+    "page_number": 28,
+    "quote": "detect changes in renal function. • Routine administration of 40 mEq/day (mixed in 500ml NS over 4 hours) of potassium chloride or 1 tablet of 600mg twice daily while on amphotericin B can decrease the incidence of Amphotericin B-related hypokalemia. • For electrolyte supplementation, two tablets daily of Magnesium Chloride 310 mg or slow Magnesium Chloride 535mg or Magnesium trisilicate 250mg while on amphotericin B • Consider alternate day Amphotericin B if creatinine is >3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is virologically suppressed (VL <50) and immunologically stable (CD4 540) with no clear guideline-supported evidence of ART toxicity in the provided excerpts.\"},\"problems\":[{\"problem\":\"TDF nephrotoxicity risk with elevated creatinine and trace proteinuria\",\"action\":\"Uncertain: provided guideline excerpts only cover hypertension medication side effects and do not address TDF nephrotoxicity monitoring or management.\",\"reason\":\"Uncertain: the excerpts do not contain TDF toxicity guidance, though creatinine 112 umol/L with trace proteinuria on TDF warrants renal monitoring per standard HIV guidelines not provided here.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician continues TDF and notes creatinine is within normal limits, but does not address trace proteinuria or plan repeat renal monitoring despite TDF use.\"}},{\"problem\":\"Uncontrolled hypertension (BP 146/94) with missed amlodipine doses\",\"action\":\"Reinforce amlodipine adherence counseling and consider dose escalation to 10 mg or addition of a second agent if BP remains elevated on follow-up.\",\"reason\":\"Patient has BP 146/94 with admitted missed amlodipine doses, and guideline Table 58 lists potential side effects of hypertension medicines supporting close monitoring.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician refilled amlodipine 5 mg and encouraged adherence but did not schedule an earlier BP follow-up or consider dose adjustment for persistent hypertension.\"}},{\"problem\":\"Chronic NSAID use with hypertension and possible renal impairment\",\"action\":\"Advise limiting ibuprofen use and monitor renal function, as chronic NSAID use can worsen BP control and renal function.\",\"reason\":\"Patient uses OTC ibuprofen regularly for back pain while having uncontrolled hypertension and trace proteinuria, increasing risk of renal injury.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician prescribed PRN ibuprofen without addressing potential renal or hypertensive risks from chronic NSAID use.\"}},{\"problem\":\"Persistent lower back pain and bilateral thigh heaviness for 4 months\",\"action\":\"Uncertain: provided excerpts do not address musculoskeletal evaluation or TDF-related bone/muscle toxicity.\",\"reason\":\"Uncertain: the guideline excerpts only cover hypertension medication side effects and do not address whether TDF or EFV could contribute to musculoskeletal symptoms.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"Clinician attributed symptoms to occupational strain and prescribed PRN ibuprofen, which is reasonable but should be reassessed if symptoms persist.\"}}],\"monitoring_plan\":[\"Repeat creatinine and urine dipstick in 3 months to monitor TDF renal safety and proteinuria trend\",\"Recheck blood pressure in 2-4 weeks to assess amlodipine adherence and dose adequacy\",\"Repeat viral load and CD4 at next scheduled 6-month visit\",\"Monitor for worsening back/thigh symptoms; if persistent or progressive, evaluate for TDF-related bone toxicity or alternative causes\"],\"patient_counselling\":[\"Emphasize taking amlodipine daily even while travelling; do not skip doses\",\"Limit ibuprofen use to avoid kidney strain and worsening blood pressure\",\"Report any new or worsening muscle pain, weakness, or changes in urination\",\"Maintain lifestyle modifications: reduce salt intake, stay physically active, and attend all follow-up appointments\"]}",
+ "plan_issues": []
+}
