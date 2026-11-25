@@ -36,8 +36,8 @@ def test_patient_matches_golden(pid: str, actual: dict, expected: dict) -> None:
 
 def test_a_planted_fault_is_caught(monkeypatch: pytest.MonkeyPatch, expected: dict) -> None:
     # Control: if the harness can't see a broken status colour, it can't see real changes either.
-    import modules.analysis as analysis
+    import artemis.visit as analysis
 
-    monkeypatch.setattr(analysis, "compute_overall_status", lambda alerts: "GREEN")
+    monkeypatch.setattr(analysis, "compute_overall_status", lambda alerts, outcome="ok": "GREEN")
     patient = next(p for p in h.patients() if p["patient_id"] == "P001")
     assert h.run_patient(patient)["status"] != expected["P001"]["status"]

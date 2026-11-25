@@ -4,6 +4,21 @@
   "llm_error": null,
   "alerts": [
    {
+    "alert_id": "tdf_creatinine_overdue",
+    "title": "Creatinine monitoring overdue while on TDF",
+    "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+     ],
+     "days_since_creatinine": 478
+    },
+    "query_hint": "TDF renal function monitoring creatinine schedule",
+    "source": "rule"
+   },
+   {
     "alert_id": "P001_001",
     "title": "Missing Viral Load Monitoring",
     "message": "Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART. The patient's last viral load test was on 2025-10-01, which is more than 6 months ago. There is no recorded viral load test in the current labs.",
@@ -33,7 +48,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P001_002",
@@ -65,7 +81,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P001_003",
@@ -97,10 +114,23 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
+   {
+    "alert_id": "tdf_creatinine_overdue",
+    "retrieved": [
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p46_c2"
+    ],
+    "explanation": "Why this alert: Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'days_since_creatinine': 478}\n\nGuideline excerpts:\n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti\n- (page=17) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD",
+    "explanation_used_llm": false
+   },
    {
     "alert_id": "P001_001",
     "retrieved": [
@@ -139,6 +169,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has no new complaints, appears well, and has a viral load of 40, indicating the current regimen of TDF, 3TC, and DTG is effective.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Potential nephrotoxicity from TDF\",\n      \"action\": \"Monitor serum creatinine and eGFR\",\n      \"reason\": \"Guidelines recommend screening for nephrotoxicity in patients on TDF, and patient's creatinine level is 88.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Patient's current creatinine level warrants continued monitoring.\"\n      }\n    },\n    {\n      \"problem\": \"DTG contraindications\",\n      \"action\": \"Screen for diabetes and other contraindications\",\n      \"reason\": \"Guidelines recommend screening for DTG contraindications, but patient's history does not mention diabetes or other relevant conditions.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Screening for contraindications is necessary to ensure safe use of DTG.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, serum creatinine, and eGFR every 6 months\",\n  \"patient_counselling\": [\n    \"Adherence counseling\",\n    \"Side effect monitoring\",\n    \"Importance of regular follow-up\"\n  ]\n}",
   "agentic_answer": "### Verification Complete Report for Patient P001, John Doe\n\n#### Task 1 — Adverse Effect Audit\n\nGiven the patient's current regimen of TDF, 3TC, and DTG, and based on the provided guideline excerpts, the following potential adverse effects were considered:\n\n1. **TDF (Tenofovir Disoproxil Fumarate) Toxicity**: The guidelines emphasize the importance of monitoring renal function in patients on TDF, suggesting serum creatinine and eGFR tests for both naive and experienced patients. The patient's creatinine level is 88, which is within normal limits, but it's crucial",
   "llm_calls": [
@@ -196,7 +227,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P002_002",
@@ -228,7 +260,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P002_003",
@@ -260,7 +293,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P002_004",
@@ -282,7 +316,8 @@
       "citations": []
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P002_005",
@@ -314,7 +349,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
@@ -380,6 +416,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is stable on current ART regimen with falling viral load and no reported symptoms or abnormalities.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Potential nephrotoxicity from TDF\",\n      \"action\": \"Monitor creatinine levels\",\n      \"reason\": \"Patient is on TDF, which may cause nephrotoxicity, and has a single creatinine level of 76.\"\n    },\n    {\n      \"problem\": \"No other potential toxicities identified\",\n      \"action\": \"Continue routine follow-up\",\n      \"reason\": \"No symptoms or lab results indicating toxicity from 3TC or DTG.\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load and creatinine levels at routine follow-up appointments\",\n  \"patient_counselling\": [\n    \"Adherence counselling\",\n    \"DSD eligibility discussion\",\n    \"Potential side effects of ART medications\"\n  ]\n}",
   "agentic_answer": "Verification complete. Primary alerts are accurate and comprehensive.\n\nThe patient, Jane Roe, is stable on her current ART regimen of TDF, 3TC, and DTG, with no reported complaints or symptoms and stable examination findings. Her lab trends show a falling viral load, indicating good adherence and response to treatment. The single creatinine level is within normal limits.\n\nThe guideline excerpts provided do not indicate any specific concerns for drug toxicity related to her current medications. The guidelines emphasize the importance of pharmacovigilance, screening for contraindications, and monitoring for adverse effects, but none of these concerns are applicable to Jane's current",
   "llm_calls": [
@@ -415,6 +452,41 @@
   "status": "YELLOW",
   "llm_error": null,
   "alerts": [
+   {
+    "alert_id": "tdf_creatinine_missing",
+    "title": "Creatinine missing while on TDF",
+    "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "EFV"
+     ],
+     "creatinine": null
+    },
+    "query_hint": "TDF creatinine monitoring frequency",
+    "source": "rule"
+   },
+   {
+    "alert_id": "efv_sleep_disturbance",
+    "title": "Possible EFV neuropsychiatric side effects",
+    "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "EFV"
+     ],
+     "keyword_hits": [
+      "sleep",
+      "insomnia",
+      "vivid dream",
+      "vivid dreams"
+     ]
+    },
+    "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+    "source": "rule"
+   },
    {
     "alert_id": "P003_EFV_TOXICITY",
     "title": "EFV Neuropsychiatric Effects",
@@ -453,7 +525,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P003_MISSING_LABS",
@@ -485,7 +558,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P003_PLAN_GAP",
@@ -507,10 +581,35 @@
       "citations": []
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
+   {
+    "alert_id": "tdf_creatinine_missing",
+    "retrieved": [
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p20_c1"
+    ],
+    "explanation": "Why this alert: Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.\nPatient evidence: {'regimen': ['TDF', '3TC', 'EFV'], 'creatinine': None}\n\nGuideline excerpts:\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori\n- (page=29) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on",
+    "explanation_used_llm": false
+   },
+   {
+    "alert_id": "efv_sleep_disturbance",
+    "retrieved": [
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+    ],
+    "explanation": "Why this alert: Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.\nPatient evidence: {'regimen': ['TDF', '3TC', 'EFV'], 'keyword_hits': ['sleep', 'insomnia', 'vivid dream', 'vivid dreams']}\n\nGuideline excerpts:\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori\n- (page=36) Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea",
+    "explanation_used_llm": false
+   },
    {
     "alert_id": "P003_EFV_TOXICITY",
     "retrieved": [
@@ -549,6 +648,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient complains of insomnia and vivid dreams, which are known side effects of EFV, suggesting potential drug toxicity from their current ART medication.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Insomnia and vivid dreams\",\n      \"action\": \"Switch to alternative regimen\",\n      \"reason\": \"EFV is known to cause insomnia and vivid dreams, and patient has been experiencing these symptoms for several weeks.\"\n    },\n    {\n      \"problem\": \"Potential renal toxicity from TDF\",\n      \"action\": \"Monitor serum creatinine and eGFR\",\n      \"reason\": \"TDF can cause renal toxicity, and guidelines recommend monitoring serum creatinine and eGFR for patients initiating TDF.\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, serum creatinine, and eGFR every 6 months, and assess for symptoms of drug toxicity\",\n  \"patient_counselling\": [\n    \"Discuss potential side effects of ART medications\",\n    \"Encourage adherence to medication regimen\",\n    \"Monitor for symptoms of drug toxicity and report to healthcare provider\"\n  ]\n}",
   "agentic_answer": "**Verification Complete**\n\nAfter reviewing the patient's symptoms, examination findings, and lab results, I have identified a potential issue that may be related to drug toxicity from their current ART medication, EFV.\n\n**Suspected Toxicity:** EFV-related neuropsychiatric effects\n**Supporting Evidence:** Patient complaints of poor sleep and vivid dreams for several weeks, which is consistent with the known side effects of EFV, particularly in the first few weeks of therapy (page 55, chunk sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4).\n**Guideline Basis:** The guidelines mention",
   "llm_calls": [
@@ -614,7 +714,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P004_002",
@@ -646,7 +747,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
@@ -676,6 +778,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: cannot determine from provided guideline excerpts\", \"reason\": \"Uncertain: guideline excerpts do not provide specific information on managing Amina Nansubuga's symptoms and lab results\"}, \n\"problems\": [{\"problem\": \"Abdominal pain\", \"action\": \"Uncertain: cannot determine from provided guideline excerpts\", \"reason\": \"Uncertain: guideline excerpts do not provide specific information on managing abdominal pain in the context of ART medications\"}], \n\"monitoring_plan\": \"Monitor viral load, creatinine, and abdominal pain symptoms\", \n\"patient_counselling\": [\"Report any changes in abdominal pain or other symptoms\", \"Adhere to current ART regimen unless otherwise instructed\", \"Follow up with clinician for further evaluation and guidance\"]}",
   "agentic_answer": "### Task 1 — Adverse Effect Audit\n\nGiven the patient's current regimen of TDF, 3TC, and DTG, and their complaint of abdominal pain without fever, we need to consider potential adverse effects of these medications.\n\n1. **TDF (Tenofovir Disoproxil Fumarate)**: According to the guideline excerpts (page 29), TDF requires monitoring of serum creatinine and eGFR, especially in patients with renal issues, due to its potential nephrotoxicity. The patient's creatinine level is 82, which is within normal limits, but ongoing monitoring is essential",
   "llm_calls": [
@@ -741,7 +844,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P006_002",
@@ -773,7 +877,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P006_003",
@@ -805,7 +910,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P006_004",
@@ -837,7 +943,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P006_005",
@@ -869,7 +976,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
@@ -935,6 +1043,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient has no complaints, improved energy, and viral load is down from 125,000 to 89 copies/mL after 10 weeks on TDF/3TC/DTG regimen.\"}, \n\"problems\": [{\"problem\": \"Potential renal toxicity\", \"action\": \"Monitor eGFR and creatinine levels\", \"reason\": \"Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after initiating TDF/3TC/DTG regimen.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Guidelines recommend monitoring renal function in patients on TDF/3TC/DTG regimen.\"}}, \n{\"problem\": \"Anemia\", \"action\": \"Continue ferrous sulfate and folic acid\", \"reason\": \"Patient's hemoglobin level is 10.8 g/dL, which is lower than normal.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Patient is already on ferrous sulfate and folic acid, which is appropriate for anemia management.\"}}], \n\"monitoring_plan\": \"Monitor viral load, CD4 count, eGFR, creatinine, and hemoglobin levels regularly.\", \n\"patient_counselling\": [\"Adhere to ART regimen\", \"Attend regular follow-up appointments\", \"Report any symptoms or concerns to the healthcare provider\"]}",
   "agentic_answer": "### Verification Output\n\n#### Corrections to Primary Alerts:\nNone reported, as there were no primary alerts provided for correction.\n\n#### Missed Issues:\n\n1. **Suspected toxicity:** Renal impairment due to TDF\n   - **Supporting evidence:** Elevated creatinine (1.1 mg/dL) compared to baseline (0.8 mg/dL), and eGFR of 78 mL/min/1.73m2.\n   - **Guideline basis:** Page 29, chunk hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1, recommends monitoring serum creatinine and e",
   "llm_calls": [
@@ -992,7 +1101,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P005_002",
@@ -1024,7 +1134,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "P005_003",
@@ -1046,7 +1157,8 @@
       "citations": []
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
@@ -1088,6 +1200,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient's creatinine level has increased to 1.4 mg/dL and eGFR has decreased to 52 mL/min/1.73m2, indicating potential renal toxicity from TDF.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Renal impairment\",\n      \"action\": \"Switch to TAF-based regimen\",\n      \"reason\": \"Patient's creatinine level has increased and eGFR has decreased, indicating potential renal toxicity from TDF.\"\n    },\n    {\n      \"problem\": \"Mild fatigue\",\n      \"action\": \"Monitor and evaluate for other causes\",\n      \"reason\": \"Patient attributes fatigue to busy work schedule, but further evaluation is needed to rule out other causes.\"\n    }\n  ],\n  \"monitoring_plan\": \"Repeat creatinine, eGFR, and urinalysis in 3 months to assess renal function after regimen switch.\",\n  \"patient_counselling\": [\n    \"Adherence to new regimen\",\n    \"Monitoring for signs of renal toxicity\",\n    \"Follow-up appointments for lab monitoring\"\n  ]\n}",
   "agentic_answer": "Based on the provided patient summary, guideline excerpts, and primary alerts (which are not provided in this case), I will perform the tasks as outlined.\n\n### Task 1 — Adverse Effect Audit\n\nThe patient is on TDF/3TC/DTG (TLD) fixed-dose combination once daily. The guideline excerpts mention potential adverse effects of antiretroviral therapy (ART) medications, including renal impairment. The patient's lab trends show an increase in creatinine levels (from 0.9 mg/dL in 2020 to 1.4 mg/dL) and a decrease in eGFR (",
   "llm_calls": [
@@ -1153,7 +1266,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "KINTU_002",
@@ -1185,7 +1299,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    },
    {
     "alert_id": "KINTU_003",
@@ -1217,7 +1332,8 @@
       ]
      }
     },
-    "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+    "source": "ai"
    }
   ],
   "results": [
@@ -1259,6 +1375,7 @@
    }
   ],
   "screening_parse_status": "parsed_nonempty",
+  "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient has gained significant weight, has elevated fasting glucose and lipid profiles, and has developed acanthosis nigricans, suggesting potential metabolic side effects from current TLD regimen.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Weight gain and metabolic changes\",\n      \"action\": \"Consider switching to a different ART regimen with a more favorable metabolic profile\",\n      \"reason\": \"Patient's weight gain, elevated fasting glucose, and lipid profiles are concerning for metabolic toxicity from TLD.\"\n    },\n    {\n      \"problem\": \"Potential risk for developing Type 2 Diabetes\",\n      \"action\": \"Monitor fasting glucose and HbA1c levels closely\",\n      \"reason\": \"Patient's family history of Type 2 Diabetes and current pre-diabetic range HbA1c level warrant close monitoring.\"\n    },\n    {\n      \"problem\": \"Hypertension\",\n      \"action\": \"Monitor blood pressure regularly\",\n      \"reason\": \"Patient's current blood pressure is elevated, and she has a significant weight gain, which may contribute to hypertension.\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor fasting glucose, HbA1c, lipid profiles, blood pressure, and renal function every 3-6 months\",\n  \"patient_counselling\": [\n    \"Discuss the potential risks and benefits of switching ART regimens\",\n    \"Emphasize the importance of lifestyle modifications, such as diet and exercise, to manage weight and metabolic changes\",\n    \"Educate on the signs and symptoms of diabetes and hypertension\"\n  ]\n}",
   "agentic_answer": "Based on the provided patient summary, guideline excerpts, and the absence of primary alerts, I will proceed with the tasks as outlined.\n\n### Task 1 — Adverse Effect Audit\n\nThe patient is currently on TDF, 3TC, and DTG (TLD) for 18 months. The patient's symptoms and lab results show:\n\n- Weight gain and increased BMI, which could be related to metabolic changes associated with ART, particularly with TDF and DTG.\n- Increased fasting glucose (118 mg/dL) and HbA1c (6.1%), indicating impaired glucose regulation, which is a concern given the patient",
   "llm_calls": [

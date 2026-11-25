@@ -472,6 +472,7 @@ HARD LIMITS — FOLLOW STRICTLY:
                 message=message,
                 evidence=evidence,
                 query_hint="HIV regimen safety monitoring toxicities drug interactions",
+                source="ai",
             )
         )
 

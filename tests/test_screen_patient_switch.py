@@ -54,13 +54,13 @@ def _pretend_analysed(at: AppTest, patient_id: str) -> None:
 
 
 def _alert_titles_on_screen(at: AppTest) -> list:
-    return [e.label for e in at.expander if e.label.startswith("Alert:")]
+    return [e.label for e in at.expander if e.label.startswith("Alert (")]
 
 
 def test_results_stay_with_the_patient_they_were_run_for(at: AppTest) -> None:
     _select(at, "P001")
     _pretend_analysed(at, "P001")
-    assert _alert_titles_on_screen(at) == ["Alert: Creatinine monitoring overdue while on TDF"]
+    assert _alert_titles_on_screen(at) == ["Alert (Rule check): Creatinine monitoring overdue while on TDF"]
 
     _select(at, "P002")
     assert _alert_titles_on_screen(at) == []

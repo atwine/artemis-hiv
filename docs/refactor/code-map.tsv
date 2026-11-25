@@ -38,11 +38,11 @@ modules/alert_rules.py	_check_efv_sleep_disturbance	Alerts when a patient on EFV
 modules/alert_rules.py	_check_tdf_nsaid_use	Alerts when a patient on TDF uses painkillers like ibuprofen, per the notes.	artemis/rules/	to-move
 modules/alert_rules.py	_check_possible_proteinuria	Alerts when the notes mention protein in the urine.	artemis/rules/	to-move
 modules/alert_rules.py	_check_suboptimal_bp_with_missed_amlodipine	Alerts when notes show poor blood pressure control with missed amlodipine doses.	artemis/rules/	to-move
-modules/analysis.py	extract_patient_facts_from_history	Pulls drugs, conditions and other key facts out of the free-text history.	artemis/visit.py	to-move
-modules/analysis.py	compute_overall_status	Picks the overall green, amber or red status from the worst alert.	artemis/visit.py	to-move
-modules/analysis.py	_retrieve	Finds the guideline passages that relate to one alert.	artemis/visit.py	to-move
-modules/analysis.py	run_visit_analysis	Runs the whole visit check: alerts, guideline lookup, AI screening and explanations.	artemis/visit.py	to-move
-modules/analysis.py	run_visit_analysis.status	Reports a progress message if someone is listening.	artemis/visit.py	to-move
+artemis/visit.py	extract_patient_facts_from_history	Pulls drugs, conditions and other key facts out of the free-text history.	artemis/visit.py	moved
+artemis/visit.py	compute_overall_status	Sets the overall colour from the alerts; INCOMPLETE when nothing was found but the AI failed.	artemis/visit.py	moved
+artemis/visit.py	_retrieve	Finds the guideline passages that relate to one alert.	artemis/visit.py	moved
+artemis/visit.py	run_visit_analysis	Runs the whole visit check: alerts, guideline lookup, AI screening and explanations.	artemis/visit.py	moved
+artemis/visit.py	run_visit_analysis.status	Reports a progress message if someone is listening.	artemis/visit.py	moved
 modules/artemis_postprocess.py	extract_json_array	Pulls a list of alerts out of the AI's reply, repairing common mistakes.	artemis/ai/	to-move
 modules/artemis_postprocess.py	_split_sentences	Splits text into sentences.	artemis/ai/	to-move
 modules/artemis_postprocess.py	_similarity	Scores how alike two pieces of text are, from 0 to 1.	artemis/ai/	to-move
@@ -120,3 +120,4 @@ ui/state.py	init_analysis_state	Sets starting values for the analysis results th
 ui/state.py	clear_analysis	Forgets the last analysis completely, including each alert's review.	ui/state.py	stays
 ui/state.py	analysis_belongs_to	Says whether the shown results are for this patient or nothing has run.	ui/state.py	stays
 ui/state.py	note_changed	Says whether the shown results came from a different note than the one on screen.	ui/state.py	stays
+ui/results_banner.py	status_banners	Chooses the coloured banners at the top of the Results section.	ui/results_banner.py	stays

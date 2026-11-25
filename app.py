@@ -33,8 +33,9 @@ from modules.patient_parser import load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
 from ui.patient_picker import patient_label
+from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
-from modules.analysis import (
+from artemis.visit import (
     AnalysisOptions,
     compute_overall_status,
     extract_patient_facts_from_history,
@@ -273,7 +274,7 @@ def _init_session_state() -> None:
     st.session_state.setdefault("custom_patients", [])
 
 
-# Moved to modules/analysis.py (Phase 1, option B). Kept under the old names for callers.
+# Moved to artemis/visit.py (Phase 1). Kept under the old names for callers.
 _extract_patient_facts_from_history = extract_patient_facts_from_history
 _compute_overall_status = compute_overall_status
 
@@ -311,7 +312,7 @@ def _run_analysis(
     ollama_model: Optional[str],
     ollama_num_ctx: Optional[int],
 ) -> None:
-    """Run the visit analysis (modules/analysis.py) and copy its result into session state."""
+    """Run the visit analysis (artemis/visit.py) and copy its result into session state."""
     rag = _get_rag_engine(
         prefer_chroma=prefer_chroma,
         embedding_model_name=embedding_model_name,
@@ -372,6 +373,7 @@ def _run_analysis(
     st.session_state["analysis_alerts"] = result.alerts
     st.session_state["analysis_results"] = result.results
     st.session_state["analysis_status"] = result.status
+    st.session_state["analysis_screening_outcome"] = result.screening_outcome
     st.session_state["analysis_use_ollama"] = bool(use_ollama)
     st.session_state["analysis_ollama_error"] = result.llm_error
     st.session_state["agentic_debug_reasoner"] = result.agentic_reasoner
@@ -1017,99 +1019,46 @@ def main() -> None:
     alerts: List[Alert] = st.session_state.get("analysis_alerts", [])
     status = st.session_state.get("analysis_status")
 
-    if status == "GREEN":
-        _use_ollama = st.session_state.get("analysis_use_ollama")
-        _ollama_err = st.session_state.get("analysis_ollama_error")
-        # Rationale: when LLM screening is configured but fails, avoid showing a
-        # reassuring GREEN banner, since the screening layer is incomplete.
-        llm_screening_incomplete = (
-            _use_ollama and bool(_ollama_err)
+    _outcome = st.session_state.get("analysis_screening_outcome") or "not_run"
+    for _kind, _text in status_banners(status, _outcome, len(alerts)):
+        getattr(st, _kind)(_text)
+    if _outcome == "failed" and st.session_state.get("analysis_ollama_error"):
+        st.caption(f"{_llm_name()} debug: {st.session_state.get('analysis_ollama_error')}")
+
+    if status == "GREEN" and _outcome == "ok":
+        st.markdown(
+            "No alerts were generated: the rule checks found nothing, and the AI review of the patient "
+            "summary and guideline excerpts did not find any guideline-based safety issue."
         )
-        # Rationale: only show a GREEN banner when the full screening layer has
-        # run successfully (deterministic + LLM screening as configured). For
-        # runs where only deterministic rules were evaluated, use an
-        # informational banner instead of GREEN to avoid over-reassurance.
         _dbg = st.session_state.get("analysis_screening_debug") or {}
+        _facts = st.session_state.get("analysis_screening_patient_facts") or {}
         _parse_status = _dbg.get("parse_status") or "unknown"
-        llm_screening_complete = (
-            _use_ollama
-            and not _ollama_err
-            and _parse_status in {"parsed_empty", "parsed_nonempty"}
+        _bundle = _dbg.get("screening_bundle") or []
+        _meds = (_facts.get("medications_detected") or []) if isinstance(_facts, dict) else []
+        _symptoms = (_facts.get("symptoms_detected") or []) if isinstance(_facts, dict) else []
+        st.caption(
+            f"LLM screening audit: parse_status={_parse_status}; guideline_excerpts={len(_bundle)}; "
+            f"meds_detected={len(_meds)}; symptoms_detected={len(_symptoms)}"
         )
-        if llm_screening_incomplete:
-            st.warning(
-                "INDETERMINATE: Deterministic rule-based checks did not trigger any alerts, "
-                "but LLM screening failed, so additional issues may have been missed."
-            )
-        elif llm_screening_complete:
-            st.success("GREEN: No alerts detected.")
-        else:
-            st.info(
-                "No deterministic alerts were triggered. LLM screening was not executed "
-                "for this run, so additional guideline-based issues may still exist."
-            )
-
-        _range_text = "all available guideline pages"
-
-        if _use_ollama and not _ollama_err:
-            st.markdown(
-                "No alerts were generated because the LLM screening step reviewed the Stage 1 patient "
-                f"summary together with guideline excerpts from {_range_text} and did not find any "
-                "guideline-based safety issues that met its alert thresholds (for example, severe anemia "
-                "on zidovudine/AZT, ART toxicities, missing or overdue safety labs, or missing guideline-"
-                "recommended monitoring)."
-            )
-            _dbg = st.session_state.get("analysis_screening_debug") or {}
-            _facts = st.session_state.get("analysis_screening_patient_facts") or {}
-            _parse_status = _dbg.get("parse_status") or "unknown"
-            _bundle = _dbg.get("screening_bundle") or []
-            _meds = (_facts.get("medications_detected") or []) if isinstance(_facts, dict) else []
-            _symptoms = (_facts.get("symptoms_detected") or []) if isinstance(_facts, dict) else []
-            st.caption(
-                f"LLM screening audit: parse_status={_parse_status}; guideline_excerpts={len(_bundle)}; "
-                f"meds_detected={len(_meds)}; symptoms_detected={len(_symptoms)}"
-            )
-            with st.expander("No-alert audit trail (LLM screening)", expanded=True):
-                if not _dbg and not _facts:
-                    st.info(
-                        "Audit data was not captured for this run. Click Save again to re-run the analysis "
-                        "and populate the no-alert audit trail."
-                    )
-                st.markdown("**What patient facts were checked (from Patient History):**")
-                st.json(_facts)
-                st.markdown("**What guidelines were checked (retrieved excerpts):**")
-                st.json(_bundle)
-                st.markdown("**How the conclusion was reached:**")
-                st.markdown(
-                    "- The model was instructed to extract rules ONLY from the retrieved guideline excerpts.\n"
-                    "- It compared those extracted rules to the patient facts in the history and Stage 1 summary.\n"
-                    f"- LLM output status: `{_dbg.get('parse_status') or 'unknown'}`."
+        with st.expander("No-alert audit trail (LLM screening)", expanded=True):
+            if not _dbg and not _facts:
+                st.info(
+                    "Audit data was not captured for this run. Click Save again to re-run the analysis "
+                    "and populate the no-alert audit trail."
                 )
-                if _dbg.get("parse_status") == "parse_failed":
-                    st.error("LLM screening output could not be parsed as a JSON array; no-alert conclusion may be unreliable.")
-                    st.text(_dbg.get("raw_output") or "")
-                # Rationale: show raw output for all cases to debug empty output issues
-                with st.expander("Debug: Raw LLM output", expanded=False):
-                    st.text(_dbg.get("raw_output") or "(no output captured)")
-        elif _use_ollama and _ollama_err:
+            st.markdown("**What patient facts were checked (from Patient History):**")
+            st.json(_facts)
+            st.markdown("**What guidelines were checked (retrieved excerpts):**")
+            st.json(_bundle)
+            st.markdown("**How the conclusion was reached:**")
             st.markdown(
-                "No alerts were generated. Deterministic rule-based checks did not trigger any alerts. "
-                "LLM screening was configured but the model call failed, so it could not contribute "
-                "additional alerts."
+                "- The model was instructed to extract rules ONLY from the retrieved guideline excerpts.\n"
+                "- It compared those extracted rules to the patient facts in the history and Stage 1 summary.\n"
+                f"- LLM output status: `{_dbg.get('parse_status') or 'unknown'}`."
             )
-            st.caption(f"{_llm_name()} debug: {_ollama_err}")
-        else:
-            st.markdown(
-                "No alerts were generated because the deterministic rule-based checks evaluated the "
-                "structured patient context and none of the configured rules were triggered."
-            )
-    elif status == "RED":
-        st.error(
-            f"RED: {len(alerts)} alert(s) to consider (at least one high/critical issue)."
-        )
-    else:
-        st.warning(f"YELLOW: {len(alerts)} alert(s) to consider.")
-    
+            # Rationale: show raw output for all cases to debug empty output issues
+            with st.expander("Debug: Raw LLM output", expanded=False):
+                st.text(_dbg.get("raw_output") or "(no output captured)")
     # Rationale: show raw LLM output for all cases (GREEN, YELLOW, RED) to debug parsing issues
     _dbg = st.session_state.get("analysis_screening_debug") or {}
     if _dbg.get("raw_output"):
@@ -1172,7 +1121,8 @@ def main() -> None:
             retrieved: List[VectorSearchResult] = item["retrieved"]
             explanation: ExplanationResult = item["explanation"]
 
-            with st.expander(f"Alert: {alert.title}", expanded=True):
+            _source = "AI review" if getattr(alert, "source", "rule") == "ai" else "Rule check"
+            with st.expander(f"Alert ({_source}): {alert.title}", expanded=True):
                 # Rationale: present clinician-facing text without inline citation fragments
                 # and keep numbered references in one place for readability.
                 _finding_text = str(alert.message or "")

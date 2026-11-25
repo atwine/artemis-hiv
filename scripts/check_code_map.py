@@ -108,7 +108,22 @@ def check(code_map: Path = CODE_MAP, moves: Path = MOVES, root: Path = ROOT) -> 
     for key in sorted(set(mapped) - on_disk):
         problems.append(f"map: no such function {key[0]}:{key[1]}")
 
-    for i, r in enumerate(_rows(moves), start=2):
+    move_rows = _rows(moves)
+    # A function can move more than once (a -> b, later b -> c). A row's new home is valid
+    # when the chain of later moves ends at a function that exists.
+    later_moves: Dict[Tuple[str, str], Tuple[str, str]] = {}
+    for r in move_rows:
+        if r.get("what") == "move":
+            later_moves[_split_ref(r.get("from", ""))] = _split_ref(r.get("to", ""))
+
+    def final_home(ref: Tuple[str, str]) -> Tuple[str, str]:
+        seen = set()
+        while ref not in on_disk and ref in later_moves and ref not in seen:
+            seen.add(ref)
+            ref = later_moves[ref]
+        return ref
+
+    for i, r in enumerate(move_rows, start=2):
         where = f"moves line {i}"
         for col in MOVE_COLUMNS:
             if not r.get(col):
@@ -119,7 +134,7 @@ def check(code_map: Path = CODE_MAP, moves: Path = MOVES, root: Path = ROOT) -> 
         src, dst = _split_ref(r.get("from", "")), _split_ref(r.get("to", ""))
         if what in {"move", "delete"} and src in on_disk:
             problems.append(f"{where}: {src[0]}:{src[1]} was {what}d but still exists")
-        if what in {"move", "rewrite"} and dst not in on_disk:
+        if what in {"move", "rewrite"} and final_home(dst) not in on_disk:
             problems.append(f"{where}: new home {dst[0]}:{dst[1]} does not exist")
     return problems
 

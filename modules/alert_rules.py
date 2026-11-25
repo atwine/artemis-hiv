@@ -19,6 +19,8 @@ class Alert:
     message: str
     evidence: Dict[str, Any]
     query_hint: str
+    # Where the alert came from: "rule" (the fixed checks in this file) or "ai" (AI screening).
+    source: str = "rule"
 
 
 def run_alerts(context: PatientContext) -> List[Alert]:

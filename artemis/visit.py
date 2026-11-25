@@ -4,9 +4,9 @@
 client, and returns an `AnalysisResult`. app.py builds the engine and the client, calls
 this, and copies the result into the screen's session state. Tests call it directly.
 
-Moved out of app.py's `_run_analysis` without changing behaviour (Phase 1, option B);
-tests/test_pipeline_golden.py checks that. Phase 1 fixes change it from here, each with
-its own test.
+Moved out of app.py's `_run_analysis` without changing behaviour (Phase 1, option B), and
+from modules/analysis.py to here in fix 3. tests/test_pipeline_golden.py checks its output;
+Phase 1 fixes change it from here, each with its own test.
 """
 
 from __future__ import annotations
@@ -52,6 +52,9 @@ class AnalysisResult:
     results: List[Dict[str, Any]]
     status: str
     deterministic_alerts: List[Alert]
+    # What happened to the AI review: "not_run" (switched off), "ok", "failed" (no reply)
+    # or "unreadable" (a reply that could not be read as a list of alerts).
+    screening_outcome: str
     screening_ran: bool
     screening_debug: Optional[Dict[str, Any]]
     patient_facts: Optional[Dict[str, Any]]
@@ -143,9 +146,10 @@ def extract_patient_facts_from_history(notes_text: str) -> Dict[str, Any]:
     }
 
 
-def compute_overall_status(alerts: List[Alert]) -> str:
+def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -> str:
+    """GREEN, YELLOW or RED from the alerts; INCOMPLETE when nothing was found but the AI review failed."""
     if not alerts:
-        return "GREEN"
+        return "INCOMPLETE" if screening_outcome in {"failed", "unreadable"} else "GREEN"
 
     # Rationale: if severity is available (e.g., from LLM screening issues), use the
     # worst severity to drive the overall status colour. Deterministic alerts that
@@ -193,7 +197,7 @@ def run_visit_analysis(
 
     context = build_patient_context(patient_copy)
     alerts = run_alerts(context)
-    # The fixed-rule alerts, kept separately (the screening step below replaces them).
+    # The fixed-rule alerts. They are always shown, next to any AI alerts (fix 3).
     deterministic_alerts = list(alerts)
     # Build Stage 1 summary once so it can be reused by LLM screening and narrative.
     stage1_summary = build_stage1_summary(patient=patient_copy, context=context)
@@ -238,6 +242,7 @@ def run_visit_analysis(
     # and checklist evidence. Deterministic alerts remain the fallback when
     # screening fails (error or unparseable output).
     screening_ran = False
+    screening_outcome = "not_run"
     screening_debug: Optional[Dict[str, Any]] = None
     patient_facts: Optional[Dict[str, Any]] = None
     if use_llm and llm_client is not None:
@@ -256,11 +261,13 @@ def run_visit_analysis(
 
         parse_status = (screening_debug.get("parse_status") or "").strip().lower()
         last_err = llm_client.last_error
-        screening_succeeded = last_err is None and parse_status in {"parsed_empty", "parsed_nonempty"}
-
-        if screening_succeeded:
-            alerts = list(screening_alerts)
-            deterministic_alerts = []
+        if last_err is not None:
+            screening_outcome = "failed"
+        elif parse_status in {"parsed_empty", "parsed_nonempty"}:
+            screening_outcome = "ok"
+            alerts = list(deterministic_alerts) + list(screening_alerts)
+        else:
+            screening_outcome = "unreadable"
 
         if last_err:
             status(f"{llm_name} error: {last_err}", "error")
@@ -278,7 +285,7 @@ def run_visit_analysis(
         explain_seconds[alert.alert_id] = max(0.0, float(time.perf_counter() - _t0))
         results.append({"alert": alert, "retrieved": retrieved, "explanation": explanation})
 
-    overall = compute_overall_status(alerts)
+    overall = compute_overall_status(alerts, screening_outcome)
 
     agentic_reasoner = None
     if options.agentic:
@@ -300,6 +307,7 @@ def run_visit_analysis(
         results=results,
         status=overall,
         deterministic_alerts=deterministic_alerts,
+        screening_outcome=screening_outcome,
         screening_ran=screening_ran,
         screening_debug=screening_debug,
         patient_facts=patient_facts,

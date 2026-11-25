@@ -17,6 +17,7 @@ ANALYSIS_DEFAULTS: Dict[str, Any] = {
     "analysis_note": None,
     "finalized": False,
     "analysis_status": None,
+    "analysis_screening_outcome": "not_run",
     "analysis_alerts": [],
     "analysis_results": [],
     "analysis_use_ollama": False,

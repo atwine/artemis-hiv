@@ -72,6 +72,26 @@ def test_each_planted_mistake_is_reported(tmp_path: Path) -> None:
     assert "empty 'proof'" in joined
 
 
+def test_a_function_moved_twice_is_followed_to_its_final_home(tmp_path: Path) -> None:
+    root = _project(tmp_path)
+    cmap = _write(root / "map.tsv", ccm.MAP_COLUMNS, FULL_MAP)
+    moves = _write(
+        root / "moves.tsv",
+        ccm.MOVE_COLUMNS,
+        [
+            ["2026-11-25", "split", "rewrite", "app.py:old", "modules/a.py:clear", "golden"],
+            ["2026-11-25", "fix 3", "move", "modules/a.py:clear", "ui/state.py:clear", "golden"],
+        ],
+    )
+    assert ccm.check(cmap, moves, root) == []
+    broken = _write(
+        root / "moves2.tsv",
+        ccm.MOVE_COLUMNS,
+        [["2026-11-25", "split", "rewrite", "app.py:old", "modules/a.py:clear", "golden"]],
+    )
+    assert any("new home modules/a.py:clear does not exist" in p for p in ccm.check(cmap, broken, root))
+
+
 def test_the_real_code_map_and_moves_log_match_the_code() -> None:
     # Every function is mapped, every recorded move really happened. See docs/refactor/README.md.
     assert ccm.check() == []
