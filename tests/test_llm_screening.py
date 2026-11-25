@@ -7,7 +7,7 @@ from artemis.rules.checks import Alert
 from artemis.ai.client import ChatMessage, OllamaClient
 from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import PatientContext
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 
 class _FakeOllamaClient(OllamaClient):  # type: ignore[misc]

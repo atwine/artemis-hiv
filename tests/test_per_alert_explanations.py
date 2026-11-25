@@ -5,7 +5,7 @@ from datetime import date
 from artemis.rules.checks import Alert
 from modules.explanation_generator import generate_explanation
 from artemis.patient.record import PatientContext
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 
 def _ctx() -> PatientContext:

@@ -12,7 +12,7 @@ from streamlit.testing.v1 import AppTest
 
 from artemis.rules.checks import Alert
 from modules.explanation_generator import ExplanationResult
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 ROOT = Path(__file__).resolve().parents[1]
 

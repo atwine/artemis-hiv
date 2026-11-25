@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from modules.guideline_processor import process_guidelines
+from artemis.guidelines.processor import process_guidelines
 
 
 def test_process_guidelines_smoke() -> None:

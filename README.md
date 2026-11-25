@@ -178,7 +178,7 @@ If the model tag differs, set `OLLAMA_MODEL` as shown above.
 ### Reset the local vector DB
 
 Chroma persists locally under:
-- `storage/chroma/` (`modules/vector_store.py:L173-L185`)
+- `storage/chroma/` (`artemis/guidelines/vector_store.py`)
 
 To rebuild the index, stop the app and delete `storage/chroma/`.
 

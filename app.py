@@ -33,7 +33,7 @@ from artemis.ai.client import (
 )
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
-from modules.vector_store import VectorSearchResult, create_vector_store
+from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display

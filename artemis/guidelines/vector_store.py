@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 
 from modules.embedder import Embedder
-from modules.guideline_processor import GuidelineChunk
+from artemis.guidelines.processor import GuidelineChunk
 
 
 @dataclass(frozen=True)

@@ -8,7 +8,7 @@ from artemis.rules.checks import Alert
 from artemis.ai.client import ChatMessage, OllamaClient
 from artemis.plan.plan_json import strip_code_fences
 from artemis.patient.record import PatientContext
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 logger = logging.getLogger(__name__)
 

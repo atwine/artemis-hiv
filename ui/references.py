@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any, List, Tuple
 
 from artemis.rules.checks import Alert
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 NOT_SHOWN = "not among the passages the AI was given"
 

@@ -39,16 +39,16 @@ modules/embedder.py	Embedder.model_name	Gives the name of the text-to-numbers mo
 modules/embedder.py	Embedder.encode	Turns pieces of text into lists of numbers so similar texts can be matched.	artemis/guidelines/	to-move
 modules/explanation_generator.py	generate_explanation	Explains an alert using its own text and up to three guideline passages.	artemis/visit.py	to-move
 modules/explanation_generator.py	_fallback_explanation	Writes the explanation text: why the alert fired, patient evidence, guideline excerpts.	artemis/visit.py	to-move
-modules/guideline_processor.py	_normalize_whitespace	Cleans messy spacing and line breaks in text taken from a PDF.	artemis/guidelines/	to-move
-modules/guideline_processor.py	_split_into_paragraphs	Splits text into lines, dropping empty ones.	artemis/guidelines/	to-move
-modules/guideline_processor.py	chunk_page_text	Cuts one guideline page into overlapping pieces of searchable text.	artemis/guidelines/	to-move
-modules/guideline_processor.py	extract_page_texts	Reads the text of each page of a guideline PDF.	artemis/guidelines/	to-move
-modules/guideline_processor.py	process_guidelines	Turns a guideline PDF into searchable pieces labelled with page numbers.	artemis/guidelines/	to-move
-modules/guideline_processor.py	iter_chunk_texts	Hands over the text of each guideline piece, one at a time.	artemis/guidelines/	to-move
-modules/guideline_processor.py	_strip_markdown_noise	Removes link tags and picture or logo placeholders that are useless for searching.	artemis/guidelines/	to-move
-modules/guideline_processor.py	_strip_markdown_noise._special_block_repl	Drops picture and logo placeholder blocks but keeps flowchart and text blocks.	artemis/guidelines/	to-move
-modules/guideline_processor.py	extract_markdown_page_texts	Splits a guideline Markdown file into pages at its page-break marks.	artemis/guidelines/	to-move
-modules/guideline_processor.py	process_markdown_guidelines	Turns a guideline Markdown file into searchable pieces labelled with page numbers.	artemis/guidelines/	to-move
+artemis/guidelines/processor.py	_normalize_whitespace	Cleans messy spacing and line breaks in text taken from a PDF.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	_split_into_paragraphs	Splits text into lines, dropping empty ones.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	chunk_page_text	Cuts one guideline page into overlapping pieces of searchable text.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	extract_page_texts	Reads the text of each page of a guideline PDF.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	process_guidelines	Turns a guideline PDF into searchable pieces labelled with page numbers.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	iter_chunk_texts	Hands over the text of each guideline piece, one at a time.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	_strip_markdown_noise	Removes link tags and picture or logo placeholders that are useless for searching.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	_strip_markdown_noise._special_block_repl	Drops picture and logo placeholder blocks but keeps flowchart and text blocks.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	extract_markdown_page_texts	Splits a guideline Markdown file into pages at its page-break marks.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	process_markdown_guidelines	Turns a guideline Markdown file into searchable pieces labelled with page numbers.	artemis/guidelines/processor.py	moved
 artemis/ai/client.py	OllamaClient.__init__	Sets up the connection to the local Ollama AI server from settings.	artemis/ai/client.py	moved
 artemis/ai/client.py	OllamaClient.model	Gives the name of the AI model being used.	artemis/ai/client.py	moved
 artemis/ai/client.py	OllamaClient.last_error	Gives the most recent AI error message, if any.	artemis/ai/client.py	moved
@@ -79,15 +79,15 @@ artemis/patient/summary.py	_iso	Writes a date as YYYY-MM-DD text, or none if the
 artemis/patient/summary.py	_extract_past_labs	Lists every lab result with unit, date, days before the visit and source.	artemis/patient/summary.py	moved
 artemis/patient/summary.py	_latest_labs_map	Lists the newest result of each test with unit, date and days before the visit.	artemis/patient/summary.py	moved
 artemis/patient/summary.py	build_stage1_summary	Builds the summary the AI reads: what is recorded, and which fields are truly empty.	artemis/patient/summary.py	moved
-modules/vector_store.py	VectorStore.index_guidelines	Blueprint for loading guideline pieces into a search store; each store fills it in.	artemis/guidelines/	to-move
-modules/vector_store.py	VectorStore.query	Blueprint for finding the guideline pieces closest to a question; each store fills it in.	artemis/guidelines/	to-move
-modules/vector_store.py	ChromaVectorStore.__init__	Opens or creates the saved Chroma guideline search database on disk.	artemis/guidelines/	to-move
-modules/vector_store.py	ChromaVectorStore.index_guidelines	Saves guideline pieces and their number codes into the Chroma database.	artemis/guidelines/	to-move
-modules/vector_store.py	ChromaVectorStore.query	Finds the guideline pieces in Chroma closest in meaning to a question.	artemis/guidelines/	to-move
-modules/vector_store.py	InMemoryVectorStore.__init__	Starts an empty temporary guideline search store held in memory.	artemis/guidelines/	to-move
-modules/vector_store.py	InMemoryVectorStore.index_guidelines	Loads guideline pieces and their number codes into the temporary store.	artemis/guidelines/	to-move
-modules/vector_store.py	InMemoryVectorStore.query	Finds the guideline pieces in the temporary store closest in meaning to a question.	artemis/guidelines/	to-move
-modules/vector_store.py	create_vector_store	Picks the saved Chroma store when available, otherwise the temporary one.	artemis/guidelines/	to-move
+artemis/guidelines/vector_store.py	VectorStore.index_guidelines	Blueprint for loading guideline pieces into a search store; each store fills it in.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	VectorStore.query	Blueprint for finding the guideline pieces closest to a question; each store fills it in.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	ChromaVectorStore.__init__	Opens or creates the saved Chroma guideline search database on disk.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	ChromaVectorStore.index_guidelines	Saves guideline pieces and their number codes into the Chroma database.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	ChromaVectorStore.query	Finds the guideline pieces in Chroma closest in meaning to a question.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	InMemoryVectorStore.__init__	Starts an empty temporary guideline search store held in memory.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	InMemoryVectorStore.index_guidelines	Loads guideline pieces and their number codes into the temporary store.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	InMemoryVectorStore.query	Finds the guideline pieces in the temporary store closest in meaning to a question.	artemis/guidelines/vector_store.py	moved
+artemis/guidelines/vector_store.py	create_vector_store	Picks the saved Chroma store when available, otherwise the temporary one.	artemis/guidelines/vector_store.py	moved
 ui/patient_picker.py	patient_label	Makes the picker label, like 'P001 - John Doe', or just the ID.	ui/patient_picker.py	stays
 ui/state.py	init_analysis_state	Sets starting values for the analysis results the screen remembers.	ui/state.py	stays
 ui/state.py	clear_analysis	Forgets the last analysis completely, including each alert's review.	ui/state.py	stays

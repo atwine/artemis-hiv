@@ -30,7 +30,7 @@ import streamlit as _streamlit  # noqa: E402
 
 import app  # noqa: E402
 from modules.rag_engine import RagEngine  # noqa: E402
-from modules.vector_store import VectorSearchResult, VectorStore  # noqa: E402
+from artemis.guidelines.vector_store import VectorSearchResult, VectorStore  # noqa: E402
 
 SETTINGS: Dict[str, Any] = {
     "prefer_chroma": True,

@@ -12,7 +12,7 @@ from typing import List
 
 from artemis.rules.checks import Alert
 from artemis.patient.record import PatientContext
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 
 @dataclass

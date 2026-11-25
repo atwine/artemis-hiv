@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from modules.guideline_processor import GuidelineChunk
-from modules.vector_store import InMemoryVectorStore
+from artemis.guidelines.processor import GuidelineChunk
+from artemis.guidelines.vector_store import InMemoryVectorStore
 
 
 @dataclass

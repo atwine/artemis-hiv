@@ -22,7 +22,7 @@ from modules.embedder import Embedder
 from artemis.ai.client import OllamaClient
 from artemis.patient.record import build_patient_context, compute_lab_trends
 from artemis.plan.plan_json import first_json_object, strip_code_fences, validate_plan
-from modules.vector_store import VectorStore, VectorSearchResult
+from artemis.guidelines.vector_store import VectorStore, VectorSearchResult
 
 
 # Core data structures -----------------------------------------------------

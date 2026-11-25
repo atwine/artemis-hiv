@@ -11,7 +11,7 @@ import pytest
 from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import build_patient_context
 from artemis.patient.summary import build_stage1_summary
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 from tests import pipeline_harness as h
 
 

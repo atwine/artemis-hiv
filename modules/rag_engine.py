@@ -15,9 +15,9 @@ import re
 
 from artemis.rules.checks import Alert
 from modules.embedder import Embedder
-from modules.guideline_processor import GuidelineChunk, process_guidelines, process_markdown_guidelines
+from artemis.guidelines.processor import GuidelineChunk, process_guidelines, process_markdown_guidelines
 from artemis.patient.record import PatientContext
-from modules.vector_store import VectorSearchResult, VectorStore
+from artemis.guidelines.vector_store import VectorSearchResult, VectorStore
 
 
 @dataclass(frozen=True)

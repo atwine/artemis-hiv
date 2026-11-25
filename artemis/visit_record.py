@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from artemis.plan.flow import AgenticResult
 from artemis.rules.checks import Alert
 from modules.explanation_generator import ExplanationResult
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 
 RECORDS_ENV = "ARTEMIS_VISIT_RECORDS_DIR"
 

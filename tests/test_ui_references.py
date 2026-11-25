@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from artemis.rules.checks import Alert
-from modules.vector_store import VectorSearchResult
+from artemis.guidelines.vector_store import VectorSearchResult
 from ui.references import alert_references
 
 
