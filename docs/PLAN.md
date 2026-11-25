@@ -60,7 +60,16 @@ numbers decide which parts of the pipeline earn their keep.
       test cases, then 20 to 30 new short cases written and labelled by clinicians (each lists the
       alerts it should raise and the guideline passages that support them).
 - [ ] 2.2 Scoring: for each case, which expected alerts were caught and which alerts were false
-      alarms. A model may help match wording, but a person spot-checks its matches.
+      alarms. A model may help match wording, but a person spot-checks its matches. Report three
+      numbers, each with how many cases it rests on:
+      - sensitivity (recall): of the problems a patient really has, how many the app caught. This is
+        "nothing missed", and for a safety tool it matters most.
+      - precision: of the alerts the app raised, how many were real problems.
+      - specificity: of the patients with nothing wrong, how many the app correctly left clear.
+      Working target from the owner: about 85%, to be set per measure with the doctor before the run.
+- [ ] 2.2b Write the method down so it can be reported: how many cases, who wrote and labelled
+      them, how a raised alert is matched to an expected one, how many runs per case (answers vary
+      between runs), and the date and model.
 - [ ] 2.3 Run the models: Llama 3.3 70B on the A100 and 2 or 3 OpenRouter models (MedGemma optional,
       as the original competition baseline).
 - [ ] 2.4 Results table plus all raw outputs saved (they feed the showcase in Phase 6).
@@ -73,6 +82,9 @@ Check: `python scripts/evaluate.py` rebuilds the table from saved outputs.
 The old results were "sometimes good, sometimes bad". This phase finds out why and fixes it,
 measuring every change on the Phase 2 cases. Background reading: `docs/research/RAG-OPTIONS.md`.
 
+Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
+They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
+
 - [ ] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
 - [ ] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
@@ -82,6 +94,10 @@ measuring every change on the Phase 2 cases. Background reading: `docs/research/
 - [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
 - [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
       their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
+- [ ] 2B.7 How the guideline knowledge is stored, decided on the 2B.1 numbers: plain Markdown as
+      today, Markdown split along the guideline's own sections, or structured records (JSON, one per
+      recommendation, with drug, condition, action, country and edition). Also which search fits
+      each: meaning search, keyword search, or both together, and filters by country and edition.
 - [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
       is extracted. Today the app searches 4 Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
       `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup
@@ -128,6 +144,8 @@ Check: a full visit works in Chrome; before/after screenshots against the Stream
 - [ ] 6.1 Publish showcase mode as a static site with A100 outputs for at least 10 cases.
 - [ ] 6.2 Two or three short explainer videos: the problem, a walkthrough, the evaluation.
 - [ ] 6.3 README rewrite: screen recording, results table, limitations, "not for clinical use".
+- [ ] 6.4 Clinician trial: once the trial version is up, the doctor working with the owner runs
+      the test cases and reports what to improve. Their findings become new Phase 2 cases.
 
 Check: the live Pages link works in a fresh browser with no VPN.
 
@@ -160,3 +178,5 @@ Check: the live Pages link works in a fresh browser with no VPN.
 5. Where the explainer videos live (YouTube, or small files in the repo).
 6. Whether to mirror this checklist as GitHub issues and milestones.
 7. Keep or cut the items marked "(suggested)", which were my additions.
+8. The target for each of sensitivity, precision and specificity (owner's working figure: about 85%),
+   agreed with the doctor before the evaluation run.
