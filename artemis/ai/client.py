@@ -249,6 +249,10 @@ class OpenAICompatConfig:
     model: Optional[str] = None
     api_key: Optional[str] = None
     timeout_s: float = 600.0
+    # Phase 2: a fixed temperature (None keeps the default 0.2), and extra request fields such as
+    # OpenRouter's {"reasoning": {"enabled": False}, "usage": {"include": True}}.
+    temperature: Optional[float] = None
+    extra_body: Optional[Dict[str, Any]] = None
 
 
 def openai_compat_config_from_env() -> Optional[OpenAICompatConfig]:
@@ -294,7 +298,10 @@ class OpenAICompatClient(_ReplyState):
         self._resolved_model: Optional[str] = config.model
         self._api_key = config.api_key
         self._timeout_s = config.timeout_s
+        self._temperature = config.temperature
+        self._extra_body = dict(config.extra_body or {})
         self._last_error: Optional[str] = None
+        self._last_usage: Optional[Dict[str, Any]] = None
 
     @property
     def model(self) -> str:
@@ -303,6 +310,11 @@ class OpenAICompatClient(_ReplyState):
     @property
     def last_error(self) -> Optional[str]:
         return self._last_error
+
+    @property
+    def last_usage(self) -> Optional[Dict[str, Any]]:
+        """The usage the server reported for the last reply (tokens, and cost when it sends one)."""
+        return self._last_usage
 
     def _headers(self) -> Dict[str, str]:
         headers = {"Content-Type": "application/json"}
@@ -353,11 +365,15 @@ class OpenAICompatClient(_ReplyState):
             self._last_error = None
             self._last_finish_reason = None
             self._last_note = None
-            options: Dict[str, Any] = {"temperature": 0.2, "num_predict": 128}
+            self._last_usage = None
+            options: Dict[str, Any] = {
+                "temperature": 0.2 if self._temperature is None else self._temperature,
+                "num_predict": 128,
+            }
             if options_override:
                 options.update(options_override)
 
-            body: Dict[str, Any] = {"model": self._resolve_model(), "messages": list(messages)}
+            body: Dict[str, Any] = {**self._extra_body, "model": self._resolve_model(), "messages": list(messages)}
             for src, dst in self._OPTION_MAP.items():
                 if options.get(src) is not None:
                     body[dst] = options[src]
@@ -379,7 +395,9 @@ class OpenAICompatClient(_ReplyState):
                 resp = requests.post(url, json=body, headers=self._headers(), timeout=self._timeout_s)
             resp.raise_for_status()
 
-            choices = resp.json().get("choices") or []
+            reply = resp.json()
+            self._last_usage = reply.get("usage")
+            choices = reply.get("choices") or []
             choice = choices[0] if choices else {}
             self._last_finish_reason = choice.get("finish_reason")
             content = _text_of((choice.get("message") or {}).get("content"))
