@@ -163,9 +163,18 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   but standalone questions fell to 11/20 and cases to 5/12. The converted files miss some
   headings, so some tables carry the wrong section label. The checker now also measures each
   problem searched with its own description (the ideal-description track).
-- Next: (d) a better search model and (e) a re-ranking step, which need downloads the owner
-  approves first; meanwhile, with no download, the other half of (a): the AI reads whole
-  passages instead of their first 480 characters (G35), checked end to end on Llama.
+- Fix 5q's second check passed: GLM end to end with the question step keeps its own catches at
+  80% (no gain yet; the passages it finds still mostly miss the rule).
+- With the owner's small download pair (2026-11-26), both tried and dropped by their rules,
+  measured with GLM's saved questions replayed (the replay reproduced earlier numbers exactly):
+  5d, search model bge-small-en-v1.5 (self-check 32/34, cases 7/12, ideal 7/12, but standalone
+  questions 11/20); 5e, re-ranker ms-marco-MiniLM-L6-v2 (self-check 34/34, cases 7/12, ideal
+  7/12, but questions 10/20). Three fixes in a row helped the patient tracks and hurt the
+  standalone questions; read by hand, the lost questions' passages are really wrong (the
+  web-trained models lack the medical knowledge the clinician-worded questions need).
+- Next (owner's call): the bigger, stronger download pair; or the other half of (a), the AI
+  reading whole passages instead of their first 480 characters (G35), with no download; or wrap
+  up 2B with what is kept.
 
 - [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
