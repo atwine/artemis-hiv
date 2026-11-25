@@ -135,8 +135,24 @@ numbers; (7) a final check on GLM, Llama and DeepSeek, then the write-up. Result
 Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
 They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
 
-- [ ] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
+Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and `eval/phase2b/`):
+- Done: the search test set (a gold quote for 17 of the 22 problems, 5 not in any guideline,
+  plus 20 standalone questions); the search checker with its self-check; the diagnosis (the
+  right passage reached the AI for 3 of 17 problems; caught 98% when shown, 72% when not).
+- Done, owner's rule (G32): Ugandan guidance only. Only registered Ugandan files are searched,
+  the South African and WHO files are in `Data/Not searched - other countries/`, and the search
+  database was rebuilt (`scripts/check_index_sources.py` passes). Questions in the top 5 went
+  from 3/20 to 13/20; 10 of 22 problems now have no Ugandan passage.
+- Baselines, Uganda only: Llama end to end done (3 runs per case, temperature 0); GLM running.
+- Tried and dropped by their own rules: 5a, one search per drug and problem (cases 3/12 against
+  4/12); 5c, keyword search beside meaning search (every gold passage now found from its own
+  words, but cases 3/12 and questions 10/20).
+- Now: testing the premise both fixes shared, by searching each problem with its own short
+  description, as if the app knew what to look for.
+
+- [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
+      Done 2026-11-25: `scripts/check_retrieval.py`, `scripts/diagnose_search.py`.
 - [ ] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
       a re-ranking step), one at a time, keeping each only if the scores improve.
 - [ ] 2B.3 Try an agentic loop like PolicyLens: plan the questions, search, judge whether the
@@ -149,7 +165,8 @@ They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
       recommendation, with drug, condition, action, country and edition). Also which search fits
       each: meaning search, keyword search, or both together, and filters by country and edition.
 - [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
-      is extracted. Today the app searches the 2 Ugandan Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
+      is extracted. The documents are picked: Uganda's only (owner, 2026-11-25); `artemis/guidelines/sources.py`
+      is the start of the sources list. Today the app searches the 2 Ugandan Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
       `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup
       script that downloads them from the official sources. Either way, add a sources list (document,
       edition, official link) for citations. Whether the public repo may hold the guideline text is the
