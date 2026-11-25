@@ -16,7 +16,6 @@ app.py	_can_finalize	Says whether the visit can be finalized, meaning every aler
 app.py	_run_analysis	Runs the visit analysis and stores its results for the screen to show.	ui/ (Save button handler)	to-move
 app.py	_run_analysis._on_status	Passes progress messages from the analysis to the on-screen status box.	ui/ (Save button handler)	to-move
 app.py	main	Draws the whole app screen and reacts to every click and input.	ui/ (split into one file per screen section)	to-move
-app.py	main._parse_bulk_labs	Turns pasted lab results, in lines or sentences, into dated lab entries.	ui/ (part of main)	to-move
 app.py	main._json_loads_relaxed2	Reads slightly malformed JSON text by fixing common mistakes first.	ui/ (part of main)	to-move
 app.py	main._badge	Makes the coloured Switch, Hold or Continue label for an ART decision.	ui/ (part of main)	to-move
 app.py	main._safe	Cleans text so it can be shown safely inside the page.	ui/ (part of main)	to-move
@@ -89,8 +88,7 @@ modules/llm_screening.py	generate_llm_screening_alerts	Has the AI screen the pat
 artemis/patient/record.py	_parse_iso_date	Converts a date written as YYYY-MM-DD into a date.	artemis/patient/record.py	moved
 artemis/patient/record.py	_days_between	Counts the days between two dates.	artemis/patient/record.py	moved
 artemis/patient/record.py	load_mock_patients	Loads the demo patient records from a JSON file.	artemis/patient/record.py	moved
-artemis/patient/record.py	build_patient_context	Gathers a patient's regimen, notes and latest labs into one tidy summary.	artemis/patient/record.py	moved
-artemis/patient/record.py	_latest_lab_entry	Picks the newest result for a lab on or before the visit date.	artemis/patient/record.py	moved
+artemis/patient/record.py	build_patient_context	Builds the patient summary the rules and AI read, including dated notes and labs.	artemis/patient/record.py	moved
 artemis/patient/record.py	days_since_lab	Counts days since a patient's latest result for a lab, or none if never done.	artemis/patient/record.py	moved
 artemis/patient/record.py	_extract_numeric	Reads the first number from a lab entry, ignoring its date.	artemis/patient/record.py	moved
 artemis/patient/record.py	compute_lab_trends	Works out whether each lab is rising, falling or steady over time.	artemis/patient/record.py	moved
@@ -100,8 +98,8 @@ modules/rag_engine.py	RagEngine.retrieve_for_alert	Finds the guideline passages 
 modules/rag_engine.py	RagEngine._build_query	Writes the search question from the regimen, notes and alert details.	artemis/guidelines/	to-move
 modules/rag_engine.py	_extract_retrieval_keywords	Picks out key drug and condition terms from the notes to improve guideline search.	artemis/guidelines/	to-move
 artemis/patient/summary.py	_iso	Writes a date as YYYY-MM-DD text, or none if there is no date.	artemis/patient/summary.py	moved
-artemis/patient/summary.py	_extract_past_labs	Flattens the patient's lab history into a simple list of lab, date and value.	artemis/patient/summary.py	moved
-artemis/patient/summary.py	_latest_labs_map	Lists each lab's latest date and value as simple text-ready data.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_extract_past_labs	Lists every lab result with unit, date, days before the visit and source.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_latest_labs_map	Lists the newest result of each test with unit, date and days before the visit.	artemis/patient/summary.py	moved
 artemis/patient/summary.py	_extract_past_complaints	Finds past visit note snippets that mention common complaints like pain or fever.	artemis/patient/summary.py	moved
 artemis/patient/summary.py	_extract_plans	Collects the Plan lines from past visit notes.	artemis/patient/summary.py	moved
 artemis/patient/summary.py	_extract_today_plan	Collects the Plan lines from today's note.	artemis/patient/summary.py	moved
@@ -121,3 +119,20 @@ ui/state.py	clear_analysis	Forgets the last analysis completely, including each 
 ui/state.py	analysis_belongs_to	Says whether the shown results are for this patient or nothing has run.	ui/state.py	stays
 ui/state.py	note_changed	Says whether the shown results came from a different note than the one on screen.	ui/state.py	stays
 ui/results_banner.py	status_banners	Chooses the coloured banners at the top of the Results section.	ui/results_banner.py	stays
+app.py	main._lab_table	Draws one add-case lab table: test, date, value and unit per row.	ui/ (part of main)	to-move
+app.py	main._records	Turns a lab table's contents into a list of rows.	ui/ (part of main)	to-move
+app.py	main._show_labs	Shows a patient's lab results in Patient Details, then any pasted lab text.	ui/ (part of main)	to-move
+artemis/patient/labs.py	LabEntry.number	Gives the number inside a lab value, such as 50 from '<50'.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	_parse_date	Reads a YYYY-MM-DD date, or gives nothing if it can't.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	creatinine_umol_per_l	Converts a creatinine value to umol/L from either unit.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	describe	Writes one lab result as text: value, unit, date and days before the visit.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	lab_rows_to_entries	Checks the add-case lab rows and turns them into stored results, or lists problems.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	lab_section	Writes the laboratory part of the AI's input: dated results, then pasted text.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	latest_entries	Picks the newest result of each test on or before the visit date.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	read_lab_entries	Reads every structured lab result in a record, whatever shape it was saved in.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	read_lab_notes	Reads lab results that were pasted as free text.	artemis/patient/labs.py	stays
+artemis/patient/labs.py	to_number	Finds the number in a lab value written as text.	artemis/patient/labs.py	stays
+artemis/patient/summary.py	_lab_item	Writes one lab result for the summary, with unit, age and source.	artemis/patient/summary.py	stays
+ui/labs.py	_cell	Turns one table cell into plain text, dates as YYYY-MM-DD.	ui/labs.py	stays
+ui/labs.py	editor_rows	Turns the add-case lab table into plain-text rows.	ui/labs.py	stays
+ui/labs.py	lab_rows_for_display	Lists a patient's lab results for the Patient Details panel.	ui/labs.py	stays

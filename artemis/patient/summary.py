@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 from datetime import date
 
+from artemis.patient.labs import LabEntry, latest_entries, read_lab_entries
 from artemis.patient.record import PatientContext
 
 
@@ -10,26 +11,24 @@ def _iso(d: Optional[date]) -> Optional[str]:
     return d.isoformat() if isinstance(d, date) else None
 
 
-def _extract_past_labs(raw_labs: Dict[str, Any]) -> List[Dict[str, Any]]:
-    items: List[Dict[str, Any]] = []
-    for lab_name, entries in (raw_labs or {}).items():
-        for e in entries or []:
-            obj: Dict[str, Any] = {"lab": lab_name}
-            for k, v in (e or {}).items():
-                if k == "date":
-                    obj["date"] = v
-                else:
-                    # Preserve the first non-date value as "value" for readability
-                    obj.setdefault("value", v)
-            items.append(obj)
-    return items
+def _lab_item(e: LabEntry, visit_date: date) -> Dict[str, Any]:
+    return {
+        "lab": e.test,
+        "date": e.date.isoformat(),
+        "value": e.value,
+        "unit": e.unit,
+        "days_before_visit": (visit_date - e.date).days,
+        "source": e.source,
+    }
 
 
-def _latest_labs_map(ctx: PatientContext) -> Dict[str, Dict[str, Any]]:
-    out: Dict[str, Dict[str, Any]] = {}
-    for name, lab in (ctx.latest_labs or {}).items():
-        out[name] = {"date": _iso(lab.date), "value": lab.value}
-    return out
+def _extract_past_labs(patient: Dict[str, Any], visit_date: date) -> List[Dict[str, Any]]:
+    return [_lab_item(e, visit_date) for e in read_lab_entries(patient)]
+
+
+def _latest_labs_map(patient: Dict[str, Any], visit_date: date) -> Dict[str, Dict[str, Any]]:
+    latest = latest_entries(read_lab_entries(patient), visit_date)
+    return {test: _lab_item(e, visit_date) for test, e in latest.items()}
 
 
 def _extract_past_complaints(patient: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -84,8 +83,8 @@ def build_stage1_summary(*, patient: Dict[str, Any], context: PatientContext) ->
     The summary includes light heuristics and explicit missing flags where data is absent.
     """
 
-    past_labs = _extract_past_labs(patient.get("labs") or {})
-    current_labs = _latest_labs_map(context)
+    past_labs = _extract_past_labs(patient, context.encounter_date)
+    latest_labs = _latest_labs_map(patient, context.encounter_date)
     past_complaints = _extract_past_complaints(patient)
     past_plans = _extract_plans(patient)
 
@@ -111,7 +110,7 @@ def build_stage1_summary(*, patient: Dict[str, Any], context: PatientContext) ->
         "regimen_history": regimen_history,
         "non_hiv_meds": non_hiv_meds,
         "past_labs": past_labs,
-        "current_labs": current_labs,
+        "latest_labs": latest_labs,
         "past_complaints": past_complaints,
         "past_plans": past_plans,
         "today_plan": today_plan,

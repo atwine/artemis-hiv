@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import datetime
 
+import pandas as pd
 import streamlit as st
 
 from modules.alert_rules import Alert
@@ -32,6 +33,8 @@ from modules.llm_client import (
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
+from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
+from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
@@ -481,28 +484,40 @@ def main() -> None:
             height=80
         )
 
-        st.caption("Optional: enter laboratory results (one result per line).")
-        new_todays_lab_results = st.text_area(
-            "Today's laboratory results",
-            key="new_case_todays_lab_results",
-            height=120,
-            help=(
-                "Enter today's lab results. Supported examples:\n"
-                "viral_load, 2025-10-01, 40\n"
-                "creatinine, 2024-10-01, 88"
-            ),
+        st.caption(
+            "Optional: one row per lab result. Leave the unit blank for the usual unit; "
+            "creatinine needs its unit when it was measured in mg/dL."
         )
-        
-        new_previous_lab_results = st.text_area(
-            "Previous Laboratory results",
-            key="new_case_previous_lab_results",
-            height=120,
-            help=(
-                "Enter previous lab results. Supported examples:\n"
-                "viral_load, 2025-10-01, 40\n"
-                "creatinine, 2024-10-01, 88"
-            ),
-        )
+        _all_units = sorted({u for units in TEST_UNITS.values() for u in units})
+
+        def _lab_table(key: str, default_date):
+            # An empty table needs explicit column types, or the date column reads as numbers.
+            empty = pd.DataFrame(
+                {
+                    "test": pd.Series(dtype="object"),
+                    "date": pd.Series(dtype="datetime64[ns]"),
+                    "value": pd.Series(dtype="object"),
+                    "unit": pd.Series(dtype="object"),
+                }
+            )[LAB_COLUMNS]
+            return st.data_editor(
+                empty,
+                key=key,
+                num_rows="dynamic",
+                hide_index=True,
+                width="stretch",
+                column_config={
+                    "test": st.column_config.SelectboxColumn("Test", options=list(TEST_UNITS)),
+                    "date": st.column_config.DateColumn("Date", format="YYYY-MM-DD", default=default_date),
+                    "value": st.column_config.TextColumn("Value", help="As written on the report, e.g. <50"),
+                    "unit": st.column_config.SelectboxColumn("Unit", options=_all_units),
+                },
+            )
+
+        st.markdown("**Today's laboratory results**")
+        new_todays_lab_rows = _lab_table("new_case_today_labs", datetime.date.today())
+        st.markdown("**Previous laboratory results**")
+        new_previous_lab_rows = _lab_table("new_case_previous_labs", None)
 
         if st.button("Add case to patient list"):
             pid = (new_patient_id or "").strip()
@@ -513,97 +528,26 @@ def main() -> None:
             else:
                 encounter_iso = datetime.date.today().isoformat()
 
-                def _parse_bulk_labs(raw_text: str) -> Dict[str, List[Dict[str, Any]]]:
-                    # Rationale: accept copy/paste and persist the same schema as Data/mock_patients.json.
-                    # Supported examples:
-                    # viral_load, 2025-10-01, 40
-                    # creatinine, 2024-10-01, 88
-                    # Narrative paste is also supported (e.g., "Creatinine: 1.4 mg/dL ... Viral load: <50").
-                    out: Dict[str, List[Dict[str, Any]]] = {}
-                    errors: List[str] = []
-                    narrative_lines: List[str] = []
 
-                    iso_date_re = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+                def _records(table) -> list:
+                    if hasattr(table, "to_dict"):
+                        return table.to_dict("records")
+                    cols = list(table or {})
+                    return [dict(zip(cols, vals)) for vals in zip(*(table[c] for c in cols))] if cols else []
 
-                    for idx, ln in enumerate((raw_text or "").splitlines(), start=1):
-                        s = (ln or "")
-                        if not s.strip():
-                            continue
-
-                        # Only treat as structured CSV if the 2nd token is a valid ISO date.
-                        # Rationale: preserve the lab value exactly as typed (no numeric conversion,
-                        # no removal of symbols like '<' / '>', no unit conversion).
-                        parts = s.split(",", 2)
-                        if len(parts) == 3 and iso_date_re.match(parts[1].strip() or ""):
-                            lab_raw, date_str, value_str = parts[0], parts[1].strip(), parts[2]
-                            try:
-                                datetime.date.fromisoformat(date_str)
-                            except Exception:
-                                errors.append(f"Labs: line {idx} has invalid date '{date_str}'")
-                                continue
-
-                            low = (lab_raw or "").strip().lower().replace(" ", "_")
-                            if low in {"viral_load", "viral", "vl"}:
-                                lab_name = "viral_load"
-                                value_key = "value_copies_per_ml"
-                            elif low in {"creatinine", "creat", "cr"}:
-                                lab_name = "creatinine"
-                                value_key = "value_umol_per_l"
-                            else:
-                                lab_name = (lab_raw or "") or low
-                                value_key = "value"
-
-                            out.setdefault(lab_name, []).append({"date": date_str, value_key: value_str})
-                            continue
-
-                        # Non-structured line: treat as narrative text; we'll extract key labs via regex below.
-                        narrative_lines.append(s)
-
-                    # If the user pasted narrative labs (single paragraph), save entire text as-is.
-                    # Rationale: preserve ALL lab data exactly as entered, including historical values,
-                    # additional tests, and context that would be lost by regex extraction.
-                    if narrative_lines:
-                        narrative_text = " ".join(narrative_lines)
-                        default_date = encounter_iso
-                        
-                        # Save the complete narrative text under a generic "labs_narrative" key
-                        # so nothing is lost and the doctor can see exactly what was entered.
-                        out.setdefault("labs_narrative", []).append(
-                            {"date": default_date, "narrative_text": narrative_text}
-                        )
-
-                    if errors:
-                        raise ValueError("; ".join(errors))
-                    return out
-
-                # Parse both today's and previous lab results
-                labs_parsed = {}
-                try:
-                    if new_todays_lab_results:
-                        todays_labs = _parse_bulk_labs(new_todays_lab_results)
-                        # Merge today's labs into labs_parsed with source tag
-                        for lab_name, entries in todays_labs.items():
-                            if lab_name == "labs_narrative":
-                                # Tag narrative entries as "today"
-                                for entry in entries:
-                                    entry["source"] = "today"
-                            labs_parsed.setdefault(lab_name, []).extend(entries)
-                except ValueError as exc:
-                    st.error(f"Error in today's lab results: {str(exc)}")
-                    st.stop()
-                
-                try:
-                    if new_previous_lab_results:
-                        previous_labs = _parse_bulk_labs(new_previous_lab_results)
-                        # Merge previous labs into labs_parsed with source tag
-                        for lab_name, entries in previous_labs.items():
-                            if lab_name == "labs_narrative":
-                                # Tag narrative entries as "previous"
-                                for entry in entries:
-                                    entry["source"] = "previous"
-                            labs_parsed.setdefault(lab_name, []).extend(entries)
-                except ValueError as exc:
-                    st.error(f"Error in previous lab results: {str(exc)}")
+                labs_parsed: Dict[str, List[Dict[str, Any]]] = {}
+                lab_errors: List[str] = []
+                for _label, _table, _source in (
+                    ("Today's", new_todays_lab_rows, "today"),
+                    ("Previous", new_previous_lab_rows, "previous"),
+                ):
+                    _entries, _errors = lab_rows_to_entries(editor_rows(_records(_table)), source=_source)
+                    lab_errors += [f"{_label} lab results, {e}" for e in _errors]
+                    for _test, _rows in _entries.items():
+                        labs_parsed.setdefault(_test, []).extend(_rows)
+                if lab_errors:
+                    for _e in lab_errors:
+                        st.error(_e)
                     st.stop()
 
                 # Parse ART regimen from comma-separated input
@@ -819,24 +763,20 @@ def main() -> None:
                     <h4 style='color: #856404; margin-top: 0;'>7. Today's laboratory results</h4>
                 </div>
             """, unsafe_allow_html=True)
-            labs_raw = patient.get("labs") or {}
-            encounter_date_str = patient.get("today_encounter", {}).get("date", "")
-            
-            # Display today's narrative lab text
-            todays_labs_found = False
-            if "labs_narrative" in labs_raw:
-                narrative_entries = labs_raw.get("labs_narrative", [])
-                for entry in narrative_entries:
-                    if isinstance(entry, dict):
-                        source = entry.get("source", "")
-                        if source == "today":
-                            narrative = entry.get("narrative_text", "")
-                            if narrative:
-                                st.markdown(narrative)
-                                todays_labs_found = True
-            
-            if not todays_labs_found:
-                st.markdown("None recorded")
+            _visit = datetime.date.fromisoformat(patient["today_encounter"]["date"])
+            _notes = read_lab_notes(patient)
+
+            def _show_labs(today: bool) -> None:
+                rows = lab_rows_for_display(patient, _visit, today=today)
+                pasted = [n.text for n in _notes if (n.source == "today") == today]
+                if rows:
+                    st.table(rows)
+                for text in pasted:
+                    st.markdown(text)
+                if not rows and not pasted:
+                    st.markdown("None recorded")
+
+            _show_labs(today=True)
             st.markdown("")
             
             # Section 8: Previous Laboratory results
@@ -846,22 +786,7 @@ def main() -> None:
                 </div>
             """, unsafe_allow_html=True)
             
-            # Display previous narrative lab text
-            previous_labs_found = False
-            if "labs_narrative" in labs_raw:
-                narrative_entries = labs_raw.get("labs_narrative", [])
-                for entry in narrative_entries:
-                    if isinstance(entry, dict):
-                        source = entry.get("source", "")
-                        if source == "previous":
-                            narrative = entry.get("narrative_text", "")
-                            if narrative:
-                                st.markdown(narrative)
-                                st.markdown("")
-                                previous_labs_found = True
-            
-            if not previous_labs_found:
-                st.markdown("None recorded")
+            _show_labs(today=False)
 
         # Rationale: clinicians may need to remove a custom test case and re-enter it.
         with st.expander("Delete Record", expanded=False):

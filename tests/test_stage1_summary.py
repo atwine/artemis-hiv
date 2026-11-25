@@ -34,7 +34,7 @@ def test_build_stage1_summary_structure_and_flags() -> None:
 
     # Labs
     assert isinstance(summary.get("past_labs"), list)
-    assert isinstance(summary.get("current_labs"), dict)
+    assert isinstance(summary.get("latest_labs"), dict)
     # Today plan should capture lines starting with "Plan:"
     assert any(line.startswith("Plan:") for line in summary.get("today_plan", []))
 

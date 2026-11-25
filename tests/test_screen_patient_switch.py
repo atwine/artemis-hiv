@@ -75,12 +75,13 @@ def test_results_stay_with_the_patient_they_were_run_for(at: AppTest) -> None:
 def test_adding_a_case_clears_the_form_and_selects_the_new_case(at: AppTest) -> None:
     at.text_input(key="new_case_patient_id").input("T-900")
     at.text_input(key="new_case_art_regimen").input("TDF, 3TC, DTG")
-    at.text_area(key="new_case_todays_lab_results").input("creatinine, 2026-01-10, 90")
-    at.text_area(key="new_case_previous_lab_results").input("viral_load, 2025-06-01, 40")
+    at.text_area(key="new_case_complaints").input("Headache for two days.")
     next(b for b in at.button if b.label == "Add case to patient list").click().run()
 
     assert not at.exception
     assert _selected(at).split(" - ")[0] == "T-900"
-    assert at.text_area(key="new_case_todays_lab_results").value == ""
-    assert at.text_area(key="new_case_previous_lab_results").value == ""
     assert at.text_input(key="new_case_patient_id").value == ""
+    assert at.text_input(key="new_case_art_regimen").value == ""
+    assert at.text_area(key="new_case_complaints").value == ""
+    # The lab tables (fix 4) can't be filled by Streamlit's test runner; their rows are
+    # converted by artemis.patient.labs.lab_rows_to_entries, tested in tests/test_lab_input.py.

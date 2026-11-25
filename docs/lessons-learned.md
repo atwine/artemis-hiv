@@ -48,7 +48,8 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
   for stable patients in all 12 of their runs.
 - Caught by: rebuilding the exact prompt the model received, with a stand-in model that
   records its input.
-- Fix: Phase 1 fixes 4 and 6 (planned).
+- Fix: fix 4. The model now reads a dated table of every result, with its unit and age in days,
+  and notes labelled with their dates (fix 6 handles the false "missing" flags in the summary).
 
 **6. Guideline text damaged before the model reads it.**
 - Example: a cleaner meant to strip HTML tags deleted everything between "<" and ">". So
@@ -102,3 +103,13 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Write the test first, watch it fail for the predicted reason, then fix.
 - Have a second reviewer rerun every serious finding before it counts. All 48 held up.
 - When an expected output is rewritten on purpose, list what changed for each patient.
+
+**12. Units carried in a field's name, then dropped.**
+- Example: lab values were saved under keys like `value_umol_per_l`, so the unit lived only in
+  the key name. The summary kept just the number, and the model saw "creatinine 76" with no unit.
+  The add-patient form saved any creatinine as umol/L, so 1.4 (mg/dL) became 1.4 umol/L, a
+  90-fold error.
+- Caught by: the audit followed one value from the form to the model's input.
+- Fix: fix 4. Each result stores its unit next to its value. The form asks for the unit, and
+  refuses a creatinine under 20 umol/L as probably mg/dL.
+
