@@ -7,7 +7,7 @@ import re
 from difflib import SequenceMatcher
 
 from artemis.rules.checks import Alert
-from modules.llm_client import ChatMessage, OllamaClient
+from artemis.ai.client import ChatMessage, OllamaClient
 from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult
 
@@ -175,7 +175,7 @@ def _parse_issues_json(text: str) -> Optional[List[Dict[str, Any]]]:
     # Rationale: use artemis_postprocess pipeline for comprehensive deduplication and validation.
     # This catches repetition loops that prompt engineering misses (safety net).
     try:
-        from modules.artemis_postprocess import clean_artemis_output
+        from artemis.ai.postprocess import clean_artemis_output
         
         # clean_artemis_output handles: JSON extraction, sentence/paragraph/alert dedup,
         # word limit enforcement, schema validation

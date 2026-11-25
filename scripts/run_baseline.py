@@ -35,7 +35,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 import streamlit as _streamlit  # noqa: E402
 
 import app  # noqa: E402  (loads .env and the app's settings)
-from modules.llm_client import openai_compat_config_from_env  # noqa: E402
+from artemis.ai.client import openai_compat_config_from_env  # noqa: E402
 
 # The app's defaults (app.py "Advanced settings" and "LLM settings"), with one exception:
 # the agentic ARTEMIS plan checkbox starts unticked in the app. It is on here because

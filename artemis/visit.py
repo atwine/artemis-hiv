@@ -20,7 +20,7 @@ from typing import Any, Callable, Dict, List, Optional
 from artemis.plan.flow import QueryContext, run_agentic_flow
 from artemis.rules.checks import Alert, run_alerts
 from modules.explanation_generator import generate_explanation
-from modules.llm_screening import generate_llm_screening_alerts
+from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import build_patient_context
 from modules.rag_engine import RagEngine
 from artemis.patient.summary import build_stage1_summary

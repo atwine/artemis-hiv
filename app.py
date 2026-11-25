@@ -23,7 +23,7 @@ from modules.embedder import Embedder, EmbedderConfig
 from modules.explanation_generator import ExplanationResult
 
 
-from modules.llm_client import (
+from artemis.ai.client import (
     OllamaClient,
     OllamaConfig,
     OpenAICompatClient,
@@ -94,7 +94,7 @@ def _load_patients(path: str, *, version: int = 1) -> List[Dict[str, Any]]:
 def _resolve_ollama_host() -> str:
     """Resolve the Ollama host in the same way the Python client expects.
 
-    Mirrors the logic in modules.llm_client.OllamaClient to avoid surprises when
+    Mirrors the logic in artemis.ai.client.OllamaClient to avoid surprises when
     listing models vs running chat calls.
     """
 

@@ -5,7 +5,7 @@ Catches and fixes LLM repetition loops in ARTEMIS alert output.
 Works as a safety net even when prompt-level controls succeed 95% of the time.
 
 Usage:
-    from modules.artemis_postprocess import clean_artemis_output
+    from artemis.ai.postprocess import clean_artemis_output
 
     raw_response = llm_call(...)   # string from LLM
     alerts = clean_artemis_output(raw_response)
