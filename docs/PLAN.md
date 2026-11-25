@@ -158,10 +158,14 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   the best this index allows even with perfect wording. Kept by the owner's decision
   (2026-11-26). Second check running: GLM end to end, 3 runs per case, must keep its own catches
   at or above 80%.
-- Next: how the guideline text is stored, measured on the standalone questions, the
-  ideal-description searches and the self-check: (b) cut along the guideline's own sections with
-  headings, then (d) a better search model and (e) a re-ranking step, which need downloads the
-  owner approves first.
+- Fix 5b (pieces cut along the guideline's own sections, labelled with the section path, tables
+  by whole rows) tried and dropped by its rule: self-check 30/34 and ideal searches 7/12 rose,
+  but standalone questions fell to 11/20 and cases to 5/12. The converted files miss some
+  headings, so some tables carry the wrong section label. The checker now also measures each
+  problem searched with its own description (the ideal-description track).
+- Next: (d) a better search model and (e) a re-ranking step, which need downloads the owner
+  approves first; meanwhile, with no download, the other half of (a): the AI reads whole
+  passages instead of their first 480 characters (G35), checked end to end on Llama.
 
 - [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
