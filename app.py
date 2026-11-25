@@ -32,6 +32,8 @@ from modules.llm_client import (
 from modules.patient_parser import load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
+from ui.patient_picker import patient_label
+from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
 from modules.analysis import (
     AnalysisOptions,
     compute_overall_status,
@@ -70,7 +72,9 @@ GUIDELINE_INDEX_VERSION = 1
 # Backward-compatible alias used by downstream code.
 GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
-CUSTOM_PATIENTS_PATH = PROJECT_ROOT / "Data" / "custom_patients.json"
+CUSTOM_PATIENTS_PATH = Path(
+    os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json"
+)
 CANDIDATE_RULES_PATH = PROJECT_ROOT / "Data" / "candidate_rules.json"
 
 
@@ -264,16 +268,7 @@ def _get_rag_engine(
 
 def _init_session_state() -> None:
     # Rationale: Streamlit reruns on every interaction; initialize defaults once.
-    st.session_state.setdefault("analysis_ran", False)
-    st.session_state.setdefault("finalized", False)
-    st.session_state.setdefault("analysis_status", None)
-    st.session_state.setdefault("analysis_alerts", [])
-    st.session_state.setdefault("analysis_results", [])
-    st.session_state.setdefault("analysis_use_ollama", False)
-    st.session_state.setdefault("analysis_ollama_error", None)
-    # Rationale: allow audit/debug display for LLM screening when no alerts are returned.
-    st.session_state.setdefault("analysis_screening_debug", None)
-    st.session_state.setdefault("analysis_screening_patient_facts", None)
+    init_analysis_state(st.session_state)
     # Rationale: allow adding ad-hoc test cases without editing JSON files.
     st.session_state.setdefault("custom_patients", [])
 
@@ -356,24 +351,21 @@ def _run_analysis(
         on_status=_on_status,
     )
 
+    # Forget everything from the previous run, including its reviews, before storing this one.
+    clear_analysis(st.session_state)
+    st.session_state["analysis_patient_id"] = str(patient.get("patient_id") or "")
+    st.session_state["analysis_note"] = today_note
     st.session_state["agentic_debug_enabled"] = agentic_enabled
     st.session_state["agentic_debug_result"] = result.agentic_result
-    if result.screening_ran:
-        st.session_state["analysis_screening_debug"] = result.screening_debug
-        st.session_state["analysis_screening_patient_facts"] = result.patient_facts
+    st.session_state["analysis_screening_debug"] = result.screening_debug
+    st.session_state["analysis_screening_patient_facts"] = result.patient_facts
 
-    # Rationale: reset per-alert review state for each analysis run. Without this,
-    # a previous acknowledgment/override can incorrectly allow finalize on a new
-    # Save without review.
     for alert in result.alerts:
         st.session_state[f"alert_action_{alert.alert_id}"] = "Unreviewed"
         st.session_state[f"alert_override_reason_{alert.alert_id}"] = ""
         st.session_state[f"alert_override_comment_{alert.alert_id}"] = ""
     for alert_id, seconds in result.explain_seconds.items():
         st.session_state[f"explain_time_{alert_id}"] = seconds
-
-    # Clinical summary (LLM) feature disabled: always clear any prior narrative.
-    st.session_state["analysis_narrative"] = None
 
     st.session_state["analysis_ran"] = True
     st.session_state["finalized"] = False
@@ -392,18 +384,7 @@ def main() -> None:
     # Rationale: avoid modifying widget-backed session_state keys after widgets are
     # instantiated. We clear the Add patient case form on the next rerun.
     if st.session_state.pop("reset_add_case_form", False):
-        for _k in [
-            "new_case_patient_id",
-            "new_case_patient_name",
-            "new_case_age",
-            "new_case_sex",
-            "new_case_art_regimen",
-            "new_case_other_meds",
-            "new_case_complaints",
-            "new_case_exam_findings",
-            "new_case_prior_history",
-            "new_case_lab_results",
-        ]:
+        for _k in [k for k in list(st.session_state.keys()) if str(k).startswith("new_case_")]:
             st.session_state.pop(_k, None)
 
     _flash = st.session_state.pop("add_case_flash_success", None)
@@ -705,7 +686,7 @@ def main() -> None:
                 _save_custom_patients(CUSTOM_PATIENTS_PATH, custom_patients)
                 # Rationale: auto-select the newly added patient to make it clear
                 # the add succeeded.
-                st.session_state["selected_patient_label"] = pid
+                st.session_state["selected_patient_label"] = patient_label(patient_record)
                 # Rationale: clear the Add patient case form after success to allow rapid entry.
                 st.session_state["add_case_flash_success"] = "Case added."
                 st.session_state["reset_add_case_form"] = True
@@ -717,7 +698,7 @@ def main() -> None:
 
     st.subheader("Encounter")
 
-    patient_labels = [f"{p.get('patient_id')} - {p.get('name')}" for p in patients]
+    patient_labels = [patient_label(p) for p in patients]
     # Rationale: persist patient selection across reruns, and safely reset if the
     # selected value no longer exists (e.g., list changed).
     if (
@@ -735,6 +716,8 @@ def main() -> None:
     patient = patients[selected_index]
 
     selected_patient_id = str(patient.get("patient_id") or "")
+    if not analysis_belongs_to(st.session_state, selected_patient_id):
+        clear_analysis(st.session_state)
     custom_patient_ids = {str(p.get("patient_id") or "") for p in (custom_patients or [])}
     can_delete_selected = bool(selected_patient_id) and selected_patient_id in custom_patient_ids
 
@@ -921,9 +904,7 @@ def main() -> None:
                     # with key selected_patient_label has already been instantiated this run.
                     # On rerun, the pre-selectbox guard will reset the selection if it no
                     # longer exists in the patient list.
-                    st.session_state["analysis_ran"] = False
-                    st.session_state["analysis_results"] = []
-                    st.session_state["finalized"] = False
+                    clear_analysis(st.session_state)
                     st.session_state.pop("pending_delete_patient_id", None)
                     st.success(f"Deleted patient case: {selected_patient_id}")
                     st.rerun()
@@ -1027,6 +1008,11 @@ def main() -> None:
     if not st.session_state.get("analysis_ran", False):
         st.info("Click 'Save encounter (run checks)' to run the analysis.")
         return
+    if note_changed(st.session_state, today_note):
+        st.warning(
+            "The clinician's note has changed since these results were produced. "
+            "Press 'Save encounter (run checks)' to update them."
+        )
 
     alerts: List[Alert] = st.session_state.get("analysis_alerts", [])
     status = st.session_state.get("analysis_status")

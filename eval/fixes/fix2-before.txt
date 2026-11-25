@@ -1,0 +1,19 @@
+Fix 2, before (2026-11-25, commit 2d7db13). Streamlit AppTest, AI switched off.
+Saved P001, then selected P002 without saving.
+
+selected before save: P001 - John Doe
+after save, alerts: ['Creatinine monitoring overdue while on TDF']
+now selected: P002 - Jane Roe
+alerts still in memory: ['Creatinine monitoring overdue while on TDF']
+banners on screen: ['YELLOW: 1 alert(s) to consider.', '4 guideline file(s) found.', 'Finalize is disabled until all alerts are acknowledged or overridden with a reason.']
+expanders mentioning creatinine: ['Alert: Creatinine monitoring overdue while on TDF']
+
+Tests written first (tests/test_screen_patient_switch.py), run on commit 2d7db13:
+test_results_stay_with_the_patient_they_were_run_for:
+  assert _alert_titles_on_screen(at) == []   (after selecting P002)
+  Left contains one more item: 'Alert: Creatinine monitoring overdue while on TDF'
+test_adding_a_case_clears_the_form_and_selects_the_new_case:
+  assert _selected(at).split(" - ")[0] == "T-900"
+  - T-900
+  + P001
+2 failed

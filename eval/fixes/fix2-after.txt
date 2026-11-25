@@ -1,0 +1,12 @@
+Fix 2, after (2026-11-25). Same steps as fix2-before.txt, plus an edit to the note after saving.
+
+selected before save: P001 - John Doe
+after save, alerts: ['Creatinine monitoring overdue while on TDF']
+after editing the note, warnings: ["The clinician's note has changed since these results were produced. Press '", 'YELLOW: 1 alert(s) to consider.']
+now selected: P002 - Jane Roe
+alerts in memory: []
+banners on screen: ["Click 'Save encounter (run checks)' to run the analysis."]
+alert sections on screen: []
+
+Tests: tests/test_screen_patient_switch.py, 2 passed (failed before the fix).
+Save with the AI off took 198 s after the fix and 238 s on the code before it (one run each): the slow first Save is the guideline index being rebuilt on every start (plan 4.3), not this fix.
