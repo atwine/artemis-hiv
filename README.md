@@ -17,9 +17,11 @@ Important: This is **decision support only**. Clinicians retain final authority.
 
 ## What’s in this repo
 
-- **Streamlit app**: `app.py`
-- **Core modules**: `modules/`
-- **Synthetic demo patients**: `Data/mock_patients.json`
+- **Streamlit app**: `app.py`, with screen helpers in `ui/`
+- **The app's logic**: `artemis/` (patient record, rules, AI review, guidelines, plan, visit record)
+- **Search engine and embeddings**: `modules/`
+- **Synthetic demo patients**: `Data/mock_patients.json`; cases you add go to `Data/custom_patients.json`
+- **Saved visits**: `Data/visit_records/`, one file per patient (created when you run checks; git ignores it)
 - **Guideline Markdown files**: `Data/MarkDown Files/*.md`
 - **Local guideline PDFs (optional / legacy)**: `Data/*.pdf`
 - **Persistent local vector DB (Chroma)**: `storage/chroma/` (created at runtime)
@@ -73,16 +75,21 @@ Then open the local URL Streamlit prints (usually `http://localhost:8501`).
 
 ### How to use the workflow
 
-1. Select a patient.
-2. Edit the **Today’s encounter note** (optional).
-3. Click **Save encounter (run checks)**.
-4. Open **Output**.
-5. If alerts are present, use **Select alert** to choose one.
-6. Review the alert content (and the **ARTEMIS Review.** plan when enabled).
-7. Near the bottom, set **Acknowledge / Override** for the selected alert:
-   - **Acknowledge**, or
-   - **Override** (requires an override reason).
-8. **Finalize / Close visit** is disabled until all alerts are reviewed.
+1. Select a patient. **Patient Details/History** shows the record, including dated lab results.
+2. Write today's **Clinician's Assessment & Plan** (optional).
+3. Click **Save encounter (run checks)**. The fixed rule checks always run; the AI review runs
+   when a model server is set. The run is saved to the patient's visit record.
+4. Read the results. Each alert says whether it came from a **Rule check** or the **AI review**.
+   A banner says when the AI review failed or was cut short, so a missing AI review never
+   looks like a clean result.
+5. With **Enable agentic ARTEMIS Review** ticked (Advanced settings), **Output** shows the AI's
+   management plan next to your own.
+6. Under **Review Alerts**, set **Acknowledge** or **Override** for every alert. An override
+   needs a reason, and the reason **Other** needs a comment.
+7. **Finalize / Close visit** saves your decisions to the visit record. It is disabled until
+   every alert is reviewed.
+8. When you come back to a patient, **Show last saved results** reopens the last run without
+   asking the AI again. If today's note differs from the saved one, the screen says so.
 
 ## Model server
 
@@ -93,8 +100,21 @@ The app sends its model calls to any OpenAI-compatible server (vLLM, OpenRouter,
 - `LLM_MODEL`: the model id (empty means the first model the server lists)
 - `LLM_API_KEY`: only if the server checks a key (OpenRouter does)
 
-The settings panel shows which server and model are in use. If `LLM_BASE_URL` is empty, the app
-falls back to a local Ollama server, as described below.
+The settings panel shows which kind of server and which model are in use, but never the
+server's address, which stays in `.env`. If `LLM_BASE_URL` is empty, the app falls back to a
+local Ollama server, as described below.
+
+## Saved data
+
+- `Data/custom_patients.json`: cases added with **Add patient case**. If the file can't be
+  read, the app says so and won't add or delete cases until it is fixed, rather than
+  overwriting it.
+- `Data/visit_records/`: one file per patient, one line per event (checks run, visit
+  finalized). The lines hold the clinician's notes, so the folder stays on this computer and
+  git ignores it. The full-stack rebuild moves these into Postgres (plan item 4.5).
+
+Two optional settings move these files, for example for tests (the test suite does this
+itself): `ARTEMIS_CUSTOM_PATIENTS_PATH` and `ARTEMIS_VISIT_RECORDS_DIR`.
 
 ## Local LLM (Ollama) fallback
 
@@ -154,7 +174,7 @@ pip install -r requirements.txt
 ### “Guidelines PDF not found”
 
 The app expects guideline **Markdown files** under:
-- `Data/MarkDown Files/*.md` (`app.py:L58-L63`)
+- `Data/MarkDown Files/*.md` (`GUIDELINE_MD_DIR` in `app.py`)
 
 If you add or change guideline files, restart Streamlit.
 
@@ -186,33 +206,25 @@ To rebuild the index, stop the app and delete `storage/chroma/`.
 
 ```text
 .
-├── app.py
-├── Data/
-│   ├── mock_patients.json
-│   ├── custom_patients.json
-│   ├── candidate_rules.json
-│   └── MarkDown Files/
-│       ├── *.md
-│       └── Example Output/
-├── modules/
-│   ├── alert_rules.py
-│   ├── embedder.py
-│   ├── explanation_generator.py
-│   ├── guideline_processor.py
-│   ├── llm_client.py
-│   ├── patient_parser.py
-│   ├── rag_engine.py
-│   └── vector_store.py
-├── plans/
-│   └── implementation-plan.md
-├── storage/
-│   └── .gitkeep
+├── app.py                  the Streamlit screen
+├── ui/                     screen helpers (banners, references, review, saved state)
+├── artemis/                the app's logic, with no screen code
+│   ├── patient/            reading a record: labs, medicines, summary, saved cases
+│   ├── rules/              the fixed safety rules
+│   ├── ai/                 the model client and the AI review
+│   ├── guidelines/         cleaning, storing and searching guideline text
+│   ├── plan/               the AI management plan and how it is shown
+│   ├── visit.py            runs one visit check from start to finish
+│   ├── review.py           alert review and Finalize rules
+│   └── visit_record.py     the saved visit record
+├── modules/                embeddings, search engine, fallback explanations
+├── scripts/                baseline runs and their comparison, code map check
+├── Data/                   demo patients, guideline files, saved cases and visits
+├── docs/                   plan, decisions, audit, lessons learned, code map
+├── eval/                   baseline runs and the evidence for each Phase 1 fix
 └── tests/
-    ├── test_alert_rules.py
-    ├── test_guideline_processor.py
-    └── test_rag_engine.py
 ```
 
 ## Debug / developer notes
 
-- To show the hidden debug panel for the agentic planner, set `AGENTIC_RAG_DEBUG=1` before starting the app (`app.py:L1490-L1494`).
+- To show the hidden debug panel for the agentic planner, set `AGENTIC_RAG_DEBUG=1` before starting the app.
