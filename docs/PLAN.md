@@ -88,10 +88,12 @@ but are never quoted as accuracy. The doctor's review and the reportable numbers
       case, the expected problems caught and missed and the extra alerts. Also the measures that
       need no answer key: the same answer across runs, citations only to passages the AI was
       shown, replies read in full, time and cost per check. It rebuilds the table from saved outputs.
-- [ ] 2.4 Models (owner, 2026-11-25): Llama 3.3 70B on the A100 (the baseline, free), DeepSeek V3.2
-      and Claude Sonnet 5.5 through OpenRouter, and MedGemma-27B on the A100 if it can be set up
-      there. OpenRouter spending cap $5: the script estimates the cost before a run, stops at the
-      cap and records the real cost of every call; models' thinking is switched off or capped.
+- [ ] 2.4 Models (owner, 2026-11-25): Llama 3.3 70B on the A100 (the baseline, free), and DeepSeek
+      V3.2, GLM 5.2 and Claude Haiku 5.5 through OpenRouter, all with thinking switched off.
+      MedGemma-27B left out (owner). Claude Sonnet 5.5 was dropped after a trial: its thinking
+      can't be switched off and filled the app's reply room, so its alert list was cut off and
+      one check cost $0.07. OpenRouter spending cap $5: the script estimates the cost before a
+      run, stops at the cap and records the real cost of every call.
       Measured: one visit check uses about 3,700 tokens in and 740 out.
 - [ ] 2.5 AfriMed-QA knowledge check: its infectious-disease questions (539, 184 written by
       experts), HIV-related ones picked out, for every shortlisted model. The download needs its
@@ -229,8 +231,8 @@ reproduces it.
 1. The design direction (after the Phase 3 mockups).
 2. Database: Postgres (owner, 2026-11-25), hosted somewhere like Railway or Cloudflare; the host
    is still open. Until then the visit record is a local file (fix 9).
-3. Which OpenRouter models, and a spending cap: decided 2026-11-25 (DeepSeek V3.2, Claude Sonnet 5.5;
-   $5). Only adding MedGemma-27B to the A100 is still open.
+3. Which OpenRouter models, and a spending cap: decided 2026-11-25 (DeepSeek V3.2, GLM 5.2, Claude
+   Haiku 5.5; $5). MedGemma-27B left out for now.
 4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited (Phase 7).
 5. Where the explainer videos live (YouTube, or small files in the repo).
 6. Whether to mirror this checklist as GitHub issues and milestones.

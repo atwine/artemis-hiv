@@ -1,7 +1,7 @@
 """Ask one model the AfriMed-QA infectious-disease and HIV multiple-choice questions.
 
     python scripts/run_afrimedqa.py --model llama-a100
-    python scripts/run_afrimedqa.py --model claude-sonnet-5.5 --limit 3
+    python scripts/run_afrimedqa.py --model glm-5.2 --limit 3
     python scripts/run_afrimedqa.py --model deepseek-v3.2 --dry-run
 
 Needs the AfriMed-QA file in eval/afrimedqa/data/ (gitignored). Answers go to

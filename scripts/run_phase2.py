@@ -41,9 +41,13 @@ PRESETS: Dict[str, Dict[str, Any]] = {
     "llama-a100": {"openrouter": None, "extra": None},
     "deepseek-v3.2": {"openrouter": "deepseek/deepseek-v3.2",
                       "extra": {"reasoning": {"enabled": False}, "usage": {"include": True}}},
-    # This endpoint refuses to switch reasoning off; measured, it bills no thinking tokens anyway.
-    "claude-sonnet-5.5": {"openrouter": "anthropic/claude-sonnet-5.5", "extra": {"usage": {"include": True}}},
+    "glm-5.2": {"openrouter": "z-ai/glm-5.2",
+                "extra": {"reasoning": {"enabled": False}, "usage": {"include": True}}},
+    "claude-haiku-5.5": {"openrouter": "anthropic/claude-haiku-5.5",
+                         "extra": {"reasoning": {"enabled": False}, "usage": {"include": True}}},
 }
+# Left out (measured 2026-11-25): Claude Sonnet 5.5, GLM 5.3 and GLM 5.3 Flash refuse to switch
+# thinking off. Sonnet 5.5's thinking filled the app's reply room, so its alert list was cut off.
 
 
 def _prices(model_id: str) -> tuple:
