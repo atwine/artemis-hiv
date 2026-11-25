@@ -84,7 +84,8 @@ def build(cases: List[Case], models: Dict[str, List[Dict[str, Any]]]) -> tuple:
             listing.append(f"- {case.case_id} run {r.get('repeat')}: missed: {', '.join(sorted(s.missed)) or 'none'}"
                            + (f"; must-not broken: {', '.join(sorted(s.must_not_broken))}" if s.must_not_broken else ""))
             for m in s.matches:
-                listing.append(f"  - [{m.source}] {m.title} -> {', '.join(m.problems) or 'extra'}")
+                what = ", ".join(m.problems) or (f"also fine: {', '.join(m.also_fine)}" if m.also_fine else "extra")
+                listing.append(f"  - [{m.source}] {m.title} -> {what}")
         listing.append("")
         s = summarize(scores)
         lf = _label_free(runs)

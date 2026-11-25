@@ -92,3 +92,11 @@ def test_the_seven_test_patients_have_case_files_with_frozen_records() -> None:
     for pid, patient in sources.items():
         assert pid in cases, pid
         assert cases[pid].patient == patient
+
+
+def test_also_fine_items_load(tmp_path: Path) -> None:
+    from artemis.evaluation.cases import load_case
+
+    data = json.loads(json.dumps(KEYED))
+    data["answer_key"]["also_fine"] = [{"id": "bp", "summary": "Blood pressure", "match": [["blood pressure"]]}]
+    assert [a.id for a in load_case(_write(tmp_path, data)).also_fine] == ["bp"]

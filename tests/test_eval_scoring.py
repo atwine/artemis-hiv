@@ -137,3 +137,32 @@ def test_the_script_refuses_cases_without_an_answer_key(tmp_path: Path) -> None:
     ev = _evaluate_module()
     with pytest.raises(SystemExit, match="no answer key"):
         ev.main(["--cases", str(cases), "--runs", str(tmp_path / "runs"), "--out", str(tmp_path / "r.md")])
+
+
+ALSO = MustNot("bp", "Blood pressure (held for the doctor)", _rule(("blood pressure",)))
+WITH_ALSO = Case("S2", "test", {}, "draft", False, [KIDNEY], [STOP], also_fine=[ALSO])
+CLEAR_ALSO = Case("C2", "test", {}, "draft", True, [], [], also_fine=[ALSO])
+
+
+def test_an_also_fine_alert_is_neither_required_nor_extra() -> None:
+    from artemis.evaluation.scoring import score_run, summarize
+
+    s = score_run(WITH_ALSO, [_alert("Creatinine on TDF"), _alert("Blood pressure rising")])
+    assert (s.caught, s.missed, s.extra) == ({"kidney"}, set(), 0)
+    assert [m.also_fine for m in s.matches] == [(), ("bp",)]
+    clear = score_run(CLEAR_ALSO, [_alert("Blood pressure rising")])
+    assert clear.extra == 0
+    sm = summarize([s, clear])
+    assert (sm.clear_correct, sm.clear_runs) == (1, 1)
+    assert (sm.matched_alerts, sm.alerts) == (3, 3)  # an also-fine alert is a real problem, just not a required one
+
+
+def test_a_must_not_phrase_said_in_the_negative_does_not_count() -> None:
+    from artemis.evaluation.scoring import score_run
+
+    case = Case("S3", "test", {}, "draft", False, [KIDNEY],
+                [MustNot("switch_dtg", "Switch from DTG", _rule(("switch from dtg",)))])
+    said = score_run(case, [_alert("Weight gain", action="Switch from DTG to EFV")])
+    denied = score_run(case, [_alert("Weight gain", action="Do not switch from DTG; treat the thyroid first")])
+    assert said.must_not_broken == {"switch_dtg"}
+    assert denied.must_not_broken == set()

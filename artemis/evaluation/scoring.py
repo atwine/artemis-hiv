@@ -5,7 +5,8 @@ caught nothing expected (extra), and which "must not say" items an alert said. A
 
 - sensitivity: caught / expected, over runs of cases that have problems
 - precision: alerts that caught something / all alerts
-- specificity: runs of should-be-clear cases with no alert / those runs
+- specificity: runs of should-be-clear cases with no extra alert / those runs ("also fine"
+  alerts are reasonable, so they neither count as catches nor as false alarms)
 - consistency: per case, the share of runs that agree on what was caught, what was wrongly said
   and whether there was any extra alert; then the mean over cases
 
@@ -27,6 +28,7 @@ class AlertMatch:
     source: str
     problems: Tuple[str, ...]
     must_not: Tuple[str, ...]
+    also_fine: Tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -55,7 +57,8 @@ def score_run(case: Case, alerts: List[Dict[str, Any]]) -> RunScore:
             title=str(a.get("title") or ""),
             source=str(a.get("source") or "rule"),
             problems=tuple(p.id for p in case.problems if p.rule.matches(text)),
-            must_not=tuple(m.id for m in case.must_not if m.rule.matches(text)),
+            must_not=tuple(m.id for m in case.must_not if m.rule.matches(text, skip_negated=True)),
+            also_fine=tuple(a.id for a in case.also_fine if a.rule.matches(text)),
         ))
     caught = frozenset(pid for m in matches for pid in m.problems)
     return RunScore(
@@ -64,7 +67,7 @@ def score_run(case: Case, alerts: List[Dict[str, Any]]) -> RunScore:
         has_must_not=bool(case.must_not),
         caught=caught,
         missed=frozenset(p.id for p in case.problems) - caught,
-        extra=sum(1 for m in matches if not m.problems),
+        extra=sum(1 for m in matches if not m.problems and not m.also_fine),
         alerts=len(matches),
         must_not_broken=frozenset(mid for m in matches for mid in m.must_not),
         matches=tuple(matches),
@@ -118,7 +121,7 @@ def summarize(scores: List[RunScore]) -> Summary:
         expected=sum(len(s.caught) + len(s.missed) for s in sick),
         matched_alerts=sum(s.alerts - s.extra for s in scores),
         alerts=sum(s.alerts for s in scores),
-        clear_correct=sum(1 for s in clear if s.alerts == 0),
+        clear_correct=sum(1 for s in clear if s.extra == 0),
         clear_runs=len(clear),
         must_not_broken_runs=sum(1 for s in guarded if s.must_not_broken),
         must_not_runs=len(guarded),
