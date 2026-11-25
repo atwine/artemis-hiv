@@ -32,7 +32,8 @@ Version 1 of the revival is done when all four are true:
 - [x] 0.3 Security scanners: secret scan on every commit, dependency and code scans on every push.
 - [x] 0.4 Create `development` and `staging` from `main`; first pull request goes through them.
 - [ ] 0.5 Fix the 5 failing tests; move the loose `test_*.py` scripts out of the test run; lock package versions.
-      Tests fixed (16 pass locally); GitHub check added (`tests.yml`), first run pending; package locking still to do.
+      Tests fixed (16 pass); GitHub check added (`tests.yml`); debugging scripts deleted; packages locked with
+      pip-tools (`requirements.in` -> `requirements.txt`). Tick once the GitHub check passes.
 - [ ] 0.6 (suggested) Stop storing the guideline PDFs in the repo; link to the official sources instead.
 
 Check: tests all pass; both branches exist; scanners run on a pull request.

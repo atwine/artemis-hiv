@@ -21,10 +21,12 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install packages
-        # The CPU build of torch first: the default Linux build pulls in about
-        # 3 GB of GPU libraries that the tests never use.
+        # The CPU build of the locked torch version first: the default Linux build
+        # pulls in about 3 GB of GPU libraries that the tests never use. It still
+        # satisfies the lock's torch==X pin, so the second install keeps it.
         run: |
-          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          torch_pin=$(grep -E '^torch==' requirements.txt)
+          pip install "$torch_pin" --index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements.txt
       - name: Run the tests
         # No model server here: the tests use stand-in clients, never a real LLM.
