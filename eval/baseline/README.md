@@ -2,8 +2,10 @@
 
 The "before" snapshot that every Phase 1 fix is judged against. `scripts/run_baseline.py`
 ran all 7 test patients 3 times each through the app's own analysis, at commit `3e75a1e`,
-on Llama 3.3 70B (AWQ 4-bit) on the A100, with the app's default settings. `summary.md` is
-generated from the JSON files; this file is written by hand.
+on Llama 3.3 70B (AWQ 4-bit) on the A100. It used the app's default settings plus one
+change: the agentic ARTEMIS plan was switched on, because it starts switched off and fix
+1.2 is about it. `summary.md` is generated from the JSON files; this file is written by
+hand.
 
 Labels: **measured** means counted from the saved files; **inferred** means a reading of
 them that a clinician should confirm.
@@ -37,7 +39,17 @@ them that a clinician should confirm.
 7. **Speed** (measured). The median was 46.5 s per run, with a range of 31.8 to 286.3 s.
    The slowest was the first run, which included loading the search index.
 
-There were no model errors, and every screening reply parsed.
+There were no model errors, every screening reply parsed, and every plan parsed.
+
+## What this snapshot can't show
+
+- **Fix 1.3** (tie results to the selected patient; save reviews and overrides) is about
+  the screen and its saved state, which this script doesn't drive. Check it with a test or
+  in the browser instead.
+- **Fix 1.4** (name the real source on each citation) changes the citation label on screen,
+  which isn't saved here. The source of every retrieved passage is saved
+  (`results[].retrieved[].metadata.source_path`), so the share by country above can be
+  recounted after the fix. The label itself has to be checked on screen.
 
 ## Rerunning after a fix
 
