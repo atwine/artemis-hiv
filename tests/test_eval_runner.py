@@ -89,3 +89,24 @@ def test_the_spend_counts_saved_runs_and_quiz_answers(tmp_path: Path) -> None:
     lines = [json.dumps({"cost_usd": 0.5}), json.dumps({"cost_usd": 0.125})]
     (tmp_path / "quiz.jsonl").write_text("\n".join(lines) + "\n", encoding="utf-8")
     assert spent_in(tmp_path) == pytest.approx(0.875)
+
+
+def test_the_spend_skips_only_a_quiz_line_cut_off_by_a_crash(tmp_path: Path) -> None:
+    from artemis.evaluation.runner import spent_in
+
+    quiz = tmp_path / "quiz.jsonl"
+    quiz.write_text(json.dumps({"cost_usd": 0.5}) + '\n{"cost_us', encoding="utf-8")
+    assert spent_in(tmp_path) == pytest.approx(0.5)  # the last line was being written when it stopped
+
+
+@pytest.mark.parametrize("name, text", [
+    ("runs/P001__run1.json", '{"cost_usd": 0.2'),  # a saved run that can't be read
+    ("quiz.jsonl", '{"cost_us\n' + json.dumps({"cost_usd": 0.5}) + "\n"),  # a broken line with more after it
+])
+def test_an_unreadable_record_stops_the_spend_count_instead_of_counting_zero(tmp_path: Path, name: str, text: str) -> None:
+    from artemis.evaluation.runner import spent_in
+
+    (tmp_path / "runs").mkdir()
+    (tmp_path / name).write_text(text, encoding="utf-8")
+    with pytest.raises(ValueError, match="can't read the cost"):
+        spent_in(tmp_path)

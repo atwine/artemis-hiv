@@ -109,9 +109,9 @@ def _parse_key(key: Dict[str, Any]) -> Tuple[str, bool, List[Expected], List[Mus
     expect_clear = bool(key.get("expect_clear"))
     if expect_clear == bool(problems):
         raise CaseError("expect_clear: a case either expects nothing flagged or lists problems, not both or neither")
-    _ids_unique(problems, "duplicate problem")
-    _ids_unique(must_not, "duplicate must_not")
-    _ids_unique(also_fine, "duplicate also_fine")
+    _ids_unique(problems, "problem")
+    _ids_unique(must_not, "must_not")
+    _ids_unique(also_fine, "also_fine")
     return str(key.get("status") or "draft"), expect_clear, problems, must_not, also_fine
 
 

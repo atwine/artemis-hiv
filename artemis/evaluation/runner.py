@@ -52,17 +52,23 @@ def cost_of(usages: List[Optional[Dict[str, Any]]], price_in: float, price_out: 
 
 
 def spent_in(folder: Path) -> float:
-    """Dollars recorded under a folder: each saved case run (.json) and each quiz answer (.jsonl line)."""
+    """Dollars recorded under a folder: each saved case run (.json) and each quiz answer (.jsonl line).
+
+    A record that can't be read stops the count: counting it as $0 could let a run pass the cap.
+    The one exception is a quiz file's last line, which a crash can cut off mid-write.
+    """
     total = 0.0
     for f in Path(folder).rglob("*.json*"):
         if f.suffix not in (".json", ".jsonl"):
             continue
         lines = f.read_text(encoding="utf-8").splitlines() if f.suffix == ".jsonl" else [f.read_text(encoding="utf-8")]
-        for line in lines:
+        for i, line in enumerate(lines):
             try:
                 total += float(json.loads(line).get("cost_usd") or 0)
-            except (ValueError, AttributeError):
-                continue
+            except (ValueError, AttributeError) as exc:
+                if f.suffix == ".jsonl" and i == len(lines) - 1:
+                    continue
+                raise ValueError(f"can't read the cost in {f} (line {i + 1})") from exc
     return total
 
 

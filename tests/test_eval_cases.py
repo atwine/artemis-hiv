@@ -61,7 +61,7 @@ def test_a_word_rule_needs_every_group_and_matches_whole_word_starts() -> None:
         (lambda k: k["problems"][0].update(kind="vibes"), "kind"),
         (lambda k: k.update(expect_clear=True), "expect_clear"),
         (lambda k: k["problems"][0].update(match=[]), "match"),
-        (lambda k: k["problems"].append(dict(k["problems"][0])), "duplicate"),
+        (lambda k: k["problems"].append(dict(k["problems"][0])), "^duplicate problem id$"),
     ],
 )
 def test_a_malformed_answer_key_is_refused(tmp_path: Path, change, reason: str) -> None:
