@@ -151,6 +151,7 @@ Check: you have picked a direction and signed off the screens.
 - [ ] 4.2 Endpoints: list patients, run a visit check, record acknowledge/override.
 - [ ] 4.3 Build the guideline index once and keep it, instead of rebuilding on every start.
 - [ ] 4.4 Tests that call the endpoints the way the frontend will.
+- [ ] 4.5 Move the visit records from fix 9's local files into Postgres.
 
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 
@@ -197,7 +198,8 @@ Check: the live Pages link works in a fresh browser with no VPN.
 ## Decisions waiting on you
 
 1. The design direction (after the Phase 3 mockups).
-2. Database: Postgres on Neon (your default) or a single SQLite file (simpler for a demo).
+2. Database: Postgres (owner, 2026-11-25), hosted somewhere like Railway or Cloudflare; the host
+   is still open. Until then the visit record is a local file (fix 9).
 3. Which OpenRouter models, and a spending cap.
 4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited.
 5. Where the explainer videos live (YouTube, or small files in the repo).

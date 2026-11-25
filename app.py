@@ -38,6 +38,7 @@ from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
 from ui.references import alert_references
+from artemis.review import can_finalize as review_can_finalize
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
@@ -283,28 +284,6 @@ def _init_session_state() -> None:
 # Moved to artemis/visit.py (Phase 1). Kept under the old names for callers.
 _extract_patient_facts_from_history = extract_patient_facts_from_history
 _compute_overall_status = compute_overall_status
-
-
-def _alert_resolution_ok(alert_id: str) -> bool:
-    action = st.session_state.get(f"alert_action_{alert_id}")
-    if action == "Acknowledge":
-        return True
-
-    if action == "Override":
-        reason = (st.session_state.get(f"alert_override_reason_{alert_id}") or "").strip()
-        return bool(reason)
-
-    return False
-
-
-def _can_finalize(alerts: List[Alert]) -> bool:
-    if not st.session_state.get("analysis_ran", False):
-        return False
-
-    if not alerts:
-        return True
-
-    return all(_alert_resolution_ok(a.alert_id) for a in alerts)
 
 
 def _run_analysis(
@@ -1170,7 +1149,7 @@ def main() -> None:
                             st.json(parse_plan(updated_plan_text))
 
 
-    # Rationale: show review controls for EVERY alert so _can_finalize can pass.
+    # Rationale: show review controls for EVERY alert so Finalize can pass.
     # Previously only one alert was shown, making it impossible to resolve the rest.
     if alerts and st.session_state.get("analysis_ran"):
         st.markdown("---")
@@ -1204,7 +1183,7 @@ def main() -> None:
                 )
             st.markdown("---")
 
-    can_finalize = _can_finalize(alerts)
+    can_finalize = review_can_finalize(st.session_state, alerts)
     if st.button("Finalize / Close visit", disabled=not can_finalize):
         st.session_state["finalized"] = True
 
