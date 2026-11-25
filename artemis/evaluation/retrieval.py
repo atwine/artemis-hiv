@@ -112,13 +112,22 @@ def _rows(kind: str, items: Sequence[SearchItem], returned: Sequence[Any]) -> Li
 def check_search(cases: Sequence[Case], questions: Sequence[Tuple[SearchItem, str]],
                  case_search: Callable[[Case], Sequence[Any]],
                  question_search: Callable[[str], Sequence[Any]],
-                 allowed: Optional[Set[str]] = None) -> List[Dict[str, Any]]:
+                 allowed: Optional[Set[str]] = None,
+                 ideal_search: Optional[Callable[[str], Sequence[Any]]] = None) -> List[Dict[str, Any]]:
     """One row per item: where its gold first came back in the passages its search returned.
     A case's items share the search the app runs for that visit; a question is searched as is.
-    `allowed` (guideline file stems) is what the app searches; other passages can't count."""
+    `allowed` (guideline file stems) is what the app searches; other passages can't count.
+    With `ideal_search`, each covered problem is also searched with its own answer-key summary
+    (kind "ideal"): the index measured apart from how the app words its searches."""
     rows: List[Dict[str, Any]] = []
     for case in cases:
-        rows += _rows("case", case_items(case, allowed), case_search(case))
+        items = case_items(case, allowed)
+        rows += _rows("case", items, case_search(case))
+        if ideal_search is not None:
+            summaries = {p.id: p.summary for p in case.problems}
+            for item in items:
+                if item.gold:
+                    rows += _rows("ideal", [item], ideal_search(summaries[item.item_id.split(":", 1)[1]]))
     for item, question in questions:
         kept = SearchItem(item.item_id, tuple(g for g in item.gold if allowed is None or g.document in allowed))
         rows += _rows("question", [kept], question_search(question))
@@ -134,7 +143,7 @@ def self_check(gold: Sequence[GoldPassage], search: Callable[[str], Sequence[Any
 
 def summarize_check(rows: Sequence[Dict[str, Any]]) -> Dict[str, Score]:
     return {kind: score([ItemResult(r["item"], r["covered"], r["rank"]) for r in rows if r["kind"] == kind])
-            for kind in ("case", "question")}
+            for kind in ("case", "question", "ideal") if kind != "ideal" or any(r["kind"] == "ideal" for r in rows)}
 
 
 def missing_quotes(gold: Sequence[GoldPassage], folder: Path) -> List[GoldPassage]:

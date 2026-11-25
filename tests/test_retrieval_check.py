@@ -123,3 +123,20 @@ def test_the_self_check_searches_each_gold_quote_word_for_word() -> None:
     index = {QUOTE: [_Hit(f"x {QUOTE} y", "D1")], LONG: [_Hit("unrelated", "D2")]}
     found, misses = self_check(gold, lambda text: index[text])
     assert found == 1 and misses == [gold[1]]
+
+
+def test_the_ideal_track_searches_each_problem_with_its_own_description(tmp_path: Path) -> None:
+    # The index measured apart from the AI's questions: what comes back when the search knows the problem.
+    from artemis.evaluation.cases import load_case
+    from artemis.evaluation.retrieval import check_search, summarize_check
+
+    (tmp_path / "S1.json").write_text(json.dumps({"case_id": "S1", "source": "test", "patient": {}, "answer_key": {
+        "status": "draft", "expect_clear": False, "problems": [
+            {"id": "kidney", "kind": "drug_harm", "summary": "Kidney harm from TDF", "match": [["tdf"]],
+             "guideline": {"document": "D1", "page": 1, "quote": QUOTE}}]}}), encoding="utf-8")
+    asked: list = []
+    ideal = lambda text: (asked.append(text), [_Hit(f"{QUOTE}.", "D1")])[1]
+    rows = check_search([load_case(tmp_path / "S1.json")], [], lambda c: [], lambda t: [], ideal_search=ideal)
+    assert asked == ["Kidney harm from TDF"]
+    assert [(r["kind"], r["rank"]) for r in rows] == [("case", None), ("ideal", 1)]
+    assert summarize_check(rows)["ideal"].found_in_5 == 1

@@ -75,6 +75,7 @@ def main(argv: Optional[list] = None) -> int:
         case_search=case_search,
         question_search=lambda text: rag.search(text, top_k=DEPTH),
         allowed=allowed,
+        ideal_search=lambda text: rag.search(text, top_k=DEPTH),
     )
     shown = AnalysisOptions().top_k
     summary = summarize_check(rows)
