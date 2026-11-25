@@ -3,7 +3,7 @@
     python scripts/evaluate.py
     python scripts/evaluate.py --cases eval/cases --runs eval/phase2/runs --out eval/phase2/results.md
 
-Runs are read from <runs>/<model>/<case>__run<k>.json, as the Phase 2 runner writes them. The
+Runs are read from <runs>/<run folder>/<case>__run<k>.json, as the Phase 2 runner writes them; each folder is one column. The
 table gives, per model, the scores against the draft answer key and the measures that need no
 answer key. A second file, matches.md next to the table, lists every alert and what it matched,
 so the word rules can be checked by eye. Every number here is preliminary: the answer key is a

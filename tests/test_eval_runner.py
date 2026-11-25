@@ -53,6 +53,7 @@ def test_a_run_record_holds_what_the_scoring_needs() -> None:
     assert len(rec["calls"]) >= 2 and rec["cost_usd"] == pytest.approx(0.001 * len(rec["calls"]))
     assert "Creatinine overdue on TDF" in [a["title"] for a in rec["alerts"]]
     assert score_run(case, rec["alerts"]).caught == {"creatinine_overdue"}
+    assert rec["temperature"] == 0  # the value used, never None: None meant 0.2 before the switch
     json.dumps(rec)  # everything in it can be saved
 
 
@@ -110,3 +111,11 @@ def test_an_unreadable_record_stops_the_spend_count_instead_of_counting_zero(tmp
     (tmp_path / name).write_text(text, encoding="utf-8")
     with pytest.raises(ValueError, match="can't read the cost"):
         spent_in(tmp_path)
+
+
+@pytest.mark.parametrize("temperature, label", [(None, "llama-a100-t0"), (0.0, "llama-a100-t0"), (0.2, "llama-a100-t0.2")])
+def test_a_run_folder_always_names_the_temperature_used(temperature, label) -> None:
+    # Saved runs are skipped on resume, so runs at different temperatures must never share a folder.
+    from artemis.evaluation.runner import run_label
+
+    assert run_label("llama-a100", temperature) == label

@@ -105,7 +105,7 @@ but are never quoted as accuracy. The doctor's review and the reportable numbers
 - [x] 2.6 Technical leftovers from Phase 1: temperature 0 or judging over several runs (G38); the
       AI citing a made-up "information_gap" passage instead of no passage. Done 2026-11-25:
       citations can only name passages shown (92% before, 100% after); temperature 0 raised
-      Llama's same-answer rate from 85% to 98%. Whether the app uses temperature 0 is open.
+      Llama's same-answer rate from 85% to 98%. The app now runs at temperature 0 (owner, 2026-11-25).
 - [x] 2.7 Write the method and the preliminary results table, both marked preliminary, and save
       every raw output (they feed the showcase in Phase 6). Done 2026-11-25:
       `eval/phase2/README.md`.

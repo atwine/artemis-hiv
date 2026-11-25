@@ -38,11 +38,31 @@ def test_temperature_extra_fields_and_usage(monkeypatch: pytest.MonkeyPatch) -> 
     assert client.last_usage == {"prompt_tokens": 10, "completion_tokens": 2, "cost": 0.0001}
 
 
-def test_the_defaults_are_unchanged(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_server_client_runs_at_temperature_0_by_default(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Owner's pick (G38): at 0, 10 of 11 test patients got the same alerts on every run, against 4 of 11 at 0.2.
     import requests
     from artemis.ai.client import OpenAICompatClient, OpenAICompatConfig
 
     sent = {}
     monkeypatch.setattr(requests, "post", lambda url, json=None, headers=None, timeout=None: (sent.update(json), _Resp())[1])
     OpenAICompatClient(OpenAICompatConfig(base_url="http://example.invalid/v1", model="m")).chat([{"role": "user", "content": "hi"}])
-    assert sent["temperature"] == 0.2 and "reasoning" not in sent
+    assert sent["temperature"] == 0 and "reasoning" not in sent
+
+
+def test_the_ollama_backup_runs_at_temperature_0_by_default(monkeypatch: pytest.MonkeyPatch) -> None:
+    import ollama
+    from artemis.ai.client import OllamaClient, OllamaConfig
+
+    sent = {}
+
+    class FakeOllama:
+        def __init__(self, host=None, timeout=None) -> None:
+            pass
+
+        def chat(self, model=None, messages=None, options=None, format=None):  # noqa: A002
+            sent.update(options or {})
+            return {"message": {"content": "[]"}, "done_reason": "stop"}
+
+    monkeypatch.setattr(ollama, "Client", FakeOllama)
+    assert OllamaClient(OllamaConfig(model="m")).chat([{"role": "user", "content": "hi"}]) == "[]"
+    assert sent["temperature"] == 0
