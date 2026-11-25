@@ -27,7 +27,7 @@ Important: This is **decision support only**. Clinicians retain final authority.
 
 ## Prerequisites
 
-- **Python 3.10+** (the code uses PEP 604 union types like `OllamaConfig | None`) (`modules/llm_client.py:L25`).
+- **Python 3.12+** (the locked package versions need it; numpy 2.5 requires 3.12).
 - A working Python environment with `pip`.
 - (Optional) **Ollama** installed locally for LLM-generated explanations.
 
@@ -132,6 +132,21 @@ If Ollama is not available or the model is missing, the app falls back to a dete
 
 ```bash
 pytest
+```
+
+GitHub runs the same tests on every push and pull request.
+
+## Adding or upgrading a package
+
+`requirements.in` lists the packages the app uses directly. `requirements.txt` is generated from it by pip-tools and pins the exact version of every package, so every install gets the same versions. Don't edit `requirements.txt` by hand.
+
+```bash
+pip install pip-tools
+# edit requirements.in, then regenerate the lock:
+pip-compile --allow-unsafe --strip-extras --no-emit-index-url --output-file=requirements.txt requirements.in
+# to move one package to its newest version:
+pip-compile --allow-unsafe --strip-extras --no-emit-index-url --output-file=requirements.txt --upgrade-package streamlit requirements.in
+pip install -r requirements.txt
 ```
 
 ## Troubleshooting
