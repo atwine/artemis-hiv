@@ -1,0 +1,780 @@
+{
+  "patient_id": "P001",
+  "git_commit": "3e75a1e",
+  "model": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+  "seconds": 42.1,
+  "overall_status": "YELLOW",
+  "llm_error": null,
+  "expected_demo_outcome": {
+    "status": "YELLOW",
+    "notes": "TDF monitoring example: creatinine is intentionally outdated for demo."
+  },
+  "rule_alerts": [
+    {
+      "alert_id": "tdf_creatinine_overdue",
+      "title": "Creatinine monitoring overdue while on TDF",
+      "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "DTG"
+        ],
+        "days_since_creatinine": 478
+      },
+      "query_hint": "TDF renal function monitoring creatinine schedule"
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "P001_001",
+      "title": "Missing Viral Load Monitoring",
+      "message": "Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART. The patient's last viral load test was on 2025-10-01, which is more than 6 months ago. There is no recorded viral load test in the current labs.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "monitoring_gap",
+        "severity": "moderate",
+        "recommended_action": "Order a viral load test",
+        "citations": [
+          {
+            "page_number": 32,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P001_001",
+          "title": "Missing Viral Load Monitoring",
+          "message": "Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART. The patient's last viral load test was on 2025-10-01, which is more than 6 months ago. There is no recorded viral load test in the current labs.",
+          "issue_type": "monitoring_gap",
+          "severity": "moderate",
+          "recommended_action": "Order a viral load test",
+          "citations": [
+            {
+              "page_number": 32,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    },
+    {
+      "alert_id": "P001_002",
+      "title": "Incomplete Medication History",
+      "message": "The patient's non-HIV medication history is not recorded. Guidelines emphasize the importance of screening for suspected adverse drug reactions. A complete medication history is necessary for this assessment.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "information_gap",
+        "severity": "low",
+        "recommended_action": "Obtain a complete medication history",
+        "citations": [],
+        "raw_issue": {
+          "alert_id": "P001_002",
+          "title": "Incomplete Medication History",
+          "message": "The patient's non-HIV medication history is not recorded. Guidelines emphasize the importance of screening for suspected adverse drug reactions. A complete medication history is necessary for this assessment.",
+          "issue_type": "information_gap",
+          "severity": "low",
+          "recommended_action": "Obtain a complete medication history",
+          "citations": []
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    },
+    {
+      "alert_id": "P001_003",
+      "title": "Lack of Adherence Support Plan",
+      "message": "Guidelines suggest providing enhanced adherence support if the viral load is above 50 copies/mL. Although the patient's viral load is currently below this threshold, there is no recorded plan for adherence support or monitoring.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "plan_review",
+        "severity": "low",
+        "recommended_action": "Develop an adherence support plan",
+        "citations": [
+          {
+            "page_number": 32,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P001_003",
+          "title": "Lack of Adherence Support Plan",
+          "message": "Guidelines suggest providing enhanced adherence support if the viral load is above 50 copies/mL. Although the patient's viral load is currently below this threshold, there is no recorded plan for adherence support or monitoring.",
+          "issue_type": "plan_review",
+          "severity": "low",
+          "recommended_action": "Develop an adherence support plan",
+          "citations": [
+            {
+              "page_number": 32,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    }
+  ],
+  "results": [
+    {
+      "alert_id": "P001_001",
+      "explanation": "Why this alert: Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART. The patient's last viral load test was on 2025-10-01, which is more than 6 months ago. There is no recorded viral load test in the current labs.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Order a viral load test', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}], 'raw_issue': {'alert_id': 'P001_001', 'title': 'Missing Viral Load Monitoring', 'message': \"Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART. The patient's last viral load test was on 2025-10-01, which is more than 6 months ago. There is no recorded viral load test in the current labs.\", 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Order a viral load test', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}]}}\n\nGuideline excerpts:\n- (page=11) g age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months 17. Assess growth and development in children under 5 years; monitor for changes 18. Ensure examination of vital signs, skin, eyes, oropharynx (prese\n- (page=20) VIRAL LOAD HIV viral load (VL) monitoring is key to the success of ART. Decisions to change ART made on the basis of virological failure, rather than on clinical or immunological failure alone, have been shown to result in better patient outcomes. 74 If the VL is undetectable, then the virus cannot mutate and develop resistance. A sustained VL 100 \n- (page=13) ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c2",
+          "distance": 0.7949833273887634,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 11
+          },
+          "excerpt": "g age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months 17. Assess growth and development in children under 5 years; monitor for changes 18. Ensure examination of vital signs, skin, eyes, oropharynx (presence of thrush), lymph nodes, lungs, heart, abdomen"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p20_c1",
+          "distance": 0.8739273548126221,
+          "metadata": {
+            "page_number": 20,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "VIRAL LOAD HIV viral load (VL) monitoring is key to the success of ART. Decisions to change ART made on the basis of virological failure, rather than on clinical or immunological failure alone, have been shown to result in better patient outcomes. 74 If the VL is undetectable, then the virus cannot mutate and develop resistance. A sustained VL 100 000 copies/mL, RPV is contraindicated. - Continue "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+          "distance": 0.8797394037246704,
+          "metadata": {
+            "page_number": 13,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+          "distance": 0.8831144571304321,
+          "metadata": {
+            "page_number": 12,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with ca"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+          "distance": 0.8832974433898926,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 12
+          },
+          "excerpt": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow t"
+        }
+      ]
+    },
+    {
+      "alert_id": "P001_002",
+      "explanation": "Why this alert: The patient's non-HIV medication history is not recorded. Guidelines emphasize the importance of screening for suspected adverse drug reactions. A complete medication history is necessary for this assessment.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Obtain a complete medication history', 'citations': [], 'raw_issue': {'alert_id': 'P001_002', 'title': 'Incomplete Medication History', 'message': \"The patient's non-HIV medication history is not recorded. Guidelines emphasize the importance of screening for suspected adverse drug reactions. A complete medication history is necessary for this assessment.\", 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Obtain a complete medication history', 'citations': []}}\n\nGuideline excerpts:\n- (page=22) ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The esse\n- (page=21) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All su\n- (page=22) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 copy) stays at the Health Unit/Facility. A validly filled aDSM report should have the following minimum information a) Source of information, b) Patient details, c) Drug details d) Reaction details. * Ensure relevant tests are conducted * The report is then su",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+          "distance": 0.7611556649208069,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 22
+          },
+          "excerpt": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+          "distance": 0.7994885444641113,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 21
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant to"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c1",
+          "distance": 0.8085720539093018,
+          "metadata": {
+            "page_number": 22,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 copy) stays at the Health Unit/Facility. A validly filled aDSM report should have the following minimum information a) Source of information, b) Patient details, c) Drug details d) Reaction details. * Ensure relevant tests are conducted * The report is then submitted to the pharmacovigilance focal person with"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+          "distance": 0.8130509853363037,
+          "metadata": {
+            "page_number": 21,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c1",
+          "distance": 0.8192673921585083,
+          "metadata": {
+            "page_number": 20,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - Systematic and standardized recording and reportin"
+        }
+      ]
+    },
+    {
+      "alert_id": "P001_003",
+      "explanation": "Why this alert: Guidelines suggest providing enhanced adherence support if the viral load is above 50 copies/mL. Although the patient's viral load is currently below this threshold, there is no recorded plan for adherence support or monitoring.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'plan_review', 'severity': 'low', 'recommended_action': 'Develop an adherence support plan', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}], 'raw_issue': {'alert_id': 'P001_003', 'title': 'Lack of Adherence Support Plan', 'message': \"Guidelines suggest providing enhanced adherence support if the viral load is above 50 copies/mL. Although the patient's viral load is currently below this threshold, there is no recorded plan for adherence support or monitoring.\", 'issue_type': 'plan_review', 'severity': 'low', 'recommended_action': 'Develop an adherence support plan', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}]}}\n\nGuideline excerpts:\n- (page=46) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 suppressed and stable on 2nd line regimens containing twice-daily LPV/r will be maintained on their regimens so as to preserve their options for 3rd line regimens. Drug substitutions may be considered on a case by case basis especially in children and adolesce\n- (page=14) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 3. Apply the red stickers for non-suppressed clients to flag non-suppressed client files. 4. Conduct a first intensive adherence counselling within 7-30 days of result return. 5. Record IAC sessions on HIV care card to support completion of 3 consecutive IAC s\n- (page=17) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p46_c1",
+          "distance": 0.7214495539665222,
+          "metadata": {
+            "page_number": 46,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 suppressed and stable on 2nd line regimens containing twice-daily LPV/r will be maintained on their regimens so as to preserve their options for 3rd line regimens. Drug substitutions may be considered on a case by case basis especially in children and adolescents in whom twice-daily dosing may hinder adherenc"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p14_c1",
+          "distance": 0.7354798913002014,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 14
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 3. Apply the red stickers for non-suppressed clients to flag non-suppressed client files. 4. Conduct a first intensive adherence counselling within 7-30 days of result return. 5. Record IAC sessions on HIV care card to support completion of 3 consecutive IAC sessions. 6. Form viral load focal teams with clini"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+          "distance": 0.7966800928115845,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 17
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD4 <200, X TB LAM if CD4 <200, X FBS/RBS (especiall"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p20_c1",
+          "distance": 0.8291921019554138,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 20
+          },
+          "excerpt": "VIRAL LOAD HIV viral load (VL) monitoring is key to the success of ART. Decisions to change ART made on the basis of virological failure, rather than on clinical or immunological failure alone, have been shown to result in better patient outcomes. 74 If the VL is undetectable, then the virus cannot mutate and develop resistance. A sustained VL 100 000 copies/mL, RPV is contraindicated. - Continue "
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
+          "distance": 0.8652327656745911,
+          "metadata": {
+            "page_number": 37,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "Flowchart: Indications for performing resistance (genotype) testing in second-line antiretroviral therapy Flowchart step VL > 50 copies/mL and on a second-line ART regimen for > 2 years Flowchart branches from previous step Flowchart step * Provide enhanced adherence support * Address potential side-effects affecting adherence, convenience of current regimen, drug interactions, social and psycholo"
+        }
+      ]
+    }
+  ],
+  "screening": {
+    "raw_output": "[\n  {\n    \"alert_id\": \"P001_001\",\n    \"title\": \"Missing Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART. The patient's last viral load test was on 2025-10-01, which is more than 6 months ago. There is no recorded viral load test in the current labs.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order a viral load test\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"P001_002\",\n    \"title\": \"Incomplete Medication History\",\n    \"message\": \"The patient's non-HIV medication history is not recorded. Guidelines emphasize the importance of screening for suspected adverse drug reactions. A complete medication history is necessary for this assessment.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Obtain a complete medication history\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"P001_003\",\n    \"title\": \"Lack of Adherence Support Plan\",\n    \"message\": \"Guidelines suggest providing enhanced adherence support if the viral load is above 50 copies/mL. Although the patient's viral load is currently below this threshold, there is no recorded plan for adherence support or monitoring.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Develop an adherence support plan\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  }\n]",
+    "screening_bundle": [
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+        "page_number": 22,
+        "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+        "page_number": 32,
+        "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider InSTI resistance testing if: - DTG monotherapy - Exposed to drug-"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+        "page_number": 21,
+        "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+        "page_number": 21,
+        "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+        "page_number": 23,
+        "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+      }
+    ],
+    "parse_status": "parsed_nonempty",
+    "dedup_stats": [
+      {
+        "alert_id": "P001_001",
+        "raw_words": 40,
+        "clean_words": 40,
+        "raw_chars": 233,
+        "clean_chars": 233
+      },
+      {
+        "alert_id": "P001_002",
+        "raw_words": 28,
+        "clean_words": 28,
+        "raw_chars": 208,
+        "clean_chars": 208
+      },
+      {
+        "alert_id": "P001_003",
+        "raw_words": 34,
+        "clean_words": 34,
+        "raw_chars": 228,
+        "clean_chars": 228
+      }
+    ]
+  },
+  "patient_facts_seen": {
+    "notes_text_char_count": 159,
+    "notes_text_preview": "Complaints & Symptoms:\nNo new complaints\n\nExamination Findings:\nAppears well\n\nPrior History:\nFeels well. Adherence reported good.\nRoutine follow-up. No issues.",
+    "medications_detected": [],
+    "symptoms_detected": [],
+    "key_history_lines": []
+  },
+  "plan_items": [
+    {
+      "action": "Monitor serum creatinine and eGFR",
+      "reason": "Guidelines recommend screening for renal toxicity in patients on TDF, and patient's creatinine level is 88.",
+      "model_decision": "Agree"
+    },
+    {
+      "action": "Screen for diabetes and other contraindications",
+      "reason": "Guidelines recommend screening for DTG contraindications, but patient's history does not mention diabetes or other relevant conditions.",
+      "model_decision": "Agree"
+    }
+  ],
+  "agentic_result": {
+    "final_answer_text": "**Verification complete. Primary alerts are accurate and comprehensive.**\n\nAfter reviewing the patient's symptoms, examination findings, and lab results, I did not find any signs of drug toxicity from their current or past ART medications or co-medications that were not already considered in the primary alerts.\n\nThe patient's current regimen includes TDF, 3TC, and DTG. The guideline excerpts provide information on the potential adverse effects of these medications, including renal toxicity associated with TDF. However, the patient's creatinine level is within normal limits (88), and there are no other indications of renal impairment.\n\nThe guideline excerpts also emphasize the importance",
+    "updated_management_plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has no new complaints, appears well, and has a viral load of 40, indicating the current regimen of TDF, 3TC, and DTG is effective.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Potential renal toxicity from TDF\",\n      \"action\": \"Monitor serum creatinine and eGFR\",\n      \"reason\": \"Guidelines recommend screening for renal toxicity in patients on TDF, and patient's creatinine level is 88.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Patient's creatinine level is within normal limits, but ongoing monitoring is necessary.\"\n      }\n    },\n    {\n      \"problem\": \"DTG contraindications\",\n      \"action\": \"Screen for diabetes and other contraindications\",\n      \"reason\": \"Guidelines recommend screening for DTG contraindications, but patient's history does not mention diabetes or other relevant conditions.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Screening for DTG contraindications is essential to ensure safe treatment.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, serum creatinine, and eGFR every 6 months\",\n  \"patient_counselling\": [\n    \"Adherence counseling\",\n    \"Renal function monitoring\",\n    \"Report any new symptoms or concerns\"\n  ]\n}",
+    "used_chunks": [],
+    "warnings": [
+      "agentic flow is in Phase 1 skeleton mode; no real planning/retrieval/reasoning has been applied"
+    ],
+    "debug_info": {
+      "normalized_context": {
+        "question_text": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?",
+        "patient_raw": {
+          "patient_id": "P001",
+          "name": "John Doe",
+          "sex": "M",
+          "age_years": 34,
+          "art_regimen_current": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "other_medications": [],
+          "regimen_history": [
+            {
+              "start_date": "2023-01-10",
+              "end_date": null,
+              "regimen": [
+                "TDF",
+                "3TC",
+                "DTG"
+              ]
+            }
+          ],
+          "intake": {
+            "complaints_symptoms": "No new complaints",
+            "examination_findings": "Appears well",
+            "prior_history": "Feels well. Adherence reported good."
+          },
+          "visits": [
+            {
+              "date": "2026-01-22",
+              "type": "intake",
+              "clinician_note": "Complaints & Symptoms:\nNo new complaints\n\nExamination Findings:\nAppears well\n\nPrior History:\nFeels well. Adherence reported good."
+            }
+          ],
+          "labs": {
+            "viral_load": [
+              {
+                "date": "2025-10-01",
+                "value_copies_per_ml": 40
+              }
+            ],
+            "creatinine": [
+              {
+                "date": "2024-10-01",
+                "value_umol_per_l": 88
+              }
+            ]
+          },
+          "today_encounter": {
+            "date": "2026-01-22",
+            "note": "Routine follow-up. No issues.",
+            "orders": [],
+            "med_changes": []
+          },
+          "expected_demo_outcome": {
+            "status": "YELLOW",
+            "notes": "TDF monitoring example: creatinine is intentionally outdated for demo."
+          }
+        },
+        "patient_summary": {
+          "patient_id": "P001",
+          "encounter_date": "2026-01-22",
+          "current_regimen": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "regimen_history": [
+            {
+              "start_date": "2023-01-10",
+              "end_date": null,
+              "regimen": [
+                "TDF",
+                "3TC",
+                "DTG"
+              ]
+            }
+          ],
+          "non_hiv_meds": [],
+          "past_labs": [
+            {
+              "lab": "viral_load",
+              "date": "2025-10-01",
+              "value": 40
+            },
+            {
+              "lab": "creatinine",
+              "date": "2024-10-01",
+              "value": 88
+            }
+          ],
+          "current_labs": {
+            "creatinine": {
+              "date": "2024-10-01",
+              "value": 88
+            },
+            "viral_load": {
+              "date": "2025-10-01",
+              "value": 40
+            }
+          },
+          "past_complaints": [],
+          "past_plans": [],
+          "today_plan": [],
+          "missing_flags": {
+            "regimen_history": false,
+            "non_hiv_meds": true,
+            "past_plans": true,
+            "past_complaints": true,
+            "today_plan": true
+          }
+        },
+        "metadata": {
+          "llm_mode": "LLM screening (generate alerts)",
+          "top_k": 5,
+          "index_max_pages": null,
+          "retrieval_page_range": null
+        }
+      },
+      "subtasks": [
+        {
+          "name": "drug_toxicity_TDF",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for TDF.",
+          "retrieval_query": "TDF side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_3TC",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for 3TC.",
+          "retrieval_query": "3TC side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_DTG",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for DTG.",
+          "retrieval_query": "DTG side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "symptom_toxicity_match",
+          "description": "Retrieve guideline sections that describe how specific symptoms (e.g. fatigue, bone pain, rash, reduced urine, nausea, peripheral neuropathy) can indicate ART drug toxicity, and how to confirm each suspected toxicity.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: which symptoms indicate drug toxicity, how to confirm suspected toxicity with lab tests, and what confirmatory investigations are recommended.",
+          "priority": "high"
+        },
+        {
+          "name": "doctors_plan_check",
+          "description": "Retrieve guideline sections about recommended clinical actions, required monitoring, counselling, and follow-up so the system can compare them against the doctor's current plan and flag any gaps.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: recommended actions after identifying drug toxicity, required lab monitoring intervals, patient counselling, when to switch regimen, and follow-up timing.",
+          "priority": "medium"
+        }
+      ],
+      "evidence_bundles": [
+        {
+          "subtask_name": "drug_toxicity_TDF",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.511458158493042
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5552599430084229
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.6336522698402405
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "page_number": 30,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.668286144733429
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these drugs. Since there is potential for hepatotoxicity, the following are recommendations for co-administration. a. **New Patient**: For newly identified patients, start on TLD with active symptomatic monitoring for adverse events (Chapter 14). Initiate TPT after 3 months to allow time for potential unmasking of TB and to monitor any toxicities that may arise from DTG, prior to initiation of TPT. b. For stable patients already transitioned to DTG: If patient has been on TLD for 3 months or more, initiate TPT immediately. c. If client is already on TPT and a non-DTG based regimen: Optimization to DTG will be deferred until completion of TPT. d. Stable patients for DTG transition and have not received TPT before: a. In case TLE stock is available: First complete TPT and then transition to DTG. b. In case TLE stock is not available: Transition to DTG and initiate TPT after 3 months. Note: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table",
+              "metadata": {
+                "page_number": 20,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6688234806060791
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_3TC",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.5711575150489807
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5992331504821777
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.605125904083252
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 **Drug substitutions for ARV drug toxicity** Substitution is the process of replacing one ARV drug with another. The duration on ART is important when doing ARV substitution. If substitutions are being done within six months of starting ART, it is not necessary to perform a viral load test. However, after six months on ART, a viral load test may be required to rule out treatment failure before a drug is substituted in a failing patient. If the viral load is not suppressed, it is possible the patient may be failing on treatment. Follow the viral load algorithm to rule out treatment failure. In a failing patient, the ART regimen should be switched to 2nd line. See Table 78 for side effects of commonly used ARVs and recommended substitutions. **HEPATOTOXICITY FOLLOWING CO-ADMINISTRATION OF ART AND TPT /TB MEDICINES**",
+              "metadata": {
+                "page_number": 33,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6280637979507446
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 30
+              },
+              "distance": 0.6398696303367615
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_DTG",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.45005160570144653
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these drugs. Since there is potential for hepatotoxicity, the following are recommendations for co-administration. a. **New Patient**: For newly identified patients, start on TLD with active symptomatic monitoring for adverse events (Chapter 14). Initiate TPT after 3 months to allow time for potential unmasking of TB and to monitor any toxicities that may arise from DTG, prior to initiation of TPT. b. For stable patients already transitioned to DTG: If patient has been on TLD for 3 months or more, initiate TPT immediately. c. If client is already on TPT and a non-DTG based regimen: Optimization to DTG will be deferred until completion of TPT. d. Stable patients for DTG transition and have not received TPT before: a. In case TLE stock is available: First complete TPT and then transition to DTG. b. In case TLE stock is not available: Transition to DTG and initiate TPT after 3 months. Note: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table",
+              "metadata": {
+                "page_number": 20,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.5692288279533386
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p28_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Patients on other 1. Screen using screening tool to identify any developing signs and symptoms. regimens and not on this table Any ART 2. Perform laboratory and radiological investigations based on clinical indication. Table 84: Laboratory monitoring for Active Pharmacovigilance in sentinel sites Category of Patient Drugs Screening procedures ART naïve or experienced patient being initiated switched to DTG or starting Isoniazid preventive therapy At the time of starting/switching to DTG or starting INH DTG 1. Review eligibility for DTG (Figure 57) 2. Perform Baseline Random or Fasting Blood Glucose checked against any previous values Isoniazid /3HP 1. Review eligibility for INH/3HP 2. Baseline Liver Function Tests checked against any previous values (Minimum AST and ALT) 3. Hepatitis B test After initiating/switching to DTG or starting INH DTG 1. Screen using screening tool to identify any developing signs and symptoms. 3. Routine RBS every 3 months in the first 12 months, then thereafter use clinical indication to determine need for tests.",
+              "metadata": {
+                "page_number": 28,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5800024271011353
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.5810737013816833
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 83: Laboratory monitoring for Active Pharmacovigilance in non-sentinel sites Category of Patient Drugs Screening procedures ART naïve or experienced patient being initiated or switched to DTG or starting Isoniazid preventive therapy At the time of starting/switching to DTG or starting INH DTG 1. Review eligibility for DTG (Figure25) 2. Perform Baseline Random or Fasting Blood Glucose for those eligible according to the DTG eligibility screening tool (Figure 22). Isoniazid /3HP 1. Review eligibility for INH/3HP 2. Perform risk-based baseline Liver Function Tests checked against any previous values (Minimum AST and ALT) 3. Hepatitis B test After initiating/switching to DTG or starting INH/3HP DTG 1. Screen using screening tool to identify any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests.",
+              "metadata": {
+                "page_number": 27,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.608601987361908
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "symptom_toxicity_match",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.596281886100769
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6071579456329346
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 **Drug substitutions for ARV drug toxicity** Substitution is the process of replacing one ARV drug with another. The duration on ART is important when doing ARV substitution. If substitutions are being done within six months of starting ART, it is not necessary to perform a viral load test. However, after six months on ART, a viral load test may be required to rule out treatment failure before a drug is substituted in a failing patient. If the viral load is not suppressed, it is possible the patient may be failing on treatment. Follow the viral load algorithm to rule out treatment failure. In a failing patient, the ART regimen should be switched to 2nd line. See Table 78 for side effects of commonly used ARVs and recommended substitutions. **HEPATOTOXICITY FOLLOWING CO-ADMINISTRATION OF ART AND TPT /TB MEDICINES**",
+              "metadata": {
+                "page_number": 33,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6584454774856567
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 30
+              },
+              "distance": 0.6625860929489136
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6668604612350464
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "doctors_plan_check",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5845831632614136
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6159113049507141
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 copy) stays at the Health Unit/Facility. A validly filled aDSM report should have the following minimum information a) Source of information, b) Patient details, c) Drug details d) Reaction details. * Ensure relevant tests are conducted * The report is then submitted to the pharmacovigilance focal person within the facility, or if no such person exists, to the regional referral within your catchment area or to the nearest NDA office, or directly to the national Pharmacovigilance Centre at the NDA head office * For reports on serious adverse events, within 24 to 48 hours of detection/ diagnosis. * For non-serious adverse events report as soon as possible but, in any case, not later than 15 days. * Follow up of the ADR should be done appropriately and any emerging supplementary/additional information should be forwarded immediately. The tally data for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:**",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 22
+              },
+              "distance": 0.6270422339439392
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6283178925514221
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Figure 59: Monitoring patients initiated or transitioned to DTG flowchart - **Start: Any indication of a possible SAE?** - Experienced symptoms that have interfered with your daily activities - Sought care from a health facility - Weight loss ≥3kg - **If Yes to any 1:** - **Assessment by clinician** - **Clinical management based on symptoms/signs + check glucose (blood or urine dipstick) referral to higher level care if indicated** - **Elevated glucose or evidence of glucosuria?*** - *See DAIDS criteria for grading - **If No:** - **Continue DTG** - **If Yes:** - **Grade I* blood glucose** - **Continue DTG, education on lifestyle modification** - **Normal or stable** - **Continue DTG** - **Grade II* blood glucose** - **Continue DTG, education on lifestyle modification, and medications (if indicated)** - **Recheck glucose in 2-4 weeks** - **If Increased:** - **Switch to EFV (1st line) or ATV/r (2nd line) Monitor/manage hyperglycaemia or DM as per standard guidelines** - (Implicit path from Recheck glucose in 2-4 weeks if not increased leads to Normal or stable)",
+              "metadata": {
+                "page_number": 18,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6340707540512085
+            }
+          ],
+          "summary": null
+        }
+      ],
+      "verifier_report": {
+        "status": "OK",
+        "issues": [],
+        "draft_answer": "**Verification complete. Primary alerts are accurate and comprehensive.**\n\nAfter reviewing the patient's symptoms, examination findings, and lab results, I did not find any signs of drug toxicity from their current or past ART medications or co-medications that were not already considered in the primary alerts.\n\nThe patient's current regimen includes TDF, 3TC, and DTG. The guideline excerpts provide information on the potential adverse effects of these medications, including renal toxicity associated with TDF. However, the patient's creatinine level is within normal limits (88), and there are no other indications of renal impairment.\n\nThe guideline excerpts also emphasize the importance"
+      },
+      "updated_management_plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has no new complaints, appears well, and has a viral load of 40, indicating the current regimen of TDF, 3TC, and DTG is effective.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Potential renal toxicity from TDF\",\n      \"action\": \"Monitor serum creatinine and eGFR\",\n      \"reason\": \"Guidelines recommend screening for renal toxicity in patients on TDF, and patient's creatinine level is 88.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Patient's creatinine level is within normal limits, but ongoing monitoring is necessary.\"\n      }\n    },\n    {\n      \"problem\": \"DTG contraindications\",\n      \"action\": \"Screen for diabetes and other contraindications\",\n      \"reason\": \"Guidelines recommend screening for DTG contraindications, but patient's history does not mention diabetes or other relevant conditions.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Screening for DTG contraindications is essential to ensure safe treatment.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, serum creatinine, and eGFR every 6 months\",\n  \"patient_counselling\": [\n    \"Adherence counseling\",\n    \"Renal function monitoring\",\n    \"Report any new symptoms or concerns\"\n  ]\n}"
+    }
+  },
+  "status_log": [
+    "vLLM: idle",
+    "running: vLLM: generating audit checklist…",
+    "running: vLLM: screening for safety issues…",
+    "complete: vLLM connected (response received)"
+  ],
+  "repeat": 2
+}

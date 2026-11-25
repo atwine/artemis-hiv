@@ -1,0 +1,619 @@
+{
+  "patient_id": "P005",
+  "git_commit": "3e75a1e",
+  "model": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+  "seconds": 45.7,
+  "overall_status": "YELLOW",
+  "llm_error": null,
+  "expected_demo_outcome": null,
+  "rule_alerts": [],
+  "alerts": [
+    {
+      "alert_id": "P005_001",
+      "title": "Renal Function Decline",
+      "message": "Guidelines do not specify exact creatinine thresholds, but patient's creatinine has been rising from 0.9 mg/dL in 2020 to 1.4 mg/dL. This could be due to TDF, a known nephrotoxin. However, other non-drug causes such as dehydration or comorbidities should also be considered.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "toxicity",
+        "severity": "moderate",
+        "recommended_action": "Monitor renal function, consider alternatives to TDF if decline continues",
+        "citations": [
+          {
+            "page_number": 32,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P005_001",
+          "title": "Renal Function Decline",
+          "message": "Guidelines do not specify exact creatinine thresholds, but patient's creatinine has been rising from 0.9 mg/dL in 2020 to 1.4 mg/dL. This could be due to TDF, a known nephrotoxin. However, other non-drug causes such as dehydration or comorbidities should also be considered.",
+          "issue_type": "toxicity",
+          "severity": "moderate",
+          "recommended_action": "Monitor renal function, consider alternatives to TDF if decline continues",
+          "citations": [
+            {
+              "page_number": 32,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    },
+    {
+      "alert_id": "P005_002",
+      "title": "Viral Load Monitoring",
+      "message": "Guidelines recommend viral load monitoring at least annually. Patient's viral load is <50 copies/mL, but adherence to this monitoring schedule is crucial for early detection of ART failure.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "monitoring_gap",
+        "severity": "low",
+        "recommended_action": "Continue annual viral load monitoring",
+        "citations": [
+          {
+            "page_number": 40,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P005_002",
+          "title": "Viral Load Monitoring",
+          "message": "Guidelines recommend viral load monitoring at least annually. Patient's viral load is <50 copies/mL, but adherence to this monitoring schedule is crucial for early detection of ART failure.",
+          "issue_type": "monitoring_gap",
+          "severity": "low",
+          "recommended_action": "Continue annual viral load monitoring",
+          "citations": [
+            {
+              "page_number": 40,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    },
+    {
+      "alert_id": "P005_003",
+      "title": "Ibuprofen Use with TLD",
+      "message": "There is no clear guideline on the interaction between ibuprofen and TLD. However, ibuprofen can affect renal function, which may be a concern given the patient's rising creatinine levels.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "drug_interaction",
+        "severity": "moderate",
+        "recommended_action": "Monitor renal function closely, consider alternative pain management",
+        "citations": [
+          {
+            "page_number": 0,
+            "chunk_id": "information_gap"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P005_003",
+          "title": "Ibuprofen Use with TLD",
+          "message": "There is no clear guideline on the interaction between ibuprofen and TLD. However, ibuprofen can affect renal function, which may be a concern given the patient's rising creatinine levels.",
+          "issue_type": "drug_interaction",
+          "severity": "moderate",
+          "recommended_action": "Monitor renal function closely, consider alternative pain management",
+          "citations": [
+            {
+              "page_number": 0,
+              "chunk_id": "information_gap"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    }
+  ],
+  "results": [
+    {
+      "alert_id": "P005_001",
+      "explanation": "Why this alert: Guidelines do not specify exact creatinine thresholds, but patient's creatinine has been rising from 0.9 mg/dL in 2020 to 1.4 mg/dL. This could be due to TDF, a known nephrotoxin. However, other non-drug causes such as dehydration or comorbidities should also be considered.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function, consider alternatives to TDF if decline continues', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}], 'raw_issue': {'alert_id': 'P005_001', 'title': 'Renal Function Decline', 'message': \"Guidelines do not specify exact creatinine thresholds, but patient's creatinine has been rising from 0.9 mg/dL in 2020 to 1.4 mg/dL. This could be due to TDF, a known nephrotoxin. However, other non-drug causes such as dehydration or comorbidities should also be considered.\", 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function, consider alternatives to TDF if decline continues', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}]}}\n\nGuideline excerpts:\n- (page=29) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on\n- (page=1) # ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal \n- (page=22) ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The esse",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+          "distance": 0.876370906829834,
+          "metadata": {
+            "page_number": 29,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p1_c1",
+          "distance": 0.8770146369934082,
+          "metadata": {
+            "page_number": 1,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "# ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal meningitis CrAg: cryptococcal antigen CrCl: creati"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+          "distance": 0.8969162702560425,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 22
+          },
+          "excerpt": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+          "distance": 0.9034323692321777,
+          "metadata": {
+            "page_number": 40,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in which TDF may act as a co-factor. Table 17 lists the laboratory investigations and their frequency advised for monitoring of ART safety. TABLE 17: Standard laboratory monitoring of patients after commencement of antiretroviral therapy"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c1",
+          "distance": 0.9144033789634705,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 40
+          },
+          "excerpt": "LABORATORY MONITORING OF THE EFFICACY AND SAFETY OF ANTIRETROVIRAL THERAPY # Key points * ART efficacy is monitored with VL and CD4+ count - discussed in __modules 8 and 9__. * The key efficacy endpoint in ART is sustained virological suppression with a VL 200 cells/µL and the VL is suppressed. But repeat CD4+ to guide management if there is virological failure or clinical failure, or if the viral"
+        }
+      ]
+    },
+    {
+      "alert_id": "P005_002",
+      "explanation": "Why this alert: Guidelines recommend viral load monitoring at least annually. Patient's viral load is <50 copies/mL, but adherence to this monitoring schedule is crucial for early detection of ART failure.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Continue annual viral load monitoring', 'citations': [{'page_number': 40, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4'}], 'raw_issue': {'alert_id': 'P005_002', 'title': 'Viral Load Monitoring', 'message': \"Guidelines recommend viral load monitoring at least annually. Patient's viral load is <50 copies/mL, but adherence to this monitoring schedule is crucial for early detection of ART failure.\", 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Continue annual viral load monitoring', 'citations': [{'page_number': 40, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4'}]}}\n\nGuideline excerpts:\n- (page=20) VIRAL LOAD HIV viral load (VL) monitoring is key to the success of ART. Decisions to change ART made on the basis of virological failure, rather than on clinical or immunological failure alone, have been shown to result in better patient outcomes. 74 If the VL is undetectable, then the virus cannot mutate and develop resistance. A sustained VL 100 \n- (page=11) g age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months 17. Assess growth and development in children under 5 years; monitor for changes 18. Ensure examination of vital signs, skin, eyes, oropharynx (prese\n- (page=12) ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have bee",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p20_c1",
+          "distance": 0.7635642886161804,
+          "metadata": {
+            "page_number": 20,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "VIRAL LOAD HIV viral load (VL) monitoring is key to the success of ART. Decisions to change ART made on the basis of virological failure, rather than on clinical or immunological failure alone, have been shown to result in better patient outcomes. 74 If the VL is undetectable, then the virus cannot mutate and develop resistance. A sustained VL 100 000 copies/mL, RPV is contraindicated. - Continue "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c2",
+          "distance": 0.7662690877914429,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 11
+          },
+          "excerpt": "g age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months 17. Assess growth and development in children under 5 years; monitor for changes 18. Ensure examination of vital signs, skin, eyes, oropharynx (presence of thrush), lymph nodes, lungs, heart, abdomen"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+          "distance": 0.7666946649551392,
+          "metadata": {
+            "page_number": 12,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with ca"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p46_c1",
+          "distance": 0.787431001663208,
+          "metadata": {
+            "page_number": 46,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 suppressed and stable on 2nd line regimens containing twice-daily LPV/r will be maintained on their regimens so as to preserve their options for 3rd line regimens. Drug substitutions may be considered on a case by case basis especially in children and adolescents in whom twice-daily dosing may hinder adherenc"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+          "distance": 0.8154633045196533,
+          "metadata": {
+            "page_number": 12,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow t"
+        }
+      ]
+    },
+    {
+      "alert_id": "P005_003",
+      "explanation": "Why this alert: There is no clear guideline on the interaction between ibuprofen and TLD. However, ibuprofen can affect renal function, which may be a concern given the patient's rising creatinine levels.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'drug_interaction', 'severity': 'moderate', 'recommended_action': 'Monitor renal function closely, consider alternative pain management', 'citations': [{'page_number': 0, 'chunk_id': 'information_gap'}], 'raw_issue': {'alert_id': 'P005_003', 'title': 'Ibuprofen Use with TLD', 'message': \"There is no clear guideline on the interaction between ibuprofen and TLD. However, ibuprofen can affect renal function, which may be a concern given the patient's rising creatinine levels.\", 'issue_type': 'drug_interaction', 'severity': 'moderate', 'recommended_action': 'Monitor renal function closely, consider alternative pain management', 'citations': [{'page_number': 0, 'chunk_id': 'information_gap'}]}}\n\nGuideline excerpts:\n- (page=43) ions between ARVs and other drugs, as well as between different ARVs. Some of these drug-drug interactions are discussed in other modules of these guidelines (e.g. interactions with RIF in module 18). The full list of all potential drug interactions is extensive and beyond the scope of these guidelines, and knowledge of drug interactions is constan\n- (page=1) # ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal \n- (page=36) 32 WHO updated recommendations on HIV clinical management: recommendations for a public health approach Table 3.4 Comparison of tenofovir alafenamide (TAF) and tenofovir disoproxil fumarate (TDF) Major parameters Favours TAF Favours TDF Comments Renal safety ✓ TAF shows less impact on renal and bone density mineral laboratory markers compared to TD",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p43_c2",
+          "distance": 0.909242570400238,
+          "metadata": {
+            "page_number": 43,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "ions between ARVs and other drugs, as well as between different ARVs. Some of these drug-drug interactions are discussed in other modules of these guidelines (e.g. interactions with RIF in module 18). The full list of all potential drug interactions is extensive and beyond the scope of these guidelines, and knowledge of drug interactions is constantly evolving. Clinicians are, therefore, advised t"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p1_c1",
+          "distance": 0.9548706412315369,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 1
+          },
+          "excerpt": "# ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal meningitis CrAg: cryptococcal antigen CrCl: creati"
+        },
+        {
+          "chunk_id": "who_guidelines.extraction__who_guidelines.extraction__p36_c1",
+          "distance": 0.9830980896949768,
+          "metadata": {
+            "page_number": 36,
+            "source_path": "Data\\MarkDown Files\\WHO_guidelines.extraction.md"
+          },
+          "excerpt": "32 WHO updated recommendations on HIV clinical management: recommendations for a public health approach Table 3.4 Comparison of tenofovir alafenamide (TAF) and tenofovir disoproxil fumarate (TDF) Major parameters Favours TAF Favours TDF Comments Renal safety ✓ TAF shows less impact on renal and bone density mineral laboratory markers compared to TDF. Nevertheless, there is a low occurrence and non"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+          "distance": 1.0073049068450928,
+          "metadata": {
+            "page_number": 22,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p35_c1",
+          "distance": 1.0078703165054321,
+          "metadata": {
+            "page_number": 35,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "in both arms). In patients currently on a second-line ATV/r or DRV/r-based regimen, a switch to TLD could be considered, particularly in patients experiencing gastrointestinal or other side-effects. Trial findings suggest equivalent second-line outcomes with a TLD regimen and a DRV/r based-regimen83 and an ATV/r- based regimen.98 However, switching to TLD may reduce side effects and pill burden. P"
+        }
+      ]
+    }
+  ],
+  "screening": {
+    "raw_output": "[\n  {\n    \"alert_id\": \"P005_001\",\n    \"title\": \"Renal Function Decline\",\n    \"message\": \"Guidelines do not specify exact creatinine thresholds, but patient's creatinine has been rising from 0.9 mg/dL in 2020 to 1.4 mg/dL. This could be due to TDF, a known nephrotoxin. However, other non-drug causes such as dehydration or comorbidities should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor renal function, consider alternatives to TDF if decline continues\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"P005_002\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend viral load monitoring at least annually. Patient's viral load is <50 copies/mL, but adherence to this monitoring schedule is crucial for early detection of ART failure.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue annual viral load monitoring\",\n    \"citations\": [{\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4\"}]\n  },\n  {\n    \"alert_id\": \"P005_003\",\n    \"title\": \"Ibuprofen Use with TLD\",\n    \"message\": \"There is no clear guideline on the interaction between ibuprofen and TLD. However, ibuprofen can affect renal function, which may be a concern given the patient's rising creatinine levels.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor renal function closely, consider alternative pain management\",\n    \"citations\": [{\"page_number\": 0, \"chunk_id\": \"information_gap\"}]\n  }\n]",
+    "screening_bundle": [
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+        "page_number": 32,
+        "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider InSTI resistance testing if: - DTG monotherapy - Exposed to drug-"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4",
+        "page_number": 40,
+        "quote": "FBC, full blood count; NVP, nevirapine; TC, total cholesterol; TG, triglycerides; VL, viral load. † These tests should also be done when clinically indicated, based on the discretion of the clinician. Common pitfall: Not monitoring the VL at least annually. If VL is not monitored, this can result in delayed detection of ART failure and required interventions resulting in clinical deterioration and increased risk of HIV transmission. 43 | Adult ART Guidelines 2023"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p36_c2",
+        "page_number": 36,
+        "quote": "nction with an HIV expert, based on treatment history and resistance test(s) result. **Management of patients with a detectable viral load on second-line therapy and initiation of third-line therapy** In a patient who has been on a second-line regimen for ≥ 2 years, if there are two or three VL measurements > 1000 copies/mL in a 6-month period despite adherence interventions, **and adherence is assessed to be satisfactory** (e.g. 100% pharmacy claims over 6 months), then a re"
+      },
+      {
+        "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+        "page_number": 1,
+        "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+        "page_number": 5,
+        "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+      }
+    ],
+    "parse_status": "parsed_nonempty",
+    "dedup_stats": [
+      {
+        "alert_id": "P005_001",
+        "raw_words": 43,
+        "clean_words": 43,
+        "raw_chars": 274,
+        "clean_chars": 274
+      },
+      {
+        "alert_id": "P005_002",
+        "raw_words": 28,
+        "clean_words": 28,
+        "raw_chars": 189,
+        "clean_chars": 189
+      },
+      {
+        "alert_id": "P005_003",
+        "raw_words": 29,
+        "clean_words": 29,
+        "raw_chars": 188,
+        "clean_chars": 188
+      }
+    ]
+  },
+  "patient_facts_seen": {
+    "notes_text_char_count": 623,
+    "notes_text_preview": "Complaints & Symptoms:\n38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.\n\nExamination Findings:\nBP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral an…",
+    "medications_detected": [],
+    "symptoms_detected": [
+      "fatigue"
+    ],
+    "key_history_lines": []
+  },
+  "plan_items": [
+    {
+      "action": "Switch to a TDF-sparing regimen",
+      "reason": "Patient's creatinine level has increased and eGFR has decreased, indicating potential renal toxicity from TDF.",
+      "model_decision": null
+    },
+    {
+      "action": "Monitor and evaluate for other causes",
+      "reason": "Patient attributes fatigue to busy work schedule, but further evaluation is needed to rule out other causes.",
+      "model_decision": null
+    }
+  ],
+  "agentic_result": {
+    "final_answer_text": "Based on the patient's symptoms, examination findings, and lab results, there are potential signs of drug toxicity from their current ART medication, TDF/3TC/DTG (TLD) fixed-dose combination.\n\nThe patient's creatinine level has been increasing over the past few years (from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026), and their eGFR has decreased to 52 mL/min/1.73m2, indicating a potential decline in renal function. This is a known adverse effect of TDF, a component of the TLD regimen",
+    "updated_management_plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient's creatinine level has increased to 1.4 mg/dL and eGFR has decreased to 52 mL/min/1.73m2, indicating potential renal toxicity from TDF.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Renal impairment\",\n      \"action\": \"Switch to a TDF-sparing regimen\",\n      \"reason\": \"Patient's creatinine level has increased and eGFR has decreased, indicating potential renal toxicity from TDF.\"\n    },\n    {\n      \"problem\": \"Mild fatigue\",\n      \"action\": \"Monitor and evaluate for other causes\",\n      \"reason\": \"Patient attributes fatigue to busy work schedule, but further evaluation is needed to rule out other causes.\"\n    }\n  ],\n  \"monitoring_plan\": \"Repeat creatinine, eGFR, and urinalysis in 3 months to assess renal function.\",\n  \"patient_counselling\": [\n    \"Adherence to the new regimen\",\n    \"Importance of regular lab monitoring\",\n    \"Management of mild fatigue\"\n  ]\n}",
+    "used_chunks": [],
+    "warnings": [
+      "agentic flow is in Phase 1 skeleton mode; no real planning/retrieval/reasoning has been applied"
+    ],
+    "debug_info": {
+      "normalized_context": {
+        "question_text": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?",
+        "patient_raw": {
+          "patient_id": "P005",
+          "age_years": 38,
+          "sex": "F",
+          "art_regimen_current": [
+            "TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years"
+          ],
+          "other_medications": [
+            "AZT/3TC/NVP for 2 years (2018-2020)",
+            " switched to TLD in 2020 due to national guideline transition."
+          ],
+          "visits": [
+            {
+              "date": "2026-02-24",
+              "type": "intake",
+              "clinician_note": "Complaints & Symptoms:\n38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.\n\nExamination Findings:\nBP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral angle tenderness. Otherwise unremarkable.\n\nSignificant history prior to today's visit:\nHIV diagnosed 2018. No diabetes, no hypertension. Adherence consistently >95% by pill count. No known allergies. Takes ibuprofen 400mg occasionally for headaches (approximately 2-3 times per week for the past 6 months due to work stress)."
+            }
+          ],
+          "labs": {
+            "labs_narrative": [
+              {
+                "date": "2026-02-24",
+                "narrative_text": "Creatinine: 1.4 mg/dL (previous values: 0.9 in 2020, 1.0 in 2021, 1.1 in 2022, 1.2 in 2023). eGFR: 52 mL/min/1.73m2 (CKD-EPI). Urinalysis: Protein 1+, glucose trace. Viral load: <50 copies/mL. CD4: 584 cells/uL. Hb: 12.8 g/dL.",
+                "source": "previous"
+              }
+            ]
+          },
+          "today_encounter": {
+            "date": "2026-02-24",
+            "note": "",
+            "orders": [],
+            "med_changes": []
+          },
+          "intake": {
+            "complaints_symptoms": "38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.",
+            "examination_findings": "BP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral angle tenderness. Otherwise unremarkable.",
+            "prior_history": "HIV diagnosed 2018. No diabetes, no hypertension. Adherence consistently >95% by pill count. No known allergies. Takes ibuprofen 400mg occasionally for headaches (approximately 2-3 times per week for the past 6 months due to work stress)."
+          }
+        },
+        "patient_summary": {
+          "patient_id": "P005",
+          "encounter_date": "2026-02-24",
+          "current_regimen": [
+            "TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years"
+          ],
+          "regimen_history": [],
+          "non_hiv_meds": [],
+          "past_labs": [
+            {
+              "lab": "labs_narrative",
+              "date": "2026-02-24",
+              "value": "Creatinine: 1.4 mg/dL (previous values: 0.9 in 2020, 1.0 in 2021, 1.1 in 2022, 1.2 in 2023). eGFR: 52 mL/min/1.73m2 (CKD-EPI). Urinalysis: Protein 1+, glucose trace. Viral load: <50 copies/mL. CD4: 584 cells/uL. Hb: 12.8 g/dL."
+            }
+          ],
+          "current_labs": {},
+          "past_complaints": [
+            {
+              "date": "2026-02-24",
+              "text": "Complaints & Symptoms:\n38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.\n\nExamination Findings:\nBP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral angle tenderness. Otherwise unremarkable.\n\nSignificant history prior to today's visit:\nHIV diagnosed 2018. No diabetes, no hypertension. Adherence consistently >95% by pill count. No known allergies. Takes ibuprofen 400mg occasionally for headaches (approximately 2-3 times per week for the past 6 months due to work stress)."
+            }
+          ],
+          "past_plans": [],
+          "today_plan": [],
+          "missing_flags": {
+            "regimen_history": true,
+            "non_hiv_meds": true,
+            "past_plans": true,
+            "past_complaints": false,
+            "today_plan": true
+          }
+        },
+        "metadata": {
+          "llm_mode": "LLM screening (generate alerts)",
+          "top_k": 5,
+          "index_max_pages": null,
+          "retrieval_page_range": null
+        }
+      },
+      "subtasks": [
+        {
+          "name": "drug_toxicity_TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years.",
+          "retrieval_query": "TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "symptom_toxicity_match",
+          "description": "Retrieve guideline sections that describe how specific symptoms (e.g. fatigue, bone pain, rash, reduced urine, nausea, peripheral neuropathy) can indicate ART drug toxicity, and how to confirm each suspected toxicity.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: which symptoms indicate drug toxicity, how to confirm suspected toxicity with lab tests, and what confirmatory investigations are recommended.",
+          "priority": "high"
+        },
+        {
+          "name": "doctors_plan_check",
+          "description": "Retrieve guideline sections about recommended clinical actions, required monitoring, counselling, and follow-up so the system can compare them against the doctor's current plan and flag any gaps.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: recommended actions after identifying drug toxicity, required lab monitoring intervals, patient counselling, when to switch regimen, and follow-up timing.",
+          "priority": "medium"
+        }
+      ],
+      "evidence_bundles": [
+        {
+          "subtask_name": "drug_toxicity_TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.6007053256034851
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 25,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6174253225326538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.634764552116394
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Figure 59: Monitoring patients initiated or transitioned to DTG flowchart - **Start: Any indication of a possible SAE?** - Experienced symptoms that have interfered with your daily activities - Sought care from a health facility - Weight loss ≥3kg - **If Yes to any 1:** - **Assessment by clinician** - **Clinical management based on symptoms/signs + check glucose (blood or urine dipstick) referral to higher level care if indicated** - **Elevated glucose or evidence of glucosuria?*** - *See DAIDS criteria for grading - **If No:** - **Continue DTG** - **If Yes:** - **Grade I* blood glucose** - **Continue DTG, education on lifestyle modification** - **Normal or stable** - **Continue DTG** - **Grade II* blood glucose** - **Continue DTG, education on lifestyle modification, and medications (if indicated)** - **Recheck glucose in 2-4 weeks** - **If Increased:** - **Switch to EFV (1st line) or ATV/r (2nd line) Monitor/manage hyperglycaemia or DM as per standard guidelines** - (Implicit path from Recheck glucose in 2-4 weeks if not increased leads to Normal or stable)",
+              "metadata": {
+                "page_number": 18,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6416758894920349
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6424779295921326
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "symptom_toxicity_match",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.6007053256034851
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 25
+              },
+              "distance": 0.6174253225326538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.634764552116394
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Figure 59: Monitoring patients initiated or transitioned to DTG flowchart - **Start: Any indication of a possible SAE?** - Experienced symptoms that have interfered with your daily activities - Sought care from a health facility - Weight loss ≥3kg - **If Yes to any 1:** - **Assessment by clinician** - **Clinical management based on symptoms/signs + check glucose (blood or urine dipstick) referral to higher level care if indicated** - **Elevated glucose or evidence of glucosuria?*** - *See DAIDS criteria for grading - **If No:** - **Continue DTG** - **If Yes:** - **Grade I* blood glucose** - **Continue DTG, education on lifestyle modification** - **Normal or stable** - **Continue DTG** - **Grade II* blood glucose** - **Continue DTG, education on lifestyle modification, and medications (if indicated)** - **Recheck glucose in 2-4 weeks** - **If Increased:** - **Switch to EFV (1st line) or ATV/r (2nd line) Monitor/manage hyperglycaemia or DM as per standard guidelines** - (Implicit path from Recheck glucose in 2-4 weeks if not increased leads to Normal or stable)",
+              "metadata": {
+                "page_number": 18,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6416758894920349
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 10
+              },
+              "distance": 0.6424779295921326
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "doctors_plan_check",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.6007053256034851
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 25
+              },
+              "distance": 0.6174253225326538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.634764552116394
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Figure 59: Monitoring patients initiated or transitioned to DTG flowchart - **Start: Any indication of a possible SAE?** - Experienced symptoms that have interfered with your daily activities - Sought care from a health facility - Weight loss ≥3kg - **If Yes to any 1:** - **Assessment by clinician** - **Clinical management based on symptoms/signs + check glucose (blood or urine dipstick) referral to higher level care if indicated** - **Elevated glucose or evidence of glucosuria?*** - *See DAIDS criteria for grading - **If No:** - **Continue DTG** - **If Yes:** - **Grade I* blood glucose** - **Continue DTG, education on lifestyle modification** - **Normal or stable** - **Continue DTG** - **Grade II* blood glucose** - **Continue DTG, education on lifestyle modification, and medications (if indicated)** - **Recheck glucose in 2-4 weeks** - **If Increased:** - **Switch to EFV (1st line) or ATV/r (2nd line) Monitor/manage hyperglycaemia or DM as per standard guidelines** - (Implicit path from Recheck glucose in 2-4 weeks if not increased leads to Normal or stable)",
+              "metadata": {
+                "page_number": 18,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6416758894920349
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 10
+              },
+              "distance": 0.6424779295921326
+            }
+          ],
+          "summary": null
+        }
+      ],
+      "verifier_report": {
+        "status": "OK",
+        "issues": [],
+        "draft_answer": "Based on the patient's symptoms, examination findings, and lab results, there are potential signs of drug toxicity from their current ART medication, TDF/3TC/DTG (TLD) fixed-dose combination.\n\nThe patient's creatinine level has been increasing over the past few years (from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026), and their eGFR has decreased to 52 mL/min/1.73m2, indicating a potential decline in renal function. This is a known adverse effect of TDF, a component of the TLD regimen"
+      },
+      "updated_management_plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient's creatinine level has increased to 1.4 mg/dL and eGFR has decreased to 52 mL/min/1.73m2, indicating potential renal toxicity from TDF.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Renal impairment\",\n      \"action\": \"Switch to a TDF-sparing regimen\",\n      \"reason\": \"Patient's creatinine level has increased and eGFR has decreased, indicating potential renal toxicity from TDF.\"\n    },\n    {\n      \"problem\": \"Mild fatigue\",\n      \"action\": \"Monitor and evaluate for other causes\",\n      \"reason\": \"Patient attributes fatigue to busy work schedule, but further evaluation is needed to rule out other causes.\"\n    }\n  ],\n  \"monitoring_plan\": \"Repeat creatinine, eGFR, and urinalysis in 3 months to assess renal function.\",\n  \"patient_counselling\": [\n    \"Adherence to the new regimen\",\n    \"Importance of regular lab monitoring\",\n    \"Management of mild fatigue\"\n  ]\n}"
+    }
+  },
+  "status_log": [
+    "vLLM: idle",
+    "running: vLLM: generating audit checklist…",
+    "running: vLLM: screening for safety issues…",
+    "complete: vLLM connected (response received)"
+  ],
+  "repeat": 2
+}

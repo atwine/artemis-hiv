@@ -1,0 +1,689 @@
+{
+  "patient_id": "P004",
+  "git_commit": "3e75a1e",
+  "model": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+  "seconds": 34.3,
+  "overall_status": "YELLOW",
+  "llm_error": null,
+  "expected_demo_outcome": {
+    "status": "GREEN",
+    "notes": "Multilingual processing demo: entity extraction/translation later; baseline alerts may be none."
+  },
+  "rule_alerts": [],
+  "alerts": [
+    {
+      "alert_id": "P004_001",
+      "title": "Abdominal Pain",
+      "message": "Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient reports abdominal pain but no fever. Non-drug causes, such as infection or other comorbidities, should also be considered.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "toxicity",
+        "severity": "moderate",
+        "recommended_action": "Investigate non-drug causes and monitor patient",
+        "citations": [
+          {
+            "page_number": 26,
+            "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P004_001",
+          "title": "Abdominal Pain",
+          "message": "Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient reports abdominal pain but no fever. Non-drug causes, such as infection or other comorbidities, should also be considered.",
+          "issue_type": "toxicity",
+          "severity": "moderate",
+          "recommended_action": "Investigate non-drug causes and monitor patient",
+          "citations": [
+            {
+              "page_number": 26,
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    },
+    {
+      "alert_id": "P004_002",
+      "title": "Missing Laboratory Results",
+      "message": "Current laboratory results are not available, which may lead to inadequate monitoring of the patient's condition. Guidelines emphasize the importance of regular laboratory tests.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "monitoring_gap",
+        "severity": "moderate",
+        "recommended_action": "Order necessary laboratory tests",
+        "citations": [
+          {
+            "page_number": 21,
+            "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P004_002",
+          "title": "Missing Laboratory Results",
+          "message": "Current laboratory results are not available, which may lead to inadequate monitoring of the patient's condition. Guidelines emphasize the importance of regular laboratory tests.",
+          "issue_type": "monitoring_gap",
+          "severity": "moderate",
+          "recommended_action": "Order necessary laboratory tests",
+          "citations": [
+            {
+              "page_number": 21,
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions"
+    }
+  ],
+  "results": [
+    {
+      "alert_id": "P004_001",
+      "explanation": "Why this alert: Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient reports abdominal pain but no fever. Non-drug causes, such as infection or other comorbidities, should also be considered.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Investigate non-drug causes and monitor patient', 'citations': [{'page_number': 26, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1'}], 'raw_issue': {'alert_id': 'P004_001', 'title': 'Abdominal Pain', 'message': 'Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient reports abdominal pain but no fever. Non-drug causes, such as infection or other comorbidities, should also be considered.', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Investigate non-drug causes and monitor patient', 'citations': [{'page_number': 26, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1'}]}}\n\nGuideline excerpts:\n- (page=22) ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The esse\n- (page=1) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New\n- (page=1) # ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal ",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+          "distance": 0.8353667855262756,
+          "metadata": {
+            "page_number": 22,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to"
+        },
+        {
+          "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+          "distance": 0.897895872592926,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+            "page_number": 1
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-r"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p1_c1",
+          "distance": 0.9016554951667786,
+          "metadata": {
+            "page_number": 1,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "# ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal meningitis CrAg: cryptococcal antigen CrCl: creati"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+          "distance": 0.9074058532714844,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 21
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant to"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+          "distance": 0.9515533447265625,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 38
+          },
+          "excerpt": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea"
+        }
+      ]
+    },
+    {
+      "alert_id": "P004_002",
+      "explanation": "Why this alert: Current laboratory results are not available, which may lead to inadequate monitoring of the patient's condition. Guidelines emphasize the importance of regular laboratory tests.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Order necessary laboratory tests', 'citations': [{'page_number': 21, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2'}], 'raw_issue': {'alert_id': 'P004_002', 'title': 'Missing Laboratory Results', 'message': \"Current laboratory results are not available, which may lead to inadequate monitoring of the patient's condition. Guidelines emphasize the importance of regular laboratory tests.\", 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Order necessary laboratory tests', 'citations': [{'page_number': 21, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2'}]}}\n\nGuideline excerpts:\n- (page=2) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Figure 34: Algorithm for screening, diagnosis, and management of TB among PLHIV Screen for TB among all PLHIV using the ICF + CRP and/or CXR Note; CRP shall be used for only ages 10 years and above : flowchart | | |Presumptive TB i.e. Positive ICF screen¹ : fl\n- (page=21) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All su\n- (page=22) ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The esse",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p2_c1",
+          "distance": 0.8295267820358276,
+          "metadata": {
+            "page_number": 2,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Figure 34: Algorithm for screening, diagnosis, and management of TB among PLHIV Screen for TB among all PLHIV using the ICF + CRP and/or CXR Note; CRP shall be used for only ages 10 years and above : flowchart | | |Presumptive TB i.e. Positive ICF screen¹ : flowchart| || |Not presumptive TB : flowchart | |---"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+          "distance": 0.8455469012260437,
+          "metadata": {
+            "page_number": 21,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant to"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+          "distance": 0.8607180118560791,
+          "metadata": {
+            "page_number": 22,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to"
+        },
+        {
+          "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+          "distance": 0.8692403435707092,
+          "metadata": {
+            "page_number": 1,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-r"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+          "distance": 0.8894586563110352,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 17
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD4 <200, X TB LAM if CD4 <200, X FBS/RBS (especiall"
+        }
+      ]
+    }
+  ],
+  "screening": {
+    "raw_output": "[\n  {\n    \"alert_id\": \"P004_001\",\n    \"title\": \"Abdominal Pain\",\n    \"message\": \"Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient reports abdominal pain but no fever. Non-drug causes, such as infection or other comorbidities, should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Investigate non-drug causes and monitor patient\",\n    \"citations\": [{\"page_number\": 26, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1\"}]\n  },\n  {\n    \"alert_id\": \"P004_002\",\n    \"title\": \"Missing Laboratory Results\",\n    \"message\": \"Current laboratory results are not available, which may lead to inadequate monitoring of the patient's condition. Guidelines emphasize the importance of regular laboratory tests.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order necessary laboratory tests\",\n    \"citations\": [{\"page_number\": 21, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\"}]\n  }\n]",
+    "screening_bundle": [
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+        "page_number": 22,
+        "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+        "page_number": 21,
+        "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+        "page_number": 26,
+        "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+        "page_number": 23,
+        "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+        "page_number": 38,
+        "quote": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdo"
+      }
+    ],
+    "parse_status": "parsed_nonempty",
+    "dedup_stats": [
+      {
+        "alert_id": "P004_001",
+        "raw_words": 34,
+        "clean_words": 34,
+        "raw_chars": 228,
+        "clean_chars": 228
+      },
+      {
+        "alert_id": "P004_002",
+        "raw_words": 24,
+        "clean_words": 24,
+        "raw_chars": 178,
+        "clean_chars": 178
+      }
+    ]
+  },
+  "patient_facts_seen": {
+    "notes_text_char_count": 252,
+    "notes_text_preview": "Complaints & Symptoms:\nOmusawo, mpulira obulumi mu lubuto (abdominal pain), but no fever\n\nExamination Findings:\nAppetite okay, no fever\n\nPrior History:\nOn TLD since March 2023. Generally stable.\nOmusawo, mpulira obulumi mu lubuto, but appetite is okay.",
+    "medications_detected": [],
+    "symptoms_detected": [],
+    "key_history_lines": []
+  },
+  "plan_items": [
+    {
+      "action": "Uncertain: need further evaluation to determine cause",
+      "reason": "Patient complains of abdominal pain but no clear cause identified",
+      "model_decision": null
+    },
+    {
+      "action": "Monitor creatinine levels and viral load",
+      "reason": "Guidelines emphasize pharmacovigilance and patient is on TDF, 3TC, DTG",
+      "model_decision": null
+    }
+  ],
+  "agentic_result": {
+    "final_answer_text": "### Task 1 — Adverse Effect Audit\n\nThe patient, Amina Nansubuga, is currently on a regimen of TDF, 3TC, and DTG. Given her symptoms and lab results, we need to assess if there are any signs of drug toxicity from her current or past ART medications.\n\n1. **TDF (Tenofovir Disoproxil Fumarate) Toxicity**: \n   - Known adverse effects include renal impairment and bone density effects. \n   - The patient's creatinine level is 82, which is within normal limits, but it's essential to monitor renal function, especially",
+    "updated_management_plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain: no clear evidence of drug toxicity from current or past ART medications\",\n    \"reason\": \"Uncertain: guidelines emphasize pharmacovigilance but do not provide specific guidance on patient's symptoms\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Abdominal pain\",\n      \"action\": \"Uncertain: need further evaluation to determine cause\",\n      \"reason\": \"Patient complains of abdominal pain but no clear cause identified\"\n    },\n    {\n      \"problem\": \"Potential drug toxicity\",\n      \"action\": \"Monitor creatinine levels and viral load\",\n      \"reason\": \"Guidelines emphasize pharmacovigilance and patient is on TDF, 3TC, DTG\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, creatinine levels, and abdominal pain symptoms\",\n  \"patient_counselling\": [\n    \"Report any changes in abdominal pain or other symptoms\",\n    \"Adhere to current ART regimen unless otherwise instructed\",\n    \"Attend follow-up appointments for ongoing monitoring\"\n  ]\n}",
+    "used_chunks": [],
+    "warnings": [
+      "agentic flow is in Phase 1 skeleton mode; no real planning/retrieval/reasoning has been applied"
+    ],
+    "debug_info": {
+      "normalized_context": {
+        "question_text": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?",
+        "patient_raw": {
+          "patient_id": "P004",
+          "name": "Amina Nansubuga",
+          "sex": "F",
+          "age_years": 37,
+          "art_regimen_current": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "other_medications": [],
+          "regimen_history": [
+            {
+              "start_date": "2023-03-20",
+              "end_date": null,
+              "regimen": [
+                "TDF",
+                "3TC",
+                "DTG"
+              ]
+            }
+          ],
+          "intake": {
+            "complaints_symptoms": "Omusawo, mpulira obulumi mu lubuto (abdominal pain), but no fever",
+            "examination_findings": "Appetite okay, no fever",
+            "prior_history": "On TLD since March 2023. Generally stable."
+          },
+          "visits": [
+            {
+              "date": "2026-01-22",
+              "type": "intake",
+              "clinician_note": "Complaints & Symptoms:\nOmusawo, mpulira obulumi mu lubuto (abdominal pain), but no fever\n\nExamination Findings:\nAppetite okay, no fever\n\nPrior History:\nOn TLD since March 2023. Generally stable."
+            }
+          ],
+          "labs": {
+            "viral_load": [
+              {
+                "date": "2025-11-05",
+                "value_copies_per_ml": 25
+              }
+            ],
+            "creatinine": [
+              {
+                "date": "2025-11-05",
+                "value_umol_per_l": 82
+              }
+            ]
+          },
+          "today_encounter": {
+            "date": "2026-01-22",
+            "note": "Omusawo, mpulira obulumi mu lubuto, but appetite is okay.",
+            "orders": [],
+            "med_changes": []
+          },
+          "expected_demo_outcome": {
+            "status": "GREEN",
+            "notes": "Multilingual processing demo: entity extraction/translation later; baseline alerts may be none."
+          }
+        },
+        "patient_summary": {
+          "patient_id": "P004",
+          "encounter_date": "2026-01-22",
+          "current_regimen": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "regimen_history": [
+            {
+              "start_date": "2023-03-20",
+              "end_date": null,
+              "regimen": [
+                "TDF",
+                "3TC",
+                "DTG"
+              ]
+            }
+          ],
+          "non_hiv_meds": [],
+          "past_labs": [
+            {
+              "lab": "viral_load",
+              "date": "2025-11-05",
+              "value": 25
+            },
+            {
+              "lab": "creatinine",
+              "date": "2025-11-05",
+              "value": 82
+            }
+          ],
+          "current_labs": {
+            "creatinine": {
+              "date": "2025-11-05",
+              "value": 82
+            },
+            "viral_load": {
+              "date": "2025-11-05",
+              "value": 25
+            }
+          },
+          "past_complaints": [
+            {
+              "date": "2026-01-22",
+              "text": "Complaints & Symptoms:\nOmusawo, mpulira obulumi mu lubuto (abdominal pain), but no fever\n\nExamination Findings:\nAppetite okay, no fever\n\nPrior History:\nOn TLD since March 2023. Generally stable."
+            }
+          ],
+          "past_plans": [],
+          "today_plan": [],
+          "missing_flags": {
+            "regimen_history": false,
+            "non_hiv_meds": true,
+            "past_plans": true,
+            "past_complaints": false,
+            "today_plan": true
+          }
+        },
+        "metadata": {
+          "llm_mode": "LLM screening (generate alerts)",
+          "top_k": 5,
+          "index_max_pages": null,
+          "retrieval_page_range": null
+        }
+      },
+      "subtasks": [
+        {
+          "name": "drug_toxicity_TDF",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for TDF.",
+          "retrieval_query": "TDF side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_3TC",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for 3TC.",
+          "retrieval_query": "3TC side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_DTG",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for DTG.",
+          "retrieval_query": "DTG side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "symptom_toxicity_match",
+          "description": "Retrieve guideline sections that describe how specific symptoms (e.g. fatigue, bone pain, rash, reduced urine, nausea, peripheral neuropathy) can indicate ART drug toxicity, and how to confirm each suspected toxicity.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: which symptoms indicate drug toxicity, how to confirm suspected toxicity with lab tests, and what confirmatory investigations are recommended.",
+          "priority": "high"
+        },
+        {
+          "name": "doctors_plan_check",
+          "description": "Retrieve guideline sections about recommended clinical actions, required monitoring, counselling, and follow-up so the system can compare them against the doctor's current plan and flag any gaps.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: recommended actions after identifying drug toxicity, required lab monitoring intervals, patient counselling, when to switch regimen, and follow-up timing.",
+          "priority": "medium"
+        }
+      ],
+      "evidence_bundles": [
+        {
+          "subtask_name": "drug_toxicity_TDF",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7468914985656738
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.7831342220306396
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+              "document": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bedaquiline CS: Cycloserine CM: Capreomycin DTG: Dolutegravir CFZ: Clofazimine DLM: Delamanid LFX: Levofloxacin MFX: Moxifloxacin ETO: Ethionamide FLQ: Fluoroquinolones H: Isoniazid LZD: Linezolid RFB: Rifabutine Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 26,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7961256504058838
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant tools: Patient care cards, Registers, entered in eMRS, and aDSM report form. All suspected ADRs/AEs data should be reviewed at the site by the facility pharmacovigilance team. The aDSM report form should be relayed to the NDA either online or as a hard copy (Annex 15). j. Data on ADRs and AEs from ART and TB medicines should regularly be analyzed by the NDA to inform regulatory decision and stakeholders feedback in quarterly aDSM technical working group meetings. Procedure of reporting an adverse drug reaction Figure 64: Showing reporting process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility**",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 21
+              },
+              "distance": 0.7995267510414124
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.8097387552261353
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_3TC",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7375954985618591
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant tools: Patient care cards, Registers, entered in eMRS, and aDSM report form. All suspected ADRs/AEs data should be reviewed at the site by the facility pharmacovigilance team. The aDSM report form should be relayed to the NDA either online or as a hard copy (Annex 15). j. Data on ADRs and AEs from ART and TB medicines should regularly be analyzed by the NDA to inform regulatory decision and stakeholders feedback in quarterly aDSM technical working group meetings. Procedure of reporting an adverse drug reaction Figure 64: Showing reporting process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility**",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 21
+              },
+              "distance": 0.7987239956855774
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+              "document": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bedaquiline CS: Cycloserine CM: Capreomycin DTG: Dolutegravir CFZ: Clofazimine DLM: Delamanid LFX: Levofloxacin MFX: Moxifloxacin ETO: Ethionamide FLQ: Fluoroquinolones H: Isoniazid LZD: Linezolid RFB: Rifabutine Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 26
+              },
+              "distance": 0.802410364151001
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "page_number": 30,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.8056221008300781
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.8158234357833862
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_DTG",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7256277799606323
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+              "document": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bedaquiline CS: Cycloserine CM: Capreomycin DTG: Dolutegravir CFZ: Clofazimine DLM: Delamanid LFX: Levofloxacin MFX: Moxifloxacin ETO: Ethionamide FLQ: Fluoroquinolones H: Isoniazid LZD: Linezolid RFB: Rifabutine Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 26,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7481753826141357
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant tools: Patient care cards, Registers, entered in eMRS, and aDSM report form. All suspected ADRs/AEs data should be reviewed at the site by the facility pharmacovigilance team. The aDSM report form should be relayed to the NDA either online or as a hard copy (Annex 15). j. Data on ADRs and AEs from ART and TB medicines should regularly be analyzed by the NDA to inform regulatory decision and stakeholders feedback in quarterly aDSM technical working group meetings. Procedure of reporting an adverse drug reaction Figure 64: Showing reporting process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility**",
+              "metadata": {
+                "page_number": 21,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7689374685287476
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.7945150136947632
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 30
+              },
+              "distance": 0.7969362735748291
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "symptom_toxicity_match",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.7402216196060181
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant tools: Patient care cards, Registers, entered in eMRS, and aDSM report form. All suspected ADRs/AEs data should be reviewed at the site by the facility pharmacovigilance team. The aDSM report form should be relayed to the NDA either online or as a hard copy (Annex 15). j. Data on ADRs and AEs from ART and TB medicines should regularly be analyzed by the NDA to inform regulatory decision and stakeholders feedback in quarterly aDSM technical working group meetings. Procedure of reporting an adverse drug reaction Figure 64: Showing reporting process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility**",
+              "metadata": {
+                "page_number": 21,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7610745429992676
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.7712441086769104
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "page_number": 30,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7842715978622437
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7842890620231628
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "doctors_plan_check",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "page_number": 34,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7175167798995972
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: SERIOUSLY ILL PATIENT *Immediate Admission* : flowchart Decision: YES to any question in Purple Action: CHECK FOR TB : flowchart Decision: YES to ANY of the questions in Purple/Yellow OR CD4 smear microscopy) CrAg screening : flowchart TESTS FOR TB mWRD e.g. Genexpert *If CD4<200* - add TB LAM.",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.7440829873085022
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 g. Routine Screening for active PV: Clinicians/ Health workers shall request for tests at baseline and periodically thereafter as described in Table 64 below. h. All AEs detected should be managed according to severity in accordance to the guidelines i. All suspected ADRs should be recorded on the relevant tools: Patient care cards, Registers, entered in eMRS, and aDSM report form. All suspected ADRs/AEs data should be reviewed at the site by the facility pharmacovigilance team. The aDSM report form should be relayed to the NDA either online or as a hard copy (Annex 15). j. Data on ADRs and AEs from ART and TB medicines should regularly be analyzed by the NDA to inform regulatory decision and stakeholders feedback in quarterly aDSM technical working group meetings. Procedure of reporting an adverse drug reaction Figure 64: Showing reporting process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility**",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 21
+              },
+              "distance": 0.753771185874939
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+              "document": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bedaquiline CS: Cycloserine CM: Capreomycin DTG: Dolutegravir CFZ: Clofazimine DLM: Delamanid LFX: Levofloxacin MFX: Moxifloxacin ETO: Ethionamide FLQ: Fluoroquinolones H: Isoniazid LZD: Linezolid RFB: Rifabutine Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 26
+              },
+              "distance": 0.7729814052581787
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 copy) stays at the Health Unit/Facility. A validly filled aDSM report should have the following minimum information a) Source of information, b) Patient details, c) Drug details d) Reaction details. * Ensure relevant tests are conducted * The report is then submitted to the pharmacovigilance focal person within the facility, or if no such person exists, to the regional referral within your catchment area or to the nearest NDA office, or directly to the national Pharmacovigilance Centre at the NDA head office * For reports on serious adverse events, within 24 to 48 hours of detection/ diagnosis. * For non-serious adverse events report as soon as possible but, in any case, not later than 15 days. * Follow up of the ADR should be done appropriately and any emerging supplementary/additional information should be forwarded immediately. The tally data for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:**",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 22
+              },
+              "distance": 0.7810287475585938
+            }
+          ],
+          "summary": null
+        }
+      ],
+      "verifier_report": {
+        "status": "OK",
+        "issues": [],
+        "draft_answer": "### Task 1 — Adverse Effect Audit\n\nThe patient, Amina Nansubuga, is currently on a regimen of TDF, 3TC, and DTG. Given her symptoms and lab results, we need to assess if there are any signs of drug toxicity from her current or past ART medications.\n\n1. **TDF (Tenofovir Disoproxil Fumarate) Toxicity**: \n   - Known adverse effects include renal impairment and bone density effects. \n   - The patient's creatinine level is 82, which is within normal limits, but it's essential to monitor renal function, especially"
+      },
+      "updated_management_plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain: no clear evidence of drug toxicity from current or past ART medications\",\n    \"reason\": \"Uncertain: guidelines emphasize pharmacovigilance but do not provide specific guidance on patient's symptoms\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Abdominal pain\",\n      \"action\": \"Uncertain: need further evaluation to determine cause\",\n      \"reason\": \"Patient complains of abdominal pain but no clear cause identified\"\n    },\n    {\n      \"problem\": \"Potential drug toxicity\",\n      \"action\": \"Monitor creatinine levels and viral load\",\n      \"reason\": \"Guidelines emphasize pharmacovigilance and patient is on TDF, 3TC, DTG\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, creatinine levels, and abdominal pain symptoms\",\n  \"patient_counselling\": [\n    \"Report any changes in abdominal pain or other symptoms\",\n    \"Adhere to current ART regimen unless otherwise instructed\",\n    \"Attend follow-up appointments for ongoing monitoring\"\n  ]\n}"
+    }
+  },
+  "status_log": [
+    "vLLM: idle",
+    "running: vLLM: generating audit checklist…",
+    "running: vLLM: screening for safety issues…",
+    "complete: vLLM connected (response received)"
+  ],
+  "repeat": 3
+}
