@@ -1,0 +1,736 @@
+{
+  "patient_id": "Kintu-Test 001",
+  "git_commit": "fd98185",
+  "model": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+  "seconds": 32.8,
+  "overall_status": "YELLOW",
+  "llm_error": null,
+  "expected_demo_outcome": null,
+  "rule_alerts": [
+    {
+      "alert_id": "tdf_creatinine_pasted_only",
+      "title": "Creatinine recorded only as pasted text",
+      "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "DTG"
+        ],
+        "creatinine": "pasted text only"
+      },
+      "query_hint": "TDF creatinine monitoring frequency",
+      "source": "rule"
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "tdf_creatinine_pasted_only",
+      "title": "Creatinine recorded only as pasted text",
+      "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "DTG"
+        ],
+        "creatinine": "pasted text only"
+      },
+      "query_hint": "TDF creatinine monitoring frequency",
+      "source": "rule"
+    },
+    {
+      "alert_id": "KINTU_001",
+      "title": "Weight Gain on TLD",
+      "message": "Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of some ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "toxicity",
+        "severity": "moderate",
+        "recommended_action": "Monitor weight, provide diet and exercise advice",
+        "citations": [
+          {
+            "page_number": 8,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+            "shown_to_ai": true
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "KINTU_001",
+          "title": "Weight Gain on TLD",
+          "message": "Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of some ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.",
+          "issue_type": "toxicity",
+          "severity": "moderate",
+          "recommended_action": "Monitor weight, provide diet and exercise advice",
+          "citations": [
+            {
+              "page_number": 8,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "KINTU_002",
+      "title": "Impaired Fasting Glucose",
+      "message": "Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "monitoring_gap",
+        "severity": "moderate",
+        "recommended_action": "Continue glucose monitoring",
+        "citations": [
+          {
+            "page_number": 5,
+            "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+            "shown_to_ai": true
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "KINTU_002",
+          "title": "Impaired Fasting Glucose",
+          "message": "Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.",
+          "issue_type": "monitoring_gap",
+          "severity": "moderate",
+          "recommended_action": "Continue glucose monitoring",
+          "citations": [
+            {
+              "page_number": 5,
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "KINTU_003",
+      "title": "Blood Pressure Elevation",
+      "message": "Patient's current BP is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address BP monitoring in this context, but regular assessment is prudent.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "information_gap",
+        "severity": "low",
+        "recommended_action": "Regularly monitor blood pressure",
+        "citations": [],
+        "raw_issue": {
+          "alert_id": "KINTU_003",
+          "title": "Blood Pressure Elevation",
+          "message": "Patient's current BP is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address BP monitoring in this context, but regular assessment is prudent.",
+          "issue_type": "information_gap",
+          "severity": "low",
+          "recommended_action": "Regularly monitor blood pressure",
+          "citations": []
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "KINTU_004",
+      "title": "Lipid Profile",
+      "message": "Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. While guidelines do not provide specific thresholds for intervention in this context, these findings are noteworthy and may require monitoring or intervention.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "information_gap",
+        "severity": "low",
+        "recommended_action": "Consider monitoring or managing lipid profile",
+        "citations": [],
+        "raw_issue": {
+          "alert_id": "KINTU_004",
+          "title": "Lipid Profile",
+          "message": "Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. While guidelines do not provide specific thresholds for intervention in this context, these findings are noteworthy and may require monitoring or intervention.",
+          "issue_type": "information_gap",
+          "severity": "low",
+          "recommended_action": "Consider monitoring or managing lipid profile",
+          "citations": []
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "KINTU_005",
+      "title": "Missing Assessment and Plan",
+      "message": "There is no recorded assessment or plan for the patient's current visit. Guidelines emphasize the importance of regular review and planning in HIV care.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "plan_review",
+        "severity": "moderate",
+        "recommended_action": "Complete assessment and plan",
+        "citations": [],
+        "raw_issue": {
+          "alert_id": "KINTU_005",
+          "title": "Missing Assessment and Plan",
+          "message": "There is no recorded assessment or plan for the patient's current visit. Guidelines emphasize the importance of regular review and planning in HIV care.",
+          "issue_type": "plan_review",
+          "severity": "moderate",
+          "recommended_action": "Complete assessment and plan",
+          "citations": []
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    }
+  ],
+  "results": [
+    {
+      "alert_id": "tdf_creatinine_pasted_only",
+      "explanation": "Why this alert: A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'creatinine': 'pasted text only'}\n\nGuideline excerpts:\n- (page=40) blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guideline\n- (page=29) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on\n- (page=6) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See ",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+          "distance": 0.7976590991020203,
+          "metadata": {
+            "page_number": 40,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with deh"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+          "distance": 0.8101456761360168,
+          "metadata": {
+            "page_number": 29,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+          "distance": 0.8606499433517456,
+          "metadata": {
+            "page_number": 6,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use T"
+        },
+        {
+          "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+          "distance": 0.8647902011871338,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+            "page_number": 1
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-r"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+          "distance": 0.8697842359542847,
+          "metadata": {
+            "page_number": 15,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * ART patients with non supressed VL and/or WHO clinical Stage 3 or 4 disease. * PLHIV re-engaging in care after interrupting treatment for 3 or more months. * PLHIV who are on treatment or prophylaxis for cryptococcal infection to inform decision on when to stop fluconazole. **Other laboratory tests** Other "
+        }
+      ]
+    },
+    {
+      "alert_id": "KINTU_001",
+      "explanation": "Why this alert: Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of some ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor weight, provide diet and exercise advice', 'citations': [{'page_number': 8, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4', 'shown_to_ai': True}], 'raw_issue': {'alert_id': 'KINTU_001', 'title': 'Weight Gain on TLD', 'message': 'Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of some ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor weight, provide diet and exercise advice', 'citations': [{'page_number': 8, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4'}]}}\n\nGuideline excerpts:\n- (page=8) ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumu",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+          "distance": 0.7481785416603088,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 8
+          },
+          "excerpt": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as "
+        }
+      ]
+    },
+    {
+      "alert_id": "KINTU_002",
+      "explanation": "Why this alert: Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Continue glucose monitoring', 'citations': [{'page_number': 5, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3', 'shown_to_ai': True}], 'raw_issue': {'alert_id': 'KINTU_002', 'title': 'Impaired Fasting Glucose', 'message': \"Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.\", 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Continue glucose monitoring', 'citations': [{'page_number': 5, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3'}]}}\n\nGuideline excerpts:\n- (page=5) or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events whic",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+          "distance": 0.7974845767021179,
+          "metadata": {
+            "page_number": 5,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. F"
+        }
+      ]
+    },
+    {
+      "alert_id": "KINTU_003",
+      "explanation": "Why this alert: Patient's current BP is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address BP monitoring in this context, but regular assessment is prudent.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Regularly monitor blood pressure', 'citations': [], 'raw_issue': {'alert_id': 'KINTU_003', 'title': 'Blood Pressure Elevation', 'message': \"Patient's current BP is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address BP monitoring in this context, but regular assessment is prudent.\", 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Regularly monitor blood pressure', 'citations': []}}\n\nGuideline excerpts: none retrieved",
+      "explanation_used_llm": false,
+      "retrieved": []
+    },
+    {
+      "alert_id": "KINTU_004",
+      "explanation": "Why this alert: Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. While guidelines do not provide specific thresholds for intervention in this context, these findings are noteworthy and may require monitoring or intervention.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Consider monitoring or managing lipid profile', 'citations': [], 'raw_issue': {'alert_id': 'KINTU_004', 'title': 'Lipid Profile', 'message': \"Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. While guidelines do not provide specific thresholds for intervention in this context, these findings are noteworthy and may require monitoring or intervention.\", 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Consider monitoring or managing lipid profile', 'citations': []}}\n\nGuideline excerpts: none retrieved",
+      "explanation_used_llm": false,
+      "retrieved": []
+    },
+    {
+      "alert_id": "KINTU_005",
+      "explanation": "Why this alert: There is no recorded assessment or plan for the patient's current visit. Guidelines emphasize the importance of regular review and planning in HIV care.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'plan_review', 'severity': 'moderate', 'recommended_action': 'Complete assessment and plan', 'citations': [], 'raw_issue': {'alert_id': 'KINTU_005', 'title': 'Missing Assessment and Plan', 'message': \"There is no recorded assessment or plan for the patient's current visit. Guidelines emphasize the importance of regular review and planning in HIV care.\", 'issue_type': 'plan_review', 'severity': 'moderate', 'recommended_action': 'Complete assessment and plan', 'citations': []}}\n\nGuideline excerpts: none retrieved",
+      "explanation_used_llm": false,
+      "retrieved": []
+    }
+  ],
+  "screening": {
+    "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_001\",\n    \"title\": \"Weight Gain on TLD\",\n    \"message\": \"Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of some ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor weight, provide diet and exercise advice\",\n    \"citations\": [{\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_002\",\n    \"title\": \"Impaired Fasting Glucose\",\n    \"message\": \"Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Continue glucose monitoring\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_003\",\n    \"title\": \"Blood Pressure Elevation\",\n    \"message\": \"Patient's current BP is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address BP monitoring in this context, but regular assessment is prudent.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Regularly monitor blood pressure\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_004\",\n    \"title\": \"Lipid Profile\",\n    \"message\": \"Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. While guidelines do not provide specific thresholds for intervention in this context, these findings are noteworthy and may require monitoring or intervention.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Consider monitoring or managing lipid profile\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_005\",\n    \"title\": \"Missing Assessment and Plan\",\n    \"message\": \"There is no recorded assessment or plan for the patient's current visit. Guidelines emphasize the importance of regular review and planning in HIV care.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Complete assessment and plan\",\n    \"citations\": []\n  }\n]",
+    "screening_bundle": [
+      {
+        "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+        "page_number": 1,
+        "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+        "page_number": 39,
+        "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+        "page_number": 8,
+        "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+        "page_number": 25,
+        "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+        "page_number": 5,
+        "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+      }
+    ],
+    "parse_status": "parsed_nonempty",
+    "finish_reason": "stop",
+    "client_note": null,
+    "exact_repeats_dropped": 0
+  },
+  "patient_summary_seen": {
+    "patient_id": "Kintu-Test 001",
+    "encounter_date": "2026-02-24",
+    "current_regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "regimen_history": [],
+    "other_medications": [],
+    "complaints_today": "36-year-old woman presents for routine review. Mentions her clothes no longer fit and she has gained 'a lot of weight' since starting her current HIV medication. Also feels more tired than usual.",
+    "examination_today": "BP 138/88 mmHg. Weight 82kg. BMI 32.4 kg/m². Waist circumference 96cm. Acanthosis nigricans noted at neck and axillae. No peripheral oedema.",
+    "assessment_and_plan_today": "",
+    "orders_today": [],
+    "medicine_changes_today": [],
+    "past_labs": [],
+    "latest_labs": {},
+    "not_recorded": [
+      "regimen history",
+      "other medications",
+      "assessment and plan today",
+      "orders today",
+      "medicine changes today"
+    ]
+  },
+  "plan_items": [
+    {
+      "action": "Uncertain: need more information on managing weight gain with current ART regimen",
+      "reason": "Patient has gained 17kg since switching to TLD 18 months ago, but guideline excerpts do not provide guidance on this issue",
+      "model_decision": "Not Addressed"
+    },
+    {
+      "action": "Uncertain: need more information on managing fatigue with current ART regimen",
+      "reason": "Patient reports feeling more tired than usual since starting current HIV medication, but guideline excerpts do not provide guidance on this issue",
+      "model_decision": "Not Addressed"
+    },
+    {
+      "action": "Monitor blood pressure",
+      "reason": "Patient's blood pressure has increased to 138/88 mmHg from 118/74 mmHg at baseline",
+      "model_decision": "Not Addressed"
+    }
+  ],
+  "agentic_result": {
+    "updated_management_plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information from guideline excerpts and patient data to determine the cause of weight gain and fatigue\", \"reason\": \"Patient has gained weight and feels tired since starting current HIV medication, but guideline excerpts do not provide specific information on managing these side effects with the current regimen of TDF, 3TC, and DTG\"}, \n\"problems\": [{\"problem\": \"Weight gain\", \"action\": \"Uncertain: need more information on managing weight gain with current ART regimen\", \"reason\": \"Patient has gained 17kg since switching to TLD 18 months ago, but guideline excerpts do not provide guidance on this issue\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for weight gain\"}}, \n{\"problem\": \"Fatigue\", \"action\": \"Uncertain: need more information on managing fatigue with current ART regimen\", \"reason\": \"Patient reports feeling more tired than usual since starting current HIV medication, but guideline excerpts do not provide guidance on this issue\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for fatigue\"}}, \n{\"problem\": \"Hypertension\", \"action\": \"Monitor blood pressure\", \"reason\": \"Patient's blood pressure has increased to 138/88 mmHg from 118/74 mmHg at baseline\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for hypertension\"}}], \n\"monitoring_plan\": \"Monitor weight, blood pressure, and fasting glucose\", \n\"patient_counselling\": [\"Discuss lifestyle changes to manage weight gain\", \"Review side effects of current medication\", \"Importance of regular blood pressure monitoring\"]}",
+    "plan_issues": [],
+    "used_chunks": [],
+    "warnings": [
+      "agentic flow is in Phase 1 skeleton mode; no real planning/retrieval/reasoning has been applied"
+    ],
+    "debug_info": {
+      "normalized_context": {
+        "question_text": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?",
+        "patient_raw": {
+          "patient_id": "Kintu-Test 001",
+          "age_years": 36,
+          "sex": "F",
+          "art_regimen_current": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "other_medications": [],
+          "visits": [
+            {
+              "date": "2026-02-24",
+              "type": "intake",
+              "clinician_note": "Complaints & Symptoms:\n36-year-old woman presents for routine review. Mentions her clothes no longer fit and she has gained 'a lot of weight' since starting her current HIV medication. Also feels more tired than usual.\n\nExamination Findings:\nBP 138/88 mmHg. Weight 82kg. BMI 32.4 kg/m². Waist circumference 96cm. Acanthosis nigricans noted at neck and axillae. No peripheral oedema.\n\nSignificant history prior to today's visit:\nART History: Switched from TDF/3TC/EFV (used for 3 years) to TLD 18 months ago due to EFV-related side effects (dizziness and vivid dreams).\n\nBaseline Metrics (at TLD switch): BP was 118/74 mmHg; Weight was 65kg; BMI was 25.6 kg/m²; Fasting glucose was 92 mg/dL.\n\nComorbidities/Family History: HIV diagnosed 2019. No prior DM or HTN. Family history significant for Type 2 Diabetes (mother)."
+            }
+          ],
+          "labs": {
+            "labs_narrative": [
+              {
+                "date": "2026-02-24",
+                "narrative_text": "Glycemic Markers: Fasting glucose 118 mg/dL (impaired); HbA1c 6.1% (pre-diabetic range). Lipid Profile: Total cholesterol 228 mg/dL, LDL 148 mg/dL, HDL 38 mg/dL, Triglycerides 212 mg/dL. Renal/Virological: Creatinine 0.9 mg/dL; Viral load <50 copies/mL; CD4 612 cells/uL.",
+                "source": "today"
+              }
+            ]
+          },
+          "today_encounter": {
+            "date": "2026-02-24",
+            "note": "",
+            "orders": [],
+            "med_changes": []
+          },
+          "intake": {
+            "complaints_symptoms": "36-year-old woman presents for routine review. Mentions her clothes no longer fit and she has gained 'a lot of weight' since starting her current HIV medication. Also feels more tired than usual.",
+            "examination_findings": "BP 138/88 mmHg. Weight 82kg. BMI 32.4 kg/m². Waist circumference 96cm. Acanthosis nigricans noted at neck and axillae. No peripheral oedema.",
+            "prior_history": "ART History: Switched from TDF/3TC/EFV (used for 3 years) to TLD 18 months ago due to EFV-related side effects (dizziness and vivid dreams).\n\nBaseline Metrics (at TLD switch): BP was 118/74 mmHg; Weight was 65kg; BMI was 25.6 kg/m²; Fasting glucose was 92 mg/dL.\n\nComorbidities/Family History: HIV diagnosed 2019. No prior DM or HTN. Family history significant for Type 2 Diabetes (mother)."
+          },
+          "art_regimen_as_entered": "Current ART Regimen: TDF, 3TC, DTG (TLD) for 18 months."
+        },
+        "patient_summary": {
+          "patient_id": "Kintu-Test 001",
+          "encounter_date": "2026-02-24",
+          "current_regimen": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "regimen_history": [],
+          "other_medications": [],
+          "complaints_today": "36-year-old woman presents for routine review. Mentions her clothes no longer fit and she has gained 'a lot of weight' since starting her current HIV medication. Also feels more tired than usual.",
+          "examination_today": "BP 138/88 mmHg. Weight 82kg. BMI 32.4 kg/m². Waist circumference 96cm. Acanthosis nigricans noted at neck and axillae. No peripheral oedema.",
+          "assessment_and_plan_today": "",
+          "orders_today": [],
+          "medicine_changes_today": [],
+          "past_labs": [],
+          "latest_labs": {},
+          "not_recorded": [
+            "regimen history",
+            "other medications",
+            "assessment and plan today",
+            "orders today",
+            "medicine changes today"
+          ]
+        },
+        "metadata": {
+          "top_k": 5
+        }
+      },
+      "subtasks": [
+        {
+          "name": "drug_toxicity_TDF",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for TDF.",
+          "retrieval_query": "TDF side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_3TC",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for 3TC.",
+          "retrieval_query": "3TC side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_DTG",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for DTG.",
+          "retrieval_query": "DTG side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "symptom_toxicity_match",
+          "description": "Retrieve guideline sections that describe how specific symptoms (e.g. fatigue, bone pain, rash, reduced urine, nausea, peripheral neuropathy) can indicate ART drug toxicity, and how to confirm each suspected toxicity.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: which symptoms indicate drug toxicity, how to confirm suspected toxicity with lab tests, and what confirmatory investigations are recommended.",
+          "priority": "high"
+        },
+        {
+          "name": "doctors_plan_check",
+          "description": "Retrieve guideline sections about recommended clinical actions, required monitoring, counselling, and follow-up so the system can compare them against the doctor's current plan and flag any gaps.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: recommended actions after identifying drug toxicity, required lab monitoring intervals, patient counselling, when to switch regimen, and follow-up timing.",
+          "priority": "medium"
+        }
+      ],
+      "evidence_bundles": [
+        {
+          "subtask_name": "drug_toxicity_TDF",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.5327565670013428
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 25,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5675652623176575
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6789206266403198
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these conditions are organised in separate(vertical) clinics making it difficult for a patient with multiple conditions to access care. Evidence from studies have shown that Integrating care for HIV and NCDs is feasible, acceptable, less costly and a possible solution to improving access to care among patients with multiple conditions. At each clinic visit, the patient should be screened for the common NCDs particularly diabetes mellitus, hypertension and mental health (anxiety, depression, substance and alcohol use disorders). ## 5.4.7.1 Diabetes Mellitus (DM) **Risk factors for development of diabetes mellitus in HIV-positive patients** * In addition to the usual risk factors for development of DM, there are several HIV-related risk factors: * Fluctuating viral load and CD4 cell count which cause a chronic inflammatory state which may induce insulin resistance. * Rapid weight gain, co-infection with Hepatitis C, dyslipidemia, and lipodystrophy.",
+              "metadata": {
+                "page_number": 35,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6922584176063538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+              "document": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 36
+              },
+              "distance": 0.70756596326828
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_3TC",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.5327565670013428
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 25,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5675652623176575
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6789206266403198
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these conditions are organised in separate(vertical) clinics making it difficult for a patient with multiple conditions to access care. Evidence from studies have shown that Integrating care for HIV and NCDs is feasible, acceptable, less costly and a possible solution to improving access to care among patients with multiple conditions. At each clinic visit, the patient should be screened for the common NCDs particularly diabetes mellitus, hypertension and mental health (anxiety, depression, substance and alcohol use disorders). ## 5.4.7.1 Diabetes Mellitus (DM) **Risk factors for development of diabetes mellitus in HIV-positive patients** * In addition to the usual risk factors for development of DM, there are several HIV-related risk factors: * Fluctuating viral load and CD4 cell count which cause a chronic inflammatory state which may induce insulin resistance. * Rapid weight gain, co-infection with Hepatitis C, dyslipidemia, and lipodystrophy.",
+              "metadata": {
+                "page_number": 35,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6922584176063538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+              "document": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 36
+              },
+              "distance": 0.70756596326828
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_DTG",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.5327565670013428
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 25,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5675652623176575
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6789206266403198
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these conditions are organised in separate(vertical) clinics making it difficult for a patient with multiple conditions to access care. Evidence from studies have shown that Integrating care for HIV and NCDs is feasible, acceptable, less costly and a possible solution to improving access to care among patients with multiple conditions. At each clinic visit, the patient should be screened for the common NCDs particularly diabetes mellitus, hypertension and mental health (anxiety, depression, substance and alcohol use disorders). ## 5.4.7.1 Diabetes Mellitus (DM) **Risk factors for development of diabetes mellitus in HIV-positive patients** * In addition to the usual risk factors for development of DM, there are several HIV-related risk factors: * Fluctuating viral load and CD4 cell count which cause a chronic inflammatory state which may induce insulin resistance. * Rapid weight gain, co-infection with Hepatitis C, dyslipidemia, and lipodystrophy.",
+              "metadata": {
+                "page_number": 35,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6922584176063538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+              "document": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 36,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.70756596326828
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "symptom_toxicity_match",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.5327565670013428
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 25
+              },
+              "distance": 0.5675652623176575
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6789206266403198
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these conditions are organised in separate(vertical) clinics making it difficult for a patient with multiple conditions to access care. Evidence from studies have shown that Integrating care for HIV and NCDs is feasible, acceptable, less costly and a possible solution to improving access to care among patients with multiple conditions. At each clinic visit, the patient should be screened for the common NCDs particularly diabetes mellitus, hypertension and mental health (anxiety, depression, substance and alcohol use disorders). ## 5.4.7.1 Diabetes Mellitus (DM) **Risk factors for development of diabetes mellitus in HIV-positive patients** * In addition to the usual risk factors for development of DM, there are several HIV-related risk factors: * Fluctuating viral load and CD4 cell count which cause a chronic inflammatory state which may induce insulin resistance. * Rapid weight gain, co-infection with Hepatitis C, dyslipidemia, and lipodystrophy.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 35
+              },
+              "distance": 0.6922584176063538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+              "document": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 36,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.70756596326828
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "doctors_plan_check",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.5327565670013428
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+              "document": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swelling, cold intorelence, hoarse voices) (e.g. ETO) 13 Hearing disturbance and vestibular toxicity (hearing loss, tinnitus, dizziness, nausea and vomiting, loss of balance) (e.g. Kanamycin) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "page_number": 25,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5675652623176575
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6789206266403198
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these conditions are organised in separate(vertical) clinics making it difficult for a patient with multiple conditions to access care. Evidence from studies have shown that Integrating care for HIV and NCDs is feasible, acceptable, less costly and a possible solution to improving access to care among patients with multiple conditions. At each clinic visit, the patient should be screened for the common NCDs particularly diabetes mellitus, hypertension and mental health (anxiety, depression, substance and alcohol use disorders). ## 5.4.7.1 Diabetes Mellitus (DM) **Risk factors for development of diabetes mellitus in HIV-positive patients** * In addition to the usual risk factors for development of DM, there are several HIV-related risk factors: * Fluctuating viral load and CD4 cell count which cause a chronic inflammatory state which may induce insulin resistance. * Rapid weight gain, co-infection with Hepatitis C, dyslipidemia, and lipodystrophy.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 35
+              },
+              "distance": 0.6922584176063538
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+              "document": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 36
+              },
+              "distance": 0.70756596326828
+            }
+          ],
+          "summary": null
+        }
+      ],
+      "updated_management_plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information from guideline excerpts and patient data to determine the cause of weight gain and fatigue\", \"reason\": \"Patient has gained weight and feels tired since starting current HIV medication, but guideline excerpts do not provide specific information on managing these side effects with the current regimen of TDF, 3TC, and DTG\"}, \n\"problems\": [{\"problem\": \"Weight gain\", \"action\": \"Uncertain: need more information on managing weight gain with current ART regimen\", \"reason\": \"Patient has gained 17kg since switching to TLD 18 months ago, but guideline excerpts do not provide guidance on this issue\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for weight gain\"}}, \n{\"problem\": \"Fatigue\", \"action\": \"Uncertain: need more information on managing fatigue with current ART regimen\", \"reason\": \"Patient reports feeling more tired than usual since starting current HIV medication, but guideline excerpts do not provide guidance on this issue\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for fatigue\"}}, \n{\"problem\": \"Hypertension\", \"action\": \"Monitor blood pressure\", \"reason\": \"Patient's blood pressure has increased to 138/88 mmHg from 118/74 mmHg at baseline\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for hypertension\"}}], \n\"monitoring_plan\": \"Monitor weight, blood pressure, and fasting glucose\", \n\"patient_counselling\": [\"Discuss lifestyle changes to manage weight gain\", \"Review side effects of current medication\", \"Importance of regular blood pressure monitoring\"]}"
+    }
+  },
+  "status_log": [
+    "vLLM: idle",
+    "running: vLLM: screening for safety issues…",
+    "complete: vLLM connected (response received)"
+  ],
+  "repeat": 3
+}

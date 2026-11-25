@@ -1,0 +1,821 @@
+{
+  "patient_id": "P003",
+  "git_commit": "a6fc3f9+uncommitted",
+  "model": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+  "seconds": 20.3,
+  "overall_status": "YELLOW",
+  "llm_error": null,
+  "expected_demo_outcome": {
+    "status": "YELLOW",
+    "notes": "EFV toxicity signal example: sleep disturbance mentions."
+  },
+  "rule_alerts": [
+    {
+      "alert_id": "tdf_creatinine_missing",
+      "title": "Creatinine missing while on TDF",
+      "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "EFV"
+        ],
+        "creatinine": null
+      },
+      "query_hint": "TDF creatinine monitoring frequency",
+      "source": "rule"
+    },
+    {
+      "alert_id": "efv_sleep_disturbance",
+      "title": "Possible EFV neuropsychiatric side effects",
+      "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "EFV"
+        ],
+        "keyword_hits": [
+          "insomnia",
+          "vivid dreams",
+          "poor sleep"
+        ]
+      },
+      "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+      "source": "rule"
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "tdf_creatinine_missing",
+      "title": "Creatinine missing while on TDF",
+      "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "EFV"
+        ],
+        "creatinine": null
+      },
+      "query_hint": "TDF creatinine monitoring frequency",
+      "source": "rule"
+    },
+    {
+      "alert_id": "efv_sleep_disturbance",
+      "title": "Possible EFV neuropsychiatric side effects",
+      "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "EFV"
+        ],
+        "keyword_hits": [
+          "insomnia",
+          "vivid dreams",
+          "poor sleep"
+        ]
+      },
+      "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+      "source": "rule"
+    },
+    {
+      "alert_id": "P003_001",
+      "title": "EFV Neuropsychiatric Effects",
+      "message": "Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "toxicity",
+        "severity": "moderate",
+        "recommended_action": "Monitor patient's symptoms and consider alternative regimen if symptoms persist",
+        "citations": [
+          {
+            "page_number": 55,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+            "shown_to_ai": true
+          },
+          {
+            "page_number": 39,
+            "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+            "shown_to_ai": true
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P003_001",
+          "title": "EFV Neuropsychiatric Effects",
+          "message": "Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered.",
+          "issue_type": "toxicity",
+          "severity": "moderate",
+          "recommended_action": "Monitor patient's symptoms and consider alternative regimen if symptoms persist",
+          "citations": [
+            {
+              "page_number": 55,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4"
+            },
+            {
+              "page_number": 39,
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "P003_002",
+      "title": "Mental Health Screening",
+      "message": "Guidelines suggest screening for mental health disorders, including depression and anxiety. Patient's symptoms could be related to underlying mental health issues. Further assessment using validated instruments like PHQ-2 or PHQ-9 is recommended.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "monitoring_gap",
+        "severity": "moderate",
+        "recommended_action": "Screen patient for mental health disorders using validated instruments",
+        "citations": [
+          {
+            "page_number": 55,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3",
+            "shown_to_ai": true
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P003_002",
+          "title": "Mental Health Screening",
+          "message": "Guidelines suggest screening for mental health disorders, including depression and anxiety. Patient's symptoms could be related to underlying mental health issues. Further assessment using validated instruments like PHQ-2 or PHQ-9 is recommended.",
+          "issue_type": "monitoring_gap",
+          "severity": "moderate",
+          "recommended_action": "Screen patient for mental health disorders using validated instruments",
+          "citations": [
+            {
+              "page_number": 55,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    }
+  ],
+  "results": [
+    {
+      "alert_id": "tdf_creatinine_missing",
+      "explanation": "Why this alert: Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.\nPatient evidence: {'regimen': ['TDF', '3TC', 'EFV'], 'creatinine': None}\n\nGuideline excerpts:\n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti\n- (page=39) 272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental\n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+          "distance": 0.8946598768234253,
+          "metadata": {
+            "page_number": 7,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Continue routine creatinine monitoring Creatinine rise "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+          "distance": 0.9319338798522949,
+          "metadata": {
+            "page_number": 39,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) "
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+          "distance": 0.9369732737541199,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 55
+          },
+          "excerpt": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experien"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+          "distance": 0.9404947757720947,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 40
+          },
+          "excerpt": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with deh"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+          "distance": 0.9480973482131958,
+          "metadata": {
+            "page_number": 5,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "frica, only co-formulated. ‡, Life-threatening reactions are indicated in **bold**. TABLE 2: Baseline investigations and monitoring required for nucleoside/nucleotide reverse transcriptase inhibitors. Generic name Monitoring required Comment Tenofovir disoproxil fumarate (TDF) eGFR before initiation, then at 3 months, 6 months, and then 6-12 monthly thereafter Avoid if eGFR < 50 mL/min/1.73m² In h"
+        }
+      ]
+    },
+    {
+      "alert_id": "efv_sleep_disturbance",
+      "explanation": "Why this alert: Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.\nPatient evidence: {'regimen': ['TDF', '3TC', 'EFV'], 'keyword_hits': ['insomnia', 'vivid dreams', 'poor sleep']}\n\nGuideline excerpts:\n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori\n- (page=10) ing with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. EFV may also cause a skin rash, which is usually mild. Patients starting EFV should be warned about these symptoms and reassured that they resolve in most patients continuing the drug after the first few weeks but, if not, an alternative can be substituted. Psycho\n- (page=39) 272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+          "distance": 0.5786030292510986,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md",
+            "page_number": 55
+          },
+          "excerpt": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experien"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p10_c3",
+          "distance": 0.6729492545127869,
+          "metadata": {
+            "page_number": 10,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "ing with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. EFV may also cause a skin rash, which is usually mild. Patients starting EFV should be warned about these symptoms and reassured that they resolve in most patients continuing the drug after the first few weeks but, if not, an alternative can be substituted. Psychosis and Stevens-Johnson syndrome may occasionally "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+          "distance": 0.766556978225708,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+            "page_number": 39
+          },
+          "excerpt": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+          "distance": 0.7946363687515259,
+          "metadata": {
+            "page_number": 36,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, y"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3",
+          "distance": 0.7986928224563599,
+          "metadata": {
+            "page_number": 55,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "nclude stigma towards PLWH with a co-morbid mental disorder, and reluctance on the part of clinicians to engage with patients on what might be perceived to be time-consuming or specialised interviews. The most prevalent conditions, including depression, the anxiety disorders and substance abuse can be readily diagnosed with semi-structured clinical interviews, or validated brief instruments, such "
+        }
+      ]
+    },
+    {
+      "alert_id": "P003_001",
+      "explanation": "Why this alert: Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': \"Monitor patient's symptoms and consider alternative regimen if symptoms persist\", 'citations': [{'page_number': 55, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4', 'shown_to_ai': True}, {'page_number': 39, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1', 'shown_to_ai': True}], 'raw_issue': {'alert_id': 'P003_001', 'title': 'EFV Neuropsychiatric Effects', 'message': 'Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered.', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': \"Monitor patient's symptoms and consider alternative regimen if symptoms persist\", 'citations': [{'page_number': 55, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4'}, {'page_number': 39, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1'}]}}\n\nGuideline excerpts:\n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori\n- (page=39) 272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+          "distance": 0.9640952348709106,
+          "metadata": {
+            "page_number": 55,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experien"
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+          "distance": 0.9153851270675659,
+          "metadata": {
+            "page_number": 39,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) "
+        }
+      ]
+    },
+    {
+      "alert_id": "P003_002",
+      "explanation": "Why this alert: Guidelines suggest screening for mental health disorders, including depression and anxiety. Patient's symptoms could be related to underlying mental health issues. Further assessment using validated instruments like PHQ-2 or PHQ-9 is recommended.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Screen patient for mental health disorders using validated instruments', 'citations': [{'page_number': 55, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3', 'shown_to_ai': True}], 'raw_issue': {'alert_id': 'P003_002', 'title': 'Mental Health Screening', 'message': \"Guidelines suggest screening for mental health disorders, including depression and anxiety. Patient's symptoms could be related to underlying mental health issues. Further assessment using validated instruments like PHQ-2 or PHQ-9 is recommended.\", 'issue_type': 'monitoring_gap', 'severity': 'moderate', 'recommended_action': 'Screen patient for mental health disorders using validated instruments', 'citations': [{'page_number': 55, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3'}]}}\n\nGuideline excerpts:\n- (page=55) nclude stigma towards PLWH with a co-morbid mental disorder, and reluctance on the part of clinicians to engage with patients on what might be perceived to be time-consuming or specialised interviews. The most prevalent conditions, including depression, the anxiety disorders and substance abuse can be readily diagnosed with semi-structured clinical",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3",
+          "distance": 0.8546586036682129,
+          "metadata": {
+            "page_number": 55,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "nclude stigma towards PLWH with a co-morbid mental disorder, and reluctance on the part of clinicians to engage with patients on what might be perceived to be time-consuming or specialised interviews. The most prevalent conditions, including depression, the anxiety disorders and substance abuse can be readily diagnosed with semi-structured clinical interviews, or validated brief instruments, such "
+        }
+      ]
+    }
+  ],
+  "screening": {
+    "raw_output": "[\n  {\n    \"alert_id\": \"P003_001\",\n    \"title\": \"EFV Neuropsychiatric Effects\",\n    \"message\": \"Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor patient's symptoms and consider alternative regimen if symptoms persist\",\n    \"citations\": [{\"page_number\": 55, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4\"}, {\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"}]\n  },\n  {\n    \"alert_id\": \"P003_002\",\n    \"title\": \"Mental Health Screening\",\n    \"message\": \"Guidelines suggest screening for mental health disorders, including depression and anxiety. Patient's symptoms could be related to underlying mental health issues. Further assessment using validated instruments like PHQ-2 or PHQ-9 is recommended.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Screen patient for mental health disorders using validated instruments\",\n    \"citations\": [{\"page_number\": 55, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3\"}]\n  }\n]",
+    "screening_bundle": [
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3",
+        "page_number": 55,
+        "quote": "nclude stigma towards PLWH with a co-morbid mental disorder, and reluctance on the part of clinicians to engage with patients on what might be perceived to be time-consuming or specialised interviews. The most prevalent conditions, including depression, the anxiety disorders and substance abuse can be readily diagnosed with semi-structured clinical interviews, or validated brief instruments, such as the PHQ-2 or PHQ-9, the GAD-7, the K-10, and the AUDIT (for alcohol use disor"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+        "page_number": 39,
+        "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+        "page_number": 55,
+        "quote": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experience neuropsychiatric features of EFV do so within the first 2-6 weeks, and therea"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+        "page_number": 22,
+        "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+        "page_number": 23,
+        "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+      }
+    ],
+    "parse_status": "parsed_nonempty",
+    "finish_reason": "stop",
+    "client_note": null,
+    "exact_repeats_dropped": 0
+  },
+  "patient_summary_seen": {
+    "patient_id": "P003",
+    "encounter_date": "2026-01-22",
+    "current_regimen": [
+      "TDF",
+      "3TC",
+      "EFV"
+    ],
+    "regimen_history": [
+      {
+        "start_date": "2024-02-01",
+        "end_date": null,
+        "regimen": [
+          "TDF",
+          "3TC",
+          "EFV"
+        ]
+      }
+    ],
+    "other_medications": [],
+    "complaints_today": "Poor sleep and vivid dreams for several weeks. No suicidal ideation.",
+    "examination_today": "Alert and oriented, no acute distress",
+    "assessment_and_plan_today": "Complains of insomnia; has vivid dreams. No suicidal ideation.",
+    "orders_today": [],
+    "medicine_changes_today": [],
+    "past_labs": [
+      {
+        "lab": "viral_load",
+        "date": "2025-08-10",
+        "value": "60",
+        "unit": "copies/mL",
+        "days_before_visit": 165,
+        "source": "record"
+      }
+    ],
+    "latest_labs": {
+      "viral_load": {
+        "lab": "viral_load",
+        "date": "2025-08-10",
+        "value": "60",
+        "unit": "copies/mL",
+        "days_before_visit": 165,
+        "source": "record"
+      }
+    },
+    "not_recorded": [
+      "other medications",
+      "orders today",
+      "medicine changes today"
+    ]
+  },
+  "plan_items": [
+    {
+      "action": "Consider switching EFV to another regimen",
+      "reason": "EFV is known to cause neuropsychiatric side effects, including insomnia and vivid dreams",
+      "model_decision": "Disagree"
+    },
+    {
+      "action": "Uncertain: need serum creatinine and eGFR results",
+      "reason": "TDF can cause renal toxicity, but no screening results are available",
+      "model_decision": "Not Addressed"
+    }
+  ],
+  "agentic_result": {
+    "updated_management_plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine if current regimen is causing toxicity\", \"reason\": \"Patient complaints of poor sleep and vivid dreams, but guideline excerpts do not provide enough information to confirm drug toxicity from TDF, 3TC, or EFV\"}, \"problems\": [{\"problem\": \"Insomnia and vivid dreams\", \"action\": \"Consider switching EFV to another regimen\", \"reason\": \"EFV is known to cause neuropsychiatric side effects, including insomnia and vivid dreams\", \"clinician_plan_for_this_problem\": {\"decision\": \"Disagree\", \"explanation\": \"Current plan does not address potential EFV side effects\"}}, {\"problem\": \"Potential renal toxicity from TDF\", \"action\": \"Uncertain: need serum creatinine and eGFR results\", \"reason\": \"TDF can cause renal toxicity, but no screening results are available\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not mention TDF toxicity screening\"}}], \"monitoring_plan\": \"Serum creatinine, eGFR, and viral load\", \"patient_counselling\": [\"Discuss potential side effects of EFV\", \"Importance of adherence to regimen\", \"Monitoring for signs of renal toxicity\"]}",
+    "plan_issues": [],
+    "used_chunks": [],
+    "warnings": [
+      "agentic flow is in Phase 1 skeleton mode; no real planning/retrieval/reasoning has been applied"
+    ],
+    "debug_info": {
+      "normalized_context": {
+        "question_text": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?",
+        "patient_raw": {
+          "patient_id": "P003",
+          "name": "Sam Kato",
+          "sex": "M",
+          "age_years": 41,
+          "art_regimen_current": [
+            "TDF",
+            "3TC",
+            "EFV"
+          ],
+          "other_medications": [],
+          "regimen_history": [
+            {
+              "start_date": "2024-02-01",
+              "end_date": null,
+              "regimen": [
+                "TDF",
+                "3TC",
+                "EFV"
+              ]
+            }
+          ],
+          "intake": {
+            "complaints_symptoms": "Poor sleep and vivid dreams for several weeks. No suicidal ideation.",
+            "examination_findings": "Alert and oriented, no acute distress",
+            "prior_history": "Started EFV-based regimen in February 2024."
+          },
+          "visits": [
+            {
+              "date": "2026-01-22",
+              "type": "intake",
+              "clinician_note": "Complaints & Symptoms:\nPoor sleep and vivid dreams for several weeks. No suicidal ideation.\n\nExamination Findings:\nAlert and oriented, no acute distress\n\nPrior History:\nStarted EFV-based regimen in February 2024."
+            }
+          ],
+          "labs": {
+            "viral_load": [
+              {
+                "date": "2025-08-10",
+                "value_copies_per_ml": 60
+              }
+            ]
+          },
+          "today_encounter": {
+            "date": "2026-01-22",
+            "note": "Complains of insomnia; has vivid dreams. No suicidal ideation.",
+            "orders": [],
+            "med_changes": []
+          },
+          "expected_demo_outcome": {
+            "status": "YELLOW",
+            "notes": "EFV toxicity signal example: sleep disturbance mentions."
+          }
+        },
+        "patient_summary": {
+          "patient_id": "P003",
+          "encounter_date": "2026-01-22",
+          "current_regimen": [
+            "TDF",
+            "3TC",
+            "EFV"
+          ],
+          "regimen_history": [
+            {
+              "start_date": "2024-02-01",
+              "end_date": null,
+              "regimen": [
+                "TDF",
+                "3TC",
+                "EFV"
+              ]
+            }
+          ],
+          "other_medications": [],
+          "complaints_today": "Poor sleep and vivid dreams for several weeks. No suicidal ideation.",
+          "examination_today": "Alert and oriented, no acute distress",
+          "assessment_and_plan_today": "Complains of insomnia; has vivid dreams. No suicidal ideation.",
+          "orders_today": [],
+          "medicine_changes_today": [],
+          "past_labs": [
+            {
+              "lab": "viral_load",
+              "date": "2025-08-10",
+              "value": "60",
+              "unit": "copies/mL",
+              "days_before_visit": 165,
+              "source": "record"
+            }
+          ],
+          "latest_labs": {
+            "viral_load": {
+              "lab": "viral_load",
+              "date": "2025-08-10",
+              "value": "60",
+              "unit": "copies/mL",
+              "days_before_visit": 165,
+              "source": "record"
+            }
+          },
+          "not_recorded": [
+            "other medications",
+            "orders today",
+            "medicine changes today"
+          ]
+        },
+        "metadata": {
+          "top_k": 5
+        }
+      },
+      "subtasks": [
+        {
+          "name": "drug_toxicity_TDF",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for TDF.",
+          "retrieval_query": "TDF side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_3TC",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for 3TC.",
+          "retrieval_query": "3TC side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_EFV",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for EFV.",
+          "retrieval_query": "EFV side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "symptom_toxicity_match",
+          "description": "Retrieve guideline sections that describe how specific symptoms (e.g. fatigue, bone pain, rash, reduced urine, nausea, peripheral neuropathy) can indicate ART drug toxicity, and how to confirm each suspected toxicity.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: which symptoms indicate drug toxicity, how to confirm suspected toxicity with lab tests, and what confirmatory investigations are recommended.",
+          "priority": "high"
+        },
+        {
+          "name": "doctors_plan_check",
+          "description": "Retrieve guideline sections about recommended clinical actions, required monitoring, counselling, and follow-up so the system can compare them against the doctor's current plan and flag any gaps.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: recommended actions after identifying drug toxicity, required lab monitoring intervals, patient counselling, when to switch regimen, and follow-up timing.",
+          "priority": "medium"
+        }
+      ],
+      "evidence_bundles": [
+        {
+          "subtask_name": "drug_toxicity_TDF",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6031826138496399
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6941693425178528
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 75: Components of a comprehensive clinical assessment of PLHIV Components 1. Demographics (age, sex etc.) 2. Symptom Screen and Advanced Disease Pathway-ask all patients all questions 3. Screen for signs and symptoms of Hepatitis B and C infections, malaria, and other infections 4. Screen for pregnancy (women of reproductive age) 5. Screen for co-morbidities especially Hypertension, Diabetes, CA cervix 6. Screen for STIs 7. Screen for symptoms of depression, anxiety and substance abuse 8. Obtain previous history of ART 9. Obtain previous history of chronic illnesses (hypertension, DM, COPD, kidney disease) 10. Obtain a list of current medication(s) 11. Screen for side/adverse effects of medications. 12. Establish family planning methods currently in use 13. Assess development, sexual awareness, and behavioral issues in adolescents 14. Assess school attendance (children of school-going age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 11
+              },
+              "distance": 0.6988998055458069
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.7003986239433289
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## Referral Please refer the patient to a mental health worker (Psychiatric Nurse, Psychiatric Clinical Officer, Psychologist, Psychiatrist) at closest health center if the following happens: * Acute aggressive behavior * Alcohol withdrawal symptoms * High suicide risk (SAD PERSONS score >7) * Hearing voices of people they cannot see (auditory hallucinations) * Seeing things that others do not see (visual hallucinations) * Persisting suicidal ideation after 4 sessions of psychotherapy # Management of Alcohol and Substance Use Disorder Motivational interviewing (brief intervention) for alcohol and substance use: * Provide personalized feedback to the person about the risks associated with their pattern of substance use * Encourage the person to take responsibility for their substance use choices, and the choice of whether to seek assistance for their substance use. * Ask the person the reasons for their substance use * Ask about their perception of both the positive and negative consequences of their substance use",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 50
+              },
+              "distance": 0.7004099488258362
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_3TC",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6272218227386475
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## Referral Please refer the patient to a mental health worker (Psychiatric Nurse, Psychiatric Clinical Officer, Psychologist, Psychiatrist) at closest health center if the following happens: * Acute aggressive behavior * Alcohol withdrawal symptoms * High suicide risk (SAD PERSONS score >7) * Hearing voices of people they cannot see (auditory hallucinations) * Seeing things that others do not see (visual hallucinations) * Persisting suicidal ideation after 4 sessions of psychotherapy # Management of Alcohol and Substance Use Disorder Motivational interviewing (brief intervention) for alcohol and substance use: * Provide personalized feedback to the person about the risks associated with their pattern of substance use * Encourage the person to take responsibility for their substance use choices, and the choice of whether to seek assistance for their substance use. * Ask the person the reasons for their substance use * Ask about their perception of both the positive and negative consequences of their substance use",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 50
+              },
+              "distance": 0.6518179774284363
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.6617098450660706
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6620492935180664
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "page_number": 30,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6680982112884521
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_EFV",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6556191444396973
+            },
+            {
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+              "document": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experience neuropsychiatric features of EFV do so within the first 2-6 weeks, and thereafter the drug is better tolerated. Late neurological syndromes, including ataxia, are however described (see module 4). Recent data suggest that EFV significantly impairs cognition compared to DTG.122,123 Psychosis may occasionally occur. Clinicians in primary care should be familiar with first-line anti-depressant prescribing, the details of which are beyond the scope of these guidelines. Fluoxetine is safe and effective, as is citalopram. Basic counselling including problem-solving approaches and motivational interviewing are increasingly being taught to counsellors and nurses in HIV care. Referral to registered counsellors and psychologists can be used when first-line care fails. Common pitfalls:",
+              "metadata": {
+                "page_number": 55,
+                "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+              },
+              "distance": 0.6710703372955322
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 75: Components of a comprehensive clinical assessment of PLHIV Components 1. Demographics (age, sex etc.) 2. Symptom Screen and Advanced Disease Pathway-ask all patients all questions 3. Screen for signs and symptoms of Hepatitis B and C infections, malaria, and other infections 4. Screen for pregnancy (women of reproductive age) 5. Screen for co-morbidities especially Hypertension, Diabetes, CA cervix 6. Screen for STIs 7. Screen for symptoms of depression, anxiety and substance abuse 8. Obtain previous history of ART 9. Obtain previous history of chronic illnesses (hypertension, DM, COPD, kidney disease) 10. Obtain a list of current medication(s) 11. Screen for side/adverse effects of medications. 12. Establish family planning methods currently in use 13. Assess development, sexual awareness, and behavioral issues in adolescents 14. Assess school attendance (children of school-going age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months",
+              "metadata": {
+                "page_number": 11,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6863040924072266
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.6885417103767395
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## Referral Please refer the patient to a mental health worker (Psychiatric Nurse, Psychiatric Clinical Officer, Psychologist, Psychiatrist) at closest health center if the following happens: * Acute aggressive behavior * Alcohol withdrawal symptoms * High suicide risk (SAD PERSONS score >7) * Hearing voices of people they cannot see (auditory hallucinations) * Seeing things that others do not see (visual hallucinations) * Persisting suicidal ideation after 4 sessions of psychotherapy # Management of Alcohol and Substance Use Disorder Motivational interviewing (brief intervention) for alcohol and substance use: * Provide personalized feedback to the person about the risks associated with their pattern of substance use * Encourage the person to take responsibility for their substance use choices, and the choice of whether to seek assistance for their substance use. * Ask the person the reasons for their substance use * Ask about their perception of both the positive and negative consequences of their substance use",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 50
+              },
+              "distance": 0.7098398804664612
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "symptom_toxicity_match",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6749135255813599
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## Referral Please refer the patient to a mental health worker (Psychiatric Nurse, Psychiatric Clinical Officer, Psychologist, Psychiatrist) at closest health center if the following happens: * Acute aggressive behavior * Alcohol withdrawal symptoms * High suicide risk (SAD PERSONS score >7) * Hearing voices of people they cannot see (auditory hallucinations) * Seeing things that others do not see (visual hallucinations) * Persisting suicidal ideation after 4 sessions of psychotherapy # Management of Alcohol and Substance Use Disorder Motivational interviewing (brief intervention) for alcohol and substance use: * Provide personalized feedback to the person about the risks associated with their pattern of substance use * Encourage the person to take responsibility for their substance use choices, and the choice of whether to seek assistance for their substance use. * Ask the person the reasons for their substance use * Ask about their perception of both the positive and negative consequences of their substance use",
+              "metadata": {
+                "page_number": 50,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.7268084287643433
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.7478607892990112
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p30_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Determine the seriousness of the toxicity. - Evaluate concurrent medications and establish whether the toxicity may be attributable to an ARV or TB medicine, or to any other medication taken at the same time. - Consider other disease processes. Not all problems that arise during treatment are caused bymedicines. - Manage the side effects and toxicities according to severity (Table 85). - Report the event using the Adverse Drug Reaction form. Table 85: Management of ARV side effects/toxicities Category Action Severe, life-threatening reactions Immediately discontinue all ARV drugs, manage the medical event and substitute the offending drug when the patient is stable. Severe reactions Substitute the offending drug without stopping the ART. Moderate reactions Substitute with a drug in the same ARV class but with a different toxicity profile, or with a drug in a different class. Do not discontinue ART. Continue ART as long as feasible. If the patient does not improve on symptomatic therapy, consider single-drug substitution.",
+              "metadata": {
+                "page_number": 30,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7482545971870422
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+              "document": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 256",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 23
+              },
+              "distance": 0.7542961835861206
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "doctors_plan_check",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6752532720565796
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## Referral Please refer the patient to a mental health worker (Psychiatric Nurse, Psychiatric Clinical Officer, Psychologist, Psychiatrist) at closest health center if the following happens: * Acute aggressive behavior * Alcohol withdrawal symptoms * High suicide risk (SAD PERSONS score >7) * Hearing voices of people they cannot see (auditory hallucinations) * Seeing things that others do not see (visual hallucinations) * Persisting suicidal ideation after 4 sessions of psychotherapy # Management of Alcohol and Substance Use Disorder Motivational interviewing (brief intervention) for alcohol and substance use: * Provide personalized feedback to the person about the risks associated with their pattern of substance use * Encourage the person to take responsibility for their substance use choices, and the choice of whether to seek assistance for their substance use. * Ask the person the reasons for their substance use * Ask about their perception of both the positive and negative consequences of their substance use",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 50
+              },
+              "distance": 0.6783211827278137
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 11: Key highlights in Pharmacovigilance * These guidelines emphasize the importance of pharmacovigilance for the early identification and management of adverse effects of medications especially HIV and TB medicines. * Method of pharmacovigilance adopted for all HIV and TB facilities shall be Active pharmacovigilance. * All facilities, as part of routine care should routinely screen, investigate, manage and report adverse drug reactions as they present at the facility. Healthcare workers should assess patients on HIV and TB medicines for side effects and toxicities at every clinic visit. * Active pharmacovigilance involves pro-active investigation of patients during treatment and follows them up to detect adverse drug reactions and adverse events even when the patient has no signs or symptoms. * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 34
+              },
+              "distance": 0.6866738796234131
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6910516023635864
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+              "document": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 256",
+              "metadata": {
+                "page_number": 23,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7081148624420166
+            }
+          ],
+          "summary": null
+        }
+      ],
+      "updated_management_plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine if current regimen is causing toxicity\", \"reason\": \"Patient complaints of poor sleep and vivid dreams, but guideline excerpts do not provide enough information to confirm drug toxicity from TDF, 3TC, or EFV\"}, \"problems\": [{\"problem\": \"Insomnia and vivid dreams\", \"action\": \"Consider switching EFV to another regimen\", \"reason\": \"EFV is known to cause neuropsychiatric side effects, including insomnia and vivid dreams\", \"clinician_plan_for_this_problem\": {\"decision\": \"Disagree\", \"explanation\": \"Current plan does not address potential EFV side effects\"}}, {\"problem\": \"Potential renal toxicity from TDF\", \"action\": \"Uncertain: need serum creatinine and eGFR results\", \"reason\": \"TDF can cause renal toxicity, but no screening results are available\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not mention TDF toxicity screening\"}}], \"monitoring_plan\": \"Serum creatinine, eGFR, and viral load\", \"patient_counselling\": [\"Discuss potential side effects of EFV\", \"Importance of adherence to regimen\", \"Monitoring for signs of renal toxicity\"]}"
+    }
+  },
+  "status_log": [
+    "vLLM: idle",
+    "running: vLLM: screening for safety issues…",
+    "complete: vLLM connected (response received)"
+  ],
+  "repeat": 2
+}
