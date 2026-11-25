@@ -113,3 +113,13 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: fix 4. Each result stores its unit next to its value. The form asks for the unit, and
   refuses a creatinine under 20 umol/L as probably mg/dL.
 
+**13. Exact-match rules on free text.**
+- Example: the rules checked for the exact entry "TDF" in the regimen list. P005's regimen was
+  saved as one sentence ("TDF/3TC/DTG (TLD) fixed-dose combination once daily…"), so she got no
+  rule alerts at all: not for tenofovir with ibuprofen, not for her kidney function, not for
+  protein in her urine. "TDF, 3TC, EFV" typed normally failed too, because of the spaces after
+  the commas.
+- Caught by: running the rules on every saved case, not only the four tidy demo patients.
+- Fix: fix 5. One function recognises the drugs however they're written, the form uses a
+  pick-list, and the old cases were converted once with their original text kept.
+

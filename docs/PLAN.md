@@ -57,7 +57,7 @@ test that fails on the old code, ends with that test passing, and is logged in
 - [x] Fix 2: results belong to the patient and note they were run for (old item 1.3, first half).
 - [x] Fix 3: rule alerts are never dropped, and a failed AI review is never green (old item 1.1).
 - [x] Fix 4: lab results carry their unit, date and age, and notes are dated.
-- [ ] Fix 5: drugs are recognised however they're typed, and the rules read the medicine list.
+- [x] Fix 5: drugs are recognised however they're typed, and the rules read the medicine list.
 - [ ] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
 - [ ] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
       "Continue" (old item 1.2).
@@ -134,6 +134,8 @@ Check: the retrieval and answer scores before and after each change are in the d
 
 - [ ] 3.1 Design brief: clinicians first; Penda-style red/amber/green; review on the alert itself;
       guideline text beside the patient values.
+      Notes from Phase 1: the regimen pick-list should not offer "Select all" (Streamlit adds it);
+      lab entry is one row per result with a unit.
 - [ ] 3.2 Mock up the visit-review screen three ways (clinic workstation, guided case review,
       evidence-first). You pick.
 - [ ] 3.3 Finish the chosen direction: patient list, visit review, plan, audit record, plus colours

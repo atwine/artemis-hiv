@@ -478,10 +478,9 @@
       "EFV"
      ],
      "keyword_hits": [
-      "sleep",
       "insomnia",
-      "vivid dream",
-      "vivid dreams"
+      "vivid dreams",
+      "poor sleep"
      ]
     },
     "query_hint": "Efavirenz sleep disturbance vivid dreams management",
@@ -607,7 +606,7 @@
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
      "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
     ],
-    "explanation": "Why this alert: Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.\nPatient evidence: {'regimen': ['TDF', '3TC', 'EFV'], 'keyword_hits': ['sleep', 'insomnia', 'vivid dream', 'vivid dreams']}\n\nGuideline excerpts:\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori\n- (page=36) Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea",
+    "explanation": "Why this alert: Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.\nPatient evidence: {'regimen': ['TDF', '3TC', 'EFV'], 'keyword_hits': ['insomnia', 'vivid dreams', 'poor sleep']}\n\nGuideline excerpts:\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=55) to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphori\n- (page=36) Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea",
     "explanation_used_llm": false
    },
    {
@@ -815,6 +814,21 @@
   "llm_error": null,
   "alerts": [
    {
+    "alert_id": "tdf_creatinine_pasted_only",
+    "title": "Creatinine recorded only as pasted text",
+    "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+     ],
+     "creatinine": "pasted text only"
+    },
+    "query_hint": "TDF creatinine monitoring frequency",
+    "source": "rule"
+   },
+   {
     "alert_id": "P006_001",
     "title": "Elevated Creatinine",
     "message": "Guidelines do not specify creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. TDF is a known cause of renal impairment, but other factors like pregnancy should also be considered.",
@@ -982,13 +996,25 @@
   ],
   "results": [
    {
+    "alert_id": "tdf_creatinine_pasted_only",
+    "retrieved": [
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+    ],
+    "explanation": "Why this alert: A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'creatinine': 'pasted text only'}\n\nGuideline excerpts:\n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti\n- (page=12) minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, ever\n- (page=17) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD",
+    "explanation_used_llm": false
+   },
+   {
     "alert_id": "P006_001",
     "retrieved": [
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c1",
      "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c1"
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
     ],
     "explanation": "Why this alert: Guidelines do not specify creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. TDF is a known cause of renal impairment, but other factors like pregnancy should also be considered.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function', 'citations': [{'page_number': 0, 'chunk_id': 'information_gap'}], 'raw_issue': {'alert_id': 'P006_001', 'title': 'Elevated Creatinine', 'message': \"Guidelines do not specify creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. TDF is a known cause of renal impairment, but other factors like pregnancy should also be considered.\", 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function', 'citations': [{'page_number': 0, 'chunk_id': 'information_gap'}]}}\n\nGuideline excerpts:\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti\n- (page=10) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TA",
     "explanation_used_llm": false
@@ -998,11 +1024,11 @@
     "retrieved": [
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c1",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1"
     ],
-    "explanation": "Why this alert: Guidelines recommend viral load monitoring at baseline, 3 months after ART initiation, and at delivery for pregnant women. Patient's viral load decreased from 125,000 to 89 copies/mL after 10 weeks of ART.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Schedule next viral load test according to guidelines', 'citations': [{'page_number': 49, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1'}], 'raw_issue': {'alert_id': 'P006_002', 'title': 'Viral Load Monitoring', 'message': \"Guidelines recommend viral load monitoring at baseline, 3 months after ART initiation, and at delivery for pregnant women. Patient's viral load decreased from 125,000 to 89 copies/mL after 10 weeks of ART.\", 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Schedule next viral load test according to guidelines', 'citations': [{'page_number': 49, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1'}]}}\n\nGuideline excerpts:\n- (page=13) ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=7) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 **When to use TDF + 3TC + ATV/r or TAF +FTC+ATV/r** Pregnant or breastfeeding women should only be initiated on TDF+3TC+ATV/r if EFV and DTG are contraindicated (Table 74). **PREGNANT AND BREASTFEEDING WOMEN ALREADY ON FIRST LINE ART** Do viral load test at th",
+    "explanation": "Why this alert: Guidelines recommend viral load monitoring at baseline, 3 months after ART initiation, and at delivery for pregnant women. Patient's viral load decreased from 125,000 to 89 copies/mL after 10 weeks of ART.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Schedule next viral load test according to guidelines', 'citations': [{'page_number': 49, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1'}], 'raw_issue': {'alert_id': 'P006_002', 'title': 'Viral Load Monitoring', 'message': \"Guidelines recommend viral load monitoring at baseline, 3 months after ART initiation, and at delivery for pregnant women. Patient's viral load decreased from 125,000 to 89 copies/mL after 10 weeks of ART.\", 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Schedule next viral load test according to guidelines', 'citations': [{'page_number': 49, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1'}]}}\n\nGuideline excerpts:\n- (page=13) ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=12) minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, ever",
     "explanation_used_llm": false
    },
    {
@@ -1049,15 +1075,15 @@
   "llm_calls": [
    {
     "kind": "agentic_answer",
-    "messages_sha1": "08e79b76aaa5"
+    "messages_sha1": "b8513cdece68"
    },
    {
     "kind": "plan",
-    "messages_sha1": "c998950b3e45"
+    "messages_sha1": "0abc399bc0c5"
    },
    {
     "kind": "screening",
-    "messages_sha1": "5bc6a80ebf8a"
+    "messages_sha1": "1d6cd326eebf"
    }
   ],
   "status_log": [
@@ -1071,6 +1097,50 @@
   "status": "YELLOW",
   "llm_error": null,
   "alerts": [
+   {
+    "alert_id": "tdf_creatinine_pasted_only",
+    "title": "Creatinine recorded only as pasted text",
+    "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+     ],
+     "creatinine": "pasted text only"
+    },
+    "query_hint": "TDF creatinine monitoring frequency",
+    "source": "rule"
+   },
+   {
+    "alert_id": "tdf_nsaid_use",
+    "title": "NSAID use mentioned while on TDF",
+    "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+     ],
+     "keyword_hits": [
+      "ibuprofen"
+     ]
+    },
+    "query_hint": "TDF NSAID renal risk monitoring",
+    "source": "rule"
+   },
+   {
+    "alert_id": "possible_proteinuria",
+    "title": "Proteinuria mentioned in notes",
+    "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+    "evidence": {
+     "keyword_hits": [
+      "protein 1+"
+     ]
+    },
+    "query_hint": "proteinuria dipstick trace protein evaluation",
+    "source": "rule"
+   },
    {
     "alert_id": "P005_001",
     "title": "Renal Function Decline",
@@ -1163,27 +1233,63 @@
   ],
   "results": [
    {
+    "alert_id": "tdf_creatinine_pasted_only",
+    "retrieved": [
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1"
+    ],
+    "explanation": "Why this alert: A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'creatinine': 'pasted text only'}\n\nGuideline excerpts:\n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti",
+    "explanation_used_llm": false
+   },
+   {
+    "alert_id": "tdf_nsaid_use",
+    "retrieved": [
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+    ],
+    "explanation": "Why this alert: NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'keyword_hits': ['ibuprofen']}\n\nGuideline excerpts:\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=13) ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0",
+    "explanation_used_llm": false
+   },
+   {
+    "alert_id": "possible_proteinuria",
+    "retrieved": [
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+    ],
+    "explanation": "Why this alert: Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.\nPatient evidence: {'keyword_hits': ['protein 1+']}\n\nGuideline excerpts:\n- (page=23) Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, \n- (page=11) g age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months 17. Assess growth and development in children under 5 years; monitor for changes 18. Ensure examination of vital signs, skin, eyes, oropharynx (prese\n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-",
+    "explanation_used_llm": false
+   },
+   {
     "alert_id": "P005_001",
     "retrieved": [
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c1",
-     "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
     ],
-    "explanation": "Why this alert: Guidelines do not specify exact creatinine thresholds, but patient's creatinine has risen from 0.9 to 1.4 mg/dL over 3 years. TDF is known to affect renal function. However, other factors like dehydration or comorbidities should also be considered. Patient's eGFR is 52 mL/min/1.73m2, indicating mild renal impairment.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function closely, consider alternative regimens if decline continues.', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}], 'raw_issue': {'alert_id': 'P005_001', 'title': 'Renal Function Decline', 'message': \"Guidelines do not specify exact creatinine thresholds, but patient's creatinine has risen from 0.9 to 1.4 mg/dL over 3 years. TDF is known to affect renal function. However, other factors like dehydration or comorbidities should also be considered. Patient's eGFR is 52 mL/min/1.73m2, indicating mild renal impairment.\", 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function closely, consider alternative regimens if decline continues.', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}]}}\n\nGuideline excerpts:\n- (page=29) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=40) fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in which TDF may act as a co-factor. Table 17 lists the laboratory investigations and their frequency advised for monitoring of ART safety. TABLE 17: Standard laboratory monitoring of pat",
+    "explanation": "Why this alert: Guidelines do not specify exact creatinine thresholds, but patient's creatinine has risen from 0.9 to 1.4 mg/dL over 3 years. TDF is known to affect renal function. However, other factors like dehydration or comorbidities should also be considered. Patient's eGFR is 52 mL/min/1.73m2, indicating mild renal impairment.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function closely, consider alternative regimens if decline continues.', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}], 'raw_issue': {'alert_id': 'P005_001', 'title': 'Renal Function Decline', 'message': \"Guidelines do not specify exact creatinine thresholds, but patient's creatinine has risen from 0.9 to 1.4 mg/dL over 3 years. TDF is known to affect renal function. However, other factors like dehydration or comorbidities should also be considered. Patient's eGFR is 52 mL/min/1.73m2, indicating mild renal impairment.\", 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function closely, consider alternative regimens if decline continues.', 'citations': [{'page_number': 32, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1'}]}}\n\nGuideline excerpts:\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=29) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on\n- (page=22) ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The esse",
     "explanation_used_llm": false
    },
    {
     "alert_id": "P005_002",
     "retrieved": [
      "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
      "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
-     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
     ],
-    "explanation": "Why this alert: Guidelines recommend monitoring viral load every 6 months for patients on DTG-based regimens. Patient's last viral load was <50 copies/mL, but adherence and potential side effects should be assessed. Common pitfall is not monitoring viral load at least annually.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Continue monitoring viral load every 6 months.', 'citations': [{'page_number': 40, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4'}], 'raw_issue': {'alert_id': 'P005_002', 'title': 'Viral Load Monitoring', 'message': \"Guidelines recommend monitoring viral load every 6 months for patients on DTG-based regimens. Patient's last viral load was <50 copies/mL, but adherence and potential side effects should be assessed. Common pitfall is not monitoring viral load at least annually.\", 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Continue monitoring viral load every 6 months.', 'citations': [{'page_number': 40, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4'}]}}\n\nGuideline excerpts:\n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=40) FBC, full blood count; NVP, nevirapine; TC, total cholesterol; TG, triglycerides; VL, viral load. † These tests should also be done when clinically indicated, based on the discretion of the clinician. Common pitfall: Not monitoring the VL at least annually. If VL is not monitored, this can result in delayed detection of ART failure and required int\n- (page=13) ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0",
+    "explanation": "Why this alert: Guidelines recommend monitoring viral load every 6 months for patients on DTG-based regimens. Patient's last viral load was <50 copies/mL, but adherence and potential side effects should be assessed. Common pitfall is not monitoring viral load at least annually.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Continue monitoring viral load every 6 months.', 'citations': [{'page_number': 40, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4'}], 'raw_issue': {'alert_id': 'P005_002', 'title': 'Viral Load Monitoring', 'message': \"Guidelines recommend monitoring viral load every 6 months for patients on DTG-based regimens. Patient's last viral load was <50 copies/mL, but adherence and potential side effects should be assessed. Common pitfall is not monitoring viral load at least annually.\", 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Continue monitoring viral load every 6 months.', 'citations': [{'page_number': 40, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4'}]}}\n\nGuideline excerpts:\n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=37) Flowchart: Indications for performing resistance (genotype) testing in second-line antiretroviral therapy Flowchart step VL > 50 copies/mL and on a second-line ART regimen for > 2 years Flowchart branches from previous step Flowchart step * Provide enhanced adherence support * Address potential side-effects affecting adherence, convenience of curre\n- (page=40) FBC, full blood count; NVP, nevirapine; TC, total cholesterol; TG, triglycerides; VL, viral load. † These tests should also be done when clinically indicated, based on the discretion of the clinician. Common pitfall: Not monitoring the VL at least annually. If VL is not monitored, this can result in delayed detection of ART failure and required int",
     "explanation_used_llm": false
    },
    {
@@ -1191,11 +1297,11 @@
     "retrieved": [
      "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c1",
      "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
-     "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
-     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c2"
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
     ],
-    "explanation": "Why this alert: Patient takes ibuprofen 400mg occasionally for headaches. While not directly related to ART, long-term use of ibuprofen can affect renal function, which is already a concern due to TDF use. Guidelines do not provide specific recommendations for ibuprofen use in this context.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Assess need for alternative pain management options.', 'citations': [], 'raw_issue': {'alert_id': 'P005_003', 'title': 'Ibuprofen Use', 'message': 'Patient takes ibuprofen 400mg occasionally for headaches. While not directly related to ART, long-term use of ibuprofen can affect renal function, which is already a concern due to TDF use. Guidelines do not provide specific recommendations for ibuprofen use in this context.', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Assess need for alternative pain management options.', 'citations': []}}\n\nGuideline excerpts:\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=40) fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in which TDF may act as a co-factor. Table 17 lists the laboratory investigations and their frequency advised for monitoring of ART safety. TABLE 17: Standard laboratory monitoring of pat",
+    "explanation": "Why this alert: Patient takes ibuprofen 400mg occasionally for headaches. While not directly related to ART, long-term use of ibuprofen can affect renal function, which is already a concern due to TDF use. Guidelines do not provide specific recommendations for ibuprofen use in this context.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Assess need for alternative pain management options.', 'citations': [], 'raw_issue': {'alert_id': 'P005_003', 'title': 'Ibuprofen Use', 'message': 'Patient takes ibuprofen 400mg occasionally for headaches. While not directly related to ART, long-term use of ibuprofen can affect renal function, which is already a concern due to TDF use. Guidelines do not provide specific recommendations for ibuprofen use in this context.', 'issue_type': 'information_gap', 'severity': 'low', 'recommended_action': 'Assess need for alternative pain management options.', 'citations': []}}\n\nGuideline excerpts:\n- (page=20) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 - Routine Laboratory screening for adverse drug reactions to monitor ARV and TB drug toxicities to better understand the risks of taking the drug regimen under conditions of programmatic use - Management of severity of adverse drug events in a timely manner - \n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=37) Flowchart: Indications for performing resistance (genotype) testing in second-line antiretroviral therapy Flowchart step VL > 50 copies/mL and on a second-line ART regimen for > 2 years Flowchart branches from previous step Flowchart step * Provide enhanced adherence support * Address potential side-effects affecting adherence, convenience of curre",
     "explanation_used_llm": false
    }
   ],
@@ -1206,23 +1312,23 @@
   "llm_calls": [
    {
     "kind": "agentic_answer",
-    "messages_sha1": "5336f253683b"
+    "messages_sha1": "d256f215106b"
    },
    {
     "kind": "plan",
-    "messages_sha1": "950aa4af1067"
+    "messages_sha1": "fdafd7a58848"
    },
    {
     "kind": "plan",
-    "messages_sha1": "f35d28470236"
+    "messages_sha1": "8fc87283ae34"
    },
    {
     "kind": "plan",
-    "messages_sha1": "f38311bd5b03"
+    "messages_sha1": "0e389d51931a"
    },
    {
     "kind": "screening",
-    "messages_sha1": "8a402ee59ce8"
+    "messages_sha1": "dcabbab09fb0"
    }
   ],
   "status_log": [
@@ -1236,6 +1342,21 @@
   "status": "YELLOW",
   "llm_error": null,
   "alerts": [
+   {
+    "alert_id": "tdf_creatinine_pasted_only",
+    "title": "Creatinine recorded only as pasted text",
+    "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+    "evidence": {
+     "regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+     ],
+     "creatinine": "pasted text only"
+    },
+    "query_hint": "TDF creatinine monitoring frequency",
+    "source": "rule"
+   },
    {
     "alert_id": "KINTU_001",
     "title": "Weight Gain on TLD",
@@ -1338,6 +1459,18 @@
   ],
   "results": [
    {
+    "alert_id": "tdf_creatinine_pasted_only",
+    "retrieved": [
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+     "sahcs_adult_art_2024__sahcs_adult_art_2024__p37_c1",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c2",
+     "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+    ],
+    "explanation": "Why this alert: A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'creatinine': 'pasted text only'}\n\nGuideline excerpts:\n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti\n- (page=32) Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL 50 copies/mL: - Provide enhanced adherence support - Address potential side-\n- (page=37) Flowchart: Indications for performing resistance (genotype) testing in second-line antiretroviral therapy Flowchart step VL > 50 copies/mL and on a second-line ART regimen for > 2 years Flowchart branches from previous step Flowchart step * Provide enhanced adherence support * Address potential side-effects affecting adherence, convenience of curre",
+    "explanation_used_llm": false
+   },
+   {
     "alert_id": "KINTU_001",
     "retrieved": [
      "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
@@ -1381,23 +1514,23 @@
   "llm_calls": [
    {
     "kind": "agentic_answer",
-    "messages_sha1": "4787e9c2e93c"
+    "messages_sha1": "f43a9b96d930"
    },
    {
     "kind": "plan",
-    "messages_sha1": "245a211845ea"
+    "messages_sha1": "9eac3b5b8f55"
    },
    {
     "kind": "plan",
-    "messages_sha1": "cfb37fed9969"
+    "messages_sha1": "f1188bc6202e"
    },
    {
     "kind": "plan",
-    "messages_sha1": "e6aa7e17ded7"
+    "messages_sha1": "6072f403de37"
    },
    {
     "kind": "screening",
-    "messages_sha1": "f8f4d8221158"
+    "messages_sha1": "464d6e65b498"
    }
   ],
   "status_log": [

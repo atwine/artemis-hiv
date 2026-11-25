@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from artemis.patient.labs import lab_section, latest_entries, read_lab_entries
+from artemis.patient.medicines import other_medicines, regimen_codes
 
 
 def _parse_iso_date(value: str) -> date:
@@ -51,6 +52,7 @@ class PatientContext:
     # What the model reads: every lab result dated with its age and unit (fix 4), and the
     # notes oldest first, each labelled with its date, with today's note marked as today's.
     lab_section: str = "None recorded"
+    art_regimen_as_entered: str = ""
     dated_notes: str = ""
 
 
@@ -74,7 +76,11 @@ def build_patient_context(patient: Dict[str, Any]) -> PatientContext:
 
     encounter_date = _parse_iso_date(patient["today_encounter"]["date"])
 
-    art_regimen_current = list(patient.get("art_regimen_current") or [])
+    # The antiretroviral codes, however the regimen was written (fix 5), plus the text as entered.
+    regimen_as_entered = patient.get("art_regimen_as_entered") or ", ".join(
+        s.strip() for s in patient.get("art_regimen_current") or [] if s and s.strip()
+    )
+    art_regimen_current = regimen_codes(patient.get("art_regimen_current") or [])
 
     notes_parts: List[str] = []
     for v in patient.get("visits", []) or []:
@@ -95,7 +101,7 @@ def build_patient_context(patient: Dict[str, Any]) -> PatientContext:
     }
 
     # NEW: Extract structured fields if available (backward compatible)
-    other_meds = list(patient.get("other_medications") or [])
+    other_meds = other_medicines(patient.get("other_medications") or [])
     intake = patient.get("intake") or {}
     complaints = intake.get("complaints_symptoms", "")
     exam_findings = intake.get("examination_findings", "")
@@ -136,6 +142,7 @@ def build_patient_context(patient: Dict[str, Any]) -> PatientContext:
         sex=sex,
         labs_narrative=labs_narrative,
         lab_section=lab_section(patient, encounter_date),
+        art_regimen_as_entered=regimen_as_entered,
         dated_notes="\n\n".join(dated_parts),
     )
 

@@ -219,6 +219,13 @@ def _parse_issues_json(text: str) -> Optional[List[Dict[str, Any]]]:
     return out
 
 
+def _as_written(patient_context: PatientContext) -> str:
+    """The regimen as the clinician wrote it, when it says more than the drug codes."""
+    written = (getattr(patient_context, "art_regimen_as_entered", "") or "").strip()
+    codes = ", ".join(patient_context.art_regimen_current or [])
+    return f" (as written: {written})" if written and written != codes else ""
+
+
 def generate_llm_screening_alerts(
     *,
     patient_context: PatientContext,
@@ -355,7 +362,8 @@ HARD LIMITS — FOLLOW STRICTLY:
             f"Age: {patient_context.age_years if patient_context.age_years is not None else 'Not recorded'} years\n"
             f"Sex: {patient_context.sex if patient_context.sex else 'Not recorded'}\n"
             f"Encounter date: {patient_context.encounter_date.isoformat()}\n\n"
-            f"Current ART regimen: {', '.join(patient_context.art_regimen_current) if patient_context.art_regimen_current else 'None'}\n"
+            f"Current ART regimen: {', '.join(patient_context.art_regimen_current) if patient_context.art_regimen_current else 'None'}"
+            f"{_as_written(patient_context)}\n"
             f"Other medications: {', '.join(patient_context.other_medications) if patient_context.other_medications else 'None'}\n\n"
             "Clinical notes, oldest first:\n"
             f"{patient_context.dated_notes}\n\n"

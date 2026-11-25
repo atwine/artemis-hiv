@@ -7,9 +7,26 @@ The LLM is used later for explanation/citation, not for deciding whether an aler
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Any, Dict, List, Optional
 
+from artemis.patient.medicines import NSAIDS
 from artemis.patient.record import PatientContext, days_since_lab
+
+# A mention counts only if no negation comes before it in the same sentence:
+# "No proteinuria", "denies NSAID use" and "negative for protein" are not findings.
+_NEGATION = re.compile(r"\b(no|not|denies|denied|without|negative for|nil)\b[^.;\n]*$", re.IGNORECASE)
+
+
+def _mentions(text: str, patterns: List[str]) -> List[str]:
+    """The patterns (regular expressions) found in the text, skipping negated mentions."""
+    hits: List[str] = []
+    for pattern in patterns:
+        for m in re.finditer(pattern, text or "", re.IGNORECASE):
+            if not _NEGATION.search((text or "")[max(0, m.start() - 60) : m.start()]):
+                hits.append(m.group(0).lower())
+                break
+    return hits
 
 
 @dataclass(frozen=True)
@@ -63,6 +80,17 @@ def _check_tdf_creatinine_overdue(context: PatientContext) -> Optional[Alert]:
         return None
 
     days = days_since_lab(context, "creatinine")
+    if days is None and re.search(r"creatinine", context.labs_narrative or "", re.IGNORECASE):
+        return Alert(
+            alert_id="tdf_creatinine_pasted_only",
+            title="Creatinine recorded only as pasted text",
+            message=(
+                "A creatinine result appears only in pasted lab text, so its date is unknown. "
+                "Check when it was taken and enter it as a dated lab result for a patient on TDF."
+            ),
+            evidence={"regimen": context.art_regimen_current, "creatinine": "pasted text only"},
+            query_hint="TDF creatinine monitoring frequency",
+        )
     if days is None:
         return Alert(
             alert_id="tdf_creatinine_missing",
@@ -96,16 +124,19 @@ def _check_efv_sleep_disturbance(context: PatientContext) -> Optional[Alert]:
     if "EFV" not in context.art_regimen_current:
         return None
 
-    text = (context.notes_text or "").lower()
-    keywords = [
-        "sleep",
-        "insomnia",
-        "vivid dream",
-        "vivid dreams",
-        "nightmare",
-    ]
-
-    hits = [k for k in keywords if k in text]
+    hits = _mentions(
+        context.notes_text,
+        [
+            r"insomnia",
+            r"vivid dreams?",
+            r"nightmares?",
+            r"sleep disturbances?",
+            r"(poor|bad|disturbed) sleep",
+            r"(trouble|difficulty|problems?) sleeping",
+            r"(can't|cannot|unable to) sleep",
+            r"sleepless",
+        ],
+    )
     if not hits:
         return None
 
@@ -131,15 +162,8 @@ def _check_tdf_nsaid_use(context: PatientContext) -> Optional[Alert]:
     if "TDF" not in context.art_regimen_current:
         return None
 
-    text = (context.notes_text or "").lower()
-    keywords = [
-        "ibuprofen",
-        "diclofenac",
-        "naproxen",
-        "nsaid",
-    ]
-
-    hits = [k for k in keywords if k in text]
+    text = "\n".join([context.notes_text or ""] + list(context.other_medications or []))
+    hits = _mentions(text, [rf"{name}s?" for name in NSAIDS])
     if not hits:
         return None
 
@@ -161,13 +185,11 @@ def _check_possible_proteinuria(context: PatientContext) -> Optional[Alert]:
     Rationale: urinalysis is not yet modeled as structured labs in the demo schema.
     """
 
-    text = (context.notes_text or "").lower()
-    keywords = [
-        "proteinuria",
-        "trace protein",
-    ]
-
-    hits = [k for k in keywords if k in text]
+    text = "\n".join([context.notes_text or "", context.labs_narrative or ""])
+    hits = _mentions(
+        text,
+        [r"proteinuria", r"trace protein", r"protein\s*[:=-]?\s*(trace|\d\s*\+|\+{1,3})"],
+    )
     if not hits:
         return None
 
@@ -186,16 +208,18 @@ def _check_suboptimal_bp_with_missed_amlodipine(context: PatientContext) -> Opti
     """Flag if notes suggest suboptimal BP control with missed amlodipine doses."""
 
     text = (context.notes_text or "").lower()
-    if "amlodipine" not in text:
+    meds = " ".join(context.other_medications or []).lower()
+    if "amlodipine" not in text and "amlodipine" not in meds:
         return None
 
     # Rationale: keep matching conservative to avoid false positives from generic
     # medication lists; require both a control concern and a missed-dose cue.
     control_terms = ["sub-optimally controlled", "suboptimally controlled", "bp is sub"]
-    missed_terms = ["missing", "missed", "occasionally missing", "occasionally missed"]
-
     control_hits = [k for k in control_terms if k in text]
-    missed_hits = [k for k in missed_terms if k in text]
+    missed_hits = [
+        m.group(0)
+        for m in re.finditer(r"\bmiss(ed|ing)\b[^.;\n]{0,40}\b(doses?|tablets?|pills?|amlodipine)\b", text)
+    ]
     if not control_hits or not missed_hits:
         return None
 

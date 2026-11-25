@@ -34,6 +34,7 @@ from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
+from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
@@ -450,17 +451,18 @@ def main() -> None:
                 help="Biological sex"
             )
 
-        new_art_regimen = st.text_input(
-            "Current ART Regimen (comma-separated, e.g., TDF, 3TC, DTG)",
+        new_art_regimen = st.multiselect(
+            "Current ART regimen",
+            REGIMEN_CHOICES,
             key="new_case_art_regimen",
-            help="Enter current antiretroviral medications separated by commas"
+            help="Pick a combination (TLD = TDF + 3TC + DTG) or the single drugs.",
         )
 
         new_other_meds = st.text_area(
             "Other Medications",
             key="new_case_other_meds",
             height=60,
-            help="Non-ARV medications (e.g., ibuprofen, metformin, carbamazepine). One per line or comma-separated."
+            help="Non-ARV medications, one per line (e.g., ibuprofen 400 mg as needed)."
         )
 
         new_complaints = st.text_area(
@@ -550,34 +552,10 @@ def main() -> None:
                         st.error(_e)
                     st.stop()
 
-                # Parse ART regimen from comma-separated input
-                # Rationale: preserve exact text as entered (no .strip())
-                art_regimen = []
-                if new_art_regimen:
-                    art_regimen = [
-                        drug
-                        for drug in new_art_regimen.split(",")
-                        if drug
-                    ]
-
-                # Parse other medications (support both newline and comma-separated)
-                # Rationale: preserve exact text as entered (no .strip())
-                other_meds = []
-                if new_other_meds:
-                    other_meds_text = (new_other_meds or "")
-                    # Try newline-separated first, then comma-separated
-                    if "\n" in other_meds_text:
-                        other_meds = [
-                            med
-                            for med in other_meds_text.split("\n")
-                            if med
-                        ]
-                    else:
-                        other_meds = [
-                            med
-                            for med in other_meds_text.split(",")
-                            if med
-                        ]
+                # The picked drugs and combinations, as drug codes (TLD becomes TDF, 3TC, DTG).
+                art_regimen = regimen_codes(new_art_regimen or [])
+                # One medicine per line; commas inside a line are part of it.
+                other_meds = other_medicines((new_other_meds or "").splitlines())
 
                 patient_record: Dict[str, Any] = {
                     "patient_id": pid,

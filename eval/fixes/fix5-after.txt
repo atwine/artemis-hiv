@@ -1,0 +1,7 @@
+Fix 5, after (2026-11-25).
+
+Tests (tests/test_medicines_and_rules.py): 9 passed (8 failed before; see fix5-before.txt).
+Conversion of Data/custom_patients.json: changed P006, P005, Kintu-Test 001; a second run changed nothing.
+Golden diff: P005 +3 rule alerts (creatinine only in pasted text, NSAID while on TDF, proteinuria); P006 and Kintu +1 (creatinine only in pasted text); P003 same EFV alert, evidence now insomnia and vivid dreams; P001, P002, P004 unchanged.
+Chrome: the add-case regimen is a pick-list (TLD, TLE, TEE, ALD, then single drugs). Streamlit adds a 'Select all' option, noted for Phase 3.
+Real Save for P005 on the A100: exceptions: [] status: YELLOW | outcome: ok | error: None alert sections: ['Alert (Rule check): Creatinine recorded only as pasted text', 'Alert (Rule check): NSAID use mentioned while on TDF', 'Alert (Rule check): Proteinuria mentioned in notes', 'Alert (AI review): Renal Function Decline', 'Alert (AI review): Potential Drug Interaction', 'Alert (AI review): Monitoring Gap']  

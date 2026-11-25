@@ -6,6 +6,8 @@ put an analysis result in place the way _run_analysis leaves it, or use the add-
 
 from __future__ import annotations
 
+import json
+import os
 from pathlib import Path
 
 import pytest
@@ -74,14 +76,17 @@ def test_results_stay_with_the_patient_they_were_run_for(at: AppTest) -> None:
 
 def test_adding_a_case_clears_the_form_and_selects_the_new_case(at: AppTest) -> None:
     at.text_input(key="new_case_patient_id").input("T-900")
-    at.text_input(key="new_case_art_regimen").input("TDF, 3TC, DTG")
+    at.multiselect(key="new_case_art_regimen").select("TLD")
     at.text_area(key="new_case_complaints").input("Headache for two days.")
     next(b for b in at.button if b.label == "Add case to patient list").click().run()
 
     assert not at.exception
     assert _selected(at).split(" - ")[0] == "T-900"
     assert at.text_input(key="new_case_patient_id").value == ""
-    assert at.text_input(key="new_case_art_regimen").value == ""
+    assert at.multiselect(key="new_case_art_regimen").value == []
+    saved = json.loads(Path(os.environ["ARTEMIS_CUSTOM_PATIENTS_PATH"]).read_text(encoding="utf-8"))
+    assert saved[-1]["patient_id"] == "T-900"
+    assert saved[-1]["art_regimen_current"] == ["TDF", "3TC", "DTG"]  # TLD picked (fix 5)
     assert at.text_area(key="new_case_complaints").value == ""
     # The lab tables (fix 4) can't be filled by Streamlit's test runner; their rows are
     # converted by artemis.patient.labs.lab_rows_to_entries, tested in tests/test_lab_input.py.
