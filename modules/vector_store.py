@@ -34,7 +34,6 @@ class VectorStore:
         query_text: str,
         embedder: Embedder,
         top_k: int = 5,
-        page_range: Optional[tuple[int, int]] = None,
     ) -> List[VectorSearchResult]:
         raise NotImplementedError
 
@@ -96,7 +95,6 @@ class ChromaVectorStore(VectorStore):
         query_text: str,
         embedder: Embedder,
         top_k: int = 5,
-        page_range: Optional[tuple[int, int]] = None,
     ) -> List[VectorSearchResult]:
         if not query_text.strip():
             return []
@@ -105,35 +103,11 @@ class ChromaVectorStore(VectorStore):
 
         # Query API documented here. [src]
         # https://docs.trychroma.com/docs/querying-collections/query-and-get
-        # Rationale: Stage 2 support — optionally constrain by PDF page range using metadata filter.
-        # Chroma 'where' filter with numeric ranges uses $gte/$lte. [src]
-        # https://docs.trychroma.com/guides#using-where-to-filter-metadata
-        where = None
-        if page_range is not None:
-            lo, hi = page_range
-            # Chroma requires one operator per expression; use $and to combine range bounds.
-            where = {
-                "$and": [
-                    {"page_number": {"$gte": int(lo)}},
-                    {"page_number": {"$lte": int(hi)}},
-                ]
-            }
-
-        try:
-            result = self._collection.query(
-                query_embeddings=[query_embedding],
-                n_results=top_k,
-                include=["metadatas", "documents", "distances"],
-                where=where,
-            )
-        except Exception:
-            # Some Chroma versions reject combined operators in filters; retry without filter
-            # and let the caller enforce page_range bounds post‑retrieval.
-            result = self._collection.query(
-                query_embeddings=[query_embedding],
-                n_results=top_k,
-                include=["metadatas", "documents", "distances"],
-            )
+        result = self._collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k,
+            include=["metadatas", "documents", "distances"],
+        )
 
         ids = (result.get("ids") or [[]])[0]
         documents = (result.get("documents") or [[]])[0]
@@ -180,7 +154,6 @@ class InMemoryVectorStore(VectorStore):
         query_text: str,
         embedder: Embedder,
         top_k: int = 5,
-        page_range: Optional[tuple[int, int]] = None,
     ) -> List[VectorSearchResult]:
         if self._embeddings is None or not self._ids:
             return []
@@ -196,29 +169,8 @@ class InMemoryVectorStore(VectorStore):
         sims = (self._embeddings @ q) / denom
         distances = 1.0 - sims
 
-        # Rationale: Stage 2 support — optionally restrict results to a PDF page range using stored metadata.
-        if page_range is not None:
-            lo, hi = page_range
-            allowed = np.array(
-                [
-                    (m.get("page_number") is not None and int(m.get("page_number")) >= int(lo) and int(m.get("page_number")) <= int(hi))
-                    for m in self._metas
-                ],
-                dtype=bool,
-            )
-            if not allowed.any():
-                return []
-            # Set distances of disallowed items to +inf so they cannot be selected in top_k.
-            distances = distances.copy()
-            distances[~allowed] = np.inf
-
         k = min(top_k, distances.shape[0])
         top_idx = np.argsort(distances)[:k]
-        # Ensure we do not return items outside the allowed page range.
-        if page_range is not None:
-            top_idx = [int(i) for i in top_idx if allowed[int(i)]]
-            if not top_idx:
-                return []
 
         out: List[VectorSearchResult] = []
         for i in top_idx:

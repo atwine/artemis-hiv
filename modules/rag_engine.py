@@ -100,22 +100,12 @@ class RagEngine:
         patient_context: PatientContext,
         alert: Alert,
         top_k: Optional[int] = None,
-        page_range: Optional[tuple[int, int]] = None,
     ) -> List[VectorSearchResult]:
         """Retrieve guideline chunks relevant to a given alert."""
 
         query = self._build_query(patient_context=patient_context, alert=alert)
         k = self._config.top_k if top_k is None else top_k
-        # Rationale: Stage 2 support — optionally restrict retrieval to a PDF page range.
-        results = self._vector_store.query(query, self._embedder, top_k=k, page_range=page_range)
-        # Defensive: enforce the page bounds even if the underlying store ignores the filter.
-        if page_range is not None:
-            lo, hi = page_range
-            results = [
-                r for r in results
-                if (r.metadata.get("page_number") is not None and int(r.metadata.get("page_number")) >= int(lo) and int(r.metadata.get("page_number")) <= int(hi))
-            ]
-        return results
+        return self._vector_store.query(query, self._embedder, top_k=k)
 
     def _build_query(self, *, patient_context: PatientContext, alert: Alert) -> str:
         # Rationale: We keep query building simple and transparent for auditability.

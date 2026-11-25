@@ -34,13 +34,9 @@ SETTINGS: Dict[str, Any] = {
     "prefer_chroma": True,
     "embedding_model_name": "all-MiniLM-L6-v2",
     "top_k": 5,
-    "index_max_pages": None,
-    "retrieval_page_range": None,
     "use_ollama": True,
-    "llm_mode": "LLM screening (generate alerts)",
     "ollama_model": None,
     "ollama_num_ctx": 8192,
-    "show_llm_narrative": False,
 }
 
 
@@ -62,13 +58,10 @@ class FakeStore(VectorStore):
     def index_guidelines(self, chunks, embedder) -> int:  # type: ignore[override]
         return 0
 
-    def query(self, query_text, embedder, top_k=5, page_range=None):  # type: ignore[override]
+    def query(self, query_text, embedder, top_k=5):  # type: ignore[override]
         q = _words(query_text)
         scored = []
         for c in self._corpus:
-            page = c["metadata"].get("page_number")
-            if page_range is not None and (page is None or not page_range[0] <= int(page) <= page_range[1]):
-                continue
             score = len(q & _words(c["document"]))
             scored.append((-score, c["chunk_id"], c, score))
         scored.sort(key=lambda t: (t[0], t[1]))

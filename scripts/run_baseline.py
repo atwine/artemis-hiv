@@ -44,13 +44,9 @@ SETTINGS: Dict[str, Any] = {
     "prefer_chroma": True,
     "embedding_model_name": "all-MiniLM-L6-v2",
     "top_k": 5,
-    "index_max_pages": None,
-    "retrieval_page_range": None,
     "use_ollama": True,
-    "llm_mode": "LLM screening (generate alerts)",
     "ollama_model": None,
     "ollama_num_ctx": 8192,
-    "show_llm_narrative": False,
     "agentic_review": True,
 }
 

@@ -7,12 +7,9 @@
  
 from __future__ import annotations
 
-import copy
-import importlib
 import json
 import os
 import re
-import time
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -20,35 +17,21 @@ import datetime
 
 import streamlit as st
 
-from modules.alert_rules import Alert, run_alerts
+from modules.alert_rules import Alert
 from modules.embedder import Embedder, EmbedderConfig
-import modules.explanation_generator as explanation_generator
+from modules.explanation_generator import ExplanationResult
 
 import html
 
-# Rationale: Streamlit can keep stale module objects across reruns. If a newer
-# export was added to `modules.explanation_generator`, force a reload only when
-# the expected symbol is missing.
-if not hasattr(explanation_generator, "generate_audit_checklist_alerts"):
-    explanation_generator = importlib.reload(explanation_generator)
-
-ExplanationResult = explanation_generator.ExplanationResult
-generate_audit_checklist_alerts = explanation_generator.generate_audit_checklist_alerts
-generate_explanation = explanation_generator.generate_explanation
-generate_stage3_synthesis_issues = explanation_generator.generate_stage3_synthesis_issues
 from modules.llm_client import (
     OllamaClient,
     OllamaConfig,
     OpenAICompatClient,
     openai_compat_config_from_env,
 )
-from modules.patient_parser import build_patient_context, load_mock_patients
+from modules.patient_parser import load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
-from modules.stage1_summary import build_stage1_summary
-from modules.stage3_narrative import generate_stage3_narrative
-from modules.llm_screening import generate_llm_screening_alerts
-from modules.agentic_flow import QueryContext, run_agentic_flow
 from modules.analysis import (
     AnalysisOptions,
     compute_overall_status,
@@ -287,7 +270,6 @@ def _init_session_state() -> None:
     st.session_state.setdefault("analysis_alerts", [])
     st.session_state.setdefault("analysis_results", [])
     st.session_state.setdefault("analysis_use_ollama", False)
-    st.session_state.setdefault("analysis_ollama_model", None)
     st.session_state.setdefault("analysis_ollama_error", None)
     # Rationale: allow audit/debug display for LLM screening when no alerts are returned.
     st.session_state.setdefault("analysis_screening_debug", None)
@@ -330,13 +312,9 @@ def _run_analysis(
     prefer_chroma: bool,
     embedding_model_name: str,
     top_k: int,
-    index_max_pages: Optional[int],
-    retrieval_page_range: Optional[tuple[int, int]],
     use_ollama: bool,
-    llm_mode: str,
     ollama_model: Optional[str],
     ollama_num_ctx: Optional[int],
-    show_llm_narrative: bool,
 ) -> None:
     """Run the visit analysis (modules/analysis.py) and copy its result into session state."""
     rag = _get_rag_engine(
@@ -345,9 +323,8 @@ def _run_analysis(
         # Rationale: cache-bust to refresh vector_store Chroma filter fix and related changes.
         engine_version=5,
     )
-    # Rationale: indexing can be expensive; we allow limiting pages for a faster demo.
     if GUIDELINE_PDF_PATHS:
-        rag.ensure_indexed(max_pages=index_max_pages)
+        rag.ensure_indexed()
 
     llm_client = None
     if use_ollama:
@@ -374,14 +351,7 @@ def _run_analysis(
         today_note=today_note,
         rag=rag,
         llm_client=llm_client,
-        options=AnalysisOptions(
-            top_k=top_k,
-            index_max_pages=index_max_pages,
-            retrieval_page_range=retrieval_page_range,
-            use_llm=use_ollama,
-            llm_mode=llm_mode,
-            agentic=agentic_enabled,
-        ),
+        options=AnalysisOptions(top_k=top_k, use_llm=use_ollama, agentic=agentic_enabled),
         llm_name=_llm_name(),
         on_status=_on_status,
     )
@@ -411,10 +381,6 @@ def _run_analysis(
     st.session_state["analysis_results"] = result.results
     st.session_state["analysis_status"] = result.status
     st.session_state["analysis_use_ollama"] = bool(use_ollama)
-    st.session_state["analysis_llm_mode"] = llm_mode
-    # UX: surface active retrieval page range in Results view (caption) for reviewers.
-    st.session_state["analysis_retrieval_page_range"] = retrieval_page_range
-    st.session_state["analysis_ollama_model"] = result.llm_model
     st.session_state["analysis_ollama_error"] = result.llm_error
     st.session_state["agentic_debug_reasoner"] = result.agentic_reasoner
 
@@ -774,22 +740,6 @@ def main() -> None:
 
     # Display Patient Details/History in expandable section
     with st.expander("Patient Details/History", expanded=False):
-        # Helper function to calculate regimen duration
-        def _calculate_regimen_duration(regimen_history):
-            if not regimen_history or len(regimen_history) == 0:
-                return None
-            current_regimen = regimen_history[-1]
-            start_date_str = current_regimen.get("start_date")
-            if not start_date_str:
-                return None
-            try:
-                from datetime import datetime
-                start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
-                today = datetime.now()
-                years = (today - start_date).days / 365.25
-                return years
-            except Exception:
-                return None
 
         # Create 2-column layout for compact display
         col1, col2 = st.columns(2)
@@ -808,7 +758,7 @@ def main() -> None:
             st.markdown(f"**Sex:** {sex if sex else 'Not recorded'}")
             visit_date = patient.get('today_encounter', {}).get('date', 'Not recorded')
             st.markdown(f"**Visit Date:** {visit_date}")
-            st.markdown(f"**Visit Type:** Routine")
+            st.markdown("**Visit Type:** Routine")
             st.markdown("")
 
             # Section 2: Current ART Regimen
@@ -995,9 +945,6 @@ def main() -> None:
         )
         top_k = st.slider("Top-K guideline chunks", min_value=1, max_value=10, value=5)
         
-        # Backend: index and retrieve from all pages by default (no UI controls)
-        index_max_pages: Optional[int] = None
-        retrieval_page_range: Optional[tuple[int, int]] = None
         
         # Agentic plan (experimental): enable ARTEMIS Review + debug expanders
         _agentic_ui_default = bool(st.session_state.get("agentic_ui_debug_enabled", False))
@@ -1013,13 +960,6 @@ def main() -> None:
 
     with st.expander("LLM settings", expanded=False):
         use_ollama = st.checkbox("Use the LLM for screening and explanations (if available)", value=True)
-        llm_mode = st.selectbox(
-            "LLM mode",
-            [
-                "LLM screening (generate alerts)",
-            ],
-            index=0,
-        )
         remote_llm_cfg = openai_compat_config_from_env()
         if remote_llm_cfg is not None:
             # Rationale: an OpenAI-compatible server (vLLM now, OpenRouter later) is set,
@@ -1078,13 +1018,9 @@ def main() -> None:
             prefer_chroma=prefer_chroma,
             embedding_model_name=embedding_model_name,
             top_k=top_k,
-            index_max_pages=index_max_pages,
-            retrieval_page_range=retrieval_page_range,
             use_ollama=use_ollama,
-            llm_mode=llm_mode,
             ollama_model=ollama_model_ui,
             ollama_num_ctx=int(num_ctx),
-            show_llm_narrative=False,
         )
 
     st.subheader("Results")
@@ -1096,13 +1032,12 @@ def main() -> None:
     status = st.session_state.get("analysis_status")
 
     if status == "GREEN":
-        _mode = st.session_state.get("analysis_llm_mode")
         _use_ollama = st.session_state.get("analysis_use_ollama")
         _ollama_err = st.session_state.get("analysis_ollama_error")
         # Rationale: when LLM screening is configured but fails, avoid showing a
         # reassuring GREEN banner, since the screening layer is incomplete.
         llm_screening_incomplete = (
-            _mode == "LLM screening (generate alerts)" and _use_ollama and bool(_ollama_err)
+            _use_ollama and bool(_ollama_err)
         )
         # Rationale: only show a GREEN banner when the full screening layer has
         # run successfully (deterministic + LLM screening as configured). For
@@ -1111,8 +1046,7 @@ def main() -> None:
         _dbg = st.session_state.get("analysis_screening_debug") or {}
         _parse_status = _dbg.get("parse_status") or "unknown"
         llm_screening_complete = (
-            _mode == "LLM screening (generate alerts)"
-            and _use_ollama
+            _use_ollama
             and not _ollama_err
             and _parse_status in {"parsed_empty", "parsed_nonempty"}
         )
@@ -1129,14 +1063,9 @@ def main() -> None:
                 "for this run, so additional guideline-based issues may still exist."
             )
 
-        _active_range = st.session_state.get("analysis_retrieval_page_range")
-        if _active_range is None:
-            _range_text = "all available guideline pages"
-        else:
-            lo, hi = _active_range
-            _range_text = f"guideline pages {lo}–{hi}"
+        _range_text = "all available guideline pages"
 
-        if _mode == "LLM screening (generate alerts)" and _use_ollama and not _ollama_err:
+        if _use_ollama and not _ollama_err:
             st.markdown(
                 "No alerts were generated because the LLM screening step reviewed the Stage 1 patient "
                 f"summary together with guideline excerpts from {_range_text} and did not find any "
@@ -1176,7 +1105,7 @@ def main() -> None:
                 # Rationale: show raw output for all cases to debug empty output issues
                 with st.expander("Debug: Raw LLM output", expanded=False):
                     st.text(_dbg.get("raw_output") or "(no output captured)")
-        elif _mode == "LLM screening (generate alerts)" and _use_ollama and _ollama_err:
+        elif _use_ollama and _ollama_err:
             st.markdown(
                 "No alerts were generated. Deterministic rule-based checks did not trigger any alerts. "
                 "LLM screening was configured but the model call failed, so it could not contribute "
@@ -1196,20 +1125,19 @@ def main() -> None:
         st.warning(f"YELLOW: {len(alerts)} alert(s) to consider.")
     
     # Rationale: show raw LLM output for all cases (GREEN, YELLOW, RED) to debug parsing issues
-    if st.session_state.get("analysis_llm_mode") == "LLM screening (generate alerts)":
-        _dbg = st.session_state.get("analysis_screening_debug") or {}
-        if _dbg.get("raw_output"):
-            with st.expander("Debug: Raw LLM screening output", expanded=False):
-                st.caption(f"Parse status: {_dbg.get('parse_status') or 'unknown'}")
-                # Rationale: show dedup stats so we can verify repetition removal is working.
-                if _dbg.get("dedup_stats"):
-                    st.caption("Dedup stats per alert:")
-                    for ds in _dbg["dedup_stats"]:
-                        st.caption(
-                            f"  {ds['alert_id']}: {ds['raw_words']}→{ds['clean_words']} words, "
-                            f"{ds['raw_chars']}→{ds['clean_chars']} chars"
-                        )
-                st.text(_dbg.get("raw_output"))
+    _dbg = st.session_state.get("analysis_screening_debug") or {}
+    if _dbg.get("raw_output"):
+        with st.expander("Debug: Raw LLM screening output", expanded=False):
+            st.caption(f"Parse status: {_dbg.get('parse_status') or 'unknown'}")
+            # Rationale: show dedup stats so we can verify repetition removal is working.
+            if _dbg.get("dedup_stats"):
+                st.caption("Dedup stats per alert:")
+                for ds in _dbg["dedup_stats"]:
+                    st.caption(
+                        f"  {ds['alert_id']}: {ds['raw_words']}→{ds['clean_words']} words, "
+                        f"{ds['raw_chars']}→{ds['clean_chars']} chars"
+                    )
+            st.text(_dbg.get("raw_output"))
 
     # Rationale: use the live checkbox key ("agentic_ui_debug_enabled") so the plan
     # expanders render as soon as the checkbox is ticked, not only after a new run.
@@ -1249,232 +1177,6 @@ def main() -> None:
 
     # Rationale: the UPDATED MANAGEMENT PLAN is rendered under the single "Output" section
     # to avoid duplicating the same content in multiple expanders.
-    if False and agentic_enabled:
-        agentic_result = st.session_state.get("agentic_debug_result")
-        updated_plan_text = None
-        try:
-            if is_dataclass(agentic_result):
-                updated_plan_text = getattr(agentic_result, "updated_management_plan_text", None)
-                if updated_plan_text is None:
-                    dbg = getattr(agentic_result, "debug_info", None) or {}
-                    if isinstance(dbg, dict):
-                        updated_plan_text = dbg.get("updated_management_plan_text")
-        except Exception:
-            updated_plan_text = None
-
-        if isinstance(updated_plan_text, str) and updated_plan_text.strip():
-            # Rationale: per clinician preference, hide the entire plan section unless we can
-            # render a clean, readable plan.
-            obj = None
-            plan_html_text = None
-            try:
-                # Rationale: LLM may return raw text with code fences or preamble;
-                # strip fences and extract the JSON object robustly before parsing.
-                _raw = updated_plan_text.strip()
-                if _raw.startswith("```"):
-                    _lines = _raw.splitlines()
-                    if _lines[0].strip().startswith("```"):
-                        _lines = _lines[1:]
-                    if _lines and _lines[-1].strip().startswith("```"):
-                        _lines = _lines[:-1]
-                    _raw = "\n".join(_lines).strip()
-                # If there's preamble before the JSON object, find the first '{'
-                _brace = _raw.find("{")
-                if _brace > 0:
-                    _raw = _raw[_brace:]
-                # Extract the first complete top-level JSON object using brace matching
-                _start = _raw.find("{")
-                if _start == -1:
-                    raise ValueError("No JSON object start '{' found in plan text")
-                _depth = 0
-                _in_str = False
-                _esc = False
-                _end = None
-                for _i in range(_start, len(_raw)):
-                    _ch = _raw[_i]
-                    if _in_str:
-                        if _esc:
-                            _esc = False
-                        elif _ch == "\\":
-                            _esc = True
-                        elif _ch == '"':
-                            _in_str = False
-                    else:
-                        if _ch == '"':
-                            _in_str = True
-                        elif _ch == '{':
-                            _depth += 1
-                        elif _ch == '}':
-                            _depth -= 1
-                            if _depth == 0:
-                                _end = _i + 1
-                                break
-                _slice = _raw[_start:_end] if _end is not None else _raw[_start:]
-                # Fallback: tolerate minor JSON formatting issues from LLM output
-                def _json_loads_relaxed(text: str):
-                    try:
-                        return json.loads(text)
-                    except Exception:
-                        t = text
-                        # 1) Remove trailing commas before closing } or ]
-                        t = re.sub(r',\s*([}\]])', r'\1', t)
-                        # 2a) Quote single-quoted keys if present
-                        t = re.sub(r"([\{\[,]\s*)'([^']+)'\s*:\s*", r'\1"\2": ', t)
-                        # 2b) Quote bareword keys (letters/underscore/hyphen) if unquoted
-                        t = re.sub(r'([\{\[,]\s*)([A-Za-z_][A-Za-z0-9_\-]*)\s*:', r'\1"\2":', t)
-                        # 2c) Quote known keys if unquoted (belt-and-suspenders for specific schema)
-                        keys_pat = r'(art_regimen_decision|problems|monitoring_plan|patient_counselling|decision|reason|action|problem|clinician_plan_for_this_problem|explanation)'
-                        t = re.sub(r'([\{,\[]\s*)' + keys_pat + r'\s*:', r'\1"\2":', t)
-                        # 3) Convert single-quoted string values to double quotes (simple heuristic)
-                        t = re.sub(r':\s*\'([^\']*)\'', r': "\1"', t)
-                        # 4) In arrays, convert 'item' to "item"
-                        t = re.sub(r'\[\s*\'([^\']*)\'', r'["\1"', t)
-                        t = re.sub(r',\s*\'([^\']*)\'', r', "\1"', t)
-                        return json.loads(t)
-                obj = _json_loads_relaxed(_slice)
-
-                # Clinician-friendly rendering: mirror the cards used under Output.
-                def _badge(decision: str) -> str:
-                    d = (decision or "").strip().lower()
-                    if d == "switch":
-                        return "<span style='background:#FDECEA;color:#DC3545;padding:4px 8px;border:1px solid #DC3545;border-radius:12px;font-weight:600;'>Switch</span>"
-                    if d.startswith("hold"):
-                        return "<span style='background:#FFF9E6;color:#856404;padding:4px 8px;border:1px solid #FFC107;border-radius:12px;font-weight:600;'>Hold temporarily</span>"
-                    return "<span style='background:#F0F8F0;color:#1B5E20;padding:4px 8px;border:1px solid #52B788;border-radius:12px;font-weight:600;'>Continue</span>"
-
-                def _safe(v: str) -> str:
-                    return html.escape(str(v or "").strip())
-
-                plan_html = []
-
-                # 1) Regimen Decision
-                ard = obj.get("art_regimen_decision") or {}
-                ard_decision = str(ard.get("decision") or "").strip()
-                ard_reason = str(ard.get("reason") or "").strip()
-                plan_html += [
-                    "<div style='background:#FFFFFF;padding:14px;border-left:4px solid #2E86AB;margin-bottom:12px;border-radius:8px;'>",
-                    f"<div style='margin-bottom:6px;'>{_badge(ard_decision)} <strong style='margin-left:8px;'>ART regimen decision</strong></div>",
-                    f"<div style='color:#333;'>Reason: {_safe(ard_reason)}</div>",
-                    "</div>",
-                ]
-
-                # 2) Problems → Actions (Agree/Disagree/Gap/Not Addressed)
-                probs = obj.get("problems") or []
-                if isinstance(probs, list) and probs:
-                    items = []
-                    for p in probs[:12]:
-                        if not isinstance(p, dict):
-                            continue
-                        action = _safe(p.get("action"))
-                        reason = _safe(p.get("reason"))
-                        cp = p.get("clinician_plan_for_this_problem") or {}
-                        decision = str(cp.get("decision") or "").strip()
-
-                        if decision in {"Gap", "Not Addressed"}:
-                            prefix = "➕ ADD"
-                            line = f"<strong>Consider adding:</strong> {action}"
-                        elif decision == "Disagree":
-                            prefix = "🔄 REVIEW"
-                            line = f"<strong>Consider instead:</strong> {action}"
-                        else:
-                            prefix = "✅ AGREE"
-                            line = f"<strong>Agree:</strong> {action}"
-
-                        items.append(
-                            "<li style='margin-bottom:6px;'>"
-                            f"<span style='margin-right:6px;'>{prefix}</span> {line}"
-                            f"<div style='color:#555;font-size:12px;margin-top:2px;'>Reason: {reason}</div>"
-                            "</li>"
-                        )
-
-                    if items:
-                        plan_html += [
-                            "<div style='background-color:#F0F8F0;padding:14px;border-left:4px solid #52B788;border-radius:8px;margin-bottom:12px;'>",
-                            "<h4 style='color:#1B5E20;margin:0 0 8px 0;'>Recommended Actions</h4>",
-                            "<ol style='margin:0;padding-left:18px;'>" + "".join(items) + "</ol>",
-                            "</div>",
-                        ]
-
-                # 3) Monitoring Plan
-                mp = obj.get("monitoring_plan")
-                mp_items = []
-                if isinstance(mp, list):
-                    mp_items = [f"<li>{_safe(x)}</li>" for x in mp if str(x).strip()]
-                elif isinstance(mp, dict):
-                    for k, v in mp.items():
-                        if isinstance(v, (list, tuple)):
-                            for x in v:
-                                if str(x).strip():
-                                    mp_items.append(f"<li>{_safe(x)}</li>")
-                        elif str(v).strip():
-                            mp_items.append(f"<li>{_safe(v)}</li>")
-                elif isinstance(mp, str) and mp.strip():
-                    mp_items = [f"<li>{_safe(mp)}</li>"]
-
-                if mp_items:
-                    plan_html += [
-                        "<div style='background:#E8F4F8;padding:14px;border-left:4px solid #2E86AB;border-radius:8px;margin-bottom:12px;'>",
-                        "<h4 style='color:#2E86AB;margin:0 0 8px 0;'>Monitoring</h4>",
-                        "<ul style='margin:0;padding-left:18px;'>" + "".join(mp_items) + "</ul>",
-                        "</div>",
-                    ]
-
-                # 4) Patient Counselling
-                pc = obj.get("patient_counselling") or []
-                if isinstance(pc, list) and pc:
-                    pc_items = [f"<li>{_safe(x)}</li>" for x in pc if str(x).strip()]
-                    if pc_items:
-                        plan_html += [
-                            "<div style='background:#F5F0FF;padding:14px;border-left:4px solid #7B68AB;border-radius:8px;margin-bottom:12px;'>",
-                            "<h4 style='color:#7B68AB;margin:0 0 8px 0;'>Counselling</h4>",
-                            "<ul style='margin:0;padding-left:18px;'>" + "".join(pc_items) + "</ul>",
-                            "</div>",
-                        ]
-
-                # 5) References (optional)
-                refs = obj.get("references") or obj.get("citations")
-                if isinstance(refs, list):
-                    ref_items = []
-                    for r in refs:
-                        if isinstance(r, dict):
-                            src = _safe(r.get("source") or r.get("src") or r.get("source_path") or "Guidelines")
-                            page = r.get("page") or r.get("page_number")
-                            try:
-                                page_i = int(page) if page is not None else None
-                            except Exception:
-                                page_i = None
-                            if page_i is not None:
-                                ref_items.append(f"<li>{src}, p.{page_i}</li>")
-                            else:
-                                title = _safe(r.get("title") or "")
-                                text = f"{src}{(': ' + title) if title else ''}"
-                                ref_items.append(f"<li>{text}</li>")
-                        else:
-                            s = _safe(r)
-                            if s:
-                                ref_items.append(f"<li>{s}</li>")
-
-                    if ref_items:
-                        plan_html += [
-                            "<div style='background:#FAFAFA;padding:14px;border-left:4px solid #9E9E9E;border-radius:8px;margin-bottom:12px;'>",
-                            "<h4 style='color:#555;margin:0 0 8px 0;'>References</h4>",
-                            "<ol style='margin:0;padding-left:18px;'>" + "".join(ref_items) + "</ol>",
-                            "</div>",
-                        ]
-
-                plan_html_text = "\n".join(plan_html) if plan_html else None
-            except Exception:
-                obj = None
-                plan_html_text = None
-
-            if isinstance(obj, dict) and isinstance(plan_html_text, str) and plan_html_text.strip():
-                # Rationale: match clinician-facing naming used in the example output.
-                with st.expander("ARTEMIS Review.", expanded=True):
-                    st.markdown(plan_html_text, unsafe_allow_html=True)
-
-                    # Keep raw JSON available for reviewers behind a collapsed toggle.
-                    with st.expander("View raw plan JSON", expanded=False):
-                        st.json(obj)
 
     # Rationale: render per-alert expanders so clinicians can see each alert's
     # finding, explanation, and references.
@@ -1558,7 +1260,6 @@ def main() -> None:
 
                 # Rationale: for LLM screening alerts, show the recommended_action
                 # instead of duplicating the finding text under "Why this alert?".
-                _is_checklist = (alert.evidence or {}).get("type") == "llm_audit_checklist"
                 _rec_action = (alert.evidence or {}).get("recommended_action") or ""
                 if _rec_action.strip():
                     st.markdown("**Recommended Action**")
@@ -1577,26 +1278,13 @@ def main() -> None:
                         )
 
                     # Rationale: move generation status/latency out of the main clinician view.
-                    if _is_checklist:
-                        st.caption(
-                            "Checklist item generated by LLM (single-call mode). Per‑alert explanation is disabled in this mode."
-                        )
-                    elif explanation.used_llm:
-                        st.caption(f"Generated with {_llm_name()} using retrieved excerpts.")
-                        _elapsed = st.session_state.get(f"explain_time_{alert.alert_id}")
-                        if isinstance(_elapsed, (int, float)):
-                            st.caption(f"LLM time: {_elapsed:.2f}s")
+                    if st.session_state.get("analysis_use_ollama"):
+                        st.caption("Deterministic fallback explanation (LLM unavailable).")
+                        err = st.session_state.get("analysis_ollama_error")
+                        if err:
+                            st.caption(f"{_llm_name()} debug: {err}")
                     else:
-                        if st.session_state.get("analysis_use_ollama"):
-                            st.caption("Deterministic fallback explanation (LLM unavailable).")
-                            model = st.session_state.get("analysis_ollama_model")
-                            err = st.session_state.get("analysis_ollama_error")
-                            if model:
-                                st.caption(f"Model: {model}")
-                            if err:
-                                st.caption(f"{_llm_name()} debug: {err}")
-                        else:
-                            st.caption("Deterministic fallback explanation (LLM disabled).")
+                        st.caption("Deterministic fallback explanation (LLM disabled).")
 
                     st.markdown("**Guideline retrieval**")
                     if retrieved:

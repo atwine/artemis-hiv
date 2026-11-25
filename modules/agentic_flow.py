@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from modules.embedder import Embedder
 from modules.llm_client import OllamaClient
@@ -203,7 +203,6 @@ def _retrieve_evidence(
     embedder: Embedder,
     vector_store: VectorStore,
     top_k: int = 5,
-    page_range: Optional[Tuple[int, int]] = None,
 ) -> List[EvidenceBundle]:
     """Retrieve evidence for each sub-task using the existing vector store.
 
@@ -260,7 +259,6 @@ def _retrieve_evidence(
             query_text=query_text,
             embedder=embedder,
             top_k=top_k,
-            page_range=page_range,
         )
 
         bundles.append(EvidenceBundle(subtask_name=subtask.name, chunks=list(results)))
@@ -881,7 +879,6 @@ def run_agentic_flow(
     embedder: Embedder,
     vector_store: VectorStore,
     top_k: int = 5,
-    page_range: Optional[Tuple[int, int]] = None,
     llm_client: Optional[OllamaClient] = None,
 ) -> AgenticResult:
     """Run the Phase 1 agentic flow skeleton.
@@ -906,7 +903,6 @@ def run_agentic_flow(
         embedder=embedder,
         vector_store=vector_store,
         top_k=top_k,
-        page_range=page_range,
     )
     draft_answer = _reason(normalized, subtasks, evidence, llm_client=llm_client)
     updated_management_plan_text = _reason_updated_management_plan(
