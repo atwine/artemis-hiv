@@ -53,6 +53,7 @@ def test_a_run_record_holds_what_the_scoring_needs() -> None:
     assert len(rec["calls"]) >= 2 and rec["cost_usd"] == pytest.approx(0.001 * len(rec["calls"]))
     assert "Creatinine overdue on TDF" in [a["title"] for a in rec["alerts"]]
     assert score_run(case, rec["alerts"]).caught == {"creatinine_overdue"}
+    assert rec["temperature"] == 0  # the value used, never None: None meant 0.2 before the switch
     json.dumps(rec)  # everything in it can be saved
 
 

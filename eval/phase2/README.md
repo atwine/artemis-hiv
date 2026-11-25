@@ -121,7 +121,8 @@ means a shorter or missing plan on screen.
    (132/144) named a passage it had been shown; after it, 100% for every model.
 7. **Temperature 0 makes Llama repeat itself** (measured, Phase 1 item G38). Same answer
    across runs went from 85% to 98%, with no real change elsewhere (78% caught against 80%,
-   82% real alerts against 81%).
+   82% real alerts against 81%). Counted by alert titles: the same alert list on all 5 runs
+   for 10 of 11 patients at 0, against 4 of 11 at 0.2. The app now runs at 0.
 
 ### AfriMed-QA knowledge check: 286 questions each
 
@@ -166,12 +167,14 @@ above. Phase 7 (the doctor's check of the key and the matches) turns this into a
 ## Reproduce
 
 ```
-python scripts/run_phase2.py --model llama-a100 --repeats 5
-python scripts/run_phase2.py --model llama-a100 --repeats 5 --temperature 0
-python scripts/run_phase2.py --model deepseek-v3.2 --repeats 5
+python scripts/evaluate.py                                                      # rebuild the tables from the saved runs
+python scripts/run_phase2.py --model llama-a100 --repeats 5                     # at the app's default, now 0
+python scripts/run_phase2.py --model deepseek-v3.2 --repeats 5 --temperature 0.2 --dry-run
 python scripts/run_afrimedqa.py --model deepseek-v3.2
-python scripts/evaluate.py
 ```
 
-Runs resume where they stopped and refuse to start if the worst-case cost would pass the $5
-cap. The A100 needs eduVPN and `LLM_BASE_URL` in `.env`; OpenRouter needs `OPENROUTER_API_KEY`.
+Rebuilding the tables sends nothing to any model. The folders without "-t" were run at 0.2,
+the default at the time. Running them again needs `--temperature 0.2` and writes new `-t0.2`
+folders; it doesn't overwrite the saved runs. A default Llama run resumes into
+`llama-a100-t0`, which already holds all 55 runs, so it does nothing. Runs resume where they
+stopped and refuse to start if the worst-case cost would pass the $5 cap. The A100 needs eduVPN and `LLM_BASE_URL` in `.env`; OpenRouter needs `OPENROUTER_API_KEY`.

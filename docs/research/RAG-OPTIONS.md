@@ -48,7 +48,7 @@ All of these come from the code. Suspects 1 to 3 and 5 I measured on the 7 patie
 5. **Jurisdictions are mixed.** Uganda, South African and WHO guidelines share one index with no source filter. 11 of 35 checklist excerpts for Ugandan patients came from the South African guideline. `page_number` is a page-break counter per file, so a page-range filter means different pages in each file.
 6. **There is no reranker, no relevance threshold and no retrieval test.** `tests/test_rag_engine.py` only checks that k results come back.
 7. **Silent fallbacks.** If the model fails to load, `Embedder` switches to a hashing bag-of-words. If Chroma fails, `InMemoryVectorStore` is used. Its `index_guidelines` *overwrites* the store on each call, so only the last file (WHO) stays indexed. Neither fallback tells the user.
-8. **Generation noise on top.** The LLM runs at temperature 0.2 (`llm_client.py`). Identical inputs can therefore still produce different alerts. Section 3 shows how to separate the two sources of variation.
+8. **Generation noise on top.** The LLM ran at temperature 0.2 when this was written (0 since 2026-11-25, `artemis/ai/client.py`). Identical inputs can therefore still produce different alerts. Section 3 shows how to separate the two sources of variation.
 
 ## 3. How to find out: evaluate retrieval separately from answers
 

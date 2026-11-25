@@ -121,7 +121,7 @@ def run_case(case: Case, client: Any, rag: Any, *, label: str, repeat: int, pric
         "model": label,
         "model_id": getattr(client, "model", None),
         "repeat": repeat,
-        "temperature": temperature,
+        "temperature": effective_temperature(temperature),
         "seconds": round(seconds, 1),
         "calls": metered.usages,
         "cost_usd": cost_of(metered.usages, price_in, price_out),

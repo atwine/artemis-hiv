@@ -31,7 +31,8 @@ import requests  # noqa: E402
 from dotenv import dotenv_values  # noqa: E402
 
 import run_baseline as rb  # noqa: E402  (imports the app; reused for removing the server address)
-from artemis.ai.client import OpenAICompatClient, OpenAICompatConfig, openai_compat_config_from_env  # noqa: E402
+from artemis.ai.client import (DEFAULT_TEMPERATURE, OpenAICompatClient, OpenAICompatConfig,  # noqa: E402
+                               openai_compat_config_from_env)
 from artemis.evaluation.cases import NO_KEY, load_cases  # noqa: E402
 from artemis.evaluation.runner import (BudgetExceeded, check_budget, effective_temperature, pending_runs,  # noqa: E402
                                        run_case, run_file_name, run_label, spent_in)
@@ -87,7 +88,7 @@ def main(argv: Optional[list] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--model", required=True, choices=sorted(PRESETS))
     ap.add_argument("--repeats", type=int, default=5)
-    ap.add_argument("--temperature", type=float, default=None, help="default: the app's own (DEFAULT_TEMPERATURE, 0)")
+    ap.add_argument("--temperature", type=float, default=None, help=f"default: the app's own ({DEFAULT_TEMPERATURE:g})")
     ap.add_argument("--cap", type=float, default=5.0, help="dollars, across everything under eval/phase2")
     ap.add_argument("--cases", type=Path, default=ROOT / "eval" / "cases")
     ap.add_argument("--root", type=Path, default=ROOT / "eval" / "phase2")
