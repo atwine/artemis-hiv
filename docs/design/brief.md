@@ -54,6 +54,43 @@ made-up composite; the details are assumptions to check with Dr Kintu in Phase 7
 7. **No surprises.** Buttons say what they do ("Finalize visit", not "Submit"). Locked buttons
    say why they are locked. Nothing irreversible without a clear confirmation.
 
+## The screen budget (owner, 2026-11-26)
+
+The owner's marketing rule ("show a client two options; if they ask for a third, take one
+away") has a UX version: a fixed budget per screen, kept by one-in-one-out. Busy screens are
+split into smaller screens; there is no limit on how many screens a direction may have.
+
+1. **One job per screen,** one primary button.
+2. **One open decision at a time.** Only the current alert is expanded; the others are
+   one-line rows or live on their own screens.
+3. **Nothing twice.** A fact appears once per screen.
+4. **At most three blocks** in the working area (for an alert: what it says, the patient's
+   number, the guideline line). The header doesn't count.
+5. **At most two tags per alert row:** severity (word and shape) and AI or Rule. Kind, times
+   and counts are one click away.
+6. **One in, one out.** Adding anything to a screen means removing or moving something.
+7. **No always-on side panels** on visit screens (queue, record, step list) unless that
+   screen's job needs them; a clear "Back to clinic list" instead.
+8. **No keyboard hint badges** on screen; one "Shortcuts" link.
+9. **Safety floor.** Splitting moves "nice to know", never "need to know": the status, the
+   current alert's patient value and guideline line, and the main button never leave the
+   screen where the decision is made.
+10. **Every new screen is one click from where it's needed,** with an obvious way back.
+
+Why (sources checked 2026-11-26; summaries are from memory of the papers):
+- Hick (1952, doi:10.1080/17470215208416600): choice time rises with the number of options.
+- Choice overload is real only under some conditions (Scheibehenne et al. 2010,
+  doi:10.1086/651235, found a near-zero average effect; Chernev et al. 2015,
+  doi:10.1016/j.jcps.2014.08.002, found it under complex choices and time pressure, which is
+  a busy clinic).
+- Bates et al. 2003, "Ten commandments for effective clinical decision support"
+  (doi:10.1197/jamia.m1370): speed is everything, fit the workflow, simple interventions
+  work best.
+- van der Sijs et al. 2006 (doi:10.1197/jamia.m1809): clinicians override most drug-safety
+  alerts; busy, noisy alerting trains people to click past it.
+- Tesler's law: complexity can't be deleted, only moved. Splitting screens moves it, at the
+  cost of clicks, which is why the safety floor (9) exists.
+
 ## What the app does (the workflow every design must show)
 
 1. **Clinic list.** Today's patients. Each shows whether checks have run, the overall status
