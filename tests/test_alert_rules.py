@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from modules.alert_rules import run_alerts
+from artemis.rules.checks import run_alerts
 from artemis.patient.record import build_patient_context, load_mock_patients
 
 

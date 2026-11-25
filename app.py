@@ -18,7 +18,7 @@ import datetime
 import pandas as pd
 import streamlit as st
 
-from modules.alert_rules import Alert
+from artemis.rules.checks import Alert
 from modules.embedder import Embedder, EmbedderConfig
 from modules.explanation_generator import ExplanationResult
 

@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from modules.alert_rules import Alert
+from artemis.rules.checks import Alert
 from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult
 

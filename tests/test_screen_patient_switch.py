@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from streamlit.testing.v1 import AppTest
 
-from modules.alert_rules import Alert
+from artemis.rules.checks import Alert
 from modules.explanation_generator import ExplanationResult
 
 ROOT = Path(__file__).resolve().parents[1]

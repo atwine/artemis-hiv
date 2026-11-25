@@ -6,7 +6,7 @@ import logging
 import re
 from difflib import SequenceMatcher
 
-from modules.alert_rules import Alert
+from artemis.rules.checks import Alert
 from modules.llm_client import ChatMessage, OllamaClient
 from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult

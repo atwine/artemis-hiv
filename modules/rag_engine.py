@@ -13,7 +13,7 @@ from typing import List, Optional
 
 import re
 
-from modules.alert_rules import Alert
+from artemis.rules.checks import Alert
 from modules.embedder import Embedder
 from modules.guideline_processor import GuidelineChunk, process_guidelines, process_markdown_guidelines
 from artemis.patient.record import PatientContext

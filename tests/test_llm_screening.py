@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Any, Dict, List, Optional
 
-from modules.alert_rules import Alert
+from artemis.rules.checks import Alert
 from modules.llm_client import ChatMessage, OllamaClient
 from modules.llm_screening import generate_llm_screening_alerts
 from artemis.patient.record import PatientContext
