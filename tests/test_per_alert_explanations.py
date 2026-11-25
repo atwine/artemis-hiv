@@ -25,7 +25,6 @@ class _StubLLM:
 def _make_patient_context() -> PatientContext:
     return PatientContext(
         patient_id="p1",
-        name="Test Patient",
         encounter_date=date(2024, 1, 1),
         art_regimen_current=["TDF"],
         notes_text="Some clinical notes...",
@@ -64,7 +63,9 @@ def test_generate_explanation_appends_citations_when_llm_omits_and_chunks_exist(
     # Assert: used LLM and appended a deterministic Citations block
     assert result.used_llm is True
     assert "Citations:" in result.text
-    assert "chunk_id=c1" in result.text
+    # Citations show the page and the quoted passage; internal chunk ids stay hidden (306ef45).
+    assert "check creatinine at least annually" in result.text
+    assert "chunk_id" not in result.text
     assert "page=105" in result.text
 
 

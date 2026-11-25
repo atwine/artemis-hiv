@@ -29,9 +29,10 @@ Version 1 of the revival is done when all four are true:
 
 - [x] 0.1 Rename to `artemis-hiv` (GitHub repo, description, README and on-screen title). Topics still to add.
 - [x] 0.2 Commit the vLLM connection work (on `claude/kaggle-project-review-89c107`).
-- [ ] 0.3 Security scanners: secret scan on every commit, dependency and code scans on every push.
-- [ ] 0.4 Create `development` and `staging` from `main`; first pull request goes through them.
+- [x] 0.3 Security scanners: secret scan on every commit, dependency and code scans on every push.
+- [x] 0.4 Create `development` and `staging` from `main`; first pull request goes through them.
 - [ ] 0.5 Fix the 5 failing tests; move the loose `test_*.py` scripts out of the test run; lock package versions.
+      Tests fixed (16 pass locally); GitHub check added (`tests.yml`), first run pending; package locking still to do.
 - [ ] 0.6 (suggested) Stop storing the guideline PDFs in the repo; link to the official sources instead.
 
 Check: tests all pass; both branches exist; scanners run on a pull request.

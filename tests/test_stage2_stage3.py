@@ -25,7 +25,6 @@ class _DummyEmbedder:
 def _make_patient_context() -> PatientContext:
     return PatientContext(
         patient_id="p1",
-        name="Test Patient",
         encounter_date=date(2024, 1, 1),
         art_regimen_current=["TDF"],
         notes_text="Some clinical notes...",
