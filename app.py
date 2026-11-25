@@ -29,7 +29,7 @@ from modules.llm_client import (
     OpenAICompatClient,
     openai_compat_config_from_env,
 )
-from modules.patient_parser import load_mock_patients
+from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
 from modules.vector_store import VectorSearchResult, create_vector_store
 from ui.patient_picker import patient_label

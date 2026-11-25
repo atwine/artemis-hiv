@@ -19,7 +19,7 @@ from typing import List
 from modules.embedder import Embedder, EmbedderConfig
 from modules.vector_store import create_vector_store, VectorSearchResult
 from modules.rag_engine import RagEngine
-from modules.patient_parser import load_mock_patients
+from artemis.patient.record import load_mock_patients
 from modules.agentic_flow import QueryContext, run_agentic_flow
 from modules.llm_client import OllamaClient, OllamaConfig
 

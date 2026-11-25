@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 from datetime import date
 
-from modules.patient_parser import PatientContext, LabResult
+from artemis.patient.record import PatientContext
 
 
 def _iso(d: Optional[date]) -> Optional[str]:

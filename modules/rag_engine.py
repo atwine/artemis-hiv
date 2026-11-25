@@ -16,7 +16,7 @@ import re
 from modules.alert_rules import Alert
 from modules.embedder import Embedder
 from modules.guideline_processor import GuidelineChunk, process_guidelines, process_markdown_guidelines
-from modules.patient_parser import PatientContext
+from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult, VectorStore
 
 

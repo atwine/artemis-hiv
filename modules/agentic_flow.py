@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional
 
 from modules.embedder import Embedder
 from modules.llm_client import OllamaClient
-from modules.patient_parser import build_patient_context, compute_lab_trends
+from artemis.patient.record import build_patient_context, compute_lab_trends
 from modules.vector_store import VectorStore, VectorSearchResult
 
 

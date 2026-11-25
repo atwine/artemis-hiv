@@ -4,7 +4,7 @@ from datetime import date
 
 from modules.alert_rules import Alert
 from modules.explanation_generator import generate_explanation
-from modules.patient_parser import PatientContext
+from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult
 
 

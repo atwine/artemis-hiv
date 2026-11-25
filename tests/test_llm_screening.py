@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 from modules.alert_rules import Alert
 from modules.llm_client import ChatMessage, OllamaClient
 from modules.llm_screening import generate_llm_screening_alerts
-from modules.patient_parser import PatientContext
+from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult
 
 

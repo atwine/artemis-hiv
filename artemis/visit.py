@@ -21,9 +21,9 @@ from modules.agentic_flow import QueryContext, run_agentic_flow
 from modules.alert_rules import Alert, run_alerts
 from modules.explanation_generator import generate_explanation
 from modules.llm_screening import generate_llm_screening_alerts
-from modules.patient_parser import build_patient_context
+from artemis.patient.record import build_patient_context
 from modules.rag_engine import RagEngine
-from modules.stage1_summary import build_stage1_summary
+from artemis.patient.summary import build_stage1_summary
 from modules.vector_store import VectorSearchResult
 
 StatusCallback = Callable[[str, str], None]  # (label, state)

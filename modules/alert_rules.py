@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from modules.patient_parser import PatientContext, days_since_lab
+from artemis.patient.record import PatientContext, days_since_lab
 
 
 @dataclass(frozen=True)

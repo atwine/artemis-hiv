@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from modules.patient_parser import build_patient_context
-from modules.stage1_summary import build_stage1_summary
+from artemis.patient.record import build_patient_context
+from artemis.patient.summary import build_stage1_summary
 
 
 def test_build_stage1_summary_structure_and_flags() -> None:

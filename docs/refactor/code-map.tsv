@@ -86,26 +86,26 @@ modules/llm_screening.py	_extract_first_json_array	Pulls the first JSON list out
 modules/llm_screening.py	_deduplicate_message	Cuts repeated phrases and sentences from an alert message and limits its length.	artemis/ai/	to-move
 modules/llm_screening.py	_parse_issues_json	Turns the AI's reply into a clean list of issues, with a fallback reader.	artemis/ai/	to-move
 modules/llm_screening.py	generate_llm_screening_alerts	Has the AI screen the patient against guidelines and returns any alerts it finds.	artemis/ai/	to-move
-modules/patient_parser.py	_parse_iso_date	Converts a date written as YYYY-MM-DD into a date.	artemis/patient/	to-move
-modules/patient_parser.py	_days_between	Counts the days between two dates.	artemis/patient/	to-move
-modules/patient_parser.py	load_mock_patients	Loads the demo patient records from a JSON file.	artemis/patient/	to-move
-modules/patient_parser.py	build_patient_context	Gathers a patient's regimen, notes and latest labs into one tidy summary.	artemis/patient/	to-move
-modules/patient_parser.py	_latest_lab_entry	Picks the newest result for a lab on or before the visit date.	artemis/patient/	to-move
-modules/patient_parser.py	days_since_lab	Counts days since a patient's latest result for a lab, or none if never done.	artemis/patient/	to-move
-modules/patient_parser.py	_extract_numeric	Reads the first number from a lab entry, ignoring its date.	artemis/patient/	to-move
-modules/patient_parser.py	compute_lab_trends	Works out whether each lab is rising, falling or steady over time.	artemis/patient/	to-move
+artemis/patient/record.py	_parse_iso_date	Converts a date written as YYYY-MM-DD into a date.	artemis/patient/record.py	moved
+artemis/patient/record.py	_days_between	Counts the days between two dates.	artemis/patient/record.py	moved
+artemis/patient/record.py	load_mock_patients	Loads the demo patient records from a JSON file.	artemis/patient/record.py	moved
+artemis/patient/record.py	build_patient_context	Gathers a patient's regimen, notes and latest labs into one tidy summary.	artemis/patient/record.py	moved
+artemis/patient/record.py	_latest_lab_entry	Picks the newest result for a lab on or before the visit date.	artemis/patient/record.py	moved
+artemis/patient/record.py	days_since_lab	Counts days since a patient's latest result for a lab, or none if never done.	artemis/patient/record.py	moved
+artemis/patient/record.py	_extract_numeric	Reads the first number from a lab entry, ignoring its date.	artemis/patient/record.py	moved
+artemis/patient/record.py	compute_lab_trends	Works out whether each lab is rising, falling or steady over time.	artemis/patient/record.py	moved
 modules/rag_engine.py	RagEngine.__init__	Sets up the guideline search engine with its guideline files and storage.	artemis/guidelines/	to-move
 modules/rag_engine.py	RagEngine.ensure_indexed	Loads the guideline files into the search store once, if not already done.	artemis/guidelines/	to-move
 modules/rag_engine.py	RagEngine.retrieve_for_alert	Finds the guideline passages most relevant to an alert for this patient.	artemis/guidelines/	to-move
 modules/rag_engine.py	RagEngine._build_query	Writes the search question from the regimen, notes and alert details.	artemis/guidelines/	to-move
 modules/rag_engine.py	_extract_retrieval_keywords	Picks out key drug and condition terms from the notes to improve guideline search.	artemis/guidelines/	to-move
-modules/stage1_summary.py	_iso	Writes a date as YYYY-MM-DD text, or none if there is no date.	artemis/patient/	to-move
-modules/stage1_summary.py	_extract_past_labs	Flattens the patient's lab history into a simple list of lab, date and value.	artemis/patient/	to-move
-modules/stage1_summary.py	_latest_labs_map	Lists each lab's latest date and value as simple text-ready data.	artemis/patient/	to-move
-modules/stage1_summary.py	_extract_past_complaints	Finds past visit note snippets that mention common complaints like pain or fever.	artemis/patient/	to-move
-modules/stage1_summary.py	_extract_plans	Collects the Plan lines from past visit notes.	artemis/patient/	to-move
-modules/stage1_summary.py	_extract_today_plan	Collects the Plan lines from today's note.	artemis/patient/	to-move
-modules/stage1_summary.py	build_stage1_summary	Builds the patient summary shown to the AI: past labs, complaints, plans and gaps.	artemis/patient/	to-move
+artemis/patient/summary.py	_iso	Writes a date as YYYY-MM-DD text, or none if there is no date.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_extract_past_labs	Flattens the patient's lab history into a simple list of lab, date and value.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_latest_labs_map	Lists each lab's latest date and value as simple text-ready data.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_extract_past_complaints	Finds past visit note snippets that mention common complaints like pain or fever.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_extract_plans	Collects the Plan lines from past visit notes.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	_extract_today_plan	Collects the Plan lines from today's note.	artemis/patient/summary.py	moved
+artemis/patient/summary.py	build_stage1_summary	Builds the patient summary shown to the AI: past labs, complaints, plans and gaps.	artemis/patient/summary.py	moved
 modules/vector_store.py	VectorStore.index_guidelines	Blueprint for loading guideline pieces into a search store; each store fills it in.	artemis/guidelines/	to-move
 modules/vector_store.py	VectorStore.query	Blueprint for finding the guideline pieces closest to a question; each store fills it in.	artemis/guidelines/	to-move
 modules/vector_store.py	ChromaVectorStore.__init__	Opens or creates the saved Chroma guideline search database on disk.	artemis/guidelines/	to-move
