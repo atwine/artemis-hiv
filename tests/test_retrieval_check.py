@@ -85,3 +85,41 @@ def test_every_gold_quote_must_be_in_its_guideline_file(tmp_path: Path) -> None:
     (tmp_path / "D1.md").write_text(f"Intro\n<!-- PAGE BREAK -->\nTable 9. **{QUOTE}**.", encoding="utf-8")
     good, bad = GoldPassage("D1", QUOTE), GoldPassage("D1", "This sentence is nowhere in the file at all.")
     assert missing_quotes([good, bad], tmp_path) == [bad]
+
+
+class _Hit:
+    def __init__(self, text: str, source: str) -> None:
+        self.document = text
+        self.metadata = {"source_path": f"Data/MarkDown Files/{source}.md", "page_number": 1}
+
+
+def test_the_check_ranks_each_items_gold_in_what_each_search_returned(tmp_path: Path) -> None:
+    from artemis.evaluation.cases import load_case
+    from artemis.evaluation.retrieval import check_search, load_search_questions, summarize_check
+
+    (tmp_path / "S1.json").write_text(json.dumps({"case_id": "S1", "source": "test", "patient": {}, "answer_key": {
+        "status": "draft", "expect_clear": False, "problems": [
+            {"id": "kidney", "kind": "drug_harm", "summary": "x", "match": [["tdf"]], "guideline": {"document": "D1", "page": 1, "quote": QUOTE}},
+            {"id": "thyroid", "kind": "plan", "summary": "x", "match": [["tsh"]], "guideline": []}]}}), encoding="utf-8")
+    (tmp_path / "q.json").write_text(json.dumps({"status": "draft", "questions": [
+        {"id": "Q01", "question": "Can a patient with poor kidneys take tenofovir?", "gold": [{"document": "D1", "page": 1, "quote": QUOTE}]}]}),
+        encoding="utf-8")
+    case_search = lambda case: [_Hit("Pharmacovigilance forms.", "SAHCS"), _Hit(f"Table 9. {QUOTE}.", "HIV_Guidelines_ART")]
+    question_search = lambda text: [_Hit(f"{QUOTE}.", "HIV_Guidelines_ART")]
+
+    rows = check_search([load_case(tmp_path / "S1.json")], load_search_questions(tmp_path / "q.json"), case_search, question_search)
+    by_id = {r["item"]: r for r in rows}
+    assert (by_id["S1:kidney"]["rank"], by_id["S1:thyroid"]["covered"], by_id["Q01"]["rank"]) == (2, False, 1)
+    assert by_id["S1:kidney"]["sources"] == ["SAHCS", "HIV_Guidelines_ART"]  # which guideline each passage came from
+    s = summarize_check(rows)
+    assert (s["case"].found_in_5, s["case"].covered, s["case"].not_covered, s["question"].found_in_5) == (1, 1, 1, 1)
+
+
+def test_the_self_check_searches_each_gold_quote_word_for_word() -> None:
+    # If searching a quote's own words can't bring its passage back, the instrument is broken, not the search.
+    from artemis.evaluation.retrieval import GoldPassage, self_check
+
+    gold = [GoldPassage("D1", QUOTE), GoldPassage("D2", LONG)]
+    index = {QUOTE: [_Hit(f"x {QUOTE} y", "D1")], LONG: [_Hit("unrelated", "D2")]}
+    found, misses = self_check(gold, lambda text: index[text])
+    assert found == 1 and misses == [gold[1]]

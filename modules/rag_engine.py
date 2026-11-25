@@ -107,6 +107,11 @@ class RagEngine:
         k = self._config.top_k if top_k is None else top_k
         return self._vector_store.query(query, self._embedder, top_k=k)
 
+    def search(self, text: str, top_k: Optional[int] = None) -> List[VectorSearchResult]:
+        """Search the guidelines with plain text, as written (the Phase 2B search check)."""
+        k = self._config.top_k if top_k is None else top_k
+        return self._vector_store.query(text, self._embedder, top_k=k)
+
     def _build_query(self, *, patient_context: PatientContext, alert: Alert) -> str:
         # Rationale: We keep query building simple and transparent for auditability.
         regimen = ", ".join(patient_context.art_regimen_current) or "unknown regimen"

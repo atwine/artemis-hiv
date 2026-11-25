@@ -10,10 +10,11 @@ have no quote; they are counted apart, since no search can find them.
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, List, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 from artemis.evaluation.cases import Case
 from artemis.guidelines.processor import _strip_markdown_noise, extract_markdown_page_texts
@@ -89,6 +90,44 @@ def _gold(entry: Any) -> Tuple[GoldPassage, ...]:
 
 def case_items(case: Case) -> List[SearchItem]:
     return [SearchItem(f"{case.case_id}:{p.id}", _gold(p.guideline)) for p in case.problems]
+
+
+def load_search_questions(path: Path) -> List[Tuple[SearchItem, str]]:
+    """The standalone questions (eval/phase2b/questions.json): each item and its question text."""
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    return [(SearchItem(str(q["id"]), _gold(q["gold"])), str(q["question"])) for q in data["questions"]]
+
+
+def _rows(kind: str, items: Sequence[SearchItem], returned: Sequence[Any]) -> List[Dict[str, Any]]:
+    texts = [str(r.document) for r in returned]
+    sources = [Path(str((r.metadata or {}).get("source_path") or "")).stem for r in returned]
+    return [{"kind": kind, "item": i.item_id, "covered": bool(i.gold),
+             "rank": first_hit(texts, i.gold) if i.gold else None, "sources": sources} for i in items]
+
+
+def check_search(cases: Sequence[Case], questions: Sequence[Tuple[SearchItem, str]],
+                 case_search: Callable[[Case], Sequence[Any]],
+                 question_search: Callable[[str], Sequence[Any]]) -> List[Dict[str, Any]]:
+    """One row per item: where its gold first came back in the passages its search returned.
+    A case's items share the search the app runs for that visit; a question is searched as is."""
+    rows: List[Dict[str, Any]] = []
+    for case in cases:
+        rows += _rows("case", case_items(case), case_search(case))
+    for item, question in questions:
+        rows += _rows("question", [item], question_search(question))
+    return rows
+
+
+def self_check(gold: Sequence[GoldPassage], search: Callable[[str], Sequence[Any]]) -> Tuple[int, List[GoldPassage]]:
+    """Search each gold quote word for word: its passage should come back. When it doesn't, the
+    instrument (the index, the cleaning or the matching) is at fault, not the query."""
+    misses = [g for g in gold if first_hit([str(r.document) for r in search(g.quote)], [g]) is None]
+    return len(gold) - len(misses), misses
+
+
+def summarize_check(rows: Sequence[Dict[str, Any]]) -> Dict[str, Score]:
+    return {kind: score([ItemResult(r["item"], r["covered"], r["rank"]) for r in rows if r["kind"] == kind])
+            for kind in ("case", "question")}
 
 
 def missing_quotes(gold: Sequence[GoldPassage], folder: Path) -> List[GoldPassage]:

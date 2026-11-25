@@ -93,6 +93,32 @@ def _retrieve(rag: RagEngine, *, context: Any, alert: Alert, top_k: int) -> List
     return rag.retrieve_for_alert(patient_context=context, alert=alert, top_k=top_k)
 
 
+def _with_note(patient: Dict[str, Any], today_note: str) -> Dict[str, Any]:
+    patient_copy = copy.deepcopy(patient)
+    patient_copy.setdefault("today_encounter", {})
+    patient_copy["today_encounter"]["note"] = today_note
+    return patient_copy
+
+
+def patient_context_for(patient: Dict[str, Any], today_note: str) -> Any:
+    """The patient context the analysis searches with: the record, with today's note."""
+    return build_patient_context(_with_note(patient, today_note))
+
+
+def screening_search(rag: RagEngine, context: Any, top_k: int) -> List[VectorSearchResult]:
+    """The guideline passages the AI screening reads. Today one fixed query plus the patient's
+    notes (a retrieval fault, G31, that Phase 2B measures and fixes). The search check calls this
+    too, so it measures exactly what the app does."""
+    checklist_seed = Alert(
+        alert_id="llm_checklist_seed",
+        title="Guideline audit checklist",
+        message="LLM audit checklist seed",
+        evidence={"type": "llm_audit_checklist_seed"},
+        query_hint="visit audit checklist labs monitoring regimen",
+    )
+    return _retrieve(rag, context=context, alert=checklist_seed, top_k=top_k)
+
+
 def _cited_passages(alert: Alert, shown: List[VectorSearchResult]) -> List[VectorSearchResult]:
     """The passages an AI alert cited that the AI was actually shown, in citation order (fix 8)."""
     by_id = {r.chunk_id: r for r in shown}
@@ -124,10 +150,7 @@ def run_visit_analysis(
         if on_status is not None:
             on_status(label, state)
 
-    patient_copy = copy.deepcopy(patient)
-    patient_copy.setdefault("today_encounter", {})
-    patient_copy["today_encounter"]["note"] = today_note
-
+    patient_copy = _with_note(patient, today_note)
     context = build_patient_context(patient_copy)
     alerts = run_alerts(context)
     # The fixed-rule alerts. They are always shown, next to any AI alerts (fix 3).
@@ -157,16 +180,7 @@ def run_visit_analysis(
 
     llm_error: Optional[str] = None
 
-    # The guideline passages the screening step reads come from this one fixed query
-    # (a retrieval fault logged for Phase 2B).
-    checklist_seed = Alert(
-        alert_id="llm_checklist_seed",
-        title="Guideline audit checklist",
-        message="LLM audit checklist seed",
-        evidence={"type": "llm_audit_checklist_seed"},
-        query_hint="visit audit checklist labs monitoring regimen",
-    )
-    checklist_retrieved = _retrieve(rag, context=context, alert=checklist_seed, top_k=top_k)
+    checklist_retrieved = screening_search(rag, context, top_k)
 
     # Optional: LLM-first screening mode — generate alerts directly from Stage 1 summary
     # and checklist evidence. Deterministic alerts remain the fallback when
