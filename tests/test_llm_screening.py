@@ -27,7 +27,6 @@ class _FakeOllamaClient(OllamaClient):  # type: ignore[misc]
 def _build_dummy_context() -> PatientContext:
     return PatientContext(
         patient_id="P005",
-        name="Case 3 - AZT anemia",
         encounter_date=date(2026, 1, 22),
         art_regimen_current=["AZT", "3TC", "DTG"],
         notes_text="Heavy menses, marked pallor, Hb 7.8 g/dL on AZT.",
