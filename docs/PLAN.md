@@ -118,6 +118,11 @@ The old results were "sometimes good, sometimes bad". This phase finds out why a
 measuring every change on the Phase 2 cases and their draft answer key. Background reading:
 `docs/research/RAG-OPTIONS.md`.
 
+Models for these tests (owner, 2026-11-25, from the Phase 2 results): every change is measured
+on GLM 5.2 (the lead) and Llama 3.3 70B on the A100 (the free in-house comparison); DeepSeek
+V3.2 (the runner-up) joins at checkpoints and when a change may affect false alarms. Only
+made-up patients go to the hosted models.
+
 Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
 They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
 
@@ -244,10 +249,14 @@ reproduces it.
 2. Database: Postgres (owner, 2026-11-25), hosted somewhere like Railway or Cloudflare; the host
    is still open. Until then the visit record is a local file (fix 9).
 3. Which OpenRouter models, and a spending cap: decided 2026-11-25 (DeepSeek V3.2, GLM 5.2, Claude
-   Haiku 5.5; $5). MedGemma-27B left out for now.
+   Haiku 5.5; $5). MedGemma-27B left out for now. After Phase 2 the shortlist is locked (owner,
+   2026-11-25): GLM 5.2 leads, DeepSeek V3.2 is the runner-up, Llama on the A100 stays as the
+   in-house comparison, Claude Haiku 5.5 is dropped. A working pick, not final: Phase 7 decides.
 4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited (Phase 7).
 5. Where the explainer videos live (YouTube, or small files in the repo).
 6. Whether to mirror this checklist as GitHub issues and milestones.
 7. Keep or cut the items marked "(suggested)", which were my additions.
 8. The target for each of sensitivity, precision and specificity (owner's working figure: about 85%),
    agreed with the doctor in Phase 7.
+9. Whether real patient records may be sent to a hosted model (OpenRouter and the company that
+   runs the model). Until the owner decides, anything with real data runs on Llama on the A100.
