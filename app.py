@@ -35,6 +35,7 @@ from artemis.ai.client import (
 from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
+from artemis.guidelines.rerank import RerankStore, cross_encoder_scorer
 from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
 from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
@@ -168,11 +169,12 @@ def _get_rag_engine(
             p.stem.strip().lower().replace(" ", "_").replace("+", "_")[:20]
             for p in GUIDELINE_PATHS
         )[:80]  # keep the collection name within Chroma's limits
-    vector_store = create_vector_store(
+    # The meaning search's top 30, reread and reordered by a re-ranker (Phase 2B fix 5e).
+    vector_store = RerankStore(create_vector_store(
         project_root=PROJECT_ROOT,
         prefer_chroma=prefer_chroma,
         collection_name=f"uganda_hiv_guidelines__{model_key}__{guideline_key}__v{GUIDELINE_INDEX_VERSION}",
-    )
+    ), scorer=cross_encoder_scorer())
     return RagEngine(
         project_root=PROJECT_ROOT,
         guideline_paths=GUIDELINE_PATHS,
