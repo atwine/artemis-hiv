@@ -1,0 +1,174 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 6.8,
+ "calls": [
+  {
+   "prompt_tokens": 1535,
+   "completion_tokens": 544,
+   "total_tokens": 2079,
+   "cost": 0.00156162,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1472,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00156162,
+    "upstream_inference_prompt_cost": 0.00024514,
+    "upstream_inference_completions_cost": 0.00131648
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2220,
+   "completion_tokens": 478,
+   "total_tokens": 2698,
+   "cost": 0.00148868,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2176,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00148868,
+    "upstream_inference_prompt_cost": 0.00033192,
+    "upstream_inference_completions_cost": 0.00115676
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0030502999999999997,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_VL_MONITORING_GAP",
+   "title": "Viral load monitoring overdue per DTG guideline",
+   "message": "Guidelines for patients on DTG-based first-line ART recommend checking VL every 6 months, reducing to 12 monthly only if VL < 50 copies/mL for >1 year with reliable adherence. The patient's last VL was 129 days ago (2025-09-15) at 20 copies/mL, which is within the 6-month window. However, no VL has been ordered at this visit or planned. If VL <50 has been sustained for >1 year (prior VL was 30 copies/mL in 2024-09-15), monitoring could be reduced to annual, but this should be explicitly documented and a 12-month VL ordered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Confirm VL <50 for >1 year to extend interval to 12 months, or order a 6-month VL if criteria not met.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_VL_MONITORING_GAP",
+     "title": "Viral load monitoring overdue per DTG guideline",
+     "message": "Guidelines for patients on DTG-based first-line ART recommend checking VL every 6 months, reducing to 12 monthly only if VL < 50 copies/mL for >1 year with reliable adherence. The patient's last VL was 129 days ago (2025-09-15) at 20 copies/mL, which is within the 6-month window. However, no VL has been ordered at this visit or planned. If VL <50 has been sustained for >1 year (prior VL was 30 copies/mL in 2024-09-15), monitoring could be reduced to annual, but this should be explicitly documented and a 12-month VL ordered.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Confirm VL <50 for >1 year to extend interval to 12 months, or order a 6-month VL if criteria not met.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_CREATININE_MONITORING",
+   "title": "TDF renal monitoring gap at follow-up",
+   "message": "TDF is associated with nephrotoxicity and guidelines recommend routine laboratory screening for adverse drug events at sentinel sites. The patient's creatinine was 76 umol/L 38 days ago, which appears normal. However, no creatinine was ordered at today's visit. While the recent value is reassuring, ongoing periodic renal monitoring is part of routine safety screening for patients on TDF-containing regimens. The clinician's plan does not address renal monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue periodic creatinine monitoring per TDF safety guidelines at the next scheduled visit.",
+    "citations": [
+     {
+      "page_number": 20,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_CREATININE_MONITORING",
+     "title": "TDF renal monitoring gap at follow-up",
+     "message": "TDF is associated with nephrotoxicity and guidelines recommend routine laboratory screening for adverse drug events at sentinel sites. The patient's creatinine was 76 umol/L 38 days ago, which appears normal. However, no creatinine was ordered at today's visit. While the recent value is reassuring, ongoing periodic renal monitoring is part of routine safety screening for patients on TDF-containing regimens. The clinician's plan does not address renal monitoring.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue periodic creatinine monitoring per TDF safety guidelines at the next scheduled visit.",
+     "citations": [
+      {
+       "page_number": 20,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_VL_MONITORING_GAP": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "P002_CREATININE_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_VL_MONITORING_GAP\",\n    \"title\": \"Viral load monitoring overdue per DTG guideline\",\n    \"message\": \"Guidelines for patients on DTG-based first-line ART recommend checking VL every 6 months, reducing to 12 monthly only if VL < 50 copies/mL for >1 year with reliable adherence. The patient's last VL was 129 days ago (2025-09-15) at 20 copies/mL, which is within the 6-month window. However, no VL has been ordered at this visit or planned. If VL <50 has been sustained for >1 year (prior VL was 30 copies/mL in 2024-09-15), monitoring could be reduced to annual, but this should be explicitly documented and a 12-month VL ordered.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Confirm VL <50 for >1 year to extend interval to 12 months, or order a 6-month VL if criteria not met.\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"P002_CREATININE_MONITORING\",\n    \"title\": \"TDF renal monitoring gap at follow-up\",\n    \"message\": \"TDF is associated with nephrotoxicity and guidelines recommend routine laboratory screening for adverse drug events at sentinel sites. The patient's creatinine was 76 umol/L 38 days ago, which appears normal. However, no creatinine was ordered at today's visit. While the recent value is reassuring, ongoing periodic renal monitoring is part of routine safety screening for patients on TDF-containing regimens. The clinician's plan does not address renal monitoring.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue periodic creatinine monitoring per TDF safety guidelines at the next scheduled visit.\",\n    \"citations\": [{\"page_number\": 20, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is stable on TDF/3TC/DTG with suppressed viral load (20 copies/mL) and normal creatinine (76 umol/L), with no symptoms or exam findings suggesting toxicity.\"},\"problems\":[{\"problem\":\"No evidence of ART drug toxicity on current regimen\",\"action\":\"Continue TDF/3TC/DTG and maintain routine monitoring per guideline pharmacovigilance requirements.\",\"reason\":\"Patient has no complaints, no exam abnormalities, suppressed viral load, and normal creatinine, so no toxicity signs are present to investigate.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan to continue routine follow-up is appropriate given the absence of toxicity signs.\"}},{\"problem\":\"Routine creatinine monitoring for TDF toxicity\",\"action\":\"Continue annual creatinine monitoring or per Uganda HIV guidelines schedule for patients on TDF-containing regimens.\",\"reason\":\"TDF is associated with renal toxicity and the patient's creatinine is currently normal at 76 umol/L, but ongoing monitoring is required per pharmacovigilance guidelines.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan does not explicitly mention scheduling the next creatinine check for TDF safety monitoring.\"}},{\"problem\":\"Pharmacovigilance assessment for ART and co-medications\",\"action\":\"Document a brief pharmacovigilance screen at each visit including inquiry about new symptoms and review of concomitant medications.\",\"reason\":\"Uganda guidelines emphasize the importance of pharmacovigilance for early detection of adverse drug reactions, and no concomitant medications are currently recorded.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The plan notes routine follow-up but does not explicitly document a pharmacovigilance screen or review of co-medications.\"}}],\"monitoring_plan\":\"- Viral load: next routine VL per schedule (last VL 2025-09-15, suppressed at 20 copies/mL)\\n- Creatinine: continue annual or per-guideline monitoring for TDF renal safety (last 2025-12-15, normal at 76 umol/L)\\n- Pharmacovigilance: screen for new symptoms and review co-medications at each visit\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily with good adherence as your viral load remains suppressed\",\"Report any new symptoms such as nausea, rash, or changes in urination promptly as these may indicate drug side effects\",\"You may be eligible for differentiated service delivery (DSD) which allows less frequent clinic visits while stable\"]}",
+ "plan_issues": []
+}

@@ -80,28 +80,35 @@ Everything here runs without the doctor (owner, 2026-11-25). The answer key is d
 guidelines and marked "draft, not checked by a clinician", so these numbers steer Phases 2B to 6
 but are never quoted as accuracy. The doctor's review and the reportable numbers come in Phase 7.
 
-- [ ] 2.1 Case set from what exists: the 7 test patients, the 4 clinician-written example answers
-      (each turned into a patient record) and the Mr K.S. case: 12 cases.
-- [ ] 2.2 Draft answer key: for each case, the problems it should flag and the guideline passage
-      behind each, written from the guidelines and marked as a draft.
-- [ ] 2.3 Scoring script (`scripts/evaluate.py`): runs each case 5 times per model and counts, per
+- [x] 2.1 Case set from what exists: the 7 test patients, the 4 clinician-written example answers
+      (each turned into a patient record) and the Mr K.S. case. Done 2026-11-25: 11 cases in
+      `eval/cases/`, as example 1 turned out to be P005.
+- [x] 2.2 Draft answer key: for each case, the problems it should flag and the guideline passage
+      behind each, written from the guidelines and marked as a draft. Done 2026-11-25: 22
+      expected problems, must-not and also-fine items.
+- [x] 2.3 Scoring script (`scripts/evaluate.py`): runs each case 5 times per model and counts, per
       case, the expected problems caught and missed and the extra alerts. Also the measures that
       need no answer key: the same answer across runs, citations only to passages the AI was
       shown, replies read in full, time and cost per check. It rebuilds the table from saved outputs.
-- [ ] 2.4 Models (owner, 2026-11-25): Llama 3.3 70B on the A100 (the baseline, free), and DeepSeek
+- [x] 2.4 Models (owner, 2026-11-25): Llama 3.3 70B on the A100 (the baseline, free), and DeepSeek
       V3.2, GLM 5.2 and Claude Haiku 5.5 through OpenRouter, all with thinking switched off.
       MedGemma-27B left out (owner). Claude Sonnet 5.5 was dropped after a trial: its thinking
       can't be switched off and filled the app's reply room, so its alert list was cut off and
       one check cost $0.07. OpenRouter spending cap $5: the script estimates the cost before a
       run, stops at the cap and records the real cost of every call.
       Measured: one visit check uses about 3,700 tokens in and 740 out.
-- [ ] 2.5 AfriMed-QA knowledge check: its infectious-disease questions (539, 184 written by
+- [x] 2.5 AfriMed-QA knowledge check: its infectious-disease questions (539, 184 written by
       experts), HIV-related ones picked out, for every shortlisted model. The download needs its
-      terms accepted on Hugging Face; the licence is non-commercial.
-- [ ] 2.6 Technical leftovers from Phase 1: temperature 0 or judging over several runs (G38); the
-      AI citing a made-up "information_gap" passage instead of no passage.
-- [ ] 2.7 Write the method and the preliminary results table, both marked preliminary, and save
-      every raw output (they feed the showcase in Phase 6).
+      terms accepted on Hugging Face. Done 2026-11-25: the 286 multiple-choice questions that are
+      infectious disease or mention HIV, for all four models. The dataset card gives CC-BY-SA
+      4.0 and the paper says non-commercial, so the data stays out of the repo.
+- [x] 2.6 Technical leftovers from Phase 1: temperature 0 or judging over several runs (G38); the
+      AI citing a made-up "information_gap" passage instead of no passage. Done 2026-11-25:
+      citations can only name passages shown (92% before, 100% after); temperature 0 raised
+      Llama's same-answer rate from 85% to 98%. Whether the app uses temperature 0 is open.
+- [x] 2.7 Write the method and the preliminary results table, both marked preliminary, and save
+      every raw output (they feed the showcase in Phase 6). Done 2026-11-25:
+      `eval/phase2/README.md`.
 
 Check: `python scripts/evaluate.py` rebuilds the preliminary table from saved outputs.
 

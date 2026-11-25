@@ -1,0 +1,98 @@
+{
+ "case_id": "P002",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 14.0,
+ "calls": [
+  {
+   "prompt_tokens": 1574,
+   "completion_tokens": 323,
+   "total_tokens": 1897,
+   "cost": 0.00048206,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00048206,
+    "upstream_inference_prompt_cost": 0.00035932,
+    "upstream_inference_completions_cost": 0.00012274
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2684,
+   "completion_tokens": 2,
+   "total_tokens": 2686,
+   "cost": 0.00075236,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00075236,
+    "upstream_inference_prompt_cost": 0.00075152,
+    "upstream_inference_completions_cost": 8.4e-07
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00123442,
+ "status": "GREEN",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [],
+ "retrieved": {},
+ "screening": {
+  "raw_output": "[]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   }
+  ],
+  "parse_status": "parsed_empty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is stable on TDF/3TC/DTG with suppressed viral load and normal creatinine, and no signs of toxicity per guidelines.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Routine monitoring for ART toxicity\",\n      \"action\": \"Continue current regimen; schedule next viral load and creatinine per monitoring plan.\",\n      \"reason\": \"Patient has no complaints, normal exam, suppressed viral load, and normal creatinine, indicating no current toxicity.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Clinician's plan for routine follow-up aligns with stable status and no toxicity signs.\"\n      }\n    },\n    {\n      \"problem\": \"Pharmacovigilance for long-term ART\",\n      \"action\": \"Uncertain: No specific action is justified from the provided excerpts.\",\n      \"reason\": \"Uncertain: The guideline excerpt mentions pharmacovigilance importance but does not specify actions for a stable patient.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention pharmacovigilance actions beyond routine follow-up.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Viral load every 12 months; creatinine annually.\",\n  \"patient_counselling\": [\"Continue adherence\", \"Report any new symptoms\", \"Discuss DSD options\"]\n}",
+ "plan_issues": []
+}

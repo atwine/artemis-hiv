@@ -1,0 +1,242 @@
+{
+ "case_id": "MR-KS",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 31.8,
+ "calls": [
+  {
+   "prompt_tokens": 2215,
+   "total_tokens": 2677,
+   "completion_tokens": 462,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2951,
+   "total_tokens": 3461,
+   "completion_tokens": 510,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MRKS_001",
+   "title": "Suboptimal BP Control",
+   "message": "Guidelines emphasize importance of blood pressure control. Patient's BP is 146/94 mmHg, indicating suboptimal control. Patient admits to occasionally missing amlodipine doses. Lifestyle modifications and adherence to antihypertensives are crucial.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Adhere to amlodipine regimen and lifestyle modifications",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "MRKS_001",
+     "title": "Suboptimal BP Control",
+     "message": "Guidelines emphasize importance of blood pressure control. Patient's BP is 146/94 mmHg, indicating suboptimal control. Patient admits to occasionally missing amlodipine doses. Lifestyle modifications and adherence to antihypertensives are crucial.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Adhere to amlodipine regimen and lifestyle modifications",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_002",
+   "title": "Renal Function Monitoring",
+   "message": "Guidelines recommend monitoring creatinine (eGFR) at 3 months, 6 months, and then 6-12 monthly for patients on TDF. Patient's latest creatinine is 112 umol/L, which is within normal limits. However, regular monitoring is still necessary, especially in high-risk patients with co-existent hypertension.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule regular creatinine checks",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_002",
+     "title": "Renal Function Monitoring",
+     "message": "Guidelines recommend monitoring creatinine (eGFR) at 3 months, 6 months, and then 6-12 monthly for patients on TDF. Patient's latest creatinine is 112 umol/L, which is within normal limits. However, regular monitoring is still necessary, especially in high-risk patients with co-existent hypertension.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Schedule regular creatinine checks",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      },
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_003",
+   "title": "Potential Side Effects of Amlodipine",
+   "message": "Amlodipine can cause lower limb edema, headache, and palpitations. Patient complains of back pain and a heavy feeling in both thighs. While these symptoms may be attributed to occupational factors, potential side effects of amlodipine should be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor for amlodipine side effects and adjust treatment if necessary",
+    "citations": [
+     {
+      "page_number": 45,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_003",
+     "title": "Potential Side Effects of Amlodipine",
+     "message": "Amlodipine can cause lower limb edema, headache, and palpitations. Patient complains of back pain and a heavy feeling in both thighs. While these symptoms may be attributed to occupational factors, potential side effects of amlodipine should be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor for amlodipine side effects and adjust treatment if necessary",
+     "citations": [
+      {
+       "page_number": 45,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p51_c4"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p52_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p30_c1"
+  ],
+  "MRKS_001": [],
+  "MRKS_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "MRKS_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"MRKS_001\",\n    \"title\": \"Suboptimal BP Control\",\n    \"message\": \"Guidelines emphasize importance of blood pressure control. Patient's BP is 146/94 mmHg, indicating suboptimal control. Patient admits to occasionally missing amlodipine doses. Lifestyle modifications and adherence to antihypertensives are crucial.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Adhere to amlodipine regimen and lifestyle modifications\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"MRKS_002\",\n    \"title\": \"Renal Function Monitoring\",\n    \"message\": \"Guidelines recommend monitoring creatinine (eGFR) at 3 months, 6 months, and then 6-12 monthly for patients on TDF. Patient's latest creatinine is 112 umol/L, which is within normal limits. However, regular monitoring is still necessary, especially in high-risk patients with co-existent hypertension.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule regular creatinine checks\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"}, {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_003\",\n    \"title\": \"Potential Side Effects of Amlodipine\",\n    \"message\": \"Amlodipine can cause lower limb edema, headache, and palpitations. Patient complains of back pain and a heavy feeling in both thighs. While these symptoms may be attributed to occupational factors, potential side effects of amlodipine should be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor for amlodipine side effects and adjust treatment if necessary\",\n    \"citations\": [{\"page_number\": 45, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+    "page_number": 40,
+    "quote": "6-monthly At virological/clinical failure Can be stopped if CD4+ > 200 cells/µL and virologically suppressed. Repeat CD4+ if a patient returns to care after treatment interruption to guide management. ALT Yes No If baseline ALT is normal, routine monitoring of ALT is not required. If baseline ALT is abnormal or the patient is on other hepatotoxic drugs, continue to monitor Creatinine (eGFR) Yes At 3 months, 6 months and then 6-12 monthly Also at 1 and 2 months in high-risk pa"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+    "page_number": 5,
+    "quote": "frica, only co-formulated. ‡, Life-threatening reactions are indicated in **bold**. TABLE 2: Baseline investigations and monitoring required for nucleoside/nucleotide reverse transcriptase inhibitors. Generic name Monitoring required Comment Tenofovir disoproxil fumarate (TDF) eGFR before initiation, then at 3 months, 6 months, and then 6-12 monthly thereafter Avoid if eGFR < 50 mL/min/1.73m² In high-risk patients (particularly those with co-existent hypertension or diabetes)"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+    "page_number": 5,
+    "quote": "). Generic name Drug class Recommended dosage Common or severe ADR‡ Tenofovir disoproxil fumarate (TDF) NtRTI 300 mg daily Renal failure, tubular wasting syndrome, reduced bone mineral density, nausea Tenofovir alafenamide (TAF) NtRTI 25 mg daily Less renal failure and bone mineral reduction than TDF, but more weight gain and worse lipid profile Lamivudine (3TC) NRTI 150 mg 12-hourly or 300 mg daily Anaemia (pure red cell aplasia) (rare) Emtricitabine (FTC) NRTI 200 mg daily "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 45,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: the provided guideline excerpts do not mention specific side effects of TDF, 3TC, or EFV that match the patient's symptoms of lower back pain and heavy feeling in both thighs, and do not provide enough information to determine if the current regimen is causing toxicity.\"},\n\"problems\": [\n{\"problem\": \"Lower back pain and heavy feeling in thighs\", \"action\": \"Uncertain: further investigation needed to determine cause\", \"reason\": \"Uncertain: the patient's symptoms could be related to occupational factors, but the guideline excerpts do not provide enough information to rule out drug toxicity from TDF, 3TC, or EFV.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The clinician's plan attributes the symptoms to occupational factors, but does not fully address the possibility of drug toxicity.\"}},\n{\"problem\": \"Sub-optimally controlled hypertension\", \"action\": \"Adhere to antihypertensives and lifestyle modifications\", \"reason\": \"The patient's BP is 146/94 and they admit to occasionally missing amlodipine doses.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan encourages lifestyle modifications and adherence to antihypertensives.\"}},\n{\"problem\": \"Trace proteinuria\", \"action\": \"Monitor proteinuria and adjust antihypertensives as needed\", \"reason\": \"The patient has trace proteinuria noted on dipstick, likely secondary to hypertension.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan notes the proteinuria, but does not specify a plan for monitoring or adjusting treatment.\"}}\n],\n\"monitoring_plan\": \"Monitor BP, proteinuria, and renal function (creatinine) in 6 months, and consider monitoring for potential side effects of TDF, 3TC, and EFV.\",\n\"patient_counselling\": [\"Adhere to antihypertensive medication\", \"Make lifestyle modifications to control hypertension\", \"Report any changes in symptoms or side effects to the clinician\"]}",
+ "plan_issues": []
+}

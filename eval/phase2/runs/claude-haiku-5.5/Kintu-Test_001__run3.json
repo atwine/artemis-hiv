@@ -1,0 +1,279 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 25.1,
+ "calls": [
+  {
+   "prompt_tokens": 2554,
+   "completion_tokens": 1000,
+   "total_tokens": 3554,
+   "cost": 0.0007554,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007554,
+    "upstream_inference_prompt_cost": 0.0002554,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2699,
+   "completion_tokens": 1000,
+   "total_tokens": 3699,
+   "cost": 0.0007699,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007699,
+    "upstream_inference_prompt_cost": 0.0002699,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3837,
+   "completion_tokens": 1000,
+   "total_tokens": 4837,
+   "cost": 0.0008837,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008837,
+    "upstream_inference_prompt_cost": 0.0003837,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4564,
+   "completion_tokens": 1137,
+   "total_tokens": 5701,
+   "cost": 0.0010249,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0010249,
+    "upstream_inference_prompt_cost": 0.0004564,
+    "upstream_inference_completions_cost": 0.0005685
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0034339,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU001_001",
+   "title": "Significant weight gain and obesity on DTG-based ART",
+   "message": "Guidelines state that weight gain should be discussed when starting ART regimens, as obesity is an increasing problem in HIV care, particularly among women, and proactive diet and exercise advice should be given to all patients starting or switching ART. Patient weight increased from 65 kg to 82 kg (BMI 25.6 to 32.4 kg/m²) over 18 months since switch to TLD, with waist circumference 96 cm. Weight gain may reflect DTG-associated effects, but overlaps with age-related and lifestyle factors and family history of T2DM; no lifestyle counselling is documented in the record.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "moderate",
+    "recommended_action": "Provide diet and exercise counselling per guidelines, monitor weight and BMI at each visit, and document the discussion of ART-associated weight gain with the patient.",
+    "citations": [
+     {
+      "page_number": 8,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU001_001",
+     "title": "Significant weight gain and obesity on DTG-based ART",
+     "message": "Guidelines state that weight gain should be discussed when starting ART regimens, as obesity is an increasing problem in HIV care, particularly among women, and proactive diet and exercise advice should be given to all patients starting or switching ART. Patient weight increased from 65 kg to 82 kg (BMI 25.6 to 32.4 kg/m²) over 18 months since switch to TLD, with waist circumference 96 cm. Weight gain may reflect DTG-associated effects, but overlaps with age-related and lifestyle factors and family history of T2DM; no lifestyle counselling is documented in the record.",
+     "issue_type": "medication_safety",
+     "severity": "moderate",
+     "recommended_action": "Provide diet and exercise counselling per guidelines, monitor weight and BMI at each visit, and document the discussion of ART-associated weight gain with the patient.",
+     "citations": [
+      {
+       "page_number": 8,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU001_002",
+   "title": "Impaired glycaemia and rising BP on DTG with obesity",
+   "message": "Guidelines recommend glucose monitoring every 3 months during the first year after transition to DTG. Patient now has fasting glucose 118 mg/dL (impaired), HbA1c 6.1% (pre-diabetic range), BP 138/88 mmHg (up from 118/74), and acanthosis nigricans, with prior baseline fasting glucose 92 mg/dL. Weight gain and insulin resistance may be linked to DTG, but obesity, family history of T2DM and lifestyle are competing non-drug explanations.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Repeat fasting glucose/HbA1c, screen for diabetes and hypertension, manage cardiovascular risk, and consider referral for evaluation of possible DTG-associated metabolic change in consultation with the ART programme.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU001_002",
+     "title": "Impaired glycaemia and rising BP on DTG with obesity",
+     "message": "Guidelines recommend glucose monitoring every 3 months during the first year after transition to DTG. Patient now has fasting glucose 118 mg/dL (impaired), HbA1c 6.1% (pre-diabetic range), BP 138/88 mmHg (up from 118/74), and acanthosis nigricans, with prior baseline fasting glucose 92 mg/dL. Weight gain and insulin resistance may be linked to DTG, but obesity, family history of T2DM and lifestyle are competing non-drug explanations.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Repeat fasting glucose/HbA1c, screen for diabetes and hypertension, manage cardiovascular risk, and consider referral for evaluation of possible DTG-associated metabolic change in consultation with the ART programme.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU001_003",
+   "title": "Fatigue with weight gain: consider thyroid and metabolic causes",
+   "message": "Guidelines list weight gain, fatigue and neck swelling among thyroid symptoms requiring evaluation. Patient reports increased tiredness alongside weight gain, dyslipidaemia (LDL 148 mg/dL, HDL 38 mg/dL, triglycerides 212 mg/dL), and hypertension. Fatigue may relate to obesity, metabolic syndrome, or sleep and mood factors rather than ART, and no thyroid assessment is recorded.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "moderate",
+    "recommended_action": "Assess for thyroid dysfunction (e.g., TSH) given weight gain and fatigue, and evaluate contributing metabolic and lifestyle factors.",
+    "citations": [
+     {
+      "page_number": 25,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU001_003",
+     "title": "Fatigue with weight gain: consider thyroid and metabolic causes",
+     "message": "Guidelines list weight gain, fatigue and neck swelling among thyroid symptoms requiring evaluation. Patient reports increased tiredness alongside weight gain, dyslipidaemia (LDL 148 mg/dL, HDL 38 mg/dL, triglycerides 212 mg/dL), and hypertension. Fatigue may relate to obesity, metabolic syndrome, or sleep and mood factors rather than ART, and no thyroid assessment is recorded.",
+     "issue_type": "information_gap",
+     "severity": "moderate",
+     "recommended_action": "Assess for thyroid dysfunction (e.g., TSH) given weight gain and fatigue, and evaluate contributing metabolic and lifestyle factors.",
+     "citations": [
+      {
+       "page_number": 25,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1"
+  ],
+  "KINTU001_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+  ],
+  "KINTU001_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "KINTU001_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"KINTU001_001\", \"title\": \"Significant weight gain and obesity on DTG-based ART\", \"message\": \"Guidelines state that weight gain should be discussed when starting ART regimens, as obesity is an increasing problem in HIV care, particularly among women, and proactive diet and exercise advice should be given to all patients starting or switching ART. Patient weight increased from 65 kg to 82 kg (BMI 25.6 to 32.4 kg/m²) over 18 months since switch to TLD, with waist circumference 96 cm. Weight gain may reflect DTG-associated effects, but overlaps with age-related and lifestyle factors and family history of T2DM; no lifestyle counselling is documented in the record.\", \"issue_type\": \"medication_safety\", \"severity\": \"moderate\", \"recommended_action\": \"Provide diet and exercise counselling per guidelines, monitor weight and BMI at each visit, and document the discussion of ART-associated weight gain with the patient.\", \"citations\": [{\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"}]}, {\"alert_id\": \"KINTU001_002\", \"title\": \"Impaired glycaemia and rising BP on DTG with obesity\", \"message\": \"Guidelines recommend glucose monitoring every 3 months during the first year after transition to DTG. Patient now has fasting glucose 118 mg/dL (impaired), HbA1c 6.1% (pre-diabetic range), BP 138/88 mmHg (up from 118/74), and acanthosis nigricans, with prior baseline fasting glucose 92 mg/dL. Weight gain and insulin resistance may be linked to DTG, but obesity, family history of T2DM and lifestyle are competing non-drug explanations.\", \"issue_type\": \"toxicity\", \"severity\": \"high\", \"recommended_action\": \"Repeat fasting glucose/HbA1c, screen for diabetes and hypertension, manage cardiovascular risk, and consider referral for evaluation of possible DTG-associated metabolic change in consultation with the ART programme.\", \"citations\": [{\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}]}, {\"alert_id\": \"KINTU001_003\", \"title\": \"Fatigue with weight gain: consider thyroid and metabolic causes\", \"message\": \"Guidelines list weight gain, fatigue and neck swelling among thyroid symptoms requiring evaluation. Patient reports increased tiredness alongside weight gain, dyslipidaemia (LDL 148 mg/dL, HDL 38 mg/dL, triglycerides 212 mg/dL), and hypertension. Fatigue may relate to obesity, metabolic syndrome, or sleep and mood factors rather than ART, and no thyroid assessment is recorded.\", \"issue_type\": \"information_gap\", \"severity\": \"moderate\", \"recommended_action\": \"Assess for thyroid dysfunction (e.g., TSH) given weight gain and fatigue, and evaluate contributing metabolic and lifestyle factors.\", \"citations\": [{\"page_number\": 25, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+    "page_number": 8,
+    "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Uncertain\",\"reason\":\"Uncertain: the provided guideline excerpts (advanced HIV disease screening flowchart) do not address DTG, TDF, or 3TC toxicity, so neither a switch nor continuation can be justified from them; the patient's weight gain since the EFV-to-TLD switch is noted but not attributed to ART from these excerpts.\"},\"problems\":[{\"problem\":\"Rapid weight gain with metabolic syndrome features (BMI 32.4, waist 96 cm, BP 138/88, acanthosis nigricans) since ART switch, with family history of type 2 diabetes\",\"action\":\"Obtain fasting glucose or HbA1c, lipid profile, and repeat weight and BP at next visit; Uncertain: guideline-specific metabolic toxicity thresholds and DTG-weight-gain management are not in the excerpts.\",\"reason\":\"Weight rose from 65 kg to 82 kg with new BMI, BP, and acanthosis changes after the TLD switch, but the excerpts do not establish whether DTG contributes.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's assessment and plan for today is blank, so no metabolic evaluation or plan is documented.\"}},{\"problem\":\"Possible TDF-related renal toxicity, with no renal function on record\",\"action\":\"Obtain serum creatinine/eGFR and urinalysis for proteinuria and glycosuria; Uncertain: the Uganda threshold for switching away from TDF is not in the excerpts.\",\"reason\":\"The patient has been on TDF for about 5 years and no renal labs are recorded, so nephrotoxicity cannot be excluded from the available data.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No renal assessment or laboratory orders appear in the clinician's plan.\"}},{\"problem\":\"Fatigue in a patient on TDF/3TC/DTG with new weight gain and elevated BP\",\"action\":\"Uncertain: evaluation of fatigue (CBC, thyroid function, glucose) is clinically reasonable but is not supported by the provided excerpts.\",\"reason\":\"Uncertain: the excerpts do not link fatigue to TDF, 3TC, or DTG, so attribution to ART cannot be made from them.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Fatigue is not mentioned in the clinician's plan.\"}}],\"monitoring_plan\":\"- Now: fasting glucose or HbA1c, lipid profile, creatinine/eGFR, urinalysis, CBC.\\n- Repeat weight, BP, and glucose at 2-4 weeks to track trend.\\n- Escalate if glucose meets diabetes threshold, eGFR declines, or BP remains elevated.\",\"patient_counselling\":[\"Weight gain and tiredness need checking; they may or may not\"]}",
+ "plan_issues": []
+}

@@ -1,0 +1,161 @@
+{
+ "case_id": "P003",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 17.6,
+ "calls": [
+  {
+   "prompt_tokens": 1424,
+   "total_tokens": 1722,
+   "completion_tokens": 298,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2086,
+   "total_tokens": 2316,
+   "completion_tokens": 230,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P003_TOXICITY_001",
+   "title": "EFV Neuropsychiatric Effects",
+   "message": "Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered. The patient has been on EFV since February 2024, and these effects typically occur within the first 2-6 weeks, but can persist.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor for neuropsychiatric effects and consider alternative treatments if necessary.",
+    "citations": [
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 55,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_TOXICITY_001",
+     "title": "EFV Neuropsychiatric Effects",
+     "message": "Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered. The patient has been on EFV since February 2024, and these effects typically occur within the first 2-6 weeks, but can persist.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor for neuropsychiatric effects and consider alternative treatments if necessary.",
+     "citations": [
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+      },
+      {
+       "page_number": 55,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+  ],
+  "efv_sleep_disturbance": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p10_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3"
+  ],
+  "P003_TOXICITY_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P003_TOXICITY_001\",\n    \"title\": \"EFV Neuropsychiatric Effects\",\n    \"message\": \"Guidelines state EFV can cause neuropsychiatric effects, including insomnia and vivid dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like depression or anxiety should also be considered. The patient has been on EFV since February 2024, and these effects typically occur within the first 2-6 weeks, but can persist.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor for neuropsychiatric effects and consider alternative treatments if necessary.\",\n    \"citations\": [{\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"}, {\"page_number\": 55, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3",
+    "page_number": 55,
+    "quote": "nclude stigma towards PLWH with a co-morbid mental disorder, and reluctance on the part of clinicians to engage with patients on what might be perceived to be time-consuming or specialised interviews. The most prevalent conditions, including depression, the anxiety disorders and substance abuse can be readily diagnosed with semi-structured clinical interviews, or validated brief instruments, such as the PHQ-2 or PHQ-9, the GAD-7, the K-10, and the AUDIT (for alcohol use disor"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+    "page_number": 55,
+    "quote": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experience neuropsychiatric features of EFV do so within the first 2-6 weeks, and therea"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine if current regimen is causing toxicity\", \"reason\": \"Patient complaints of poor sleep and vivid dreams, but guideline excerpts do not provide enough information to confirm drug toxicity from TDF, 3TC, or EFV\"}, \"problems\": [{\"problem\": \"Insomnia and vivid dreams\", \"action\": \"Consider switching EFV to another NNRTI or PI\", \"reason\": \"EFV is known to cause neuropsychiatric side effects, including insomnia and vivid dreams\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan only notes the complaint but does not address potential EFV toxicity\"}}, {\"problem\": \"Potential TDF toxicity\", \"action\": \"Uncertain: need serum creatinine and eGFR results\", \"reason\": \"Guideline recommends screening for TDF toxicity with serum creatinine and eGFR, but results are not available\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not mention TDF toxicity screening\"}}], \"monitoring_plan\": \"Serum creatinine, eGFR, and viral load in 3 months\", \"patient_counselling\": [\"Discuss potential side effects of EFV\", \"Importance of adherence to ART regimen\", \"Follow-up appointment in 3 months to monitor symptoms and lab results\"]}",
+ "plan_issues": []
+}

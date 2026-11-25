@@ -1,0 +1,183 @@
+{
+ "case_id": "P001",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 6.2,
+ "calls": [
+  {
+   "prompt_tokens": 1455,
+   "completion_tokens": 523,
+   "total_tokens": 1978,
+   "cost": 0.00382748,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00382748,
+    "upstream_inference_prompt_cost": 0.00152628,
+    "upstream_inference_completions_cost": 0.0023012
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2161,
+   "completion_tokens": 395,
+   "total_tokens": 2556,
+   "cost": 0.00381492,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00381492,
+    "upstream_inference_prompt_cost": 0.00207692,
+    "upstream_inference_completions_cost": 0.001738
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0076424,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "CREATININE_OVERDUE",
+   "title": "Creatinine not monitored for over 15 months",
+   "message": "Patient on TDF-containing regimen has no creatinine result for 478 days. TDF is associated with nephrotoxicity, and renal function monitoring is essential for patients on this drug. The only available creatinine (88 umol/L) is from 2024-10-01, well outside any reasonable monitoring interval. The clinician's plan does not include renal function testing.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "high",
+    "recommended_action": "Order serum creatinine and urinalysis to assess renal function given TDF use. Establish regular renal monitoring schedule per guideline recommendations.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "CREATININE_OVERDUE",
+     "title": "Creatinine not monitored for over 15 months",
+     "message": "Patient on TDF-containing regimen has no creatinine result for 478 days. TDF is associated with nephrotoxicity, and renal function monitoring is essential for patients on this drug. The only available creatinine (88 umol/L) is from 2024-10-01, well outside any reasonable monitoring interval. The clinician's plan does not include renal function testing.",
+     "issue_type": "monitoring_gap",
+     "severity": "high",
+     "recommended_action": "Order serum creatinine and urinalysis to assess renal function given TDF use. Establish regular renal monitoring schedule per guideline recommendations.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "VL_NEAR_THRESHOLD",
+   "title": "Viral load 40 copies/mL — confirm suppression status",
+   "message": "Latest viral load is 40 copies/mL (2025-10-01), which is below the 50 copies/mL threshold for suppression. Guidelines state VL < 50 copies/mL on DTG-based ART should continue regimen. If VL < 50 for > 1 year with reliable adherence, monitoring can reduce to 12 monthly. This patient's VL should be repeated per the 6-monthly schedule unless suppression > 1 year is documented.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue current regimen. Confirm duration of viral suppression to determine if VL monitoring can be reduced to 12-monthly per guideline flowchart.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "VL_NEAR_THRESHOLD",
+     "title": "Viral load 40 copies/mL — confirm suppression status",
+     "message": "Latest viral load is 40 copies/mL (2025-10-01), which is below the 50 copies/mL threshold for suppression. Guidelines state VL < 50 copies/mL on DTG-based ART should continue regimen. If VL < 50 for > 1 year with reliable adherence, monitoring can reduce to 12 monthly. This patient's VL should be repeated per the 6-monthly schedule unless suppression > 1 year is documented.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue current regimen. Confirm duration of viral suppression to determine if VL monitoring can be reduced to 12-monthly per guideline flowchart.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p41_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3"
+  ],
+  "CREATININE_OVERDUE": [],
+  "VL_NEAR_THRESHOLD": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"CREATININE_OVERDUE\",\n    \"title\": \"Creatinine not monitored for over 15 months\",\n    \"message\": \"Patient on TDF-containing regimen has no creatinine result for 478 days. TDF is associated with nephrotoxicity, and renal function monitoring is essential for patients on this drug. The only available creatinine (88 umol/L) is from 2024-10-01, well outside any reasonable monitoring interval. The clinician's plan does not include renal function testing.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Order serum creatinine and urinalysis to assess renal function given TDF use. Establish regular renal monitoring schedule per guideline recommendations.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"VL_NEAR_THRESHOLD\",\n    \"title\": \"Viral load 40 copies/mL — confirm suppression status\",\n    \"message\": \"Latest viral load is 40 copies/mL (2025-10-01), which is below the 50 copies/mL threshold for suppression. Guidelines state VL < 50 copies/mL on DTG-based ART should continue regimen. If VL < 50 for > 1 year with reliable adherence, monitoring can reduce to 12 monthly. This patient's VL should be repeated per the 6-monthly schedule unless suppression > 1 year is documented.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue current regimen. Confirm duration of viral suppression to determine if VL monitoring can be reduced to 12-monthly per guideline flowchart.\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is on TDF/3TC/DTG with no complaints, appears well, viral load is suppressed at 40 copies/mL, and creatinine was normal at 88 umol/L, so there is no evidence of drug toxicity requiring regimen change.\"},\"problems\":[{\"problem\":\"Stale renal function monitoring on TDF (creatinine last checked 478 days ago)\",\"action\":\"Order serum creatinine and eGFR today to screen for TDF nephrotoxicity per Uganda guidelines.\",\"reason\":\"Guidelines require serum creatinine and eGFR screening for patients on TDF, and the last creatinine was over 15 months ago.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan of routine follow-up with no issues does not include ordering renal function tests despite the creatinine being over a year old.\"}},{\"problem\":\"Viral load of 40 copies/mL near the detection threshold\",\"action\":\"Repeat viral load in 3-6 months to confirm sustained virologic suppression and detect any early rebound.\",\"reason\":\"The viral load is at the low-level viremia threshold and guidelines emphasize ongoing viral load monitoring to confirm suppression.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician notes routine follow-up but does not specify timing of the next viral load to confirm continued suppression.\"}},{\"problem\":\"Pharmacovigilance assessment for ART and co-medication toxicity not documented\",\"action\":\"Screen for symptoms of TDF nephrotoxicity, 3TC and DTG adverse effects, and document any co-medications at this visit.\",\"reason\":\"Guidelines emphasize pharmacovigilance for all patients on ART, and co-medications are not recorded for this patient.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention any pharmacovigilance screening or documentation of co-medications.\"}}],\"monitoring_plan\":[\"Repeat serum creatinine and eGFR now (overdue by >15 months)\",\"Repeat viral load in 3-6 months to confirm suppression at 40 copies/mL\",\"Routine clinical monitoring at next scheduled visit for any new symptoms of drug toxicity\"],\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily as prescribed and maintain good adherence\",\"Report any new symptoms such as nausea, abdominal pain, or changes in urination immediately\",\"Attend all scheduled follow-up appointments for routine lab monitoring\"]}",
+ "plan_issues": []
+}

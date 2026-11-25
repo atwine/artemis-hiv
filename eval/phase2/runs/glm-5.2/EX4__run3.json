@@ -1,0 +1,235 @@
+{
+ "case_id": "EX4",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 12.0,
+ "calls": [
+  {
+   "prompt_tokens": 1773,
+   "completion_tokens": 924,
+   "total_tokens": 2697,
+   "cost": 0.006295163,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.006295163,
+    "upstream_inference_prompt_cost": 1.1963e-05,
+    "upstream_inference_completions_cost": 0.0062832
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2601,
+   "completion_tokens": 826,
+   "total_tokens": 3427,
+   "cost": 0.00238274,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2560,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00238274,
+    "upstream_inference_prompt_cost": 0.00038382,
+    "upstream_inference_completions_cost": 0.00199892
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.008677903,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX4_001",
+   "title": "Carbamazepine-DTG interaction causing viraemia",
+   "message": "Guidelines state carbamazepine decreases DTG levels by 30–70% and recommend using valproic acid instead. Carbamazepine was started 2 weeks ago, and the viral load rose from <50 to 1,240 copies/mL in that interval. The temporal relationship strongly supports drug attribution. The patient reports good adherence, further supporting the interaction as the cause. This interaction is directly dose-dependent and clinically significant.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Switch carbamazepine to valproic acid as per guideline recommendation, or consult neurology for alternative antiepileptic. Repeat viral load after adjustment.",
+    "citations": [
+     {
+      "page_number": 49,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_001",
+     "title": "Carbamazepine-DTG interaction causing viraemia",
+     "message": "Guidelines state carbamazepine decreases DTG levels by 30–70% and recommend using valproic acid instead. Carbamazepine was started 2 weeks ago, and the viral load rose from <50 to 1,240 copies/mL in that interval. The temporal relationship strongly supports drug attribution. The patient reports good adherence, further supporting the interaction as the cause. This interaction is directly dose-dependent and clinically significant.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Switch carbamazepine to valproic acid as per guideline recommendation, or consult neurology for alternative antiepileptic. Repeat viral load after adjustment.",
+     "citations": [
+      {
+       "page_number": 49,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_002",
+   "title": "Carbamazepine toxicity with hyponatraemia",
+   "message": "Carbamazepine level is 14 mcg/mL, above the therapeutic range of 4–12. Symptoms include dizziness, ataxia, nystagmus, and tremor, all consistent with toxicity. Hyponatraemia at 128 mmol/L may also be carbamazepine-induced SIADH. The clinician plans dose reduction, which is appropriate. Sodium valproate is already prescribed and is the guideline-recommended alternative for seizure control in patients on DTG.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Reduce carbamazepine dose as planned, repeat level, and monitor sodium. Consider switching to valproic acid monotherapy to resolve both toxicity and the DTG interaction.",
+    "citations": [
+     {
+      "page_number": 49,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_002",
+     "title": "Carbamazepine toxicity with hyponatraemia",
+     "message": "Carbamazepine level is 14 mcg/mL, above the therapeutic range of 4–12. Symptoms include dizziness, ataxia, nystagmus, and tremor, all consistent with toxicity. Hyponatraemia at 128 mmol/L may also be carbamazepine-induced SIADH. The clinician plans dose reduction, which is appropriate. Sodium valproate is already prescribed and is the guideline-recommended alternative for seizure control in patients on DTG.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Reduce carbamazepine dose as planned, repeat level, and monitor sodium. Consider switching to valproic acid monotherapy to resolve both toxicity and the DTG interaction.",
+     "citations": [
+      {
+       "page_number": 49,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_003",
+   "title": "Detectable viral load requires adherence support",
+   "message": "Guidelines state that for VL >50 copies/mL on DTG-based ART, clinicians should provide enhanced adherence support, address potential side-effects affecting adherence, and repeat VL in 2–3 months. The plan does not mention enhanced adherence counselling or a repeat VL timeline. Addressing the carbamazepine interaction is essential, but adherence support and follow-up VL are still required per protocol.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_add",
+    "severity": "moderate",
+    "recommended_action": "Provide enhanced adherence support, address side-effects, and repeat viral load in 2–3 months as per guideline.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_003",
+     "title": "Detectable viral load requires adherence support",
+     "message": "Guidelines state that for VL >50 copies/mL on DTG-based ART, clinicians should provide enhanced adherence support, address potential side-effects affecting adherence, and repeat VL in 2–3 months. The plan does not mention enhanced adherence counselling or a repeat VL timeline. Addressing the carbamazepine interaction is essential, but adherence support and follow-up VL are still required per protocol.",
+     "issue_type": "plan_add",
+     "severity": "moderate",
+     "recommended_action": "Provide enhanced adherence support, address side-effects, and repeat viral load in 2–3 months as per guideline.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_004",
+   "title": "Elevated ALT with hepatotoxic drugs",
+   "message": "ALT is 68 U/L, above normal. The patient is on both sodium valproate and carbamazepine, which are both known hepatotoxic agents. Either drug could be contributing. The recent carbamazepine initiation 2 weeks ago makes it a likely contributor. Non-drug causes such as viral hepatitis should also be considered. No LFT monitoring plan is documented.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor LFTs regularly while on dual antiepileptics. Investigate viral hepatitis if ALT persists or worsens.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX4_004",
+     "title": "Elevated ALT with hepatotoxic drugs",
+     "message": "ALT is 68 U/L, above normal. The patient is on both sodium valproate and carbamazepine, which are both known hepatotoxic agents. Either drug could be contributing. The recent carbamazepine initiation 2 weeks ago makes it a likely contributor. Non-drug causes such as viral hepatitis should also be considered. No LFT monitoring plan is documented.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor LFTs regularly while on dual antiepileptics. Investigate viral hepatitis if ALT persists or worsens.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX4_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+  ],
+  "EX4_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+  ],
+  "EX4_003": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "EX4_004": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX4_001\",\n    \"title\": \"Carbamazepine-DTG interaction causing viraemia\",\n    \"message\": \"Guidelines state carbamazepine decreases DTG levels by 30–70% and recommend using valproic acid instead. Carbamazepine was started 2 weeks ago, and the viral load rose from <50 to 1,240 copies/mL in that interval. The temporal relationship strongly supports drug attribution. The patient reports good adherence, further supporting the interaction as the cause. This interaction is directly dose-dependent and clinically significant.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Switch carbamazepine to valproic acid as per guideline recommendation, or consult neurology for alternative antiepileptic. Repeat viral load after adjustment.\",\n    \"citations\": [{\"page_number\": 49, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_002\",\n    \"title\": \"Carbamazepine toxicity with hyponatraemia\",\n    \"message\": \"Carbamazepine level is 14 mcg/mL, above the therapeutic range of 4–12. Symptoms include dizziness, ataxia, nystagmus, and tremor, all consistent with toxicity. Hyponatraemia at 128 mmol/L may also be carbamazepine-induced SIADH. The clinician plans dose reduction, which is appropriate. Sodium valproate is already prescribed and is the guideline-recommended alternative for seizure control in patients on DTG.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Reduce carbamazepine dose as planned, repeat level, and monitor sodium. Consider switching to valproic acid monotherapy to resolve both toxicity and the DTG interaction.\",\n    \"citations\": [{\"page_number\": 49, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_003\",\n    \"title\": \"Detectable viral load requires adherence support\",\n    \"message\": \"Guidelines state that for VL >50 copies/mL on DTG-based ART, clinicians should provide enhanced adherence support, address potential side-effects affecting adherence, and repeat VL in 2–3 months. The plan does not mention enhanced adherence counselling or a repeat VL timeline. Addressing the carbamazepine interaction is essential, but adherence support and follow-up VL are still required per protocol.\",\n    \"issue_type\": \"plan_add\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Provide enhanced adherence support, address side-effects, and repeat viral load in 2–3 months as per guideline.\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_004\",\n    \"title\": \"Elevated ALT with hepatotoxic drugs\",\n    \"message\": \"ALT is 68 U/L, above normal. The patient is on both sodium valproate and carbamazepine, which are both known hepatotoxic agents. Either drug could be contributing. The recent carbamazepine initiation 2 weeks ago makes it a likely contributor. Non-drug causes such as viral hepatitis should also be considered. No LFT monitoring plan is documented.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor LFTs regularly while on dual antiepileptics. Investigate viral hepatitis if ALT persists or worsens.\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p9_c2",
+    "page_number": 9,
+    "quote": "ivity, there is still limited evidence on the optimal DTG dose. Pending further data, we suggest such patients continue to receive DTG 12-hourly. TABLE 4: Key drug-drug interactions with dolutegravir. Drug Action required Rifampicin (RIF) Pending further data, for patients on DTG who have a history of virologic failure on a previous regimen, we suggest DTG be administered twice-daily (i.e. 50 mg 12-hourly) until 2 weeks after stopping RIF. For patients on DTG with no prior hi"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4",
+    "page_number": 40,
+    "quote": "FBC, full blood count; NVP, nevirapine; TC, total cholesterol; TG, triglycerides; VL, viral load. † These tests should also be done when clinically indicated, based on the discretion of the clinician. Common pitfall: Not monitoring the VL at least annually. If VL is not monitored, this can result in delayed detection of ART failure and required interventions resulting in clinical deterioration and increased risk of HIV transmission. 43 | Adult ART Guidelines 2023"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+    "page_number": 49,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Drug Family ARV Drug Interaction Action Anti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid Drugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole ATV/r Reduced con-centrations of Atazanavir Use alternatives like ranit-idine, cimetidine, etc. Polyvalent"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient's neurological symptoms and elevated ALT are attributable to carbamazepine toxicity rather than TDF/3TC/DTG, and creatinine is within acceptable range; however, detectable viral load requires adherence evaluation and DTG interaction assessment.\"},\"problems\":[{\"problem\":\"Carbamazepine toxicity with cerebellar signs (nystagmus, ataxia, tremor) and elevated ALT 68 U/L\",\"action\":\"Reduce carbamazepine dose as planned, repeat carbamazepine level, and monitor liver function tests (ALT/AST) to confirm toxicity resolution.\",\"reason\":\"Patient has horizontal nystagmus, wide-based gait, and tremor with carbamazepine level of 14 and mild ALT elevation, consistent with carbamazepine toxicity per pharmacovigilance principles in Uganda guidelines.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"Clinician correctly identified carbamazepine toxicity, planned dose reduction and repeat level, though ALT monitoring for hepatotoxicity should be added.\"}},{\"problem\":\"Detectable viral load (1,240 copies/mL) after prior suppression on TLD regimen\",\"action\":\"Conduct enhanced adherence counseling, assess for drug interactions (carbamazepine induces CYP3A4 and may reduce DTG levels), and repeat viral load in 2-3 months per Uganda guidelines.\",\"reason\":\"Patient was previously suppressed (<50 copies/mL) but now has low-level viremia of 1,240 copies/mL while on carbamazepine which can lower DTG concentrations via enzyme induction, and Uganda guidelines require adherence support and repeat viral load for detectable results.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician noted detectable viral load and was unsure of cause but did not address the potential DTG-carbamazepine interaction or plan enhanced adherence counseling and repeat viral load.\"}},{\"problem\":\"Potential DTG-carbamazepine drug interaction reducing ART efficacy\",\"action\":\"Consider switching carbamazepine to a non-enzyme-inducing antiepileptic (e.g., levetiracetam or valproate continuation) or adjust DTG dosing, and consult neurology for seizure management alternatives.\",\"reason\":\"Carbamazepine is a potent CYP3A4/UGT inducer that can significantly reduce dolutegravir plasma concentrations, potentially explaining the detectable viral load despite reported good adherence.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Clinician's plan does not mention the pharmacokinetic interaction between carbamazepine and DTG that may be contributing to virologic failure.\"}},{\"problem\":\"Pharmacovigilance reporting for adverse drug reaction\",\"action\":\"Submit an adverse drug reaction report to the national pharmacovigilance center for carbamazepine toxicity per Uganda guidelines Box 11.\",\"reason\":\"Uganda HIV guidelines Box 11 emphasize the importance of pharmacovigilance reporting for all adverse drug reactions including those from co-medications in HIV patients.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Clinician's plan does not include pharmacovigilance reporting for the carbamazepine adverse reaction.\"}},{\"problem\":\"TDF renal safety monitoring\",\"action\":\"Continue TDF with current creatinine 84 umol/L within acceptable range; monitor renal function at next scheduled visit.\",\"reason\":\"Patient's creatinine of 84 umol/L does not indicate TDF nephrotoxicity requiring regimen change, but ongoing monitoring is required per guidelines.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Clinician's plan does not mention TDF renal monitoring, though current renal function is acceptable.\"}}],\"monitoring_plan\":[\"Repeat carbamazepine level after dose reduction to confirm therapeutic range\",\"Monitor ALT/AST weekly until normalization to track carbamazepine hepatotoxicity resolution\",\"Repeat viral load in 2-3 months after adherence counseling and interaction management\",\"Monitor renal function (creatinine/eGFR) at next routine visit for TDF safety\"],\"patient_counselling\":[\"Counsel patient on carbamazepine toxicity symptoms and the importance of dose adherence after reduction\",\"Educate on the interaction between carbamazepine and DTG that may reduce HIV treatment effectiveness\",\"Reinforce ART adherence and schedule enhanced adherence counseling sessions\",\"Advise to report new or worsening neurological symptoms immediately\"]}",
+ "plan_issues": []
+}

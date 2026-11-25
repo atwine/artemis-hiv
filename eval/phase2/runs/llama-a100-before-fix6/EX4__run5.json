@@ -1,0 +1,177 @@
+{
+ "case_id": "EX4",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 27.8,
+ "calls": [
+  {
+   "prompt_tokens": 1803,
+   "total_tokens": 2200,
+   "completion_tokens": 397,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2601,
+   "total_tokens": 3054,
+   "completion_tokens": 453,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX4_001",
+   "title": "Carbamazepine Toxicity",
+   "message": "Guidelines warn of carbamazepine decreasing DTG levels. Patient shows carbamazepine level 14 mcg/mL, above therapeutic range, with symptoms of toxicity. DTG efficacy may be compromised.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Monitor DTG levels and viral load, consider alternative anti-epileptics",
+    "citations": [
+     {
+      "page_number": 49,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_001",
+     "title": "Carbamazepine Toxicity",
+     "message": "Guidelines warn of carbamazepine decreasing DTG levels. Patient shows carbamazepine level 14 mcg/mL, above therapeutic range, with symptoms of toxicity. DTG efficacy may be compromised.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Monitor DTG levels and viral load, consider alternative anti-epileptics",
+     "citations": [
+      {
+       "page_number": 49,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_002",
+   "title": "Viral Load Increase",
+   "message": "Viral load increased from <50 to 1240 copies/mL. Guidelines recommend checking adherence and addressing potential side-effects. Patient reports good adherence, but carbamazepine toxicity may affect DTG efficacy.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Enhanced adherence support, address potential side-effects, repeat VL in 2-3 months",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_002",
+     "title": "Viral Load Increase",
+     "message": "Viral load increased from <50 to 1240 copies/mL. Guidelines recommend checking adherence and addressing potential side-effects. Patient reports good adherence, but carbamazepine toxicity may affect DTG efficacy.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Enhanced adherence support, address potential side-effects, repeat VL in 2-3 months",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_003",
+   "title": "ALT Elevation",
+   "message": "ALT level is 68 U/L, which may indicate liver injury. Guidelines recommend monitoring liver function. Patient is on multiple medications, including DTG and carbamazepine, which may contribute to liver injury.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor liver function tests",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_003",
+     "title": "ALT Elevation",
+     "message": "ALT level is 68 U/L, which may indicate liver injury. Guidelines recommend monitoring liver function. Patient is on multiple medications, including DTG and carbamazepine, which may contribute to liver injury.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor liver function tests",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX4_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+  ],
+  "EX4_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "EX4_003": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX4_001\",\n    \"title\": \"Carbamazepine Toxicity\",\n    \"message\": \"Guidelines warn of carbamazepine decreasing DTG levels. Patient shows carbamazepine level 14 mcg/mL, above therapeutic range, with symptoms of toxicity. DTG efficacy may be compromised.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Monitor DTG levels and viral load, consider alternative anti-epileptics\",\n    \"citations\": [{\"page_number\": 49, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_002\",\n    \"title\": \"Viral Load Increase\",\n    \"message\": \"Viral load increased from <50 to 1240 copies/mL. Guidelines recommend checking adherence and addressing potential side-effects. Patient reports good adherence, but carbamazepine toxicity may affect DTG efficacy.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Enhanced adherence support, address potential side-effects, repeat VL in 2-3 months\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_003\",\n    \"title\": \"ALT Elevation\",\n    \"message\": \"ALT level is 68 U/L, which may indicate liver injury. Guidelines recommend monitoring liver function. Patient is on multiple medications, including DTG and carbamazepine, which may contribute to liver injury.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor liver function tests\",\n    \"citations\": [{\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p9_c2",
+    "page_number": 9,
+    "quote": "ivity, there is still limited evidence on the optimal DTG dose. Pending further data, we suggest such patients continue to receive DTG 12-hourly. TABLE 4: Key drug-drug interactions with dolutegravir. Drug Action required Rifampicin (RIF) Pending further data, for patients on DTG who have a history of virologic failure on a previous regimen, we suggest DTG be administered twice-daily (i.e. 50 mg 12-hourly) until 2 weeks after stopping RIF. For patients on DTG with no prior hi"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c4",
+    "page_number": 40,
+    "quote": "FBC, full blood count; NVP, nevirapine; TC, total cholesterol; TG, triglycerides; VL, viral load. † These tests should also be done when clinically indicated, based on the discretion of the clinician. Common pitfall: Not monitoring the VL at least annually. If VL is not monitored, this can result in delayed detection of ART failure and required interventions resulting in clinical deterioration and increased risk of HIV transmission. 43 | Adult ART Guidelines 2023"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+    "page_number": 49,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Drug Family ARV Drug Interaction Action Anti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid Drugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole ATV/r Reduced con-centrations of Atazanavir Use alternatives like ranit-idine, cimetidine, etc. Polyvalent"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: the provided guideline excerpts and patient data are not sufficient to determine if the current ART regimen is causing toxicity or if a change is needed\"}, \n\"problems\": [{\"problem\": \"Viral load increase\", \"action\": \"Investigate cause of viral load increase\", \"reason\": \"The patient's viral load is now detectable at 1,240 copies/mL despite reported good adherence\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan mentions the viral load increase but is unsure of the cause\"}}, \n{\"problem\": \"Potential drug interaction between carbamazepine and current ART regimen\", \"action\": \"Monitor for signs of toxicity and adjust medications as needed\", \"reason\": \"The patient is experiencing symptoms of carbamazepine toxicity and is also taking TDF, 3TC, and DTG\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan includes reducing the carbamazepine dose and repeating the level\"}}, \n{\"problem\": \"Neurological symptoms\", \"action\": \"Continue to monitor and adjust carbamazepine dose as needed\", \"reason\": \"The patient is experiencing headaches, dizziness, unsteady walking, and shaky hands\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan includes reducing the carbamazepine dose and repeating the level\"}}], \n\"monitoring_plan\": \"Repeat viral load, liver function tests (ALT), and creatinine levels in 3 months, and monitor for signs of toxicity\", \n\"patient_counselling\": [\"Adhere to the adjusted carbamazepine dose\", \"Report any changes in symptoms or side effects\", \"Importance of continued viral load monitoring\"]}",
+ "plan_issues": []
+}

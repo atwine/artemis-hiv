@@ -1,0 +1,205 @@
+{
+ "case_id": "P001",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 20.9,
+ "calls": [
+  {
+   "prompt_tokens": 2342,
+   "completion_tokens": 1000,
+   "total_tokens": 3342,
+   "cost": 0.0007342,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007342,
+    "upstream_inference_prompt_cost": 0.0002342,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2423,
+   "completion_tokens": 1000,
+   "total_tokens": 3423,
+   "cost": 0.0007423,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007423,
+    "upstream_inference_prompt_cost": 0.0002423,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3624,
+   "completion_tokens": 997,
+   "total_tokens": 4621,
+   "cost": 0.0008609,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008609,
+    "upstream_inference_prompt_cost": 0.0003624,
+    "upstream_inference_completions_cost": 0.0004985
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4091,
+   "completion_tokens": 409,
+   "total_tokens": 4500,
+   "cost": 0.0006136,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0006136,
+    "upstream_inference_prompt_cost": 0.0004091,
+    "upstream_inference_completions_cost": 0.0002045
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0029509999999999996,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P001_VL_MONITOR_001",
+   "title": "Viral load monitoring overdue on DTG-based regimen",
+   "message": "Guidelines state that patients on two NRTIs plus DTG should have viral load checked every 6 months, with 12-monthly testing only if VL is below 50 copies/mL for over one year with reliable adherence. The latest viral load of 40 copies/mL was recorded on 2025-10-01, 113 days before this visit, which is within the 6-month interval, so no monitoring gap is present. Creatinine was last recorded 478 days before the visit (2024-10-01), with no renal function monitoring documented since, while the patient remains on TDF, which requires periodic renal monitoring not captured in the excerpts provided.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Confirm the next viral load is scheduled within 6 months of 2025-10-01, and order an up-to-date creatinine and renal function check given the last value is over 15 months old while on TDF.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P001_VL_MONITOR_001",
+     "title": "Viral load monitoring overdue on DTG-based regimen",
+     "message": "Guidelines state that patients on two NRTIs plus DTG should have viral load checked every 6 months, with 12-monthly testing only if VL is below 50 copies/mL for over one year with reliable adherence. The latest viral load of 40 copies/mL was recorded on 2025-10-01, 113 days before this visit, which is within the 6-month interval, so no monitoring gap is present. Creatinine was last recorded 478 days before the visit (2024-10-01), with no renal function monitoring documented since, while the patient remains on TDF, which requires periodic renal monitoring not captured in the excerpts provided.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Confirm the next viral load is scheduled within 6 months of 2025-10-01, and order an up-to-date creatinine and renal function check given the last value is over 15 months old while on TDF.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p41_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3"
+  ],
+  "P001_VL_MONITOR_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"P001_VL_MONITOR_001\", \"title\": \"Viral load monitoring overdue on DTG-based regimen\", \"message\": \"Guidelines state that patients on two NRTIs plus DTG should have viral load checked every 6 months, with 12-monthly testing only if VL is below 50 copies/mL for over one year with reliable adherence. The latest viral load of 40 copies/mL was recorded on 2025-10-01, 113 days before this visit, which is within the 6-month interval, so no monitoring gap is present. Creatinine was last recorded 478 days before the visit (2024-10-01), with no renal function monitoring documented since, while the patient remains on TDF, which requires periodic renal monitoring not captured in the excerpts provided.\", \"issue_type\": \"monitoring_gap\", \"severity\": \"moderate\", \"recommended_action\": \"Confirm the next viral load is scheduled within 6 months of 2025-10-01, and order an up-to-date creatinine and renal function check given the last value is over 15 months old while on TDF.\", \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is well with no new complaints, reports good adherence, and viral load of 40 copies/mL on 2025-10-01 indicates suppression, so no toxicity-driven regimen change is supported by the excerpts.\"},\"problems\":[{\"problem\":\"Renal safety on TDF: last serum creatinine 88 umol/L is 478 days old with no current eGFR on record\",\"action\":\"Order serum creatinine and calculate eGFR today; add urinalysis for proteinuria if eGFR is reduced or the result is delayed.\",\"reason\":\"Uganda guidelines call for creatinine/eGFR monitoring on TDF, and the existing value is too old to confirm ongoing renal safety.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Plan states routine follow-up with no issues but does not order a current creatinine or eGFR.\"}},{\"problem\":\"Metabolic monitoring on DTG: no weight, glucose, or lipid data recorded\",\"action\":\"Record weight and BMI today; order fasting glucose or HbA1c and lipid profile if not done in the past year.\",\"reason\":\"The DTG screening excerpt supports checking for metabolic conditions such as diabetes, and no such data are on file for this patient.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Plan does not mention weight, glucose, or lipid monitoring.\"}},{\"problem\":\"Viral load monitoring interval: last VL 40 copies/mL on 2025-10-01 is 113 days before visit\",\"action\":\"Continue routine viral load monitoring at the scheduled interval; no toxicity-driven test is required.\",\"reason\":\"The excerpts support routine viral load monitoring on ART, and the suppressed result does not indicate toxicity-driven testing.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"Plan continues routine follow-up, which covers scheduled viral load monitoring.\"}}],\"monitoring_plan\":\"- Serum creatinine and eGFR today, then at least annually on TDF, or sooner if symptoms arise or eGFR falls.\\n- Urinalysis if eGFR is reduced or creatinine rises.\\n- Weight/BMI today and at each visit.\\n- Fasting glucose or HbA1c and lipid profile if not done in the past year.\\n- Viral load at the routine interval; repeat sooner if adherence changes or symptoms emerge.\\n- Report rash, jaundice, GI symptoms, or new neuropsychiatric symptoms promptly.\",\"patient_counselling\":[\"Blood tests today check kidney function on tenofovir; this is routine and not a sign of a problem by itself.\",\"Report new rash, yellow eyes or skin, nausea, or unusual tiredness promptly.\",\"Continue taking all medicines daily as prescribed and tell the clinic before stopping any medicine.\"]}",
+ "plan_issues": []
+}

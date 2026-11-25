@@ -1,0 +1,183 @@
+{
+ "case_id": "P002",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 26.5,
+ "calls": [
+  {
+   "prompt_tokens": 2442,
+   "completion_tokens": 1000,
+   "total_tokens": 3442,
+   "cost": 0.0007442,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007442,
+    "upstream_inference_prompt_cost": 0.0002442,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2523,
+   "completion_tokens": 1000,
+   "total_tokens": 3523,
+   "cost": 0.0007523,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007523,
+    "upstream_inference_prompt_cost": 0.0002523,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3726,
+   "completion_tokens": 976,
+   "total_tokens": 4702,
+   "cost": 0.0008606,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008606,
+    "upstream_inference_prompt_cost": 0.0003726,
+    "upstream_inference_completions_cost": 0.000488
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4172,
+   "completion_tokens": 406,
+   "total_tokens": 4578,
+   "cost": 0.0006202,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0006202,
+    "upstream_inference_prompt_cost": 0.0004172,
+    "upstream_inference_completions_cost": 0.000203
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0029773,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_VL_001",
+   "title": "Viral load monitoring interval exceeded on DTG-based ART",
+   "message": "Guidance for patients on two NRTIs plus DTG specifies viral load checks every 6 months, with reduction to 12-monthly only after VL below 50 copies/mL for over one year with reliable adherence. Patient P002 has had VL checks at 2024-09-15 (494 days before visit) and 2025-09-15 (129 days before visit), with no VL recorded since 2025-09-15 despite the 6-month interval being due. Viral load values are suppressed (30 and 20 copies/mL), so the regimen is not in question, but the monitoring schedule should be confirmed as current.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Confirm the 6-monthly viral load schedule is current; order viral load if the last test is overdue. Reduce to 12-monthly only if VL has been below 50 copies/mL for over one year with reliable adherence.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_VL_001",
+     "title": "Viral load monitoring interval exceeded on DTG-based ART",
+     "message": "Guidance for patients on two NRTIs plus DTG specifies viral load checks every 6 months, with reduction to 12-monthly only after VL below 50 copies/mL for over one year with reliable adherence. Patient P002 has had VL checks at 2024-09-15 (494 days before visit) and 2025-09-15 (129 days before visit), with no VL recorded since 2025-09-15 despite the 6-month interval being due. Viral load values are suppressed (30 and 20 copies/mL), so the regimen is not in question, but the monitoring schedule should be confirmed as current.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Confirm the 6-monthly viral load schedule is current; order viral load if the last test is overdue. Reduce to 12-monthly only if VL has been below 50 copies/mL for over one year with reliable adherence.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_VL_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"P002_VL_001\", \"title\": \"Viral load monitoring interval exceeded on DTG-based ART\", \"message\": \"Guidance for patients on two NRTIs plus DTG specifies viral load checks every 6 months, with reduction to 12-monthly only after VL below 50 copies/mL for over one year with reliable adherence. Patient P002 has had VL checks at 2024-09-15 (494 days before visit) and 2025-09-15 (129 days before visit), with no VL recorded since 2025-09-15 despite the 6-month interval being due. Viral load values are suppressed (30 and 20 copies/mL), so the regimen is not in question, but the monitoring schedule should be confirmed as current.\", \"issue_type\": \"monitoring_gap\", \"severity\": \"moderate\", \"recommended_action\": \"Confirm the 6-monthly viral load schedule is current; order viral load if the last test is overdue. Reduce to 12-monthly only if VL has been below 50 copies/mL for over one year with reliable adherence.\", \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient P002 is clinically stable on TDF/3TC/DTG since 2022 with no complaints, normal examination, suppressed viral load (20 copies/mL on 2025-09-15), and creatinine 76 umol/L on 2025-12-15, with no recorded toxicity signal; Uncertain: the provided excerpts do not state TDF renal or DTG toxicity monitoring thresholds.\"},\"problems\":[{\"problem\":\"Possible TDF-related renal toxicity (no current signal)\",\"action\":\"Order serum creatinine, eGFR, and urinalysis for proteinuria at the next scheduled lab draw and compare with the 2025-12-15 baseline of 76 umol/L.\",\"reason\":\"Stable creatinine on TDF supports continuation, but Uncertain: the excerpts do not specify the TDF renal monitoring interval.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The plan documents routine follow-up and stability but does not mention renal function or urinalysis monitoring.\"}},{\"problem\":\"Possible DTG-related weight gain or neuropsychiatric effects (no current signal)\",\"action\":\"Record weight and ask about sleep disturbance, mood change, or headache at each visit; no additional test unless symptoms appear.\",\"reason\":\"No complaints or abnormal findings are recorded, but Uncertain: the excerpts provide no DTG-specific toxicity thresholds.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The plan does not mention DTG side-effect screening.\"}},{\"problem\":\"Viral load monitoring overdue relative to last test\",\"action\":\"Order viral load now if the Uganda guideline interval has elapsed; last recorded value was 2025-09-15 (129 days before visit).\",\"reason\":\"The last viral load was 129 days ago and the excerpts do not state the exact interval, so Uncertain: schedule not specified in excerpts.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The plan does not mention viral load monitoring or ordering.\"}}],\"monitoring_plan\":\"- Serum creatinine, eGFR, and urinalysis at next scheduled lab draw (interval per clinic protocol; excerpt interval not stated).\\n- Viral load per Uganda guideline interval, given last test 2025-09-15.\\n- Weight and neuropsychiatric symptom check at each visit.\\n- Escalate to renal workup if creatinine rises above baseline or proteinuria is found.\",\"patient_counselling\":[\"Report new rash, persistent headache, sleep or mood change, or reduced urine output promptly.\",\"Continue daily adherence to TDF/3TC/DTG as prescribed.\",\"Discuss DSD eligibility and what changes would be needed if chosen.\"]}",
+ "plan_issues": []
+}

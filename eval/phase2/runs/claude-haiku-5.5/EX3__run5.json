@@ -1,0 +1,271 @@
+{
+ "case_id": "EX3",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 25.1,
+ "calls": [
+  {
+   "prompt_tokens": 3116,
+   "completion_tokens": 1000,
+   "total_tokens": 4116,
+   "cost": 0.0008116,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008116,
+    "upstream_inference_prompt_cost": 0.0003116,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3248,
+   "completion_tokens": 1000,
+   "total_tokens": 4248,
+   "cost": 0.0008248,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008248,
+    "upstream_inference_prompt_cost": 0.0003248,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4477,
+   "completion_tokens": 1000,
+   "total_tokens": 5477,
+   "cost": 0.0009477,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0009477,
+    "upstream_inference_prompt_cost": 0.0004477,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 5178,
+   "completion_tokens": 1276,
+   "total_tokens": 6454,
+   "cost": 0.0011558,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0011558,
+    "upstream_inference_prompt_cost": 0.0005178,
+    "upstream_inference_completions_cost": 0.000638
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0037399,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_001",
+   "title": "Probable Hypothyroidism Under-Treated and Levothyroxine Adherence Problem",
+   "message": "Patient on levothyroxine 50 mcg with TSH 12.4 mIU/L (target below 4.5) and low free T4, with clinical hypothyroid features (fatigue, cold intolerance, constipation, dry skin, periorbital puffiness, delayed reflex relaxation). The plan states to continue levothyroxine 50 mcg unchanged, without addressing the elevated TSH. The patient reports often forgetting the thyroid tablet, which likely contributes to inadequate replacement. Weight gain may partly reflect hypothyroidism rather than the ART regimen alone. Guideline excerpts supplied do not contain specific levothyroxine dosing thresholds, so dose adjustment should follow standard thyroid management guidance.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Address adherence barriers and review levothyroxine dose in light of TSH 12.4 mIU/L and low free T4 before attributing weight gain to DTG; reassess thyroid function after dose adjustment.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_001",
+     "title": "Probable Hypothyroidism Under-Treated and Levothyroxine Adherence Problem",
+     "message": "Patient on levothyroxine 50 mcg with TSH 12.4 mIU/L (target below 4.5) and low free T4, with clinical hypothyroid features (fatigue, cold intolerance, constipation, dry skin, periorbital puffiness, delayed reflex relaxation). The plan states to continue levothyroxine 50 mcg unchanged, without addressing the elevated TSH. The patient reports often forgetting the thyroid tablet, which likely contributes to inadequate replacement. Weight gain may partly reflect hypothyroidism rather than the ART regimen alone. Guideline excerpts supplied do not contain specific levothyroxine dosing thresholds, so dose adjustment should follow standard thyroid management guidance.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Address adherence barriers and review levothyroxine dose in light of TSH 12.4 mIU/L and low free T4 before attributing weight gain to DTG; reassess thyroid function after dose adjustment.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_002",
+   "title": "Proposed DTG Switch for Weight Gain Not Supported by Current Evidence",
+   "message": "Guidelines state that DTG-associated weight gain is not considered causal; the association may reflect less metabolic toxicity than older ART regimens. Weight gain of about 9 kg (BMI 33) is documented, but hypothyroidism is an unaddressed alternative explanation. Abnormal weight gain is listed as a recognised DTG adverse effect in the adverse-event reporting form, so it should be recorded and evaluated, though switching is not automatically indicated. Viral load was suppressed (<50 copies/mL) on 2025-11-10.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Do not switch DTG solely for weight gain before correcting hypothyroidism; document as possible adverse event and reassess weight after thyroid optimisation; if switching is considered, check viral load and adherence first.",
+    "citations": [
+     {
+      "page_number": 7,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 26,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_002",
+     "title": "Proposed DTG Switch for Weight Gain Not Supported by Current Evidence",
+     "message": "Guidelines state that DTG-associated weight gain is not considered causal; the association may reflect less metabolic toxicity than older ART regimens. Weight gain of about 9 kg (BMI 33) is documented, but hypothyroidism is an unaddressed alternative explanation. Abnormal weight gain is listed as a recognised DTG adverse effect in the adverse-event reporting form, so it should be recorded and evaluated, though switching is not automatically indicated. Viral load was suppressed (<50 copies/mL) on 2025-11-10.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Do not switch DTG solely for weight gain before correcting hypothyroidism; document as possible adverse event and reassess weight after thyroid optimisation; if switching is considered, check viral load and adherence first.",
+     "citations": [
+      {
+       "page_number": 7,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+      },
+      {
+       "page_number": 26,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+      },
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_003",
+   "title": "Hyperglycaemia Risk Screening Needed on DTG",
+   "message": "Guidelines recommend assessing hyperglycaemia risk for experienced clients transitioning to DTG; risk factors include age 30 or over and BMI 25 or more. This patient is 45 years old with BMI 33, so she has at least two risk factors. Fasting glucose today is 5.6 mmol/L, and the excerpts do not provide a confirmatory diagnostic threshold, so the result requires follow-up glucose assessment per the screening flowchart.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Complete hyperglycaemia screening per the DTG flowchart (check glucose as indicated by risk factors) and document the result; no such assessment is recorded in today's plan.",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_003",
+     "title": "Hyperglycaemia Risk Screening Needed on DTG",
+     "message": "Guidelines recommend assessing hyperglycaemia risk for experienced clients transitioning to DTG; risk factors include age 30 or over and BMI 25 or more. This patient is 45 years old with BMI 33, so she has at least two risk factors. Fasting glucose today is 5.6 mmol/L, and the excerpts do not provide a confirmatory diagnostic threshold, so the result requires follow-up glucose assessment per the screening flowchart.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Complete hyperglycaemia screening per the DTG flowchart (check glucose as indicated by risk factors) and document the result; no such assessment is recorded in today's plan.",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_001": [],
+  "EX3_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "EX3_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"EX3_001\", \"title\": \"Probable Hypothyroidism Under-Treated and Levothyroxine Adherence Problem\", \"message\": \"Patient on levothyroxine 50 mcg with TSH 12.4 mIU/L (target below 4.5) and low free T4, with clinical hypothyroid features (fatigue, cold intolerance, constipation, dry skin, periorbital puffiness, delayed reflex relaxation). The plan states to continue levothyroxine 50 mcg unchanged, without addressing the elevated TSH. The patient reports often forgetting the thyroid tablet, which likely contributes to inadequate replacement. Weight gain may partly reflect hypothyroidism rather than the ART regimen alone. Guideline excerpts supplied do not contain specific levothyroxine dosing thresholds, so dose adjustment should follow standard thyroid management guidance.\", \"issue_type\": \"plan_review\", \"severity\": \"high\", \"recommended_action\": \"Address adherence barriers and review levothyroxine dose in light of TSH 12.4 mIU/L and low free T4 before attributing weight gain to DTG; reassess thyroid function after dose adjustment.\", \"citations\": []}, {\"alert_id\": \"EX3_002\", \"title\": \"Proposed DTG Switch for Weight Gain Not Supported by Current Evidence\", \"message\": \"Guidelines state that DTG-associated weight gain is not considered causal; the association may reflect less metabolic toxicity than older ART regimens. Weight gain of about 9 kg (BMI 33) is documented, but hypothyroidism is an unaddressed alternative explanation. Abnormal weight gain is listed as a recognised DTG adverse effect in the adverse-event reporting form, so it should be recorded and evaluated, though switching is not automatically indicated. Viral load was suppressed (<50 copies/mL) on 2025-11-10.\", \"issue_type\": \"guideline_deviation\", \"severity\": \"moderate\", \"recommended_action\": \"Do not switch DTG solely for weight gain before correcting hypothyroidism; document as possible adverse event and reassess weight after thyroid optimisation; if switching is considered, check viral load and adherence first.\", \"citations\": [{\"page_number\": 7, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4\"}, {\"page_number\": 26, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1\"}, {\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]}, {\"alert_id\": \"EX3_003\", \"title\": \"Hyperglycaemia Risk Screening Needed on DTG\", \"message\": \"Guidelines recommend assessing hyperglycaemia risk for experienced clients transitioning to DTG; risk factors include age 30 or over and BMI 25 or more. This patient is 45 years old with BMI 33, so she has at least two risk factors. Fasting glucose today is 5.6 mmol/L, and the excerpts do not provide a confirmatory diagnostic threshold, so the result requires follow-up glucose assessment per the screening flowchart.\", \"issue_type\": \"monitoring_gap\", \"severity\": \"moderate\", \"recommended_action\": \"Complete hyperglycaemia screening per the DTG flowchart (check glucose as indicated by risk factors) and document the result; no such assessment is recorded in today's plan.\", \"citations\": [{\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+    "page_number": 7,
+    "quote": "te to better outcomes for both mother and child. 30-33 Therefore, as for all adults, DTG is recommended as first-line treatment for pregnant and breastfeeding women, and for women of reproductive age. Contrary to initial speculation that the integrase inhibitor class may cause weight gain, the association now appears not to be causal. Instead, the association may be the result of comparatively less metabolic toxicity than alternative older ART regimens (that impair weight gai"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Uncertain\",\"reason\":\"Uncertain: the provided excerpts are truncated and do not contain the specific Uganda guidance on DTG-associated weight gain or on switching criteria, and the weight gain here is more plausibly explained by hypothyroidism (cold intolerance, dry skin, periorbital puffiness, delayed ankle reflex relaxation, constipation, poor levothyroxine adherence) than by TLD.\"},\"problems\":[{\"problem\":\"Hypothyroidism with suboptimal control (likely under-replacement from levothyroxine non-adherence) as a probable contributor to weight gain and symptoms\",\"action\":\"Check TSH and free T4 today; reinforce daily levothyroxine adherence (e.g., linked to a daily routine, pill organiser, or reminder); reassess levothyroxine dose after TSH result.\",\"reason\":\"The patient reports forgetting levothyroxine and has clinical features of hypothyroidism (cold intolerance, dry skin, periorbital puffiness, delayed ankle reflex relaxation, constipation) that can cause weight gain, and the excerpts do not address this, so the thyroid link is inferred from clinical findings rather than guideline text. Uncertain: TSH is not in the provided labs and the guideline excerpts do not address thyroid testing.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The plan says to continue levothyroxine 50 mcg but does not check thyroid function, address adherence, or consider hypothyroidism as the cause of the weight gain.\"}},{\"problem\":\"Weight gain (9 kg over one year, BMI 33) on TLD: possible DTG-associated weight gain versus non-ART causes\",\"action\":\"Uncertain: the excerpts do not support a switch decision; do not switch from DTG on the basis of weight gain until thyroid status is corrected and reassessed, and review the Uganda guideline section on DTG weight gain and switching criteria.\",\"reason\":\"Uncertain: the provided excerpts do not include guidance on DTG-related weight gain or switching thresholds, and hypothyroidism is a likely confounder.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Disagree\",\"explanation\":\"The plan proposes considering a switch from DTG for weight gain now, before the thyroid cause has been evaluated and treated.\"}},{\"problem\":\"Metabolic screening: fasting glucose 5.6 mmol/L and dyslipidaemia (total cholesterol 6.4, LDL 4.2, triglycerides 2.3 mmol/L)\",\"action\":\"Repeat fasting glucose and lipids after thyroid correction; reassess cardiovascular risk and lifestyle counselling; if a switch is later considered, check drug-specific effects of any new agent on lipids and glucose.\",\"reason\":\"Patient facts show borderline fasting glucose and elevated lipids along\"}]}",
+ "plan_issues": [
+  "cut_off",
+  "missing_key:monitoring_plan",
+  "missing_key:patient_counselling",
+  "problem_2_missing_key:clinician_plan_for_this_problem",
+  "monitoring_plan_wrong_type",
+  "patient_counselling_not_list"
+ ]
+}

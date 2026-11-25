@@ -1,0 +1,242 @@
+{
+ "case_id": "MR-KS",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 27.8,
+ "calls": [
+  {
+   "prompt_tokens": 2215,
+   "total_tokens": 2553,
+   "completion_tokens": 338,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2933,
+   "total_tokens": 3429,
+   "completion_tokens": 496,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MRKS_001",
+   "title": "Renal Function Monitoring",
+   "message": "Guidelines recommend monitoring creatinine (eGFR) at 3 months, 6 months, and then 6-12 monthly for patients on TDF. Patient has been on TDF for 6 years, and latest creatinine level is within normal limits. However, patient has hypertension and occasionally misses amlodipine doses, which may impact renal function.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor creatinine (eGFR) levels regularly",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_001",
+     "title": "Renal Function Monitoring",
+     "message": "Guidelines recommend monitoring creatinine (eGFR) at 3 months, 6 months, and then 6-12 monthly for patients on TDF. Patient has been on TDF for 6 years, and latest creatinine level is within normal limits. However, patient has hypertension and occasionally misses amlodipine doses, which may impact renal function.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor creatinine (eGFR) levels regularly",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      },
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_002",
+   "title": "Hypertension Management",
+   "message": "Patient has sub-optimally controlled hypertension, with a BP of 146/94 mmHg. Guidelines recommend monitoring and managing hypertension to prevent cardiovascular risk. Patient occasionally misses amlodipine doses, which may contribute to uncontrolled hypertension.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Adhere to amlodipine regimen and monitor BP regularly",
+    "citations": [
+     {
+      "page_number": 45,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_002",
+     "title": "Hypertension Management",
+     "message": "Patient has sub-optimally controlled hypertension, with a BP of 146/94 mmHg. Guidelines recommend monitoring and managing hypertension to prevent cardiovascular risk. Patient occasionally misses amlodipine doses, which may contribute to uncontrolled hypertension.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Adhere to amlodipine regimen and monitor BP regularly",
+     "citations": [
+      {
+       "page_number": 45,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_003",
+   "title": "Musculoskeletal Back Pain",
+   "message": "Patient complains of chronic musculoskeletal back pain, likely occupational. Guidelines do not provide specific recommendations for managing back pain in HIV patients. However, patient is taking ibuprofen as needed, which may have gastrointestinal side effects.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "low",
+    "recommended_action": "Consider alternative pain management options",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "MRKS_003",
+     "title": "Musculoskeletal Back Pain",
+     "message": "Patient complains of chronic musculoskeletal back pain, likely occupational. Guidelines do not provide specific recommendations for managing back pain in HIV patients. However, patient is taking ibuprofen as needed, which may have gastrointestinal side effects.",
+     "issue_type": "information_gap",
+     "severity": "low",
+     "recommended_action": "Consider alternative pain management options",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p51_c4"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p52_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p30_c1"
+  ],
+  "MRKS_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "MRKS_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+  ],
+  "MRKS_003": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"MRKS_001\",\n    \"title\": \"Renal Function Monitoring\",\n    \"message\": \"Guidelines recommend monitoring creatinine (eGFR) at 3 months, 6 months, and then 6-12 monthly for patients on TDF. Patient has been on TDF for 6 years, and latest creatinine level is within normal limits. However, patient has hypertension and occasionally misses amlodipine doses, which may impact renal function.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor creatinine (eGFR) levels regularly\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"}, {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_002\",\n    \"title\": \"Hypertension Management\",\n    \"message\": \"Patient has sub-optimally controlled hypertension, with a BP of 146/94 mmHg. Guidelines recommend monitoring and managing hypertension to prevent cardiovascular risk. Patient occasionally misses amlodipine doses, which may contribute to uncontrolled hypertension.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Adhere to amlodipine regimen and monitor BP regularly\",\n    \"citations\": [{\"page_number\": 45, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_003\",\n    \"title\": \"Musculoskeletal Back Pain\",\n    \"message\": \"Patient complains of chronic musculoskeletal back pain, likely occupational. Guidelines do not provide specific recommendations for managing back pain in HIV patients. However, patient is taking ibuprofen as needed, which may have gastrointestinal side effects.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Consider alternative pain management options\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+    "page_number": 40,
+    "quote": "6-monthly At virological/clinical failure Can be stopped if CD4+ > 200 cells/µL and virologically suppressed. Repeat CD4+ if a patient returns to care after treatment interruption to guide management. ALT Yes No If baseline ALT is normal, routine monitoring of ALT is not required. If baseline ALT is abnormal or the patient is on other hepatotoxic drugs, continue to monitor Creatinine (eGFR) Yes At 3 months, 6 months and then 6-12 monthly Also at 1 and 2 months in high-risk pa"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+    "page_number": 5,
+    "quote": "frica, only co-formulated. ‡, Life-threatening reactions are indicated in **bold**. TABLE 2: Baseline investigations and monitoring required for nucleoside/nucleotide reverse transcriptase inhibitors. Generic name Monitoring required Comment Tenofovir disoproxil fumarate (TDF) eGFR before initiation, then at 3 months, 6 months, and then 6-12 monthly thereafter Avoid if eGFR < 50 mL/min/1.73m² In high-risk patients (particularly those with co-existent hypertension or diabetes)"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+    "page_number": 5,
+    "quote": "). Generic name Drug class Recommended dosage Common or severe ADR‡ Tenofovir disoproxil fumarate (TDF) NtRTI 300 mg daily Renal failure, tubular wasting syndrome, reduced bone mineral density, nausea Tenofovir alafenamide (TAF) NtRTI 25 mg daily Less renal failure and bone mineral reduction than TDF, but more weight gain and worse lipid profile Lamivudine (3TC) NRTI 150 mg 12-hourly or 300 mg daily Anaemia (pure red cell aplasia) (rare) Emtricitabine (FTC) NRTI 200 mg daily "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 45,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: guideline excerpts do not provide sufficient information to determine potential drug toxicity from current ART medications\"}, \n\"problems\": [{\"problem\": \"Chronic musculoskeletal back pain\", \"action\": \"Continue current management with PRN ibuprofen\", \"reason\": \"Patient's back pain is likely occupational and current management is appropriate\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician's plan already addresses this issue\"}}, \n{\"problem\": \"Sub-optimally controlled hypertension\", \"action\": \"Adhere to amlodipine and lifestyle modifications\", \"reason\": \"Patient's BP is 146/94 and they admit to occasionally missing amlodipine doses\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician's plan already addresses this issue\"}}, \n{\"problem\": \"Trace proteinuria\", \"action\": \"Monitor proteinuria and adjust antihypertensives as needed\", \"reason\": \"Trace proteinuria is noted on dipstick, likely secondary to hypertension\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician's plan already addresses this issue\"}}], \n\"monitoring_plan\": \"Monitor BP, proteinuria, and creatinine in 6 months\", \n\"patient_counselling\": [\"Adhere to amlodipine and lifestyle modifications to control hypertension\", \"Continue PRN ibuprofen for back pain\", \"Review side effects of medications with clinician\"]}",
+ "plan_issues": []
+}

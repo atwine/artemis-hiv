@@ -1,0 +1,403 @@
+{
+ "case_id": "MR-KS",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 4,
+ "temperature": null,
+ "seconds": 12.5,
+ "calls": [
+  {
+   "prompt_tokens": 2190,
+   "completion_tokens": 704,
+   "total_tokens": 2894,
+   "cost": 0.006247736,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.006247736,
+    "upstream_inference_prompt_cost": 0.002840376,
+    "upstream_inference_completions_cost": 0.00340736
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2934,
+   "completion_tokens": 1484,
+   "total_tokens": 4418,
+   "cost": 0.00402796,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2880,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00402796,
+    "upstream_inference_prompt_cost": 0.00043668,
+    "upstream_inference_completions_cost": 0.00359128
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.010275696,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "TDF_PHOSPHATE_LOW",
+   "title": "Low phosphate with TDF suggests tubular toxicity",
+   "message": "Guidelines list renal failure and tubular wasting syndrome as TDF adverse effects, and recommend eGFR monitoring at 3, 6, then 6–12 monthly intervals, with closer monitoring in high-risk patients including those with co-existent hypertension. Patient has serum phosphate 0.78 mmol/L and trace proteinuria on TDF for 6 years with hypertension. TDF can cause proximal tubular dysfunction leading to phosphate wasting and proteinuria. Against drug attribution: trace proteinuria may stem from uncontrolled hypertension, and phosphate was measured only once without baseline comparison. However, the combination of low phosphate, proteinuria, and TDF exposure warrants evaluation for tubulopathy.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Check eGFR, urinary phosphate, and consider renal tubular function assessment. If tubulopathy confirmed, consider switching TDF to TAF or alternative NRTI.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_PHOSPHATE_LOW",
+     "title": "Low phosphate with TDF suggests tubular toxicity",
+     "message": "Guidelines list renal failure and tubular wasting syndrome as TDF adverse effects, and recommend eGFR monitoring at 3, 6, then 6–12 monthly intervals, with closer monitoring in high-risk patients including those with co-existent hypertension. Patient has serum phosphate 0.78 mmol/L and trace proteinuria on TDF for 6 years with hypertension. TDF can cause proximal tubular dysfunction leading to phosphate wasting and proteinuria. Against drug attribution: trace proteinuria may stem from uncontrolled hypertension, and phosphate was measured only once without baseline comparison. However, the combination of low phosphate, proteinuria, and TDF exposure warrants evaluation for tubulopathy.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Check eGFR, urinary phosphate, and consider renal tubular function assessment. If tubulopathy confirmed, consider switching TDF to TAF or alternative NRTI.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      },
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "TDF_IBUPROFEN_NEPHROTOXICITY",
+   "title": "TDF plus NSAID increases renal risk",
+   "message": "Guidelines note TDF can cause renal failure and recommend eGFR monitoring, especially in high-risk patients with co-existent hypertension. Patient takes PRN ibuprofen alongside TDF and has hypertension with BP 146/94 and trace proteinuria today. Concurrent TDF and NSAID use compounds nephrotoxic risk through additive effects on renal tubular and haemodynamic function. The clinician's plan continues both TDF and PRN ibuprofen without flagging this interaction. Creatinine of 112 umol/L is within normal limits but represents a single snapshot; no trend data are available.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Counsel patient to minimise ibuprofen use; consider alternative analgesia. Monitor renal function more frequently given combined nephrotoxic risk.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_IBUPROFEN_NEPHROTOXICITY",
+     "title": "TDF plus NSAID increases renal risk",
+     "message": "Guidelines note TDF can cause renal failure and recommend eGFR monitoring, especially in high-risk patients with co-existent hypertension. Patient takes PRN ibuprofen alongside TDF and has hypertension with BP 146/94 and trace proteinuria today. Concurrent TDF and NSAID use compounds nephrotoxic risk through additive effects on renal tubular and haemodynamic function. The clinician's plan continues both TDF and PRN ibuprofen without flagging this interaction. Creatinine of 112 umol/L is within normal limits but represents a single snapshot; no trend data are available.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Counsel patient to minimise ibuprofen use; consider alternative analgesia. Monitor renal function more frequently given combined nephrotoxic risk.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "TDF_EGFR_MONITORING_GAP",
+   "title": "eGFR not documented despite TDF risk factors",
+   "message": "Guidelines require eGFR monitoring at 3 months, 6 months, then 6–12 monthly on TDF, with additional monitoring in high-risk patients including those with hypertension. Patient has been on TDF for 6 years and has hypertension, yet only serum creatinine is reported today without eGFR calculation. Trace proteinuria and low phosphate further elevate renal risk. The clinician's plan does not include eGFR assessment or enhanced renal monitoring. Creatinine alone may underestimate renal impairment, particularly in this higher-risk patient.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Calculate eGFR from today's creatinine. Given hypertension and proteinuria, schedule renal monitoring at least every 6 months including eGFR and urinalysis.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_EGFR_MONITORING_GAP",
+     "title": "eGFR not documented despite TDF risk factors",
+     "message": "Guidelines require eGFR monitoring at 3 months, 6 months, then 6–12 monthly on TDF, with additional monitoring in high-risk patients including those with hypertension. Patient has been on TDF for 6 years and has hypertension, yet only serum creatinine is reported today without eGFR calculation. Trace proteinuria and low phosphate further elevate renal risk. The clinician's plan does not include eGFR assessment or enhanced renal monitoring. Creatinine alone may underestimate renal impairment, particularly in this higher-risk patient.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Calculate eGFR from today's creatinine. Given hypertension and proteinuria, schedule renal monitoring at least every 6 months including eGFR and urinalysis.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      },
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EFV_LONGTERM_USE",
+   "title": "EFV after 6 years: consider neuropsychiatric review",
+   "message": "Guidelines list EFV as a current regimen component but do not explicitly address long-term EFV continuation thresholds. Patient has been on EFV for 6 years with viral suppression and CD4 of 540. He reports a heavy feeling in both thighs and stiff gait, which could reflect chronic EFV neuropsychiatric effects or peripheral neuropathy. Against drug attribution: symptoms are also consistent with occupational musculoskeletal strain from truck driving. No baseline neurological findings are documented for comparison. Many guidelines now prefer dolutegravir-based regimens over EFV for tolerability.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "moderate",
+    "recommended_action": "Assess for EFV-related neuropsychiatric symptoms and peripheral neuropathy. Consider regimen review for potential switch to a better-tolerated ARV.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EFV_LONGTERM_USE",
+     "title": "EFV after 6 years: consider neuropsychiatric review",
+     "message": "Guidelines list EFV as a current regimen component but do not explicitly address long-term EFV continuation thresholds. Patient has been on EFV for 6 years with viral suppression and CD4 of 540. He reports a heavy feeling in both thighs and stiff gait, which could reflect chronic EFV neuropsychiatric effects or peripheral neuropathy. Against drug attribution: symptoms are also consistent with occupational musculoskeletal strain from truck driving. No baseline neurological findings are documented for comparison. Many guidelines now prefer dolutegravir-based regimens over EFV for tolerability.",
+     "issue_type": "medication_safety",
+     "severity": "moderate",
+     "recommended_action": "Assess for EFV-related neuropsychiatric symptoms and peripheral neuropathy. Consider regimen review for potential switch to a better-tolerated ARV.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "PROTEINURIA_HYPERTENSION_TDF",
+   "title": "Trace proteinuria needs workup beyond hypertension",
+   "message": "Guidelines identify TDF as a cause of tubular wasting syndrome and renal failure, and recommend enhanced monitoring in high-risk patients with hypertension. Patient has trace proteinuria attributed solely to hypertension in the plan, but TDF-related tubular dysfunction is an alternative or contributing cause, especially given low phosphate. The plan does not include quantitative protein assessment or renal tubular evaluation. Distinguishing hypertensive nephropathy from TDF tubulopathy requires further investigation, as management differs significantly.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Order urine protein-to-creatinine ratio and renal tubular markers. If TDF tubulopathy suspected, consider switching to TAF or alternative.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "PROTEINURIA_HYPERTENSION_TDF",
+     "title": "Trace proteinuria needs workup beyond hypertension",
+     "message": "Guidelines identify TDF as a cause of tubular wasting syndrome and renal failure, and recommend enhanced monitoring in high-risk patients with hypertension. Patient has trace proteinuria attributed solely to hypertension in the plan, but TDF-related tubular dysfunction is an alternative or contributing cause, especially given low phosphate. The plan does not include quantitative protein assessment or renal tubular evaluation. Distinguishing hypertensive nephropathy from TDF tubulopathy requires further investigation, as management differs significantly.",
+     "issue_type": "plan_review",
+     "severity": "moderate",
+     "recommended_action": "Order urine protein-to-creatinine ratio and renal tubular markers. If TDF tubulopathy suspected, consider switching to TAF or alternative.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p51_c4"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p52_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p30_c1"
+  ],
+  "TDF_PHOSPHATE_LOW": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3"
+  ],
+  "TDF_IBUPROFEN_NEPHROTOXICITY": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+  ],
+  "TDF_EGFR_MONITORING_GAP": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3"
+  ],
+  "EFV_LONGTERM_USE": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3"
+  ],
+  "PROTEINURIA_HYPERTENSION_TDF": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"TDF_PHOSPHATE_LOW\",\n    \"title\": \"Low phosphate with TDF suggests tubular toxicity\",\n    \"message\": \"Guidelines list renal failure and tubular wasting syndrome as TDF adverse effects, and recommend eGFR monitoring at 3, 6, then 6–12 monthly intervals, with closer monitoring in high-risk patients including those with co-existent hypertension. Patient has serum phosphate 0.78 mmol/L and trace proteinuria on TDF for 6 years with hypertension. TDF can cause proximal tubular dysfunction leading to phosphate wasting and proteinuria. Against drug attribution: trace proteinuria may stem from uncontrolled hypertension, and phosphate was measured only once without baseline comparison. However, the combination of low phosphate, proteinuria, and TDF exposure warrants evaluation for tubulopathy.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Check eGFR, urinary phosphate, and consider renal tubular function assessment. If tubulopathy confirmed, consider switching TDF to TAF or alternative NRTI.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3\"},\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"},\n      {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"TDF_IBUPROFEN_NEPHROTOXICITY\",\n    \"title\": \"TDF plus NSAID increases renal risk\",\n    \"message\": \"Guidelines note TDF can cause renal failure and recommend eGFR monitoring, especially in high-risk patients with co-existent hypertension. Patient takes PRN ibuprofen alongside TDF and has hypertension with BP 146/94 and trace proteinuria today. Concurrent TDF and NSAID use compounds nephrotoxic risk through additive effects on renal tubular and haemodynamic function. The clinician's plan continues both TDF and PRN ibuprofen without flagging this interaction. Creatinine of 112 umol/L is within normal limits but represents a single snapshot; no trend data are available.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Counsel patient to minimise ibuprofen use; consider alternative analgesia. Monitor renal function more frequently given combined nephrotoxic risk.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3\"},\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"}\n    ]\n  },\n  {\n    \"alert_id\": \"TDF_EGFR_MONITORING_GAP\",\n    \"title\": \"eGFR not documented despite TDF risk factors\",\n    \"message\": \"Guidelines require eGFR monitoring at 3 months, 6 months, then 6–12 monthly on TDF, with additional monitoring in high-risk patients including those with hypertension. Patient has been on TDF for 6 years and has hypertension, yet only serum creatinine is reported today without eGFR calculation. Trace proteinuria and low phosphate further elevate renal risk. The clinician's plan does not include eGFR assessment or enhanced renal monitoring. Creatinine alone may underestimate renal impairment, particularly in this higher-risk patient.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Calculate eGFR from today's creatinine. Given hypertension and proteinuria, schedule renal monitoring at least every 6 months including eGFR and urinalysis.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"},\n      {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EFV_LONGTERM_USE\",\n    \"title\": \"EFV after 6 years: consider neuropsychiatric review\",\n    \"message\": \"Guidelines list EFV as a current regimen component but do not explicitly address long-term EFV continuation thresholds. Patient has been on EFV for 6 years with viral suppression and CD4 of 540. He reports a heavy feeling in both thighs and stiff gait, which could reflect chronic EFV neuropsychiatric effects or peripheral neuropathy. Against drug attribution: symptoms are also consistent with occupational musculoskeletal strain from truck driving. No baseline neurological findings are documented for comparison. Many guidelines now prefer dolutegravir-based regimens over EFV for tolerability.\",\n    \"issue_type\": \"medication_safety\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Assess for EFV-related neuropsychiatric symptoms and peripheral neuropathy. Consider regimen review for potential switch to a better-tolerated ARV.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"PROTEINURIA_HYPERTENSION_TDF\",\n    \"title\": \"Trace proteinuria needs workup beyond hypertension\",\n    \"message\": \"Guidelines identify TDF as a cause of tubular wasting syndrome and renal failure, and recommend enhanced monitoring in high-risk patients with hypertension. Patient has trace proteinuria attributed solely to hypertension in the plan, but TDF-related tubular dysfunction is an alternative or contributing cause, especially given low phosphate. The plan does not include quantitative protein assessment or renal tubular evaluation. Distinguishing hypertensive nephropathy from TDF tubulopathy requires further investigation, as management differs significantly.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order urine protein-to-creatinine ratio and renal tubular markers. If TDF tubulopathy suspected, consider switching to TAF or alternative.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3\"},\n      {\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+    "page_number": 40,
+    "quote": "6-monthly At virological/clinical failure Can be stopped if CD4+ > 200 cells/µL and virologically suppressed. Repeat CD4+ if a patient returns to care after treatment interruption to guide management. ALT Yes No If baseline ALT is normal, routine monitoring of ALT is not required. If baseline ALT is abnormal or the patient is on other hepatotoxic drugs, continue to monitor Creatinine (eGFR) Yes At 3 months, 6 months and then 6-12 monthly Also at 1 and 2 months in high-risk pa"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+    "page_number": 5,
+    "quote": "frica, only co-formulated. ‡, Life-threatening reactions are indicated in **bold**. TABLE 2: Baseline investigations and monitoring required for nucleoside/nucleotide reverse transcriptase inhibitors. Generic name Monitoring required Comment Tenofovir disoproxil fumarate (TDF) eGFR before initiation, then at 3 months, 6 months, and then 6-12 monthly thereafter Avoid if eGFR < 50 mL/min/1.73m² In high-risk patients (particularly those with co-existent hypertension or diabetes)"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+    "page_number": 5,
+    "quote": "). Generic name Drug class Recommended dosage Common or severe ADR‡ Tenofovir disoproxil fumarate (TDF) NtRTI 300 mg daily Renal failure, tubular wasting syndrome, reduced bone mineral density, nausea Tenofovir alafenamide (TAF) NtRTI 25 mg daily Less renal failure and bone mineral reduction than TDF, but more weight gain and worse lipid profile Lamivudine (3TC) NRTI 150 mg 12-hourly or 300 mg daily Anaemia (pure red cell aplasia) (rare) Emtricitabine (FTC) NRTI 200 mg daily "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 45,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is virologically suppressed (VL <50) and immunologically stable (CD4 540) on TDF/3TC/EFV with no clear guideline-supported evidence of ART toxicity requiring substitution.\"},\"problems\":[{\"problem\":\"TDF nephrotoxicity risk with trace proteinuria and creatinine 112 umol/L\",\"action\":\"Uncertain: provided guideline excerpts only cover hypertension medication side effects and do not address TDF renal toxicity monitoring or when to switch; unable to confirm guideline-based action.\",\"reason\":\"Uncertain: the provided excerpts do not contain TDF toxicity guidance, though trace proteinuria and creatinine 112 umol/L in a patient on TDF warrant renal monitoring per standard practice.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician attributes proteinuria to hypertension and notes creatinine is normal, but does not plan repeat renal monitoring or consider TDF contribution despite trace proteinuria.\"}},{\"problem\":\"Chronic back and thigh pain — possible TDF-related or EFV-related toxicity vs occupational\",\"action\":\"Uncertain: provided excerpts do not list TDF or EFV musculoskeletal or neurological side effects, so guideline-based confirmation or exclusion of drug toxicity cannot be done.\",\"reason\":\"Uncertain: the guideline excerpts only reference hypertension medication side effects and do not address ART-related musculoskeletal or neurological toxicity.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician attributes symptoms to occupational causes and plans PRN ibuprofen, but does not investigate potential ART-related toxicity such as TDF bone effects or EFV neuromuscular effects.\"}},{\"problem\":\"Uncontrolled hypertension (BP 146/94) with missed amlodipine doses\",\"action\":\"Reinforce amlodipine adherence counselling and consider dose escalation to 10 mg or addition of a second agent if BP remains elevated on follow-up.\",\"reason\":\"Patient has BP 146/94 with admitted missed doses of amlodipine while travelling, and guideline excerpts reference side effects of hypertension medicines.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"Clinician identified suboptimal BP control, counselled on adherence, refilled amlodipine, and encouraged lifestyle modifications.\"}},{\"problem\":\"Concurrent ibuprofen use with TDF and hypertension — renal risk\",\"action\":\"Limit ibuprofen to short courses and monitor renal function; consider alternative analgesia if persistent pain requires regular NSAIDs.\",\"reason\":\"Patient uses OTC ibuprofen for back pain while on TDF and has uncontrolled hypertension with trace proteinuria, increasing risk of renal injury.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician prescribed PRN ibuprofen without addressing the renal risk of NSAIDs combined with TDF and uncontrolled hypertension.\"}}],\"monitoring_plan\":\"Repeat creatinine and urine protein in 3 months; monitor BP at follow-up; repeat viral load per schedule; escalate hypertension therapy if BP remains above target.\",\"patient_counselling\":[\"Take amlodipine consistently every day, even while travelling; do not skip doses.\",\"Limit ibuprofen to occasional use only; prolonged use can harm your kidneys, especially with your current medications.\",\"Report any worsening back/thigh pain, new numbness, or changes in urination promptly.\",\"Keep all follow-up appointments for BP and kidney monitoring.\"]}",
+ "plan_issues": []
+}

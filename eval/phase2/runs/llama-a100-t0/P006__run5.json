@@ -1,0 +1,233 @@
+{
+ "case_id": "P006",
+ "model": "llama-a100-t0",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 5,
+ "temperature": 0.0,
+ "seconds": 30.9,
+ "calls": [
+  {
+   "prompt_tokens": 1448,
+   "total_tokens": 1777,
+   "completion_tokens": 329,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2240,
+   "total_tokens": 2865,
+   "completion_tokens": 625,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P006_001",
+   "title": "Elevated Creatinine Level",
+   "message": "Guidelines do not specify exact creatinine thresholds, but patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered. Patient's eGFR is 78 mL/min/1.73m2, which is within a relatively normal range.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor renal function and adjust TDF dose if necessary",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P006_001",
+     "title": "Elevated Creatinine Level",
+     "message": "Guidelines do not specify exact creatinine thresholds, but patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered. Patient's eGFR is 78 mL/min/1.73m2, which is within a relatively normal range.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor renal function and adjust TDF dose if necessary",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_002",
+   "title": "Viral Load Monitoring",
+   "message": "Guidelines recommend viral load monitoring at baseline, after 3 months of ART, and at delivery for pregnant women. Patient's viral load has decreased from 125,000 to 89 copies/mL, indicating a good response to ART.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue routine viral load monitoring",
+    "citations": [
+     {
+      "page_number": 49,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_002",
+     "title": "Viral Load Monitoring",
+     "message": "Guidelines recommend viral load monitoring at baseline, after 3 months of ART, and at delivery for pregnant women. Patient's viral load has decreased from 125,000 to 89 copies/mL, indicating a good response to ART.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue routine viral load monitoring",
+     "citations": [
+      {
+       "page_number": 49,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1"
+      },
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_003",
+   "title": "DTG Use in Pregnancy",
+   "message": "Guidelines state that women becoming pregnant while on DTG-based regimens should be maintained on the regimen. Patient is 22 weeks pregnant and on TDF/3TC/DTG, which is consistent with guidelines.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "low",
+    "recommended_action": "Continue current regimen",
+    "citations": [
+     {
+      "page_number": 50,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_003",
+     "title": "DTG Use in Pregnancy",
+     "message": "Guidelines state that women becoming pregnant while on DTG-based regimens should be maintained on the regimen. Patient is 22 weeks pregnant and on TDF/3TC/DTG, which is consistent with guidelines.",
+     "issue_type": "guideline_deviation",
+     "severity": "low",
+     "recommended_action": "Continue current regimen",
+     "citations": [
+      {
+       "page_number": 50,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_004",
+   "title": "Potential Drug Interaction",
+   "message": "Guidelines warn about potential interactions between DTG and divalent cation-containing medications, such as iron supplements. Patient is taking ferrous sulfate, which may interact with DTG.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "moderate",
+    "recommended_action": "Monitor for potential interactions and adjust medications if necessary",
+    "citations": [
+     {
+      "page_number": 48,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_004",
+     "title": "Potential Drug Interaction",
+     "message": "Guidelines warn about potential interactions between DTG and divalent cation-containing medications, such as iron supplements. Patient is taking ferrous sulfate, which may interact with DTG.",
+     "issue_type": "drug_interaction",
+     "severity": "moderate",
+     "recommended_action": "Monitor for potential interactions and adjust medications if necessary",
+     "citations": [
+      {
+       "page_number": 48,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "who_guidelines.extraction__who_guidelines.extraction__p30_c3"
+  ],
+  "P006_001": [],
+  "P006_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+  ],
+  "P006_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+  ],
+  "P006_004": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P006_001\",\n    \"title\": \"Elevated Creatinine Level\",\n    \"message\": \"Guidelines do not specify exact creatinine thresholds, but patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered. Patient's eGFR is 78 mL/min/1.73m2, which is within a relatively normal range.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor renal function and adjust TDF dose if necessary\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"P006_002\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend viral load monitoring at baseline, after 3 months of ART, and at delivery for pregnant women. Patient's viral load has decreased from 125,000 to 89 copies/mL, indicating a good response to ART.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue routine viral load monitoring\",\n    \"citations\": [{\"page_number\": 49, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1\"}, {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"}]\n  },\n  {\n    \"alert_id\": \"P006_003\",\n    \"title\": \"DTG Use in Pregnancy\",\n    \"message\": \"Guidelines state that women becoming pregnant while on DTG-based regimens should be maintained on the regimen. Patient is 22 weeks pregnant and on TDF/3TC/DTG, which is consistent with guidelines.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue current regimen\",\n    \"citations\": [{\"page_number\": 50, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\"}]\n  },\n  {\n    \"alert_id\": \"P006_004\",\n    \"title\": \"Potential Drug Interaction\",\n    \"message\": \"Guidelines warn about potential interactions between DTG and divalent cation-containing medications, such as iron supplements. Patient is taking ferrous sulfate, which may interact with DTG.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor for potential interactions and adjust medications if necessary\",\n    \"citations\": [{\"page_number\": 48, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+    "page_number": 49,
+    "quote": "TABLE 21: Timing of viral load monitoring during pregnancy, delivery and breastfeeding. Period ART initiation in pregnancy Already on ART at diagnosis of pregnancy Previously taken ART, not currently on treatment (ART interruption, ART for PMTCT) Newly diagnosed HIV infection during delivery or breastfeeding Antenatal VL at baseline and after 3 months of ART: if > 28 weeks' gestation, then repeat VL at delivery VL at first ANC visit VL at initiation of DTG-based regimen; repe"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+    "page_number": 48,
+    "quote": "etween DTG and divalent cation-containing medication in pregnancy, since pregnant women frequently receive iron or calcium supplements and/or magnesium-/aluminium- containing antacids (see module 17). Patients returning to care in pregnancy after interrupting a first-line NNRTI regimen or those exposed to previous VTP regimens should be put directly on a DTG-based regimen, rather than retrying an NNRTI-regimen (see also module 16). As per the current PMTCT guidelines, women n"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p64_c1",
+    "page_number": 64,
+    "quote": "The ACTG A5372 trial showed that DTG needs to be given twice daily for 28 days if co-administered with rifapentine. 137 Rifapentine also affects the metabolism of common ARV drugs most affected by CYP induction such as all protease inhibitors (PIs) including LPV/r, and some non-nucleoside reverse transcriptase inhibitors (NNRTIs), including nevirapine. 138 All patients receiving ART should be considered for TPT after having been screened for active TB using a symptom screen, "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: no information on potential drug toxicity or adverse effects from current regimen TDF, 3TC, DTG in provided guideline excerpts and patient data\"}, \"problems\": [{\"problem\": \"Potential drug toxicity from TDF\", \"action\": \"Uncertain: monitor renal function\", \"reason\": \"Uncertain: no clear guidance on TDF toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential TDF toxicity\"}}, {\"problem\": \"Potential drug toxicity from 3TC\", \"action\": \"Uncertain: monitor for liver enzyme elevations\", \"reason\": \"Uncertain: no clear guidance on 3TC toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential 3TC toxicity\"}}, {\"problem\": \"Potential drug toxicity from DTG\", \"action\": \"Uncertain: monitor for DTG-related adverse effects\", \"reason\": \"Uncertain: no clear guidance on DTG toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential DTG toxicity\"}}], \"monitoring_plan\": \"Monitor renal function, liver enzymes, and DTG-related adverse effects\", \"patient_counselling\": [\"Report any adverse effects to healthcare provider\", \"Adhere to prescribed regimen\", \"Attend follow-up appointments for monitoring\"]}",
+ "plan_issues": []
+}

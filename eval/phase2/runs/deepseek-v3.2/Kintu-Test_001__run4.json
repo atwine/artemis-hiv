@@ -1,0 +1,122 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 4,
+ "temperature": null,
+ "seconds": 15.2,
+ "calls": [
+  {
+   "prompt_tokens": 1538,
+   "completion_tokens": 527,
+   "total_tokens": 2065,
+   "cost": 0.000281036,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1472,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000281036,
+    "upstream_inference_prompt_cost": 5.9696e-05,
+    "upstream_inference_completions_cost": 0.00022134
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2370,
+   "completion_tokens": 2,
+   "total_tokens": 2372,
+   "cost": 0.00031744,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00031744,
+    "upstream_inference_prompt_cost": 0.00031668,
+    "upstream_inference_completions_cost": 7.6e-07
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.000598476,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+    "page_number": 8,
+    "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_empty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: The provided guideline excerpts are insufficient to determine if the weight gain and acanthosis nigricans are signs of DTG toxicity requiring a regimen switch.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Possible DTG-associated weight gain and metabolic changes\",\n      \"action\": \"Uncertain: Order fasting glucose, HbA1c, and lipid profile to assess for diabetes and dyslipidemia.\",\n      \"reason\": \"Uncertain: The guideline excerpts provided do not contain specific recommendations for evaluating weight gain and acanthosis nigricans in patients on DTG.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not address the patient's symptoms or examination findings.\"\n      }\n    },\n    {\n      \"problem\": \"Obesity and elevated cardiovascular risk\",\n      \"action\": \"Uncertain: Counsel on diet and exercise, and consider referral for weight management.\",\n      \"reason\": \"Uncertain: The guideline excerpts provided do not contain specific management steps for obesity or cardiovascular risk in patients with HIV.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not address the patient's elevated BMI, waist circumference, or blood pressure.\"\n      }\n    },\n    {\n      \"problem\": \"Incomplete clinical assessment and plan\",\n      \"action\": \"Complete a full assessment and documented management plan addressing the patient's symptoms and examination findings.\",\n      \"reason\": \"The clinician's assessment and plan for today is documented as 'none written', which is a gap in care.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written', so the problem of an incomplete assessment is not addressed.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order fasting glucose, HbA1c, and lipid profile. Monitor weight, BMI, waist circumference, and blood pressure at each visit.\",\n  \"patient_counselling\": [\"Discuss healthy diet and increased physical activity for weight management.\", \"Explain the need for tests to check blood sugar and cholesterol levels.\", \"Advise on regular follow-up to monitor weight and metabolic health.\"]\n}",
+ "plan_issues": []
+}

@@ -1,0 +1,140 @@
+{
+ "case_id": "EX2",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 22.2,
+ "calls": [
+  {
+   "prompt_tokens": 1705,
+   "total_tokens": 2043,
+   "completion_tokens": 338,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2589,
+   "total_tokens": 2928,
+   "completion_tokens": 339,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_001",
+   "title": "Acute Kidney Injury",
+   "message": "Guidelines state to check creatinine in patients on TDF admitted to hospital, especially with dehydration or sepsis. Patient has severe gastroenteritis with dehydration and acute kidney injury (creatinine 2.4, was 0.9). TDF may be a contributing factor, but dehydration and sepsis are also likely causes.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Monitor creatinine and adjust TDF as needed",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_001",
+     "title": "Acute Kidney Injury",
+     "message": "Guidelines state to check creatinine in patients on TDF admitted to hospital, especially with dehydration or sepsis. Patient has severe gastroenteritis with dehydration and acute kidney injury (creatinine 2.4, was 0.9). TDF may be a contributing factor, but dehydration and sepsis are also likely causes.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Monitor creatinine and adjust TDF as needed",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_002",
+   "title": "Renal Impairment Management",
+   "message": "Guidelines recommend alternative regimens for patients with renal impairment. Patient has acute kidney injury, and the clinician is considering stopping TDF. Alternative regimens such as ABC + 3TC + DTG or TAF + 3TC + DTG may be suitable.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Consider alternative regimens for renal impairment",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_002",
+     "title": "Renal Impairment Management",
+     "message": "Guidelines recommend alternative regimens for patients with renal impairment. Patient has acute kidney injury, and the clinician is considering stopping TDF. Alternative regimens such as ABC + 3TC + DTG or TAF + 3TC + DTG may be suitable.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Consider alternative regimens for renal impairment",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "EX2_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_001\",\n    \"title\": \"Acute Kidney Injury\",\n    \"message\": \"Guidelines state to check creatinine in patients on TDF admitted to hospital, especially with dehydration or sepsis. Patient has severe gastroenteritis with dehydration and acute kidney injury (creatinine 2.4, was 0.9). TDF may be a contributing factor, but dehydration and sepsis are also likely causes.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Monitor creatinine and adjust TDF as needed\",\n    \"citations\": [{\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"}]\n  },\n  {\n    \"alert_id\": \"EX2_002\",\n    \"title\": \"Renal Impairment Management\",\n    \"message\": \"Guidelines recommend alternative regimens for patients with renal impairment. Patient has acute kidney injury, and the clinician is considering stopping TDF. Alternative regimens such as ABC + 3TC + DTG or TAF + 3TC + DTG may be suitable.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Consider alternative regimens for renal impairment\",\n    \"citations\": [{\"page_number\": 29, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p1_c1",
+    "page_number": 1,
+    "quote": "# ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal meningitis CrAg: cryptococcal antigen CrCl: creatinine clearance CSF: cerebrospinal fluid CTX: cotrimoxazole CVS: cardiovascular d"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+    "page_number": 29,
+    "quote": "TABLE 12: Recommended alternative initial antiretroviral therapy regimens in specific clinical situations where TDF + 3TC (or FTC) + DTG cannot be used. Scenario Alternative regimen Renal impairment at baseline (eGFR < 50 mL/min/1.73m²) ABC + 3TC + DTG or TAF + 3TC + DTG if eGFR 30-50 mL/min/1.73m² Renal impairment develops due to TDF ABC + 3TC + DTG Patient is intolerant of DTG side-effects TDF + 3TC (or FTC) + EFV, or TDF + 3TC (or FTC) + RPV Pure red cell aplasia develops "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p38_c1",
+    "page_number": 38,
+    "quote": "Flowchart: - Start: - Confirmed virological failure on LPV/r or ATV/r second-line regimen and - Resistance to current PI (Stanford score > 14) and - No prior DTG failure - Decision/Branch 1 (from Start): - Path 1 (left): - DRV susceptible (Stanford score <= 15), or - DRV high level resistance (Stanford score >=60). - Path 2 (right): - DRV low- or intermediate-level resistance (Stanford score 15-59) - Action/Branch 1 (from Path 1): - Switch to TLD* - *If renal impairment or pr"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+    "page_number": 7,
+    "quote": "Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Continue routine creatinine monitoring Creatinine rise 20-30 μmol/L Likely DTG-related. Leave on current regimen. Check creatinine in 1"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Hold temporarily\", \"reason\": \"Patient has acute kidney injury with creatinine 2.4, which may be exacerbated by TDF, as per Uganda HIV guidelines\"}, \n\"problems\": [{\"problem\": \"Acute kidney injury\", \"action\": \"Stop TDF temporarily and monitor creatinine levels\", \"reason\": \"TDF may be contributing to kidney injury, as indicated by elevated creatinine levels\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician is considering stopping TDF permanently due to kidney injury\"}}, \n{\"problem\": \"Severe gastroenteritis with dehydration\", \"action\": \"Continue IV fluid resuscitation and empiric antibiotics\", \"reason\": \"Patient is showing signs of severe dehydration and gastroenteritis, requiring immediate treatment\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician's plan includes IV fluid resuscitation and empiric antibiotics\"}}, \n{\"problem\": \"Viral load suppression\", \"action\": \"Monitor viral load\", \"reason\": \"Patient's viral load was suppressed at the last measurement, but current regimen may be affected by kidney injury\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Clinician's plan does not mention viral load monitoring\"}}], \n\"monitoring_plan\": \"Monitor creatinine levels, viral load, and adjust treatment plan as needed\", \n\"patient_counselling\": [\"Adhere to treatment plan\", \"Monitor for signs of kidney injury\", \"Return for follow-up appointments\"]}",
+ "plan_issues": []
+}

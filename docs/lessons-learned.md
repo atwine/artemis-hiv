@@ -232,3 +232,32 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Caught by: the end-of-phase rerun itself, and a review that read the scripts outside the diff.
 - Fix: 1.Z. A test now runs the baseline script on one patient, and another checks the demo's
   call against the function it calls.
+
+**24. A reply format fixes what an instruction can't.**
+- Example: the prompt told the model to leave citations empty when no passage supported an
+  alert, yet Llama kept citing a made-up "information_gap" passage: 12 of its 144 citations named
+  nothing it had been shown. In the AfriMed-QA quiz, "reply with only the option key" got a
+  sentence from Claude 1 time in 3.
+- Caught by: counting citations against the passages each run was shown, and reading the quiz
+  replies that could not be scored.
+- Fix: Phase 2, steps 6 and 8. The reply format lists the allowed values (the ids of the passages
+  shown; the question's own option keys), so a server that follows the format can't produce
+  anything else. Citations to passages shown went from 92% to 100%.
+
+**25. A reply limit sized for one model cuts off another.**
+- Example: the app allows 1,600 tokens for the alert list and 1,000 for the plan, set when Llama
+  was the only model; its longest reply in 110 checks was 769. Claude Sonnet 5.5 can't switch
+  its thinking off and spent 877 tokens thinking, so its alert list was cut off. Claude Sonnet 5
+  with thinking off filled all 1,600 too.
+- Caught by: one trial check per model before the paid runs, reading the finish reason and the
+  token counts of every call, not only whether alerts came back.
+- Fix: Phase 2 used models that fit (owner's pick). The limits go on the rebuild list.
+
+**26. Word rules reward long answers.**
+- Example: Phase 2 matched alerts to the answer key by words in the whole alert. GLM's alerts ran
+  a median 96 words, Llama's 40. On the dehydration case, long alerts tripped "blames TDF" by
+  quoting the guideline's condition ("if renal impairment develops due to TDF") while saying the
+  cause was dehydration. The same length earns extra credit when counting catches.
+- Caught by: reading every "must not" hit in context before reporting the count.
+- Fix: the write-up gives the word-rule count beside a hand reading. The doctor's check of the
+  matches in Phase 7 replaces both.

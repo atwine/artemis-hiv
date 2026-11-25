@@ -1,0 +1,243 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 13.4,
+ "calls": [
+  {
+   "prompt_tokens": 1519,
+   "completion_tokens": 839,
+   "total_tokens": 2358,
+   "cost": 0.00224385,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1024,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00224385,
+    "upstream_inference_prompt_cost": 0.00023025,
+    "upstream_inference_completions_cost": 0.0020136
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2388,
+   "completion_tokens": 821,
+   "total_tokens": 3209,
+   "cost": 0.00233074,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2368,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00233074,
+    "upstream_inference_prompt_cost": 0.00034392,
+    "upstream_inference_completions_cost": 0.00198682
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00457459,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "DTG_WEIGHT_GAIN_METABOLIC_001",
+   "title": "DTG-associated weight gain and metabolic syndrome",
+   "message": "Guidelines state weight gain should be discussed when starting all ART regimens, with proactive diet and exercise advice, as obesity is an increasing problem particularly among women. Patient gained 17kg (65→82kg) and BMI rose from 25.6→32.4 within 18 months of switching to DTG. Acanthosis nigricans, elevated BP (138/88), impaired fasting glucose (118 mg/dL), pre-diabetic HbA1c (6.1%), and dyslipidemia now present. DTG is strongly associated with weight gain; switching from EFV may have unmasked weight gain previously suppressed by EFV. Family history of Type 2 Diabetes compounds risk. Non-drug contributors include diet and physical inactivity. No clinician assessment or plan was documented today.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Provide diet and exercise counselling. Consider glucose monitoring every 3 months. Evaluate for diabetes intervention. Document assessment and management plan.",
+    "citations": [
+     {
+      "page_number": 8,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "DTG_WEIGHT_GAIN_METABOLIC_001",
+     "title": "DTG-associated weight gain and metabolic syndrome",
+     "message": "Guidelines state weight gain should be discussed when starting all ART regimens, with proactive diet and exercise advice, as obesity is an increasing problem particularly among women. Patient gained 17kg (65→82kg) and BMI rose from 25.6→32.4 within 18 months of switching to DTG. Acanthosis nigricans, elevated BP (138/88), impaired fasting glucose (118 mg/dL), pre-diabetic HbA1c (6.1%), and dyslipidemia now present. DTG is strongly associated with weight gain; switching from EFV may have unmasked weight gain previously suppressed by EFV. Family history of Type 2 Diabetes compounds risk. Non-drug contributors include diet and physical inactivity. No clinician assessment or plan was documented today.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Provide diet and exercise counselling. Consider glucose monitoring every 3 months. Evaluate for diabetes intervention. Document assessment and management plan.",
+     "citations": [
+      {
+       "page_number": 8,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "DTG_GLUCOSE_MONITORING_GAP_002",
+   "title": "Missing DTG glucose monitoring per guideline",
+   "message": "Guidelines specify glucose monitoring every 3 months for the first year when transitioning to DTG. Patient transitioned to DTG 18 months ago; no record of quarterly glucose monitoring exists in available data. Current fasting glucose is 118 mg/dL (impaired) and HbA1c 6.1% (pre-diabetic), confirming that glucose dysregulation has developed. The monitoring gap means deterioration may have gone undetected earlier. Family history of Type 2 Diabetes further increases risk.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Initiate regular glucose and HbA1c monitoring at least every 3-6 months given pre-diabetic status and ongoing DTG use.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "DTG_GLUCOSE_MONITORING_GAP_002",
+     "title": "Missing DTG glucose monitoring per guideline",
+     "message": "Guidelines specify glucose monitoring every 3 months for the first year when transitioning to DTG. Patient transitioned to DTG 18 months ago; no record of quarterly glucose monitoring exists in available data. Current fasting glucose is 118 mg/dL (impaired) and HbA1c 6.1% (pre-diabetic), confirming that glucose dysregulation has developed. The monitoring gap means deterioration may have gone undetected earlier. Family history of Type 2 Diabetes further increases risk.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Initiate regular glucose and HbA1c monitoring at least every 3-6 months given pre-diabetic status and ongoing DTG use.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MISSING_CLINICIAN_PLAN_003",
+   "title": "No assessment or plan documented for abnormal findings",
+   "message": "Patient presents with significant weight gain (17kg in 18 months), new hypertension-range BP (138/88 mmHg), impaired fasting glucose, pre-diabetic HbA1c, and atherogenic dyslipidemia (LDL 148, HDL 38, triglycerides 212). No clinician assessment or plan was documented for this visit. Guidelines emphasise proactive management of weight gain including diet and exercise advice. The combination of obesity, pre-diabetes, hypertension, and dyslipidemia constitutes metabolic syndrome requiring coordinated intervention.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_gap",
+    "severity": "high",
+    "recommended_action": "Document assessment addressing weight gain, BP, glucose, and lipids. Initiate lifestyle counselling and pharmacologic intervention as indicated.",
+    "citations": [
+     {
+      "page_number": 8,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MISSING_CLINICIAN_PLAN_003",
+     "title": "No assessment or plan documented for abnormal findings",
+     "message": "Patient presents with significant weight gain (17kg in 18 months), new hypertension-range BP (138/88 mmHg), impaired fasting glucose, pre-diabetic HbA1c, and atherogenic dyslipidemia (LDL 148, HDL 38, triglycerides 212). No clinician assessment or plan was documented for this visit. Guidelines emphasise proactive management of weight gain including diet and exercise advice. The combination of obesity, pre-diabetes, hypertension, and dyslipidemia constitutes metabolic syndrome requiring coordinated intervention.",
+     "issue_type": "plan_gap",
+     "severity": "high",
+     "recommended_action": "Document assessment addressing weight gain, BP, glucose, and lipids. Initiate lifestyle counselling and pharmacologic intervention as indicated.",
+     "citations": [
+      {
+       "page_number": 8,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1"
+  ],
+  "DTG_WEIGHT_GAIN_METABOLIC_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "DTG_GLUCOSE_MONITORING_GAP_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "MISSING_CLINICIAN_PLAN_003": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"DTG_WEIGHT_GAIN_METABOLIC_001\",\n    \"title\": \"DTG-associated weight gain and metabolic syndrome\",\n    \"message\": \"Guidelines state weight gain should be discussed when starting all ART regimens, with proactive diet and exercise advice, as obesity is an increasing problem particularly among women. Patient gained 17kg (65→82kg) and BMI rose from 25.6→32.4 within 18 months of switching to DTG. Acanthosis nigricans, elevated BP (138/88), impaired fasting glucose (118 mg/dL), pre-diabetic HbA1c (6.1%), and dyslipidemia now present. DTG is strongly associated with weight gain; switching from EFV may have unmasked weight gain previously suppressed by EFV. Family history of Type 2 Diabetes compounds risk. Non-drug contributors include diet and physical inactivity. No clinician assessment or plan was documented today.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Provide diet and exercise counselling. Consider glucose monitoring every 3 months. Evaluate for diabetes intervention. Document assessment and management plan.\",\n    \"citations\": [\n      {\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"},\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"DTG_GLUCOSE_MONITORING_GAP_002\",\n    \"title\": \"Missing DTG glucose monitoring per guideline\",\n    \"message\": \"Guidelines specify glucose monitoring every 3 months for the first year when transitioning to DTG. Patient transitioned to DTG 18 months ago; no record of quarterly glucose monitoring exists in available data. Current fasting glucose is 118 mg/dL (impaired) and HbA1c 6.1% (pre-diabetic), confirming that glucose dysregulation has developed. The monitoring gap means deterioration may have gone undetected earlier. Family history of Type 2 Diabetes further increases risk.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Initiate regular glucose and HbA1c monitoring at least every 3-6 months given pre-diabetic status and ongoing DTG use.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"MISSING_CLINICIAN_PLAN_003\",\n    \"title\": \"No assessment or plan documented for abnormal findings\",\n    \"message\": \"Patient presents with significant weight gain (17kg in 18 months), new hypertension-range BP (138/88 mmHg), impaired fasting glucose, pre-diabetic HbA1c, and atherogenic dyslipidemia (LDL 148, HDL 38, triglycerides 212). No clinician assessment or plan was documented for this visit. Guidelines emphasise proactive management of weight gain including diet and exercise advice. The combination of obesity, pre-diabetes, hypertension, and dyslipidemia constitutes metabolic syndrome requiring coordinated intervention.\",\n    \"issue_type\": \"plan_gap\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Document assessment addressing weight gain, BP, glucose, and lipids. Initiate lifestyle counselling and pharmacologic intervention as indicated.\",\n    \"citations\": [\n      {\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+    "page_number": 8,
+    "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: The provided guideline excerpts do not contain specific content on DTG-related weight gain or metabolic toxicity management, so a regimen switch cannot be justified from the excerpts alone.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Significant weight gain and possible metabolic syndrome on DTG-based regimen (17 kg gain in 18 months, BMI 32.4, acanthosis nigricans, BP elevation)\",\n      \"action\": \"Uncertain: The guideline excerpts provided do not contain specific recommendations for managing DTG-associated weight gain or metabolic changes; clinician should refer to full Uganda HIV guidelines sections on ART toxicity and DTG switching.\",\n      \"reason\": \"Uncertain: Patient gained 17 kg and developed acanthosis nigricans and elevated BP since switching to TLD 18 months ago, but the provided excerpts lack DTG toxicity management guidance.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No assessment or plan was documented for this visit.\"\n      }\n    },\n    {\n      \"problem\": \"Possible insulin resistance or prediabetes given acanthosis nigricans, obesity, family history of Type 2 Diabetes, and baseline fasting glucose of 92 mg/dL\",\n      \"action\": \"Order fasting blood glucose and HbA1c to screen for prediabetes/diabetes.\",\n      \"reason\": \"Patient has acanthosis nigricans, BMI 32.4, strong family history of Type 2 Diabetes, and fatigue, all of which warrant diabetes screening per standard clinical practice.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No lab orders or metabolic screening were documented.\"\n      }\n    },\n    {\n      \"problem\": \"New-onset elevated blood pressure (138/88 mmHg) compared to baseline 118/74 mmHg\",\n      \"action\": \"Repeat blood pressure measurement and evaluate for hypertension; consider lifestyle counseling and follow-up.\",\n      \"reason\": \"Patient's BP has risen from 118/74 to 138/88 mmHg, meeting criteria for elevated/stage 1 hypertension, and no plan addresses this.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No BP follow-up or hypertension evaluation was documented.\"\n      }\n    },\n    {\n      \"problem\": \"Fatigue with possible underlying causes including anemia, thyroid dysfunction, or metabolic disorder\",\n      \"action\": \"Order CBC and TSH to evaluate fatigue; correlate with fasting glucose results.\",\n      \"reason\": \"Patient reports new-onset fatigue with significant weight gain and metabolic changes, requiring laboratory workup to identify the cause.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No workup for fatigue was documented.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": [\n    \"Fasting blood glucose and HbA1c now; repeat annually if normal\",\n    \"Blood pressure recheck within 2-4 weeks to confirm hypertension\",\n    \"CBC and TSH now to evaluate fatigue\",\n    \"Renal function (creatinine/eGFR) and urinalysis to assess TDF safety given metabolic risk\",\n    \"Repeat weight, BMI, and waist circumference at next visit to track trend\"\n  ],\n  \"patient_counselling\": [\n    \"Counsel on dietary modifications and physical activity to address weight gain and metabolic risk\",\n    \"Inform patient that DTG can be associated with weight gain and that alternative regimens may be considered if metabolic complications are confirmed\",\n    \"Educate on signs of hyperglycemia (excessive thirst, urination, fatigue) given family history and acanthosis nigricans\",\n    \"Advise on home blood pressure monitoring if possible and salt reduction in diet\"\n  ]\n}",
+ "plan_issues": []
+}
