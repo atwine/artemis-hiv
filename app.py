@@ -22,7 +22,6 @@ from artemis.rules.checks import Alert
 from modules.embedder import Embedder, EmbedderConfig
 from modules.explanation_generator import ExplanationResult
 
-import html
 
 from modules.llm_client import (
     OllamaClient,
@@ -36,6 +35,8 @@ from modules.vector_store import VectorSearchResult, create_vector_store
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
+from artemis.plan.plan_json import parse_plan
+from artemis.plan.view import plan_html, read_plan
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
@@ -1179,187 +1180,18 @@ def main() -> None:
                     updated_plan_text = None
 
                 if isinstance(updated_plan_text, str) and updated_plan_text.strip():
-                    # Rationale: per clinician preference, hide the plan section unless we can
-                    # render a clean, readable plan.
-                    obj = None
-                    plan_html_text = None
-                    try:
-                        # Rationale: same robust JSON extraction as the standalone expander.
-                        _raw2 = updated_plan_text.strip()
-                        if _raw2.startswith("```"):
-                            _lines2 = _raw2.splitlines()
-                            if _lines2[0].strip().startswith("```"):
-                                _lines2 = _lines2[1:]
-                            if _lines2 and _lines2[-1].strip().startswith("```"):
-                                _lines2 = _lines2[:-1]
-                            _raw2 = "\n".join(_lines2).strip()
-                        _brace2 = _raw2.find("{")
-                        if _brace2 > 0:
-                            _raw2 = _raw2[_brace2:]
-                        # Extract the first complete top-level JSON object using brace matching
-                        _start2 = _raw2.find("{")
-                        if _start2 == -1:
-                            raise ValueError("No JSON object start '{' found in plan text")
-                        _depth2 = 0
-                        _in_str2 = False
-                        _esc2 = False
-                        _end2 = None
-                        for _j in range(_start2, len(_raw2)):
-                            _ch2 = _raw2[_j]
-                            if _in_str2:
-                                if _esc2:
-                                    _esc2 = False
-                                elif _ch2 == "\\":
-                                    _esc2 = True
-                                elif _ch2 == '"':
-                                    _in_str2 = False
-                            else:
-                                if _ch2 == '"':
-                                    _in_str2 = True
-                                elif _ch2 == '{':
-                                    _depth2 += 1
-                                elif _ch2 == '}':
-                                    _depth2 -= 1
-                                    if _depth2 == 0:
-                                        _end2 = _j + 1
-                                        break
-                        _slice2 = _raw2[_start2:_end2] if _end2 is not None else _raw2[_start2:]
-                        # Fallback: tolerate minor JSON formatting issues from LLM output
-                        def _json_loads_relaxed2(text: str):
-                            try:
-                                return json.loads(text)
-                            except Exception:
-                                t2 = text
-                                # 1) Remove trailing commas before closing } or ]
-                                t2 = re.sub(r',\s*([}\]])', r'\1', t2)
-                                # 2a) Quote single-quoted keys if present
-                                t2 = re.sub(r"([\{\[,]\s*)'([^']+)'\s*:\s*", r'\1"\2": ', t2)
-                                # 2b) Quote bareword keys (letters/underscore/hyphen) if unquoted
-                                t2 = re.sub(r'([\{\[,]\s*)([A-Za-z_][A-Za-z0-9_\-]*)\s*:', r'\1"\2":', t2)
-                                # 2c) Quote known keys if unquoted
-                                keys_pat2 = r'(art_regimen_decision|problems|monitoring_plan|patient_counselling|decision|reason|action|problem|clinician_plan_for_this_problem|explanation)'
-                                t2 = re.sub(r'([\{,\[]\s*)' + keys_pat2 + r'\s*:', r'\1"\2":', t2)
-                                # 3) Convert single-quoted string values to double quotes (simple heuristic)
-                                t2 = re.sub(r':\s*\'([^\']*)\'', r': "\1"', t2)
-                                # 4) In arrays, convert 'item' to "item"
-                                t2 = re.sub(r'\[\s*\'([^\']*)\'', r'["\1"', t2)
-                                t2 = re.sub(r',\s*\'([^\']*)\'', r', "\1"', t2)
-                                return json.loads(t2)
-                        obj = _json_loads_relaxed2(_slice2)
-
-                        # Render a clinician-friendly view (no raw JSON).
-                        def _badge(decision: str) -> str:
-                            d = (decision or "").strip().lower()
-                            if d == "switch":
-                                return "<span style='background:#FDECEA;color:#DC3545;padding:4px 8px;border:1px solid #DC3545;border-radius:12px;font-weight:600;'>Switch</span>"
-                            if d.startswith("hold"):
-                                return "<span style='background:#FFF9E6;color:#856404;padding:4px 8px;border:1px solid #FFC107;border-radius:12px;font-weight:600;'>Hold temporarily</span>"
-                            return "<span style='background:#F0F8F0;color:#1B5E20;padding:4px 8px;border:1px solid #52B788;border-radius:12px;font-weight:600;'>Continue</span>"
-
-                        def _safe(v: str) -> str:
-                            return html.escape(str(v or "").strip())
-
-                        # 1) Regimen Decision
-                        ard = obj.get("art_regimen_decision") or {}
-                        ard_decision = str(ard.get("decision") or "").strip()
-                        ard_reason = str(ard.get("reason") or "").strip()
-                        plan_html = [
-                            "<div style='background:#FFFFFF;padding:14px;border-left:4px solid #2E86AB;margin-bottom:12px;border-radius:8px;'>",
-                            f"<div style='margin-bottom:6px;'>{_badge(ard_decision)} <strong style='margin-left:8px;'>ART regimen decision</strong></div>",
-                            f"<div style='color:#333;'>Reason: {_safe(ard_reason)}</div>",
-                            "</div>",
-                        ]
-
-                        # 2) Problems → Actions (Agree/Disagree/Gap/Not Addressed)
-                        probs = obj.get("problems") or []
-                        if isinstance(probs, list) and probs:
-                            items = []
-                            for p in probs[:12]:
-                                if not isinstance(p, dict):
-                                    continue
-                                action = _safe(p.get("action"))
-                                reason = _safe(p.get("reason"))
-                                cp = p.get("clinician_plan_for_this_problem") or {}
-                                decision = str(cp.get("decision") or "").strip()
-
-                                if decision in {"Gap", "Not Addressed"}:
-                                    prefix = "➕ ADD"
-                                    status_label = "Not in your plan"
-                                    line = f"<strong>Consider adding:</strong> {action}"
-                                elif decision == "Disagree":
-                                    prefix = "🔄 REVIEW"
-                                    status_label = "Needs review"
-                                    line = f"<strong>Consider instead:</strong> {action}"
-                                else:
-                                    prefix = "✅ AGREE"
-                                    status_label = "Matches your plan"
-                                    line = f"<strong>Agree:</strong> {action}"
-
-                                items.append(
-                                    "<li style='margin-bottom:8px;'>"
-                                    f"<div><span style='margin-right:6px;'>{prefix}</span> {line}</div>"
-                                    f"<div style='color:#444;font-size:12px;margin-top:2px;'><em>{_safe(status_label)}</em></div>"
-                                    f"<div style='color:#555;font-size:12px;margin-top:2px;'>Reason: {reason}</div>"
-                                    "</li>"
-                                )
-
-                            if items:
-                                plan_html += [
-                                    "<div style='background-color:#F0F8F0;padding:14px;border-left:4px solid #52B788;border-radius:8px;margin-bottom:12px;'>",
-                                    "<h4 style='color:#1B5E20;margin:0 0 8px 0;'>Suggested Management Plan</h4>",
-                                    "<ol style='margin:0;padding-left:18px;'>" + "".join(items) + "</ol>",
-                                    "</div>",
-                                ]
-
-                        # 3) Monitoring Plan
-                        mp = obj.get("monitoring_plan")
-                        mp_items = []
-                        if isinstance(mp, list):
-                            mp_items = [f"<li>{_safe(x)}</li>" for x in mp if str(x).strip()]
-                        elif isinstance(mp, dict):
-                            for k, v in mp.items():
-                                if isinstance(v, (list, tuple)):
-                                    for x in v:
-                                        if str(x).strip():
-                                            mp_items.append(f"<li>{_safe(x)}</li>")
-                                elif str(v).strip():
-                                    mp_items.append(f"<li>{_safe(v)}</li>")
-                        elif isinstance(mp, str) and mp.strip():
-                            mp_items = [f"<li>{_safe(mp)}</li>"]
-
-                        if mp_items:
-                            plan_html += [
-                                "<div style='background:#E8F4F8;padding:14px;border-left:4px solid #2E86AB;border-radius:8px;margin-bottom:12px;'>",
-                                "<h4 style='color:#2E86AB;margin:0 0 8px 0;'>Monitoring</h4>",
-                                "<ul style='margin:0;padding-left:18px;'>" + "".join(mp_items) + "</ul>",
-                                "</div>",
-                            ]
-
-                        # 4) Patient Counselling
-                        pc = obj.get("patient_counselling") or []
-                        if isinstance(pc, list) and pc:
-                            pc_items = [f"<li>{_safe(x)}</li>" for x in pc if str(x).strip()]
-                            if pc_items:
-                                plan_html += [
-                                    "<div style='background:#F5F0FF;padding:14px;border-left:4px solid #7B68AB;border-radius:8px;margin-bottom:12px;'>",
-                                    "<h4 style='color:#7B68AB;margin:0 0 8px 0;'>Counselling</h4>",
-                                    "<ul style='margin:0;padding-left:18px;'>" + "".join(pc_items) + "</ul>",
-                                    "</div>",
-                                ]
-
-                        plan_html_text = "\n".join(plan_html) if plan_html else None
-                    except Exception:
-                        obj = None
-                        plan_html_text = None
-
-                    if isinstance(obj, dict) and isinstance(plan_html_text, str) and plan_html_text.strip():
-                        # Rationale: match clinician-facing naming used in the example output.
+                    view = read_plan(
+                        updated_plan_text,
+                        clinician_plan_written=bool((st.session_state.get("analysis_note") or "").strip()),
+                        issues=list(getattr(agentic_result, "plan_issues", []) or []),
+                    )
+                    if view is None:
+                        st.warning("The AI's management plan could not be read, so it is not shown.")
+                    else:
                         st.markdown("### ARTEMIS Review.")
-                        st.markdown(plan_html_text, unsafe_allow_html=True)
-
-                        # Optional: raw JSON for reviewers (collapsed UI)
+                        st.markdown(plan_html(view), unsafe_allow_html=True)
                         with st.expander("View raw plan JSON", expanded=False):
-                            st.json(obj)
+                            st.json(parse_plan(updated_plan_text))
 
 
     # Rationale: show review controls for EVERY alert so _can_finalize can pass.

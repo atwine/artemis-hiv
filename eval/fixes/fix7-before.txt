@@ -1,0 +1,14 @@
+Fix 7, before (2026-11-25, commit 522289a).
+
+Today's screen rule (app.py, Output section) applied to the saved baseline plans (run 1):
+Kintu-Test 001: regimen 'Switch' shown as Switch (red); item verdicts from the AI [None, None, None] shown as ['AGREE / Matches your plan', 'AGREE / Matches your plan', 'AGREE / Matches your plan']
+P001: regimen 'Continue' shown as Continue (green); item verdicts from the AI ['Agree', 'Agree'] shown as ['AGREE / Matches your plan', 'AGREE / Matches your plan']
+P002: regimen 'Continue' shown as Continue (green); item verdicts from the AI [None, None] shown as ['AGREE / Matches your plan', 'AGREE / Matches your plan']
+P003: regimen 'Switch' shown as Switch (red); item verdicts from the AI [None, None] shown as ['AGREE / Matches your plan', 'AGREE / Matches your plan']
+P004: regimen 'Uncertain: cannot determine from provide' shown as Continue (green); item verdicts from the AI [None] shown as ['AGREE / Matches your plan']
+P005: regimen 'Switch' shown as Switch (red); item verdicts from the AI [None, None] shown as ['AGREE / Matches your plan', 'AGREE / Matches your plan']
+P006: regimen 'Continue' shown as Continue (green); item verdicts from the AI ['Agree', 'Agree'] shown as ['AGREE / Matches your plan', 'AGREE / Matches your plan']
+
+Clinician plans written today: P001-P004 yes; P005, P006, Kintu-Test 001 none (empty note).
+
+Tests written first (tests/test_plan_view.py) on the old code: 9 failed (the plan step's first AI call was the 'ARTEMIS Verification Agent', not the plan; no failed-checks marker; no view code).

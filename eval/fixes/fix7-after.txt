@@ -1,0 +1,18 @@
+Fix 7, after (2026-11-25).
+
+Tests (tests/test_plan_view.py): 9 passed (9 failed before; see fix7-before.txt).
+Golden diff: the verification call is gone for all 7 patients; plan prompts changed; replayed plans, alerts and colours unchanged; plans without verdicts (old saved replies) are now marked as failing the checks for 5 patients.
+
+Real runs on the A100 with the AI plan switched on:
+===== P002 | exceptions: [] | status: YELLOW
+plan issues: []
+AI verdicts: ['Gap', 'Not Addressed'] | regimen: Continue
+screen shows: ('Continue', ['Not in your plan', 'Not in your plan'])
+markdown has ARTEMIS Review: True
+===== P005 | exceptions: [] | status: YELLOW
+plan issues: []
+AI verdicts: ['Not Addressed', 'Not Addressed'] | regimen: Uncertain: insufficient information to determine potential drug toxicity from current or past ART medications
+screen shows: ('Needs review', ['No plan to compare', 'No plan to compare'])
+markdown has ARTEMIS Review: True
+
+Before (baseline run 1, today's screen rule): every item for every patient shown as 'AGREE / Matches your plan', including P005, P006 and Kintu who wrote no plan; P004's 'Uncertain' shown as green Continue.

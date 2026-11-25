@@ -15,7 +15,9 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
   verdict. 36 of 44 plan items had no verdict. For 3 patients the clinician had written no plan
   at all, and the screen still said "Matches your plan".
 - Caught by: the baseline run saved the model's raw verdict next to what the screen showed.
-- Fix: Phase 1 fix 7 (planned).
+- Fix: fix 7. The screen shows only what the AI said: "Not assessed" when there's no verdict, "No
+  plan to compare" when the clinician wrote none, and a grey "Needs review" for an unclear
+  decision.
 
 **2. A failure that looks like success.**
 - Example: when the AI's reply couldn't be read, or the server didn't answer, a patient with no
@@ -132,4 +134,15 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Caught by: printing the summary for every patient next to their actual record.
 - Fix: fix 6. The summary carries the recorded values themselves, and lists a field as not
   recorded only when it is truly empty.
+
+**15. The model's instructions and the app's check contradict each other.**
+- Example: the plan prompt told the AI to include a verdict "ONLY if the clinician plan differs
+  or is missing". The app's validity check required a verdict on every item. So 17 of 21 plans
+  failed the check, were retried twice, and were then shown anyway with no warning. The prompt
+  also invited "Uncertain: …" answers that the check rejected and the screen drew as a green
+  "Continue".
+- Caught by: replaying the saved plans through the check, and reading the prompt and the check
+  side by side.
+- Fix: fix 7. One shared check, a prompt that asks for what the check requires, and plans that
+  still fail are marked as failed on screen.
 

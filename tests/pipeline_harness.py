@@ -172,7 +172,7 @@ def run_patient(patient: Dict[str, Any]) -> Dict[str, Any]:
             "screening_parse_status": (ss.get("analysis_screening_debug") or {}).get("parse_status"),
             "screening_outcome": ss.get("analysis_screening_outcome"),
             "plan_text": getattr(agentic, "updated_management_plan_text", None),
-            "agentic_answer": getattr(agentic, "final_answer_text", None),
+            "plan_issues": list(getattr(agentic, "plan_issues", []) or []),
             "llm_calls": client.calls,
             "status_log": shim.status_log,
         }

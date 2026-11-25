@@ -171,15 +171,11 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has no new complaints, appears well, and has a viral load of 40, indicating the current regimen of TDF, 3TC, and DTG is effective.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Potential nephrotoxicity from TDF\",\n      \"action\": \"Monitor serum creatinine and eGFR\",\n      \"reason\": \"Guidelines recommend screening for nephrotoxicity in patients on TDF, and patient's creatinine level is 88.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Patient's current creatinine level warrants continued monitoring.\"\n      }\n    },\n    {\n      \"problem\": \"DTG contraindications\",\n      \"action\": \"Screen for diabetes and other contraindications\",\n      \"reason\": \"Guidelines recommend screening for DTG contraindications, but patient's history does not mention diabetes or other relevant conditions.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Screening for contraindications is necessary to ensure safe use of DTG.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, serum creatinine, and eGFR every 6 months\",\n  \"patient_counselling\": [\n    \"Adherence counseling\",\n    \"Side effect monitoring\",\n    \"Importance of regular follow-up\"\n  ]\n}",
-  "agentic_answer": "### Verification Complete Report for Patient P001, John Doe\n\n#### Task 1 — Adverse Effect Audit\n\nGiven the patient's current regimen of TDF, 3TC, and DTG, and based on the provided guideline excerpts, the following potential adverse effects were considered:\n\n1. **TDF (Tenofovir Disoproxil Fumarate) Toxicity**: The guidelines emphasize the importance of monitoring renal function in patients on TDF, suggesting serum creatinine and eGFR tests for both naive and experienced patients. The patient's creatinine level is 88, which is within normal limits, but it's crucial",
+  "plan_issues": [],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "e7bf586082ee"
-   },
-   {
     "kind": "plan",
-    "messages_sha1": "91c0033af996"
+    "messages_sha1": "5dcb245c665e"
    },
    {
     "kind": "screening",
@@ -418,23 +414,22 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is stable on current ART regimen with falling viral load and no reported symptoms or abnormalities.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Potential nephrotoxicity from TDF\",\n      \"action\": \"Monitor creatinine levels\",\n      \"reason\": \"Patient is on TDF, which may cause nephrotoxicity, and has a single creatinine level of 76.\"\n    },\n    {\n      \"problem\": \"No other potential toxicities identified\",\n      \"action\": \"Continue routine follow-up\",\n      \"reason\": \"No symptoms or lab results indicating toxicity from 3TC or DTG.\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load and creatinine levels at routine follow-up appointments\",\n  \"patient_counselling\": [\n    \"Adherence counselling\",\n    \"DSD eligibility discussion\",\n    \"Potential side effects of ART medications\"\n  ]\n}",
-  "agentic_answer": "Verification complete. Primary alerts are accurate and comprehensive.\n\nThe patient, Jane Roe, is stable on her current ART regimen of TDF, 3TC, and DTG, with no reported complaints or symptoms and stable examination findings. Her lab trends show a falling viral load, indicating good adherence and response to treatment. The single creatinine level is within normal limits.\n\nThe guideline excerpts provided do not indicate any specific concerns for drug toxicity related to her current medications. The guidelines emphasize the importance of pharmacovigilance, screening for contraindications, and monitoring for adverse effects, but none of these concerns are applicable to Jane's current",
+  "plan_issues": [
+   "problem_0_missing_key:clinician_plan_for_this_problem",
+   "problem_1_missing_key:clinician_plan_for_this_problem"
+  ],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "dd7c96e09a70"
+    "kind": "plan",
+    "messages_sha1": "a617f7fa9629"
    },
    {
     "kind": "plan",
-    "messages_sha1": "8091f3225388"
+    "messages_sha1": "b00d8912a853"
    },
    {
     "kind": "plan",
-    "messages_sha1": "fffbcacbe328"
-   },
-   {
-    "kind": "plan",
-    "messages_sha1": "aa627f0d2e28"
+    "messages_sha1": "2de8d5c7079b"
    },
    {
     "kind": "screening",
@@ -649,23 +644,22 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient complains of insomnia and vivid dreams, which are known side effects of EFV, suggesting potential drug toxicity from their current ART medication.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Insomnia and vivid dreams\",\n      \"action\": \"Switch to alternative regimen\",\n      \"reason\": \"EFV is known to cause insomnia and vivid dreams, and patient has been experiencing these symptoms for several weeks.\"\n    },\n    {\n      \"problem\": \"Potential renal toxicity from TDF\",\n      \"action\": \"Monitor serum creatinine and eGFR\",\n      \"reason\": \"TDF can cause renal toxicity, and guidelines recommend monitoring serum creatinine and eGFR for patients initiating TDF.\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor viral load, serum creatinine, and eGFR every 6 months, and assess for symptoms of drug toxicity\",\n  \"patient_counselling\": [\n    \"Discuss potential side effects of ART medications\",\n    \"Encourage adherence to medication regimen\",\n    \"Monitor for symptoms of drug toxicity and report to healthcare provider\"\n  ]\n}",
-  "agentic_answer": "**Verification Complete**\n\nAfter reviewing the patient's symptoms, examination findings, and lab results, I have identified a potential issue that may be related to drug toxicity from their current ART medication, EFV.\n\n**Suspected Toxicity:** EFV-related neuropsychiatric effects\n**Supporting Evidence:** Patient complaints of poor sleep and vivid dreams for several weeks, which is consistent with the known side effects of EFV, particularly in the first few weeks of therapy (page 55, chunk sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4).\n**Guideline Basis:** The guidelines mention",
+  "plan_issues": [
+   "problem_0_missing_key:clinician_plan_for_this_problem",
+   "problem_1_missing_key:clinician_plan_for_this_problem"
+  ],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "f5a460f37573"
+    "kind": "plan",
+    "messages_sha1": "0248cec7a331"
    },
    {
     "kind": "plan",
-    "messages_sha1": "7e4ffd474a82"
+    "messages_sha1": "39dd79aa4b35"
    },
    {
     "kind": "plan",
-    "messages_sha1": "4aff5fc829e7"
-   },
-   {
-    "kind": "plan",
-    "messages_sha1": "ce140d9cbfe5"
+    "messages_sha1": "ae7719c69ba7"
    },
    {
     "kind": "screening",
@@ -779,23 +773,21 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: cannot determine from provided guideline excerpts\", \"reason\": \"Uncertain: guideline excerpts do not provide specific information on managing Amina Nansubuga's symptoms and lab results\"}, \n\"problems\": [{\"problem\": \"Abdominal pain\", \"action\": \"Uncertain: cannot determine from provided guideline excerpts\", \"reason\": \"Uncertain: guideline excerpts do not provide specific information on managing abdominal pain in the context of ART medications\"}], \n\"monitoring_plan\": \"Monitor viral load, creatinine, and abdominal pain symptoms\", \n\"patient_counselling\": [\"Report any changes in abdominal pain or other symptoms\", \"Adhere to current ART regimen unless otherwise instructed\", \"Follow up with clinician for further evaluation and guidance\"]}",
-  "agentic_answer": "### Task 1 — Adverse Effect Audit\n\nGiven the patient's current regimen of TDF, 3TC, and DTG, and their complaint of abdominal pain without fever, we need to consider potential adverse effects of these medications.\n\n1. **TDF (Tenofovir Disoproxil Fumarate)**: According to the guideline excerpts (page 29), TDF requires monitoring of serum creatinine and eGFR, especially in patients with renal issues, due to its potential nephrotoxicity. The patient's creatinine level is 82, which is within normal limits, but ongoing monitoring is essential",
+  "plan_issues": [
+   "problem_0_missing_key:clinician_plan_for_this_problem"
+  ],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "a64285c7f89f"
+    "kind": "plan",
+    "messages_sha1": "eccab86a5997"
    },
    {
     "kind": "plan",
-    "messages_sha1": "da2a0f7efc15"
+    "messages_sha1": "137cd915064f"
    },
    {
     "kind": "plan",
-    "messages_sha1": "8ee57d6c0507"
-   },
-   {
-    "kind": "plan",
-    "messages_sha1": "adfbaf92bc70"
+    "messages_sha1": "559768ab8df1"
    },
    {
     "kind": "screening",
@@ -1071,15 +1063,11 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient has no complaints, improved energy, and viral load is down from 125,000 to 89 copies/mL after 10 weeks on TDF/3TC/DTG regimen.\"}, \n\"problems\": [{\"problem\": \"Potential renal toxicity\", \"action\": \"Monitor eGFR and creatinine levels\", \"reason\": \"Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after initiating TDF/3TC/DTG regimen.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Guidelines recommend monitoring renal function in patients on TDF/3TC/DTG regimen.\"}}, \n{\"problem\": \"Anemia\", \"action\": \"Continue ferrous sulfate and folic acid\", \"reason\": \"Patient's hemoglobin level is 10.8 g/dL, which is lower than normal.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Patient is already on ferrous sulfate and folic acid, which is appropriate for anemia management.\"}}], \n\"monitoring_plan\": \"Monitor viral load, CD4 count, eGFR, creatinine, and hemoglobin levels regularly.\", \n\"patient_counselling\": [\"Adhere to ART regimen\", \"Attend regular follow-up appointments\", \"Report any symptoms or concerns to the healthcare provider\"]}",
-  "agentic_answer": "### Verification Output\n\n#### Corrections to Primary Alerts:\nNone reported, as there were no primary alerts provided for correction.\n\n#### Missed Issues:\n\n1. **Suspected toxicity:** Renal impairment due to TDF\n   - **Supporting evidence:** Elevated creatinine (1.1 mg/dL) compared to baseline (0.8 mg/dL), and eGFR of 78 mL/min/1.73m2.\n   - **Guideline basis:** Page 29, chunk hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1, recommends monitoring serum creatinine and e",
+  "plan_issues": [],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "b8513cdece68"
-   },
-   {
     "kind": "plan",
-    "messages_sha1": "0abc399bc0c5"
+    "messages_sha1": "72f0c2fa8dea"
    },
    {
     "kind": "screening",
@@ -1308,23 +1296,22 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient's creatinine level has increased to 1.4 mg/dL and eGFR has decreased to 52 mL/min/1.73m2, indicating potential renal toxicity from TDF.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Renal impairment\",\n      \"action\": \"Switch to TAF-based regimen\",\n      \"reason\": \"Patient's creatinine level has increased and eGFR has decreased, indicating potential renal toxicity from TDF.\"\n    },\n    {\n      \"problem\": \"Mild fatigue\",\n      \"action\": \"Monitor and evaluate for other causes\",\n      \"reason\": \"Patient attributes fatigue to busy work schedule, but further evaluation is needed to rule out other causes.\"\n    }\n  ],\n  \"monitoring_plan\": \"Repeat creatinine, eGFR, and urinalysis in 3 months to assess renal function after regimen switch.\",\n  \"patient_counselling\": [\n    \"Adherence to new regimen\",\n    \"Monitoring for signs of renal toxicity\",\n    \"Follow-up appointments for lab monitoring\"\n  ]\n}",
-  "agentic_answer": "Based on the provided patient summary, guideline excerpts, and primary alerts (which are not provided in this case), I will perform the tasks as outlined.\n\n### Task 1 — Adverse Effect Audit\n\nThe patient is on TDF/3TC/DTG (TLD) fixed-dose combination once daily. The guideline excerpts mention potential adverse effects of antiretroviral therapy (ART) medications, including renal impairment. The patient's lab trends show an increase in creatinine levels (from 0.9 mg/dL in 2020 to 1.4 mg/dL) and a decrease in eGFR (",
+  "plan_issues": [
+   "problem_0_missing_key:clinician_plan_for_this_problem",
+   "problem_1_missing_key:clinician_plan_for_this_problem"
+  ],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "d256f215106b"
+    "kind": "plan",
+    "messages_sha1": "3797f66e819e"
    },
    {
     "kind": "plan",
-    "messages_sha1": "fdafd7a58848"
+    "messages_sha1": "96aa8264f269"
    },
    {
     "kind": "plan",
-    "messages_sha1": "8fc87283ae34"
-   },
-   {
-    "kind": "plan",
-    "messages_sha1": "0e389d51931a"
+    "messages_sha1": "24be0860fb57"
    },
    {
     "kind": "screening",
@@ -1510,23 +1497,23 @@
   "screening_parse_status": "parsed_nonempty",
   "screening_outcome": "ok",
   "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient has gained significant weight, has elevated fasting glucose and lipid profiles, and has developed acanthosis nigricans, suggesting potential metabolic side effects from current TLD regimen.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Weight gain and metabolic changes\",\n      \"action\": \"Consider switching to a different ART regimen with a more favorable metabolic profile\",\n      \"reason\": \"Patient's weight gain, elevated fasting glucose, and lipid profiles are concerning for metabolic toxicity from TLD.\"\n    },\n    {\n      \"problem\": \"Potential risk for developing Type 2 Diabetes\",\n      \"action\": \"Monitor fasting glucose and HbA1c levels closely\",\n      \"reason\": \"Patient's family history of Type 2 Diabetes and current pre-diabetic range HbA1c level warrant close monitoring.\"\n    },\n    {\n      \"problem\": \"Hypertension\",\n      \"action\": \"Monitor blood pressure regularly\",\n      \"reason\": \"Patient's current blood pressure is elevated, and she has a significant weight gain, which may contribute to hypertension.\"\n    }\n  ],\n  \"monitoring_plan\": \"Monitor fasting glucose, HbA1c, lipid profiles, blood pressure, and renal function every 3-6 months\",\n  \"patient_counselling\": [\n    \"Discuss the potential risks and benefits of switching ART regimens\",\n    \"Emphasize the importance of lifestyle modifications, such as diet and exercise, to manage weight and metabolic changes\",\n    \"Educate on the signs and symptoms of diabetes and hypertension\"\n  ]\n}",
-  "agentic_answer": "Based on the provided patient summary, guideline excerpts, and the absence of primary alerts, I will proceed with the tasks as outlined.\n\n### Task 1 — Adverse Effect Audit\n\nThe patient is currently on TDF, 3TC, and DTG (TLD) for 18 months. The patient's symptoms and lab results show:\n\n- Weight gain and increased BMI, which could be related to metabolic changes associated with ART, particularly with TDF and DTG.\n- Increased fasting glucose (118 mg/dL) and HbA1c (6.1%), indicating impaired glucose regulation, which is a concern given the patient",
+  "plan_issues": [
+   "problem_0_missing_key:clinician_plan_for_this_problem",
+   "problem_1_missing_key:clinician_plan_for_this_problem",
+   "problem_2_missing_key:clinician_plan_for_this_problem"
+  ],
   "llm_calls": [
    {
-    "kind": "agentic_answer",
-    "messages_sha1": "f43a9b96d930"
+    "kind": "plan",
+    "messages_sha1": "63c569bb4767"
    },
    {
     "kind": "plan",
-    "messages_sha1": "9eac3b5b8f55"
+    "messages_sha1": "4cf704bc2d9e"
    },
    {
     "kind": "plan",
-    "messages_sha1": "f1188bc6202e"
-   },
-   {
-    "kind": "plan",
-    "messages_sha1": "6072f403de37"
+    "messages_sha1": "ceecca009a25"
    },
    {
     "kind": "screening",

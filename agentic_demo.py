@@ -109,7 +109,8 @@ def main() -> None:
         print()
 
     print("=== Final placeholder answer (reasoning not implemented yet) ===")
-    print(result.final_answer_text)
+    print(result.updated_management_plan_text)
+    print("Plan checks failed:", result.plan_issues)
     print("\nWarnings:")
     for w in result.warnings:
         print("-", w)

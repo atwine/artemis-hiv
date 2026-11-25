@@ -16,21 +16,13 @@ app.py	_can_finalize	Says whether the visit can be finalized, meaning every aler
 app.py	_run_analysis	Runs the visit analysis and stores its results for the screen to show.	ui/ (Save button handler)	to-move
 app.py	_run_analysis._on_status	Passes progress messages from the analysis to the on-screen status box.	ui/ (Save button handler)	to-move
 app.py	main	Draws the whole app screen and reacts to every click and input.	ui/ (split into one file per screen section)	to-move
-app.py	main._json_loads_relaxed2	Reads slightly malformed JSON text by fixing common mistakes first.	ui/ (part of main)	to-move
-app.py	main._badge	Makes the coloured Switch, Hold or Continue label for an ART decision.	ui/ (part of main)	to-move
-app.py	main._safe	Cleans text so it can be shown safely inside the page.	ui/ (part of main)	to-move
 artemis/plan/flow.py	_normalize_input	Placeholder step that hands the question and patient data on unchanged.	artemis/plan/flow.py	moved
 artemis/plan/flow.py	_plan_subtasks	Plans the guideline questions to ask, one per current drug plus symptom checks.	artemis/plan/flow.py	moved
 artemis/plan/flow.py	_retrieve_evidence	Looks up guideline passages for each planned question.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	_reason	Asks the AI to write the drug-toxicity checklist from the guideline passages.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	_reason_updated_management_plan	Asks the AI for a structured updated management plan, checking and repairing it.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	_reason_updated_management_plan._strip_code_fences	Removes code-fence marks that the AI sometimes wraps around its answer.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	_reason_updated_management_plan._extract_first_json_object	Pulls the first complete JSON object out of the AI's reply text.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	_reason_updated_management_plan._validate_plan_json	Lists the problems found in the AI's plan, such as missing parts.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan	Asks the AI for the management plan with a verdict on every item; returns it with any failed checks.	artemis/plan/flow.py	moved
 artemis/plan/flow.py	_reason_updated_management_plan._organize_plan_json	Asks the AI to tidy and repair a flawed draft plan.	artemis/plan/flow.py	moved
 artemis/plan/flow.py	_reason_updated_management_plan._build_plan_messages	Writes the instructions and patient data sent to the AI for the plan.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	_verify	Placeholder check that always reports the draft answer as fine.	artemis/plan/flow.py	moved
-artemis/plan/flow.py	run_agentic_flow	Runs the whole toxicity-checklist process from planning to the AI's written answer.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	run_agentic_flow	Runs the plan step: subtasks, evidence search, then the management plan.	artemis/plan/flow.py	moved
 artemis/rules/checks.py	run_alerts	Runs every fixed clinical rule and returns the alerts that fire.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_tdf_creatinine_overdue	Flags creatinine missing, overdue, or only in pasted text, for a patient on TDF.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_efv_sleep_disturbance	Flags specific sleep complaints, unless negated, for a patient on EFV.	artemis/rules/checks.py	moved
@@ -138,3 +130,12 @@ artemis/patient/medicines.py	other_medicines	Cleans the medicine list, dropping 
 artemis/patient/medicines.py	regimen_codes	Finds the HIV drugs in a regimen however it was written, as drug codes.	artemis/patient/medicines.py	stays
 artemis/rules/checks.py	_mentions	Finds words in the notes, skipping negated mentions like 'no proteinuria'.	artemis/rules/checks.py	stays
 modules/llm_screening.py	_as_written	Adds the regimen as the clinician wrote it, when it says more than the codes.	artemis/ai/	to-move
+artemis/plan/plan_json.py	first_json_object	Finds the first complete JSON object in the AI's reply.	artemis/plan/plan_json.py	stays
+artemis/plan/plan_json.py	loads_relaxed	Reads JSON, repairing small slips like trailing commas.	artemis/plan/plan_json.py	stays
+artemis/plan/plan_json.py	parse_plan	Turns the AI's plan reply into data, or nothing if unreadable.	artemis/plan/plan_json.py	stays
+artemis/plan/plan_json.py	regimen_decision_kind	Reads the regimen decision as Switch, Hold, Continue or Uncertain.	artemis/plan/plan_json.py	stays
+artemis/plan/plan_json.py	strip_code_fences	Removes ``` fences the AI sometimes wraps its reply in.	artemis/plan/plan_json.py	stays
+artemis/plan/plan_json.py	validate_plan	Lists what is wrong with a plan, or nothing if it passes.	artemis/plan/plan_json.py	stays
+artemis/plan/view.py	_texts	Turns a plan field into a list of non-empty lines.	artemis/plan/view.py	stays
+artemis/plan/view.py	plan_html	Draws the plan for the screen, escaping all AI text.	artemis/plan/view.py	stays
+artemis/plan/view.py	read_plan	Decides what the clinician sees for each plan item and the regimen decision.	artemis/plan/view.py	stays

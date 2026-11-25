@@ -21,6 +21,7 @@ from typing import Any, Dict, List, Optional
 from modules.embedder import Embedder
 from modules.llm_client import OllamaClient
 from artemis.patient.record import build_patient_context, compute_lab_trends
+from artemis.plan.plan_json import first_json_object, strip_code_fences, validate_plan
 from modules.vector_store import VectorStore, VectorSearchResult
 
 
@@ -75,10 +76,9 @@ class AgenticResult:
     intermediate artefacts (plans, evidence, verifier reports, etc.).
     """
 
-    final_answer_text: str
-    # Rationale: new output requested by updated ARTEMIS instructions. Kept
-    # optional and additive to preserve existing behaviour and call-sites.
     updated_management_plan_text: Optional[str] = None
+    # What the plan failed in the app's own checks, after its retries; empty when it passed (fix 7).
+    plan_issues: List[str] = field(default_factory=list)
     used_chunks: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
     debug_info: Dict[str, Any] = field(default_factory=dict)
@@ -266,372 +266,21 @@ def _retrieve_evidence(
     return bundles
 
 
-def _reason(
-    context: QueryContext,
-    subtasks: List[SubTaskPlan],
-    evidence_bundles: List[EvidenceBundle],
-    llm_client: Optional[OllamaClient] = None,
-) -> str:
-    """Reason over retrieved evidence.
-
-    When ``llm_client`` is provided, this uses the same LLM pattern as
-    ``agentic_demo.py`` to generate a grounded answer from the retrieved
-    guideline excerpts. When no client is available, it falls back to the
-    original placeholder text to keep behaviour explicit.
-    """
-
-    if llm_client is None:
-        # Keep the original clearly-marked placeholder when no LLM is wired in.
-        _ = (subtasks, evidence_bundles)  # explicit: unused in this branch
-        return (
-            "Agentic flow skeleton is not yet implemented. "
-            "Question received but no agentic reasoning has been run."
-        )
-
-    # LLM-based reasoning path (debug-only; callers must ensure this is gated).
-    try:
-        evidence_lines: List[str] = []
-        for bundle in evidence_bundles:
-            chunks = list(bundle.chunks or [])
-            if not chunks:
-                continue
-            evidence_lines.append(f"Subtask {bundle.subtask_name}:")
-            for r in chunks[:3]:
-                try:
-                    metadata = getattr(r, "metadata", {}) or {}
-                    page = metadata.get("page_number")
-                    chunk_id = getattr(r, "chunk_id", None)
-                    doc_text = getattr(r, "document", "") or ""
-                except Exception:
-                    continue
-                preview = doc_text.replace("\n", " ")
-                if len(preview) > 300:
-                    preview = preview[:300] + "…"
-                evidence_lines.append(
-                    f"- page {page}, chunk {chunk_id}: {preview}"
-                )
-            evidence_lines.append("")
-
-        evidence_text = "\n".join(evidence_lines) or "No evidence retrieved."
-
-        patient = context.patient_raw or {}
-        question = (context.question_text or "").strip() or (
-            "Clinical guideline support for this patient."
-        )
-        patient_id = patient.get("patient_id")
-        patient_name = patient.get("name")
-
-        # --- Suggestion 2 (wired): compute lab trends and include them ---
-        # Rationale: doctors spot toxicity by seeing trends over time (e.g.
-        # rising creatinine).  We compute the trends here and inject them
-        # into the user message so the LLM has this information explicitly.
-        lab_trends_text = ""
-        try:
-            raw_labs = patient.get("labs") or {}
-            encounter_date_str = (patient.get("today_encounter") or {}).get("date")
-            enc_date = None
-            if encounter_date_str:
-                from datetime import datetime as _dt
-                enc_date = _dt.strptime(encounter_date_str, "%Y-%m-%d").date()
-            trends = compute_lab_trends(raw_labs, encounter_date=enc_date)
-            if trends:
-                lab_trends_text = "\n".join(t.summary_text for t in trends)
-        except Exception:
-            lab_trends_text = ""
-
-        # --- Suggestion 4 (wired): extract doctor's current plan ---
-        # Rationale: the user's workflow says MedGemma should check *after*
-        # the doctor has made a plan.  We surface that plan so the LLM can
-        # evaluate whether it addresses all identified issues.
-        doctors_plan = ""
-        try:
-            today = patient.get("today_encounter") or {}
-            plan_parts: List[str] = []
-            note = (today.get("note") or "").strip()
-            if note:
-                plan_parts.append(f"Today's note: {note}")
-            orders = today.get("orders") or []
-            if orders:
-                plan_parts.append(f"Orders: {orders}")
-            med_changes = today.get("med_changes") or []
-            if med_changes:
-                plan_parts.append(f"Medication changes: {med_changes}")
-            doctors_plan = "\n".join(plan_parts) if plan_parts else "No plan documented."
-        except Exception:
-            doctors_plan = "No plan documented."
-
-        # Regimen and notes for context in the user message.
-        regimen_str = ", ".join(patient.get("art_regimen_current") or []) or "unknown"
-        notes_text = ""
-        try:
-            ctx = build_patient_context(patient)
-            notes_text = (ctx.notes_text or "")
-        except Exception:
-            pass
-
-        # --- Suggestion 5: structured toxicity-focused system prompt ---
-        # Rationale: instead of free-text output, we ask the LLM to produce a
-        # structured checklist that maps each suspected toxicity to supporting
-        # evidence, confirmation steps, recommended actions, and gaps in the
-        # doctor's plan.  This makes the output actionable and easy to review.
-        messages = [
-            {
-                "role": "system",
-                "content": (
-                    "You are the ARTEMIS Verification Agent. You receive the original patient summary, "
-        "guideline excerpts, and the alerts generated by the primary ARTEMIS screening system. "
-        "Your job is to cross-check that output for errors and omissions before it reaches the clinician.\n\n"
-
-        "## INPUTS\n"
-        "1. PATIENT SUMMARY: Same patient data the primary system received.\n"
-        "2. GUIDELINE EXCERPTS: Same excerpts (with page_number and chunk_id).\n"
-        "3. PRIMARY ALERTS: The JSON alert array produced by the primary system.\n\n"
-
-        "## YOUR THREE TASKS\n\n"
-
-        "### Task 1 — Adverse Effect Audit (HIGHEST PRIORITY)\n"
-        "For EVERY medication in the patient summary:\n"
-        "- Check guideline excerpts for known adverse effects of that drug.\n"
-        "- Check whether the patient has ANY signs, symptoms, or lab findings consistent with those "
-        "adverse effects — even subclinical or early-stage.\n"
-        "- Check whether the primary alerts caught this. If missed, flag it.\n"
-        "- Pay special attention to: lab trajectories suggesting emerging toxicity, "
-        "duration-dependent risks, and compounding factors (e.g., renal impairment + nephrotoxic drug).\n\n"
-
-        "### Task 2 — Opportunistic Infection & HIV Complication Screen (HIGH PRIORITY)\n"
-        "- Could any unattributed symptoms represent an opportunistic infection?\n"
-        "- Are there findings the primary system attributed to drug toxicity that are better explained by an OI?\n"
-        "- Does the patient's immune status (CD4, viral load) indicate OI risk requiring prophylaxis or investigation?\n\n"
-
-        "### Task 3 — Alert Quality Check\n"
-        "For each primary alert, verify:\n"
-        "- Citation validity: does every cited chunk_id exist in the provided excerpts?\n"
-        "- Attribution balance: did the primary system argue both for AND against drug attribution?\n"
-        "- Severity calibration: does severity match guideline language?\n"
-        "- Flag any hallucinated citations, one-sided attributions, over/under-escalation, or duplicates.\n\n"
-
-        "## RULES\n"
-        "- NEVER invent guideline thresholds or citations. Only reference rules and chunk_ids present in the provided excerpts.\n"
-        "- Before attributing any finding to drug toxicity, consider at least one non-drug explanation.\n"
-        "- If guideline excerpts are insufficient to support a concern, say you are unsure instead of guessing.\n"
-        "- Be concise. Do not repeat the primary system's reasoning — only state what it got wrong or missed.\n\n"
-
-        "## OUTPUT FORMAT\n\n"
-        "First, list any CORRECTIONS to the primary alerts (if any):\n"
-        "- Alert corrected: [alert_id from primary output]\n"
-        "- Correction type: [hallucinated citation | unbalanced attribution | severity change | false positive | redundant]\n"
-        "- Explanation: [what is wrong and what should change]\n\n"
-        "Then, for each MISSED issue found in Tasks 1-2, output:\n"
-        "- Suspected toxicity/OI: [name]\n"
-        "- Supporting evidence: [patient findings + lab trends]\n"
-        "- Guideline basis: [what the guideline excerpt says, with page_number and chunk_id]\n"
-        "- Evidence against: [alternative explanations or findings that argue against this attribution]\n"
-        "- Confirmation needed: [test/investigation]\n"
-        "- Recommended action: [what guidelines say to do]\n"
-        "- Doctor's plan gap: [what is missing from current plan]\n\n"
-        "If no missed issues are found and no corrections are needed, state: "
-        "\"Verification complete. Primary alerts are accurate and comprehensive.\"\n\n"
-        "If the guideline excerpts are insufficient for a concern you identify, state: "
-        "\"Unsure — guideline excerpts do not contain sufficient information to confirm or rule out [concern]. "
-        "Additional guideline retrieval recommended.\""
-                ),
-            },
-            {
-                "role": "user",
-                "content": (
-                    f"Patient id: {patient_id}, name: {patient_name}\n"
-                    f"Current regimen: {regimen_str}\n"
-                    f"Question: {question}\n\n"
-                    f"Patient notes:\n{notes_text}\n\n"
-                    f"Lab trends:\n{lab_trends_text or 'No lab history available.'}\n\n"
-                    f"Doctor's current plan:\n{doctors_plan}\n\n"
-                    f"Guideline excerpts:\n{evidence_text}"
-                ),
-            },
-        ]
-
-        answer = llm_client.chat(messages)
-        if answer is None:
-            # Degrade gracefully to a descriptive fallback while surfacing any
-            # available error detail from the client.
-            base = (
-                "Agentic reasoning attempted but the LLM call did not return "
-                "content. See Ollama logs for details."
-            )
-            last_err = getattr(llm_client, "last_error", None)
-            if last_err:
-                return f"{base} Last error: {last_err}"
-            return base
-
-        return answer
-    except Exception:
-        # Defensive: never break callers because of agentic reasoning failures.
-        return (
-            "Agentic flow skeleton is not yet implemented. "
-            "Question received but no agentic reasoning has been run."
-        )
-
-
 def _reason_updated_management_plan(
     context: QueryContext,
     evidence_bundles: List[EvidenceBundle],
     *,
     llm_client: Optional[OllamaClient] = None,
-) -> Optional[str]:
-    # Rationale: Part 3 requires adding a new structured "UPDATED MANAGEMENT PLAN"
-    # output alongside the existing toxicity checklist output.
+) -> tuple:
+    """(plan text or None, the checks it failed). The issues list is empty when the plan passed."""
     if llm_client is None:
-        return None
+        return None, []
 
-    # Rationale: limit output length to force conciseness while still allowing structured JSON.
-    _PLAN_CHAT_OPTIONS = {"num_predict": 400}
-
-    def _strip_code_fences(text: str) -> str:
-        # Rationale: tolerate models that wrap JSON in ```json fences.
-        t = (text or "").strip()
-        if not t.startswith("```"):
-            return t
-        lines = t.splitlines()
-        if not lines:
-            return t
-        if lines[0].strip().startswith("```"):
-            lines = lines[1:]
-        if lines and lines[-1].strip().startswith("```"):
-            lines = lines[:-1]
-        return "\n".join(lines).strip()
-
-    def _extract_first_json_object(text: str) -> str:
-        # Rationale: models sometimes add extra words before/after the JSON.
-        # We extract the first full {...} block so validation can still succeed.
-        raw = _strip_code_fences(text)
-        if not raw:
-            return ""
-        start = raw.find("{")
-        if start == -1:
-            return ""
-        depth = 0
-        in_str = False
-        esc = False
-        end = None
-        for i in range(start, len(raw)):
-            ch = raw[i]
-            if in_str:
-                if esc:
-                    esc = False
-                elif ch == "\\":
-                    esc = True
-                elif ch == '"':
-                    in_str = False
-            else:
-                if ch == '"':
-                    in_str = True
-                elif ch == "{":
-                    depth += 1
-                elif ch == "}":
-                    depth -= 1
-                    if depth == 0:
-                        end = i + 1
-                        break
-        return raw[start:end] if end is not None else raw[start:]
-
-    def _validate_plan_json(text: str) -> List[str]:
-        # Rationale: output must be machine-checkable and reliably structured.
-        issues: List[str] = []
-        raw = _extract_first_json_object(text)
-        if not (text or "").strip():
-            return ["empty_output"]
-        if not raw:
-            # Rationale: caller provided content, but it didn't contain a JSON object.
-            return ["no_json_object_found"]
-
-        try:
-            obj = json.loads(raw)
-        except Exception:
-            return ["invalid_json"]
-
-        if not isinstance(obj, dict):
-            issues.append("root_not_object")
-            return issues
-
-        # Rationale: Part 4 requires an explicit regimen decision (Switch / Hold temporarily / Continue)
-        # as a critical decision point.
-        required_keys = [
-            "art_regimen_decision",
-            "problems",
-            "monitoring_plan",
-            "patient_counselling",
-        ]
-        for k in required_keys:
-            if k not in obj:
-                issues.append(f"missing_key:{k}")
-
-        ard = obj.get("art_regimen_decision")
-        if not isinstance(ard, dict):
-            issues.append("art_regimen_decision_wrong_type")
-        else:
-            if "decision" not in ard or "reason" not in ard:
-                issues.append("art_regimen_decision_missing_fields")
-            else:
-                decision = str(ard.get("decision") or "").strip()
-                allowed = {"Switch", "Hold temporarily", "Continue"}
-                if decision not in allowed:
-                    issues.append("art_regimen_decision_bad_decision")
-                reason = str(ard.get("reason") or "").strip()
-                if not reason:
-                    issues.append("art_regimen_decision_empty_reason")
-
-        problems = obj.get("problems")
-        if not isinstance(problems, list) or not problems:
-            issues.append("problems_not_nonempty_list")
-        else:
-            seen: set[str] = set()
-            for idx, p in enumerate(problems[:10]):
-                if not isinstance(p, dict):
-                    issues.append(f"problem_{idx}_not_object")
-                    continue
-                for k in ["problem", "action", "reason", "clinician_plan_for_this_problem"]:
-                    if k not in p:
-                        issues.append(f"problem_{idx}_missing_key:{k}")
-                # Heuristic: avoid task-like "problem" naming.
-                prob = str(p.get("problem") or "")
-                low_prob = prob.strip().lower()
-                if (
-                    low_prob.startswith("assess")
-                    or low_prob.startswith("check")
-                    or low_prob.startswith("review")
-                    or low_prob.startswith("evaluate")
-                    or low_prob.startswith("screen")
-                    or low_prob.startswith("monitor")
-                ):
-                    issues.append(f"problem_{idx}_looks_like_task")
-
-                # Rationale: prevent duplicate problems (common failure mode in draft output).
-                norm = " ".join(low_prob.split())
-                if norm:
-                    if norm in seen:
-                        issues.append(f"problem_{idx}_duplicate")
-                    seen.add(norm)
-                cp = p.get("clinician_plan_for_this_problem")
-                if isinstance(cp, dict):
-                    if "decision" not in cp or "explanation" not in cp:
-                        issues.append(f"problem_{idx}_clinician_plan_missing_fields")
-                    else:
-                        decision = str(cp.get("decision") or "").strip()
-                        allowed = {"Agree", "Disagree", "Gap", "Not Addressed"}
-                        if decision not in allowed:
-                            issues.append(f"problem_{idx}_clinician_plan_bad_decision")
-                elif not isinstance(cp, str):
-                    issues.append(f"problem_{idx}_clinician_plan_wrong_type")
-
-        mp = obj.get("monitoring_plan")
-        if not isinstance(mp, (str, list, dict)):
-            issues.append("monitoring_plan_wrong_type")
-
-        pc = obj.get("patient_counselling")
-        if not isinstance(pc, list):
-            issues.append("patient_counselling_not_list")
-
-        return issues
+    # A verdict on every item makes the plan longer; 400 tokens risked cutting it off (fix 7).
+    _PLAN_CHAT_OPTIONS = {"num_predict": 1000}
+    _strip_code_fences = strip_code_fences
+    _extract_first_json_object = first_json_object
+    _validate_plan_json = validate_plan
 
     def _organize_plan_json(
         *,
@@ -653,7 +302,8 @@ def _reason_updated_management_plan(
                 "You MUST de-duplicate repeated problems, merge overlapping ones, "
                 "and rewrite problem titles as patient problems/clinical decisions (not tasks). "
                 "Order problems from most urgent/high-risk to least. "
-                "You MUST include a valid art_regimen_decision with decision one of: Switch, Hold temporarily, Continue. "
+                "You MUST include a valid art_regimen_decision with decision one of: Switch, Hold temporarily, Continue, Uncertain. "
+                "You MUST include clinician_plan_for_this_problem with a decision for every problem. "
                 "Keep the plan concise (max 6 problems). "
                 "Return ONLY the corrected JSON object."
             )
@@ -698,21 +348,23 @@ def _reason_updated_management_plan(
             "- Problems must be PATIENT PROBLEMS / CLINICAL DECISIONS (not tasks like 'Assess', 'Check', 'Review').\n"
             "- Every Action must be specific enough that a clinician can act on it.\n"
             "- Every Reason must be ONE SENTENCE using patient facts and guideline excerpts.\n"
-            "- If you cannot justify an action from the excerpts, write: Uncertain: why you are uncertain (do not guess).\n\n"
+            "- If you cannot justify an action from the excerpts, write: Uncertain: why you are uncertain (do not guess).\n"
+            "- Compare every problem with the clinician's assessment and plan for today, and give a verdict for every problem.\n\n"
             "REQUIRED JSON KEYS (root object):\n"
-            "- art_regimen_decision: object with keys decision + reason (decision must be exactly one of: Switch, Hold temporarily, Continue)\n"
+            "- art_regimen_decision: object with keys decision + reason (decision must be exactly one of: Switch, Hold temporarily, Continue, Uncertain)\n"
             "- problems: array of problem objects (maximum 3-5 items in priority order)\n"
             "- monitoring_plan: brief bullet points or string (what labs, when, triggers)\n"
             "- patient_counselling: array of brief strings (maximum 3-4 items)\n\n"
             "REQUIRED KEYS (art_regimen_decision):\n"
-            "- decision: one of Switch, Hold temporarily, Continue\n"
+            "- decision: one of Switch, Hold temporarily, Continue, Uncertain (use Uncertain when the excerpts and patient data are not enough)\n"
             "- reason: brief 1-sentence rationale (patient facts + guideline-grounded OR Uncertain: ...)\n\n"
             "REQUIRED KEYS (each item in problems):\n"
             "- problem: string (a real patient problem / clinical decision)\n"
             "- action: string (specific action OR Uncertain: ...)\n"
             "- reason: brief 1-sentence rationale (patient facts + guideline-grounded OR Uncertain: ...)\n"
-            "- clinician_plan_for_this_problem: object (ONLY include if clinician plan differs or is missing)\n"
-            "  - decision: one of Agree, Disagree, Gap, Not Addressed\n"
+            "- clinician_plan_for_this_problem: object, required for every problem\n"
+            "  - decision: one of Agree (the clinician's plan already covers it), Disagree (the plan does something else), "
+            "Gap (the plan covers it partly), Not Addressed (the plan does not mention it, or there is no plan)\n"
             "  - explanation: brief 1-sentence explanation\n"
         )
 
@@ -728,7 +380,6 @@ def _reason_updated_management_plan(
             "Clinical guideline support for this patient."
         )
         patient_id = patient.get("patient_id")
-        patient_name = patient.get("name")
 
         lab_trends_text = ""
         try:
@@ -761,13 +412,11 @@ def _reason_updated_management_plan(
         except Exception:
             doctors_plan = "No plan documented."
 
-        regimen_str = ", ".join(patient.get("art_regimen_current") or []) or "unknown"
-        notes_text = ""
-        try:
-            ctx = build_patient_context(patient)
-            notes_text = (ctx.notes_text or "")
-        except Exception:
-            pass
+        regimen_str = ", ".join(build_patient_context(patient).art_regimen_current) or "unknown"
+        # The same dated notes and recorded-facts summary the screening step reads (fixes 4 and 6).
+        ctx = build_patient_context(patient)
+        notes_text = ctx.dated_notes or ""
+        summary_text = json.dumps(context.patient_summary or {}, ensure_ascii=False, default=str)
 
         evidence_lines: List[str] = []
         for bundle in evidence_bundles:
@@ -797,10 +446,11 @@ def _reason_updated_management_plan(
             {
                 "role": "user",
                 "content": (
-                    f"Patient id: {patient_id}, name: {patient_name}\n"
+                    f"Patient id: {patient_id}\n"
                     f"Current regimen: {regimen_str}\n"
                     f"Question: {question}\n\n"
-                    f"Patient notes:\n{notes_text}\n\n"
+                    f"Patient summary (recorded facts; not_recorded lists empty fields):\n{summary_text}\n\n"
+                    f"Patient notes, oldest first:\n{notes_text}\n\n"
                     f"Lab trends:\n{lab_trends_text or 'No lab history available.'}\n\n"
                     f"Doctor's current plan:\n{doctors_plan}\n\n"
                     f"Guideline excerpts:\n{evidence_text}"
@@ -816,12 +466,12 @@ def _reason_updated_management_plan(
             options_override=_PLAN_CHAT_OPTIONS,
         )
         if plan_answer is None:
-            return None
+            return None, ["no_reply"]
 
         issues = _validate_plan_json(plan_answer)
         if not issues:
             # Rationale: return only the JSON object (ignore any extra words around it).
-            return _extract_first_json_object(plan_answer) or _strip_code_fences(plan_answer)
+            return _extract_first_json_object(plan_answer) or _strip_code_fences(plan_answer), []
 
         # One retry with explicit format feedback (non-blocking if it still fails).
         feedback = "Previous output failed validation: " + ", ".join(issues)
@@ -832,12 +482,12 @@ def _reason_updated_management_plan(
             options_override=_PLAN_CHAT_OPTIONS,
         )
         if plan_retry is None:
-            return plan_answer
+            return plan_answer, issues
 
         retry_issues = _validate_plan_json(plan_retry)
         if not retry_issues:
             # Rationale: return only the JSON object (ignore any extra words around it).
-            return _extract_first_json_object(plan_retry) or _strip_code_fences(plan_retry)
+            return _extract_first_json_object(plan_retry) or _strip_code_fences(plan_retry), []
 
         # Organizer pass: attempt to repair/organize into a valid, de-duplicated
         # management plan JSON.
@@ -846,28 +496,12 @@ def _reason_updated_management_plan(
             validation_issues=retry_issues,
         )
         if organized is not None:
-            return organized
+            return organized, []
 
-        # If still invalid, return the latest raw output for debugging/display.
-        return _strip_code_fences(plan_retry)
-    except Exception:
-        return None
-
-
-def _verify(
-    draft_answer: str,
-    evidence_bundles: List[EvidenceBundle],
-    context: QueryContext,
-) -> Dict[str, Any]:
-    """Phase 1 verifier stub.
-
-    Returns a trivial "OK" status without performing any checks. Future
-    versions will cross-check the answer against retrieved evidence and
-    patient context.
-    """
-
-    _ = (evidence_bundles, context)  # explicit: unused in Phase 1
-    return {"status": "OK", "issues": [], "draft_answer": draft_answer}
+        # Still invalid: return the latest output with what it failed, so the screen can say so.
+        return _strip_code_fences(plan_retry), retry_issues
+    except Exception as exc:
+        return None, [f"error:{exc.__class__.__name__}"]
 
 
 # Public orchestrator ------------------------------------------------------
@@ -904,27 +538,24 @@ def run_agentic_flow(
         vector_store=vector_store,
         top_k=top_k,
     )
-    draft_answer = _reason(normalized, subtasks, evidence, llm_client=llm_client)
-    updated_management_plan_text = _reason_updated_management_plan(
+    updated_management_plan_text, plan_issues = _reason_updated_management_plan(
         normalized,
         evidence,
         llm_client=llm_client,
     )
-    verifier_report = _verify(draft_answer, evidence, normalized)
 
     debug_info: Dict[str, Any] = {
         "normalized_context": normalized,
         "subtasks": subtasks,
         "evidence_bundles": evidence,
-        "verifier_report": verifier_report,
         # Rationale: store new Part 3 output for debug UI consumption without
         # changing existing behaviour.
         "updated_management_plan_text": updated_management_plan_text,
     }
 
     return AgenticResult(
-        final_answer_text=draft_answer,
         updated_management_plan_text=updated_management_plan_text,
+        plan_issues=plan_issues,
         used_chunks=[],
         warnings=[
             "agentic flow is in Phase 1 skeleton mode; no real planning/"

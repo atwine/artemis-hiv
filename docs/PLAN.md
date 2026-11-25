@@ -59,7 +59,7 @@ test that fails on the old code, ends with that test passing, and is logged in
 - [x] Fix 4: lab results carry their unit, date and age, and notes are dated.
 - [x] Fix 5: drugs are recognised however they're typed, and the rules read the medicine list.
 - [x] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
-- [ ] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
+- [x] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
       "Continue" (old item 1.2).
 - [ ] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.
 - [ ] Fix 9: save the visit record: reviews, overrides and reasons (old item 1.3, second half).
