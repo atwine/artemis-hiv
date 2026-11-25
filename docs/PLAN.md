@@ -153,9 +153,11 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   4/12 for the app's real search. The biggest lever is what the app searches for; 5 problems
   stay missing even then, which the index fixes target. Fix 5c is out of the app again.
 - The owner picked the search wording first. Fix 5q (the AI writes the patient's guideline
-  questions, each searched) was tried with Llama writing them and dropped by its rule: 4/12, the
-  same as today. Llama's questions were short and generic ("TDF side effects") for every patient.
-  Whether a stronger question writer (GLM) does better is untested.
+  questions, each searched for its best 2 passages, up to 10): with Llama writing them, 4/12,
+  the same as today (generic questions); with GLM, 6/12, one short of the bar of 7 but equal to
+  the best this index allows even with perfect wording. Kept by the owner's decision
+  (2026-11-26). Second check running: GLM end to end, 3 runs per case, must keep its own catches
+  at or above 80%.
 - Next: how the guideline text is stored, measured on the standalone questions, the
   ideal-description searches and the self-check: (b) cut along the guideline's own sections with
   headings, then (d) a better search model and (e) a re-ranking step, which need downloads the
