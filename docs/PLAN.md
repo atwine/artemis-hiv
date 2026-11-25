@@ -21,9 +21,10 @@ Version 1 of the revival is done when all four are true:
   comparison. Ollama comes back only for fine-tuning experiments.
 - Synthetic or clinician-written cases only. No real patient records anywhere.
 - Out of scope: mixed Luganda/English notes.
-- Branch flow: each piece of work gets its own branch off `development`, then a pull request into
-  `development`, then `staging`, then `main`. Code review and security review before `staging`.
-  Nothing is pushed without a yes.
+- Branch flow: each piece of work gets its own branch off `development`. Once reviewed, it is merged into
+  `development` locally and pushed, with no pull request; `development` moves to `staging` the same way.
+  The only pull request is `staging` into `main`, and only the owner merges it. Code review and security
+  review before anything reaches `development`. Nothing is pushed without a yes.
 
 ## Phase 0: Foundations
 
@@ -31,9 +32,9 @@ Version 1 of the revival is done when all four are true:
 - [x] 0.2 Commit the vLLM connection work (on `claude/kaggle-project-review-89c107`).
 - [x] 0.3 Security scanners: secret scan on every commit, dependency and code scans on every push.
 - [x] 0.4 Create `development` and `staging` from `main`; first pull request goes through them.
-- [ ] 0.5 Fix the 5 failing tests; move the loose `test_*.py` scripts out of the test run; lock package versions.
-      Tests fixed (16 pass); GitHub check added (`tests.yml`); debugging scripts deleted; packages locked with
-      pip-tools (`requirements.in` -> `requirements.txt`). Tick once the GitHub check passes.
+- [x] 0.5 Fix the 5 failing tests; move the loose `test_*.py` scripts out of the test run; lock package versions.
+      Tests fixed (16 pass on GitHub); debugging scripts deleted; packages locked with pip-tools
+      (`requirements.in` -> `requirements.txt`).
 - [ ] 0.6 (suggested) Stop storing the guideline PDFs in the repo; link to the official sources instead.
 
 Check: tests all pass; both branches exist; scanners run on a pull request.
