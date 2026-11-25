@@ -108,7 +108,8 @@ def patient_context_for(patient: Dict[str, Any], today_note: str) -> Any:
 def screening_search(rag: RagEngine, context: Any, top_k: int) -> List[VectorSearchResult]:
     """The guideline passages the AI screening reads. Today one fixed query plus the patient's
     notes (a retrieval fault, G31, that Phase 2B measures and fixes). The search check calls this
-    too, so it measures exactly what the app does."""
+    too, so it measures exactly what the app does. (Fix 5a, one search per drug, medicine, rule
+    alert and symptom, was tried and dropped: 3 of 12 problems in the top 5 against 4 of 12.)"""
     checklist_seed = Alert(
         alert_id="llm_checklist_seed",
         title="Guideline audit checklist",
