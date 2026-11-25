@@ -19,7 +19,7 @@ class _FakeOllamaClient(OllamaClient):  # type: ignore[misc]
         self._num_ctx = None
         self._payload = payload
 
-    def chat(self, messages: List[ChatMessage]) -> Optional[str]:  # type: ignore[override]
+    def chat(self, messages: List[ChatMessage], format=None, options_override=None) -> Optional[str]:  # noqa: A002
         # Return the preconfigured payload regardless of messages.
         return self._payload
 

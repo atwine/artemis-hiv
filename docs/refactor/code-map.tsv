@@ -30,20 +30,10 @@ artemis/rules/checks.py	_check_tdf_nsaid_use	Flags NSAID use, in the notes or on
 artemis/rules/checks.py	_check_possible_proteinuria	Flags protein in the urine, in the notes or pasted lab text, unless negated.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_suboptimal_bp_with_missed_amlodipine	Alerts when notes show poor blood pressure control with missed amlodipine doses.	artemis/rules/checks.py	moved
 artemis/visit.py	extract_patient_facts_from_history	Pulls drugs, conditions and other key facts out of the free-text history.	artemis/visit.py	moved
-artemis/visit.py	compute_overall_status	Sets the overall colour from the alerts; INCOMPLETE when nothing was found but the AI failed.	artemis/visit.py	moved
+artemis/visit.py	compute_overall_status	Sets the overall colour from the alerts; INCOMPLETE when nothing was found and the AI review did not finish cleanly.	artemis/visit.py	moved
 artemis/visit.py	_retrieve	Finds the guideline passages that relate to one alert.	artemis/visit.py	moved
 artemis/visit.py	run_visit_analysis	Runs the whole visit check: alerts, guideline lookup, AI screening and explanations.	artemis/visit.py	moved
 artemis/visit.py	run_visit_analysis.status	Reports a progress message if someone is listening.	artemis/visit.py	moved
-artemis/ai/postprocess.py	extract_json_array	Pulls a list of alerts out of the AI's reply, repairing common mistakes.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	_split_sentences	Splits text into sentences.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	_similarity	Scores how alike two pieces of text are, from 0 to 1.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	deduplicate_text	Removes repeated or near-repeated sentences from a block of text.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	_split_paragraphs	Splits text into paragraphs at blank lines, bars or Evidence headings.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	deduplicate_paragraphs	Removes near-repeated paragraphs from text.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	deduplicate_alerts	Drops alerts that nearly repeat an earlier alert's title and message.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	enforce_word_limit	Shortens text to a word limit, ending at a full sentence when possible.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	validate_alert	Lists what is wrong with an AI-written alert, if anything.	artemis/ai/postprocess.py	moved
-artemis/ai/postprocess.py	clean_artemis_output	Turns the AI's raw reply into a clean, de-duplicated, length-limited list of alerts.	artemis/ai/postprocess.py	moved
 modules/embedder.py	Embedder.__init__	Loads the text-to-numbers model, or a simple backup if it cannot load.	artemis/guidelines/	to-move
 modules/embedder.py	Embedder.model_name	Gives the name of the text-to-numbers model in use.	artemis/guidelines/	to-move
 modules/embedder.py	Embedder.encode	Turns pieces of text into lists of numbers so similar texts can be matched.	artemis/guidelines/	to-move
@@ -72,10 +62,6 @@ artemis/ai/client.py	OpenAICompatClient._resolve_model	Asks the server which mod
 artemis/ai/client.py	OpenAICompatClient._response_format	Converts the requested reply format into the form this kind of server expects.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient.chat	Sends a conversation to an OpenAI-style AI server and returns its reply.	artemis/ai/client.py	moved
 artemis/ai/screening.py	_build_screening_bundle	Packs up to ten guideline passages, with page numbers, to show the AI.	artemis/ai/screening.py	moved
-artemis/ai/screening.py	_strip_code_fences	Removes code-fence marks that the AI sometimes wraps around its answer.	artemis/ai/screening.py	moved
-artemis/ai/screening.py	_extract_first_json_array	Pulls the first JSON list out of the AI's reply, closing it if cut off.	artemis/ai/screening.py	moved
-artemis/ai/screening.py	_deduplicate_message	Cuts repeated phrases and sentences from an alert message and limits its length.	artemis/ai/screening.py	moved
-artemis/ai/screening.py	_parse_issues_json	Turns the AI's reply into a clean list of issues, with a fallback reader.	artemis/ai/screening.py	moved
 artemis/ai/screening.py	generate_llm_screening_alerts	Has the AI screen the patient against guidelines and returns any alerts it finds.	artemis/ai/screening.py	moved
 artemis/patient/record.py	_parse_iso_date	Converts a date written as YYYY-MM-DD into a date.	artemis/patient/record.py	moved
 artemis/patient/record.py	_days_between	Counts the days between two dates.	artemis/patient/record.py	moved
@@ -139,3 +125,15 @@ artemis/plan/plan_json.py	validate_plan	Lists what is wrong with a plan, or noth
 artemis/plan/view.py	_texts	Turns a plan field into a list of non-empty lines.	artemis/plan/view.py	stays
 artemis/plan/view.py	plan_html	Draws the plan for the screen, escaping all AI text.	artemis/plan/view.py	stays
 artemis/plan/view.py	read_plan	Decides what the clinician sees for each plan item and the regimen decision.	artemis/plan/view.py	stays
+artemis/ai/client.py	_ReplyState.last_finish_reason	Says why the AI's last reply ended: finished, or cut at the length limit.	artemis/ai/client.py	moved
+artemis/ai/client.py	_ReplyState.last_note	Gives a note about the last reply, such as the server refusing the answer format.	artemis/ai/client.py	moved
+artemis/ai/client.py	_text_of	Joins a reply sent as a list of parts into one text.	artemis/ai/client.py	moved
+artemis/ai/screening.py	_is_alert	Tells whether a piece of the AI's reply looks like an alert.	artemis/ai/screening.py	moved
+artemis/ai/screening.py	_closes	Tells whether a piece of JSON closes before the reply ends.	artemis/ai/screening.py	moved
+artemis/ai/screening.py	_read_list	Reads a list from the AI's reply one item at a time, noting if it was cut or broken.	artemis/ai/screening.py	moved
+artemis/ai/screening.py	read_alert_list	Finds the list of alerts in the AI's reply and says whether it was read in full.	artemis/ai/screening.py	moved
+artemis/ai/screening.py	_severity	Keeps the AI's severity if it is one of the four, otherwise 'not given'.	artemis/ai/screening.py	moved
+artemis/ai/screening.py	_marked_citations	Marks each passage the AI cited with whether it was shown that passage.	artemis/ai/screening.py	moved
+artemis/visit.py	_cited_passages	Lists the passages an AI alert cited from those the AI was shown.	artemis/visit.py	moved
+ui/references.py	_unique	Drops repeated lines, keeping the order.	ui/references.py	stays
+ui/references.py	alert_references	Builds the References list under an alert: what the AI cited, or what a search found.	ui/references.py	stays

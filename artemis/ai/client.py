@@ -1,6 +1,7 @@
 """LLM clients.
 
-Two backends share one interface (`.model`, `.last_error`, `.chat(...)`):
+Two backends share one interface (`.model`, `.last_error`, `.last_finish_reason`,
+`.last_note`, `.chat(...)`):
 - OllamaClient: a local Ollama server (the original setup).
 - OpenAICompatClient: any OpenAI-compatible server, such as vLLM on a remote GPU.
   Selected by setting LLM_BASE_URL (see `openai_compat_config_from_env`).
@@ -19,6 +20,26 @@ class ChatMessage(TypedDict):
     content: str
 
 
+class _ReplyState:
+    """Why the last reply ended and anything worth noting about it (fix 8).
+
+    last_finish_reason is the server's own word: "stop" (the model finished) or
+    "length" (the server cut the reply at the token limit). None when the server
+    did not say.
+    """
+
+    _last_finish_reason: Optional[str] = None
+    _last_note: Optional[str] = None
+
+    @property
+    def last_finish_reason(self) -> Optional[str]:
+        return self._last_finish_reason
+
+    @property
+    def last_note(self) -> Optional[str]:
+        return self._last_note
+
+
 @dataclass(frozen=True)
 class OllamaConfig:
     # Rationale: default to the locally pulled model tag to avoid mismatches.
@@ -29,7 +50,7 @@ class OllamaConfig:
     num_ctx: Optional[int] = None
 
 
-class OllamaClient:
+class OllamaClient(_ReplyState):
     def __init__(self, config: OllamaConfig | None = None) -> None:
         cfg = config or OllamaConfig()
 
@@ -91,6 +112,8 @@ class OllamaClient:
 
         try:
             self._last_error = None
+            self._last_finish_reason = None
+            self._last_note = None
             # Rationale: use an explicit client so we can control the host used for
             # connectivity debugging. Allow up to 5 minutes for long-running
             # local model calls before treating them as timeouts.
@@ -139,6 +162,10 @@ class OllamaClient:
             if response is None:
                 self._last_error = "Ollama returned no response"
                 return None
+            done_reason = (
+                response.get("done_reason") if isinstance(response, dict) else getattr(response, "done_reason", None)
+            )
+            self._last_finish_reason = str(done_reason) if done_reason else None
 
             if hasattr(response, "message") and getattr(response, "message") is not None:
                 content = getattr(response, "message").content
@@ -203,7 +230,14 @@ def openai_compat_config_from_env() -> Optional[OpenAICompatConfig]:
     )
 
 
-class OpenAICompatClient:
+def _text_of(content: Any) -> Optional[str]:
+    """The reply text. Some servers send it as a list of parts ({"type": "text", "text": ...})."""
+    if isinstance(content, list):
+        return "".join(str(part.get("text") or "") for part in content if isinstance(part, dict))
+    return content
+
+
+class OpenAICompatClient(_ReplyState):
     """Chat client for OpenAI-compatible servers (vLLM, llama.cpp server, LM Studio).
 
     Accepts the same Ollama-style options the pipeline already passes and maps the
@@ -283,6 +317,8 @@ class OpenAICompatClient:
 
         try:
             self._last_error = None
+            self._last_finish_reason = None
+            self._last_note = None
             options: Dict[str, Any] = {"temperature": 0.2, "num_predict": 128}
             if options_override:
                 options.update(options_override)
@@ -301,12 +337,18 @@ class OpenAICompatClient:
                 # Some servers reject schema-constrained output (vLLM: 400; OpenRouter:
                 # 404 "no endpoints found" for models without it); the pipeline's JSON
                 # parsers already cope with free-text JSON, so retry without it.
+                self._last_note = (
+                    f"The server refused the answer format (HTTP {resp.status_code}), "
+                    "so the model was asked again without it."
+                )
                 body.pop("response_format")
                 resp = requests.post(url, json=body, headers=self._headers(), timeout=self._timeout_s)
             resp.raise_for_status()
 
             choices = resp.json().get("choices") or []
-            content = (choices[0].get("message") or {}).get("content") if choices else None
+            choice = choices[0] if choices else {}
+            self._last_finish_reason = choice.get("finish_reason")
+            content = _text_of((choice.get("message") or {}).get("content"))
             if not content:
                 self._last_error = "Model server returned an empty message content"
                 return None

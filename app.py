@@ -37,6 +37,7 @@ from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
+from ui.references import alert_references
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
@@ -968,14 +969,9 @@ def main() -> None:
     if _dbg.get("raw_output"):
         with st.expander("Debug: Raw LLM screening output", expanded=False):
             st.caption(f"Parse status: {_dbg.get('parse_status') or 'unknown'}")
-            # Rationale: show dedup stats so we can verify repetition removal is working.
-            if _dbg.get("dedup_stats"):
-                st.caption("Dedup stats per alert:")
-                for ds in _dbg["dedup_stats"]:
-                    st.caption(
-                        f"  {ds['alert_id']}: {ds['raw_words']}→{ds['clean_words']} words, "
-                        f"{ds['raw_chars']}→{ds['clean_chars']} chars"
-                    )
+            st.caption(f"Why the reply ended: {_dbg.get('finish_reason') or 'not reported'}")
+            if _dbg.get("client_note"):
+                st.caption(str(_dbg["client_note"]))
             st.text(_dbg.get("raw_output"))
 
     # Rationale: use the live checkbox key ("agentic_ui_debug_enabled") so the plan
@@ -1065,35 +1061,16 @@ def main() -> None:
                 _why_text = re.split(r"\bpatient evidence\s*:\s*", _why_text, maxsplit=1, flags=re.IGNORECASE)[0]
                 _why_text = re.split(r"\bguideline excerpts\s*:\s*", _why_text, maxsplit=1, flags=re.IGNORECASE)[0]
 
-                # Rationale: build a single numbered reference list from evidence + retrieved pages.
-                _pages: List[int] = []
-                try:
-                    _cit = (alert.evidence or {}).get("citations") or []
-                    if isinstance(_cit, list):
-                        for c in _cit:
-                            if isinstance(c, dict) and c.get("page_number") is not None:
-                                try:
-                                    _pages.append(int(c.get("page_number")))
-                                except Exception:
-                                    continue
-                except Exception:
-                    _pages = []
-                if retrieved:
-                    for r in retrieved:
-                        try:
-                            p = (getattr(r, "metadata", {}) or {}).get("page_number")
-                            if p is not None:
-                                _pages.append(int(p))
-                        except Exception:
-                            continue
 
-                # Rationale: keep compatible with older Python versions (avoid built-in generics like set[int]).
-                _seen_pages = set()
-                _ref_pages: List[int] = []
-                for p in _pages:
-                    if isinstance(p, int) and p not in _seen_pages:
-                        _seen_pages.add(p)
-                        _ref_pages.append(p)
+                if alert.source == "ai":
+                    _sev = (alert.evidence or {}).get("severity") or "not given"
+                    if _sev == "not given":
+                        st.warning(
+                            "Severity not given: the AI's severity was missing or not one of "
+                            "critical, high, moderate or low."
+                        )
+                    else:
+                        st.caption(f"Severity: {_sev}")
 
                 st.markdown("**Finding**")
                 st.write(_finding_text.strip() or "-")
@@ -1111,11 +1088,10 @@ def main() -> None:
                 # Rationale: keep technical retrieval details available without cluttering the main view.
                 with st.expander("Details (debug)", expanded=False):
                     # Rationale: keep references out of the main alert view; only show them in Details.
-                    if _ref_pages:
-                        st.markdown("**References**")
-                        st.markdown(
-                            "\n".join([f"{i+1}. Guidelines, p.{p}" for i, p in enumerate(_ref_pages)])
-                        )
+                    _ref_heading, _ref_lines = alert_references(alert, retrieved)
+                    if _ref_lines:
+                        st.markdown(f"**{_ref_heading}**")
+                        st.markdown("\n".join(f"{i + 1}. {line}" for i, line in enumerate(_ref_lines)))
 
                     # Rationale: move generation status/latency out of the main clinician view.
                     if st.session_state.get("analysis_use_ollama"):

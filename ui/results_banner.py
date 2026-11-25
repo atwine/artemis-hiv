@@ -11,6 +11,11 @@ _FAILED_REASON = {
     "failed": "the model server did not answer",
     "unreadable": "its reply could not be read as a list of alerts",
 }
+# The AI's reply was read only in part: the alerts read are shown, others may be missing (fix 8).
+_PARTIAL_REASON = {
+    "cut_off": "its reply was cut off before it finished",
+    "partly_read": "part of its reply could not be read",
+}
 
 
 def status_banners(status: Optional[str], screening_outcome: str, alert_count: int) -> List[Banner]:
@@ -21,6 +26,14 @@ def status_banners(status: Optional[str], screening_outcome: str, alert_count: i
                 "warning",
                 f"AI review failed ({_FAILED_REASON[screening_outcome]}): only rule checks are shown. "
                 "Issues the AI would have raised may be missing.",
+            )
+        )
+    elif screening_outcome in _PARTIAL_REASON:
+        banners.append(
+            (
+                "warning",
+                f"AI review incomplete ({_PARTIAL_REASON[screening_outcome]}). "
+                "The AI alerts it completed are shown; others may be missing.",
             )
         )
 

@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import json
 import logging
-import re
-from difflib import SequenceMatcher
 
 from artemis.rules.checks import Alert
 from artemis.ai.client import ChatMessage, OllamaClient
+from artemis.plan.plan_json import strip_code_fences
 from artemis.patient.record import PatientContext
 from modules.vector_store import VectorSearchResult
 
@@ -27,36 +26,18 @@ def _build_screening_bundle(chunks: List[VectorSearchResult]) -> List[Dict[str, 
     return bundle
 
 
-def _strip_code_fences(text: str) -> str:
-    # Rationale: tolerate models that wrap JSON in ```json fences.
-    t = (text or "").strip()
-    if not t.startswith("```"):
-        return t
-    lines = t.splitlines()
-    if not lines:
-        return t
-    if lines[0].strip().startswith("```"):
-        lines = lines[1:]
-    if lines and lines[-1].strip().startswith("```"):
-        lines = lines[:-1]
-    return "\n".join(lines).strip()
+SEVERITIES = ("critical", "high", "moderate", "low")
+NO_SEVERITY = "not given"
 
 
-def _extract_first_json_array(text: str) -> str:
-    # Rationale: models sometimes add extra words before/after the JSON array.
-    # Extract the first full [...] block. If truncated, attempt to close incomplete objects.
-    raw = _strip_code_fences(text)
-    if not raw:
-        return ""
-    start = raw.find("[")
-    if start == -1:
-        return ""
-    depth = 0
-    in_str = False
-    esc = False
-    end = None
-    for i in range(start, len(raw)):
-        ch = raw[i]
+def _is_alert(item: Any) -> bool:
+    return isinstance(item, dict) and any(k in item for k in ("alert_id", "title", "message"))
+
+
+def _closes(raw: str, pos: int) -> bool:
+    """True when the JSON value starting at pos closes before the text ends (strings respected)."""
+    depth, in_str, esc = 0, False, False
+    for ch in raw[pos:]:
         if in_str:
             if esc:
                 esc = False
@@ -64,158 +45,98 @@ def _extract_first_json_array(text: str) -> str:
                 esc = True
             elif ch == '"':
                 in_str = False
-        else:
-            if ch == '"':
-                in_str = True
-            elif ch == "[":
-                depth += 1
-            elif ch == "]":
-                depth -= 1
-                if depth == 0:
-                    end = i + 1
-                    break
-    
-    if end is not None:
-        return raw[start:end]
-    
-    # Rationale: if array is incomplete (truncated output), salvage all fully-formed
-    # objects and discard the last incomplete one. Simply closing braces on a truncated
-    # object (e.g., '{"page') produces invalid JSON like '{"page}]'.
-    # Instead, find the last complete '}' that ends a top-level object and cut there.
-    incomplete = raw[start:]
-    # Find the position of the last '}' that closes a complete top-level object
-    last_complete_obj = incomplete.rfind('},')
-    if last_complete_obj == -1:
-        last_complete_obj = incomplete.rfind('}')
-    if last_complete_obj != -1:
-        # Keep everything up to and including the last complete '}'
-        incomplete = incomplete[:last_complete_obj + 1] + ']'
-    else:
-        # No complete objects at all — return empty array
-        incomplete = '[]'
-    # Rationale: fix trailing commas before ] that json.loads rejects
-    incomplete = re.sub(r',\s*\]', ']', incomplete)
-    return incomplete
+        elif ch == '"':
+            in_str = True
+        elif ch in "[{":
+            depth += 1
+        elif ch in "]}":
+            depth -= 1
+            if depth <= 0:
+                return True
+    return False
 
 
-def _deduplicate_message(text: str, max_words: int = 200) -> str:
-    """Inline dedup + word limit — guaranteed to run on every alert message.
-    
-    Rationale: the artemis_postprocess pipeline may fail silently (import error,
-    JSON parse error, etc.) and the fallback parser returns raw LLM text with no
-    dedup. This function is the last line of defense against repetition loops.
-    
-    Two-layer approach:
-      Layer 1 — Phrase-level: detect any phrase (5+ words) that repeats 3+ times
-                and collapse it to a single occurrence. This catches loops like
-                "The patient is on TDF, 3TC, and DTG. The patient is on TDF, 3TC..."
-      Layer 2 — Sentence-level: split on sentence boundaries and remove sentences
-                that are ≥75% similar to one already kept.
+def _read_list(raw: str, pos: int) -> Tuple[List[Any], str]:
+    """Read list items one at a time from just after a "[".
+
+    Returns the items read and how the list ended: "closed" (reached "]"), "cut" (the
+    text ended first) or "broken" (an item could not be read; the items before it are kept).
     """
-    if not text:
-        return text
-    
-    orig_len = len(text.split())
-    
-    # --- Layer 1: Phrase-level repetition collapse ---
-    # Rationale: the LLM sometimes gets stuck repeating a phrase that doesn't end
-    # with punctuation, so sentence splitting can't catch it. We look for any
-    # substring of 5+ words that appears 3+ times and keep only the first occurrence.
-    # This regex finds a phrase of 5+ words that repeats at least 2 more times.
-    text = re.sub(
-        r'((?:\S+\s+){4,}\S+[.,;:!?]?\s*?)(\1{2,})',
-        r'\1',
-        text,
-    )
-    
-    # --- Layer 2: Sentence-level deduplication ---
-    # Split into sentences at period/exclamation/question followed by space + capital letter
-    sentences = re.split(r"(?<=[.!?])\s+(?=[A-Z])", text)
-    
-    kept: List[str] = []
-    for sentence in sentences:
-        sentence = sentence.strip()
-        if not sentence:
-            continue
-        # Check if this sentence is too similar to one we already kept
-        is_dup = False
-        for existing in kept:
-            # Rationale: SequenceMatcher ratio >= 0.75 catches near-identical sentences
-            # that differ only in minor wording (e.g., rounding differences).
-            if SequenceMatcher(None, sentence.lower(), existing.lower()).ratio() >= 0.75:
-                is_dup = True
+    decoder = json.JSONDecoder()
+    items: List[Any] = []
+    while True:
+        while pos < len(raw) and raw[pos] in " \t\r\n,":
+            pos += 1
+        if pos >= len(raw):
+            return items, "cut"
+        if raw[pos] == "]":
+            return items, "closed"
+        try:
+            value, pos = decoder.raw_decode(raw, pos)
+        except json.JSONDecodeError:
+            return items, ("broken" if _closes(raw, pos) else "cut")
+        items.append(value)
+
+
+def read_alert_list(text: str, *, finish_reason: Optional[str] = None) -> Tuple[List[Dict[str, Any]], str]:
+    """Find the list of alerts in the model's reply (fix 8).
+
+    The list may come after other words, including bracketed ones such as "[1]", or as
+    a single alert object. Returns (alerts, status):
+    - parsed_nonempty / parsed_empty: the list was read in full.
+    - cut_off: the reply stopped part-way (the server said so, or the list never closed);
+      the complete alerts before the cut are kept.
+    - partly_read: some items in the list could not be read as alerts; the rest are kept.
+    - parse_failed: no list of alerts was found.
+    """
+    raw = strip_code_fences(text or "")
+    decoder = json.JSONDecoder()
+    found: Optional[Tuple[List[Any], str]] = None
+    ended_mid_list = False
+    for i, ch in enumerate(raw):
+        if ch == "[":
+            items, end = _read_list(raw, i + 1)
+            if any(_is_alert(x) for x in items) or (end == "closed" and not items):
+                found = (items, end)
                 break
-        if not is_dup:
-            kept.append(sentence)
-    
-    result = " ".join(kept)
-    
-    # Enforce word limit with sentence-boundary truncation
-    words = result.split()
-    if len(words) > max_words:
-        truncated = " ".join(words[:max_words])
-        last_period = truncated.rfind(".")
-        if last_period > len(truncated) * 0.5:
-            truncated = truncated[:last_period + 1]
-        result = truncated
-    
-    new_len = len(result.split())
-    if new_len < orig_len:
-        logger.info(
-            "Dedup reduced message: %d→%d words (%d chars→%d chars)",
-            orig_len, new_len, len(text), len(result),
-        )
-    return result
+            ended_mid_list = ended_mid_list or end == "cut"
+        elif ch == "{":
+            try:
+                value, _ = decoder.raw_decode(raw, i)
+            except json.JSONDecodeError:
+                continue
+            if _is_alert(value):
+                found = ([value], "closed")
+                break
+    if found is None:
+        cut = finish_reason == "length" or ended_mid_list
+        return [], ("cut_off" if cut else "parse_failed")
+
+    items, end = found
+    alerts = [x for x in items if isinstance(x, dict)]
+    if end == "cut" or finish_reason == "length":
+        status = "cut_off"
+    elif end == "broken" or len(alerts) < len(items):
+        status = "partly_read"
+    else:
+        status = "parsed_nonempty" if alerts else "parsed_empty"
+    return alerts, status
 
 
-def _parse_issues_json(text: str) -> Optional[List[Dict[str, Any]]]:
-    if not text:
-        return None
+def _severity(value: Any) -> str:
+    """One of the four severities, or "not given" when it is missing or something else (fix 8)."""
+    s = str(value or "").strip().lower()
+    return s if s in SEVERITIES else NO_SEVERITY
 
-    # Rationale: use artemis_postprocess pipeline for comprehensive deduplication and validation.
-    # This catches repetition loops that prompt engineering misses (safety net).
-    try:
-        from artemis.ai.postprocess import clean_artemis_output
-        
-        # clean_artemis_output handles: JSON extraction, sentence/paragraph/alert dedup,
-        # word limit enforcement, schema validation
-        cleaned_alerts = clean_artemis_output(
-            text,
-            message_max_words=200,
-            action_max_words=50,
-            sentence_similarity=0.75,
-            paragraph_similarity=0.70,
-            alert_similarity=0.70,
-        )
-        
-        # Return None only if parsing completely failed (clean_artemis_output returns error alert)
-        if len(cleaned_alerts) == 1 and cleaned_alerts[0].get("alert_id") == "PARSE_ERROR":
-            return None
-        
-        return cleaned_alerts if cleaned_alerts else []
-        
-    except Exception as exc:
-        # Rationale: catch ALL exceptions so that any failure in the postprocessing pipeline
-        # falls back to the proven original parser instead of crashing.
-        # Log the error so we can diagnose why postprocessing failed.
-        logger.warning("artemis_postprocess failed, using fallback parser: %s", exc)
 
-    # Fallback: original robust parsing (no dedup, but at least parses the JSON)
-    raw = _extract_first_json_array(text)
-    if not raw:
-        return None
-
-    try:
-        parsed = json.loads(raw)
-    except Exception:
-        return None
-
-    if not isinstance(parsed, list):
-        return None
+def _marked_citations(value: Any, shown_ids: set) -> List[Dict[str, Any]]:
+    """The AI's citations, each marked with whether the AI was actually shown that passage."""
+    raw_list = value if isinstance(value, list) else ([value] if value else [])
     out: List[Dict[str, Any]] = []
-    for item in parsed:
-        if isinstance(item, dict):
-            out.append(item)
+    for c in raw_list:
+        c = dict(c) if isinstance(c, dict) else {"chunk_id": str(c)}
+        c["shown_to_ai"] = str(c.get("chunk_id") or "") in shown_ids
+        out.append(c)
     return out
 
 
@@ -254,7 +175,7 @@ def generate_llm_screening_alerts(
                 "title": {"type": "string"},
                 "message": {"type": "string"},
                 "issue_type": {"type": "string"},
-                "severity": {"type": "string"},
+                "severity": {"type": "string", "enum": list(SEVERITIES)},
                 "recommended_action": {"type": "string"},
                 "citations": {
                     "type": "array",
@@ -386,106 +307,60 @@ HARD LIMITS — FOLLOW STRICTLY:
     #   (~50 words), which is too short to catch phrase-level loops. 256 tokens (~200
     #   words) covers the full length of a typical alert message.
     #   [src] https://docs.ollama.com/modelfile — repeat_last_n controls the window.
-    try:
-        llm_text = llm_client.chat(
-            [system, user],
-            format=output_schema,
-            options_override={
-                "num_predict": 1600,
-                "repeat_penalty": 1.5,
-                "repeat_last_n": 256,
-            },
-        )
-    except TypeError:
-        llm_text = llm_client.chat([system, user])
+    llm_text = llm_client.chat(
+        [system, user],
+        format=output_schema,
+        options_override={
+            "num_predict": 1600,
+            "repeat_penalty": 1.5,
+            "repeat_last_n": 256,
+        },
+    )
+    finish_reason = getattr(llm_client, "last_finish_reason", None)
+    issues, parse_status = read_alert_list(llm_text or "", finish_reason=finish_reason)
     if debug is not None:
         # Rationale: persist the exact inputs/outputs used for screening so GREEN results
         # can explain what was checked and whether parsing succeeded.
         debug["raw_output"] = llm_text
         debug["screening_bundle"] = bundle
+        debug["parse_status"] = parse_status
+        debug["finish_reason"] = finish_reason
+        debug["client_note"] = getattr(llm_client, "last_note", None)
 
-    issues = _parse_issues_json(llm_text or "")
-    if issues is None:
-        if debug is not None:
-            debug["parse_status"] = "parse_failed"
-        return []
-
-    if len(issues) == 0:
-        if debug is not None:
-            debug["parse_status"] = "parsed_empty"
-        return []
-
-    if debug is not None:
-        debug["parse_status"] = "parsed_nonempty"
-
+    shown_ids = {str(c.get("chunk_id")) for c in bundle}
     alerts: List[Alert] = []
-    dedup_stats: List[Dict[str, Any]] = []  # Debug: track dedup effectiveness per alert
-    seen_alert_ids: set = set()   # Rationale: catch exact duplicate alert_ids
-    seen_titles: List[str] = []   # Rationale: catch near-duplicate alerts by title similarity
+    kept: List[Dict[str, Any]] = []
+    used_ids: set = set()
     for idx, issue in enumerate(issues):
-        if not isinstance(issue, dict):
+        # Only exact repeats are dropped; different alerts with similar titles both stay (fix 8).
+        if issue in kept:
             continue
-        issue_type = str(issue.get("issue_type") or "screening_issue")
-        severity = str(issue.get("severity") or "unspecified")
-        title = str(issue.get("title") or issue_type)
-        message_raw = str(issue.get("message") or issue_type)
-        alert_id = str(issue.get("alert_id") or f"llm_screening_{idx}")
-
-        # --- Alert-level dedup: skip duplicate alerts ---
-        # Rationale: the model sometimes generates identical alerts (same alert_id)
-        # or near-identical alerts with slightly different IDs but same content.
-        if alert_id in seen_alert_ids:
-            logger.info("Skipping duplicate alert_id: %s", alert_id)
-            continue
-        is_dup_title = False
-        for existing_title in seen_titles:
-            if SequenceMatcher(None, title.lower(), existing_title.lower()).ratio() >= 0.75:
-                is_dup_title = True
-                break
-        if is_dup_title:
-            logger.info("Skipping near-duplicate alert title: %s", title)
-            continue
-        seen_alert_ids.add(alert_id)
-        seen_titles.append(title)
-        recommended_action = str(issue.get("recommended_action") or "")
-        citations = issue.get("citations") or []
-        
-        # Rationale: guaranteed dedup — runs regardless of whether artemis_postprocess succeeded.
-        # This is the last line of defense against LLM repetition loops.
-        message = _deduplicate_message(message_raw)
-        recommended_action = _deduplicate_message(recommended_action, max_words=50)
-        
-        # Debug: track how much dedup reduced the message
-        dedup_stats.append({
-            "alert_id": alert_id,
-            "raw_words": len(message_raw.split()),
-            "clean_words": len(message.split()),
-            "raw_chars": len(message_raw),
-            "clean_chars": len(message),
-        })
+        kept.append(issue)
+        alert_id = str(issue.get("alert_id") or "").strip() or f"llm_screening_{idx}"
+        base, n = alert_id, 1
+        while alert_id in used_ids:
+            n += 1
+            alert_id = f"{base}-{n}"
+        used_ids.add(alert_id)
 
         evidence: Dict[str, Any] = {
             "type": "llm_screening",
-            "issue_type": issue_type,
-            "severity": severity,
-            "recommended_action": recommended_action,
-            "citations": citations,
+            "issue_type": str(issue.get("issue_type") or "screening_issue"),
+            "severity": _severity(issue.get("severity")),
+            "recommended_action": str(issue.get("recommended_action") or "").strip(),
+            "citations": _marked_citations(issue.get("citations"), shown_ids),
             "raw_issue": issue,
         }
-
         alerts.append(
             Alert(
                 alert_id=alert_id,
-                title=title,
-                message=message,
+                title=str(issue.get("title") or "").strip() or "AI alert with no title",
+                message=str(issue.get("message") or "").strip() or "The AI gave no explanation for this alert.",
                 evidence=evidence,
                 query_hint="HIV regimen safety monitoring toxicities drug interactions",
                 source="ai",
             )
         )
-
-    # Debug: persist dedup stats so they show in the Streamlit debug expander
     if debug is not None:
-        debug["dedup_stats"] = dedup_stats
-
+        debug["exact_repeats_dropped"] = len(issues) - len(kept)
     return alerts

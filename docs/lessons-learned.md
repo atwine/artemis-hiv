@@ -146,3 +146,34 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: fix 7. One shared check, a prompt that asks for what the check requires, and plans that
   still fail are marked as failed on screen.
 
+
+**16. "Couldn't read it" reported as "found nothing".**
+- Example: the reply reader took the first "[" in the text. A reply that began "Based on the
+  guideline excerpts [1], these are the alerts:" and then listed 3 alerts came back as an empty
+  list, which the app reads as "the AI found no issues". A list of plain sentences did the
+  same. A reply cut off part-way lost every alert, including the complete ones before the cut.
+- Caught by: feeding the reader stub replies in each shape a model can produce, and checking
+  the status it reported, not only the alerts.
+- Fix: fix 8. The reader looks past bracketed words, accepts a single alert, keeps the complete
+  alerts from a cut-off reply, and says which happened. A cut-off or partly read reply gets an
+  amber banner and is never green.
+
+**17. A clean-up written for one model, kept for the next.**
+- Example: the 4B model repeated itself, so a cleaner merged alerts whose titles were 75% alike
+  and deleted sentences that were 75% alike. With the 70B model it did harm: "Missing hepatitis
+  B test" was dropped as a copy of "Missing creatinine test", a high viral-load alert was merged
+  into a moderate creatinine one, and "Hb was 9.1 g/dL in January. Hb was 7.2 g/dL in March."
+  became "Hb was 9.1 g/dL in January.", hiding the fall.
+- Caught by: running pairs of different alerts through the cleaner and counting what came out.
+- Fix: fix 8. The cleaner is deleted. Only exact repeats are dropped, and alerts with the same
+  id are kept apart.
+
+**18. Evidence the AI never saw, shown as its sources.**
+- Example: after screening, the app ran a fresh search for each alert and listed those passages
+  as the alert's References, merged with the pages the AI cited. 273 of the 335 listed passages
+  in the baseline were never shown to the AI. The AI could also cite a passage it was never
+  given, and nothing checked.
+- Caught by: comparing each alert's listed passages with the passages actually sent to the AI.
+- Fix: fix 8. An AI alert lists only the passages it was shown and cited. A citation to anything
+  else is kept but marked "not among the passages the AI was given". A rule alert's passages are
+  labelled as search results.

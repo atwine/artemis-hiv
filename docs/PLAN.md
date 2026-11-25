@@ -61,7 +61,7 @@ test that fails on the old code, ends with that test passing, and is logged in
 - [x] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
 - [x] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
       "Continue" (old item 1.2).
-- [ ] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.
+- [x] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.
 - [ ] Fix 9: save the visit record: reviews, overrides and reasons (old item 1.3, second half).
       9b: reopen a patient's last results from the record, with no new AI call.
 - [ ] Fix 10: small fixes, plus two dangerous retrieval faults pulled forward from 2B (the cleaner

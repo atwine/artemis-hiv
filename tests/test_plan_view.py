@@ -5,9 +5,7 @@ from __future__ import annotations
 import copy
 import json
 from pathlib import Path
-from typing import List, Optional
-
-import pytest
+from typing import List
 
 ROOT = Path(__file__).resolve().parents[1]
 

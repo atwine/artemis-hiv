@@ -193,3 +193,7 @@ dangerous way and are small to fix.
 - **Phase 2:**
   - G38: temperature 0, or judging each case over several runs.
   - G39: whether ARTEMIS flags problems outside HIV-drug safety, such as Kintu's blood pressure.
+  - From fix 8's real run: when no passage supports an alert, the model cites a made-up
+    "information_gap" passage on page 0 instead of leaving citations empty, as the prompt asks
+    (P006, 3 of 18 citations). The screen now marks these as not given to the AI; the prompt
+    wording is a Phase 2 question.

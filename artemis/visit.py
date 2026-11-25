@@ -147,9 +147,10 @@ def extract_patient_facts_from_history(notes_text: str) -> Dict[str, Any]:
 
 
 def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -> str:
-    """GREEN, YELLOW or RED from the alerts; INCOMPLETE when nothing was found but the AI review failed."""
+    """GREEN, YELLOW or RED from the alerts; INCOMPLETE when nothing was found but the AI review
+    did not finish cleanly (failed, unreadable, cut off or partly read)."""
     if not alerts:
-        return "INCOMPLETE" if screening_outcome in {"failed", "unreadable"} else "GREEN"
+        return "GREEN" if screening_outcome in {"ok", "not_run"} else "INCOMPLETE"
 
     # Rationale: if severity is available (e.g., from LLM screening issues), use the
     # worst severity to drive the overall status colour. Deterministic alerts that
@@ -170,6 +171,18 @@ def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -
 
 def _retrieve(rag: RagEngine, *, context: Any, alert: Alert, top_k: int) -> List[VectorSearchResult]:
     return rag.retrieve_for_alert(patient_context=context, alert=alert, top_k=top_k)
+
+
+def _cited_passages(alert: Alert, shown: List[VectorSearchResult]) -> List[VectorSearchResult]:
+    """The passages an AI alert cited that the AI was actually shown, in citation order (fix 8)."""
+    by_id = {r.chunk_id: r for r in shown}
+    out: List[VectorSearchResult] = []
+    for c in (alert.evidence or {}).get("citations") or []:
+        # Only the first 10 passages go to the AI, so a later one can't count even if it was found.
+        r = by_id.get(str(c.get("chunk_id") or "")) if c.get("shown_to_ai") else None
+        if r is not None and r not in out:
+            out.append(r)
+    return out
 
 
 def run_visit_analysis(
@@ -265,9 +278,13 @@ def run_visit_analysis(
             screening_outcome = "failed"
         elif parse_status in {"parsed_empty", "parsed_nonempty"}:
             screening_outcome = "ok"
-            alerts = list(deterministic_alerts) + list(screening_alerts)
+        elif parse_status in {"cut_off", "partly_read"}:
+            # The alerts read before the cut are kept; the banner says others may be missing (fix 8).
+            screening_outcome = parse_status
         else:
             screening_outcome = "unreadable"
+        if screening_outcome in {"ok", "cut_off", "partly_read"}:
+            alerts = list(deterministic_alerts) + list(screening_alerts)
 
         if last_err:
             status(f"{llm_name} error: {last_err}", "error")
@@ -279,7 +296,12 @@ def run_visit_analysis(
     results: List[Dict[str, Any]] = []
     explain_seconds: Dict[str, float] = {}
     for alert in alerts:
-        retrieved = _retrieve(rag, context=context, alert=alert, top_k=top_k)
+        # An AI alert's references are the passages it cited from those it was shown; a rule
+        # alert's are found by a search for it (fix 8).
+        if alert.source == "ai":
+            retrieved = _cited_passages(alert, checklist_retrieved)
+        else:
+            retrieved = _retrieve(rag, context=context, alert=alert, top_k=top_k)
         _t0 = time.perf_counter()
         explanation = generate_explanation(patient_context=context, alert=alert, retrieved_chunks=retrieved)
         explain_seconds[alert.alert_id] = max(0.0, float(time.perf_counter() - _t0))
