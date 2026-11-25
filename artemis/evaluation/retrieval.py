@@ -1,0 +1,102 @@
+"""The guideline search check (Phase 2B): did the search return the passage each problem rests on?
+
+Each expected problem in a case names the guideline passage behind it, as a quote. A returned
+passage counts as found when it holds the quote, ignoring case, spacing and formatting marks. A
+long quote also counts when 8 of its words in a row are there, so a quote that the cutting split
+across two passages is still found. Matching on the quote's words, not on passage ids, keeps the
+gold set valid when the way the guidelines are cut changes. Problems the guidelines don't cover
+have no quote; they are counted apart, since no search can find them.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, List, Optional, Sequence, Tuple
+
+from artemis.evaluation.cases import Case
+from artemis.guidelines.processor import _strip_markdown_noise, extract_markdown_page_texts
+
+WINDOW = 8  # words in a row that show a long quote is in a passage
+
+
+@dataclass(frozen=True)
+class GoldPassage:
+    document: str  # the guideline file's stem
+    quote: str
+
+
+@dataclass(frozen=True)
+class SearchItem:
+    item_id: str
+    gold: Tuple[GoldPassage, ...]  # empty: the guidelines don't cover it
+
+
+@dataclass(frozen=True)
+class ItemResult:
+    item_id: str
+    covered: bool
+    rank: Optional[int]  # 1-based rank of the first returned passage holding a gold quote
+
+
+@dataclass(frozen=True)
+class Score:
+    covered: int
+    not_covered: int
+    found_in_5: int
+    found_in_10: int
+    mrr: Optional[float]
+
+
+def _words(text: str) -> List[str]:
+    return re.findall(r"[a-z0-9]+", text.lower())
+
+
+def contains_quote(passage: str, quote: str, window: int = WINDOW) -> bool:
+    # Quotes are copied from the raw files, table code included; the index holds cleaned text.
+    q = _words(_strip_markdown_noise(quote))
+    if not q:
+        return False
+    hay = f" {' '.join(_words(passage))} "
+    size = min(window, len(q))
+    return any(f" {' '.join(q[i:i + size])} " in hay for i in range(len(q) - size + 1))
+
+
+def first_hit(passages: Sequence[str], gold: Sequence[GoldPassage]) -> Optional[int]:
+    for rank, text in enumerate(passages, start=1):
+        if any(contains_quote(text, g.quote) for g in gold):
+            return rank
+    return None
+
+
+def score(results: Sequence[ItemResult]) -> Score:
+    covered = [r for r in results if r.covered]
+    ranks = [r.rank for r in covered]
+    return Score(
+        covered=len(covered),
+        not_covered=len(results) - len(covered),
+        found_in_5=sum(1 for r in ranks if r is not None and r <= 5),
+        found_in_10=sum(1 for r in ranks if r is not None and r <= 10),
+        mrr=sum(1 / r for r in ranks if r is not None) / len(ranks) if ranks else None,
+    )
+
+
+def _gold(entry: Any) -> Tuple[GoldPassage, ...]:
+    entries = entry if isinstance(entry, list) else [entry] if entry else []
+    return tuple(GoldPassage(str(e["document"]), str(e["quote"])) for e in entries)
+
+
+def case_items(case: Case) -> List[SearchItem]:
+    return [SearchItem(f"{case.case_id}:{p.id}", _gold(p.guideline)) for p in case.problems]
+
+
+def missing_quotes(gold: Sequence[GoldPassage], folder: Path) -> List[GoldPassage]:
+    """Gold quotes not found whole in their guideline file, as the app cleans it for the index."""
+    missing = []
+    for g in gold:
+        path = Path(folder) / f"{g.document}.md"
+        text = " ".join(extract_markdown_page_texts(path)) if path.exists() else ""
+        if not contains_quote(text, g.quote, window=len(_words(_strip_markdown_noise(g.quote))) or 1):
+            missing.append(g)
+    return missing

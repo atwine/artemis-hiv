@@ -123,6 +123,15 @@ on GLM 5.2 (the lead) and Llama 3.3 70B on the A100 (the free in-house compariso
 V3.2 (the runner-up) joins at checkpoints and when a change may affect false alarms. Only
 made-up patients go to the hosted models.
 
+How it runs (approved by the owner, 2026-11-25): (1) a search test set: a gold guideline quote for
+each expected problem, plus about 20 standalone questions; (2) a search checker that runs the
+app's own searches with no AI call; (3) baselines before any change; (4) a checkpoint with the
+owner on whether Phase 2's misses came from the search or from the AI's reasoning; (5) fixes one
+at a time, simplest first, each kept only if the search score improves, with the keep rule written
+before the run and a Llama end-to-end check for each kept fix; (6) the owner's decisions on the
+numbers; (7) a final check on GLM, Llama and DeepSeek, then the write-up. Results go in
+`eval/phase2b/`.
+
 Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
 They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
 
