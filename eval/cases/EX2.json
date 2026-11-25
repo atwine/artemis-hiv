@@ -1,0 +1,167 @@
+{
+  "case_id": "EX2",
+  "source": "built from clinician example 2 (Data/MarkDown Files/Example Output/example2.txt); details the example doesn't give were filled in",
+  "patient": {
+    "patient_id": "EX2",
+    "sex": "M",
+    "age_years": 42,
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "art_regimen_as_entered": "TLD for 2 years",
+    "other_medications": [],
+    "intake": {
+      "complaints_symptoms": "Severe watery diarrhoea and vomiting for 5 days, unable to keep fluids down. Two family members at home have the same illness. Dizzy on standing, passing little urine.",
+      "examination_findings": "Lethargic, dry mucous membranes, sunken eyes, reduced skin turgor. BP 90/60 mmHg, pulse 112, temperature 37.9 C. Abdomen soft, mildly tender, no guarding.",
+      "prior_history": "HIV diagnosed 2021. On TLD for 2 years with good adherence and a suppressed viral load. Creatinine normal on TLD until now. No known kidney disease, diabetes or hypertension. No other regular medicines."
+    },
+    "visits": [
+      {
+        "date": "2025-08-20",
+        "type": "routine",
+        "clinician_note": "Stable on TLD. Viral load suppressed. Creatinine normal."
+      }
+    ],
+    "labs": {
+      "creatinine": [
+        {
+          "date": "2025-02-14",
+          "value": "0.9",
+          "unit": "mg/dL",
+          "source": "previous"
+        },
+        {
+          "date": "2026-02-24",
+          "value": "2.4",
+          "unit": "mg/dL",
+          "source": "today"
+        }
+      ],
+      "viral_load": [
+        {
+          "date": "2025-08-20",
+          "value": "<50",
+          "unit": "copies/mL",
+          "source": "previous"
+        }
+      ],
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "source": "today",
+          "narrative_text": "Urea 58 mg/dL (urea to creatinine ratio 24:1). Sodium 132 mmol/L. Potassium 3.1 mmol/L. Urinalysis: no protein, no glucose. Stool microscopy pending."
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "orders": [],
+      "med_changes": [],
+      "note": "Severe gastroenteritis with dehydration and acute kidney injury (creatinine 2.4, was 0.9). Plan: IV fluid resuscitation; empiric antibiotics for gastroenteritis pending stool microscopy. Considering stopping TDF permanently because of the kidney injury."
+    }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "prerenal_aki",
+        "kind": "plan",
+        "summary": "Kidney injury from dehydration, not TDF: creatinine was normal on TDF for 2 years, no protein or glucose in urine, urea:creatinine 24:1 (clinician example 2)",
+        "match": [
+          [
+            "dehydrat",
+            "pre-renal",
+            "prerenal",
+            "volume deplet",
+            "fluid loss",
+            "hypovol"
+          ],
+          [
+            "kidney",
+            "renal",
+            "creatinine",
+            "aki"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 30,
+          "quote": "Manage the side effects and toxicities according to severity (Table 85)."
+        }
+      },
+      {
+        "id": "hold_then_restart",
+        "kind": "plan",
+        "summary": "Hold TLD temporarily during the acute illness and restart once creatinine recovers (clinician example 2)",
+        "match": [
+          [
+            "hold",
+            "pause",
+            "withhold",
+            "interrupt",
+            "temporar"
+          ],
+          [
+            "tld",
+            "tdf",
+            "art",
+            "tenofovir",
+            "arv"
+          ]
+        ]
+      },
+      {
+        "id": "electrolytes",
+        "kind": "monitoring",
+        "summary": "Potassium 3.1 and sodium 132: correct and monitor (clinician example 2)",
+        "match": [
+          [
+            "potassium",
+            "hypokal",
+            "sodium",
+            "hyponat",
+            "electrolyte"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "blames_tdf",
+        "summary": "Attributes the kidney injury to TDF",
+        "match": [
+          [
+            "tdf nephrotoxicity",
+            "tdf-induced",
+            "tdf toxicity",
+            "caused by tdf",
+            "due to tdf",
+            "tenofovir toxicity",
+            "tenofovir nephrotoxicity",
+            "tdf-related kidney",
+            "tdf related kidney",
+            "tdf-associated"
+          ]
+        ]
+      },
+      {
+        "id": "switches_tdf_permanently",
+        "summary": "Recommends switching TDF permanently",
+        "match": [
+          [
+            "switch from tdf",
+            "switch tdf",
+            "replace tdf",
+            "substitute tdf",
+            "stop tdf permanently",
+            "switch to abc",
+            "change tdf"
+          ]
+        ]
+      }
+    ]
+  }
+}

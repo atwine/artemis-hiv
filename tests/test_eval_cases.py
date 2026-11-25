@@ -100,3 +100,12 @@ def test_also_fine_items_load(tmp_path: Path) -> None:
     data = json.loads(json.dumps(KEYED))
     data["answer_key"]["also_fine"] = [{"id": "bp", "summary": "Blood pressure", "match": [["blood pressure"]]}]
     assert [a.id for a in load_case(_write(tmp_path, data)).also_fine] == ["bp"]
+
+
+def test_every_evaluation_case_has_a_draft_answer_key() -> None:
+    from artemis.evaluation.cases import load_cases
+
+    cases = load_cases(ROOT / "eval" / "cases")
+    assert len(cases) == 11
+    assert all(c.key_status.startswith("draft") for c in cases)
+    assert sorted(c.case_id for c in cases if c.expect_clear) == ["P002", "P004"]

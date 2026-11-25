@@ -1,0 +1,186 @@
+{
+  "case_id": "EX4",
+  "source": "built from clinician example 4 (Data/MarkDown Files/Example Output/example4.txt); details the example doesn't give were filled in",
+  "patient": {
+    "patient_id": "EX4",
+    "sex": "M",
+    "age_years": 33,
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "art_regimen_as_entered": "TLD since 2022",
+    "other_medications": [
+      "Sodium valproate 500 mg twice daily",
+      "Carbamazepine 400 mg twice daily (started 2 weeks ago)"
+    ],
+    "intake": {
+      "complaints_symptoms": "Headaches, dizziness, unsteady walking and shaky hands for the past week. No seizures since carbamazepine was added.",
+      "examination_findings": "Horizontal nystagmus, wide-based unsteady gait, fine tremor of both hands. BP 122/78 mmHg, pulse 80. Alert and oriented.",
+      "prior_history": "HIV diagnosed 2019, on TLD since 2022, viral load always suppressed with good adherence by pill count. Epilepsy since childhood on sodium valproate; the neurology clinic added carbamazepine 2 weeks ago for breakthrough seizures."
+    },
+    "visits": [
+      {
+        "date": "2025-09-01",
+        "type": "routine",
+        "clinician_note": "Stable on TLD, viral load suppressed. Seizures on valproate, followed by neurology."
+      }
+    ],
+    "labs": {
+      "viral_load": [
+        {
+          "date": "2025-09-01",
+          "value": "<50",
+          "unit": "copies/mL",
+          "source": "previous"
+        },
+        {
+          "date": "2026-02-24",
+          "value": "1240",
+          "unit": "copies/mL",
+          "source": "today"
+        }
+      ],
+      "alt": [
+        {
+          "date": "2026-02-24",
+          "value": "68",
+          "unit": "U/L",
+          "source": "today"
+        }
+      ],
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "source": "today",
+          "narrative_text": "Carbamazepine level 14 mcg/mL (therapeutic range 4-12). Sodium 128 mmol/L."
+        }
+      ],
+      "creatinine": [
+        {
+          "date": "2026-02-24",
+          "value": "84",
+          "unit": "umol/L",
+          "source": "today"
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "orders": [],
+      "med_changes": [],
+      "note": "Symptoms of carbamazepine toxicity, level 14. Plan: reduce the carbamazepine dose and repeat the level. Viral load now detectable at 1,240 copies/mL; adherence reported good; unsure of the cause."
+    }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "carbamazepine_lowers_dtg",
+        "kind": "clash",
+        "summary": "Carbamazepine lowers DTG levels, so the viral load rose from <50 to 1,240: change the anticonvulsant or give DTG 50 mg twice daily (clinician example 4)",
+        "match": [
+          [
+            "carbamazepine",
+            "cbz"
+          ],
+          [
+            "dtg",
+            "dolutegravir",
+            "tld",
+            "viral load"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 49,
+          "quote": "Anti-epileptics, e.g. carbamazepine, phenobarbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid"
+        }
+      },
+      {
+        "id": "carbamazepine_toxicity",
+        "kind": "drug_harm",
+        "summary": "Carbamazepine level 14 with dizziness, nystagmus, ataxia and tremor: toxicity (clinician example 4)",
+        "match": [
+          [
+            "carbamazepine",
+            "cbz"
+          ],
+          [
+            "toxic",
+            "level",
+            "dizz",
+            "ataxia",
+            "nystagmus",
+            "tremor",
+            "overdos"
+          ]
+        ]
+      },
+      {
+        "id": "hyponatraemia",
+        "kind": "monitoring",
+        "summary": "Sodium 128 from carbamazepine: correct and monitor (clinician example 4)",
+        "match": [
+          [
+            "sodium",
+            "hyponat",
+            "siadh"
+          ]
+        ]
+      },
+      {
+        "id": "repeat_viral_load",
+        "kind": "monitoring",
+        "summary": "Repeat the viral load 4-6 weeks after fixing the interaction (clinician example 4)",
+        "match": [
+          [
+            "viral load",
+            "vl"
+          ],
+          [
+            "recheck",
+            "repeat",
+            "re-check",
+            "follow",
+            "weeks",
+            "monitor"
+          ]
+        ]
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "liver",
+        "summary": "ALT 68",
+        "match": [
+          [
+            "alt",
+            "liver",
+            "lft",
+            "transaminase",
+            "hepat"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "blames_adherence",
+        "summary": "Puts the viral load rise down to poor adherence",
+        "match": [
+          [
+            "poor adherence",
+            "non-adherence",
+            "nonadherence",
+            "adherence problem",
+            "due to adherence",
+            "adherence failure"
+          ]
+        ]
+      }
+    ]
+  }
+}

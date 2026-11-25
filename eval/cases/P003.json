@@ -53,5 +53,86 @@
       "status": "YELLOW",
       "notes": "EFV toxicity signal example: sleep disturbance mentions."
     }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "efv_cns_toxicity",
+        "kind": "drug_harm",
+        "summary": "Insomnia and vivid dreams for weeks on EFV: persistent CNS toxicity; substitute EFV",
+        "match": [
+          [
+            "efv",
+            "efavirenz"
+          ],
+          [
+            "sleep",
+            "dream",
+            "insomnia",
+            "neuropsych",
+            "cns",
+            "psychiatric"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 39,
+          "quote": "EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion)"
+        }
+      },
+      {
+        "id": "creatinine_never_done",
+        "kind": "monitoring",
+        "summary": "No creatinine/eGFR on record while on TDF",
+        "match": [
+          [
+            "creatinine",
+            "renal",
+            "kidney",
+            "egfr",
+            "crcl"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 27,
+          "quote": "Do Serum creatinine & eGFR for experienced patient on TDF every 12 months"
+        }
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "low_level_viremia",
+        "summary": "Viral load 60 copies/mL in August 2025: repeat or adherence check is reasonable",
+        "match": [
+          [
+            "viral load",
+            "vl",
+            "viremia",
+            "viraemia"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "says_no_plan",
+        "summary": "Says there is no clinician plan, though today's note has one",
+        "match": [
+          [
+            "no current clinician plan",
+            "no clinician plan",
+            "no plan",
+            "missing plan",
+            "lack of clinician plan",
+            "plan is missing",
+            "no documented plan",
+            "lack of plan"
+          ]
+        ]
+      }
+    ]
   }
 }

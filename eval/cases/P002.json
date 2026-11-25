@@ -63,5 +63,45 @@
       "status": "GREEN",
       "notes": "Stable patient, no alerts expected in baseline demo."
     }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": true,
+    "must_not": [
+      {
+        "id": "says_labs_missing",
+        "summary": "Says lab results are missing, though recent ones are on record",
+        "match": [
+          [
+            "missing",
+            "no recent",
+            "not available",
+            "lack of",
+            "absent"
+          ],
+          [
+            "lab",
+            "laboratory",
+            "result"
+          ]
+        ]
+      },
+      {
+        "id": "says_no_plan",
+        "summary": "Says there is no clinician plan, though today's note has one",
+        "match": [
+          [
+            "no current clinician plan",
+            "no clinician plan",
+            "no plan",
+            "missing plan",
+            "lack of clinician plan",
+            "plan is missing",
+            "no documented plan",
+            "lack of plan"
+          ]
+        ]
+      }
+    ]
   }
 }
