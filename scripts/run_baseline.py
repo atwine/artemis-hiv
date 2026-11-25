@@ -101,11 +101,18 @@ def _to_jsonable(obj: Any) -> Any:
     return str(obj)
 
 
+_ROOT_PREFIXES = sorted(
+    {str(PROJECT_ROOT) + os.sep, PROJECT_ROOT.as_posix() + "/"}, key=len, reverse=True
+)
+
+
 def _scrub(obj: Any, secrets: List[str]) -> Any:
-    """Keep the model server's address out of saved files (the repo is public)."""
+    """Keep the model server's address and local folder paths out of saved files (the repo is public)."""
     if isinstance(obj, str):
         for s in secrets:
             obj = obj.replace(s, "<model-server>")
+        for prefix in _ROOT_PREFIXES:
+            obj = obj.replace(prefix, "")
         return obj
     if isinstance(obj, dict):
         return {k: _scrub(v, secrets) for k, v in obj.items()}

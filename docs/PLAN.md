@@ -41,8 +41,9 @@ Check: tests all pass; both branches exist; scanners run on a pull request.
 
 ## Phase 1: Fix what the demo exposed
 
-- [ ] 1.0 Baseline first: a script runs all 7 test patients through the A100 and saves every
+- [x] 1.0 Baseline first: a script runs all 7 test patients through the A100 and saves every
       output to `eval/baseline/`. Every fix below is judged against this "before" snapshot.
+      Done 2026-11-25: 3 runs per patient; findings in `eval/baseline/README.md`.
 - [ ] 1.1 Keep the fixed-rule alerts next to the AI alerts instead of dropping them.
 - [ ] 1.2 Stop showing "AGREE" when the model never said so.
 - [ ] 1.3 Tie results to the selected patient; save reviews and overrides as an audit record.
