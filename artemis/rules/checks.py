@@ -80,7 +80,7 @@ def _check_tdf_creatinine_overdue(context: PatientContext) -> Optional[Alert]:
         return None
 
     days = days_since_lab(context, "creatinine")
-    if days is None and re.search(r"creatinine", context.labs_narrative or "", re.IGNORECASE):
+    if days is None and _mentions(context.labs_narrative or "", [r"creatinine"]):
         return Alert(
             alert_id="tdf_creatinine_pasted_only",
             title="Creatinine recorded only as pasted text",

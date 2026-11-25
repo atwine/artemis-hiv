@@ -37,6 +37,8 @@ import streamlit as _streamlit  # noqa: E402
 
 import app  # noqa: E402  (loads .env and the app's settings)
 from artemis.ai.client import openai_compat_config_from_env  # noqa: E402
+from artemis.patient.record import build_patient_context  # noqa: E402
+from artemis.rules.checks import run_alerts  # noqa: E402
 
 # The app's defaults (app.py "Advanced settings" and "LLM settings"), with one exception:
 # the agentic ARTEMIS plan checkbox starts unticked in the app. It is on here because
@@ -172,11 +174,11 @@ def run_one(patient: Dict[str, Any]) -> Dict[str, Any]:
 
     ss = shim.session_state
     agentic = ss.get("agentic_debug_result")
-    # What the fixed rules raise on their own. The app drops these when LLM screening
-    # succeeds (plan item 1.1), so record them separately.
+    # What the fixed rules raise on their own, recorded separately so a run can be compared
+    # with the first baseline, where the app dropped them when AI screening succeeded (fix 3).
     rule_patient = copy.deepcopy(patient)
     rule_patient.setdefault("today_encounter", {})["note"] = note
-    rule_alerts = app.run_alerts(app.build_patient_context(rule_patient))
+    rule_alerts = run_alerts(build_patient_context(rule_patient))
     results = []
     for r in ss.get("analysis_results") or []:
         expl = r.get("explanation")

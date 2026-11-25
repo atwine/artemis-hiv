@@ -12,8 +12,8 @@ Phase 1 fixes change it from here, each with its own test.
 from __future__ import annotations
 
 import copy
-import time
-from dataclasses import dataclass, field
+import logging
+from dataclasses import dataclass, replace
 from typing import Any, Callable, Dict, List, Optional
 
 from artemis.plan.flow import QueryContext, run_agentic_flow
@@ -21,6 +21,8 @@ from artemis.rules.checks import Alert, run_alerts
 from modules.explanation_generator import generate_explanation
 from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import build_patient_context
+
+logger = logging.getLogger(__name__)
 from modules.rag_engine import RagEngine
 from artemis.patient.summary import build_stage1_summary
 from artemis.guidelines.vector_store import VectorSearchResult
@@ -62,7 +64,6 @@ class AnalysisResult:
     agentic_result: Any
     agentic_reasoner: Optional[Dict[str, Any]]
     llm_error: Optional[str]
-    explain_seconds: Dict[str, float] = field(default_factory=dict)
 
 
 def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -> str:
@@ -197,17 +198,24 @@ def run_visit_analysis(
         else:
             screening_outcome = "unreadable"
         if screening_outcome in {"ok", "cut_off", "partly_read"}:
+            # Both kinds share one list and one set of review controls, keyed by id: an AI
+            # alert never takes a rule alert's id (review finding, 1.Z).
+            rule_ids = {a.alert_id for a in deterministic_alerts}
+            screening_alerts = [
+                replace(a, alert_id=f"{a.alert_id}-ai") if a.alert_id in rule_ids else a for a in screening_alerts
+            ]
             alerts = list(deterministic_alerts) + list(screening_alerts)
 
         if last_err:
-            status(f"{llm_name} error: {last_err}", "error")
+            # The details go to the log; the screen stays generic (review finding, 1.Z).
+            logger.warning("AI review failed: %s", last_err)
+            status(f"{llm_name}: the AI review failed (details in the app log)", "error")
         else:
             status(f"{llm_name} connected (response received)", "complete")
         if llm_error is None:
             llm_error = last_err
 
     results: List[Dict[str, Any]] = []
-    explain_seconds: Dict[str, float] = {}
     for alert in alerts:
         # An AI alert's references are the passages it cited from those it was shown; a rule
         # alert's are found by a search for it (fix 8).
@@ -215,26 +223,21 @@ def run_visit_analysis(
             retrieved = _cited_passages(alert, checklist_retrieved)
         else:
             retrieved = _retrieve(rag, context=context, alert=alert, top_k=top_k)
-        _t0 = time.perf_counter()
         explanation = generate_explanation(patient_context=context, alert=alert, retrieved_chunks=retrieved)
-        explain_seconds[alert.alert_id] = max(0.0, float(time.perf_counter() - _t0))
         results.append({"alert": alert, "retrieved": retrieved, "explanation": explanation})
 
     overall = compute_overall_status(alerts, screening_outcome)
 
     agentic_reasoner = None
     if options.agentic:
-        try:
-            agentic_reasoner = {
-                "final_status": overall,
-                "final_alert_count": len(alerts),
-                "deterministic_alert_ids": [a.alert_id for a in deterministic_alerts],
-                "final_alert_ids": [a.alert_id for a in alerts],
-                "evidence_map_keys": [r["alert"].alert_id for r in results],
-                "agentic_result_present": agentic_result is not None,
-            }
-        except Exception as exc:
-            agentic_reasoner = {"error": str(exc), "type": exc.__class__.__name__}
+        agentic_reasoner = {
+            "final_status": overall,
+            "final_alert_count": len(alerts),
+            "deterministic_alert_ids": [a.alert_id for a in deterministic_alerts],
+            "final_alert_ids": [a.alert_id for a in alerts],
+            "evidence_map_keys": [r["alert"].alert_id for r in results],
+            "agentic_result_present": agentic_result is not None,
+        }
 
     return AnalysisResult(
         patient_id=patient.get("patient_id"),
@@ -250,5 +253,4 @@ def run_visit_analysis(
         agentic_result=agentic_result,
         agentic_reasoner=agentic_reasoner,
         llm_error=llm_error,
-        explain_seconds=explain_seconds,
     )

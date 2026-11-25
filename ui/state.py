@@ -20,7 +20,6 @@ ANALYSIS_DEFAULTS: Dict[str, Any] = {
     "analysis_screening_outcome": "not_run",
     "analysis_alerts": [],
     "analysis_results": [],
-    "analysis_use_ollama": False,
     "analysis_ollama_error": None,
     "analysis_screening_debug": None,
     "analysis_patient_summary": None,
@@ -37,7 +36,7 @@ ANALYSIS_DEFAULTS: Dict[str, Any] = {
 }
 
 # Per-alert review choices and timings are stored under these prefixes plus the alert id.
-_PER_ALERT_PREFIXES = ("alert_action_", "alert_override_reason_", "alert_override_comment_", "explain_time_")
+_PER_ALERT_PREFIXES = ("alert_action_", "alert_override_reason_", "alert_override_comment_")
 
 
 def init_analysis_state(state: MutableMapping[str, Any]) -> None:

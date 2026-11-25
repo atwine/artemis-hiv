@@ -19,7 +19,7 @@ from artemis.plan.plan_json import parse_plan, regimen_decision_kind
 _VERDICT_LABELS = {
     "Agree": "Matches your plan",
     "Disagree": "Differs from your plan",
-    "Gap": "Not in your plan",
+    "Gap": "Partly in your plan",
     "Not Addressed": "Not in your plan",
 }
 _REGIMEN = {

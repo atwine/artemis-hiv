@@ -206,7 +206,6 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
         "analysis_screening_outcome": checks.get("ai_review") or "not_run",
         "analysis_alerts": alerts,
         "analysis_results": results,
-        "analysis_use_ollama": bool(checks.get("ai_review_ran")),
         "analysis_screening_debug": checks.get("screening_debug"),
         "analysis_patient_summary": checks.get("patient_summary"),
         "agentic_debug_enabled": bool(checks.get("agentic_enabled")),

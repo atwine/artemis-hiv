@@ -112,7 +112,7 @@ ollama pull aadide/medgemma-1.5-4b-it-Q4_K_S
 ### Model selection
 
 By default the app uses:
-- `aadide/medgemma-1.5-4b-it-Q4_K_S` (`modules/llm_client.py:L20-L23`)
+- `aadide/medgemma-1.5-4b-it-Q4_K_S` (`artemis/ai/client.py`, `OllamaConfig`)
 
 To override the model without changing code:
 

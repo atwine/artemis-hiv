@@ -80,7 +80,6 @@ def main() -> None:
         embedder=embedder,
         vector_store=vector_store,
         top_k=3,
-        page_range=None,
     )
 
     print("\n=== Planner sub-tasks ===")

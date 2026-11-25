@@ -41,6 +41,7 @@ from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
+from artemis.ai.screening import NO_SEVERITY
 from ui.references import alert_references
 from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize
@@ -50,7 +51,6 @@ from ui.results_banner import status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
 from artemis.visit import (
     AnalysisOptions,
-    compute_overall_status,
     run_visit_analysis,
 )
 
@@ -185,7 +185,6 @@ def _init_session_state() -> None:
 
 
 # Moved to artemis/visit.py (Phase 1). Kept under the old names for callers.
-_compute_overall_status = compute_overall_status
 
 
 def _run_analysis(
@@ -252,8 +251,6 @@ def _run_analysis(
         st.session_state[f"alert_action_{alert.alert_id}"] = "Unreviewed"
         st.session_state[f"alert_override_reason_{alert.alert_id}"] = ""
         st.session_state[f"alert_override_comment_{alert.alert_id}"] = ""
-    for alert_id, seconds in result.explain_seconds.items():
-        st.session_state[f"explain_time_{alert_id}"] = seconds
 
     st.session_state["analysis_ran"] = True
     st.session_state["finalized"] = False
@@ -261,7 +258,6 @@ def _run_analysis(
     st.session_state["analysis_results"] = result.results
     st.session_state["analysis_status"] = result.status
     st.session_state["analysis_screening_outcome"] = result.screening_outcome
-    st.session_state["analysis_use_ollama"] = bool(use_ollama)
     st.session_state["analysis_ollama_error"] = result.llm_error
     st.session_state["agentic_debug_reasoner"] = result.agentic_reasoner
 
@@ -283,7 +279,7 @@ def _run_analysis(
                 saved_at=saved_at,
             ),
         )
-    except (OSError, TypeError, ValueError) as exc:
+    except OSError as exc:
         logger.warning("Visit record not saved: %s", type(exc).__name__)
         st.session_state["analysis_record_error"] = True
 
@@ -857,8 +853,6 @@ def main() -> None:
     _outcome = st.session_state.get("analysis_screening_outcome") or "not_run"
     for _kind, _text in status_banners(status, _outcome, len(alerts)):
         getattr(st, _kind)(_text)
-    if _outcome == "failed" and st.session_state.get("analysis_ollama_error"):
-        st.caption(f"{_llm_name()} debug: {st.session_state.get('analysis_ollama_error')}")
 
     if status == "GREEN" and _outcome == "ok":
         st.markdown(
@@ -886,9 +880,6 @@ def main() -> None:
                 "- It compared them with the patient summary above, the dated notes and the lab table.\n"
                 f"- LLM output status: `{_dbg.get('parse_status') or 'unknown'}`."
             )
-            # Rationale: show raw output for all cases to debug empty output issues
-            with st.expander("Debug: Raw LLM output", expanded=False):
-                st.text(_dbg.get("raw_output") or "(no output captured)")
     # Rationale: show raw LLM output for all cases (GREEN, YELLOW, RED) to debug parsing issues
     _dbg = st.session_state.get("analysis_screening_debug") or {}
     if _dbg.get("raw_output"):
@@ -988,8 +979,8 @@ def main() -> None:
 
 
                 if alert.source == "ai":
-                    _sev = (alert.evidence or {}).get("severity") or "not given"
-                    if _sev == "not given":
+                    _sev = (alert.evidence or {}).get("severity") or NO_SEVERITY
+                    if _sev == NO_SEVERITY:
                         st.warning(
                             "Severity not given: the AI's severity was missing or not one of "
                             "critical, high, moderate or low."
@@ -1036,7 +1027,7 @@ def main() -> None:
                 # Rationale: allow promoting useful LLM-screening issues into a
                 # candidate list for future deterministic rules without changing
                 # rule logic at runtime.
-                if (alert.evidence or {}).get("type") == "llm_screening":
+                if alert.source == "ai":
                     if st.button(
                         "Mark as candidate deterministic rule",
                         key=f"candidate_rule_{alert.alert_id}",
@@ -1099,6 +1090,15 @@ def main() -> None:
                         st.markdown(plan_html(view), unsafe_allow_html=True)
                         with st.expander("View raw plan JSON", expanded=False):
                             st.json(parse_plan(updated_plan_text))
+                elif isinstance(agentic_result, dict) or getattr(agentic_result, "plan_issues", None):
+                    # The plan step ran but gave nothing to show: say so instead of showing nothing
+                    # (D14, review finding at 1.Z).
+                    _why = (
+                        ", ".join(getattr(agentic_result, "plan_issues", []) or [])
+                        if not isinstance(agentic_result, dict)
+                        else "the plan step stopped with an error"
+                    )
+                    st.warning(f"The AI's management plan could not be produced ({_why}).")
 
 
     # Rationale: show review controls for EVERY alert so Finalize can pass.

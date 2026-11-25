@@ -76,7 +76,6 @@ def test_labels_say_what_happened(cases: Path) -> None:
     at.session_state["analysis_patient_id"] = "P001"
     at.session_state["analysis_status"] = "YELLOW"
     at.session_state["analysis_screening_outcome"] = "ok"
-    at.session_state["analysis_use_ollama"] = True
     at.session_state["analysis_alerts"] = [ai]
     at.session_state["analysis_results"] = [
         {"alert": ai, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[], used_llm=False)}
@@ -111,3 +110,18 @@ def test_a_damaged_cases_file_is_never_overwritten(cases: Path) -> None:
     at.text_area(key="new_case_complaints").input("Cough.")
     next(b for b in at.button if b.label == "Add case to patient list").click().run()
     assert cases.read_text(encoding="utf-8") == damaged
+
+
+def test_a_failed_ai_review_shows_no_raw_error_text(cases: Path) -> None:
+    # Errors shown to users stay generic; the details go to the app log (code review, 1.Z).
+    at = _app()
+    _select(at, "P001")
+    at.session_state["analysis_ran"] = True
+    at.session_state["analysis_patient_id"] = "P001"
+    at.session_state["analysis_status"] = "INCOMPLETE"
+    at.session_state["analysis_screening_outcome"] = "failed"
+    at.session_state["analysis_ollama_error"] = "Model server call failed: ReadTimeout: internal detail 42"
+    at.run()
+    text = _all_text(at)
+    assert "AI review failed" in text
+    assert "internal detail 42" not in text and "ReadTimeout" not in text

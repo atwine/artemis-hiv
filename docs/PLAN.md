@@ -152,6 +152,12 @@ Check: you have picked a direction and signed off the screens.
 - [ ] 4.3 Build the guideline index once and keep it, instead of rebuilding on every start.
 - [ ] 4.4 Tests that call the endpoints the way the frontend will.
 - [ ] 4.5 Move the visit records from fix 9's local files into Postgres.
+- [ ] 4.6 (suggested) Phase 1 code review follow-ups, best done as the API replaces the Streamlit
+      shell: move the add-case record building out of app.py into a typed endpoint; validate a
+      patient record once when it is loaded (4.1); have the model client return the reply with
+      its finish reason instead of setting attributes; keep the screen's session keys in one
+      place (today in ui/state.py, app.py and visit_record.restore); share one JSON bracket
+      scanner (screening and plan_json); drop unused fields (deterministic_alerts, used_llm).
 
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 

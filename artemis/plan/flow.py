@@ -15,6 +15,7 @@ retrieval, reasoning, and verification.
 from __future__ import annotations
 
 import json
+import logging
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -23,6 +24,8 @@ from artemis.ai.client import OllamaClient
 from artemis.patient.record import build_patient_context
 from artemis.plan.plan_json import first_json_object, strip_code_fences, validate_plan
 from artemis.guidelines.vector_store import VectorStore, VectorSearchResult
+
+logger = logging.getLogger(__name__)
 
 
 # Core data structures -----------------------------------------------------
@@ -398,9 +401,9 @@ def _reason_updated_management_plan(
         except Exception:
             doctors_plan = "No plan documented."
 
-        regimen_str = ", ".join(build_patient_context(patient).art_regimen_current) or "unknown"
-        # The same dated notes and recorded-facts summary the screening step reads (fixes 4 and 6).
         ctx = build_patient_context(patient)
+        regimen_str = ", ".join(ctx.art_regimen_current) or "unknown"
+        # The same dated notes and recorded-facts summary the screening step reads (fixes 4 and 6).
         notes_text = ctx.dated_notes or ""
         summary_text = json.dumps(context.patient_summary or {}, ensure_ascii=False, default=str)
 
@@ -443,6 +446,12 @@ def _reason_updated_management_plan(
             },
         ]
 
+    def _cut(issues: List[str]) -> List[str]:
+        # The server stopped the reply at the length limit (fix 8's finish_reason); say so (G18).
+        if getattr(llm_client, "last_finish_reason", None) == "length" and "cut_off" not in issues:
+            return ["cut_off"] + issues
+        return issues
+
     try:
         messages = _build_plan_messages()
         plan_answer = llm_client.chat(
@@ -453,7 +462,7 @@ def _reason_updated_management_plan(
         if plan_answer is None:
             return None, ["no_reply"]
 
-        issues = _validate_plan_json(plan_answer)
+        issues = _cut(_validate_plan_json(plan_answer))
         if not issues:
             # Rationale: return only the JSON object (ignore any extra words around it).
             return _extract_first_json_object(plan_answer) or _strip_code_fences(plan_answer), []
@@ -469,7 +478,7 @@ def _reason_updated_management_plan(
         if plan_retry is None:
             return plan_answer, issues
 
-        retry_issues = _validate_plan_json(plan_retry)
+        retry_issues = _cut(_validate_plan_json(plan_retry))
         if not retry_issues:
             # Rationale: return only the JSON object (ignore any extra words around it).
             return _extract_first_json_object(plan_retry) or _strip_code_fences(plan_retry), []
@@ -486,6 +495,7 @@ def _reason_updated_management_plan(
         # Still invalid: return the latest output with what it failed, so the screen can say so.
         return _strip_code_fences(plan_retry), retry_issues
     except Exception as exc:
+        logger.warning("Management plan step failed: %s", type(exc).__name__, exc_info=True)
         return None, [f"error:{exc.__class__.__name__}"]
 
 

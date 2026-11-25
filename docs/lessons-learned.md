@@ -224,3 +224,11 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Caught by: printing the label next to the values for every patient.
 - Fix: fix 10 (owner's pick). The labels are gone; the AI reads the dated values themselves, and
   trend rules come back when the doctor sets them.
+
+**23. Scripts nobody runs break quietly.**
+- Example: Phase 1 moved code out of app.py. The tests passed, but the baseline script still
+  called app.run_alerts and crashed on its first patient, and the old demo script still passed a
+  removed argument. Neither ran in the test suite, so nothing noticed until the script was used.
+- Caught by: the end-of-phase rerun itself, and a review that read the scripts outside the diff.
+- Fix: 1.Z. A test now runs the baseline script on one patient, and another checks the demo's
+  call against the function it calls.
