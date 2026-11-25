@@ -22,13 +22,15 @@ direction.
 | S8 · Add patient case | Regimen pick-list with no "Select all", labs one row per result with unit |
 
 Screens are 1366 x 768. Every status has a word and a shape, not only a colour. The brand
-accent never uses the status reds, ambers or greens.
+accent never uses the status reds, ambers or greens. Every screen passes the avatar checklist
+in `brief.md` (Harriet): simple, uncluttered, one visible primary action.
 
 ## 01 · Triage Board
 
-- **Idea:** the clinic day is a queue; status colour is the organising signal. A
-  keyboard-first, three-pane workstation: queue on the left, the visit in the middle, an alert
-  rail on the right where each alert is reviewed in place.
+- **Idea:** the clinic day is a queue; status colour is the organising signal. A three-pane
+  workstation: queue on the left, the visit in the middle, an alert rail on the right where
+  each alert is reviewed in place. Every action has a visible button; keyboard shortcuts are
+  a bonus (owner's simplicity rule, 2026-11-26).
 - **Library mix:** Intercom (shared inbox, colour = status, Geist + Geist Mono) · Plane
   (states, approvals, keyboard hints) · Hex (quiet data tables).
 - **Display ideas to explore:** a review ring on each queue row that fills as alerts are

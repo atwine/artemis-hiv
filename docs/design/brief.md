@@ -18,6 +18,42 @@ for the overview. Shared made-up content: `docs/design/content-kit.md`.
 - Secondary readers: whoever audits a visit later (a supervisor, the doctor checking the
   evaluation, the owner's portfolio visitors).
 
+## The avatar every screen is judged against
+
+The owner's rule (2026-11-26): the experience must be flawless for clinicians, simple to
+understand and never cluttered. Every screen is critiqued against this one person. She is a
+made-up composite; the details are assumptions to check with Dr Kintu in Phase 7.
+
+**Harriet, a clinical officer at a busy ART clinic.**
+- Sees 40 to 60 patients on a clinic day, a few minutes each, with a queue outside the door.
+  Interrupted often: a phone, a colleague, a patient's question.
+- Knows HIV care and the Ugandan guidelines well. Knows the computer less well: confident with
+  a mouse and a form, not with shortcuts, hidden menus or hover-only details.
+- English is her working language, not always her first. Short plain sentences beat clever
+  wording. Abbreviations she uses daily (TDF, eGFR, VL, TLD) are fine; software and AI words
+  are not.
+- Trusts the Ministry of Health guidelines; is wary of a computer telling her what to do.
+  She will act on an alert only if she can see why in a glance: her patient's number next to
+  the guideline line.
+- Works on a shared 1366 x 768 screen, sometimes in glare, sometimes on a slow or dropping
+  connection.
+
+**What she needs from every screen (the critique checklist)**
+1. **The five-second test.** In five seconds she can say what state the patient is in and
+   what the one next thing to do is. One primary action per screen, visibly the main one.
+2. **Nothing she has to hunt for.** No hover-only information, no hidden menus for core steps,
+   no keyboard-only actions (shortcuts are a bonus, never the only way).
+3. **Calm by default.** Show only what this step needs; the rest one click away. No more than
+   three levels of text size and two accent colours on a screen besides the status colours.
+   White space over boxes. If something can go, it goes.
+4. **Readable at arm's length.** Body text 14 to 16px, key numbers larger, high contrast.
+5. **Few, clear decisions.** Each alert asks one question (accept or override). Reasons are one
+   tap. Nothing is typed unless "Other".
+6. **Safe to be interrupted.** She can leave mid-review and come back to exactly where she was,
+   with what is done and what is left obvious.
+7. **No surprises.** Buttons say what they do ("Finalize visit", not "Submit"). Locked buttons
+   say why they are locked. Nothing irreversible without a clear confirmation.
+
 ## What the app does (the workflow every design must show)
 
 1. **Clinic list.** Today's patients. Each shows whether checks have run, the overall status
