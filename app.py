@@ -49,6 +49,12 @@ from modules.stage1_summary import build_stage1_summary
 from modules.stage3_narrative import generate_stage3_narrative
 from modules.llm_screening import generate_llm_screening_alerts
 from modules.agentic_flow import QueryContext, run_agentic_flow
+from modules.analysis import (
+    AnalysisOptions,
+    compute_overall_status,
+    extract_patient_facts_from_history,
+    run_visit_analysis,
+)
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -290,106 +296,9 @@ def _init_session_state() -> None:
     st.session_state.setdefault("custom_patients", [])
 
 
-def _extract_patient_facts_from_history(notes_text: str) -> Dict[str, Any]:
-    # Rationale: deterministic, lightweight extraction so clinicians can see what the system
-    # believes is present in the free-text history even when no alerts are generated.
-    text = (notes_text or "").strip()
-    low = text.lower()
-
-    # Rationale: match common ART abbreviations and full names to reduce false "empty" fact extraction.
-    # This does not change alert logic; it only improves audit transparency.
-    arv_terms = {
-        "tdf": "TDF",
-        "tenofovir": "TDF",
-        "3tc": "3TC",
-        "lamivudine": "3TC",
-        "dtg": "DTG",
-        "dolutegravir": "DTG",
-        "azt": "AZT",
-        "zidovudine": "AZT",
-        "ftc": "FTC",
-        "emtricitabine": "FTC",
-        "efv": "EFV",
-        "efavirenz": "EFV",
-        "nvp": "NVP",
-        "nevirapine": "NVP",
-        "d4t": "D4T",
-        "stavudine": "D4T",
-        "abc": "ABC",
-        "abacavir": "ABC",
-        "taf": "TAF",
-    }
-    meds_norm = set()
-    for term, canon in arv_terms.items():
-        if re.search(rf"\b{re.escape(term)}\b", low):
-            meds_norm.add(canon)
-    meds_found = sorted(meds_norm)
-
-    symptom_terms = [
-        "bone pain",
-        "fracture",
-        "difficulty walking",
-        "proximal muscle weakness",
-        "weakness",
-        "fatigue",
-        "dizziness",
-    ]
-    symptoms_found = [t for t in symptom_terms if t in low]
-
-    key_line_terms = [
-        "current art",
-        "viral load",
-        "cd4",
-        "serum creatinine",
-        "creatinine",
-        "egfr",
-        "urinalysis",
-        "phosphate",
-        "alp",
-        "vitamin d",
-        "dexa",
-        "t-score",
-        "looser",
-    ]
-    key_lines: List[str] = []
-    for ln in (text.splitlines() or []):
-        s = ln.strip()
-        if not s:
-            continue
-        sl = s.lower()
-        if any(term in sl for term in key_line_terms):
-            key_lines.append(s)
-
-    # Bound the output so it remains readable in the UI.
-    return {
-        # Rationale: include minimal diagnostics so a clinician can confirm what text was actually checked.
-        "notes_text_char_count": len(text),
-        "notes_text_preview": (text[:300] + ("…" if len(text) > 300 else "")),
-        "medications_detected": meds_found,
-        "symptoms_detected": symptoms_found,
-        "key_history_lines": key_lines[:25],
-    }
-
-
-def _compute_overall_status(alerts: List[Alert]) -> str:
-    if not alerts:
-        return "GREEN"
-
-    # Rationale: if severity is available (e.g., from LLM screening issues), use the
-    # worst severity to drive the overall status colour. Deterministic alerts that
-    # do not specify a severity are treated as at least moderate.
-    severity_rank = {"low": 0, "moderate": 1, "high": 2, "critical": 3}
-    max_rank = 1  # default to "moderate" when any alert exists but no severity set
-    for alert in alerts:
-        evidence = alert.evidence or {}
-        sev = str(evidence.get("severity") or "").lower()
-        rank = severity_rank.get(sev, max_rank)
-        if rank > max_rank:
-            max_rank = rank
-
-    if max_rank >= 2:
-        return "RED"
-    return "YELLOW"
+# Moved to modules/analysis.py (Phase 1, option B). Kept under the old names for callers.
+_extract_patient_facts_from_history = extract_patient_facts_from_history
+_compute_overall_status = compute_overall_status
 
 
 def _alert_resolution_ok(alert_id: str) -> bool:
@@ -429,27 +338,13 @@ def _run_analysis(
     ollama_num_ctx: Optional[int],
     show_llm_narrative: bool,
 ) -> None:
-    # Rationale: keep analysis deterministic for alert triggering, and only use the
-    # LLM for explanation/citation if available.
-
-    patient_copy = copy.deepcopy(patient)
-    patient_copy.setdefault("today_encounter", {})
-    patient_copy["today_encounter"]["note"] = today_note
-
-    context = build_patient_context(patient_copy)
-    alerts = run_alerts(context)
-    # Preserve Stage 1 deterministic alerts for Stage 3 synthesis input.
-    deterministic_alerts = list(alerts)
-    # Build Stage 1 summary once so it can be reused by LLM screening and narrative.
-    stage1_summary = build_stage1_summary(patient=patient_copy, context=context)
-
+    """Run the visit analysis (modules/analysis.py) and copy its result into session state."""
     rag = _get_rag_engine(
         prefer_chroma=prefer_chroma,
         embedding_model_name=embedding_model_name,
         # Rationale: cache-bust to refresh vector_store Chroma filter fix and related changes.
         engine_version=5,
     )
-
     # Rationale: indexing can be expensive; we allow limiting pages for a faster demo.
     if GUIDELINE_PDF_PATHS:
         rag.ensure_indexed(max_pages=index_max_pages)
@@ -463,318 +358,65 @@ def _run_analysis(
             cfg = OllamaConfig(model=(ollama_model or "aadide/medgemma-1.5-4b-it-Q4_K_S"), num_ctx=ollama_num_ctx)
             llm_client = OllamaClient(cfg)
 
-    # Optional: agentic planner + per-subtask retrieval (debug-only, no UI change).
     env_flag = (os.getenv("AGENTIC_RAG_DEBUG") or "").strip() == "1"
     ui_flag = bool(st.session_state.get("agentic_ui_debug_enabled"))
-    agentic_debug_enabled = bool(env_flag or ui_flag)
-    agentic_debug_result = None
-
-    if agentic_debug_enabled:
-        try:
-            agentic_context = QueryContext(
-                question_text=(
-                    "Review this patient's symptoms, examination findings, "
-                    "and lab results (including trends over time). Could any "
-                    "of them be signs of drug toxicity from their current or "
-                    "past ART medications or co-medications? If so, what "
-                    "tests confirm it, and does the doctor's current plan "
-                    "adequately address the issue per Uganda HIV guidelines?"
-                ),
-                patient_raw=patient_copy,
-                patient_summary=stage1_summary,
-                metadata={
-                    "llm_mode": llm_mode,
-                    "top_k": top_k,
-                    "index_max_pages": index_max_pages,
-                    "retrieval_page_range": retrieval_page_range,
-                },
-            )
-
-            agentic_debug_result = run_agentic_flow(
-                agentic_context,
-                embedder=rag._embedder,
-                vector_store=rag._vector_store,
-                top_k=top_k,
-                page_range=retrieval_page_range,
-                llm_client=llm_client,
-            )
-
-        except Exception as exc:
-            agentic_debug_result = {
-                "error": str(exc),
-                "type": exc.__class__.__name__,
-            }
-
-    st.session_state["agentic_debug_enabled"] = agentic_debug_enabled
-    st.session_state["agentic_debug_result"] = agentic_debug_result
+    agentic_enabled = bool(env_flag or ui_flag)
 
     # Status box for any LLM activity in this run.
     ollama_status = st.status(f"{_llm_name()}: idle", expanded=False) if use_ollama else None
 
-    ollama_error: Optional[str] = None
+    def _on_status(label: str, state: str) -> None:
+        if ollama_status is not None:
+            ollama_status.update(label=label, state=state)
 
-    # Rationale: LLM-first audit checklist layer (Option B) - checklist items are
-    # represented as Alert objects and must be acknowledged/overridden before Finalize.
-    checklist_seed = Alert(
-        alert_id="llm_checklist_seed",
-        title="Guideline audit checklist",
-        message="LLM audit checklist seed",
-        evidence={"type": "llm_audit_checklist_seed"},
-        query_hint="visit audit checklist labs monitoring regimen",
+    result = run_visit_analysis(
+        patient=patient,
+        today_note=today_note,
+        rag=rag,
+        llm_client=llm_client,
+        options=AnalysisOptions(
+            top_k=top_k,
+            index_max_pages=index_max_pages,
+            retrieval_page_range=retrieval_page_range,
+            use_llm=use_ollama,
+            llm_mode=llm_mode,
+            agentic=agentic_enabled,
+        ),
+        llm_name=_llm_name(),
+        on_status=_on_status,
     )
-    # Rationale: compatibility — during hot-reload, a cached RagEngine may not yet
-    # accept the new page_range kw. Try new signature first, then fall back.
-    try:
-        checklist_retrieved = rag.retrieve_for_alert(
-            patient_context=context,
-            alert=checklist_seed,
-            top_k=top_k,
-            page_range=retrieval_page_range,
-        )
-    except (TypeError, ValueError):
-        checklist_retrieved = rag.retrieve_for_alert(
-            patient_context=context,
-            alert=checklist_seed,
-            top_k=top_k,
-        )
-    # Client-side guard: enforce page-range bounds post-retrieval to avoid any caching/store drift.
-    if retrieval_page_range is not None:
-        lo, hi = retrieval_page_range
-        checklist_retrieved = [
-            r for r in checklist_retrieved
-            if (r.metadata.get("page_number") is not None and int(r.metadata.get("page_number")) >= int(lo) and int(r.metadata.get("page_number")) <= int(hi))
-        ]
 
-    if ollama_status is not None:
-        # Rationale: the first LLM call is a good proxy for "Ollama connected".
-        ollama_status.update(label=f"{_llm_name()}: generating audit checklist…", state="running")
-    # Manage LLM calls by mode: checklist vs per‑alert explanations vs synthesis vs screening.
-    # In Synthesis mode, skip the checklist LLM to keep a single LLM call later.
-    checklist_llm = llm_client if (use_ollama and llm_mode == "Checklist only") else None
-    explanation_llm = llm_client if (use_ollama and llm_mode == "Per-alert explanations") else None
-
-    checklist_alerts: List[Alert] = []
-    if llm_mode == "Checklist only":
-        if ollama_status is not None and checklist_llm is not None:
-            ollama_status.update(label=f"{_llm_name()}: generating audit checklist…", state="running")
-        checklist_alerts = generate_audit_checklist_alerts(
-            patient_context=context,
-            retrieved_chunks=checklist_retrieved,
-            llm_client=checklist_llm,
-        )
-
-        if ollama_status is not None and checklist_llm is not None:
-            last_err = checklist_llm.last_error if checklist_llm is not None else None
-            if last_err:
-                ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
-            else:
-                ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
-        if checklist_alerts:
-            alerts = list(alerts) + checklist_alerts
-
-    # Optional: LLM-first screening mode — generate alerts directly from Stage 1 summary
-    # and checklist evidence. Deterministic alerts remain the fallback when
-    # screening fails (error or unparseable output).
-    if (
-        use_ollama
-        and llm_mode == "LLM screening (generate alerts)"
-        and llm_client is not None
-    ):
-        if ollama_status is not None:
-            ollama_status.update(label=f"{_llm_name()}: screening for safety issues…", state="running")
-        screening_debug: Dict[str, Any] = {}
-        screening_alerts = generate_llm_screening_alerts(
-            patient_context=context,
-            stage1_summary=stage1_summary,
-            screening_chunks=checklist_retrieved,
-            llm_client=llm_client,
-            debug=screening_debug,
-        )
-        # Rationale: persist screening audit inputs/parse status for GREEN "no alerts" explanation.
-        st.session_state["analysis_screening_debug"] = screening_debug
-        st.session_state["analysis_screening_patient_facts"] = _extract_patient_facts_from_history(
-            context.notes_text
-        )
-
-        parse_status = (screening_debug.get("parse_status") or "").strip().lower()
-        last_err = llm_client.last_error
-
-        screening_succeeded = (
-            last_err is None
-            and parse_status in {"parsed_empty", "parsed_nonempty"}
-        )
-
-        if screening_succeeded:
-            alerts = list(screening_alerts)
-            deterministic_alerts = []
-
-        if ollama_status is not None:
-            if last_err:
-                ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
-            else:
-                ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
-        if ollama_error is None:
-            ollama_error = last_err
+    st.session_state["agentic_debug_enabled"] = agentic_enabled
+    st.session_state["agentic_debug_result"] = result.agentic_result
+    if result.screening_ran:
+        st.session_state["analysis_screening_debug"] = result.screening_debug
+        st.session_state["analysis_screening_patient_facts"] = result.patient_facts
 
     # Rationale: reset per-alert review state for each analysis run. Without this,
     # a previous acknowledgment/override can incorrectly allow finalize on a new
     # Save without review.
-    for alert in alerts:
+    for alert in result.alerts:
         st.session_state[f"alert_action_{alert.alert_id}"] = "Unreviewed"
         st.session_state[f"alert_override_reason_{alert.alert_id}"] = ""
         st.session_state[f"alert_override_comment_{alert.alert_id}"] = ""
-
-    results: List[Dict[str, Any]] = []
-    # Evidence map for Stage 3 synthesis (per deterministic alert).
-    evidence_map: Dict[str, List[VectorSearchResult]] = {}
-
-    for alert in alerts:
-        if (alert.evidence or {}).get("type") == "llm_audit_checklist":
-            # Rationale: checklist alerts already contain LLM-produced guidance and
-            # citations; avoid additional LLM calls per checklist item.
-            retrieved: List[VectorSearchResult] = []
-            explanation = ExplanationResult(
-                text=alert.message,
-                used_chunks=[],
-                used_llm=False,
-            )
-        else:
-            try:
-                retrieved = rag.retrieve_for_alert(
-                    patient_context=context,
-                    alert=alert,
-                    top_k=top_k,
-                    # Rationale: Stage 2 — propagate page range filter for per-alert retrieval.
-                    page_range=retrieval_page_range,
-                )
-            except (TypeError, ValueError):
-                retrieved = rag.retrieve_for_alert(
-                    patient_context=context,
-                    alert=alert,
-                    top_k=top_k,
-                )
-            # Client-side guard: enforce page-range bounds post-retrieval to avoid any caching/store drift.
-            if retrieval_page_range is not None:
-                lo, hi = retrieval_page_range
-                retrieved = [
-                    r for r in retrieved
-                    if (r.metadata.get("page_number") is not None and int(r.metadata.get("page_number")) >= int(lo) and int(r.metadata.get("page_number")) <= int(hi))
-                ]
-
-            # Capture evidence for Stage 3 only for deterministic (non-LLM) alerts.
-            evidence_map[alert.alert_id] = list(retrieved)
-
-            if ollama_status is not None and explanation_llm is not None:
-                # Rationale: per-alert LLM calls may each take time; show which step is active.
-                ollama_status.update(
-                    label=f"{_llm_name()}: generating explanation for '{alert.title}'…",
-                    state="running",
-                )
-            # Rationale: measure per‑alert LLM explanation time to track latency and surface it in the UI.
-            _t0 = time.perf_counter()
-            explanation = generate_explanation(
-                patient_context=context,
-                alert=alert,
-                retrieved_chunks=retrieved,
-                llm_client=explanation_llm,
-            )
-            _t1 = time.perf_counter()
-            st.session_state[f"explain_time_{alert.alert_id}"] = max(0.0, float(_t1 - _t0))
-
-            if ollama_status is not None and explanation_llm is not None:
-                last_err = explanation_llm.last_error if explanation_llm is not None else None
-                if last_err:
-                    ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
-                else:
-                    ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
-
-        # Rationale: capture the first LLM failure reason so the UI can show why
-        # it fell back to deterministic mode.
-        if explanation_llm is not None and not explanation.used_llm:
-            last_err = explanation_llm.last_error
-            if last_err and ollama_error is None:
-                ollama_error = last_err
-
-        results.append(
-            {
-                "alert": alert,
-                "retrieved": retrieved,
-                "explanation": explanation,
-            }
-        )
+    for alert_id, seconds in result.explain_seconds.items():
+        st.session_state[f"explain_time_{alert_id}"] = seconds
 
     # Clinical summary (LLM) feature disabled: always clear any prior narrative.
     st.session_state["analysis_narrative"] = None
 
-    # Stage 3 synthesis: single LLM call producing structured issues as new Alerts.
-    if use_ollama and llm_mode == "Synthesis" and llm_client is not None:
-        if ollama_status is not None:
-            ollama_status.update(label=f"{_llm_name()}: generating synthesis issues…", state="running")
-        try:
-            synth_alerts = generate_stage3_synthesis_issues(
-                patient_context=context,
-                deterministic_alerts=deterministic_alerts,
-                evidence_map=evidence_map,
-                llm_client=llm_client,
-            )
-        except Exception:
-            synth_alerts = []
-        # Initialize gating state for new synthesis alerts and append to results.
-        if synth_alerts:
-            for a in synth_alerts:
-                st.session_state[f"alert_action_{a.alert_id}"] = "Unreviewed"
-                st.session_state[f"alert_override_reason_{a.alert_id}"] = ""
-                st.session_state[f"alert_override_comment_{a.alert_id}"] = ""
-                results.append(
-                    {
-                        "alert": a,
-                        "retrieved": [],
-                        "explanation": ExplanationResult(text=a.message, used_chunks=[], used_llm=False),
-                    }
-                )
-            alerts = list(alerts) + synth_alerts
-
-        if ollama_status is not None:
-            last_err = llm_client.last_error
-            if last_err:
-                ollama_status.update(label=f"{_llm_name()} error: {last_err}", state="error")
-            else:
-                ollama_status.update(label=f"{_llm_name()} connected (response received)", state="complete")
-        # Capture first error if no LLM text returned.
-        if ollama_error is None:
-            ollama_error = llm_client.last_error
-
     st.session_state["analysis_ran"] = True
     st.session_state["finalized"] = False
-    st.session_state["analysis_alerts"] = alerts
-    st.session_state["analysis_results"] = results
-    st.session_state["analysis_status"] = _compute_overall_status(alerts)
+    st.session_state["analysis_alerts"] = result.alerts
+    st.session_state["analysis_results"] = result.results
+    st.session_state["analysis_status"] = result.status
     st.session_state["analysis_use_ollama"] = bool(use_ollama)
     st.session_state["analysis_llm_mode"] = llm_mode
     # UX: surface active retrieval page range in Results view (caption) for reviewers.
     st.session_state["analysis_retrieval_page_range"] = retrieval_page_range
-    _client_used = (checklist_llm or explanation_llm)
-    st.session_state["analysis_ollama_model"] = _client_used.model if _client_used is not None else None
-    st.session_state["analysis_ollama_error"] = ollama_error
-
-    agentic_reasoner_debug = None
-    if st.session_state.get("agentic_debug_enabled"):
-        try:
-            base_result = st.session_state.get("agentic_debug_result")
-            agentic_reasoner_debug = {
-                "final_status": st.session_state.get("analysis_status"),
-                "final_alert_count": len(alerts),
-                "deterministic_alert_ids": [a.alert_id for a in deterministic_alerts],
-                "final_alert_ids": [a.alert_id for a in alerts],
-                "evidence_map_keys": list(evidence_map.keys()),
-                "agentic_result_present": base_result is not None,
-            }
-        except Exception as exc:
-            agentic_reasoner_debug = {
-                "error": str(exc),
-                "type": exc.__class__.__name__,
-            }
-    st.session_state["agentic_debug_reasoner"] = agentic_reasoner_debug
+    st.session_state["analysis_ollama_model"] = result.llm_model
+    st.session_state["analysis_ollama_error"] = result.llm_error
+    st.session_state["agentic_debug_reasoner"] = result.agentic_reasoner
 
 
 def main() -> None:
