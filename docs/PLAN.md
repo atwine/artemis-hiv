@@ -66,7 +66,7 @@ test that fails on the old code, ends with that test passing, and is logged in
       9b: reopen a patient's last results from the record, with no new AI call.
 - [x] Fix 10: small fixes, plus two dangerous retrieval faults pulled forward from 2B (the cleaner
       deleting "<50" thresholds, and the backup index keeping only one guideline).
-- [ ] 1.Z Rerun the baseline (7 patients, 3 runs each) and compare with `scripts/compare_runs.py`;
+- [x] 1.Z Rerun the baseline (7 patients, 3 runs each) and compare with `scripts/compare_runs.py`;
       code review, security review, then merge into `development` and push after a yes.
 
 Old item 1.4 (name the real source on each citation) moved into Phase 2B with the other
