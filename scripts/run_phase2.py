@@ -121,6 +121,10 @@ def main(argv: Optional[list] = None) -> int:
     for case, k in todo:
         record = rb._scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
                                     price_out=price_out, temperature=args.temperature), secrets)
+        if record["llm_error"]:
+            # Not saved: a server outage is not a result, and a saved run would be skipped on resume.
+            print(f"stopped at {case.case_id} #{k}: the model call failed ({record['llm_error']}); nothing saved for it")
+            return 2
         _write(out / run_file_name(case.case_id, k), record)
         spent += record["cost_usd"]
         print(f"  {case.case_id} #{k}: {record['status']}, {len(record['alerts'])} alerts, "
