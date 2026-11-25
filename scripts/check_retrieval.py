@@ -33,6 +33,21 @@ from run_phase2 import PRESETS, model_config  # noqa: E402
 DEPTH = 10  # passages checked; the app shows the AI AnalysisOptions().top_k of them
 
 
+class _Replay:
+    """Answers the question step with the questions saved for each case, in the app's own format."""
+
+    last_error = None
+    model = "replay"
+
+    def __init__(self, saved: dict) -> None:
+        self._saved = saved
+
+    def chat(self, messages, format=None, options_override=None):  # noqa: A002
+        facts = str(messages[-1]["content"])
+        case_id = next(cid for cid in self._saved if f"Patient ID: {cid}\n" in facts)
+        return json.dumps(self._saved[case_id] or [])
+
+
 def _note(case) -> str:
     return (case.patient.get("today_encounter") or {}).get("note") or ""
 
@@ -43,17 +58,26 @@ def main(argv: Optional[list] = None) -> int:
     ap.add_argument("--cases", type=Path, default=ROOT / "eval" / "cases")
     ap.add_argument("--questions", type=Path, default=ROOT / "eval" / "phase2b" / "questions.json")
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--replay-questions", type=Path, default=None,
+                    help="replay the AI questions saved in an earlier search-*.json instead of asking an AI")
     ap.add_argument("--ai", choices=sorted(PRESETS), default=None,
                     help="let this model write the patient's guideline questions first, as the app does")
     args = ap.parse_args(argv)
 
-    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name="all-MiniLM-L6-v2", engine_version=5)
+    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
+    if getattr(rag._embedder, "_model", None) is None:
+        # The app falls back to word hashing when the model can't load (G33); a measurement must not.
+        raise SystemExit(f"the search model {rb.app.EMBEDDING_MODEL} did not load; nothing measured")
     if rb.app.GUIDELINE_PDF_PATHS:
         rag.ensure_indexed()
     cases = load_cases(args.cases)
     questions = load_search_questions(args.questions)
     allowed = {p.stem for p in rb.app.GUIDELINE_PATHS}  # what the app searches: Ugandan guidance only
-    ai = OpenAICompatClient(model_config(args.ai, None)[0]) if args.ai else None
+    if args.replay_questions:
+        # The questions an AI wrote in an earlier check, replayed, so only the index changes.
+        ai = _Replay(json.loads(args.replay_questions.read_text(encoding="utf-8"))["search_questions"])
+    else:
+        ai = OpenAICompatClient(model_config(args.ai, None)[0]) if args.ai else None
     asked = {}
 
     def case_search(c):

@@ -84,6 +84,10 @@ GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY
 # when the ingestion/cleaning/chunking logic changes to force a fresh collection.
 # Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
 GUIDELINE_INDEX_VERSION = 2
+# The search model that turns guideline text and queries into meanings (one setting the app and
+# the scripts share). Phase 2B fix 5d tried BAAI/bge-small-en-v1.5 (512 word-pieces) and dropped it
+# by its keep rule. The index is per model, so changing it builds a fresh one.
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 # Backward-compatible alias used by downstream code.
 GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
@@ -742,7 +746,7 @@ def main() -> None:
         prefer_chroma = st.checkbox("Prefer Chroma (persistent)", value=True)
         embedding_model_name = st.text_input(
             "Embedding model (SentenceTransformers)",
-            value="all-MiniLM-L6-v2",
+            value=EMBEDDING_MODEL,
         )
         top_k = st.slider("Top-K guideline chunks", min_value=1, max_value=10, value=5)
         

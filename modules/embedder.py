@@ -28,9 +28,11 @@ class Embedder:
         # Rationale: try to load the transformer; if it fails (e.g., offline), fall back to a light hashing embedder.
         try:
             if SentenceTransformer is not None:
+                # Safe weights only (safetensors): a pickled model file can run code when loaded.
                 self._model = SentenceTransformer(
                     self._config.model_name,
                     device=self._config.device,
+                    model_kwargs={"use_safetensors": True},
                 )
         except Exception:
             self._model = None

@@ -117,7 +117,7 @@ def main(argv: Optional[list] = None) -> int:
         return 0
 
     out.mkdir(parents=True, exist_ok=True)
-    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name="all-MiniLM-L6-v2", engine_version=5)
+    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
     if rb.app.GUIDELINE_PDF_PATHS:
         rag.ensure_indexed()
     client = OpenAICompatClient(config)
