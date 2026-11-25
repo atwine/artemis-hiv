@@ -15,7 +15,7 @@ import re
 
 from artemis.rules.checks import Alert
 from modules.embedder import Embedder
-from artemis.guidelines.processor import GuidelineChunk, process_guidelines, process_markdown_sections
+from artemis.guidelines.processor import GuidelineChunk, process_guidelines, process_markdown_guidelines
 from artemis.patient.record import PatientContext
 from artemis.guidelines.vector_store import VectorSearchResult, VectorStore
 
@@ -64,8 +64,12 @@ class RagEngine:
             # Rationale: detect Markdown vs PDF by extension so callers can mix
             # file types in a single guideline list.
             if gpath.suffix.lower() in (".md", ".markdown"):
-                # Cut along the guideline's own sections (Phase 2B fix 5b).
-                chunks: List[GuidelineChunk] = process_markdown_sections(gpath, max_pages=max_pages)
+                chunks: List[GuidelineChunk] = process_markdown_guidelines(
+                    gpath,
+                    chunk_size=self._config.chunk_size,
+                    overlap=self._config.overlap,
+                    max_pages=max_pages,
+                )
             else:
                 chunks = process_guidelines(
                     gpath,

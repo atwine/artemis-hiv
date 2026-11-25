@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional
 
 import html
 import re
@@ -266,126 +266,6 @@ def extract_markdown_page_texts(
         page_texts.append(cleaned)
 
     return page_texts
-
-
-SECTION_LIMIT = 900  # characters: about what the search model reads (256 word pieces), label included
-_HEADING_RE = re.compile(r"^(#{1,6})\s+(.*\S)\s*$")
-_SENTENCE_RE = re.compile(r"(?<=[.!?;])\s+")
-
-
-def _fit(text: str, room: int) -> List[str]:
-    """Sentences packed into parts of at most `room` characters; a longer sentence is cut by words."""
-    parts: List[str] = []
-    current = ""
-    for sentence in _SENTENCE_RE.split(text):
-        words = sentence.split()
-        while words:
-            piece = words.pop(0)
-            while words and len(piece) + 1 + len(words[0]) <= room:
-                piece += " " + words.pop(0)
-            if current and len(current) + 1 + len(piece) <= room:
-                current += " " + piece
-            else:
-                if current:
-                    parts.append(current)
-                current = piece
-    if current:
-        parts.append(current)
-    return parts
-
-
-def _section_pieces(label: str, lines: List[Tuple[int, str]], limit: int) -> List[Tuple[int, str]]:
-    """One section's text as (page, text) pieces: paragraphs packed, tables by whole rows with
-    the header row repeated, every piece starting with the section label."""
-    head = f"{label}\n" if label else ""
-    room = max(limit - len(head), 100)
-    blocks: List[Tuple[str, List[Tuple[int, str]]]] = []
-    for page, line in lines:
-        if "\t" in line:  # a table row, as the cleaner leaves it (cells separated by tabs)
-            row = " | ".join(c.strip() for c in line.split("\t") if c.strip())
-            if row:
-                if not blocks or blocks[-1][0] != "table":
-                    blocks.append(("table", []))
-                blocks[-1][1].append((page, row))
-        elif line.strip():
-            if not blocks or blocks[-1][0] != "para":
-                blocks.append(("para", []))
-            blocks[-1][1].append((page, line.strip()))
-        elif blocks and blocks[-1][0] == "para":
-            blocks.append(("break", []))
-
-    pieces: List[Tuple[int, str]] = []
-    text, first_page = "", 0
-    for kind, items in blocks:
-        if not items:
-            continue
-        if kind == "table" and len(items) > 1:
-            if text:
-                pieces.append((first_page, head + text))
-                text = ""
-            header = items[0][1]
-            block, block_page = header, items[0][0]
-            for page, row in items[1:]:
-                if block != header and len(block) + 1 + len(row) > room:
-                    pieces.append((block_page, head + block))
-                    block, block_page = header, page
-                block += "\n" + row
-            pieces.append((block_page, head + block))
-            continue
-        for part in _fit(_normalize_whitespace(" ".join(t for _, t in items)), room):
-            if text and len(text) + 1 + len(part) > room:
-                pieces.append((first_page, head + text))
-                text = ""
-            if not text:
-                text, first_page = part, items[0][0]
-            else:
-                text += " " + part
-    if text:
-        pieces.append((first_page, head + text))
-    return pieces
-
-
-def process_markdown_sections(
-    md_path: Path,
-    *,
-    limit: int = SECTION_LIMIT,
-    max_pages: Optional[int] = None,
-) -> List[GuidelineChunk]:
-    """Cut a guideline Markdown file along its own sections (Phase 2B fix 5b).
-
-    A piece never crosses a heading and starts with its section path ("6.12 MONITORING > 6.12.3
-    Frequency of VL"); paragraphs are packed up to `limit` characters, so the search model reads
-    every word, and tables are split by whole rows with the header row repeated. It replaced
-    1,200-character windows that cut sections and tables apart, 42% of them longer than the search
-    model reads (G34). The page is the page the piece starts on.
-    """
-    if not md_path.exists():
-        raise FileNotFoundError(f"Guideline Markdown file not found: {md_path}")
-    segments = re.split(r"<!--\s*PAGE\s+BREAK\s*-->", md_path.read_text(encoding="utf-8"))
-    segments = segments if max_pages is None else segments[:max_pages]
-    file_prefix = md_path.stem.strip().lower().replace(" ", "-")
-
-    sections: List[Tuple[str, List[Tuple[int, str]]]] = []
-    path: List[Tuple[int, str]] = []
-    lines: List[Tuple[int, str]] = []
-    for page, segment in enumerate(segments, start=1):
-        for line in _strip_markdown_noise(segment).split("\n"):
-            m = _HEADING_RE.match(line.strip())
-            if m:
-                sections.append((" > ".join(t for _, t in path), lines))
-                level, title = len(m.group(1)), _normalize_whitespace(m.group(2).replace("*", ""))
-                path = [(lv, t) for lv, t in path if lv < level] + [(level, title)]
-                lines = []
-            else:
-                lines.append((page, line))
-    sections.append((" > ".join(t for _, t in path), lines))
-
-    chunks: List[GuidelineChunk] = []
-    for s, (label, section_lines) in enumerate(sections, start=1):
-        for j, (page, text) in enumerate(_section_pieces(label, section_lines, limit), start=1):
-            chunks.append(GuidelineChunk(chunk_id=f"{file_prefix}__s{s}_c{j}", text=text,
-                                         source_path=str(md_path), page_number=page))
-    return chunks
 
 
 def process_markdown_guidelines(

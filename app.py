@@ -83,8 +83,7 @@ GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY
 # Rationale: persistent Chroma collections keep old indexed chunks; bump this
 # when the ingestion/cleaning/chunking logic changes to force a fresh collection.
 # Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
-# Version 3 (Phase 2B fix 5b): pieces cut along the guideline's own sections.
-GUIDELINE_INDEX_VERSION = 3
+GUIDELINE_INDEX_VERSION = 2
 # Backward-compatible alias used by downstream code.
 GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
