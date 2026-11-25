@@ -1,0 +1,285 @@
+{
+ "case_id": "P005",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 24.8,
+ "calls": [
+  {
+   "prompt_tokens": 2469,
+   "completion_tokens": 1000,
+   "total_tokens": 3469,
+   "cost": 0.0007469,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007469,
+    "upstream_inference_prompt_cost": 0.0002469,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2550,
+   "completion_tokens": 1000,
+   "total_tokens": 3550,
+   "cost": 0.000755,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000755,
+    "upstream_inference_prompt_cost": 0.000255,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3791,
+   "completion_tokens": 1000,
+   "total_tokens": 4791,
+   "cost": 0.0008791,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008791,
+    "upstream_inference_prompt_cost": 0.0003791,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4449,
+   "completion_tokens": 779,
+   "total_tokens": 5228,
+   "cost": 0.0008344,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008344,
+    "upstream_inference_prompt_cost": 0.0004449,
+    "upstream_inference_completions_cost": 0.0003895
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0032153999999999998,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "protein 1+"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P005_renal_decline_tdf",
+   "title": "Progressive creatinine rise and reduced eGFR on TDF with NSAID use",
+   "message": "Guidelines advise checking creatinine (eGFR) on TDF, and that dehydration or intercurrent illness may worsen renal function. Patient has a steady creatinine rise from 0.9 mg/dL (2020) to 1.4 mg/dL (2026), eGFR now 52 mL/min/1.73m2, and 1+ proteinuria with trace glycosuria. Evidence for TDF nephrotoxicity: sustained trend on TDF for 3 years. Evidence against sole attribution: concurrent ibuprofen 2-3 times weekly for 6 months, which is a recognised cause of renal impairment and interacts with TDF nephrotoxicity risk; non-drug causes such as hypertension or diabetes are not present (BP 118/76, no diabetes), but dehydration from the fatigue history should be assessed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Repeat creatinine and eGFR and urinalysis promptly, stop or minimise ibuprofen, assess hydration, and review TDF suitability per guideline renal monitoring thresholds.",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P005_renal_decline_tdf",
+     "title": "Progressive creatinine rise and reduced eGFR on TDF with NSAID use",
+     "message": "Guidelines advise checking creatinine (eGFR) on TDF, and that dehydration or intercurrent illness may worsen renal function. Patient has a steady creatinine rise from 0.9 mg/dL (2020) to 1.4 mg/dL (2026), eGFR now 52 mL/min/1.73m2, and 1+ proteinuria with trace glycosuria. Evidence for TDF nephrotoxicity: sustained trend on TDF for 3 years. Evidence against sole attribution: concurrent ibuprofen 2-3 times weekly for 6 months, which is a recognised cause of renal impairment and interacts with TDF nephrotoxicity risk; non-drug causes such as hypertension or diabetes are not present (BP 118/76, no diabetes), but dehydration from the fatigue history should be assessed.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Repeat creatinine and eGFR and urinalysis promptly, stop or minimise ibuprofen, assess hydration, and review TDF suitability per guideline renal monitoring thresholds.",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P005_monitoring_gap",
+   "title": "Routine DTG viral load monitoring up to date; renal monitoring not documented",
+   "message": "Guidelines recommend viral load every 6 months on DTG-based first-line ART; viral load <50 copies/mL is reported and consistent with suppression. However, no renal monitoring plan or clinician assessment is recorded despite the declining eGFR and proteinuria on TDF.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Document a renal monitoring plan with repeat creatinine/eGFR and urinalysis, and continue 6-monthly viral load per guideline.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P005_monitoring_gap",
+     "title": "Routine DTG viral load monitoring up to date; renal monitoring not documented",
+     "message": "Guidelines recommend viral load every 6 months on DTG-based first-line ART; viral load <50 copies/mL is reported and consistent with suppression. However, no renal monitoring plan or clinician assessment is recorded despite the declining eGFR and proteinuria on TDF.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Document a renal monitoring plan with repeat creatinine/eGFR and urinalysis, and continue 6-monthly viral load per guideline.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ],
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p2_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p19_c4",
+   "who_guidelines.extraction__who_guidelines.extraction__p36_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p41_c4"
+  ],
+  "P005_renal_decline_tdf": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "P005_monitoring_gap": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"P005_renal_decline_tdf\", \"title\": \"Progressive creatinine rise and reduced eGFR on TDF with NSAID use\", \"message\": \"Guidelines advise checking creatinine (eGFR) on TDF, and that dehydration or intercurrent illness may worsen renal function. Patient has a steady creatinine rise from 0.9 mg/dL (2020) to 1.4 mg/dL (2026), eGFR now 52 mL/min/1.73m2, and 1+ proteinuria with trace glycosuria. Evidence for TDF nephrotoxicity: sustained trend on TDF for 3 years. Evidence against sole attribution: concurrent ibuprofen 2-3 times weekly for 6 months, which is a recognised cause of renal impairment and interacts with TDF nephrotoxicity risk; non-drug causes such as hypertension or diabetes are not present (BP 118/76, no diabetes), but dehydration from the fatigue history should be assessed.\", \"issue_type\": \"toxicity\", \"severity\": \"high\", \"recommended_action\": \"Repeat creatinine and eGFR and urinalysis promptly, stop or minimise ibuprofen, assess hydration, and review TDF suitability per guideline renal monitoring thresholds.\", \"citations\": [{\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"}]}, {\"alert_id\": \"P005_monitoring_gap\", \"title\": \"Routine DTG viral load monitoring up to date; renal monitoring not documented\", \"message\": \"Guidelines recommend viral load every 6 months on DTG-based first-line ART; viral load <50 copies/mL is reported and consistent with suppression. However, no renal monitoring plan or clinician assessment is recorded despite the declining eGFR and proteinuria on TDF.\", \"issue_type\": \"monitoring_gap\", \"severity\": \"moderate\", \"recommended_action\": \"Document a renal monitoring plan with repeat creatinine/eGFR and urinalysis, and continue 6-monthly viral load per guideline.\", \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2",
+    "page_number": 43,
+    "quote": "< 102cm for males. Adherence counselling for integrated HIV Hypertension and diabetes Care * The goal of treatment is blood pressure <140/90mmHg, Diabetes is FBG < 7mmol/l and viral load< 200copies/ml * Patients with uncontrolled hypertension and blood sugar may suffer complication such as heart attack, stroke, chronic kidney disease, blindness, numbness of limbs and heart failure, * Hypertension, diabetes and HIV/ART treatment is lifelong. * Hypertension often has no symptom"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Adherence is >95% by pill count and today's findings (BP 118/76, weight stable, no oedema, no CVA tenderness) do not establish TDF, 3TC or DTG toxicity, so TLD is not changed on current evidence; Uncertain: the provided guideline excerpts do not contain TDF, 3TC or DTG toxicity monitoring thresholds.\"},\"problems\":[{\"problem\":\"Possible TDF-associated renal toxicity in a patient using ibuprofen 2-3 times weekly for 6 months\",\"action\":\"Check serum creatinine, eGFR, serum phosphate, urine dipstick for protein and glucose, and urine microscopy today; repeat in 1-3 months if abnormal\",\"reason\":\"Chronic NSAID use alongside TDF increases the risk of renal tubular injury, but Uncertain: the provided excerpts do not state renal monitoring criteria for TDF.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The assessment and plan is blank, no orders were placed, and ibuprofen use is not mentioned.\"}},{\"problem\":\"Two months of fatigue in a woman on ART with no recorded baseline labs\",\"action\":\"Check full blood count with haemoglobin and MCV, and TSH; take a stress, sleep and mood history\",\"reason\":\"Fatigue needs haematological and thyroid evaluation before attributing it to work schedule, but Uncertain: the provided excerpts do not cover these tests.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No labs or differential diagnosis for fatigue are documented today.\"}},{\"problem\":\"Unconfirmed viral suppression and immune status on TLD since 2020\",\"action\":\"Obtain HIV viral load and CD4 count if not done in the last 12 months; confirm full ART history since 2018\",\"reason\":\"No viral load or CD4 results are recorded, so treatment response and tolerability on TLD cannot be confirmed; Uncertain: the provided excerpts do not state the viral load schedule.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No labs are recorded and no plan is written, so viral load and CD4 monitoring are not addressed.\"}}],\"monitoring_plan\":\"- Today: renal panel (creatinine, eGFR, phosphate), urine dipstick and microscopy, FBC, TSH\\n- Viral load and CD4 if not done in past 12 months\\n- Repeat renal function in 1-3 months if abnormal, or sooner if symptoms progress\\n- Reassess fatigue at next visit if labs unrevealing\",\"patient_counselling\":[\"Avoid or minimise ibuprofen and other NSAIDs; discuss safer headache options with the clinician.\",\"Report swelling, reduced urine output, flank pain, or worsening tiredness promptly.\",\"Continue\"]}",
+ "plan_issues": []
+}

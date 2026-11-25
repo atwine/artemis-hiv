@@ -1,0 +1,198 @@
+{
+ "case_id": "EX2",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 35.6,
+ "calls": [
+  {
+   "prompt_tokens": 1681,
+   "completion_tokens": 465,
+   "total_tokens": 2146,
+   "cost": 0.00061376,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00061376,
+    "upstream_inference_prompt_cost": 0.00043706,
+    "upstream_inference_completions_cost": 0.0001767
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2556,
+   "completion_tokens": 649,
+   "total_tokens": 3205,
+   "cost": 0.00091118,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00091118,
+    "upstream_inference_prompt_cost": 0.00066456,
+    "upstream_inference_completions_cost": 0.00024662
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00152494,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_AKI_TDF_001",
+   "title": "Acute Kidney Injury with TDF",
+   "message": "Guidelines state that in patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function. The patient has severe gastroenteritis with dehydration, leading to an acute kidney injury (creatinine rise from 0.9 to 2.4 mg/dL). TDF is a known nephrotoxin, but the high urea-to-creatinine ratio (24:1) and clinical context strongly point to pre-renal AKI from dehydration as the primary cause.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Manage dehydration aggressively with IV fluids. Reassess renal function after rehydration before deciding on permanent TDF discontinuation.",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_AKI_TDF_001",
+     "title": "Acute Kidney Injury with TDF",
+     "message": "Guidelines state that in patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function. The patient has severe gastroenteritis with dehydration, leading to an acute kidney injury (creatinine rise from 0.9 to 2.4 mg/dL). TDF is a known nephrotoxin, but the high urea-to-creatinine ratio (24:1) and clinical context strongly point to pre-renal AKI from dehydration as the primary cause.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Manage dehydration aggressively with IV fluids. Reassess renal function after rehydration before deciding on permanent TDF discontinuation.",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_REGIMEN_CHANGE_002",
+   "title": "Consider TDF Alternative for AKI",
+   "message": "Guidelines recommend an alternative regimen if renal impairment develops due to TDF. The patient has an acute kidney injury (creatinine 2.4 mg/dL) while on a TDF-containing regimen (TLD). After treating the reversible cause (dehydration), if renal impairment persists, a switch to an alternative regimen such as ABC + 3TC + DTG should be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "After rehydration, if eGFR remains <50 mL/min/1.73m², switch to ABC + 3TC + DTG or TAF + 3TC + DTG per guidelines.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_REGIMEN_CHANGE_002",
+     "title": "Consider TDF Alternative for AKI",
+     "message": "Guidelines recommend an alternative regimen if renal impairment develops due to TDF. The patient has an acute kidney injury (creatinine 2.4 mg/dL) while on a TDF-containing regimen (TLD). After treating the reversible cause (dehydration), if renal impairment persists, a switch to an alternative regimen such as ABC + 3TC + DTG should be considered.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "After rehydration, if eGFR remains <50 mL/min/1.73m², switch to ABC + 3TC + DTG or TAF + 3TC + DTG per guidelines.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_MONITORING_GAP_003",
+   "title": "Missing eGFR Calculation",
+   "message": "The patient has a significant acute kidney injury. Guidelines specify actions based on eGFR thresholds (e.g., <50 mL/min/1.73m²). The current assessment only provides a creatinine value. An eGFR calculation is required to apply guideline recommendations for regimen switching accurately.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Calculate the patient's eGFR using the creatinine value of 2.4 mg/dL to determine the severity of renal impairment.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX2_MONITORING_GAP_003",
+     "title": "Missing eGFR Calculation",
+     "message": "The patient has a significant acute kidney injury. Guidelines specify actions based on eGFR thresholds (e.g., <50 mL/min/1.73m²). The current assessment only provides a creatinine value. An eGFR calculation is required to apply guideline recommendations for regimen switching accurately.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Calculate the patient's eGFR using the creatinine value of 2.4 mg/dL to determine the severity of renal impairment.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_AKI_TDF_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "EX2_REGIMEN_CHANGE_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+  ],
+  "EX2_MONITORING_GAP_003": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_AKI_TDF_001\",\n    \"title\": \"Acute Kidney Injury with TDF\",\n    \"message\": \"Guidelines state that in patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function. The patient has severe gastroenteritis with dehydration, leading to an acute kidney injury (creatinine rise from 0.9 to 2.4 mg/dL). TDF is a known nephrotoxin, but the high urea-to-creatinine ratio (24:1) and clinical context strongly point to pre-renal AKI from dehydration as the primary cause.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Manage dehydration aggressively with IV fluids. Reassess renal function after rehydration before deciding on permanent TDF discontinuation.\",\n    \"citations\": [\n      {\n        \"page_number\": 40,\n        \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"\n      }\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_REGIMEN_CHANGE_002\",\n    \"title\": \"Consider TDF Alternative for AKI\",\n    \"message\": \"Guidelines recommend an alternative regimen if renal impairment develops due to TDF. The patient has an acute kidney injury (creatinine 2.4 mg/dL) while on a TDF-containing regimen (TLD). After treating the reversible cause (dehydration), if renal impairment persists, a switch to an alternative regimen such as ABC + 3TC + DTG should be considered.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"After rehydration, if eGFR remains <50 mL/min/1.73m², switch to ABC + 3TC + DTG or TAF + 3TC + DTG per guidelines.\",\n    \"citations\": [\n      {\n        \"page_number\": 29,\n        \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1\"\n      }\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_MONITORING_GAP_003\",\n    \"title\": \"Missing eGFR Calculation\",\n    \"message\": \"The patient has a significant acute kidney injury. Guidelines specify actions based on eGFR thresholds (e.g., <50 mL/min/1.73m²). The current assessment only provides a creatinine value. An eGFR calculation is required to apply guideline recommendations for regimen switching accurately.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Calculate the patient's eGFR using the creatinine value of 2.4 mg/dL to determine the severity of renal impairment.\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p1_c1",
+    "page_number": 1,
+    "quote": "# ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal meningitis CrAg: cryptococcal antigen CrCl: creatinine clearance CSF: cerebrospinal fluid CTX: cotrimoxazole CVS: cardiovascular d"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+    "page_number": 29,
+    "quote": "TABLE 12: Recommended alternative initial antiretroviral therapy regimens in specific clinical situations where TDF + 3TC (or FTC) + DTG cannot be used. Scenario Alternative regimen Renal impairment at baseline (eGFR < 50 mL/min/1.73m²) ABC + 3TC + DTG or TAF + 3TC + DTG if eGFR 30-50 mL/min/1.73m² Renal impairment develops due to TDF ABC + 3TC + DTG Patient is intolerant of DTG side-effects TDF + 3TC (or FTC) + EFV, or TDF + 3TC (or FTC) + RPV Pure red cell aplasia develops "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p38_c1",
+    "page_number": 38,
+    "quote": "Flowchart: - Start: - Confirmed virological failure on LPV/r or ATV/r second-line regimen and - Resistance to current PI (Stanford score > 14) and - No prior DTG failure - Decision/Branch 1 (from Start): - Path 1 (left): - DRV susceptible (Stanford score <= 15), or - DRV high level resistance (Stanford score >=60). - Path 2 (right): - DRV low- or intermediate-level resistance (Stanford score 15-59) - Action/Branch 1 (from Path 1): - Switch to TLD* - *If renal impairment or pr"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+    "page_number": 7,
+    "quote": "Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Continue routine creatinine monitoring Creatinine rise 20-30 μmol/L Likely DTG-related. Leave on current regimen. Check creatinine in 1"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"Patient has acute kidney injury (creatinine 2.4 mg/dL) with severe dehydration, and TDF is associated with nephrotoxicity per guidelines.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Acute kidney injury and severe dehydration\",\n      \"action\": \"Proceed with IV fluid resuscitation and stop TDF permanently.\",\n      \"reason\": \"Creatinine rose from 0.9 to 2.4 mg/dL with severe diarrhoea and vomiting, indicating acute kidney injury, and TDF can be nephrotoxic.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan includes IV fluid resuscitation and considering stopping TDF permanently.\"\n      }\n    },\n    {\n      \"problem\": \"Severe gastroenteritis\",\n      \"action\": \"Administer empiric antibiotics pending stool microscopy.\",\n      \"reason\": \"Patient has severe watery diarrhoea and vomiting for 5 days with a fever of 37.9 C.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan includes empiric antibiotics for gastroenteritis.\"\n      }\n    },\n    {\n      \"problem\": \"ART regimen adjustment due to TDF cessation\",\n      \"action\": \"Uncertain: The guideline excerpts only mention screening for TDF toxicity but do not specify the replacement regimen.\",\n      \"reason\": \"Uncertain: The guideline excerpts only mention screening for TDF toxicity but do not specify the replacement regimen.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Gap\",\n        \"explanation\": \"The clinician's plan considers stopping TDF but does not specify the new ART regimen.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Monitor creatinine and urine output daily; repeat creatinine after rehydration.\",\n  \"patient_counselling\": [\n    \"Importance of oral rehydration and seeking care for diarrhoea.\",\n    \"Explanation of ART change due to kidney injury.\",\n    \"Adherence to new ART regimen once prescribed.\"\n  ]\n}",
+ "plan_issues": []
+}

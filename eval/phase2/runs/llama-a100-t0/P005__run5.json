@@ -1,0 +1,205 @@
+{
+ "case_id": "P005",
+ "model": "llama-a100-t0",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 5,
+ "temperature": 0.0,
+ "seconds": 23.6,
+ "calls": [
+  {
+   "prompt_tokens": 1487,
+   "total_tokens": 1854,
+   "completion_tokens": 367,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2323,
+   "total_tokens": 2651,
+   "completion_tokens": 328,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "protein 1+"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P005_001",
+   "title": "Renal Function Decline",
+   "message": "Guidelines recommend monitoring renal function in patients on TDF. Patient's creatinine levels have been increasing over the years (0.9 in 2020 to 1.4 in 2026), indicating a decline in renal function. This could be due to TDF toxicity, but other factors like dehydration or sepsis should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor creatinine and eGFR regularly",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P005_001",
+     "title": "Renal Function Decline",
+     "message": "Guidelines recommend monitoring renal function in patients on TDF. Patient's creatinine levels have been increasing over the years (0.9 in 2020 to 1.4 in 2026), indicating a decline in renal function. This could be due to TDF toxicity, but other factors like dehydration or sepsis should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor creatinine and eGFR regularly",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P005_002",
+   "title": "Viral Load Monitoring",
+   "message": "Guidelines recommend checking viral load every 6 months for patients on DTG-based first-line ART. Patient's latest viral load is <50 copies/mL, but the frequency of monitoring should be evaluated based on adherence and previous results.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue viral load monitoring every 6 months",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P005_002",
+     "title": "Viral Load Monitoring",
+     "message": "Guidelines recommend checking viral load every 6 months for patients on DTG-based first-line ART. Patient's latest viral load is <50 copies/mL, but the frequency of monitoring should be evaluated based on adherence and previous results.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue viral load monitoring every 6 months",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ],
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p2_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p19_c4",
+   "who_guidelines.extraction__who_guidelines.extraction__p36_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p41_c4"
+  ],
+  "P005_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "P005_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P005_001\",\n    \"title\": \"Renal Function Decline\",\n    \"message\": \"Guidelines recommend monitoring renal function in patients on TDF. Patient's creatinine levels have been increasing over the years (0.9 in 2020 to 1.4 in 2026), indicating a decline in renal function. This could be due to TDF toxicity, but other factors like dehydration or sepsis should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor creatinine and eGFR regularly\",\n    \"citations\": [{\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"}]\n  },\n  {\n    \"alert_id\": \"P005_002\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend checking viral load every 6 months for patients on DTG-based first-line ART. Patient's latest viral load is <50 copies/mL, but the frequency of monitoring should be evaluated based on adherence and previous results.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue viral load monitoring every 6 months\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2",
+    "page_number": 43,
+    "quote": "< 102cm for males. Adherence counselling for integrated HIV Hypertension and diabetes Care * The goal of treatment is blood pressure <140/90mmHg, Diabetes is FBG < 7mmol/l and viral load< 200copies/ml * Patients with uncontrolled hypertension and blood sugar may suffer complication such as heart attack, stroke, chronic kidney disease, blindness, numbness of limbs and heart failure, * Hypertension, diabetes and HIV/ART treatment is lifelong. * Hypertension often has no symptom"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: no lab results or specific symptoms suggesting drug toxicity from current ART medications are provided, and the guideline excerpts do not specify how to assess toxicity for TDF, 3TC, and DTG based on the patient's symptoms and lab results.\"}, \n\"problems\": [{\"problem\": \"Mild fatigue\", \"action\": \"Uncertain: need more information on lab results and guideline recommendations for managing fatigue in HIV patients on TDF, 3TC, and DTG\", \"reason\": \"Uncertain: the patient reports mild fatigue, but without lab results or more specific guidance from the Uganda HIV guidelines, it's unclear how to address it\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention fatigue.\"}}, \n{\"problem\": \"Potential drug toxicity\", \"action\": \"Uncertain: need more information on lab results and specific toxicity signs for TDF, 3TC, and DTG\", \"reason\": \"Uncertain: without lab results or specific symptoms suggesting drug toxicity, it's unclear if the patient is experiencing toxicity from their current ART medications\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not address potential drug toxicity.\"}}], \n\"monitoring_plan\": \"Monitor for signs of drug toxicity, including lab results for renal function and liver enzymes, and assess fatigue levels over time.\", \n\"patient_counselling\": [\"Discuss the importance of adherence to the current ART regimen\", \"Inquire about any changes in symptoms or side effects\", \"Educate on the potential for drug toxicity and the importance of regular lab monitoring\"]}",
+ "plan_issues": []
+}

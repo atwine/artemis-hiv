@@ -1,0 +1,252 @@
+{
+ "case_id": "P006",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 4,
+ "temperature": null,
+ "seconds": 24.5,
+ "calls": [
+  {
+   "prompt_tokens": 2358,
+   "completion_tokens": 1000,
+   "total_tokens": 3358,
+   "cost": 0.0007358,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007358,
+    "upstream_inference_prompt_cost": 0.0002358,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2439,
+   "completion_tokens": 1000,
+   "total_tokens": 3439,
+   "cost": 0.0007439,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0007439,
+    "upstream_inference_prompt_cost": 0.0002439,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3656,
+   "completion_tokens": 1000,
+   "total_tokens": 4656,
+   "cost": 0.0008656,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008656,
+    "upstream_inference_prompt_cost": 0.0003656,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4256,
+   "completion_tokens": 865,
+   "total_tokens": 5121,
+   "cost": 0.0008581,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008581,
+    "upstream_inference_prompt_cost": 0.0004256,
+    "upstream_inference_completions_cost": 0.0004325
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0032034,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P006_VL_PREGNANCY_MONITORING",
+   "title": "Pregnant on ART: viral load monitoring due at 3 months",
+   "message": "Guidelines specify viral load monitoring in pregnancy: for women who newly initiated ART in pregnancy, VL should be repeated after 3 months of ART, with repeat VL at delivery if beyond 28 weeks' gestation. Routine VL monitoring for pregnant and lactating women is every 3 months. Patient started ART 10 weeks ago and is now 22 weeks pregnant. Most recent VL is 89 copies/mL (suppressed, down from 125,000 at diagnosis), but today's labs are not recorded, so the 3-month and subsequent in-pregnancy VL scheduling cannot be confirmed as ordered. No clinician assessment or plan was documented today.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Confirm the 3-month post-ART viral load is ordered and documented, and schedule a repeat VL at delivery since gestation will exceed 28 weeks. Document the plan today.",
+    "citations": [
+     {
+      "page_number": 49,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_VL_PREGNANCY_MONITORING",
+     "title": "Pregnant on ART: viral load monitoring due at 3 months",
+     "message": "Guidelines specify viral load monitoring in pregnancy: for women who newly initiated ART in pregnancy, VL should be repeated after 3 months of ART, with repeat VL at delivery if beyond 28 weeks' gestation. Routine VL monitoring for pregnant and lactating women is every 3 months. Patient started ART 10 weeks ago and is now 22 weeks pregnant. Most recent VL is 89 copies/mL (suppressed, down from 125,000 at diagnosis), but today's labs are not recorded, so the 3-month and subsequent in-pregnancy VL scheduling cannot be confirmed as ordered. No clinician assessment or plan was documented today.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Confirm the 3-month post-ART viral load is ordered and documented, and schedule a repeat VL at delivery since gestation will exceed 28 weeks. Document the plan today.",
+     "citations": [
+      {
+       "page_number": 49,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1"
+      },
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_DIVALENT_CATION_INTERACTION",
+   "title": "DTG and iron supplement: separate administration timing",
+   "message": "Guidelines caution against co-administration of DTG with divalent cation-containing medications in pregnancy, since pregnant women frequently receive iron or calcium supplements. Patient is taking ferrous sulfate for anaemia (Hb 10.8 g/dL) alongside TDF/3TC/DTG. The interaction is clinically relevant because the patient is pregnant and iron is prescribed for her anaemia, so the timing of DTG relative to iron must be managed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Review administration timing of ferrous sulfate relative to DTG per guideline advice on divalent cation separation, and document counselling today. Reassess the iron prescription given Hb 10.8 g/dL.",
+    "citations": [
+     {
+      "page_number": 48,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_DIVALENT_CATION_INTERACTION",
+     "title": "DTG and iron supplement: separate administration timing",
+     "message": "Guidelines caution against co-administration of DTG with divalent cation-containing medications in pregnancy, since pregnant women frequently receive iron or calcium supplements. Patient is taking ferrous sulfate for anaemia (Hb 10.8 g/dL) alongside TDF/3TC/DTG. The interaction is clinically relevant because the patient is pregnant and iron is prescribed for her anaemia, so the timing of DTG relative to iron must be managed.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Review administration timing of ferrous sulfate relative to DTG per guideline advice on divalent cation separation, and document counselling today. Reassess the iron prescription given Hb 10.8 g/dL.",
+     "citations": [
+      {
+       "page_number": 48,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "who_guidelines.extraction__who_guidelines.extraction__p30_c3"
+  ],
+  "P006_VL_PREGNANCY_MONITORING": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+  ],
+  "P006_DIVALENT_CATION_INTERACTION": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"P006_VL_PREGNANCY_MONITORING\", \"title\": \"Pregnant on ART: viral load monitoring due at 3 months\", \"message\": \"Guidelines specify viral load monitoring in pregnancy: for women who newly initiated ART in pregnancy, VL should be repeated after 3 months of ART, with repeat VL at delivery if beyond 28 weeks' gestation. Routine VL monitoring for pregnant and lactating women is every 3 months. Patient started ART 10 weeks ago and is now 22 weeks pregnant. Most recent VL is 89 copies/mL (suppressed, down from 125,000 at diagnosis), but today's labs are not recorded, so the 3-month and subsequent in-pregnancy VL scheduling cannot be confirmed as ordered. No clinician assessment or plan was documented today.\", \"issue_type\": \"monitoring_gap\", \"severity\": \"moderate\", \"recommended_action\": \"Confirm the 3-month post-ART viral load is ordered and documented, and schedule a repeat VL at delivery since gestation will exceed 28 weeks. Document the plan today.\", \"citations\": [{\"page_number\": 49, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1\"}, {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"}]}, {\"alert_id\": \"P006_DIVALENT_CATION_INTERACTION\", \"title\": \"DTG and iron supplement: separate administration timing\", \"message\": \"Guidelines caution against co-administration of DTG with divalent cation-containing medications in pregnancy, since pregnant women frequently receive iron or calcium supplements. Patient is taking ferrous sulfate for anaemia (Hb 10.8 g/dL) alongside TDF/3TC/DTG. The interaction is clinically relevant because the patient is pregnant and iron is prescribed for her anaemia, so the timing of DTG relative to iron must be managed.\", \"issue_type\": \"drug_interaction\", \"severity\": \"high\", \"recommended_action\": \"Review administration timing of ferrous sulfate relative to DTG per guideline advice on divalent cation separation, and document counselling today. Reassess the iron prescription given Hb 10.8 g/dL.\", \"citations\": [{\"page_number\": 48, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+    "page_number": 49,
+    "quote": "TABLE 21: Timing of viral load monitoring during pregnancy, delivery and breastfeeding. Period ART initiation in pregnancy Already on ART at diagnosis of pregnancy Previously taken ART, not currently on treatment (ART interruption, ART for PMTCT) Newly diagnosed HIV infection during delivery or breastfeeding Antenatal VL at baseline and after 3 months of ART: if > 28 weeks' gestation, then repeat VL at delivery VL at first ANC visit VL at initiation of DTG-based regimen; repe"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+    "page_number": 48,
+    "quote": "etween DTG and divalent cation-containing medication in pregnancy, since pregnant women frequently receive iron or calcium supplements and/or magnesium-/aluminium- containing antacids (see module 17). Patients returning to care in pregnancy after interrupting a first-line NNRTI regimen or those exposed to previous VTP regimens should be put directly on a DTG-based regimen, rather than retrying an NNRTI-regimen (see also module 16). As per the current PMTCT guidelines, women n"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p64_c1",
+    "page_number": 64,
+    "quote": "The ACTG A5372 trial showed that DTG needs to be given twice daily for 28 days if co-administered with rifapentine. 137 Rifapentine also affects the metabolism of common ARV drugs most affected by CYP induction such as all protease inhibitors (PIs) including LPV/r, and some non-nucleoside reverse transcriptase inhibitors (NNRTIs), including nevirapine. 138 All patients receiving ART should be considered for TPT after having been screened for active TB using a symptom screen, "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is a 29-year-old pregnant woman (22 weeks) on TDF/3TC/DTG who reports no complaints, has BP 110/70 mmHg, no oedema, negative urine protein dipstick, and improving energy, so no toxicity signal is evident in the recorded facts; the guideline excerpts provided do not specify TDF renal monitoring thresholds, so this decision is made without full guideline detail.\"},\"problems\":[{\"problem\":\"Possible ART-related toxicity (TDF renal, DTG neuropsychiatric or weight effects, 3TC) in pregnancy with no current signs identified\",\"action\":\"Order baseline serum creatinine with eGFR, urine protein to creatinine ratio, and LFTs if not already done; complete DTG screening tool and document any contraindications.\",\"reason\":\"Renal monitoring on TDF and DTG screening are the standard checks for toxicity on this regimen, and no baseline labs are recorded for this patient, though the excerpts do not specify the exact monitoring intervals.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment, plan, or orders were documented today, so toxicity monitoring is not addressed.\"}},{\"problem\":\"Pregnancy-related weight gain (62 to 68 kg) without toxicity features\",\"action\":\"Continue routine antenatal and ART monitoring; reassess weight, BP, and urine protein at each visit.\",\"reason\":\"Weight gain is consistent with normal pregnancy, and absence of oedema and proteinuria means no change is indicated based on the recorded findings.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician has not written any plan for this finding.\"}},{\"problem\":\"Incomplete regimen history, co-medication reconciliation, and baseline labs\",\"action\":\"Uncertain: the excerpts do not specify required lab timing; obtain full prior regimen history, confirm co-medications (ferrous sulfate, folic acid), and record baseline labs.\",\"reason\":\"Uncertain: regimen history, other medications, and labs are not recorded, so toxicity cannot be fully excluded from the available data.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician plan is empty, so the documented co-medications are not reconciled and labs are not ordered.\"}}],\"monitoring_plan\":\"- Baseline creatinine/eGFR, urine protein to creatinine ratio, and LFTs now if not done\\n- Repeat renal function and urinalysis at routine antenatal and ART visits per local protocol\\n- Screen for DTG neuropsychiatric, sleep, or weight-related symptoms at each visit\\n- Escalate if creatinine rises, proteinuria appears, or new symptoms develop\",\"patient_counselling\":[\"Report nausea, rash, jaundice, dark urine, or new mood\"]}",
+ "plan_issues": []
+}

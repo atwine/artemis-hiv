@@ -1,0 +1,168 @@
+{
+  "case_id": "P005",
+  "source": "test patient (Data/custom_patients.json)",
+  "patient": {
+    "patient_id": "P005",
+    "age_years": 38,
+    "sex": "F",
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "other_medications": [],
+    "visits": [
+      {
+        "date": "2026-02-24",
+        "type": "intake",
+        "clinician_note": "Complaints & Symptoms:\n38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.\n\nExamination Findings:\nBP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral angle tenderness. Otherwise unremarkable.\n\nSignificant history prior to today's visit:\nHIV diagnosed 2018. No diabetes, no hypertension. Adherence consistently >95% by pill count. No known allergies. Takes ibuprofen 400mg occasionally for headaches (approximately 2-3 times per week for the past 6 months due to work stress).\n\nPrevious ART (moved from Other Medications on 2026-11-25): AZT/3TC/NVP for 2 years (2018-2020), switched to TLD in 2020 due to national guideline transition."
+      }
+    ],
+    "labs": {
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "narrative_text": "Creatinine: 1.4 mg/dL (previous values: 0.9 in 2020, 1.0 in 2021, 1.1 in 2022, 1.2 in 2023). eGFR: 52 mL/min/1.73m2 (CKD-EPI). Urinalysis: Protein 1+, glucose trace. Viral load: <50 copies/mL. CD4: 584 cells/uL. Hb: 12.8 g/dL.",
+          "source": "previous"
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "note": "",
+      "orders": [],
+      "med_changes": []
+    },
+    "intake": {
+      "complaints_symptoms": "38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.",
+      "examination_findings": "BP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral angle tenderness. Otherwise unremarkable.",
+      "prior_history": "HIV diagnosed 2018. No diabetes, no hypertension. Adherence consistently >95% by pill count. No known allergies. Takes ibuprofen 400mg occasionally for headaches (approximately 2-3 times per week for the past 6 months due to work stress).\n\nPrevious ART (moved from Other Medications on 2026-11-25): AZT/3TC/NVP for 2 years (2018-2020), switched to TLD in 2020 due to national guideline transition."
+    },
+    "art_regimen_as_entered": "TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years"
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "tdf_kidney_harm",
+        "kind": "drug_harm",
+        "summary": "Creatinine 0.9 to 1.4 mg/dL over 4 years on TDF, eGFR 52, protein and glucose in urine: TDF kidney damage; switch TDF (clinician example 1)",
+        "match": [
+          [
+            "tdf",
+            "tenofovir",
+            "tld"
+          ],
+          [
+            "egfr",
+            "decline",
+            "rising",
+            "rise",
+            "worsen",
+            "nephrotox",
+            "damage",
+            "tubul",
+            "proteinuria",
+            "impair",
+            "toxicity"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 10,
+          "quote": "Contraindications for TDF: Renal disease and/or GFR <60ml/min"
+        }
+      },
+      {
+        "id": "nsaid_with_tdf",
+        "kind": "clash",
+        "summary": "Ibuprofen (an NSAID) taken regularly with TDF adds to kidney harm; stop it, use paracetamol",
+        "match": [
+          [
+            "ibuprofen",
+            "nsaid",
+            "anti-inflammator"
+          ]
+        ],
+        "guideline": {
+          "document": "SAHCS_Adult_ART_2024",
+          "page": 4,
+          "quote": "Long-term use of TDF together with other nephrotoxic agents (e.g. aminoglycosides or non-steroidal anti-inflammatory agents) should nonetheless be avoided."
+        }
+      },
+      {
+        "id": "vl_before_switch",
+        "kind": "plan",
+        "summary": "Check the viral load before substituting TDF (clinician example 1)",
+        "match": [
+          [
+            "viral load",
+            "vl"
+          ],
+          [
+            "before",
+            "prior",
+            "switch",
+            "substitut",
+            "change"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "keeps_tdf",
+        "summary": "Advises continuing TDF/TLD unchanged",
+        "match": [
+          [
+            "continue tdf",
+            "continue tld",
+            "continue current regimen",
+            "continue the current regimen",
+            "continue current art",
+            "no change to art",
+            "no regimen change"
+          ]
+        ]
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "pasted_creatinine",
+        "summary": "Creatinine recorded only as pasted text: a data-entry nudge from the rules",
+        "match": [
+          [
+            "pasted"
+          ]
+        ]
+      },
+      {
+        "id": "proteinuria",
+        "summary": "Protein in the urine flagged on its own (part of the TDF kidney picture)",
+        "match": [
+          [
+            "proteinuria",
+            "protein in the urine"
+          ]
+        ]
+      },
+      {
+        "id": "no_plan_written",
+        "summary": "Today's assessment and plan is empty",
+        "match": [
+          [
+            "plan",
+            "assessment"
+          ],
+          [
+            "missing",
+            "no ",
+            "not documented",
+            "empty"
+          ]
+        ]
+      }
+    ]
+  }
+}

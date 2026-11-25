@@ -1,0 +1,1540 @@
+# Phase 2 matches (preliminary)
+
+Every alert, and the expected problem it matched.
+
+## claude-haiku-5.5
+- EX2 run 1: missed: hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI on TDF During Dehydrating Illness Requires Regimen Review -> prerenal_aki
+  - [ai] Hypokalaemia and Hyponatraemia Need Monitoring During Rehydration -> prerenal_aki, electrolytes
+- EX2 run 2: missed: electrolytes, hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI on TDF with dehydration: consider TDF switch and assess renal function -> prerenal_aki
+  - [ai] DTG creatinine rise assessment not yet documented -> prerenal_aki
+- EX2 run 3: missed: hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI on TDF during gastroenteritis with dehydration: review TDF -> prerenal_aki
+  - [ai] Hypokalaemia and hyponatraemia: monitoring gap in acute illness -> electrolytes
+- EX2 run 4: missed: hold_then_restart; must-not broken: blames_tdf
+  - [ai] AKI on TDF during gastroenteritis: consider switching to ABC-based regimen -> prerenal_aki
+  - [ai] Confirm DTG is not the cause of creatinine rise -> prerenal_aki
+  - [ai] Hypokalaemia and hyponatraemia unaddressed in plan -> prerenal_aki, electrolytes
+- EX2 run 5: missed: hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI in TDF-treated patient during dehydrating illness, TDF decision needed -> prerenal_aki
+  - [ai] Hypokalaemia and hyponatraemia in dehydrated patient on TDF -> prerenal_aki, electrolytes
+  - [ai] Creatinine rise interpretation and recheck timing -> prerenal_aki
+- EX3 run 1: missed: none; must-not broken: switches_dtg
+  - [ai] Hypothyroidism Uncontrolled With Missed Levothyroxine Doses -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG: Evaluate Before Switching -> amitriptyline_weight
+  - [ai] Viral Load Monitoring Due on DTG-Based ART -> also fine: weight
+- EX3 run 2: missed: amitriptyline_weight; must-not broken: switches_dtg
+  - [ai] Hypothyroidism uncontrolled with missed levothyroxine doses; weight gain may partly reflect thyroid dysfunction -> undertreated_hypothyroidism
+  - [ai] Planned DTG switch for weight gain not supported by guideline evidence -> also fine: weight
+  - [ai] Hyperglycaemia risk screening indicated: BMI ≥25 and age ≥30 on DTG -> also fine: weight, lipids
+  - [ai] Viral load monitoring interval should be confirmed on DTG -> undertreated_hypothyroidism
+- EX3 run 3: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Uncontrolled with Possible Adherence Gap -> undertreated_hypothyroidism
+  - [ai] Proposed DTG Switch for Weight Gain Lacks Attribution Support -> undertreated_hypothyroidism
+  - [ai] Viral Load Monitoring Due on DTG-Based ART -> undertreated_hypothyroidism
+- EX3 run 4: missed: amitriptyline_weight; must-not broken: switches_dtg
+  - [ai] Uncontrolled hypothyroidism with missed levothyroxine doses -> undertreated_hypothyroidism
+  - [ai] Proposed DTG switch for weight gain lacks guideline support -> undertreated_hypothyroidism
+  - [ai] Abnormal weight gain on DTG should be reported as adverse effect -> undertreated_hypothyroidism
+  - [ai] Hyperglycaemia risk screening incomplete at BMI 33 -> also fine: weight
+- EX3 run 5: missed: amitriptyline_weight
+  - [ai] Probable Hypothyroidism Under-Treated and Levothyroxine Adherence Problem -> undertreated_hypothyroidism
+  - [ai] Proposed DTG Switch for Weight Gain Not Supported by Current Evidence -> undertreated_hypothyroidism
+  - [ai] Hyperglycaemia Risk Screening Needed on DTG -> also fine: weight
+- EX4 run 1: missed: none
+  - [ai] Carbamazepine co-prescribed with DTG may lower DTG levels and cause virologic failure -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Detectable viral load requires repeat testing and adherence/side-effect assessment -> repeat_viral_load
+  - [ai] Hyponatraemia and carbamazepine-related neurotoxicity; confirm regimen review -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+- EX4 run 2: missed: none
+  - [ai] Carbamazepine co-administration may markedly lower dolutegravir levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Detectable viral load on DTG-based regimen requires structured response -> repeat_viral_load
+  - [ai] Hyponatraemia and neurotoxicity signs may be drug-related -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+- EX4 run 3: missed: none
+  - [ai] Carbamazepine co-administration may reduce dolutegravir levels and cause virologic failure -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with neurological signs and hyponatraemia -> carbamazepine_toxicity, hyponatraemia
+  - [ai] Monitoring gap: no documented repeat viral load or ALT follow-up plan -> carbamazepine_lowers_dtg, repeat_viral_load
+- EX4 run 4: missed: none
+  - [ai] Carbamazepine co-administration reduces dolutegravir levels; virologic failure risk -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral load detectable: enhanced adherence support and repeat testing required -> carbamazepine_lowers_dtg, repeat_viral_load
+  - [ai] Plan review: address carbamazepine-DTG interaction, not just carbamazepine dose -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+- EX4 run 5: missed: none
+  - [ai] Carbamazepine-DTG interaction with virologic failure -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral load detectable: monitoring and genotype evaluation -> repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatremia and ALT rise -> carbamazepine_toxicity, hyponatraemia
+- Kintu-Test 001 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant weight gain and emerging metabolic dysregulation on DTG-based ART -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant weight gain and metabolic changes on DTG-based ART -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant weight gain and obesity on DTG-based ART -> weight_gain
+  - [ai] Impaired glycaemia and rising BP on DTG with obesity -> weight_gain, glucose
+  - [ai] Fatigue with weight gain: consider thyroid and metabolic causes -> weight_gain, lipids
+- Kintu-Test 001 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant Weight Gain with Emerging Metabolic Dysregulation on DTG-Based ART -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant weight gain with emerging metabolic dysregulation on DTG -> weight_gain, glucose, lipids
+- MR-KS run 1: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] TDF nephrotoxicity risk: hypertension, NSAID use, trace proteinuria -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Missing eGFR and monitoring gap on TDF -> tdf_tubular_bone_harm
+  - [ai] Low serum phosphate with proteinuria suggests possible TDF tubulopathy -> tdf_tubular_bone_harm
+- MR-KS run 2: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] TDF nephrotoxicity risk: hypertension, trace proteinuria, NSAID use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Renal monitoring overdue and eGFR not documented -> tdf_tubular_bone_harm
+  - [ai] Ibuprofen use with TDF and proteinuria -> tdf_tubular_bone_harm, nsaid_with_tdf
+- MR-KS run 3: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal and bone toxicity risk on TDF with hypertension and NSAID use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Suboptimal blood pressure control and amlodipine nonadherence -> also fine: blood_pressure
+- MR-KS run 4: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal function monitoring needed on TDF with hypertension and proteinuria -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Amlodipine non-adherence and peripheral oedema-related monitoring -> also fine: blood_pressure
+- MR-KS run 5: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] TDF nephrotoxicity risk: proteinuria and NSAID use with hypertension -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Low serum phosphate with TDF: possible proximal tubulopathy -> tdf_tubular_bone_harm
+  - [ai] Amlodipine nonadherence and BP control in a high-risk patient -> also fine: blood_pressure
+- P001 run 1: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring overdue on DTG-based regimen -> creatinine_overdue
+- P001 run 2: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring interval should be checked against DTG guideline -> extra
+- P001 run 3: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring due: last VL 113 days ago on DTG-based ART -> creatinine_overdue
+- P001 run 4: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring due: last VL 113 days ago -> creatinine_overdue
+- P001 run 5: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring interval due for review -> extra
+- P002 run 1: missed: none
+  - [ai] Viral load monitoring interval exceeded on DTG-based ART -> extra
+- P002 run 2: missed: none
+  - [ai] Viral load monitoring interval and DSD eligibility need review -> extra
+- P002 run 3: missed: none
+  - [ai] Viral load monitoring on DTG-based ART requires attention -> extra
+- P002 run 4: missed: none
+  - [ai] Viral load monitoring interval appears overdue -> extra
+- P002 run 5: missed: none
+  - [ai] Viral load monitoring: confirm 6-monthly schedule and recency -> extra
+- P003 run 1: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] Probable EFV neuropsychiatric toxicity: insomnia and vivid dreams -> efv_cns_toxicity
+- P003 run 2: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV-associated neuropsychiatric symptoms: insomnia and vivid dreams -> efv_cns_toxicity
+- P003 run 3: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] Probable EFV Neuropsychiatric Adverse Effect: Insomnia and Vivid Dreams -> efv_cns_toxicity
+- P003 run 4: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV-associated neuropsychiatric effects: insomnia and vivid dreams -> efv_cns_toxicity
+- P003 run 5: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] Insomnia and vivid dreams likely EFV neuropsychiatric effect -> efv_cns_toxicity
+- P004 run 1: missed: none
+  - [ai] Abdominal pain on TLD: screen for ADR and assess cause -> also fine: abdominal_pain
+- P004 run 2: missed: none
+  - [ai] Abdominal pain on TLD: screen for ADR per guideline -> also fine: abdominal_pain
+  - [ai] Renal and viral load monitoring documentation gap -> also fine: abdominal_pain
+- P004 run 3: missed: none
+  - [ai] New abdominal pain on TDF/3TC/DTG requires ADR screening -> also fine: abdominal_pain
+- P004 run 4: missed: none
+  - [ai] Abdominal pain on TLD: screen for ADR and non-drug causes -> also fine: abdominal_pain
+- P004 run 5: missed: none
+  - [ai] Abdominal pain on TLD: screen for ADR and non-drug causes -> also fine: abdominal_pain
+- P005 run 1: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Progressive creatinine rise and reduced eGFR on TDF with NSAID use -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Routine DTG viral load monitoring up to date; renal monitoring not documented -> tdf_kidney_harm
+- P005 run 2: missed: vl_before_switch; must-not broken: keeps_tdf
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Progressive creatinine rise on TDF with regular ibuprofen use -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Viral suppression on DTG: continue routine 6-monthly monitoring -> extra
+- P005 run 3: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Progressive creatinine rise and eGFR decline on TDF-containing ART -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Viral load monitoring interval on DTG-based ART -> also fine: no_plan_written
+- P005 run 4: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Progressive creatinine rise with eGFR 52 on TDF requires urgent review -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Viral load monitoring due at 6-month review -> extra
+- P005 run 5: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Progressive creatinine rise and proteinuria on TDF with regular NSAID use -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Viral load monitoring on DTG-based ART -> extra
+- P006 run 1: missed: creatinine_rise
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Pregnancy viral load monitoring due at 3 months and at 28 weeks -> also fine: viral_load, no_plan_written
+  - [ai] Dolutegravir and iron supplement co-administration needs timing review -> iron_with_dtg
+  - [ai] Confirm DTG-based regimen continuation in pregnancy -> also fine: no_plan_written
+- P006 run 2: missed: creatinine_rise
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Pregnant on TLD: Viral Load Monitoring Due at 3-Month Interval -> also fine: viral_load
+  - [ai] DTG Interaction Risk with Iron Supplementation in Pregnancy -> iron_with_dtg
+- P006 run 3: missed: creatinine_rise
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Pregnant on ART: viral load monitoring at 3-month interval and at delivery -> also fine: viral_load
+  - [ai] DTG and iron supplement interaction: separate administration -> iron_with_dtg
+- P006 run 4: missed: creatinine_rise
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Pregnant on ART: viral load monitoring due at 3 months -> also fine: viral_load, no_plan_written
+  - [ai] DTG and iron supplement: separate administration timing -> iron_with_dtg
+- P006 run 5: missed: creatinine_rise
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Pregnant on ART: viral load due at 3 months per guideline -> also fine: viral_load
+  - [ai] DTG and iron supplement interaction in pregnancy -> iron_with_dtg
+  - [ai] Continue DTG-based regimen through pregnancy -> iron_with_dtg
+
+## deepseek-v3.2
+- EX2 run 1: missed: electrolytes, hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] Acute Kidney Injury with TDF -> prerenal_aki
+  - [ai] Consider TDF Alternative for AKI -> prerenal_aki
+  - [ai] Missing eGFR Calculation -> extra
+- EX2 run 2: missed: electrolytes, hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] Acute Kidney Injury with TDF -> prerenal_aki
+  - [ai] Review TDF Stop Decision -> prerenal_aki
+  - [ai] Missing Creatinine Trend Check -> prerenal_aki
+- EX2 run 3: missed: hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] Acute Kidney Injury with TDF -> prerenal_aki, electrolytes
+  - [ai] Consider TDF Switch Post-AKI -> prerenal_aki
+  - [ai] Missing Routine Creatinine Monitoring -> prerenal_aki
+- EX2 run 4: missed: hold_then_restart; must-not broken: blames_tdf
+  - [ai] Acute Kidney Injury with TDF -> prerenal_aki, electrolytes
+  - [ai] Review ART Change Timing -> prerenal_aki
+  - [ai] Monitor Renal Function Post-AKI -> extra
+- EX2 run 5: missed: hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] Acute Kidney Injury with TDF -> prerenal_aki, electrolytes
+  - [ai] Plan to Stop TDF Prematurely -> prerenal_aki
+- EX3 run 1: missed: amitriptyline_weight
+  - [ai] Uncontrolled Hypothyroidism -> undertreated_hypothyroidism
+  - [ai] Dyslipidemia with High LDL -> also fine: weight, lipids
+  - [ai] Potential Misattribution of Weight Gain -> undertreated_hypothyroidism
+  - [ai] Missing Viral Load Monitoring -> extra
+- EX3 run 2: missed: amitriptyline_weight
+  - [ai] Uncontrolled Hypothyroidism -> undertreated_hypothyroidism
+  - [ai] Dyslipidemia Needs Management -> also fine: weight, lipids
+  - [ai] Viral Load Monitoring Overdue -> extra
+  - [ai] Consider Hyperglycemia Risk Factors -> also fine: weight
+- EX3 run 3: missed: amitriptyline_weight, undertreated_hypothyroidism
+- EX3 run 4: missed: amitriptyline_weight; must-not broken: switches_dtg
+  - [ai] Weight gain attribution unclear -> undertreated_hypothyroidism
+  - [ai] Untreated hypothyroidism -> undertreated_hypothyroidism
+  - [ai] Dyslipidemia and DTG monitoring -> also fine: weight, lipids
+  - [ai] Viral load monitoring schedule -> extra
+- EX3 run 5: missed: amitriptyline_weight
+  - [ai] Weight gain attribution unclear -> undertreated_hypothyroidism
+  - [ai] Hyperglycemia screening indicated -> also fine: weight
+  - [ai] Dyslipidemia requires management -> also fine: weight, lipids
+  - [ai] Hypothyroidism uncontrolled -> undertreated_hypothyroidism
+  - [ai] Viral load monitoring overdue -> undertreated_hypothyroidism
+- EX4 run 1: missed: none
+  - [ai] Carbamazepine reduces DTG levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral load >50 requires action -> repeat_viral_load
+  - [ai] Hyponatremia with carbamazepine -> carbamazepine_toxicity, hyponatraemia
+- EX4 run 2: missed: none
+  - [ai] Carbamazepine reduces DTG levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral load >50 requires action -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Hyponatremia with carbamazepine -> carbamazepine_toxicity, hyponatraemia
+- EX4 run 3: missed: none
+  - [ai] Carbamazepine reduces DTG levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Detectable VL needs action plan -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity and hyponatremia -> carbamazepine_toxicity, hyponatraemia
+- EX4 run 4: missed: none
+  - [ai] Carbamazepine reduces DTG levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral load >50 requires action -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatremia -> carbamazepine_toxicity, hyponatraemia
+- EX4 run 5: missed: none
+  - [ai] Carbamazepine Reduces DTG Levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral Load >50 Copies/mL Requires Action -> repeat_viral_load
+  - [ai] Carbamazepine Toxicity with Hyponatremia -> carbamazepine_toxicity, hyponatraemia
+- Kintu-Test 001 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on DTG Regimen -> weight_gain, glucose
+  - [ai] New Metabolic Syndrome -> weight_gain, glucose, lipids
+  - [ai] Missing Glucose Monitoring Plan -> glucose
+  - [ai] No Clinician Plan Documented -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant Weight Gain and Metabolic Changes on DTG -> weight_gain, glucose, lipids
+  - [ai] Missing Glucose Monitoring for DTG -> glucose
+  - [ai] No Clinician Plan for New Metabolic Issues -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain & Metabolic Syndrome -> weight_gain, glucose, lipids
+  - [ai] Missing DTG Glucose Monitoring -> glucose
+  - [ai] No Clinician Plan Documented -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 4: missed: glucose, lipids, weight_gain
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+- Kintu-Test 001 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Significant weight gain and metabolic changes on DTG -> weight_gain, glucose, lipids
+  - [ai] Missing glucose monitoring per DTG guideline -> glucose
+  - [ai] No clinician assessment or plan documented -> weight_gain, glucose, lipids
+- MR-KS run 1: missed: tdf_tubular_bone_harm
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+- MR-KS run 2: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Missing TDF Renal Monitoring -> tdf_tubular_bone_harm
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Trace Proteinuria Needs Evaluation -> tdf_tubular_bone_harm
+- MR-KS run 3: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Missing eGFR monitoring for TDF -> tdf_tubular_bone_harm
+  - [ai] Suboptimal BP control with amlodipine -> also fine: blood_pressure
+  - [ai] Hypophosphatemia with TDF and ibuprofen -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria with TDF and hypertension -> tdf_tubular_bone_harm
+- MR-KS run 4: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Missing eGFR monitoring for TDF -> tdf_tubular_bone_harm
+  - [ai] Suboptimal BP control and plan gap -> also fine: blood_pressure
+  - [ai] Compounding renal risk: TDF, HTN, NSAID -> tdf_tubular_bone_harm, nsaid_with_tdf
+- MR-KS run 5: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] TDF renal monitoring overdue -> tdf_tubular_bone_harm
+  - [ai] TDF use with hypertension risk -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] NSAID use with TDF and hypertension -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Uncontrolled hypertension plan -> tdf_tubular_bone_harm
+  - [ai] CD4 monitoring may be optional -> extra
+- P001 run 1: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring overdue -> extra
+  - [ai] Creatinine monitoring overdue -> creatinine_overdue
+  - [ai] No documented ADR screening -> extra
+- P001 run 2: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+- P001 run 3: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+- P001 run 4: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+- P001 run 5: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+- P002 run 1: missed: none
+- P002 run 2: missed: none
+- P002 run 3: missed: none
+- P002 run 4: missed: none
+- P002 run 5: missed: none
+- P003 run 1: missed: none; must-not broken: says_no_plan
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity -> efv_cns_toxicity
+  - [ai] Missing viral load monitoring -> also fine: low_level_viremia
+  - [ai] ADR reporting consideration -> efv_cns_toxicity
+- P003 run 2: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity -> efv_cns_toxicity
+  - [ai] Missing viral load monitoring -> also fine: low_level_viremia
+  - [ai] Consider ADR reporting -> efv_cns_toxicity
+- P003 run 3: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity -> efv_cns_toxicity
+  - [ai] Missing viral load monitoring -> also fine: low_level_viremia
+  - [ai] Insufficient neuropsychiatric assessment -> efv_cns_toxicity
+- P003 run 4: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity -> efv_cns_toxicity
+  - [ai] Missing routine viral load -> also fine: low_level_viremia
+  - [ai] Insufficient neuropsychiatric assessment -> also fine: mental_health
+- P003 run 5: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity -> efv_cns_toxicity
+  - [ai] Missing viral load monitoring -> also fine: low_level_viremia
+  - [ai] ADR reporting opportunity -> efv_cns_toxicity
+- P004 run 1: missed: none
+  - [ai] Abdominal pain on DTG regimen -> also fine: abdominal_pain
+  - [ai] ADR reporting process not followed -> also fine: abdominal_pain
+- P004 run 2: missed: none
+- P004 run 3: missed: none
+  - [ai] Abdominal Pain on DTG -> also fine: abdominal_pain
+  - [ai] ADR Screening and Reporting Required -> also fine: abdominal_pain
+- P004 run 4: missed: none
+  - [ai] Abdominal Pain on DTG -> also fine: abdominal_pain
+  - [ai] ADR Reporting Required -> also fine: abdominal_pain
+- P004 run 5: missed: none
+  - [ai] Abdominal Pain on DTG -> also fine: abdominal_pain
+  - [ai] ADR Reporting Required -> also fine: abdominal_pain
+- P005 run 1: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Chronic Kidney Disease Risk on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Proteinuria Needs Evaluation -> also fine: proteinuria
+  - [ai] NSAID Use with Renal Impairment -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] No Assessment or Plan Documented -> also fine: proteinuria, no_plan_written
+- P005 run 2: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Chronic Kidney Disease Risk on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Missing Clinician Assessment & Plan -> also fine: proteinuria, no_plan_written
+  - [ai] Proteinuria and Glucose Trace on Urinalysis -> tdf_kidney_harm, nsaid_with_tdf
+- P005 run 3: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Chronic Kidney Disease Risk on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Missing Clinician Assessment and Plan -> also fine: proteinuria, no_plan_written
+  - [ai] Proteinuria and Possible Diabetes Screening -> also fine: proteinuria
+- P005 run 4: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Chronic kidney disease risk with TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Missing clinician assessment and plan -> nsaid_with_tdf
+  - [ai] Proteinuria and trace glucosuria present -> tdf_kidney_harm
+- P005 run 5: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Chronic kidney disease risk on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Missing clinician assessment and plan -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Proteinuria and trace glucosuria on urinalysis -> tdf_kidney_harm, nsaid_with_tdf
+- P006 run 1: missed: creatinine_rise, iron_with_dtg
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+- P006 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Viral Load Monitoring Schedule -> also fine: viral_load, no_plan_written
+  - [ai] Creatinine Rise on TDF -> creatinine_rise
+  - [ai] DTG and Iron Supplement Interaction -> iron_with_dtg
+- P006 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Missing Viral Load Monitoring Plan -> also fine: viral_load, no_plan_written
+  - [ai] Potential DTG-Iron Interaction -> iron_with_dtg
+  - [ai] Rising Creatinine on TDF -> creatinine_rise
+- P006 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Missing Viral Load Monitoring Plan -> also fine: viral_load, no_plan_written
+  - [ai] Potential DTG-Iron Interaction -> iron_with_dtg
+  - [ai] Creatinine Rise on TDF -> creatinine_rise
+- P006 run 5: missed: iron_with_dtg
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Viral load monitoring schedule deviation -> also fine: viral_load, no_plan_written
+  - [ai] Creatinine rise on TDF -> creatinine_rise
+  - [ai] Missing assessment and plan -> creatinine_rise
+  - [ai] Anemia in pregnancy -> also fine: anaemia
+
+## glm-5.2
+- EX2 run 1: missed: electrolytes, hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI likely from dehydration, not TDF -> prerenal_aki
+  - [ai] If TDF stopped, use ABC+3TC+DTG -> extra
+  - [ai] Repeat creatinine monitoring during admission -> prerenal_aki
+- EX2 run 2: missed: electrolytes; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI likely pre-renal, not TDF toxicity -> prerenal_aki
+  - [ai] DTG creatinine rise does not fit this pattern -> prerenal_aki
+  - [ai] If TDF must be stopped, use guideline alternative -> prerenal_aki, hold_then_restart
+- EX2 run 3: missed: electrolytes; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI likely from gastroenteritis, not TDF -> prerenal_aki, hold_then_restart
+  - [ai] Permanent TDF stop may be premature -> prerenal_aki
+  - [ai] DTG creatinine rise not relevant here -> hold_then_restart
+- EX2 run 4: missed: electrolytes; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI likely pre-renal, not TDF nephrotoxicity -> prerenal_aki, hold_then_restart
+  - [ai] If TDF must be stopped, use guideline-recommended substitute -> extra
+  - [ai] DTG creatinine rise does not apply here -> prerenal_aki
+- EX2 run 5: missed: electrolytes, hold_then_restart; must-not broken: blames_tdf, switches_tdf_permanently
+  - [ai] AKI likely from gastroenteritis, not TDF -> prerenal_aki
+  - [ai] Switch to ABC+3TC+DTG if TDF stopped -> extra
+- EX3 run 1: missed: amitriptyline_weight; must-not broken: switches_dtg
+  - [ai] Uncontrolled hypothyroidism despite levothyroxine -> undertreated_hypothyroidism
+  - [ai] Dyslipidaemia and hyperglycaemia risk with BMI 33 -> undertreated_hypothyroidism
+  - [ai] Viral load monitoring overdue per guideline schedule -> extra
+- EX3 run 2: missed: amitriptyline_weight
+  - [ai] Uncontrolled hypothyroidism despite levothyroxine -> undertreated_hypothyroidism
+  - [ai] Dyslipidaemia and hyperglycaemia risk on DTG with BMI 33 -> undertreated_hypothyroidism
+  - [ai] Viral load monitoring overdue -> extra
+- EX3 run 3: missed: none; must-not broken: switches_dtg
+  - [ai] Uncontrolled hypothyroidism likely driving weight gain and symptoms -> undertreated_hypothyroidism
+  - [ai] Planned DTG switch conflicts with guideline evidence on weight gain -> undertreated_hypothyroidism
+  - [ai] Hyperglycaemia risk factors warrant glucose screening on DTG -> also fine: weight
+  - [ai] Viral load monitoring interval approaching on DTG regimen -> extra
+  - [ai] Amitriptyline effects may compound hypothyroid symptoms -> undertreated_hypothyroidism, amitriptyline_weight
+- EX3 run 4: missed: amitriptyline_weight; must-not broken: switches_dtg
+  - [ai] Hypothyroidism undertreated despite levothyroxine -> undertreated_hypothyroidism
+  - [ai] Weight gain attributed to DTG may be confounded by hypothyroidism -> undertreated_hypothyroidism
+  - [ai] Dyslipidaemia and hyperglycaemia risk require monitoring -> also fine: weight, lipids
+  - [ai] Viral load monitoring overdue -> extra
+- EX3 run 5: missed: amitriptyline_weight
+  - [ai] Weight gain likely from undertreated hypothyroidism, not DTG -> undertreated_hypothyroidism
+  - [ai] Uncontrolled hypothyroidism with inadequate levothyroxine dose -> undertreated_hypothyroidism
+  - [ai] Elevated lipids and fasting glucose — metabolic risk assessment needed -> also fine: weight, lipids
+  - [ai] Viral load monitoring overdue per DTG guideline schedule -> extra
+- EX4 run 1: missed: none
+  - [ai] Carbamazepine-DTG interaction lowers DTG levels -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia, repeat_viral_load
+  - [ai] Detectable viral load requires enhanced adherence plan -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatraemia -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+- EX4 run 2: missed: none
+  - [ai] Carbamazepine-DTG interaction causing viremia -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatremia -> carbamazepine_toxicity, hyponatraemia
+  - [ai] Detectable VL requires adherence support and repeat -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Elevated ALT with hepatotoxic polypharmacy -> carbamazepine_lowers_dtg, hyponatraemia
+- EX4 run 3: missed: none
+  - [ai] Carbamazepine-DTG interaction causing viraemia -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatraemia -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+  - [ai] Detectable viral load requires adherence support -> carbamazepine_lowers_dtg, repeat_viral_load
+  - [ai] Elevated ALT with hepatotoxic drugs -> hyponatraemia
+- EX4 run 4: missed: none
+  - [ai] Carbamazepine–DTG interaction causing viral rebound -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatraemia -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+  - [ai] Viral load >50: guideline response not fully addressed -> carbamazepine_lowers_dtg, repeat_viral_load
+- EX4 run 5: missed: none
+  - [ai] Carbamazepine-DTG interaction causing viral rebound -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Carbamazepine toxicity with hyponatraemia -> carbamazepine_lowers_dtg, carbamazepine_toxicity, hyponatraemia
+  - [ai] Detectable VL requires enhanced adherence and repeat -> carbamazepine_lowers_dtg, repeat_viral_load
+  - [ai] Elevated ALT with dual hepatotoxic drugs -> carbamazepine_lowers_dtg, hyponatraemia
+- Kintu-Test 001 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] DTG-associated weight gain with metabolic deterioration -> weight_gain, glucose, lipids
+  - [ai] No assessment or plan documented for metabolic abnormalities -> weight_gain, glucose, lipids
+  - [ai] Pre-diabetes and borderline hypertension require monitoring -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] DTG-associated weight gain with obesity and metabolic risk -> weight_gain, glucose, lipids
+  - [ai] Missing glucose monitoring plan for DTG patient -> weight_gain, glucose
+  - [ai] No clinician plan despite multiple metabolic abnormalities -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] DTG-associated weight gain and metabolic deterioration -> weight_gain, glucose, lipids
+  - [ai] No assessment or plan documented for abnormal labs -> weight_gain, glucose, lipids
+  - [ai] Pre-diabetes requires quarterly glucose monitoring on DTG -> glucose
+- Kintu-Test 001 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] DTG-associated weight gain and metabolic decompensation -> weight_gain, glucose, lipids
+  - [ai] Missing glucose monitoring after DTG initiation -> glucose
+  - [ai] No assessment or plan documented for abnormal findings -> weight_gain, glucose, lipids
+- Kintu-Test 001 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] DTG-associated weight gain and metabolic syndrome -> weight_gain, glucose, lipids
+  - [ai] Missing DTG glucose monitoring per guideline -> glucose
+  - [ai] No assessment or plan documented for abnormal findings -> weight_gain, glucose, lipids
+- MR-KS run 1: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Low phosphate with TDF suggests tubular toxicity -> tdf_tubular_bone_harm
+  - [ai] TDF plus ibuprofen and hypertension increases renal risk -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Uncontrolled BP on amlodipine with missed doses -> tdf_tubular_bone_harm
+  - [ai] EFV-based regimen long-term — consider modernisation -> tdf_tubular_bone_harm
+- MR-KS run 2: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Low phosphate with TDF — proximal tubulopathy risk -> tdf_tubular_bone_harm
+  - [ai] TDF plus NSAID increases nephrotoxicity risk -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] eGFR not documented despite TDF and hypertension -> tdf_tubular_bone_harm
+  - [ai] Uncontrolled BP with TDF nephrotoxicity risk -> tdf_tubular_bone_harm
+- MR-KS run 3: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Low phosphate with TDF — possible tubulopathy -> tdf_tubular_bone_harm
+  - [ai] TDF plus ibuprofen — compounding renal risk -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] eGFR not calculated despite TDF and hypertension -> tdf_tubular_bone_harm
+  - [ai] Uncontrolled hypertension increases TDF renal risk -> tdf_tubular_bone_harm
+- MR-KS run 4: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Low phosphate with TDF suggests tubular toxicity -> tdf_tubular_bone_harm
+  - [ai] TDF plus NSAID increases renal risk -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] eGFR not documented despite TDF risk factors -> tdf_tubular_bone_harm
+  - [ai] EFV after 6 years: consider neuropsychiatric review -> also fine: efv_to_dtg
+  - [ai] Trace proteinuria needs workup beyond hypertension -> tdf_tubular_bone_harm
+- MR-KS run 5: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Low phosphate with TDF suggests tubular toxicity -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Ibuprofen plus TDF and hypertension increases renal risk -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] eGFR not documented despite TDF and renal risk factors -> tdf_tubular_bone_harm
+  - [ai] Uncontrolled BP with trace proteinuria needs escalation -> tdf_tubular_bone_harm
+- P001 run 1: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Creatinine not monitored for over 15 months -> creatinine_overdue
+  - [ai] Viral load 40 copies/mL — confirm suppression status -> extra
+- P001 run 2: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Creatinine not monitored for over 12 months -> creatinine_overdue
+  - [ai] Viral load 40 copies/mL — borderline detectable -> extra
+- P001 run 3: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Creatinine not monitored for over 12 months -> creatinine_overdue
+  - [ai] Viral load 40 copies/mL — confirm threshold -> extra
+- P001 run 4: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Creatinine not monitored for over 12 months -> creatinine_overdue
+  - [ai] Viral load 40 copies/mL not fully suppressed -> extra
+- P001 run 5: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Viral load monitoring overdue on DTG-based regimen -> extra
+  - [ai] Renal function not monitored for over 15 months on TDF -> creatinine_overdue
+  - [ai] ADR screening not documented at this encounter -> extra
+- P002 run 1: missed: none
+- P002 run 2: missed: none
+  - [ai] Viral load monitoring overdue -> extra
+- P002 run 3: missed: none
+  - [ai] Viral load monitoring overdue per DTG guideline -> extra
+  - [ai] TDF renal monitoring gap at follow-up -> extra
+- P002 run 4: missed: none
+- P002 run 5: missed: none
+- P003 run 1: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity: insomnia and vivid dreams -> efv_cns_toxicity
+  - [ai] Missing renal and hepatic monitoring on TDF/EFV -> creatinine_never_done
+  - [ai] Plan lacks action for neuropsychiatric symptoms -> efv_cns_toxicity
+- P003 run 2: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity: insomnia and vivid dreams -> efv_cns_toxicity
+  - [ai] Missing baseline and monitoring labs -> creatinine_never_done
+  - [ai] Plan lacks management for EFV CNS symptoms -> efv_cns_toxicity
+- P003 run 3: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity causing insomnia and vivid dreams -> efv_cns_toxicity
+  - [ai] Neuropsychiatric symptoms not documented on aDSM screening form -> efv_cns_toxicity
+  - [ai] No structured mental health or suicidality assessment documented -> efv_cns_toxicity
+- P003 run 4: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity: insomnia and vivid dreams -> efv_cns_toxicity
+  - [ai] Neuropsychiatric adverse event not flagged for aDSM reporting -> efv_cns_toxicity
+- P003 run 5: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV neuropsychiatric toxicity -> efv_cns_toxicity
+- P004 run 1: missed: none
+  - [ai] Abdominal pain: screen as suspected ADR -> also fine: abdominal_pain
+  - [ai] Clinician plan lacks ADR evaluation -> also fine: abdominal_pain
+- P004 run 2: missed: none
+  - [ai] Abdominal pain: screen as suspected ADR -> also fine: abdominal_pain
+  - [ai] No action plan for abdominal pain -> also fine: abdominal_pain
+- P004 run 3: missed: none
+- P004 run 4: missed: none
+  - [ai] Abdominal pain requires ADR screening and reporting -> also fine: abdominal_pain
+- P004 run 5: missed: none
+  - [ai] Abdominal pain: screen as suspected ADR -> also fine: abdominal_pain
+  - [ai] Clinician plan lacks evaluation for abdominal pain -> also fine: abdominal_pain
+- P005 run 1: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] TDF nephrotoxicity with progressive renal decline -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Ibuprofen use with TDF and renal impairment -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] No assessment or plan documented for abnormal labs -> tdf_kidney_harm, nsaid_with_tdf
+- P005 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Rising creatinine and declining eGFR on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] No clinician assessment or plan documented -> tdf_kidney_harm, nsaid_with_tdf, vl_before_switch
+  - [ai] Ibuprofen and TDF compounding renal risk -> tdf_kidney_harm, nsaid_with_tdf
+- P005 run 3: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Rising creatinine and declining eGFR on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Ibuprofen plus TDF compounding renal risk -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] No clinician assessment or plan documented -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Proteinuria on urinalysis warrants investigation -> tdf_kidney_harm
+- P005 run 4: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Rising creatinine and declining eGFR on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] No clinician assessment or plan documented -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Ibuprofen use with renal impairment on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Viral load monitoring frequency may be reduced -> extra
+- P005 run 5: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Rising creatinine and declining eGFR on TDF -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] No clinician assessment or plan documented -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Frequent ibuprofen use compounding renal risk -> tdf_kidney_harm, nsaid_with_tdf
+- P006 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Rising creatinine on TDF in pregnancy -> creatinine_rise
+  - [ai] DTG and iron supplement interaction -> iron_with_dtg
+  - [ai] Missing VL monitoring per pregnancy schedule -> also fine: viral_load, no_plan_written
+  - [ai] No clinician assessment or plan documented -> iron_with_dtg, creatinine_rise
+- P006 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] DTG and iron supplement co-administration in pregnancy -> iron_with_dtg
+  - [ai] Rising creatinine on TDF after 10 weeks -> creatinine_rise
+  - [ai] Viral load not fully suppressed at 89 copies/mL -> also fine: viral_load
+  - [ai] No clinician assessment or plan documented -> iron_with_dtg, creatinine_rise
+- P006 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Rising creatinine on TDF during pregnancy -> creatinine_rise
+  - [ai] DTG and iron supplement interaction in pregnancy -> iron_with_dtg
+  - [ai] Viral load monitoring frequency in pregnancy -> also fine: viral_load, no_plan_written
+  - [ai] No clinician assessment or plan documented -> iron_with_dtg, creatinine_rise
+- P006 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Rising creatinine on TDF in pregnancy -> creatinine_rise
+  - [ai] DTG–iron supplement interaction in pregnancy -> iron_with_dtg
+  - [ai] Missing VL monitoring plan in pregnancy -> also fine: viral_load, no_plan_written
+  - [ai] No clinician plan documented today -> iron_with_dtg, creatinine_rise
+- P006 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Rising creatinine on TDF in pregnancy -> creatinine_rise
+  - [ai] DTG–iron supplement interaction in pregnancy -> iron_with_dtg
+  - [ai] Missing VL monitoring plan for pregnancy -> also fine: viral_load, no_plan_written
+  - [ai] No clinician plan documented today -> iron_with_dtg, creatinine_rise
+
+## llama-a100
+- EX2 run 1: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 2: missed: electrolytes
+  - [ai] Acute Kidney Injury -> prerenal_aki, hold_then_restart
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 3: missed: electrolytes
+  - [ai] Acute Kidney Injury -> prerenal_aki, hold_then_restart
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 4: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 5: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX3 run 1: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Metabolic Monitoring -> also fine: weight, lipids
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Renal Function Monitoring -> extra
+- EX3 run 2: missed: amitriptyline_weight; must-not broken: switches_dtg
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Metabolic Monitoring -> also fine: weight, lipids
+- EX3 run 3: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Monitoring Gap -> extra
+- EX3 run 4: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Hyperglycemia Screening -> also fine: weight
+- EX3 run 5: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Hyperglycemia Screening -> also fine: weight
+  - [ai] Virological Monitoring -> extra
+  - [ai] Renal Function Monitoring -> extra
+- EX4 run 1: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_toxicity
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Monitoring -> repeat_viral_load
+- EX4 run 2: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> repeat_viral_load
+  - [ai] ALT Level -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+- EX4 run 3: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> repeat_viral_load
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+- EX4 run 4: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> repeat_viral_load
+  - [ai] Potential DTG Dose Adjustment -> carbamazepine_lowers_dtg
+- EX4 run 5: missed: none
+  - [ai] Carbamazepine Toxicity -> carbamazepine_toxicity
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Monitoring -> repeat_viral_load
+  - [ai] Elevated ALT -> also fine: liver
+  - [ai] Subtherapeutic Sodium Level -> hyponatraemia
+- Kintu-Test 001 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on ART -> weight_gain
+  - [ai] Glucose Monitoring -> glucose
+  - [ai] Fatigue on ART -> extra
+  - [ai] Elevated Blood Pressure -> also fine: blood_pressure
+  - [ai] Abnormal Lipid Profile -> lipids
+- Kintu-Test 001 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain, glucose
+  - [ai] Elevated Fasting Glucose -> weight_gain, glucose
+  - [ai] Increased Blood Pressure -> weight_gain
+  - [ai] Lipid Profile -> weight_gain, lipids
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+- Kintu-Test 001 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on ART -> weight_gain
+  - [ai] Metabolic Risk Factors -> weight_gain, glucose, lipids
+  - [ai] Elevated Blood Pressure -> also fine: blood_pressure
+  - [ai] Patient Fatigue -> extra
+  - [ai] Glucose Monitoring -> glucose
+- Kintu-Test 001 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Glucose Monitoring -> glucose
+  - [ai] Blood Pressure Monitoring -> also fine: blood_pressure
+  - [ai] Lipid Profile Monitoring -> weight_gain, lipids
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+- Kintu-Test 001 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- MR-KS run 1: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use with TDF -> nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- MR-KS run 2: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+- MR-KS run 3: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+- MR-KS run 4: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential TDF Side Effects -> tdf_tubular_bone_harm
+- MR-KS run 5: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- P001 run 1: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Viral Load Monitoring -> extra
+- P001 run 2: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 3: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inconsistent Viral Load Monitoring -> extra
+- P001 run 4: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 5: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P002 run 1: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 2: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 3: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 4: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 5: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P003 run 1: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 2: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 3: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Screening -> efv_cns_toxicity
+- P003 run 4: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 5: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P004 run 1: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 2: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 3: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 4: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 5: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P005 run 1: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 2: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 3: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 4: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 5: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P006 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+- P006 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+- P006 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+  - [ai] Missing Clinician's Plan -> also fine: no_plan_written
+- P006 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+- P006 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+
+## llama-a100-before-fix6
+- EX2 run 1: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 2: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 3: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 4: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 5: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX3 run 1: missed: amitriptyline_weight
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Elevated TSH -> undertreated_hypothyroidism
+  - [ai] Hyperglycemia Risk -> extra
+- EX3 run 2: missed: amitriptyline_weight
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Elevated TSH -> undertreated_hypothyroidism
+  - [ai] Hyperglycemia Risk -> also fine: weight
+- EX3 run 3: missed: amitriptyline_weight
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Glucose Monitoring -> also fine: weight
+  - [ai] Virological Monitoring -> extra
+  - [ai] Renal Function Monitoring -> extra
+- EX3 run 4: missed: amitriptyline_weight
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Glucose Monitoring -> also fine: weight
+- EX3 run 5: missed: amitriptyline_weight
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Elevated TSH -> undertreated_hypothyroidism
+  - [ai] Hyperglycemia Risk -> also fine: weight
+- EX4 run 1: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> repeat_viral_load
+  - [ai] ALT Level -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+- EX4 run 2: missed: hyponatraemia; must-not broken: blames_adherence
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> repeat_viral_load
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+- EX4 run 3: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral Load Increase -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] ALT Elevation -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+- EX4 run 4: missed: hyponatraemia; must-not broken: blames_adherence
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> repeat_viral_load
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+- EX4 run 5: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] Viral Load Increase -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+  - [ai] ALT Elevation -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+- Kintu-Test 001 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- Kintu-Test 001 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> weight_gain, glucose
+  - [ai] Blood Pressure Elevation -> weight_gain
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+- Kintu-Test 001 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> weight_gain, glucose
+  - [ai] Blood Pressure Elevation -> weight_gain
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+- Kintu-Test 001 run 4: missed: lipids
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> weight_gain, glucose
+  - [ai] Blood Pressure Elevation -> weight_gain
+- Kintu-Test 001 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain and Metabolic Changes -> weight_gain, glucose, lipids
+  - [ai] Blood Pressure Elevation -> also fine: blood_pressure
+  - [ai] Lipid Profile Abnormalities -> lipids
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+  - [ai] Glucose Monitoring -> glucose
+- MR-KS run 1: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Hypertension Management -> also fine: blood_pressure
+  - [ai] Potential TDF Side Effects -> tdf_tubular_bone_harm
+- MR-KS run 2: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Hypertension Management -> also fine: blood_pressure, proteinuria
+  - [ai] Musculoskeletal Back Pain -> nsaid_with_tdf
+- MR-KS run 3: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Hypertension Management -> also fine: blood_pressure, proteinuria
+  - [ai] Musculoskeletal Back Pain -> nsaid_with_tdf
+- MR-KS run 4: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Hypertension Management -> also fine: blood_pressure
+  - [ai] Musculoskeletal Pain Management -> nsaid_with_tdf
+- MR-KS run 5: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Hypertension Management -> also fine: blood_pressure
+  - [ai] Musculoskeletal Back Pain -> nsaid_with_tdf
+- P001 run 1: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 2: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 3: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 4: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 5: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P002 run 1: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 2: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 3: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 4: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 5: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P003 run 1: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+- P003 run 2: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+- P003 run 3: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+- P003 run 4: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Mental Health Assessment -> also fine: mental_health
+- P003 run 5: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+- P004 run 1: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 2: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 3: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 4: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 5: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P005 run 1: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Proteinuria -> tdf_kidney_harm
+  - [ai] Monitoring Gap -> extra
+  - [ai] Ibuprofen Use -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 2: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 3: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Potential Ibuprofen Interaction -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+- P005 run 4: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Potential Ibuprofen Interaction -> tdf_kidney_harm, nsaid_with_tdf
+  - [ai] Lipid Monitoring Gap -> extra
+- P005 run 5: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P006 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+- P006 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+- P006 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load, no_plan_written
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+  - [ai] Missing Assessment and Plan -> also fine: no_plan_written
+- P006 run 4: missed: iron_with_dtg
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG-Based Regimen in Pregnancy -> extra
+- P006 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Pregnancy and DTG-Based Regimen -> iron_with_dtg
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+
+## llama-a100-t0
+- EX2 run 1: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 2: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 3: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 4: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX2 run 5: missed: electrolytes, hold_then_restart
+  - [ai] Acute Kidney Injury -> prerenal_aki
+  - [ai] Renal Impairment Management -> extra
+- EX3 run 1: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Glucose Monitoring -> also fine: weight
+- EX3 run 2: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Glucose Monitoring -> also fine: weight
+- EX3 run 3: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Glucose Monitoring -> also fine: weight
+- EX3 run 4: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Glucose Monitoring -> also fine: weight
+- EX3 run 5: missed: amitriptyline_weight
+  - [ai] Hypothyroidism Management -> undertreated_hypothyroidism
+  - [ai] Weight Gain on DTG -> also fine: weight
+  - [ai] Glucose Monitoring -> also fine: weight
+- EX4 run 1: missed: none
+  - [ai] Carbamazepine Toxicity -> carbamazepine_toxicity
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Monitoring -> repeat_viral_load
+  - [ai] Elevated ALT -> also fine: liver
+  - [ai] Subtherapeutic Sodium Level -> hyponatraemia
+- EX4 run 2: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> extra
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+- EX4 run 3: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> extra
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+- EX4 run 4: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> extra
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+- EX4 run 5: missed: hyponatraemia
+  - [ai] Carbamazepine Toxicity -> carbamazepine_lowers_dtg, carbamazepine_toxicity
+  - [ai] Viral Load Increase -> extra
+  - [ai] Potential Drug Interaction -> carbamazepine_lowers_dtg, carbamazepine_toxicity, repeat_viral_load
+- Kintu-Test 001 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- Kintu-Test 001 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- Kintu-Test 001 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- Kintu-Test 001 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- Kintu-Test 001 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Weight Gain on TLD -> weight_gain
+  - [ai] Impaired Fasting Glucose -> glucose
+  - [ai] Increased Blood Pressure -> also fine: blood_pressure
+  - [ai] Lipid Profile -> lipids
+  - [ai] Missing Assessment and Plan -> weight_gain
+- MR-KS run 1: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- MR-KS run 2: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- MR-KS run 3: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- MR-KS run 4: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- MR-KS run 5: missed: none
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria
+  - [rule] BP control concern with missed amlodipine doses -> also fine: blood_pressure
+  - [ai] Suboptimal BP Control -> also fine: blood_pressure
+  - [ai] Renal Function Monitoring -> tdf_tubular_bone_harm
+  - [ai] Potential Side Effects of Amlodipine -> also fine: blood_pressure
+  - [ai] Ibuprofen Use -> tdf_tubular_bone_harm, nsaid_with_tdf
+  - [ai] Proteinuria Monitoring -> also fine: blood_pressure, proteinuria
+- P001 run 1: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 2: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 3: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 4: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P001 run 5: missed: none
+  - [rule] Creatinine monitoring overdue while on TDF -> creatinine_overdue
+  - [ai] Missing Recent Creatinine -> creatinine_overdue
+  - [ai] Inadequate Virological Monitoring -> extra
+- P002 run 1: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 2: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 3: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 4: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P002 run 5: missed: none
+  - [ai] Viral Load Monitoring -> extra
+  - [ai] Creatinine Monitoring -> extra
+- P003 run 1: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 2: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 3: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 4: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P003 run 5: missed: none
+  - [rule] Creatinine missing while on TDF -> creatinine_never_done
+  - [rule] Possible EFV neuropsychiatric side effects -> efv_cns_toxicity
+  - [ai] EFV Neuropsychiatric Effects -> efv_cns_toxicity
+  - [ai] Neuropsychiatric Symptom Screening -> efv_cns_toxicity
+- P004 run 1: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 2: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 3: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 4: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P004 run 5: missed: none; must-not broken: says_labs_missing
+  - [ai] Abdominal Pain -> also fine: abdominal_pain
+  - [ai] Missing Recent Lab Results -> extra
+- P005 run 1: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 2: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 3: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 4: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P005 run 5: missed: vl_before_switch
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [rule] NSAID use mentioned while on TDF -> nsaid_with_tdf
+  - [rule] Proteinuria mentioned in notes -> also fine: proteinuria, no_plan_written
+  - [ai] Renal Function Decline -> tdf_kidney_harm
+  - [ai] Viral Load Monitoring -> extra
+- P006 run 1: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+- P006 run 2: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+- P006 run 3: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+- P006 run 4: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+- P006 run 5: missed: none
+  - [rule] Creatinine recorded only as pasted text -> also fine: pasted_creatinine
+  - [ai] Elevated Creatinine Level -> creatinine_rise
+  - [ai] Viral Load Monitoring -> also fine: viral_load
+  - [ai] DTG Use in Pregnancy -> extra
+  - [ai] Potential Drug Interaction -> iron_with_dtg
+

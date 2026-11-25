@@ -1,0 +1,100 @@
+{
+  "case_id": "P004",
+  "source": "test patient (Data/mock_patients.json)",
+  "patient": {
+    "patient_id": "P004",
+    "name": "Amina Nansubuga",
+    "sex": "F",
+    "age_years": 37,
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "other_medications": [],
+    "regimen_history": [
+      {
+        "start_date": "2023-03-20",
+        "end_date": null,
+        "regimen": [
+          "TDF",
+          "3TC",
+          "DTG"
+        ]
+      }
+    ],
+    "intake": {
+      "complaints_symptoms": "Omusawo, mpulira obulumi mu lubuto (abdominal pain), but no fever",
+      "examination_findings": "Appetite okay, no fever",
+      "prior_history": "On TLD since March 2023. Generally stable."
+    },
+    "visits": [
+      {
+        "date": "2026-01-22",
+        "type": "intake",
+        "clinician_note": "Complaints & Symptoms:\nOmusawo, mpulira obulumi mu lubuto (abdominal pain), but no fever\n\nExamination Findings:\nAppetite okay, no fever\n\nPrior History:\nOn TLD since March 2023. Generally stable."
+      }
+    ],
+    "labs": {
+      "viral_load": [
+        {
+          "date": "2025-11-05",
+          "value_copies_per_ml": 25
+        }
+      ],
+      "creatinine": [
+        {
+          "date": "2025-11-05",
+          "value_umol_per_l": 82
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-01-22",
+      "note": "Omusawo, mpulira obulumi mu lubuto, but appetite is okay.",
+      "orders": [],
+      "med_changes": []
+    },
+    "expected_demo_outcome": {
+      "status": "GREEN",
+      "notes": "Multilingual processing demo: entity extraction/translation later; baseline alerts may be none."
+    }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": true,
+    "also_fine": [
+      {
+        "id": "abdominal_pain",
+        "summary": "Assessing the abdominal pain is reasonable",
+        "match": [
+          [
+            "abdominal",
+            "abdomen",
+            "stomach"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "says_labs_missing",
+        "summary": "Says lab results are missing, though recent ones are on record",
+        "match": [
+          [
+            "missing",
+            "no recent",
+            "not available",
+            "lack of",
+            "absent"
+          ],
+          [
+            "lab",
+            "laboratory",
+            "result"
+          ]
+        ]
+      }
+    ]
+  }
+}

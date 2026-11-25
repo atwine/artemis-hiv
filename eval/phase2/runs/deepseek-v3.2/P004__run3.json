@@ -1,0 +1,184 @@
+{
+ "case_id": "P004",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 27.5,
+ "calls": [
+  {
+   "prompt_tokens": 1568,
+   "completion_tokens": 444,
+   "total_tokens": 2012,
+   "cost": 0.00052648,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00052648,
+    "upstream_inference_prompt_cost": 0.00035776,
+    "upstream_inference_completions_cost": 0.00016872
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2702,
+   "completion_tokens": 470,
+   "total_tokens": 3172,
+   "cost": 0.00071204,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 960,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00071204,
+    "upstream_inference_prompt_cost": 0.00051464,
+    "upstream_inference_completions_cost": 0.0001974
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00123852,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_001",
+   "title": "Abdominal Pain on DTG",
+   "message": "Guidelines list abdominal pain as a symptom to screen for. The patient presents with abdominal pain (obulumi mu lubuto). Dolutegravir (DTG) is associated with gastrointestinal side effects, including nausea and vomiting, which can present as pain. However, the patient's appetite is okay, and there is no fever, which argues against a severe intra-abdominal process. Non-drug causes of abdominal pain should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Screen for other DTG-associated symptoms and consider non-drug causes. Document as a suspected ADR if attributed to DTG.",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_001",
+     "title": "Abdominal Pain on DTG",
+     "message": "Guidelines list abdominal pain as a symptom to screen for. The patient presents with abdominal pain (obulumi mu lubuto). Dolutegravir (DTG) is associated with gastrointestinal side effects, including nausea and vomiting, which can present as pain. However, the patient's appetite is okay, and there is no fever, which argues against a severe intra-abdominal process. Non-drug causes of abdominal pain should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Screen for other DTG-associated symptoms and consider non-drug causes. Document as a suspected ADR if attributed to DTG.",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P004_002",
+   "title": "ADR Screening and Reporting Required",
+   "message": "Guidelines mandate that for each encounter, all health workers should screen for suspected adverse drug reactions (ADRs) using the Drug Safety Screening checklist. The patient's abdominal pain is a new complaint that should be evaluated as a potential ADR. All suspected ADRs, whether mild or severe, should be recorded in HMIS tools and reported.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Complete the Drug Safety Screening checklist for this encounter and document the abdominal pain as a suspected ADR if indicated.",
+    "citations": [
+     {
+      "page_number": 21,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 22,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_002",
+     "title": "ADR Screening and Reporting Required",
+     "message": "Guidelines mandate that for each encounter, all health workers should screen for suspected adverse drug reactions (ADRs) using the Drug Safety Screening checklist. The patient's abdominal pain is a new complaint that should be evaluated as a potential ADR. All suspected ADRs, whether mild or severe, should be recorded in HMIS tools and reported.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Complete the Drug Safety Screening checklist for this encounter and document the abdominal pain as a suspected ADR if indicated.",
+     "citations": [
+      {
+       "page_number": 21,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+      },
+      {
+       "page_number": 22,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3"
+  ],
+  "P004_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_001\",\n    \"title\": \"Abdominal Pain on DTG\",\n    \"message\": \"Guidelines list abdominal pain as a symptom to screen for. The patient presents with abdominal pain (obulumi mu lubuto). Dolutegravir (DTG) is associated with gastrointestinal side effects, including nausea and vomiting, which can present as pain. However, the patient's appetite is okay, and there is no fever, which argues against a severe intra-abdominal process. Non-drug causes of abdominal pain should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Screen for other DTG-associated symptoms and consider non-drug causes. Document as a suspected ADR if attributed to DTG.\",\n    \"citations\": [\n      {\n        \"page_number\": 38,\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3\"\n      }\n    ]\n  },\n  {\n    \"alert_id\": \"P004_002\",\n    \"title\": \"ADR Screening and Reporting Required\",\n    \"message\": \"Guidelines mandate that for each encounter, all health workers should screen for suspected adverse drug reactions (ADRs) using the Drug Safety Screening checklist. The patient's abdominal pain is a new complaint that should be evaluated as a potential ADR. All suspected ADRs, whether mild or severe, should be recorded in HMIS tools and reported.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Complete the Drug Safety Screening checklist for this encounter and document the abdominal pain as a suspected ADR if indicated.\",\n    \"citations\": [\n      {\n        \"page_number\": 21,\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\"\n      },\n      {\n        \"page_number\": 22,\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2\"\n      }\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+    "page_number": 38,
+    "quote": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdo"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Uncertain: The guideline excerpts provided are generic and do not specify criteria for switching or holding ART based on abdominal pain or creatinine levels.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Abdominal pain of unclear etiology\",\n      \"action\": \"Uncertain: The guideline excerpts do not provide specific diagnostic steps for abdominal pain in patients on ART.\",\n      \"reason\": \"Uncertain: The guideline excerpts only emphasize pharmacovigilance importance without detailing evaluation for abdominal pain.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only notes the symptom without proposing any diagnostic or management actions.\"\n      }\n    },\n    {\n      \"problem\": \"Potential TDF-associated renal toxicity\",\n      \"action\": \"Check serum creatinine and calculate eGFR.\",\n      \"reason\": \"Patient is on TDF and has a creatinine of 82 umol/L, but no baseline or trend is available to assess for toxicity.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention evaluating renal function.\"\n      }\n    },\n    {\n      \"problem\": \"Inadequate pharmacovigilance assessment\",\n      \"action\": \"Perform a structured assessment for adverse drug reactions per guidelines.\",\n      \"reason\": \"Guidelines emphasize the importance of pharmacovigilance, but the current evaluation is limited to symptom noting.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Gap\",\n        \"explanation\": \"The clinician noted the symptom but did not perform a guideline-recommended structured assessment.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Check serum creatinine and eGFR now; repeat in 3 months or if symptoms worsen.\",\n  \"patient_counselling\": [\n    \"Report any worsening abdominal pain or new symptoms.\",\n    \"Continue taking ART as prescribed.\",\n    \"Maintain hydration.\"\n  ]\n}",
+ "plan_issues": []
+}

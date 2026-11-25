@@ -10,7 +10,7 @@ Version 1 of the revival is done when all four are true:
 1. A GitHub Pages site shows the new interface replaying at least 10 synthetic visits, using
    outputs generated on the A100, with a "not for clinical use" notice.
 2. The README shows a model comparison table on at least 30 clinician-labelled cases, and one
-   command (`python scripts/evaluate.py`) reproduces it.
+   command (`python scripts/evaluate.py`) reproduces it (Phase 7; Phase 2 gives a preliminary one).
 3. Tests pass in GitHub's automatic checks on `development`.
 4. Every alert on screen quotes the guideline passage it rests on, with the document and edition.
 
@@ -74,36 +74,49 @@ retrieval work (G32 in `docs/audit/phase1-groups.tsv`), as the owner ruled.
 
 Check: rerun the baseline; the before/after difference shows each fix and nothing unexplained.
 
-## Phase 2: Evaluation and first model comparison
+## Phase 2: Preliminary evaluation and model comparison (no doctor needed)
 
-Starts right after Phase 1 and can run alongside Phase 3. It comes before the rebuild because its
-numbers decide which parts of the pipeline earn their keep.
+Everything here runs without the doctor (owner, 2026-11-25). The answer key is drafted from the
+guidelines and marked "draft, not checked by a clinician", so these numbers steer Phases 2B to 6
+but are never quoted as accuracy. The doctor's review and the reportable numbers come in Phase 7.
 
-- [ ] 2.1 Case set: the 7 existing patients, the clinician-written example outputs and Timothy's
-      test cases, then 20 to 30 new short cases written and labelled by clinicians (each lists the
-      alerts it should raise and the guideline passages that support them).
-- [ ] 2.2 Scoring: for each case, which expected alerts were caught and which alerts were false
-      alarms. A model may help match wording, but a person spot-checks its matches. Report three
-      numbers, each with how many cases it rests on:
-      - sensitivity (recall): of the problems a patient really has, how many the app caught. This is
-        "nothing missed", and for a safety tool it matters most.
-      - precision: of the alerts the app raised, how many were real problems.
-      - specificity: of the patients with nothing wrong, how many the app correctly left clear.
-      Working target from the owner: about 85%, to be set per measure with the doctor before the run.
-- [ ] 2.2b Write the method down so it can be reported: how many cases, who wrote and labelled
-      them, how a raised alert is matched to an expected one, how many runs per case (answers vary
-      between runs), and the date and model.
-- [ ] 2.3 Run the models: Llama 3.3 70B on the A100 and 2 or 3 OpenRouter models (MedGemma optional,
-      as the original competition baseline).
-- [ ] 2.4 Results table plus all raw outputs saved (they feed the showcase in Phase 6).
-- [ ] 2.5 (suggested) A knowledge check on the HIV questions in AfriMed-QA.
+- [x] 2.1 Case set from what exists: the 7 test patients, the 4 clinician-written example answers
+      (each turned into a patient record) and the Mr K.S. case. Done 2026-11-25: 11 cases in
+      `eval/cases/`, as example 1 turned out to be P005.
+- [x] 2.2 Draft answer key: for each case, the problems it should flag and the guideline passage
+      behind each, written from the guidelines and marked as a draft. Done 2026-11-25: 22
+      expected problems, must-not and also-fine items.
+- [x] 2.3 Scoring script (`scripts/evaluate.py`): runs each case 5 times per model and counts, per
+      case, the expected problems caught and missed and the extra alerts. Also the measures that
+      need no answer key: the same answer across runs, citations only to passages the AI was
+      shown, replies read in full, time and cost per check. It rebuilds the table from saved outputs.
+- [x] 2.4 Models (owner, 2026-11-25): Llama 3.3 70B on the A100 (the baseline, free), and DeepSeek
+      V3.2, GLM 5.2 and Claude Haiku 5.5 through OpenRouter, all with thinking switched off.
+      MedGemma-27B left out (owner). Claude Sonnet 5.5 was dropped after a trial: its thinking
+      can't be switched off and filled the app's reply room, so its alert list was cut off and
+      one check cost $0.07. OpenRouter spending cap $5: the script estimates the cost before a
+      run, stops at the cap and records the real cost of every call.
+      Measured: one visit check uses about 3,700 tokens in and 740 out.
+- [x] 2.5 AfriMed-QA knowledge check: its infectious-disease questions (539, 184 written by
+      experts), HIV-related ones picked out, for every shortlisted model. The download needs its
+      terms accepted on Hugging Face. Done 2026-11-25: the 286 multiple-choice questions that are
+      infectious disease or mention HIV, for all four models. The dataset card gives CC-BY-SA
+      4.0 and the paper says non-commercial, so the data stays out of the repo.
+- [x] 2.6 Technical leftovers from Phase 1: temperature 0 or judging over several runs (G38); the
+      AI citing a made-up "information_gap" passage instead of no passage. Done 2026-11-25:
+      citations can only name passages shown (92% before, 100% after); temperature 0 raised
+      Llama's same-answer rate from 85% to 98%. Whether the app uses temperature 0 is open.
+- [x] 2.7 Write the method and the preliminary results table, both marked preliminary, and save
+      every raw output (they feed the showcase in Phase 6). Done 2026-11-25:
+      `eval/phase2/README.md`.
 
-Check: `python scripts/evaluate.py` rebuilds the table from saved outputs.
+Check: `python scripts/evaluate.py` rebuilds the preliminary table from saved outputs.
 
 ## Phase 2B: Retrieval (RAG) revamp
 
 The old results were "sometimes good, sometimes bad". This phase finds out why and fixes it,
-measuring every change on the Phase 2 cases. Background reading: `docs/research/RAG-OPTIONS.md`.
+measuring every change on the Phase 2 cases and their draft answer key. Background reading:
+`docs/research/RAG-OPTIONS.md`.
 
 Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
 They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
@@ -175,20 +188,44 @@ Check: a full visit works in Chrome; before/after screenshots against the Stream
 
 - [ ] 6.1 Publish showcase mode as a static site with A100 outputs for at least 10 cases.
 - [ ] 6.2 Two or three short explainer videos: the problem, a walkthrough, the evaluation.
-- [ ] 6.3 README rewrite: screen recording, results table, limitations, "not for clinical use".
-- [ ] 6.4 Clinician trial: once the trial version is up, the doctor working with the owner runs
-      the test cases and reports what to improve. Their findings become new Phase 2 cases.
+- [ ] 6.3 README rewrite: screen recording, the preliminary results table (marked as such until
+      Phase 7), limitations, "not for clinical use".
 
 Check: the live Pages link works in a fresh browser with no VPN.
 
-## Phase 7: Stretch, as time allows
+## Phase 7: Clinical check with the doctor
 
-- [ ] 7.1 CDS Hooks endpoint (patient-view hook, cards, feedback), so record systems such as
+Everything that needs the doctor, done together once the app is built and running (owner,
+2026-11-25).
+
+- [ ] 7.1 The doctor reviews and corrects the draft answer key and adds cases, to about 30
+      (Timothy's test cases too, if he takes part).
+- [ ] 7.2 Targets for sensitivity, precision and specificity, set with the doctor (owner's working
+      figure: about 85%).
+- [ ] 7.3 The clinical calls held from Phase 1: whether to flag problems outside HIV-drug safety,
+      such as Kintu's blood pressure (G39); whether P002's monitoring reminders and P004's
+      "missing labs" alert are false alarms.
+- [ ] 7.4 The final run on the clinician-checked answer key: the accuracy table the README reports,
+      with the method written up (done criterion 2).
+- [ ] 7.5 Clinician trial (was 6.4): the doctor uses the running app on the test cases and reports
+      what to improve. Their findings become new cases.
+- [ ] 7.6 Before 7.4's run, tidy the evaluation scripts (standards review of Phase 2; the owner
+      chose to push Phase 2 first, 2026-11-25): move the run loops, the spending checks and
+      "stop when a model call fails" from `scripts/run_phase2.py` and `scripts/run_afrimedqa.py`
+      into tested functions in `artemis/evaluation/`, share the helpers copied in two or three
+      places, and give the saved run record and quiz answer named types.
+
+Check: the README's accuracy table rests on clinician-checked cases, and `python scripts/evaluate.py`
+reproduces it.
+
+## Phase 8: Stretch, as time allows
+
+- [ ] 8.1 CDS Hooks endpoint (patient-view hook, cards, feedback), so record systems such as
       OpenMRS-based UgandaEMR could call it.
-- [ ] 7.2 FHIR import (Patient, Condition, MedicationStatement, Observation), tested on Synthea's
+- [ ] 8.2 FHIR import (Patient, Condition, MedicationStatement, Observation), tested on Synthea's
       synthetic HIV patients.
-- [ ] 7.3 (suggested) Rules-only mode that works with no model connection (winners of the challenge were offline-first).
-- [ ] 7.4 (suggested) "Left in red" view: how often critical alerts are left unresolved (Penda's main lever).
+- [ ] 8.3 (suggested) Rules-only mode that works with no model connection (winners of the challenge were offline-first).
+- [ ] 8.4 (suggested) "Left in red" view: how often critical alerts are left unresolved (Penda's main lever).
 
 ## Ideas borrowed
 
@@ -206,10 +243,11 @@ Check: the live Pages link works in a fresh browser with no VPN.
 1. The design direction (after the Phase 3 mockups).
 2. Database: Postgres (owner, 2026-11-25), hosted somewhere like Railway or Cloudflare; the host
    is still open. Until then the visit record is a local file (fix 9).
-3. Which OpenRouter models, and a spending cap.
-4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited.
+3. Which OpenRouter models, and a spending cap: decided 2026-11-25 (DeepSeek V3.2, GLM 5.2, Claude
+   Haiku 5.5; $5). MedGemma-27B left out for now.
+4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited (Phase 7).
 5. Where the explainer videos live (YouTube, or small files in the repo).
 6. Whether to mirror this checklist as GitHub issues and milestones.
 7. Keep or cut the items marked "(suggested)", which were my additions.
 8. The target for each of sensitivity, precision and specificity (owner's working figure: about 85%),
-   agreed with the doctor before the evaluation run.
+   agreed with the doctor in Phase 7.

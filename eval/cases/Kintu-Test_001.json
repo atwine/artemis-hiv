@@ -1,0 +1,157 @@
+{
+  "case_id": "Kintu-Test 001",
+  "source": "test patient (Data/custom_patients.json)",
+  "patient": {
+    "patient_id": "Kintu-Test 001",
+    "age_years": 36,
+    "sex": "F",
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "other_medications": [],
+    "visits": [
+      {
+        "date": "2026-02-24",
+        "type": "intake",
+        "clinician_note": "Complaints & Symptoms:\n36-year-old woman presents for routine review. Mentions her clothes no longer fit and she has gained 'a lot of weight' since starting her current HIV medication. Also feels more tired than usual.\n\nExamination Findings:\nBP 138/88 mmHg. Weight 82kg. BMI 32.4 kg/m². Waist circumference 96cm. Acanthosis nigricans noted at neck and axillae. No peripheral oedema.\n\nSignificant history prior to today's visit:\nART History: Switched from TDF/3TC/EFV (used for 3 years) to TLD 18 months ago due to EFV-related side effects (dizziness and vivid dreams).\n\nBaseline Metrics (at TLD switch): BP was 118/74 mmHg; Weight was 65kg; BMI was 25.6 kg/m²; Fasting glucose was 92 mg/dL.\n\nComorbidities/Family History: HIV diagnosed 2019. No prior DM or HTN. Family history significant for Type 2 Diabetes (mother)."
+      }
+    ],
+    "labs": {
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "narrative_text": "Glycemic Markers: Fasting glucose 118 mg/dL (impaired); HbA1c 6.1% (pre-diabetic range). Lipid Profile: Total cholesterol 228 mg/dL, LDL 148 mg/dL, HDL 38 mg/dL, Triglycerides 212 mg/dL. Renal/Virological: Creatinine 0.9 mg/dL; Viral load <50 copies/mL; CD4 612 cells/uL.",
+          "source": "today"
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "note": "",
+      "orders": [],
+      "med_changes": []
+    },
+    "intake": {
+      "complaints_symptoms": "36-year-old woman presents for routine review. Mentions her clothes no longer fit and she has gained 'a lot of weight' since starting her current HIV medication. Also feels more tired than usual.",
+      "examination_findings": "BP 138/88 mmHg. Weight 82kg. BMI 32.4 kg/m². Waist circumference 96cm. Acanthosis nigricans noted at neck and axillae. No peripheral oedema.",
+      "prior_history": "ART History: Switched from TDF/3TC/EFV (used for 3 years) to TLD 18 months ago due to EFV-related side effects (dizziness and vivid dreams).\n\nBaseline Metrics (at TLD switch): BP was 118/74 mmHg; Weight was 65kg; BMI was 25.6 kg/m²; Fasting glucose was 92 mg/dL.\n\nComorbidities/Family History: HIV diagnosed 2019. No prior DM or HTN. Family history significant for Type 2 Diabetes (mother)."
+    },
+    "art_regimen_as_entered": "Current ART Regimen: TDF, 3TC, DTG (TLD) for 18 months."
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "weight_gain",
+        "kind": "drug_harm",
+        "summary": "Weight 65 to 82 kg (BMI 25.6 to 32.4) since moving to TLD: DTG-associated weight gain; diet and exercise",
+        "match": [
+          [
+            "weight",
+            "bmi",
+            "obes"
+          ]
+        ],
+        "guideline": {
+          "document": "SAHCS_Adult_ART_2024",
+          "page": 6,
+          "quote": "Although DTG is associated with more weight gain compared to other regimens, it appears to unmask it rather than cause it. There is no role for switching ART regimens in patients who experience significant weight gain on DTG."
+        }
+      },
+      {
+        "id": "glucose",
+        "kind": "monitoring",
+        "summary": "Fasting glucose 92 to 118 mg/dL, HbA1c 6.1% (prediabetes) on DTG: glucose monitoring",
+        "match": [
+          [
+            "glucose",
+            "hba1c",
+            "diabet",
+            "glycaem",
+            "glycem",
+            "insulin"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 5,
+          "quote": "Initiate on DTG, glucose monitoring every 3 months for the 1st year"
+        }
+      },
+      {
+        "id": "lipids",
+        "kind": "monitoring",
+        "summary": "LDL 148, triglycerides 212, HDL 38 mg/dL: dyslipidaemia to manage",
+        "match": [
+          [
+            "lipid",
+            "cholesterol",
+            "ldl",
+            "triglycer",
+            "dyslipid"
+          ]
+        ]
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "blood_pressure",
+        "summary": "BP 118/74 to 138/88 (whether to flag it is a Phase 7 call)",
+        "match": [
+          [
+            "blood pressure",
+            "hypertension",
+            "hypertensive"
+          ]
+        ]
+      },
+      {
+        "id": "no_plan_written",
+        "summary": "Today's assessment and plan is empty",
+        "match": [
+          [
+            "plan",
+            "assessment"
+          ],
+          [
+            "missing",
+            "no ",
+            "not documented",
+            "empty"
+          ]
+        ]
+      },
+      {
+        "id": "pasted_creatinine",
+        "summary": "Creatinine recorded only as pasted text: a data-entry nudge from the rules",
+        "match": [
+          [
+            "pasted"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "switches_dtg",
+        "summary": "Recommends switching away from DTG",
+        "match": [
+          [
+            "switch from dtg",
+            "switch dtg",
+            "stop dtg",
+            "discontinue dtg",
+            "replace dtg",
+            "change dtg",
+            "switching from dtg",
+            "switch away from dtg",
+            "substitute dtg"
+          ]
+        ]
+      }
+    ]
+  }
+}

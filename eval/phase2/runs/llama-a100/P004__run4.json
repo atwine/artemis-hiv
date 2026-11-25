@@ -1,0 +1,127 @@
+{
+ "case_id": "P004",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 4,
+ "temperature": null,
+ "seconds": 18.8,
+ "calls": [
+  {
+   "prompt_tokens": 1558,
+   "total_tokens": 1855,
+   "completion_tokens": 297,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2284,
+   "total_tokens": 2561,
+   "completion_tokens": 277,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_001",
+   "title": "Abdominal Pain",
+   "message": "Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient presents with abdominal pain but no fever. Evidence for drug attribution includes the patient's current regimen, which includes DTG. However, non-drug causes such as infection or other comorbidities should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor patient and consider alternative causes",
+    "citations": [
+     {
+      "page_number": 26,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_001",
+     "title": "Abdominal Pain",
+     "message": "Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient presents with abdominal pain but no fever. Evidence for drug attribution includes the patient's current regimen, which includes DTG. However, non-drug causes such as infection or other comorbidities should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor patient and consider alternative causes",
+     "citations": [
+      {
+       "page_number": 26,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P004_002",
+   "title": "Missing Recent Lab Results",
+   "message": "Guidelines emphasize the importance of regular laboratory monitoring. Patient's latest creatinine and viral load results are 78 days old. Recent lab results are necessary to assess the patient's current health status and adjust the treatment plan accordingly.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order recent lab tests",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P004_002",
+     "title": "Missing Recent Lab Results",
+     "message": "Guidelines emphasize the importance of regular laboratory monitoring. Patient's latest creatinine and viral load results are 78 days old. Recent lab results are necessary to assess the patient's current health status and adjust the treatment plan accordingly.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order recent lab tests",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+  ],
+  "P004_002": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_001\",\n    \"title\": \"Abdominal Pain\",\n    \"message\": \"Guidelines mention abdominal pain as a potential side effect of certain medications, such as DTG. Patient presents with abdominal pain but no fever. Evidence for drug attribution includes the patient's current regimen, which includes DTG. However, non-drug causes such as infection or other comorbidities should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor patient and consider alternative causes\",\n    \"citations\": [{\"page_number\": 26, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1\"}]\n  },\n  {\n    \"alert_id\": \"P004_002\",\n    \"title\": \"Missing Recent Lab Results\",\n    \"message\": \"Guidelines emphasize the importance of regular laboratory monitoring. Patient's latest creatinine and viral load results are 78 days old. Recent lab results are necessary to assess the patient's current health status and adjust the treatment plan accordingly.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order recent lab tests\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+    "page_number": 38,
+    "quote": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdo"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine potential drug toxicity\", \"reason\": \"Patient presents with abdominal pain, but no clear link to current ART regimen and guideline excerpts do not provide specific guidance on managing this symptom\"}, \"problems\": [{\"problem\": \"Abdominal pain\", \"action\": \"Order abdominal ultrasound and liver function tests to rule out drug toxicity\", \"reason\": \"Patient complaint of abdominal pain requires further investigation to determine cause\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not address potential causes of abdominal pain\"}}, {\"problem\": \"Potential drug toxicity from TDF, 3TC, or DTG\", \"action\": \"Uncertain: need more information on patient's lab results and medication history\", \"reason\": \"Guideline excerpts emphasize pharmacovigilance but do not provide specific guidance on managing potential toxicity\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not mention potential drug toxicity\"}}], \"monitoring_plan\": \"Repeat creatinine and viral load tests in 3 months, and monitor patient for signs of drug toxicity\", \"patient_counselling\": [\"Report any changes in symptoms or side effects to healthcare provider\", \"Adhere to current ART regimen unless instructed to change by healthcare provider\", \"Attend follow-up appointments for ongoing monitoring and evaluation\"]}",
+ "plan_issues": []
+}

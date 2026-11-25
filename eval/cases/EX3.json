@@ -1,0 +1,179 @@
+{
+  "case_id": "EX3",
+  "source": "built from clinician example 3 (Data/MarkDown Files/Example Output/example3.txt); details the example doesn't give were filled in",
+  "patient": {
+    "patient_id": "EX3",
+    "sex": "F",
+    "age_years": 45,
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "art_regimen_as_entered": "TLD since January 2023",
+    "other_medications": [
+      "Levothyroxine 50 mcg once daily",
+      "Amitriptyline 50 mg at night"
+    ],
+    "intake": {
+      "complaints_symptoms": "Weight gain of about 9 kg over the past year, tiredness, feeling cold, constipation. Often forgets the thyroid tablet.",
+      "examination_findings": "Weight 84 kg (75 kg a year ago; 72 kg when starting TLD 3 years ago). BMI 33. BP 128/82 mmHg. Dry skin, periorbital puffiness, delayed relaxation of the ankle reflexes. Mood low but improving.",
+      "prior_history": "HIV diagnosed 2016; switched to TLD in January 2023, weight stable for the first 2 years on TLD. Depression diagnosed early 2025; amitriptyline started in February 2025 by the mental health team. Hypothyroidism diagnosed mid-2025, on levothyroxine 50 mcg."
+    },
+    "visits": [
+      {
+        "date": "2025-08-12",
+        "type": "routine",
+        "clinician_note": "Started levothyroxine 50 mcg for hypothyroidism. On amitriptyline from the mental health clinic. Stable on TLD."
+      }
+    ],
+    "labs": {
+      "viral_load": [
+        {
+          "date": "2025-11-10",
+          "value": "<50",
+          "unit": "copies/mL",
+          "source": "previous"
+        }
+      ],
+      "fasting_glucose": [
+        {
+          "date": "2026-02-24",
+          "value": "5.6",
+          "unit": "mmol/L",
+          "source": "today"
+        }
+      ],
+      "total_cholesterol": [
+        {
+          "date": "2026-02-24",
+          "value": "6.4",
+          "unit": "mmol/L",
+          "source": "today"
+        }
+      ],
+      "ldl": [
+        {
+          "date": "2026-02-24",
+          "value": "4.2",
+          "unit": "mmol/L",
+          "source": "today"
+        }
+      ],
+      "triglycerides": [
+        {
+          "date": "2026-02-24",
+          "value": "2.3",
+          "unit": "mmol/L",
+          "source": "today"
+        }
+      ],
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "source": "today",
+          "narrative_text": "TSH 12.4 mIU/L (target below 4.5). Free T4 low."
+        }
+      ],
+      "creatinine": [
+        {
+          "date": "2025-08-12",
+          "value": "72",
+          "unit": "umol/L",
+          "source": "previous"
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "orders": [],
+      "med_changes": [],
+      "note": "Weight gain on TLD, BMI now 33. Considering switching from DTG because of the weight gain. Continue levothyroxine 50 mcg."
+    }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "undertreated_hypothyroidism",
+        "kind": "plan",
+        "summary": "TSH 12.4 on levothyroxine 50 mcg with missed doses: undertreated hypothyroidism likely drives the weight gain; optimise it (clinician example 3)",
+        "match": [
+          [
+            "thyroid",
+            "tsh",
+            "levothyrox"
+          ]
+        ]
+      },
+      {
+        "id": "amitriptyline_weight",
+        "kind": "clash",
+        "summary": "Amitriptyline, started a year ago when the weight gain began, causes weight gain; review with the mental health team (clinician example 3)",
+        "match": [
+          [
+            "amitriptyline",
+            "tricyclic",
+            "antidepressant"
+          ]
+        ]
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "weight",
+        "summary": "Weight gain itself",
+        "match": [
+          [
+            "weight",
+            "bmi",
+            "obes"
+          ]
+        ]
+      },
+      {
+        "id": "lipids",
+        "summary": "Raised cholesterol",
+        "match": [
+          [
+            "lipid",
+            "cholesterol",
+            "ldl",
+            "triglycer",
+            "dyslipid"
+          ]
+        ]
+      },
+      {
+        "id": "mood",
+        "summary": "Mood follow-up",
+        "match": [
+          [
+            "mood",
+            "depress"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "switches_dtg",
+        "summary": "Recommends switching away from DTG",
+        "match": [
+          [
+            "switch from dtg",
+            "switch dtg",
+            "stop dtg",
+            "discontinue dtg",
+            "replace dtg",
+            "change dtg",
+            "switching from dtg",
+            "switch away from dtg",
+            "substitute dtg"
+          ]
+        ]
+      }
+    ]
+  }
+}

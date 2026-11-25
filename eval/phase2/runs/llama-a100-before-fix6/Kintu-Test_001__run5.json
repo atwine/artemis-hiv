@@ -1,0 +1,234 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 36.8,
+ "calls": [
+  {
+   "prompt_tokens": 1545,
+   "total_tokens": 1960,
+   "completion_tokens": 415,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2395,
+   "total_tokens": 3121,
+   "completion_tokens": 726,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU_001",
+   "title": "Weight Gain and Metabolic Changes",
+   "message": "Guidelines suggest discussing weight gain possibility when starting ART regimens. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m² and acanthosis nigricans. This could be related to the ART regimen, but other factors like diet and exercise should also be considered. Fasting glucose is impaired at 118 mg/dL, and HbA1c is in the pre-diabetic range, indicating a potential metabolic issue.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor weight, glucose, and lipid profiles regularly, and consider diet and exercise counseling.",
+    "citations": [
+     {
+      "page_number": 8,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_001",
+     "title": "Weight Gain and Metabolic Changes",
+     "message": "Guidelines suggest discussing weight gain possibility when starting ART regimens. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m² and acanthosis nigricans. This could be related to the ART regimen, but other factors like diet and exercise should also be considered. Fasting glucose is impaired at 118 mg/dL, and HbA1c is in the pre-diabetic range, indicating a potential metabolic issue.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor weight, glucose, and lipid profiles regularly, and consider diet and exercise counseling.",
+     "citations": [
+      {
+       "page_number": 8,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_002",
+   "title": "Blood Pressure Elevation",
+   "message": "Patient's blood pressure has increased from 118/74 mmHg to 138/88 mmHg since switching to TLD. This could be a sign of cardiovascular risk. Although guidelines do not specifically mention blood pressure monitoring in the provided excerpts, it is a relevant concern.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor blood pressure regularly and consider lifestyle modifications or antihypertensive therapy if necessary.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_002",
+     "title": "Blood Pressure Elevation",
+     "message": "Patient's blood pressure has increased from 118/74 mmHg to 138/88 mmHg since switching to TLD. This could be a sign of cardiovascular risk. Although guidelines do not specifically mention blood pressure monitoring in the provided excerpts, it is a relevant concern.",
+     "issue_type": "information_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor blood pressure regularly and consider lifestyle modifications or antihypertensive therapy if necessary.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_003",
+   "title": "Lipid Profile Abnormalities",
+   "message": "Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. This could increase cardiovascular risk. Guidelines do not specifically address lipid monitoring in the provided excerpts, but it is an important consideration.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor lipid profiles regularly and consider dietary changes or lipid-lowering therapy if necessary.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_003",
+     "title": "Lipid Profile Abnormalities",
+     "message": "Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. This could increase cardiovascular risk. Guidelines do not specifically address lipid monitoring in the provided excerpts, but it is an important consideration.",
+     "issue_type": "information_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor lipid profiles regularly and consider dietary changes or lipid-lowering therapy if necessary.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_004",
+   "title": "Missing Assessment and Plan",
+   "message": "There is no recorded assessment or plan for the patient's current visit. This is a gap in care that needs to be addressed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "high",
+    "recommended_action": "Complete a thorough assessment and create a plan for the patient's care.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_004",
+     "title": "Missing Assessment and Plan",
+     "message": "There is no recorded assessment or plan for the patient's current visit. This is a gap in care that needs to be addressed.",
+     "issue_type": "monitoring_gap",
+     "severity": "high",
+     "recommended_action": "Complete a thorough assessment and create a plan for the patient's care.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_005",
+   "title": "Glucose Monitoring",
+   "message": "Guidelines recommend glucose monitoring every 3 months for the first year after transitioning to DTG. Patient's fasting glucose is impaired, and HbA1c is in the pre-diabetic range, indicating a need for regular monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor glucose levels every 3 months for the first year after transitioning to DTG.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_005",
+     "title": "Glucose Monitoring",
+     "message": "Guidelines recommend glucose monitoring every 3 months for the first year after transitioning to DTG. Patient's fasting glucose is impaired, and HbA1c is in the pre-diabetic range, indicating a need for regular monitoring.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor glucose levels every 3 months for the first year after transitioning to DTG.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1"
+  ],
+  "KINTU_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+  ],
+  "KINTU_002": [],
+  "KINTU_003": [],
+  "KINTU_004": [],
+  "KINTU_005": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_001\",\n    \"title\": \"Weight Gain and Metabolic Changes\",\n    \"message\": \"Guidelines suggest discussing weight gain possibility when starting ART regimens. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m² and acanthosis nigricans. This could be related to the ART regimen, but other factors like diet and exercise should also be considered. Fasting glucose is impaired at 118 mg/dL, and HbA1c is in the pre-diabetic range, indicating a potential metabolic issue.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor weight, glucose, and lipid profiles regularly, and consider diet and exercise counseling.\",\n    \"citations\": [{\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_002\",\n    \"title\": \"Blood Pressure Elevation\",\n    \"message\": \"Patient's blood pressure has increased from 118/74 mmHg to 138/88 mmHg since switching to TLD. This could be a sign of cardiovascular risk. Although guidelines do not specifically mention blood pressure monitoring in the provided excerpts, it is a relevant concern.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor blood pressure regularly and consider lifestyle modifications or antihypertensive therapy if necessary.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_003\",\n    \"title\": \"Lipid Profile Abnormalities\",\n    \"message\": \"Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. This could increase cardiovascular risk. Guidelines do not specifically address lipid monitoring in the provided excerpts, but it is an important consideration.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor lipid profiles regularly and consider dietary changes or lipid-lowering therapy if necessary.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_004\",\n    \"title\": \"Missing Assessment and Plan\",\n    \"message\": \"There is no recorded assessment or plan for the patient's current visit. This is a gap in care that needs to be addressed.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Complete a thorough assessment and create a plan for the patient's care.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_005\",\n    \"title\": \"Glucose Monitoring\",\n    \"message\": \"Guidelines recommend glucose monitoring every 3 months for the first year after transitioning to DTG. Patient's fasting glucose is impaired, and HbA1c is in the pre-diabetic range, indicating a need for regular monitoring.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor glucose levels every 3 months for the first year after transitioning to DTG.\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+    "page_number": 8,
+    "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: no guideline excerpts provided to assess potential toxicity of TDF, 3TC, or DTG\", \"reason\": \"Patient presents with weight gain and fatigue since starting current HIV medication, but no relevant guideline excerpts are provided to inform decision\"}, \n\"problems\": [{\"problem\": \"Weight gain\", \"action\": \"Uncertain: no guideline excerpts provided to assess potential relationship between weight gain and current ART regimen\", \"reason\": \"Patient has gained a significant amount of weight since starting current HIV medication, but no relevant guideline excerpts are provided to inform action\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address weight gain\"}}, \n{\"problem\": \"Fatigue\", \"action\": \"Uncertain: no guideline excerpts provided to assess potential relationship between fatigue and current ART regimen\", \"reason\": \"Patient reports feeling more tired than usual since starting current HIV medication, but no relevant guideline excerpts are provided to inform action\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address fatigue\"}}, \n{\"problem\": \"Potential metabolic side effects\", \"action\": \"Uncertain: no guideline excerpts provided to assess potential metabolic side effects of current ART regimen\", \"reason\": \"Patient has developed acanthosis nigricans and has a family history of Type 2 Diabetes, but no relevant guideline excerpts are provided to inform action\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address potential metabolic side effects\"}}], \n\"monitoring_plan\": \"Monitor weight, BMI, waist circumference, blood pressure, and fasting glucose\", \n\"patient_counselling\": [\"Discuss potential side effects of current ART regimen\", \"Encourage healthy lifestyle habits to manage weight and reduce metabolic risk\", \"Schedule follow-up appointment to monitor progress\"]}",
+ "plan_issues": []
+}

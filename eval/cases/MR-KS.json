@@ -1,0 +1,161 @@
+{
+  "case_id": "MR-KS",
+  "source": "built from the Mr K.S. use case (Data/Sample/Mr_KS_sample_usecase.md); no answer was given, so the key is drafted",
+  "patient": {
+    "patient_id": "MR-KS",
+    "sex": "M",
+    "age_years": 51,
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "EFV"
+    ],
+    "art_regimen_as_entered": "TDF/3TC/EFV fixed-dose combination; on ART for 6 years",
+    "other_medications": [
+      "Amlodipine 5 mg once daily (doses missed while travelling)",
+      "Ibuprofen as needed, over the counter"
+    ],
+    "intake": {
+      "complaints_symptoms": "Scheduled 6-month refill. Feels fairly well but has persistent dull aching lower back pain and a heavy feeling in both thighs, worse over the last 4 months; puts it down to long hours driving and loading cargo. Occasionally takes ibuprofen. No fever, cough or urinary symptoms.",
+      "examination_findings": "Well-nourished, not in distress. BP 146/94 mmHg, pulse 78, temperature 36.7 C, weight 74 kg (stable). Mild tenderness over the lumbar paraspinal muscles; no focal neurological deficit; gait slightly stiff but steady. No pedal oedema. Chest clear.",
+      "prior_history": "Long-distance truck driver (Kampala to Mombasa). On ART for 6 years, currently TDF/3TC/EFV; reports strict adherence but an irregular diet on the road. Essential hypertension diagnosed 2 years ago, on amlodipine 5 mg; admits missing doses while in transit."
+    },
+    "visits": [],
+    "labs": {
+      "viral_load": [
+        {
+          "date": "2026-02-24",
+          "value": "<50",
+          "unit": "copies/mL",
+          "source": "today"
+        }
+      ],
+      "cd4": [
+        {
+          "date": "2026-02-24",
+          "value": "540",
+          "unit": "cells/uL",
+          "source": "today"
+        }
+      ],
+      "hemoglobin": [
+        {
+          "date": "2026-02-24",
+          "value": "13.4",
+          "unit": "g/dL",
+          "source": "today"
+        }
+      ],
+      "creatinine": [
+        {
+          "date": "2026-02-24",
+          "value": "112",
+          "unit": "umol/L",
+          "source": "today"
+        }
+      ],
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "source": "today",
+          "narrative_text": "Serum phosphate 0.78 mmol/L. Urinalysis: protein trace, glucose negative, leukocytes negative. Random blood sugar 6.2 mmol/L."
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "orders": [],
+      "med_changes": [],
+      "note": "Patient seen for routine review. Virologically suppressed and immunologically stable. Complains of chronic musculoskeletal back pain, likely occupational (truck driving). BP is sub-optimally controlled today (146/94); patient admits to occasionally missing amlodipine while on transit. Trace proteinuria noted on dipstick, likely secondary to hypertension. Creatinine remains within normal limits. Encouraged lifestyle modifications and adherence to antihypertensives. Continue current ART regimen. Plan: 1. Continue TDF/3TC/EFV. 2. Refill amlodipine 5 mg. 3. PRN ibuprofen for back pain. 4. Review in 6 months."
+    }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "tdf_tubular_bone_harm",
+        "kind": "drug_harm",
+        "summary": "Low phosphate, trace protein in urine, lower back pain and heavy thighs on TDF: possible TDF kidney tubular damage and bone loss; check eGFR and urine, consider replacing TDF",
+        "match": [
+          [
+            "tdf",
+            "tenofovir"
+          ],
+          [
+            "phosphat",
+            "bone",
+            "osteomalac",
+            "fanconi",
+            "tubul",
+            "proteinuria",
+            "back pain",
+            "egfr"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 37,
+          "quote": "TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density ... Lower back pain, change in urine volume Bone aches, spontaneous fractures"
+        }
+      },
+      {
+        "id": "nsaid_with_tdf",
+        "kind": "clash",
+        "summary": "Ibuprofen (an NSAID) taken regularly with TDF adds to kidney harm; stop it, use paracetamol",
+        "match": [
+          [
+            "ibuprofen",
+            "nsaid",
+            "anti-inflammator"
+          ]
+        ],
+        "guideline": {
+          "document": "SAHCS_Adult_ART_2024",
+          "page": 4,
+          "quote": "Long-term use of TDF together with other nephrotoxic agents (e.g. aminoglycosides or non-steroidal anti-inflammatory agents) should nonetheless be avoided."
+        }
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "blood_pressure",
+        "summary": "BP 146/94 with missed amlodipine; EFV may lower amlodipine levels (whether to flag BP is a Phase 7 call)",
+        "match": [
+          [
+            "blood pressure",
+            "hypertension",
+            "amlodipine"
+          ]
+        ]
+      },
+      {
+        "id": "efv_to_dtg",
+        "summary": "Moving from EFV to a DTG-based regimen",
+        "match": [
+          [
+            "dtg",
+            "dolutegravir",
+            "tld"
+          ],
+          [
+            "transition",
+            "switch",
+            "change",
+            "optimi"
+          ]
+        ]
+      },
+      {
+        "id": "proteinuria",
+        "summary": "Protein in the urine flagged on its own (part of the TDF kidney picture)",
+        "match": [
+          [
+            "proteinuria",
+            "protein in the urine"
+          ]
+        ]
+      }
+    ]
+  }
+}

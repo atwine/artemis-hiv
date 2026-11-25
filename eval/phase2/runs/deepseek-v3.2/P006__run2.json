@@ -1,0 +1,220 @@
+{
+ "case_id": "P006",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 2,
+ "temperature": null,
+ "seconds": 36.9,
+ "calls": [
+  {
+   "prompt_tokens": 1450,
+   "completion_tokens": 489,
+   "total_tokens": 1939,
+   "cost": 0.000498484,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000498484,
+    "upstream_inference_prompt_cost": 0.000293104,
+    "upstream_inference_completions_cost": 0.00020538
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2226,
+   "completion_tokens": 575,
+   "total_tokens": 2801,
+   "cost": 0.0005227,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2112,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0005227,
+    "upstream_inference_prompt_cost": 0.0003042,
+    "upstream_inference_completions_cost": 0.0002185
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.001021184,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P006_MON_001",
+   "title": "Viral Load Monitoring Schedule",
+   "message": "Guidelines specify a viral load monitoring schedule of every 3 months for pregnant women. The patient initiated ART 10 weeks ago and is 22 weeks pregnant. Her latest viral load is 89 copies/mL, indicating suppression. However, the next viral load test is not documented in the clinician's plan, creating a monitoring gap for this high-risk period.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Schedule the next viral load test as per the 3-monthly schedule for pregnant women.",
+    "citations": [
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_MON_001",
+     "title": "Viral Load Monitoring Schedule",
+     "message": "Guidelines specify a viral load monitoring schedule of every 3 months for pregnant women. The patient initiated ART 10 weeks ago and is 22 weeks pregnant. Her latest viral load is 89 copies/mL, indicating suppression. However, the next viral load test is not documented in the clinician's plan, creating a monitoring gap for this high-risk period.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Schedule the next viral load test as per the 3-monthly schedule for pregnant women.",
+     "citations": [
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_TOX_001",
+   "title": "Creatinine Rise on TDF",
+   "message": "The patient's creatinine has risen from a baseline of 0.8 mg/dL to 1.1 mg/dL after 10 weeks on a TDF-containing regimen (TLD), with a corresponding eGFR of 78 mL/min/1.73m2. TDF is a known cause of renal impairment. However, pregnancy itself can cause physiological changes in renal function and serum creatinine. The absence of proteinuria on urinalysis is reassuring but does not rule out drug-related toxicity.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor renal function closely. Consider TDF alternatives if creatinine continues to rise or if other signs of renal impairment appear.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P006_TOX_001",
+     "title": "Creatinine Rise on TDF",
+     "message": "The patient's creatinine has risen from a baseline of 0.8 mg/dL to 1.1 mg/dL after 10 weeks on a TDF-containing regimen (TLD), with a corresponding eGFR of 78 mL/min/1.73m2. TDF is a known cause of renal impairment. However, pregnancy itself can cause physiological changes in renal function and serum creatinine. The absence of proteinuria on urinalysis is reassuring but does not rule out drug-related toxicity.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor renal function closely. Consider TDF alternatives if creatinine continues to rise or if other signs of renal impairment appear.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_INT_001",
+   "title": "DTG and Iron Supplement Interaction",
+   "message": "Guidelines highlight a potential interaction between DTG and divalent cation-containing medications like iron supplements. The patient is pregnant and taking ferrous sulfate. This co-administration can reduce DTG absorption, risking virological failure and mother-to-child transmission.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Advise patient to take iron supplements at least 2 hours before or 6 hours after DTG dose.",
+    "citations": [
+     {
+      "page_number": 48,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_INT_001",
+     "title": "DTG and Iron Supplement Interaction",
+     "message": "Guidelines highlight a potential interaction between DTG and divalent cation-containing medications like iron supplements. The patient is pregnant and taking ferrous sulfate. This co-administration can reduce DTG absorption, risking virological failure and mother-to-child transmission.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Advise patient to take iron supplements at least 2 hours before or 6 hours after DTG dose.",
+     "citations": [
+      {
+       "page_number": 48,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "who_guidelines.extraction__who_guidelines.extraction__p30_c3"
+  ],
+  "P006_MON_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+  ],
+  "P006_TOX_001": [],
+  "P006_INT_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P006_MON_001\",\n    \"title\": \"Viral Load Monitoring Schedule\",\n    \"message\": \"Guidelines specify a viral load monitoring schedule of every 3 months for pregnant women. The patient initiated ART 10 weeks ago and is 22 weeks pregnant. Her latest viral load is 89 copies/mL, indicating suppression. However, the next viral load test is not documented in the clinician's plan, creating a monitoring gap for this high-risk period.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Schedule the next viral load test as per the 3-monthly schedule for pregnant women.\",\n    \"citations\": [\n      {\n        \"page_number\": 13,\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"\n      }\n    ]\n  },\n  {\n    \"alert_id\": \"P006_TOX_001\",\n    \"title\": \"Creatinine Rise on TDF\",\n    \"message\": \"The patient's creatinine has risen from a baseline of 0.8 mg/dL to 1.1 mg/dL after 10 weeks on a TDF-containing regimen (TLD), with a corresponding eGFR of 78 mL/min/1.73m2. TDF is a known cause of renal impairment. However, pregnancy itself can cause physiological changes in renal function and serum creatinine. The absence of proteinuria on urinalysis is reassuring but does not rule out drug-related toxicity.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor renal function closely. Consider TDF alternatives if creatinine continues to rise or if other signs of renal impairment appear.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"P006_INT_001\",\n    \"title\": \"DTG and Iron Supplement Interaction\",\n    \"message\": \"Guidelines highlight a potential interaction between DTG and divalent cation-containing medications like iron supplements. The patient is pregnant and taking ferrous sulfate. This co-administration can reduce DTG absorption, risking virological failure and mother-to-child transmission.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Advise patient to take iron supplements at least 2 hours before or 6 hours after DTG dose.\",\n    \"citations\": [\n      {\n        \"page_number\": 48,\n        \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4\"\n      }\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+    "page_number": 49,
+    "quote": "TABLE 21: Timing of viral load monitoring during pregnancy, delivery and breastfeeding. Period ART initiation in pregnancy Already on ART at diagnosis of pregnancy Previously taken ART, not currently on treatment (ART interruption, ART for PMTCT) Newly diagnosed HIV infection during delivery or breastfeeding Antenatal VL at baseline and after 3 months of ART: if > 28 weeks' gestation, then repeat VL at delivery VL at first ANC visit VL at initiation of DTG-based regimen; repe"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+    "page_number": 48,
+    "quote": "etween DTG and divalent cation-containing medication in pregnancy, since pregnant women frequently receive iron or calcium supplements and/or magnesium-/aluminium- containing antacids (see module 17). Patients returning to care in pregnancy after interrupting a first-line NNRTI regimen or those exposed to previous VTP regimens should be put directly on a DTG-based regimen, rather than retrying an NNRTI-regimen (see also module 16). As per the current PMTCT guidelines, women n"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p64_c1",
+    "page_number": 64,
+    "quote": "The ACTG A5372 trial showed that DTG needs to be given twice daily for 28 days if co-administered with rifapentine. 137 Rifapentine also affects the metabolism of common ARV drugs most affected by CYP induction such as all protease inhibitors (PIs) including LPV/r, and some non-nucleoside reverse transcriptase inhibitors (NNRTIs), including nevirapine. 138 All patients receiving ART should be considered for TPT after having been screened for active TB using a symptom screen, "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is pregnant and clinically well on TDF/3TC/DTG, which is a recommended first-line regimen per guidelines, with no signs of toxicity.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Inadequate baseline and routine monitoring for ART and pregnancy\",\n      \"action\": \"Order baseline CD4, viral load, creatinine, ALT, and hepatitis B surface antigen; schedule routine viral load at 6 months and delivery.\",\n      \"reason\": \"Guidelines recommend baseline and routine monitoring for all patients on ART, and pregnant women require specific viral load monitoring.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The doctor's current plan is documented as 'none written' or 'No plan documented'.\"\n      }\n    },\n    {\n      \"problem\": \"Need for DTG screening tool assessment\",\n      \"action\": \"Administer DTG screening tool to assess for contraindications like known diabetes.\",\n      \"reason\": \"Guidelines state to use the DTG screening tool prior to DTG initiation to check for contraindications.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The doctor's current plan is documented as 'none written' or 'No plan documented'.\"\n      }\n    },\n    {\n      \"problem\": \"Need for advanced HIV disease screening\",\n      \"action\": \"Screen for advanced HIV disease per guideline flowchart.\",\n      \"reason\": \"Guidelines recommend screening all patients for advanced HIV disease.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The doctor's current plan is documented as 'none written' or 'No plan documented'.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Baseline: CD4, viral load, creatinine, ALT, hepatitis B surface antigen. Routine: Viral load at 6 months ART and at delivery. Monitor weight and BP at each antenatal visit.\",\n  \"patient_counselling\": [\n    \"Adherence to ART and antenatal vitamins.\",\n    \"Importance of scheduled lab tests.\",\n    \"Report any new symptoms promptly.\"\n  ]\n}",
+ "plan_issues": []
+}

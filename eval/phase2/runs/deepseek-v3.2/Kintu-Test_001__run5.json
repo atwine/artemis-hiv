@@ -1,0 +1,220 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 24.3,
+ "calls": [
+  {
+   "prompt_tokens": 1538,
+   "completion_tokens": 493,
+   "total_tokens": 2031,
+   "cost": 0.000266756,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1472,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000266756,
+    "upstream_inference_prompt_cost": 5.9696e-05,
+    "upstream_inference_completions_cost": 0.00020706
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2804,
+   "completion_tokens": 621,
+   "total_tokens": 3425,
+   "cost": 0.000368564,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2688,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000368564,
+    "upstream_inference_prompt_cost": 0.000107744,
+    "upstream_inference_completions_cost": 0.00026082
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00063532,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU_WEIGHT_METABOLIC_001",
+   "title": "Significant weight gain and metabolic changes on DTG",
+   "message": "Guidelines note the possibility of weight gain with all ART regimens, advising proactive counseling on diet and exercise. The patient has gained 17 kg (BMI increased from 25.6 to 32.4 kg/m²) over 18 months since switching to TLD (TDF/3TC/DTG). She now has acanthosis nigricans, pre-diabetes (fasting glucose 118 mg/dL, HbA1c 6.1%), and dyslipidemia. DTG is a known contributor to weight gain and metabolic complications. Non-drug causes include family history of Type 2 Diabetes and potential lifestyle factors.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Discuss weight gain risk, counsel on diet and exercise, and intensify monitoring for diabetes and cardiovascular risk.",
+    "citations": [
+     {
+      "page_number": 8,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_WEIGHT_METABOLIC_001",
+     "title": "Significant weight gain and metabolic changes on DTG",
+     "message": "Guidelines note the possibility of weight gain with all ART regimens, advising proactive counseling on diet and exercise. The patient has gained 17 kg (BMI increased from 25.6 to 32.4 kg/m²) over 18 months since switching to TLD (TDF/3TC/DTG). She now has acanthosis nigricans, pre-diabetes (fasting glucose 118 mg/dL, HbA1c 6.1%), and dyslipidemia. DTG is a known contributor to weight gain and metabolic complications. Non-drug causes include family history of Type 2 Diabetes and potential lifestyle factors.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Discuss weight gain risk, counsel on diet and exercise, and intensify monitoring for diabetes and cardiovascular risk.",
+     "citations": [
+      {
+       "page_number": 8,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_MONITORING_GAP_002",
+   "title": "Missing glucose monitoring per DTG guideline",
+   "message": "Guidelines recommend glucose monitoring every 3 months for the first year for people living with HIV transitioned to DTG. The patient was switched to DTG (in TLD) 18 months ago. There is no record of structured glucose monitoring during the first year on DTG, and the patient now presents with impaired fasting glucose and pre-diabetes.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Implement guideline-recommended glucose monitoring schedule and assess for diabetes.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_MONITORING_GAP_002",
+     "title": "Missing glucose monitoring per DTG guideline",
+     "message": "Guidelines recommend glucose monitoring every 3 months for the first year for people living with HIV transitioned to DTG. The patient was switched to DTG (in TLD) 18 months ago. There is no record of structured glucose monitoring during the first year on DTG, and the patient now presents with impaired fasting glucose and pre-diabetes.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Implement guideline-recommended glucose monitoring schedule and assess for diabetes.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_PLAN_REVIEW_003",
+   "title": "No clinician assessment or plan documented",
+   "message": "The clinician's assessment and plan for today's visit is documented as 'none written'. The patient presents with significant new findings including substantial weight gain, acanthosis nigricans, pre-diabetes, dyslipidemia, and elevated blood pressure. A clinical plan is required to address these metabolic complications and cardiovascular risk factors.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Document a clinical assessment and management plan addressing weight gain, glycemic control, lipids, and blood pressure.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_PLAN_REVIEW_003",
+     "title": "No clinician assessment or plan documented",
+     "message": "The clinician's assessment and plan for today's visit is documented as 'none written'. The patient presents with significant new findings including substantial weight gain, acanthosis nigricans, pre-diabetes, dyslipidemia, and elevated blood pressure. A clinical plan is required to address these metabolic complications and cardiovascular risk factors.",
+     "issue_type": "plan_review",
+     "severity": "moderate",
+     "recommended_action": "Document a clinical assessment and management plan addressing weight gain, glycemic control, lipids, and blood pressure.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1"
+  ],
+  "KINTU_WEIGHT_METABOLIC_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+  ],
+  "KINTU_MONITORING_GAP_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "KINTU_PLAN_REVIEW_003": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_WEIGHT_METABOLIC_001\",\n    \"title\": \"Significant weight gain and metabolic changes on DTG\",\n    \"message\": \"Guidelines note the possibility of weight gain with all ART regimens, advising proactive counseling on diet and exercise. The patient has gained 17 kg (BMI increased from 25.6 to 32.4 kg/m²) over 18 months since switching to TLD (TDF/3TC/DTG). She now has acanthosis nigricans, pre-diabetes (fasting glucose 118 mg/dL, HbA1c 6.1%), and dyslipidemia. DTG is a known contributor to weight gain and metabolic complications. Non-drug causes include family history of Type 2 Diabetes and potential lifestyle factors.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Discuss weight gain risk, counsel on diet and exercise, and intensify monitoring for diabetes and cardiovascular risk.\",\n    \"citations\": [\n      {\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"}\n    ]\n  },\n  {\n    \"alert_id\": \"KINTU_MONITORING_GAP_002\",\n    \"title\": \"Missing glucose monitoring per DTG guideline\",\n    \"message\": \"Guidelines recommend glucose monitoring every 3 months for the first year for people living with HIV transitioned to DTG. The patient was switched to DTG (in TLD) 18 months ago. There is no record of structured glucose monitoring during the first year on DTG, and the patient now presents with impaired fasting glucose and pre-diabetes.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Implement guideline-recommended glucose monitoring schedule and assess for diabetes.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"KINTU_PLAN_REVIEW_003\",\n    \"title\": \"No clinician assessment or plan documented\",\n    \"message\": \"The clinician's assessment and plan for today's visit is documented as 'none written'. The patient presents with significant new findings including substantial weight gain, acanthosis nigricans, pre-diabetes, dyslipidemia, and elevated blood pressure. A clinical plan is required to address these metabolic complications and cardiovascular risk factors.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Document a clinical assessment and management plan addressing weight gain, glycemic control, lipids, and blood pressure.\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+    "page_number": 8,
+    "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: The provided guideline excerpts do not contain specific information on managing weight gain or metabolic changes associated with DTG or other ART drugs to inform a regimen decision.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Possible ART-associated weight gain and metabolic syndrome\",\n      \"action\": \"Uncertain: Order fasting glucose, lipid profile, and HbA1c to assess for diabetes and dyslipidemia.\",\n      \"reason\": \"Uncertain: The guideline excerpts provided do not specify tests for confirming drug toxicity related to weight gain and metabolic changes.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not mention the patient's weight gain or metabolic findings.\"\n      }\n    },\n    {\n      \"problem\": \"Elevated blood pressure\",\n      \"action\": \"Uncertain: Monitor blood pressure and assess for hypertension.\",\n      \"reason\": \"Uncertain: The guideline excerpts provided do not contain specific guidance on managing elevated BP in the context of ART or weight gain.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not address the elevated blood pressure finding.\"\n      }\n    },\n    {\n      \"problem\": \"Fatigue\",\n      \"action\": \"Uncertain: Assess for underlying causes including anemia, thyroid dysfunction, or depression.\",\n      \"reason\": \"Uncertain: The guideline excerpts provided do not contain specific guidance on evaluating fatigue in patients on ART.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not address the patient's complaint of fatigue.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Uncertain: The guideline excerpts provided do not specify a monitoring plan for the issues presented.\",\n  \"patient_counselling\": [\n    \"Discuss healthy diet and physical activity for weight management.\",\n    \"Explain the potential link between certain HIV medications and weight gain.\",\n    \"Advise on regular monitoring of blood pressure and blood sugar.\"\n  ]\n}",
+ "plan_issues": []
+}

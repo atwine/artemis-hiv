@@ -153,3 +153,38 @@ artemis/ai/client.py	list_ollama_models	Lists the models on the local Ollama ser
 artemis/patient/store.py	read_json_list	Reads a saved list file; a damaged file is reported, never read as empty.	artemis/patient/store.py	moved
 artemis/patient/store.py	write_json_list	Replaces a saved list file in one step, so a crash can't leave it half-written.	artemis/patient/store.py	moved
 artemis/plan/flow.py	_reason_updated_management_plan._cut	Adds "cut_off" to a plan's failed checks when the server stopped the reply at its length limit.	artemis/plan/flow.py	moved
+artemis/evaluation/cases.py	MatchRule.from_json	Reads a word rule from a case file, refusing an empty or malformed one.	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	MatchRule.matches	Says whether alert text has a word from every group of the rule.	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	_ids_unique	Refuses two answer-key entries with the same id.	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	_parse_key	Reads and checks a case's answer key.	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	load_case	Reads one evaluation case: the frozen patient record and its answer key.	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	load_cases	Reads every evaluation case in a folder.	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	case_file_name	Turns a case id into a safe file name.	artemis/evaluation/cases.py	moved
+artemis/evaluation/scoring.py	alert_text	Joins an alert's title, message and recommended action for matching.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/scoring.py	score_run	Scores one run: problems caught and missed, extra alerts, must-not items said.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/scoring.py	Summary._share	Divides, or gives no number when there is nothing to count.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/scoring.py	Summary.sensitivity	Share of expected problems caught.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/scoring.py	Summary.precision	Share of alerts that caught an expected problem.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/scoring.py	Summary.specificity	Share of should-be-clear runs with no alert.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/scoring.py	summarize	Totals many runs into the Phase 2 measures, including run-to-run agreement.	artemis/evaluation/scoring.py	moved
+artemis/evaluation/cases.py	_items	Reads a list of id, summary and word-rule items (must-not and also-fine).	artemis/evaluation/cases.py	moved
+artemis/evaluation/cases.py	MatchRule.matches.said	Says whether a word appears, optionally skipping uses said in the negative.	artemis/evaluation/cases.py	moved
+artemis/evaluation/runner.py	MeteredClient.__init__	Wraps a model client to keep the usage of each call.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	MeteredClient.chat	Passes a call to the model and keeps the usage the server reported.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	MeteredClient.__getattr__	Passes everything else through to the wrapped client.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	cost_of	Dollars for a list of calls: the server's figure, or tokens times the listed price.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	check_budget	Refuses a run whose worst-case cost would pass the cap.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	run_file_name	The saved file name for one case and repeat.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	pending_runs	Lists the case runs not saved yet, so a stopped run resumes.	artemis/evaluation/runner.py	moved
+artemis/evaluation/runner.py	run_case	Runs one case through the app's analysis with a model and returns the record to save.	artemis/evaluation/runner.py	moved
+artemis/ai/client.py	OpenAICompatClient.last_usage	Gives the usage the server reported for the last reply.	artemis/ai/client.py	moved
+artemis/evaluation/afrimedqa.py	load_questions	Reads the AfriMed-QA multiple-choice questions that are infectious disease or mention HIV.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	messages	Builds the quiz prompt, saying how many options to pick.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	answer_format	The quiz reply format: the right number of the question's own option keys.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	read_answer	Reads the option keys out of a model's reply.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	score	Says whether an answer names exactly the correct options.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	answered_ids	Lists the questions already answered, so a stopped quiz run resumes.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	result_row	One saved quiz answer: the question id and the model's answer, never the question text.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/afrimedqa.py	accuracy	Right answers over questions asked, for all, HIV-related and infectious-disease questions.	artemis/evaluation/afrimedqa.py	moved
+artemis/evaluation/runner.py	spent_in	Adds up the dollars recorded in saved case runs and quiz answers under a folder.	artemis/evaluation/runner.py	moved
+artemis/evaluation/scoring.py	RunScore.caught_by_ai	The expected problems an AI alert caught, leaving out the fixed-rule alerts every model shares.	artemis/evaluation/scoring.py	moved

@@ -1,0 +1,186 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "llama-a100",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 4,
+ "temperature": null,
+ "seconds": 26.2,
+ "calls": [
+  {
+   "prompt_tokens": 1545,
+   "total_tokens": 1898,
+   "completion_tokens": 353,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2395,
+   "total_tokens": 2835,
+   "completion_tokens": 440,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU_001",
+   "title": "Weight Gain on TLD",
+   "message": "Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of certain ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor weight, provide diet and exercise advice",
+    "citations": [
+     {
+      "page_number": 8,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_001",
+     "title": "Weight Gain on TLD",
+     "message": "Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of certain ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor weight, provide diet and exercise advice",
+     "citations": [
+      {
+       "page_number": 8,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_002",
+   "title": "Impaired Fasting Glucose",
+   "message": "Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Schedule glucose monitoring",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_002",
+     "title": "Impaired Fasting Glucose",
+     "message": "Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Schedule glucose monitoring",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_003",
+   "title": "Blood Pressure Elevation",
+   "message": "Patient's current blood pressure is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address blood pressure monitoring in this context, but regular checks are prudent.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "low",
+    "recommended_action": "Monitor blood pressure regularly",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_003",
+     "title": "Blood Pressure Elevation",
+     "message": "Patient's current blood pressure is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address blood pressure monitoring in this context, but regular checks are prudent.",
+     "issue_type": "information_gap",
+     "severity": "low",
+     "recommended_action": "Monitor blood pressure regularly",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1"
+  ],
+  "KINTU_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4"
+  ],
+  "KINTU_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "KINTU_003": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_001\",\n    \"title\": \"Weight Gain on TLD\",\n    \"message\": \"Guidelines suggest discussing weight gain possibility when starting ART. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m². Evidence for drug attribution includes the known effect of certain ART regimens on weight. However, non-drug causes such as diet and exercise should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor weight, provide diet and exercise advice\",\n    \"citations\": [{\"page_number\": 8, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_002\",\n    \"title\": \"Impaired Fasting Glucose\",\n    \"message\": \"Patient's fasting glucose is 118 mg/dL, indicating impaired glucose regulation. Guidelines suggest glucose monitoring every 3 months for the first year after transitioning to DTG. The patient's weight gain and family history of Type 2 Diabetes are additional risk factors.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Schedule glucose monitoring\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_003\",\n    \"title\": \"Blood Pressure Elevation\",\n    \"message\": \"Patient's current blood pressure is 138/88 mmHg, which is higher than baseline. This could be related to weight gain or other factors. Guidelines do not specifically address blood pressure monitoring in this context, but regular checks are prudent.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Monitor blood pressure regularly\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p8_c4",
+    "page_number": 8,
+    "quote": "ght. * The possibility of weight gain should be discussed by clinicians when starting all ART regimens, as obesity is an increasing problem in HIV care, particularly but not exclusively amongst women. * Proactive advice for preventing weight gain through diet and exercise should be given to all patients starting or switching ART. Evidence is accumulating for specific weight loss therapies such as GLP-1 agonists, but these are likely to be unaffordable and out of reach of the "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information from guideline excerpts and patient data to determine potential drug toxicity from current ART medications\", \"reason\": \"Patient presents with weight gain and fatigue since starting current HIV medication, but guideline excerpts do not provide specific information on managing these symptoms as potential drug toxicity from TDF, 3TC, or DTG\"}, \n\"problems\": [{\"problem\": \"Weight gain\", \"action\": \"Uncertain: need more information on potential relationship between weight gain and current ART regimen\", \"reason\": \"Patient has gained a significant amount of weight since starting current HIV medication, which may be related to the medication regimen\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address the patient's weight gain\"}}, \n{\"problem\": \"Fatigue\", \"action\": \"Uncertain: need more information on potential relationship between fatigue and current ART regimen\", \"reason\": \"Patient reports feeling more tired than usual since starting current HIV medication, which may be related to the medication regimen\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address the patient's fatigue\"}}], \n\"monitoring_plan\": \"Monitor weight, BMI, and fasting glucose levels, and assess for signs of peripheral neuropathy or other potential side effects of TDF, 3TC, or DTG\", \n\"patient_counselling\": [\"Discuss potential side effects of current ART regimen with patient\", \"Encourage patient to report any changes in symptoms or side effects\", \"Provide guidance on healthy lifestyle habits to manage weight gain and fatigue\"]}",
+ "plan_issues": []
+}

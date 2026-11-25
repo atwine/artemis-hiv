@@ -1,0 +1,127 @@
+{
+ "case_id": "P002",
+ "model": "llama-a100-t0",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 17.6,
+ "calls": [
+  {
+   "prompt_tokens": 1565,
+   "total_tokens": 1821,
+   "completion_tokens": 256,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2243,
+   "total_tokens": 2505,
+   "completion_tokens": 262,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_001",
+   "title": "Viral Load Monitoring",
+   "message": "Guidelines recommend checking viral load every 6 months for patients on DTG-based first-line ART. Patient's last viral load was 129 days before the visit, which is within the recommended timeframe. However, the next viral load check is due soon.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule next viral load check",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_001",
+     "title": "Viral Load Monitoring",
+     "message": "Guidelines recommend checking viral load every 6 months for patients on DTG-based first-line ART. Patient's last viral load was 129 days before the visit, which is within the recommended timeframe. However, the next viral load check is due soon.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Schedule next viral load check",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_002",
+   "title": "Creatinine Monitoring",
+   "message": "Patient's creatinine level was 76 umol/L 38 days before the visit. Guidelines do not specify the exact monitoring frequency for creatinine, but it is essential to continue monitoring renal function in patients on TDF.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue monitoring renal function",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P002_002",
+     "title": "Creatinine Monitoring",
+     "message": "Patient's creatinine level was 76 umol/L 38 days before the visit. Guidelines do not specify the exact monitoring frequency for creatinine, but it is essential to continue monitoring renal function in patients on TDF.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue monitoring renal function",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "P002_002": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_001\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend checking viral load every 6 months for patients on DTG-based first-line ART. Patient's last viral load was 129 days before the visit, which is within the recommended timeframe. However, the next viral load check is due soon.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule next viral load check\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"P002_002\",\n    \"title\": \"Creatinine Monitoring\",\n    \"message\": \"Patient's creatinine level was 76 umol/L 38 days before the visit. Guidelines do not specify the exact monitoring frequency for creatinine, but it is essential to continue monitoring renal function in patients on TDF.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue monitoring renal function\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient is stable with no reported complaints or abnormalities, and viral load is suppressed at 20 copies/mL.\"},\n\"problems\": [\n{\"problem\": \"Potential renal toxicity from TDF\", \"action\": \"Monitor creatinine levels regularly\", \"reason\": \"TDF can cause renal toxicity, and patient's latest creatinine level was 76 umol/L\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"Current plan does not mention monitoring for TDF toxicity\"}},\n{\"problem\": \"Potential DTG toxicity\", \"action\": \"Uncertain: guideline excerpts do not provide clear information on DTG toxicity monitoring\", \"reason\": \"Guideline excerpts mention contraindications for DTG but do not provide guidance on toxicity monitoring\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not mention DTG toxicity monitoring\"}}\n],\n\"monitoring_plan\": \"Monitor viral load and creatinine levels every 6 months, or as clinically indicated\",\n\"patient_counselling\": [\"Adhere to medication regimen\", \"Report any changes in symptoms or side effects\", \"Attend regular follow-up appointments\"]}",
+ "plan_issues": []
+}

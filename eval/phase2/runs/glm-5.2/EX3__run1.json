@@ -1,0 +1,234 @@
+{
+ "case_id": "EX3",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 21.0,
+ "calls": [
+  {
+   "prompt_tokens": 2038,
+   "completion_tokens": 1000,
+   "total_tokens": 3038,
+   "cost": 0.00346852,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00346852,
+    "upstream_inference_prompt_cost": 0.00104852,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2067,
+   "completion_tokens": 817,
+   "total_tokens": 2884,
+   "cost": 0.00260157,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00260157,
+    "upstream_inference_prompt_cost": 0.00064077,
+    "upstream_inference_completions_cost": 0.0019608
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2949,
+   "completion_tokens": 833,
+   "total_tokens": 3782,
+   "cost": 0.00384424,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00384424,
+    "upstream_inference_prompt_cost": 0.00182838,
+    "upstream_inference_completions_cost": 0.00201586
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00991433,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_001",
+   "title": "Uncontrolled hypothyroidism despite levothyroxine",
+   "message": "Patient has TSH 12.4 mIU/L (target below 4.5) with low Free T4, confirming persistent hypothyroidism. She reports often forgetting her thyroid tablet, which is the likely primary cause. Symptoms include tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes—all classic hypothyroid features. Hypothyroidism itself causes weight gain and can elevate LDL and triglycerides. The clinician plans to switch DTG for weight gain, but much of the weight gain (9 kg over 1 year) and dyslipidaemia may be attributable to untreated hypothyroidism rather than DTG. The guideline excerpt notes the DTG-weight-gain association may not be causal. Optimising levothyroxine adherence and dose should precede any ART change.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Address levothyroxine adherence and up-titrate dose to normalise TSH before attributing weight gain to DTG. Reassess symptoms and lipids after TSH normalises.",
+    "citations": [
+     {
+      "page_number": 7,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_001",
+     "title": "Uncontrolled hypothyroidism despite levothyroxine",
+     "message": "Patient has TSH 12.4 mIU/L (target below 4.5) with low Free T4, confirming persistent hypothyroidism. She reports often forgetting her thyroid tablet, which is the likely primary cause. Symptoms include tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes—all classic hypothyroid features. Hypothyroidism itself causes weight gain and can elevate LDL and triglycerides. The clinician plans to switch DTG for weight gain, but much of the weight gain (9 kg over 1 year) and dyslipidaemia may be attributable to untreated hypothyroidism rather than DTG. The guideline excerpt notes the DTG-weight-gain association may not be causal. Optimising levothyroxine adherence and dose should precede any ART change.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Address levothyroxine adherence and up-titrate dose to normalise TSH before attributing weight gain to DTG. Reassess symptoms and lipids after TSH normalises.",
+     "citations": [
+      {
+       "page_number": 7,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_002",
+   "title": "Dyslipidaemia and hyperglycaemia risk with BMI 33",
+   "message": "Guidelines require checking glucose when 2+ hyperglycaemia risk factors are present (age ≥30, BMI ≥25). This patient has BMI 33 and age 45. Fasting glucose 5.6 mmol/L is borderline. LDL 4.2, total cholesterol 6.4, and triglycerides 2.3 mmol/L are all elevated. TDF can contribute to lipid abnormalities, and uncontrolled hypothyroidism worsens dyslipidaemia. DTG-associated weight gain may compound metabolic risk. The clinician's plan does not address the dyslipidaemia or cardiovascular risk.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Address dyslipidaemia: optimise thyroid function first, consider dietary intervention, and repeat lipid panel after TSH normalisation. Evaluate need for lipid-lowering therapy.",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_002",
+     "title": "Dyslipidaemia and hyperglycaemia risk with BMI 33",
+     "message": "Guidelines require checking glucose when 2+ hyperglycaemia risk factors are present (age ≥30, BMI ≥25). This patient has BMI 33 and age 45. Fasting glucose 5.6 mmol/L is borderline. LDL 4.2, total cholesterol 6.4, and triglycerides 2.3 mmol/L are all elevated. TDF can contribute to lipid abnormalities, and uncontrolled hypothyroidism worsens dyslipidaemia. DTG-associated weight gain may compound metabolic risk. The clinician's plan does not address the dyslipidaemia or cardiovascular risk.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Address dyslipidaemia: optimise thyroid function first, consider dietary intervention, and repeat lipid panel after TSH normalisation. Evaluate need for lipid-lowering therapy.",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_003",
+   "title": "Viral load monitoring overdue per guideline schedule",
+   "message": "Guidelines state patients on DTG-based first-line ART should have VL checked every 6 months, reducible to 12 monthly if VL <50 for >1 year with reliable adherence. Last VL was <50 on 2025-11-10, 106 days ago. While not yet critically overdue, no VL is ordered in today's plan. If the clinician is considering switching DTG, confirming virological suppression before any regimen change is essential.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Confirm viral load is current before switching regimen. If last VL <50 was the first suppressed result, next VL due around May 2026 per 6-month schedule.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_003",
+     "title": "Viral load monitoring overdue per guideline schedule",
+     "message": "Guidelines state patients on DTG-based first-line ART should have VL checked every 6 months, reducible to 12 monthly if VL <50 for >1 year with reliable adherence. Last VL was <50 on 2025-11-10, 106 days ago. While not yet critically overdue, no VL is ordered in today's plan. If the clinician is considering switching DTG, confirming virological suppression before any regimen change is essential.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Confirm viral load is current before switching regimen. If last VL <50 was the first suppressed result, next VL due around May 2026 per 6-month schedule.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+  ],
+  "EX3_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "EX3_003": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_001\",\n    \"title\": \"Uncontrolled hypothyroidism despite levothyroxine\",\n    \"message\": \"Patient has TSH 12.4 mIU/L (target below 4.5) with low Free T4, confirming persistent hypothyroidism. She reports often forgetting her thyroid tablet, which is the likely primary cause. Symptoms include tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes—all classic hypothyroid features. Hypothyroidism itself causes weight gain and can elevate LDL and triglycerides. The clinician plans to switch DTG for weight gain, but much of the weight gain (9 kg over 1 year) and dyslipidaemia may be attributable to untreated hypothyroidism rather than DTG. The guideline excerpt notes the DTG-weight-gain association may not be causal. Optimising levothyroxine adherence and dose should precede any ART change.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Address levothyroxine adherence and up-titrate dose to normalise TSH before attributing weight gain to DTG. Reassess symptoms and lipids after TSH normalises.\",\n    \"citations\": [\n      {\"page_number\": 7, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX3_002\",\n    \"title\": \"Dyslipidaemia and hyperglycaemia risk with BMI 33\",\n    \"message\": \"Guidelines require checking glucose when 2+ hyperglycaemia risk factors are present (age ≥30, BMI ≥25). This patient has BMI 33 and age 45. Fasting glucose 5.6 mmol/L is borderline. LDL 4.2, total cholesterol 6.4, and triglycerides 2.3 mmol/L are all elevated. TDF can contribute to lipid abnormalities, and uncontrolled hypothyroidism worsens dyslipidaemia. DTG-associated weight gain may compound metabolic risk. The clinician's plan does not address the dyslipidaemia or cardiovascular risk.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Address dyslipidaemia: optimise thyroid function first, consider dietary intervention, and repeat lipid panel after TSH normalisation. Evaluate need for lipid-lowering therapy.\",\n    \"citations\": [\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX3_003\",\n    \"title\": \"Viral load monitoring overdue per guideline schedule\",\n    \"message\": \"Guidelines state patients on DTG-based first-line ART should have VL checked every 6 months, reducible to 12 monthly if VL <50 for >1 year with reliable adherence. Last VL was <50 on 2025-11-10, 106 days ago. While not yet critically overdue, no VL is ordered in today's plan. If the clinician is considering switching DTG, confirming virological suppression before any regimen change is essential.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Confirm viral load is current before switching regimen. If last VL <50 was the first suppressed result, next VL due around May 2026 per 6-month schedule.\",\n    \"citations\": [\n      {\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+    "page_number": 7,
+    "quote": "te to better outcomes for both mother and child. 30-33 Therefore, as for all adults, DTG is recommended as first-line treatment for pregnant and breastfeeding women, and for women of reproductive age. Contrary to initial speculation that the integrase inhibitor class may cause weight gain, the association now appears not to be causal. Instead, the association may be the result of comparatively less metabolic toxicity than alternative older ART regimens (that impair weight gai"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Uncertain\",\"reason\":\"Uncertain: the provided guideline excerpts do not contain specific guidance on switching DTG for weight gain, and the patient's symptoms (tiredness, feeling cold, constipation, dry skin, periorbital puffiness, delayed reflexes) are more consistent with inadequately treated hypothyroidism than DTG toxicity.\"},\"problems\":[{\"problem\":\"Uncontrolled hypothyroidism with patient forgetting levothyroxine doses\",\"action\":\"Check TSH and free T4 to confirm current thyroid status; reinforce adherence counseling for levothyroxine and consider dose adjustment if TSH is elevated.\",\"reason\":\"Patient reports forgetting thyroid tablets and has classic hypothyroid features (tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, delayed ankle reflexes) which may be driving symptoms attributed to ART.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan only continues levothyroxine 50 mcg without checking thyroid function or addressing the reported missed doses.\"}},{\"problem\":\"Significant weight gain (12 kg over 3 years, 9 kg over past year) with BMI now 33\",\"action\":\"Uncertain: the provided excerpts do not contain specific guidance on managing DTG-associated weight gain or switching criteria for obesity.\",\"reason\":\"Patient has gained 12 kg since starting TLD with BMI now 33, and the clinician is considering switching from DTG, but the excerpts do not provide guidance on this scenario.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician identifies the weight gain and is considering switching DTG but has not ordered any labs or made a definitive decision.\"}},{\"problem\":\"Dyslipidemia with elevated LDL (4.2 mmol/L), total cholesterol (6.4 mmol/L), and triglycerides (2.3 mmol/L)\",\"action\":\"Uncertain: the provided excerpts do not contain specific lipid management thresholds or interventions for patients on ART.\",\"reason\":\"Today's fasting lipid panel shows elevated LDL, total cholesterol, and triglycerides which may be related to weight gain, diet, or ART, but the excerpts do not provide guidance on lipid management.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention the abnormal lipid results or any lipid management strategy.\"}},{\"problem\":\"Potential drug interaction between amitriptyline and current symptoms\",\"action\":\"Review amitriptyline indication and consider whether it contributes to weight gain, constipation, or low mood; consider dose reduction or alternative if clinically indicated.\",\"reason\":\"Amitriptyline 50 mg nightly can cause weight gain, constipation, and sedation, which overlap with the patient's current complaints and may confound the assessment of ART toxicity.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not consider amitriptyline as a contributor to the patient's symptoms or weight gain.\"}}],\"monitoring_plan\":\"Check TSH and free T4 now to assess thyroid control; repeat fasting lipid panel in 3 months; monitor weight and BMI trend; check creatinine if regimen is changed; viral load remains suppressed (<50 copies/mL, Nov 2025) — next VL per routine schedule.\",\"patient_counselling\":[\"Emphasize importance of taking levothyroxine every morning on an empty stomach and not missing doses, as uncontrolled hypothyroidism can cause tiredness, weight gain, and constipation.\",\"Discuss that weight gain may be multifactorial including DTG, improved health, hypothyroidism, and amitriptyline — a decision about switching ART should wait until thyroid status is clarified.\",\"Encourage dietary changes and physical activity given BMI 33 and abnormal lipid panel.\",\"Inform patient that lipid results are elevated and will need repeat testing and possible lifestyle or medical intervention.\"]}",
+ "plan_issues": []
+}

@@ -1,0 +1,272 @@
+{
+ "case_id": "EX3",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 39.1,
+ "calls": [
+  {
+   "prompt_tokens": 2038,
+   "completion_tokens": 985,
+   "total_tokens": 3023,
+   "cost": 0.00299578,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00299578,
+    "upstream_inference_prompt_cost": 0.00063178,
+    "upstream_inference_completions_cost": 0.002364
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2949,
+   "completion_tokens": 1244,
+   "total_tokens": 4193,
+   "cost": 0.004356839,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.004356839,
+    "upstream_inference_prompt_cost": 0.001896207,
+    "upstream_inference_completions_cost": 0.002460632
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.007352619,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_HYPOTHYROID_UNCONTROLLED",
+   "title": "Uncontrolled hypothyroidism likely driving weight gain and symptoms",
+   "message": "Patient has TSH 12.4 mIU/L with low free T4 despite levothyroxine 50 mcg, plus tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflex relaxation — classic overt hypothyroidism. She reports often forgetting the thyroid tablet, making under-treatment and poor adherence the most likely explanation. Weight gain of 9 kg over the past year is more consistent with untreated hypothyroidism than with DTG, which guidelines note may not be causally associated with weight gain. Switching DTG for weight gain would be a misattribution while the thyroid is uncontrolled. Fasting glucose 5.6 mmol/L is not diabetic range, further arguing against DTG-driven metabolic dysfunction.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Do not switch DTG for weight gain at this visit. Address levothyroxine adherence, recheck TSH after adherence improvement, and consider dose titration per endocrine guidance.",
+    "citations": [
+     {
+      "page_number": 7,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_HYPOTHYROID_UNCONTROLLED",
+     "title": "Uncontrolled hypothyroidism likely driving weight gain and symptoms",
+     "message": "Patient has TSH 12.4 mIU/L with low free T4 despite levothyroxine 50 mcg, plus tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflex relaxation — classic overt hypothyroidism. She reports often forgetting the thyroid tablet, making under-treatment and poor adherence the most likely explanation. Weight gain of 9 kg over the past year is more consistent with untreated hypothyroidism than with DTG, which guidelines note may not be causally associated with weight gain. Switching DTG for weight gain would be a misattribution while the thyroid is uncontrolled. Fasting glucose 5.6 mmol/L is not diabetic range, further arguing against DTG-driven metabolic dysfunction.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Do not switch DTG for weight gain at this visit. Address levothyroxine adherence, recheck TSH after adherence improvement, and consider dose titration per endocrine guidance.",
+     "citations": [
+      {
+       "page_number": 7,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_DTG_SWITCH_MISATTRIBUTION",
+   "title": "Planned DTG switch conflicts with guideline evidence on weight gain",
+   "message": "Guidelines state the association between integrase inhibitors and weight gain now appears not to be causal, possibly reflecting less metabolic toxicity than older regimens. The clinician plans to switch from DTG because of weight gain, but this patient has a clear alternative cause: overt hypothyroidism with TSH 12.4 and low free T4, plus poor levothyroxine adherence. Viral load is suppressed on the current regimen. Switching away from DTG risks losing a well-tolerated, effective first-line regimen without addressing the actual cause of weight gain.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Defer DTG switch. Correct hypothyroidism and reassess weight after thyroid control before considering any ART change.",
+    "citations": [
+     {
+      "page_number": 7,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_DTG_SWITCH_MISATTRIBUTION",
+     "title": "Planned DTG switch conflicts with guideline evidence on weight gain",
+     "message": "Guidelines state the association between integrase inhibitors and weight gain now appears not to be causal, possibly reflecting less metabolic toxicity than older regimens. The clinician plans to switch from DTG because of weight gain, but this patient has a clear alternative cause: overt hypothyroidism with TSH 12.4 and low free T4, plus poor levothyroxine adherence. Viral load is suppressed on the current regimen. Switching away from DTG risks losing a well-tolerated, effective first-line regimen without addressing the actual cause of weight gain.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Defer DTG switch. Correct hypothyroidism and reassess weight after thyroid control before considering any ART change.",
+     "citations": [
+      {
+       "page_number": 7,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_HYPERGLYCAEMIA_SCREENING",
+   "title": "Hyperglycaemia risk factors warrant glucose screening on DTG",
+   "message": "Guidelines recommend checking glucose in patients starting or transitioning to DTG who have two or more hyperglycaemia risk factors (age ≥30, BMI ≥25, hypertension, family history of diabetes). This patient has at least two risk factors: age 45 and BMI 33. Today's fasting glucose of 5.6 mmol/L is reassuring and below diabetic range, but guidelines support glucose monitoring in this context. No further action beyond awareness of the result is needed today given the normal value.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Note fasting glucose 5.6 mmol/L is normal. Continue periodic glucose monitoring given BMI 33 and age per guideline risk-factor screening.",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_HYPERGLYCAEMIA_SCREENING",
+     "title": "Hyperglycaemia risk factors warrant glucose screening on DTG",
+     "message": "Guidelines recommend checking glucose in patients starting or transitioning to DTG who have two or more hyperglycaemia risk factors (age ≥30, BMI ≥25, hypertension, family history of diabetes). This patient has at least two risk factors: age 45 and BMI 33. Today's fasting glucose of 5.6 mmol/L is reassuring and below diabetic range, but guidelines support glucose monitoring in this context. No further action beyond awareness of the result is needed today given the normal value.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Note fasting glucose 5.6 mmol/L is normal. Continue periodic glucose monitoring given BMI 33 and age per guideline risk-factor screening.",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_VL_MONITORING_DUE",
+   "title": "Viral load monitoring interval approaching on DTG regimen",
+   "message": "Guidelines specify viral load checks every 6 months for patients on two NRTIs plus DTG, reducible to 12-monthly only if VL <50 copies/mL for over a year with reliable adherence. Last viral load was <50 copies/mL on 2025-11-10, 106 days ago. The next 6-monthly viral load is due around May 2026. No viral load was ordered today, which is acceptable timing-wise but should be scheduled.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule next viral load for approximately May 2026 per 6-monthly DTG monitoring schedule.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_VL_MONITORING_DUE",
+     "title": "Viral load monitoring interval approaching on DTG regimen",
+     "message": "Guidelines specify viral load checks every 6 months for patients on two NRTIs plus DTG, reducible to 12-monthly only if VL <50 copies/mL for over a year with reliable adherence. Last viral load was <50 copies/mL on 2025-11-10, 106 days ago. The next 6-monthly viral load is due around May 2026. No viral load was ordered today, which is acceptable timing-wise but should be scheduled.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Schedule next viral load for approximately May 2026 per 6-monthly DTG monitoring schedule.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_AMITRIPTYLINE_HYPOTHYROID",
+   "title": "Amitriptyline effects may compound hypothyroid symptoms",
+   "message": "Amitriptyline 50 mg nightly can cause weight gain, constipation, and sedation, which overlap with and may compound the patient's hypothyroid symptoms of weight gain, constipation, and tiredness. This contributes to the clinical picture but is a secondary factor compared to the overtly elevated TSH of 12.4 with low free T4. Distinguishing contributors matters for treatment: correcting hypothyroidism should be prioritised, and amitriptyline review may be considered if symptoms persist after thyroid correction.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "moderate",
+    "recommended_action": "Review amitriptyline necessity and dose with mental health team after thyroid correction; consider alternatives if weight and sedation remain problematic.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_AMITRIPTYLINE_HYPOTHYROID",
+     "title": "Amitriptyline effects may compound hypothyroid symptoms",
+     "message": "Amitriptyline 50 mg nightly can cause weight gain, constipation, and sedation, which overlap with and may compound the patient's hypothyroid symptoms of weight gain, constipation, and tiredness. This contributes to the clinical picture but is a secondary factor compared to the overtly elevated TSH of 12.4 with low free T4. Distinguishing contributors matters for treatment: correcting hypothyroidism should be prioritised, and amitriptyline review may be considered if symptoms persist after thyroid correction.",
+     "issue_type": "medication_safety",
+     "severity": "moderate",
+     "recommended_action": "Review amitriptyline necessity and dose with mental health team after thyroid correction; consider alternatives if weight and sedation remain problematic.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_HYPOTHYROID_UNCONTROLLED": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+  ],
+  "EX3_DTG_SWITCH_MISATTRIBUTION": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4"
+  ],
+  "EX3_HYPERGLYCAEMIA_SCREENING": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "EX3_VL_MONITORING_DUE": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "EX3_AMITRIPTYLINE_HYPOTHYROID": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_HYPOTHYROID_UNCONTROLLED\",\n    \"title\": \"Uncontrolled hypothyroidism likely driving weight gain and symptoms\",\n    \"message\": \"Patient has TSH 12.4 mIU/L with low free T4 despite levothyroxine 50 mcg, plus tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflex relaxation — classic overt hypothyroidism. She reports often forgetting the thyroid tablet, making under-treatment and poor adherence the most likely explanation. Weight gain of 9 kg over the past year is more consistent with untreated hypothyroidism than with DTG, which guidelines note may not be causally associated with weight gain. Switching DTG for weight gain would be a misattribution while the thyroid is uncontrolled. Fasting glucose 5.6 mmol/L is not diabetic range, further arguing against DTG-driven metabolic dysfunction.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Do not switch DTG for weight gain at this visit. Address levothyroxine adherence, recheck TSH after adherence improvement, and consider dose titration per endocrine guidance.\",\n    \"citations\": [{\"page_number\": 7, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4\"}]\n  },\n  {\n    \"alert_id\": \"EX3_DTG_SWITCH_MISATTRIBUTION\",\n    \"title\": \"Planned DTG switch conflicts with guideline evidence on weight gain\",\n    \"message\": \"Guidelines state the association between integrase inhibitors and weight gain now appears not to be causal, possibly reflecting less metabolic toxicity than older regimens. The clinician plans to switch from DTG because of weight gain, but this patient has a clear alternative cause: overt hypothyroidism with TSH 12.4 and low free T4, plus poor levothyroxine adherence. Viral load is suppressed on the current regimen. Switching away from DTG risks losing a well-tolerated, effective first-line regimen without addressing the actual cause of weight gain.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Defer DTG switch. Correct hypothyroidism and reassess weight after thyroid control before considering any ART change.\",\n    \"citations\": [{\"page_number\": 7, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4\"}]\n  },\n  {\n    \"alert_id\": \"EX3_HYPERGLYCAEMIA_SCREENING\",\n    \"title\": \"Hyperglycaemia risk factors warrant glucose screening on DTG\",\n    \"message\": \"Guidelines recommend checking glucose in patients starting or transitioning to DTG who have two or more hyperglycaemia risk factors (age ≥30, BMI ≥25, hypertension, family history of diabetes). This patient has at least two risk factors: age 45 and BMI 33. Today's fasting glucose of 5.6 mmol/L is reassuring and below diabetic range, but guidelines support glucose monitoring in this context. No further action beyond awareness of the result is needed today given the normal value.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Note fasting glucose 5.6 mmol/L is normal. Continue periodic glucose monitoring given BMI 33 and age per guideline risk-factor screening.\",\n    \"citations\": [{\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"}]\n  },\n  {\n    \"alert_id\": \"EX3_VL_MONITORING_DUE\",\n    \"title\": \"Viral load monitoring interval approaching on DTG regimen\",\n    \"message\": \"Guidelines specify viral load checks every 6 months for patients on two NRTIs plus DTG, reducible to 12-monthly only if VL <50 copies/mL for over a year with reliable adherence. Last viral load was <50 copies/mL on 2025-11-10, 106 days ago. The next 6-monthly viral load is due around May 2026. No viral load was ordered today, which is acceptable timing-wise but should be scheduled.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule next viral load for approximately May 2026 per 6-monthly DTG monitoring schedule.\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX3_AMITRIPTYLINE_HYPOTHYROID\",\n    \"title\": \"Amitriptyline effects may compound hypothyroid symptoms\",\n    \"message\": \"Amitriptyline 50 mg nightly can cause weight gain, constipation, and sedation, which overlap with and may compound the patient's hypothyroid symptoms of weight gain, constipation, and tiredness. This contributes to the clinical picture but is a secondary factor compared to the overtly elevated TSH of 12.4 with low free T4. Distinguishing contributors matters for treatment: correcting hypothyroidism should be prioritised, and amitriptyline review may be considered if symptoms persist after thyroid correction.\",\n    \"issue_type\": \"medication_safety\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Review amitriptyline necessity and dose with mental health team after thyroid correction; consider alternatives if weight and sedation remain problematic.\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c4",
+    "page_number": 7,
+    "quote": "te to better outcomes for both mother and child. 30-33 Therefore, as for all adults, DTG is recommended as first-line treatment for pregnant and breastfeeding women, and for women of reproductive age. Contrary to initial speculation that the integrase inhibitor class may cause weight gain, the association now appears not to be causal. Instead, the association may be the result of comparatively less metabolic toxicity than alternative older ART regimens (that impair weight gai"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: the provided guideline excerpts do not contain specific guidance on switching DTG for weight gain, and the patient's symptoms (tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, delayed reflexes) are more consistent with inadequately treated hypothyroidism than DTG toxicity.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Symptoms of inadequately treated hypothyroidism (tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, delayed ankle reflexes) with frequent missed levothyroxine doses\",\n      \"action\": \"Check TSH and free T4 to assess current thyroid function and determine if levothyroxine dose adjustment is needed.\",\n      \"reason\": \"The patient reports often forgetting the thyroid tablet and has classic hypothyroidism signs on examination, suggesting current levothyroxine 50 mcg is insufficient or adherence is poor.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only continues levothyroxine 50 mcg without investigating thyroid function or addressing poor adherence despite clear hypothyroid signs.\"\n      }\n    },\n    {\n      \"problem\": \"Significant weight gain (12 kg over 3 years on TLD, 9 kg in past year) with BMI now 33\",\n      \"action\": \"Uncertain: the provided excerpts do not contain specific guidance on managing DTG-associated weight gain or criteria for switching; consider dietary and lifestyle counseling and consult full Uganda HIV guidelines for alternative regimen options if clinically indicated.\",\n      \"reason\": \"The patient has gained substantial weight on TLD reaching obese BMI, but the provided guideline excerpts do not include specific recommendations for switching DTG due to weight gain.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Gap\",\n        \"explanation\": \"The clinician notes considering switching from DTG but has not made a definitive decision, ordered no tests, and provided no weight management plan.\"\n      }\n    },\n    {\n      \"problem\": \"Dyslipidemia (LDL 4.2 mmol/L, total cholesterol 6.4 mmol/L, triglycerides 2.3 mmol/L)\",\n      \"action\": \"Uncertain: the provided excerpts do not contain lipid management thresholds for patients on ART; refer to full Uganda HIV guidelines for cardiovascular risk assessment and lipid management recommendations.\",\n      \"reason\": \"The patient has elevated LDL and total cholesterol which may be related to obesity, hypothyroidism, or ART, but the provided excerpts do not include lipid management guidance.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention the abnormal lipid results or any cardiovascular risk assessment despite LDL of 4.2 mmol/L.\"\n      }\n    },\n    {\n      \"problem\": \"Potential drug-drug interaction between amitriptyline and current medications\",\n      \"action\": \"Uncertain: the provided excerpts mention potential for hepatotoxicity with co-administration but do not give specific interaction guidance for amitriptyline with TDF/3TC/DTG.\",\n      \"reason\": \"The patient is on amitriptyline 50 mg with TLD and the guideline excerpt notes potential for hepatotoxicity with co-administration of these drugs.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not address potential drug interactions between amitriptyline and the ART regimen.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": [\n    \"Check TSH and free T4 now to evaluate thyroid function given hypothyroid signs and poor adherence\",\n    \"Repeat creatinine and eGFR (last creatinine 72 umol/L was 196 days ago) for routine TDF monitoring\",\n    \"Recheck fasting lipid panel in 3 months after thyroid optimization and lifestyle intervention\",\n    \"Repeat viral load at next scheduled visit (last VL <50 copies/mL on 2025-11-10)\",\n    \"Monitor weight and BMI trends at each visit\"\n  ],\n  \"patient_counselling\": [\n    \"Emphasize importance of taking levothyroxine daily as prescribed and not missing doses, as current symptoms suggest inadequate thyroid treatment\",\n    \"Provide dietary and physical activity counseling for weight management given BMI of 33\",\n    \"Educate on signs and symptoms of worsening hypothyroidism and when to return to clinic\"\n  ]\n}",
+ "plan_issues": []
+}

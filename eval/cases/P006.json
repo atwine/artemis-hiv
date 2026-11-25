@@ -1,0 +1,172 @@
+{
+  "case_id": "P006",
+  "source": "test patient (Data/custom_patients.json)",
+  "patient": {
+    "patient_id": "P006",
+    "age_years": 29,
+    "sex": "F",
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "other_medications": [],
+    "visits": [
+      {
+        "date": "2026-02-24",
+        "type": "intake",
+        "clinician_note": "Complaints & Symptoms:\n29-year-old woman presents for routine 3-month follow-up after initiating ART. No complaints. Feeling well, energy improved since starting treatment.\n\nExamination Findings:\nBP 110/70 mmHg. Weight 68kg (pre-pregnancy weight 62kg). Fundal height appropriate for dates. Fetal movements present. No oedema. Urine dipstick negative for protein.\n\nSignificant history prior to today's visit:\nHIV diagnosed 10 weeks ago during antenatal screening. Currently 22 weeks pregnant (second pregnancy, first child alive and well). No other medical conditions. No regular medications prior to ART. Taking ferrous sulfate and folic acid as prescribed."
+      }
+    ],
+    "labs": {
+      "labs_narrative": [
+        {
+          "date": "2026-02-24",
+          "narrative_text": "Trial--Trial",
+          "source": "today"
+        },
+        {
+          "date": "2026-02-24",
+          "narrative_text": "Creatinine: 1.1 mg/dL (baseline before ART: 0.8 mg/dL). eGFR: 78 mL/min/1.73m2. Urinalysis: Normal, no protein, no glucose. Viral load: 89 copies/mL (down from 125,000 at diagnosis). CD4: 389 cells/uL (was 312 at diagnosis). Hb: 10.8 g/dL. Phosphate: 3.8 mg/dL (normal).",
+          "source": "previous"
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-02-24",
+      "note": "",
+      "orders": [],
+      "med_changes": []
+    },
+    "intake": {
+      "complaints_symptoms": "29-year-old woman presents for routine 3-month follow-up after initiating ART. No complaints. Feeling well, energy improved since starting treatment.",
+      "examination_findings": "BP 110/70 mmHg. Weight 68kg (pre-pregnancy weight 62kg). Fundal height appropriate for dates. Fetal movements present. No oedema. Urine dipstick negative for protein.",
+      "prior_history": "HIV diagnosed 10 weeks ago during antenatal screening. Currently 22 weeks pregnant (second pregnancy, first child alive and well). No other medical conditions. No regular medications prior to ART. Taking ferrous sulfate and folic acid as prescribed."
+    },
+    "art_regimen_as_entered": "TDF/3TC/DTG (TLD) initiated 10 weeks ago."
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "iron_with_dtg",
+        "kind": "clash",
+        "summary": "Ferrous sulfate (iron) lowers DTG absorption: take DTG 2 hours before or 6 hours after it",
+        "match": [
+          [
+            "iron",
+            "ferrous",
+            "polyvalent",
+            "supplement"
+          ],
+          [
+            "dtg",
+            "dolutegravir",
+            "tld"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 49,
+          "quote": "Polyvalent cation products containing Mg, Al, Fe, Ca, Zn (e.g. vitamin supplements and antacids) DTG Reduce DTG levels Use DTG 2 hours before or 6 hours after the product to avoid interaction"
+        }
+      },
+      {
+        "id": "creatinine_rise",
+        "kind": "monitoring",
+        "summary": "Creatinine 0.8 to 1.1 mg/dL since starting TDF, in pregnancy: recheck kidney function",
+        "match": [
+          [
+            "creatinine",
+            "renal",
+            "kidney",
+            "egfr",
+            "crcl"
+          ],
+          [
+            "rise",
+            "rising",
+            "increase",
+            "elevat",
+            "1.1",
+            "recheck",
+            "repeat",
+            "monitor"
+          ]
+        ],
+        "guideline": {
+          "document": "SAHCS_Adult_ART_2024",
+          "page": 5,
+          "quote": "Tenofovir disoproxil fumarate (TDF) eGFR before initiation, then at 3 months, 6 months, and then 6-12 monthly thereafter"
+        }
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "viral_load",
+        "summary": "VL 89 copies/mL, not yet below 50: a repeat VL is reasonable",
+        "match": [
+          [
+            "viral load",
+            "vl"
+          ]
+        ]
+      },
+      {
+        "id": "anaemia",
+        "summary": "Hb 10.8 g/dL in pregnancy",
+        "match": [
+          [
+            "anaemi",
+            "anemi",
+            "haemoglobin",
+            "hemoglobin",
+            "hb"
+          ]
+        ]
+      },
+      {
+        "id": "pasted_creatinine",
+        "summary": "Creatinine recorded only as pasted text: a data-entry nudge from the rules",
+        "match": [
+          [
+            "pasted"
+          ]
+        ]
+      },
+      {
+        "id": "no_plan_written",
+        "summary": "Today's assessment and plan is empty",
+        "match": [
+          [
+            "plan",
+            "assessment"
+          ],
+          [
+            "missing",
+            "no ",
+            "not documented",
+            "empty"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "avoids_dtg_in_pregnancy",
+        "summary": "Advises avoiding or stopping DTG in pregnancy",
+        "match": [
+          [
+            "avoid dtg",
+            "stop dtg",
+            "switch from dtg",
+            "discontinue dtg",
+            "change dtg",
+            "dtg is contraindicated"
+          ]
+        ]
+      }
+    ]
+  }
+}

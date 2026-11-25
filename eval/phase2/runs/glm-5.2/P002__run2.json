@@ -1,0 +1,137 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": null,
+ "seconds": 14.7,
+ "calls": [
+  {
+   "prompt_tokens": 1535,
+   "completion_tokens": 644,
+   "total_tokens": 2179,
+   "cost": 0.002260837,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002260837,
+    "upstream_inference_prompt_cost": 0.000987005,
+    "upstream_inference_completions_cost": 0.001273832
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2220,
+   "completion_tokens": 263,
+   "total_tokens": 2483,
+   "cost": 0.00096838,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2176,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00096838,
+    "upstream_inference_prompt_cost": 0.00033192,
+    "upstream_inference_completions_cost": 0.00063646
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.003229217,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "VL_MONITORING_GAP_001",
+   "title": "Viral load monitoring overdue",
+   "message": "Guidelines state that patients on DTG-based first-line ART should have VL checked every 6 months, and if VL < 50 copies/mL for >1 year with reliable adherence, monitoring can be reduced to 12 monthly. Patient's last VL was 20 copies/mL on 2025-09-15, 129 days ago. The prior VL was 30 copies/mL on 2024-09-15. Both were suppressed. With two consecutive suppressed VLs spanning over a year and good adherence, the patient qualifies for 12-monthly VL monitoring, so the next VL would be due around 2026-09-15. No VL is currently overdue.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "No VL currently due. Schedule next VL around September 2026 per 12-monthly interval for stable suppressed patients.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "VL_MONITORING_GAP_001",
+     "title": "Viral load monitoring overdue",
+     "message": "Guidelines state that patients on DTG-based first-line ART should have VL checked every 6 months, and if VL < 50 copies/mL for >1 year with reliable adherence, monitoring can be reduced to 12 monthly. Patient's last VL was 20 copies/mL on 2025-09-15, 129 days ago. The prior VL was 30 copies/mL on 2024-09-15. Both were suppressed. With two consecutive suppressed VLs spanning over a year and good adherence, the patient qualifies for 12-monthly VL monitoring, so the next VL would be due around 2026-09-15. No VL is currently overdue.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "No VL currently due. Schedule next VL around September 2026 per 12-monthly interval for stable suppressed patients.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "VL_MONITORING_GAP_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"VL_MONITORING_GAP_001\",\n    \"title\": \"Viral load monitoring overdue\",\n    \"message\": \"Guidelines state that patients on DTG-based first-line ART should have VL checked every 6 months, and if VL < 50 copies/mL for >1 year with reliable adherence, monitoring can be reduced to 12 monthly. Patient's last VL was 20 copies/mL on 2025-09-15, 129 days ago. The prior VL was 30 copies/mL on 2024-09-15. Both were suppressed. With two consecutive suppressed VLs spanning over a year and good adherence, the patient qualifies for 12-monthly VL monitoring, so the next VL would be due around 2026-09-15. No VL is currently overdue.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"No VL currently due. Schedule next VL around September 2026 per 12-monthly interval for stable suppressed patients.\",\n    \"citations\": [{\"page_number\": 32, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient is asymptomatic, virally suppressed (VL 20 copies/mL, 2025-09-15), with normal creatinine (76 umol/L, 2025-12-15) on TDF/3TC/DTG, so no toxicity signal warrants a regimen change.\"}, \"problems\": [{\"problem\": \"No current evidence of TDF, 3TC, or DTG toxicity\", \"action\": \"Continue TDF/3TC/DTG and maintain routine toxicity screening per pharmacovigilance guidance (Box 11).\", \"reason\": \"Patient reports no complaints, examination is stable with no abnormalities, and creatinine is normal, so no drug toxicity signs are present.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan of routine follow-up for a stable, asymptomatic patient is consistent with continuing the current regimen.\"}}, {\"problem\": \"Viral load suppression needs ongoing confirmation at routine intervals\", \"action\": \"Repeat viral load per national VL monitoring schedule (e.g., annual for stable patients) and confirm DSD eligibility documentation.\", \"reason\": \"VL has been consistently suppressed (30 copies/mL in 2024, 20 copies/mL in 2025), supporting stability and DSD eligibility per guidelines.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The plan discusses DSD eligibility but does not document the next scheduled viral load test.\"}}, {\"problem\": \"Renal function monitoring on TDF not scheduled\", \"action\": \"Schedule repeat creatinine at the next routine visit (approximately 6-12 months from 2025-12-15) to monitor for TDF nephrotoxicity.\", \"reason\": \"TDF can cause renal toxicity, and while current creatinine (76 umol/L) is normal, guidelines emphasize ongoing pharmacovigilance and periodic monitoring.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Today's plan does not mention scheduling follow-up renal function testing for the patient on TDF.\"}}], \"monitoring_plan\": [\"Repeat viral load at next routine visit per annual schedule for stable patients\", \"Repeat creatinine within 6-12 months to monitor TDF renal safety\", \"Assess for new symptoms (CNS, renal, hypersensitivity) at each visit and report suspected adverse drug reactions per pharmacovigilance guidance\", \"Trigger: any new symptom, abnormal creatinine, or VL >1000 copies/mL prompts urgent review\"], \"patient_counselling\": [\"Continue taking TDF/3TC/DTG daily with good adherence as you have done since 2022\", \"Report any new symptoms such as yellow eyes, dark urine, abdominal pain, dizziness, or sleep problems immediately\", \"You may be eligible for Differentiated Service Delivery (DSD) given your stable viral suppression; discuss enrollment at next visit\", \"Attend all scheduled clinic visits and lab appointments for viral load and kidney function checks\"]}",
+ "plan_issues": []
+}

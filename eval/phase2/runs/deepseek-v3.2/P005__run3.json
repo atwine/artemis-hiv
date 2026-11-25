@@ -1,0 +1,263 @@
+{
+ "case_id": "P005",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": null,
+ "seconds": 23.4,
+ "calls": [
+  {
+   "prompt_tokens": 1479,
+   "completion_tokens": 512,
+   "total_tokens": 1991,
+   "cost": 0.000274344,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1408,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000274344,
+    "upstream_inference_prompt_cost": 5.9304e-05,
+    "upstream_inference_completions_cost": 0.00021504
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2729,
+   "completion_tokens": 653,
+   "total_tokens": 3382,
+   "cost": 0.00079646,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 960,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00079646,
+    "upstream_inference_prompt_cost": 0.0005222,
+    "upstream_inference_completions_cost": 0.00027426
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.001070804,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "protein 1+"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P005_ALERT_001",
+   "title": "Chronic Kidney Disease Risk on TDF",
+   "message": "Guidelines highlight the importance of monitoring renal function in patients on TDF, especially during intercurrent illness. The patient's creatinine has shown a steady upward trend from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026, with a current eGFR of 52 mL/min/1.73m2 indicating stage 3a chronic kidney disease (CKD). TDF is a known cause of nephrotoxicity. However, the patient's regular use of ibuprofen (an NSAID) 2-3 times weekly for headaches is a significant non-drug risk factor for CKD progression. The urinalysis showing protein 1+ further supports kidney damage.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Assess TDF-related renal toxicity, review ibuprofen use, and consider regimen switch per guidelines if CKD is confirmed.",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P005_ALERT_001",
+     "title": "Chronic Kidney Disease Risk on TDF",
+     "message": "Guidelines highlight the importance of monitoring renal function in patients on TDF, especially during intercurrent illness. The patient's creatinine has shown a steady upward trend from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026, with a current eGFR of 52 mL/min/1.73m2 indicating stage 3a chronic kidney disease (CKD). TDF is a known cause of nephrotoxicity. However, the patient's regular use of ibuprofen (an NSAID) 2-3 times weekly for headaches is a significant non-drug risk factor for CKD progression. The urinalysis showing protein 1+ further supports kidney damage.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Assess TDF-related renal toxicity, review ibuprofen use, and consider regimen switch per guidelines if CKD is confirmed.",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P005_ALERT_002",
+   "title": "Missing Clinician Assessment and Plan",
+   "message": "The clinician's assessment and plan for today's visit is documented as 'none written'. This is a critical information gap. The patient has significant new laboratory findings (worsening renal function, proteinuria) and a complaint of mild fatigue that require clinical evaluation and a management plan. A plan is necessary to address the CKD, review medications, and schedule appropriate follow-up.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "high",
+    "recommended_action": "Clinician must document an assessment and management plan addressing the abnormal labs and symptoms.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P005_ALERT_002",
+     "title": "Missing Clinician Assessment and Plan",
+     "message": "The clinician's assessment and plan for today's visit is documented as 'none written'. This is a critical information gap. The patient has significant new laboratory findings (worsening renal function, proteinuria) and a complaint of mild fatigue that require clinical evaluation and a management plan. A plan is necessary to address the CKD, review medications, and schedule appropriate follow-up.",
+     "issue_type": "information_gap",
+     "severity": "high",
+     "recommended_action": "Clinician must document an assessment and management plan addressing the abnormal labs and symptoms.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P005_ALERT_003",
+   "title": "Proteinuria and Possible Diabetes Screening",
+   "message": "The patient's urinalysis shows glucose trace and protein 1+. Guidelines link uncontrolled diabetes to complications like chronic kidney disease. While the patient has no history of diabetes, the presence of glucosuria warrants evaluation. Proteinuria is a marker of kidney damage, which aligns with the declining eGFR. These findings together indicate a need for further diagnostic workup.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Perform fasting blood glucose or HbA1c test to screen for diabetes. Investigate cause of proteinuria.",
+    "citations": [
+     {
+      "page_number": 43,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P005_ALERT_003",
+     "title": "Proteinuria and Possible Diabetes Screening",
+     "message": "The patient's urinalysis shows glucose trace and protein 1+. Guidelines link uncontrolled diabetes to complications like chronic kidney disease. While the patient has no history of diabetes, the presence of glucosuria warrants evaluation. Proteinuria is a marker of kidney damage, which aligns with the declining eGFR. These findings together indicate a need for further diagnostic workup.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Perform fasting blood glucose or HbA1c test to screen for diabetes. Investigate cause of proteinuria.",
+     "citations": [
+      {
+       "page_number": 43,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ],
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p2_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p19_c4",
+   "who_guidelines.extraction__who_guidelines.extraction__p36_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p41_c4"
+  ],
+  "P005_ALERT_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "P005_ALERT_002": [],
+  "P005_ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P005_ALERT_001\",\n    \"title\": \"Chronic Kidney Disease Risk on TDF\",\n    \"message\": \"Guidelines highlight the importance of monitoring renal function in patients on TDF, especially during intercurrent illness. The patient's creatinine has shown a steady upward trend from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026, with a current eGFR of 52 mL/min/1.73m2 indicating stage 3a chronic kidney disease (CKD). TDF is a known cause of nephrotoxicity. However, the patient's regular use of ibuprofen (an NSAID) 2-3 times weekly for headaches is a significant non-drug risk factor for CKD progression. The urinalysis showing protein 1+ further supports kidney damage.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Assess TDF-related renal toxicity, review ibuprofen use, and consider regimen switch per guidelines if CKD is confirmed.\",\n    \"citations\": [\n      {\n        \"page_number\": 40,\n        \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"\n      }\n    ]\n  },\n  {\n    \"alert_id\": \"P005_ALERT_002\",\n    \"title\": \"Missing Clinician Assessment and Plan\",\n    \"message\": \"The clinician's assessment and plan for today's visit is documented as 'none written'. This is a critical information gap. The patient has significant new laboratory findings (worsening renal function, proteinuria) and a complaint of mild fatigue that require clinical evaluation and a management plan. A plan is necessary to address the CKD, review medications, and schedule appropriate follow-up.\",\n    \"issue_type\": \"information_gap\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Clinician must document an assessment and management plan addressing the abnormal labs and symptoms.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"P005_ALERT_003\",\n    \"title\": \"Proteinuria and Possible Diabetes Screening\",\n    \"message\": \"The patient's urinalysis shows glucose trace and protein 1+. Guidelines link uncontrolled diabetes to complications like chronic kidney disease. While the patient has no history of diabetes, the presence of glucosuria warrants evaluation. Proteinuria is a marker of kidney damage, which aligns with the declining eGFR. These findings together indicate a need for further diagnostic workup.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Perform fasting blood glucose or HbA1c test to screen for diabetes. Investigate cause of proteinuria.\",\n    \"citations\": [\n      {\n        \"page_number\": 43,\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2\"\n      }\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2",
+    "page_number": 43,
+    "quote": "< 102cm for males. Adherence counselling for integrated HIV Hypertension and diabetes Care * The goal of treatment is blood pressure <140/90mmHg, Diabetes is FBG < 7mmol/l and viral load< 200copies/ml * Patients with uncontrolled hypertension and blood sugar may suffer complication such as heart attack, stroke, chronic kidney disease, blindness, numbness of limbs and heart failure, * Hypertension, diabetes and HIV/ART treatment is lifelong. * Hypertension often has no symptom"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Uncertain: The provided guideline excerpts are insufficient to assess for drug toxicity or make a regimen decision based on the patient's mild fatigue and ibuprofen use.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Mild fatigue of unclear etiology\",\n      \"action\": \"Uncertain: Order investigations to rule out common causes including anemia, renal dysfunction, and drug toxicity.\",\n      \"reason\": \"Uncertain: The guideline excerpts do not provide specific guidance on evaluating fatigue in a patient on TDF/3TC/DTG with occasional ibuprofen use.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's documented plan is empty and does not mention the patient's fatigue.\"\n      }\n    },\n    {\n      \"problem\": \"Chronic use of ibuprofen with potential for nephrotoxicity\",\n      \"action\": \"Uncertain: Counsel patient on risks of chronic NSAID use and consider renal function testing.\",\n      \"reason\": \"Uncertain: The guideline excerpts do not address management of co-medications like ibuprofen in patients on ART.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's documented plan is empty and does not address the patient's ibuprofen use.\"\n      }\n    },\n    {\n      \"problem\": \"Incomplete baseline and monitoring labs\",\n      \"action\": \"Order creatinine, eGFR, urinalysis, and a complete blood count.\",\n      \"reason\": \"Uncertain: Standard monitoring for ART and NSAID use includes renal function and hematologic parameters, but the provided excerpts lack specific guidance.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's documented plan is empty and does not include any laboratory orders.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Creatinine/eGFR, urinalysis, CBC now. Repeat in 3-6 months if normal. If abnormal, investigate cause and monitor more frequently.\",\n  \"patient_counselling\": [\n    \"Discuss risks of regular ibuprofen use, especially with TDF.\",\n    \"Reinforce ART adherence.\",\n    \"Advise to report worsening fatigue, edema, or changes in urination.\"\n  ]\n}",
+ "plan_issues": []
+}

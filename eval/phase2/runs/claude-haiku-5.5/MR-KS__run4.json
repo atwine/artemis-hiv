@@ -1,0 +1,317 @@
+{
+ "case_id": "MR-KS",
+ "model": "claude-haiku-5.5",
+ "model_id": "anthropic/claude-haiku-5.5",
+ "repeat": 4,
+ "temperature": null,
+ "seconds": 25.0,
+ "calls": [
+  {
+   "prompt_tokens": 3539,
+   "completion_tokens": 1000,
+   "total_tokens": 4539,
+   "cost": 0.0008539,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008539,
+    "upstream_inference_prompt_cost": 0.0003539,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3647,
+   "completion_tokens": 1000,
+   "total_tokens": 4647,
+   "cost": 0.0008647,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0008647,
+    "upstream_inference_prompt_cost": 0.0003647,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4923,
+   "completion_tokens": 1000,
+   "total_tokens": 5923,
+   "cost": 0.0009923,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0009923,
+    "upstream_inference_prompt_cost": 0.0004923,
+    "upstream_inference_completions_cost": 0.0005
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 5235,
+   "completion_tokens": 948,
+   "total_tokens": 6183,
+   "cost": 0.0009975,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0009975,
+    "upstream_inference_prompt_cost": 0.0005235,
+    "upstream_inference_completions_cost": 0.000474
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0037083999999999997,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MRKS_001",
+   "title": "Renal function monitoring needed on TDF with hypertension and proteinuria",
+   "message": "Guidelines require eGFR monitoring for TDF at 3 months, 6 months, then 6-12 monthly, with high-risk patients (co-existent hypertension or diabetes) needing closer monitoring. Patient has hypertension (146/94), trace proteinuria, regular ibuprofen (NSAID) use, and on TDF. Creatinine 112 umol/L is within normal limits, but eGFR is not recorded and the plan does not specify renal monitoring frequency. Serum phosphate is low (0.78 mmol/L), which may reflect TDF-associated proximal tubulopathy, though this is not explicitly addressed in the guideline excerpts provided. Non-drug causes of proteinuria (hypertensive nephropathy) remain plausible.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "high",
+    "recommended_action": "Calculate eGFR today and monitor renal function at 3 and 6 months then 6-12 monthly. Avoid TDF if eGFR <50 mL/min/1.73m2. Consider urinalysis/proteinuria follow-up and reassess NSAID use given renal risk.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_001",
+     "title": "Renal function monitoring needed on TDF with hypertension and proteinuria",
+     "message": "Guidelines require eGFR monitoring for TDF at 3 months, 6 months, then 6-12 monthly, with high-risk patients (co-existent hypertension or diabetes) needing closer monitoring. Patient has hypertension (146/94), trace proteinuria, regular ibuprofen (NSAID) use, and on TDF. Creatinine 112 umol/L is within normal limits, but eGFR is not recorded and the plan does not specify renal monitoring frequency. Serum phosphate is low (0.78 mmol/L), which may reflect TDF-associated proximal tubulopathy, though this is not explicitly addressed in the guideline excerpts provided. Non-drug causes of proteinuria (hypertensive nephropathy) remain plausible.",
+     "issue_type": "monitoring_gap",
+     "severity": "high",
+     "recommended_action": "Calculate eGFR today and monitor renal function at 3 and 6 months then 6-12 monthly. Avoid TDF if eGFR <50 mL/min/1.73m2. Consider urinalysis/proteinuria follow-up and reassess NSAID use given renal risk.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+      },
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3"
+      },
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_002",
+   "title": "Amlodipine non-adherence and peripheral oedema-related monitoring",
+   "message": "Guidelines advise observing amlodipine side effects such as lower limb oedema and considering alternatives if persistent. Patient reports heavy-feeling thighs and stiff gait, with no pedal oedema noted today. Patient misses amlodipine doses during transit, contributing to suboptimal BP control (146/94). The clinician plan refills amlodipine but does not address adherence strategies or BP target re-evaluation.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Address adherence barriers during transit; reassess BP control at follow-up and monitor for amlodipine side effects such as lower limb oedema, considering alternatives if excessive or persistent.",
+    "citations": [
+     {
+      "page_number": 45,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_002",
+     "title": "Amlodipine non-adherence and peripheral oedema-related monitoring",
+     "message": "Guidelines advise observing amlodipine side effects such as lower limb oedema and considering alternatives if persistent. Patient reports heavy-feeling thighs and stiff gait, with no pedal oedema noted today. Patient misses amlodipine doses during transit, contributing to suboptimal BP control (146/94). The clinician plan refills amlodipine but does not address adherence strategies or BP target re-evaluation.",
+     "issue_type": "plan_review",
+     "severity": "moderate",
+     "recommended_action": "Address adherence barriers during transit; reassess BP control at follow-up and monitor for amlodipine side effects such as lower limb oedema, considering alternatives if excessive or persistent.",
+     "citations": [
+      {
+       "page_number": 45,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p51_c4"
+  ],
+  "possible_proteinuria": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p4_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p52_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p30_c1"
+  ],
+  "MRKS_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+  ],
+  "MRKS_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[{\"alert_id\": \"MRKS_001\", \"title\": \"Renal function monitoring needed on TDF with hypertension and proteinuria\", \"message\": \"Guidelines require eGFR monitoring for TDF at 3 months, 6 months, then 6-12 monthly, with high-risk patients (co-existent hypertension or diabetes) needing closer monitoring. Patient has hypertension (146/94), trace proteinuria, regular ibuprofen (NSAID) use, and on TDF. Creatinine 112 umol/L is within normal limits, but eGFR is not recorded and the plan does not specify renal monitoring frequency. Serum phosphate is low (0.78 mmol/L), which may reflect TDF-associated proximal tubulopathy, though this is not explicitly addressed in the guideline excerpts provided. Non-drug causes of proteinuria (hypertensive nephropathy) remain plausible.\", \"issue_type\": \"monitoring_gap\", \"severity\": \"high\", \"recommended_action\": \"Calculate eGFR today and monitor renal function at 3 and 6 months then 6-12 monthly. Avoid TDF if eGFR <50 mL/min/1.73m2. Consider urinalysis/proteinuria follow-up and reassess NSAID use given renal risk.\", \"citations\": [{\"page_number\": 5, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4\"}, {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3\"}, {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"}]}, {\"alert_id\": \"MRKS_002\", \"title\": \"Amlodipine non-adherence and peripheral oedema-related monitoring\", \"message\": \"Guidelines advise observing amlodipine side effects such as lower limb oedema and considering alternatives if persistent. Patient reports heavy-feeling thighs and stiff gait, with no pedal oedema noted today. Patient misses amlodipine doses during transit, contributing to suboptimal BP control (146/94). The clinician plan refills amlodipine but does not address adherence strategies or BP target re-evaluation.\", \"issue_type\": \"plan_review\", \"severity\": \"moderate\", \"recommended_action\": \"Address adherence barriers during transit; reassess BP control at follow-up and monitor for amlodipine side effects such as lower limb oedema, considering alternatives if excessive or persistent.\", \"citations\": [{\"page_number\": 45, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1\"}]}]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+    "page_number": 40,
+    "quote": "6-monthly At virological/clinical failure Can be stopped if CD4+ > 200 cells/µL and virologically suppressed. Repeat CD4+ if a patient returns to care after treatment interruption to guide management. ALT Yes No If baseline ALT is normal, routine monitoring of ALT is not required. If baseline ALT is abnormal or the patient is on other hepatotoxic drugs, continue to monitor Creatinine (eGFR) Yes At 3 months, 6 months and then 6-12 monthly Also at 1 and 2 months in high-risk pa"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4",
+    "page_number": 5,
+    "quote": "frica, only co-formulated. ‡, Life-threatening reactions are indicated in **bold**. TABLE 2: Baseline investigations and monitoring required for nucleoside/nucleotide reverse transcriptase inhibitors. Generic name Monitoring required Comment Tenofovir disoproxil fumarate (TDF) eGFR before initiation, then at 3 months, 6 months, and then 6-12 monthly thereafter Avoid if eGFR < 50 mL/min/1.73m² In high-risk patients (particularly those with co-existent hypertension or diabetes)"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c3",
+    "page_number": 5,
+    "quote": "). Generic name Drug class Recommended dosage Common or severe ADR‡ Tenofovir disoproxil fumarate (TDF) NtRTI 300 mg daily Renal failure, tubular wasting syndrome, reduced bone mineral density, nausea Tenofovir alafenamide (TAF) NtRTI 25 mg daily Less renal failure and bone mineral reduction than TDF, but more weight gain and worse lipid profile Lamivudine (3TC) NRTI 150 mg 12-hourly or 300 mg daily Anaemia (pure red cell aplasia) (rare) Emtricitabine (FTC) NRTI 200 mg daily "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 45,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Uncertain\",\"reason\":\"Uncertain: the guideline excerpt provided covers only the hypertension medicine side-effect table (Table 58) and does not contain ART toxicity monitoring criteria for TDF, 3TC or EFV, so a Continue/Switch decision cannot be justified from the excerpts; however, the patient is virologically suppressed (VL <50) and CD4 is 540, which supports no immediate change pending further evaluation.\"},\"problems\":[{\"problem\":\"Possible TDF-associated renal toxicity (trace proteinuria, creatinine 112 umol/L, chronic back and thigh pain with stiff gait)\",\"action\":\"Uncertain: the excerpt does not specify TDF renal monitoring thresholds; clinician to repeat urinalysis with urine protein:creatinine ratio, serum phosphate, and eGFR calculation, and review against the full Uganda ART guideline renal section.\",\"reason\":\"Uncertain: the patient is on TDF with new trace proteinuria and musculoskeletal symptoms that could reflect Fanconi-type proximal tubulopathy, but the excerpts provided do not contain TDF toxicity criteria to confirm or exclude it.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The plan attributes the proteinuria to hypertension and does not mention TDF nephrotoxicity, phosphate, or urine protein quantification.\"}},{\"problem\":\"Uncontrolled hypertension (146/94 mmHg) with intermittent amlodipine non-adherence\",\"action\":\"Continue amlodipine 5 mg daily, counsel on adherence during transit, and recheck BP at follow-up; consider dose adjustment if BP remains above target.\",\"reason\":\"The patient reports missed amlodipine doses while travelling, and BP 146/94 mmHg is above target, so adherence support and monitoring are indicated, though the excerpt provided does not give BP targets.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The plan refills amlodipine and encourages adherence and lifestyle modification, which addresses this problem.\"}},{\"problem\":\"Regular ibuprofen use with trace proteinuria and creatinine in the upper-normal range\",\"action\":\"Advise the patient to stop or minimise ibuprofen and use paracetamol for pain; recheck creatinine and urinalysis in 4-6 weeks.\",\"reason\":\"NSAIDs can cause renal injury and raise blood pressure, and the patient is on TDF and has new proteinuria, so NSAID exposure should be reduced.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Disagree\",\"explanation\":\"The plan continues ibuprofen as needed without considering its renal risk in a patient on TDF with proteinuria.\"}},{\"problem\":\"Persistent back and thigh pain with stiff g\"}]}",
+ "plan_issues": [
+  "cut_off",
+  "missing_key:monitoring_plan",
+  "missing_key:patient_counselling",
+  "problem_3_missing_key:action",
+  "problem_3_missing_key:reason",
+  "problem_3_missing_key:clinician_plan_for_this_problem",
+  "monitoring_plan_wrong_type",
+  "patient_counselling_not_list"
+ ]
+}

@@ -1,0 +1,150 @@
+{
+  "case_id": "P003",
+  "source": "test patient (Data/mock_patients.json)",
+  "patient": {
+    "patient_id": "P003",
+    "name": "Sam Kato",
+    "sex": "M",
+    "age_years": 41,
+    "art_regimen_current": [
+      "TDF",
+      "3TC",
+      "EFV"
+    ],
+    "other_medications": [],
+    "regimen_history": [
+      {
+        "start_date": "2024-02-01",
+        "end_date": null,
+        "regimen": [
+          "TDF",
+          "3TC",
+          "EFV"
+        ]
+      }
+    ],
+    "intake": {
+      "complaints_symptoms": "Poor sleep and vivid dreams for several weeks. No suicidal ideation.",
+      "examination_findings": "Alert and oriented, no acute distress",
+      "prior_history": "Started EFV-based regimen in February 2024."
+    },
+    "visits": [
+      {
+        "date": "2026-01-22",
+        "type": "intake",
+        "clinician_note": "Complaints & Symptoms:\nPoor sleep and vivid dreams for several weeks. No suicidal ideation.\n\nExamination Findings:\nAlert and oriented, no acute distress\n\nPrior History:\nStarted EFV-based regimen in February 2024."
+      }
+    ],
+    "labs": {
+      "viral_load": [
+        {
+          "date": "2025-08-10",
+          "value_copies_per_ml": 60
+        }
+      ]
+    },
+    "today_encounter": {
+      "date": "2026-01-22",
+      "note": "Complains of insomnia; has vivid dreams. No suicidal ideation.",
+      "orders": [],
+      "med_changes": []
+    },
+    "expected_demo_outcome": {
+      "status": "YELLOW",
+      "notes": "EFV toxicity signal example: sleep disturbance mentions."
+    }
+  },
+  "answer_key": {
+    "status": "draft, not checked by a clinician (written 2026-11-25 from the guidelines; reviewed by the doctor in Phase 7)",
+    "expect_clear": false,
+    "problems": [
+      {
+        "id": "efv_cns_toxicity",
+        "kind": "drug_harm",
+        "summary": "Insomnia and vivid dreams for weeks on EFV: persistent CNS toxicity; substitute EFV",
+        "match": [
+          [
+            "efv",
+            "efavirenz"
+          ],
+          [
+            "sleep",
+            "dream",
+            "insomnia",
+            "neuropsych",
+            "cns",
+            "psychiatric"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 39,
+          "quote": "EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion)"
+        }
+      },
+      {
+        "id": "creatinine_never_done",
+        "kind": "monitoring",
+        "summary": "No creatinine/eGFR on record while on TDF",
+        "match": [
+          [
+            "creatinine",
+            "renal",
+            "kidney",
+            "egfr",
+            "crcl"
+          ]
+        ],
+        "guideline": {
+          "document": "HIV_Guidelines_ART.extraction",
+          "page": 27,
+          "quote": "Do Serum creatinine & eGFR for experienced patient on TDF every 12 months"
+        }
+      }
+    ],
+    "also_fine": [
+      {
+        "id": "low_level_viremia",
+        "summary": "Viral load 60 copies/mL in August 2025: repeat or adherence check is reasonable",
+        "match": [
+          [
+            "viral load",
+            "vl",
+            "viremia",
+            "viraemia"
+          ]
+        ]
+      },
+      {
+        "id": "mental_health",
+        "summary": "Mental health screening (EFV can cause mood symptoms)",
+        "match": [
+          [
+            "mental health",
+            "depress",
+            "psychiatric",
+            "mood"
+          ]
+        ]
+      }
+    ],
+    "must_not": [
+      {
+        "id": "says_no_plan",
+        "summary": "Says there is no clinician plan, though today's note has one",
+        "match": [
+          [
+            "no current clinician plan",
+            "no clinician plan",
+            "no plan",
+            "missing plan",
+            "lack of clinician plan",
+            "plan is missing",
+            "no documented plan",
+            "lack of plan"
+          ]
+        ]
+      }
+    ]
+  }
+}

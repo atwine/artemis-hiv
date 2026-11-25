@@ -104,6 +104,15 @@ The settings panel shows which kind of server and which model are in use, but ne
 server's address, which stays in `.env`. If `LLM_BASE_URL` is empty, the app falls back to a
 local Ollama server, as described below.
 
+## Evaluation (preliminary)
+
+`eval/phase2/README.md` has the method and the first results: 11 test visits with a draft answer
+key, run 5 times each on Llama 3.3 70B, DeepSeek V3.2, GLM 5.2 and Claude Haiku 5.5, plus an
+AfriMed-QA knowledge check. No clinician has checked the answer key yet, so these numbers are
+not the app's accuracy. `python scripts/evaluate.py` rebuilds the table from the saved runs.
+Running new models needs two more settings in `.env`, used only by the scripts:
+`OPENROUTER_API_KEY` (set a spending limit on the key) and `HF_TOKEN` (to download AfriMed-QA).
+
 ## Saved data
 
 - `Data/custom_patients.json`: cases added with **Add patient case**. If the file can't be
@@ -216,12 +225,13 @@ To rebuild the index, stop the app and delete `storage/chroma/`.
 │   ├── plan/               the AI management plan and how it is shown
 │   ├── visit.py            runs one visit check from start to finish
 │   ├── review.py           alert review and Finalize rules
-│   └── visit_record.py     the saved visit record
+│   ├── visit_record.py     the saved visit record
+│   └── evaluation/         test cases, scoring, model runs, AfriMed-QA quiz (Phase 2)
 ├── modules/                embeddings, search engine, fallback explanations
-├── scripts/                baseline runs and their comparison, code map check
+├── scripts/                baseline and evaluation runs, results table, code map check
 ├── Data/                   demo patients, guideline files, saved cases and visits
 ├── docs/                   plan, decisions, audit, lessons learned, code map
-├── eval/                   baseline runs and the evidence for each Phase 1 fix
+├── eval/                   baseline runs, Phase 1 fix evidence, Phase 2 cases and results
 └── tests/
 ```
 

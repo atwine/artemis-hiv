@@ -1,0 +1,266 @@
+{
+ "case_id": "P003",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 5,
+ "temperature": null,
+ "seconds": 36.1,
+ "calls": [
+  {
+   "prompt_tokens": 1416,
+   "completion_tokens": 456,
+   "total_tokens": 1872,
+   "cost": 0.00036672,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1344,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00036672,
+    "upstream_inference_prompt_cost": 0.00019344,
+    "upstream_inference_completions_cost": 0.00017328
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2108,
+   "completion_tokens": 621,
+   "total_tokens": 2729,
+   "cost": 0.00068422,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00068422,
+    "upstream_inference_prompt_cost": 0.00044824,
+    "upstream_inference_completions_cost": 0.00023598
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00105094,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P003_NEUROPSYCH_EFV",
+   "title": "EFV neuropsychiatric toxicity",
+   "message": "Guidelines state EFV frequently causes neuropsychiatric effects, typically insomnia and vivid dreams, within the first 2-6 weeks of therapy. The patient has been on an EFV-based regimen since February 2024 and presents with poor sleep and vivid dreams for several weeks. This is a persistent central nervous system toxicity. The patient reports no suicidal ideation, which is a common concern requiring assessment. The symptoms are a known adverse event of EFV.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Assess for suicidality and consider management per guidelines, which may include regimen substitution.",
+    "citations": [
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 55,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 23,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_NEUROPSYCH_EFV",
+     "title": "EFV neuropsychiatric toxicity",
+     "message": "Guidelines state EFV frequently causes neuropsychiatric effects, typically insomnia and vivid dreams, within the first 2-6 weeks of therapy. The patient has been on an EFV-based regimen since February 2024 and presents with poor sleep and vivid dreams for several weeks. This is a persistent central nervous system toxicity. The patient reports no suicidal ideation, which is a common concern requiring assessment. The symptoms are a known adverse event of EFV.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Assess for suicidality and consider management per guidelines, which may include regimen substitution.",
+     "citations": [
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+      },
+      {
+       "page_number": 55,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4"
+      },
+      {
+       "page_number": 23,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P003_MONITORING_GAP",
+   "title": "Missing viral load monitoring",
+   "message": "The patient's last viral load was 60 copies/mL on 2025-08-10, which is 165 days (over 5 months) before the current visit. Routine viral load monitoring is essential for assessing ART efficacy. The clinician's plan does not include ordering a new viral load test. There is no evidence of a recent result to confirm ongoing viral suppression.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order a viral load test as per routine monitoring schedule.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P003_MONITORING_GAP",
+     "title": "Missing viral load monitoring",
+     "message": "The patient's last viral load was 60 copies/mL on 2025-08-10, which is 165 days (over 5 months) before the current visit. Routine viral load monitoring is essential for assessing ART efficacy. The clinician's plan does not include ordering a new viral load test. There is no evidence of a recent result to confirm ongoing viral suppression.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order a viral load test as per routine monitoring schedule.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P003_ADR_REPORTING",
+   "title": "ADR reporting opportunity",
+   "message": "The patient is experiencing a known adverse drug reaction (insomnia, vivid dreams) to EFV. Guidelines provide mechanisms for reporting suspected adverse drug reactions to pharmacovigilance authorities. Reporting this event contributes to drug safety monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "low",
+    "recommended_action": "Consider reporting the suspected ADR using the national reporting system.",
+    "citations": [
+     {
+      "page_number": 22,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_ADR_REPORTING",
+     "title": "ADR reporting opportunity",
+     "message": "The patient is experiencing a known adverse drug reaction (insomnia, vivid dreams) to EFV. Guidelines provide mechanisms for reporting suspected adverse drug reactions to pharmacovigilance authorities. Reporting this event contributes to drug safety monitoring.",
+     "issue_type": "medication_safety",
+     "severity": "low",
+     "recommended_action": "Consider reporting the suspected ADR using the national reporting system.",
+     "citations": [
+      {
+       "page_number": 22,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p5_c4"
+  ],
+  "efv_sleep_disturbance": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p10_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3"
+  ],
+  "P003_NEUROPSYCH_EFV": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ],
+  "P003_MONITORING_GAP": [],
+  "P003_ADR_REPORTING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P003_NEUROPSYCH_EFV\",\n    \"title\": \"EFV neuropsychiatric toxicity\",\n    \"message\": \"Guidelines state EFV frequently causes neuropsychiatric effects, typically insomnia and vivid dreams, within the first 2-6 weeks of therapy. The patient has been on an EFV-based regimen since February 2024 and presents with poor sleep and vivid dreams for several weeks. This is a persistent central nervous system toxicity. The patient reports no suicidal ideation, which is a common concern requiring assessment. The symptoms are a known adverse event of EFV.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Assess for suicidality and consider management per guidelines, which may include regimen substitution.\",\n    \"citations\": [\n      {\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"},\n      {\"page_number\": 55, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4\"},\n      {\"page_number\": 23, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P003_MONITORING_GAP\",\n    \"title\": \"Missing viral load monitoring\",\n    \"message\": \"The patient's last viral load was 60 copies/mL on 2025-08-10, which is 165 days (over 5 months) before the current visit. Routine viral load monitoring is essential for assessing ART efficacy. The clinician's plan does not include ordering a new viral load test. There is no evidence of a recent result to confirm ongoing viral suppression.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order a viral load test as per routine monitoring schedule.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"P003_ADR_REPORTING\",\n    \"title\": \"ADR reporting opportunity\",\n    \"message\": \"The patient is experiencing a known adverse drug reaction (insomnia, vivid dreams) to EFV. Guidelines provide mechanisms for reporting suspected adverse drug reactions to pharmacovigilance authorities. Reporting this event contributes to drug safety monitoring.\",\n    \"issue_type\": \"medication_safety\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Consider reporting the suspected ADR using the national reporting system.\",\n    \"citations\": [\n      {\"page_number\": 22, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c3",
+    "page_number": 55,
+    "quote": "nclude stigma towards PLWH with a co-morbid mental disorder, and reluctance on the part of clinicians to engage with patients on what might be perceived to be time-consuming or specialised interviews. The most prevalent conditions, including depression, the anxiety disorders and substance abuse can be readily diagnosed with semi-structured clinical interviews, or validated brief instruments, such as the PHQ-2 or PHQ-9, the GAD-7, the K-10, and the AUDIT (for alcohol use disor"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p55_c4",
+    "page_number": 55,
+    "quote": "to local guidelines as required. Suicidality remains a common concern, and may require additional assessment. DTG may cause insomnia, headache and neuropsychiatric side-effects. EFV frequently causes neuropsychiatric effects in the first few weeks of therapy, typically presenting with insomnia, vivid dreams and dizziness. Both dysphoria and euphoria may occur. The majority of patients who experience neuropsychiatric features of EFV do so within the first 2-6 weeks, and therea"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has CNS symptoms (insomnia, vivid dreams) consistent with EFV toxicity, but viral load is suppressed (60 copies/mL) and there is no suicidal ideation.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"CNS toxicity from EFV (insomnia, vivid dreams)\",\n      \"action\": \"Assess severity and consider dose reduction or switch to DTG if symptoms intolerable.\",\n      \"reason\": \"Patient reports poor sleep and vivid dreams, which are known CNS side effects of EFV.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only documents the symptoms but does not propose any management.\"\n      }\n    },\n    {\n      \"problem\": \"Need for renal monitoring on TDF\",\n      \"action\": \"Order serum creatinine and eGFR.\",\n      \"reason\": \"Guidelines recommend serum creatinine and eGFR screening for patients on TDF.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention any lab orders or monitoring for TDF toxicity.\"\n      }\n    },\n    {\n      \"problem\": \"Viral load is not recent\",\n      \"action\": \"Order a new viral load test.\",\n      \"reason\": \"The latest viral load is from 165 days ago (August 2025), and routine monitoring is needed.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not include ordering a new viral load test.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order serum creatinine/eGFR (for TDF). Order new viral load (last was 165 days ago). Monitor for worsening CNS symptoms.\",\n  \"patient_counselling\": [\n    \"Discuss EFV side effects (sleep disturbances, dreams).\",\n    \"Advise on sleep hygiene.\",\n    \"Report any new or worsening symptoms, especially mood changes.\"\n  ]\n}",
+ "plan_issues": []
+}

@@ -1,0 +1,184 @@
+{
+ "case_id": "P004",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 25.7,
+ "calls": [
+  {
+   "prompt_tokens": 1591,
+   "completion_tokens": 349,
+   "total_tokens": 1940,
+   "cost": 0.000479164,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000479164,
+    "upstream_inference_prompt_cost": 0.000332584,
+    "upstream_inference_completions_cost": 0.00014658
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2276,
+   "completion_tokens": 433,
+   "total_tokens": 2709,
+   "cost": 0.00065646,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00065646,
+    "upstream_inference_prompt_cost": 0.00049192,
+    "upstream_inference_completions_cost": 0.00016454
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.001135624,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_ABDPAIN_DTG",
+   "title": "Abdominal pain on DTG regimen",
+   "message": "Guidelines list abdominal pain as a symptom to screen for adverse drug reactions. Patient reports abdominal pain (obulumi mu lubuto) while on a DTG-containing regimen (TDF/3TC/DTG). DTG is associated with gastrointestinal side effects. However, non-drug causes of abdominal pain should also be considered, as appetite is reported as okay and there is no fever.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Screen for suspected ADR using checklist, record in HMIS tools, and consider reporting.",
+    "citations": [
+     {
+      "page_number": 21,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_ABDPAIN_DTG",
+     "title": "Abdominal pain on DTG regimen",
+     "message": "Guidelines list abdominal pain as a symptom to screen for adverse drug reactions. Patient reports abdominal pain (obulumi mu lubuto) while on a DTG-containing regimen (TDF/3TC/DTG). DTG is associated with gastrointestinal side effects. However, non-drug causes of abdominal pain should also be considered, as appetite is reported as okay and there is no fever.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Screen for suspected ADR using checklist, record in HMIS tools, and consider reporting.",
+     "citations": [
+      {
+       "page_number": 21,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+      },
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P004_ADR_REPORTING",
+   "title": "ADR reporting process not followed",
+   "message": "Guidelines mandate that for each encounter, all health workers should screen for suspected ADRs using the Drug Safety Screening checklist. The patient's abdominal pain is a new complaint. The clinician's assessment and plan does not mention ADR screening or documentation, indicating a potential gap in the required safety process.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Complete the ADR screening checklist for this encounter and record findings in ART card/eMRS.",
+    "citations": [
+     {
+      "page_number": 21,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_ADR_REPORTING",
+     "title": "ADR reporting process not followed",
+     "message": "Guidelines mandate that for each encounter, all health workers should screen for suspected ADRs using the Drug Safety Screening checklist. The patient's abdominal pain is a new complaint. The clinician's assessment and plan does not mention ADR screening or documentation, indicating a potential gap in the required safety process.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Complete the ADR screening checklist for this encounter and record findings in ART card/eMRS.",
+     "citations": [
+      {
+       "page_number": 21,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_ABDPAIN_DTG": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3"
+  ],
+  "P004_ADR_REPORTING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_ABDPAIN_DTG\",\n    \"title\": \"Abdominal pain on DTG regimen\",\n    \"message\": \"Guidelines list abdominal pain as a symptom to screen for adverse drug reactions. Patient reports abdominal pain (obulumi mu lubuto) while on a DTG-containing regimen (TDF/3TC/DTG). DTG is associated with gastrointestinal side effects. However, non-drug causes of abdominal pain should also be considered, as appetite is reported as okay and there is no fever.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Screen for suspected ADR using checklist, record in HMIS tools, and consider reporting.\",\n    \"citations\": [\n      {\"page_number\": 21, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\"},\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P004_ADR_REPORTING\",\n    \"title\": \"ADR reporting process not followed\",\n    \"message\": \"Guidelines mandate that for each encounter, all health workers should screen for suspected ADRs using the Drug Safety Screening checklist. The patient's abdominal pain is a new complaint. The clinician's assessment and plan does not mention ADR screening or documentation, indicating a potential gap in the required safety process.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Complete the ADR screening checklist for this encounter and record findings in ART card/eMRS.\",\n    \"citations\": [\n      {\"page_number\": 21, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+    "page_number": 38,
+    "quote": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdo"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has abdominal pain but no fever and appetite is okay, and the guideline excerpts only emphasize pharmacovigilance without specific toxicity criteria for TDF/3TC/DTG.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Abdominal pain of unclear etiology\",\n      \"action\": \"Uncertain: The guideline excerpts only mention the importance of pharmacovigilance but do not specify diagnostic tests for abdominal pain related to ART.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts do not specify how to evaluate abdominal pain for potential drug toxicity.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only notes the symptom but does not propose any investigation or management.\"\n      }\n    },\n    {\n      \"problem\": \"Need for routine ART monitoring\",\n      \"action\": \"Schedule creatinine and viral load testing per routine schedule.\",\n      \"reason\": \"The guidelines emphasize pharmacovigilance, and the patient's last creatinine and viral load were from 78 days ago.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention any lab monitoring.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Check creatinine and viral load now; if normal, follow routine annual monitoring.\",\n  \"patient_counselling\": [\"Report any worsening abdominal pain or new symptoms.\", \"Continue taking ART as prescribed.\", \"Attend scheduled follow-up visits.\"]\n}",
+ "plan_issues": []
+}

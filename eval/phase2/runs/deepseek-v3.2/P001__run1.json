@@ -1,0 +1,230 @@
+{
+ "case_id": "P001",
+ "model": "deepseek-v3.2",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": null,
+ "seconds": 49.7,
+ "calls": [
+  {
+   "prompt_tokens": 1510,
+   "completion_tokens": 398,
+   "total_tokens": 1908,
+   "cost": 0.000477064,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000477064,
+    "upstream_inference_prompt_cost": 0.000309904,
+    "upstream_inference_completions_cost": 0.00016716
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2190,
+   "completion_tokens": 689,
+   "total_tokens": 2879,
+   "cost": 0.0030734,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0030734,
+    "upstream_inference_prompt_cost": 0.001971,
+    "upstream_inference_completions_cost": 0.0011024
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.003550464,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MONITOR_001",
+   "title": "Viral load monitoring overdue",
+   "message": "Guidelines recommend viral load (VL) monitoring every 6 months for patients on DTG-based first-line ART, or every 12 months if VL < 50 copies/mL for >1 year with reliable adherence. The patient's last VL was 40 copies/mL on 2025-10-01 (113 days ago). The clinician's plan for 'routine follow-up' does not include ordering a VL test. A new VL test is now due to ensure continued virological suppression and adherence.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order a viral load test as per the 6-12 month monitoring schedule for DTG-based ART.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MONITOR_001",
+     "title": "Viral load monitoring overdue",
+     "message": "Guidelines recommend viral load (VL) monitoring every 6 months for patients on DTG-based first-line ART, or every 12 months if VL < 50 copies/mL for >1 year with reliable adherence. The patient's last VL was 40 copies/mL on 2025-10-01 (113 days ago). The clinician's plan for 'routine follow-up' does not include ordering a VL test. A new VL test is now due to ensure continued virological suppression and adherence.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order a viral load test as per the 6-12 month monitoring schedule for DTG-based ART.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "CREAT_001",
+   "title": "Creatinine monitoring overdue",
+   "message": "The patient is on tenofovir disoproxil fumarate (TDF), which requires monitoring of renal function. The last recorded creatinine was 88 umol/L on 2024-10-01, which is 478 days (over 15 months) ago. No recent renal function test is documented, and the clinician's plan does not include ordering one. Regular monitoring is essential to detect TDF-associated nephrotoxicity early, especially as the patient has been on this regimen since 2023.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order a serum creatinine test to assess renal function for TDF safety monitoring.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "CREAT_001",
+     "title": "Creatinine monitoring overdue",
+     "message": "The patient is on tenofovir disoproxil fumarate (TDF), which requires monitoring of renal function. The last recorded creatinine was 88 umol/L on 2024-10-01, which is 478 days (over 15 months) ago. No recent renal function test is documented, and the clinician's plan does not include ordering one. Regular monitoring is essential to detect TDF-associated nephrotoxicity early, especially as the patient has been on this regimen since 2023.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order a serum creatinine test to assess renal function for TDF safety monitoring.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ADRS_001",
+   "title": "No documented ADR screening",
+   "message": "Guidelines state that for each encounter, ALL health workers should screen for suspected Adverse Drug Reactions (ADRs) using a Drug Safety Screening checklist. The clinical note for today's visit only states 'No new complaints' and 'Appears well', with no specific mention of ADR screening. The patient is on DTG, which can cause neuropsychiatric symptoms (e.g., bad dreams, insomnia, headaches, mood changes). A systematic screening for these and other ADRs was not documented.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "low",
+    "recommended_action": "Perform and document systematic ADR screening using the checklist at every visit.",
+    "citations": [
+     {
+      "page_number": 21,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 23,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ADRS_001",
+     "title": "No documented ADR screening",
+     "message": "Guidelines state that for each encounter, ALL health workers should screen for suspected Adverse Drug Reactions (ADRs) using a Drug Safety Screening checklist. The clinical note for today's visit only states 'No new complaints' and 'Appears well', with no specific mention of ADR screening. The patient is on DTG, which can cause neuropsychiatric symptoms (e.g., bad dreams, insomnia, headaches, mood changes). A systematic screening for these and other ADRs was not documented.",
+     "issue_type": "guideline_deviation",
+     "severity": "low",
+     "recommended_action": "Perform and document systematic ADR screening using the checklist at every visit.",
+     "citations": [
+      {
+       "page_number": 21,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+      },
+      {
+       "page_number": 23,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p41_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c3",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p54_c3"
+  ],
+  "MONITOR_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1"
+  ],
+  "CREAT_001": [],
+  "ADRS_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "```json\n[\n  {\n    \"alert_id\": \"MONITOR_001\",\n    \"title\": \"Viral load monitoring overdue\",\n    \"message\": \"Guidelines recommend viral load (VL) monitoring every 6 months for patients on DTG-based first-line ART, or every 12 months if VL < 50 copies/mL for >1 year with reliable adherence. The patient's last VL was 40 copies/mL on 2025-10-01 (113 days ago). The clinician's plan for 'routine follow-up' does not include ordering a VL test. A new VL test is now due to ensure continued virological suppression and adherence.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order a viral load test as per the 6-12 month monitoring schedule for DTG-based ART.\",\n    \"citations\": [\n      {\n        \"page_number\": 32,\n        \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1\"\n      }\n    ]\n  },\n  {\n    \"alert_id\": \"CREAT_001\",\n    \"title\": \"Creatinine monitoring overdue\",\n    \"message\": \"The patient is on tenofovir disoproxil fumarate (TDF), which requires monitoring of renal function. The last recorded creatinine was 88 umol/L on 2024-10-01, which is 478 days (over 15 months) ago. No recent renal function test is documented, and the clinician's plan does not include ordering one. Regular monitoring is essential to detect TDF-associated nephrotoxicity early, especially as the patient has been on this regimen since 2023.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order a serum creatinine test to assess renal function for TDF safety monitoring.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"ADRS_001\",\n    \"title\": \"No documented ADR screening\",\n    \"message\": \"Guidelines state that for each encounter, ALL health workers should screen for suspected Adverse Drug Reactions (ADRs) using a Drug Safety Screening checklist. The clinical note for today's visit only states 'No new complaints' and 'Appears well', with no specific mention of ADR screening. The patient is on DTG, which can cause neuropsychiatric symptoms (e.g., bad dreams, insomnia, headaches, mood changes). A systematic screening for these and other ADRs was not documented.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Perform and document systematic ADR screening using the checklist at every visit.\",\n    \"citations\": [\n      {\n        \"page_number\": 21,\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\"\n      },\n      {\n        \"page_number\": 23,\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\"\n      }\n    ]\n  }\n]\n```",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p32_c1",
+    "page_number": 32,
+    "quote": "Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART and the recommended response to results. flowchart : Patient on two NRTIs + DTG Check VL every 6 months* *If VL < 50 copies/mL for > 1 year and reliable adherence, can reduce to 12 monthly Decision point: - VL < 50 copies/mL: - Continue regimen - VL > 50 copies/mL: - Provide enhanced adherence support - Address potential side-effects affecting adherence - Repeat VL in 2-3 months - Consider In"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is clinically well with suppressed viral load and no symptoms or lab findings suggestive of toxicity from TDF, 3TC, or DTG.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Outdated renal function assessment for TDF monitoring\",\n      \"action\": \"Order serum creatinine and eGFR test.\",\n      \"reason\": \"Guidelines recommend serum creatinine & eGFR for patients on TDF, and the last recorded creatinine is from 478 days ago.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan for a routine follow-up with no issues does not include ordering any new labs.\"\n      }\n    },\n    {\n      \"problem\": \"Inadequate pharmacovigilance for ART regimen\",\n      \"action\": \"Perform a structured review for potential drug toxicity using the DTG screening tool and TDF monitoring guidelines.\",\n      \"reason\": \"Guidelines emphasize the importance of pharmacovigilance for all patients on ART, which requires proactive assessment beyond a routine check.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Gap\",\n        \"explanation\": \"The clinician's plan for a routine follow-up is a form of monitoring but lacks the specific, guideline-recommended structured toxicity assessment.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order serum creatinine/eGFR now. Schedule next viral load in 6-12 months. Monitor for new symptoms of diabetes or renal issues at each visit.\",\n  \"patient_counselling\": [\n    \"Reinforce excellent adherence to maintain viral suppression.\",\n    \"Advise to report any new symptoms like excessive thirst, frequent urination, or swelling.\",\n    \"Confirm understanding of routine lab monitoring schedule.\"\n  ]\n}",
+ "plan_issues": []
+}
