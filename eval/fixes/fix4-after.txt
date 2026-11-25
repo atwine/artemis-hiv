@@ -1,0 +1,66 @@
+Fix 4, after (2026-11-25). The screening model's input now, rebuilt with a recording stand-in model.
+
+===== P002
+Clinical notes, oldest first:
+Visit note (2025-12-15, intake):
+Complaints & Symptoms:
+None reported
+
+Examination Findings:
+Stable, no abnormalities noted
+
+Prior History:
+Stable on ART since 2022. Good adherence.
+
+Today's note (2026-01-22):
+Routine follow-up. Stable. Discussed DSD eligibility.
+
+Laboratory results (age counted from the visit date):
+- viral load 30 copies/mL on 2024-09-15 (494 days before the visit)
+- viral load 20 copies/mL on 2025-09-15 (129 days before the visit)
+- creatinine 76 umol/L on 2025-12-15 (38 days before the visit)
+
+===== P001
+Clinical notes, oldest first:
+Visit note (2026-01-22, intake):
+Complaints & Symptoms:
+No new complaints
+
+Examination Findings:
+Appears well
+
+Prior History:
+Feels well. Adherence reported good.
+
+Today's note (2026-01-22):
+Routine follow-up. No issues.
+
+Laboratory results (age counted from the visit date):
+- creatinine 88 umol/L on 2024-10-01 (478 days before the visit)
+- viral load 40 copies/mL on 2025-10-01 (113 days before the visit)
+
+===== P005
+Clinical notes, oldest first:
+Visit note (2026-02-24, intake):
+Complaints & Symptoms:
+38-year-old woman presents for routine 6-monthly review. No specific complaints. Mentions mild fatigue over the past 2 months which she attributes to her busy work schedule.
+
+Examination Findings:
+BP 118/76 mmHg. Weight 64kg (stable). No peripheral oedema. No costovertebral angle tenderness. Otherwise unremarkable.
+
+Significant history prior to today's visit:
+HIV diagnosed 2018. No diabetes, no hypertension. Adherence consistently >95% by pill count. No known allergies. Takes ibuprofen 400mg occasionally for headaches (approximately 2-3 times per week for the past 6 months due to work stress).
+
+Today's note (2026-02-24):
+none written
+
+Laboratory results (age counted from the visit date):
+Pasted lab text (entered 2026-02-24, previous results):
+Creatinine: 1.4 mg/dL (previous values: 0.9 in 2020, 1.0 in 2021, 1.1 in 2022, 1.2 in 2023). eGFR: 52 mL/min/1.73m2 (CKD-EPI). Urinalysis: Protein 1+, glucose trace. Viral load: <50 copies/mL. CD4: 584 cells/uL. Hb: 12.8 g/dL.
+
+
+Browser check in Chrome (2026-11-25), app on port 8502 with added cases redirected to a throwaway file:
+- Patient Details for P001 now lists creatinine 88 umol/L (2024-10-01, 478 days before visit) and viral load 40 copies/mL (2025-10-01, 113 days); before the fix both sections said 'None recorded'.
+- Add-case form: previous result 'creatinine, 2025-10-01, 1.4' with no unit was refused: 'Previous lab results, Row 1 (creatinine): 1.4 looks like mg/dL, not umol/L. Check the unit for this creatinine.'
+- With unit mg/dL it saved as {"date": "2025-10-01", "value": "1.4", "unit": "mg/dL", "source": "previous"}; 'Case added.' and the new case CHECK-01 was selected. Data/custom_patients.json unchanged.
+- Found while loading the screen: an empty lab table's date column read as numbers and crashed the page; fixed with explicit column types before the browser check.

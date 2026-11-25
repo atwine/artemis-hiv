@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from modules.alert_rules import run_alerts
-from modules.patient_parser import build_patient_context, load_mock_patients
+from artemis.rules.checks import run_alerts
+from artemis.patient.record import build_patient_context, load_mock_patients
 
 
 def test_mock_patients_rule_expectations_smoke() -> None:

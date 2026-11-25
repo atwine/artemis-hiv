@@ -1,0 +1,37 @@
+Phase 1 close (1.Z): review findings, 2026-11-25.
+
+Reviews run on git diff origin/development...HEAD (25 commits): a standards review and a spec
+review (two separate helper agents), a security review (helper agent; no findings at the
+>80% confidence bar), and a blast-radius check (what outside the diff could break).
+
+Fixed, each with a test that failed first (tests/test_review_findings.py,
+tests/test_run_baseline.py, tests/test_screen_small_fixes.py):
+- scripts/run_baseline.py crashed on its first patient: app.run_alerts and
+  app.build_patient_context had moved out of app.py (measured: the 1.Z rerun stopped).
+- agentic_demo.py passed page_range, which fix 1 removed (TypeError).
+- Pasted lab text "No creatinine done this year." counted as a creatinine result.
+- "Gap" (the plan covers it partly) was shown as "Not in your plan"; now "Partly in your plan".
+- A plan reply cut at the length limit showed only "invalid_json"; it now says "cut_off".
+- A plan that could not be produced vanished with no message; it now shows a warning (D14).
+- An AI alert could take a rule alert's id and share its review controls; it gets "-ai".
+- Raw error text ("Type: message") reached the screen; it now goes to the app log and the
+  screen stays generic.
+Standards clean-ups with no behaviour change: dead aliases and write-only state removed
+(_compute_overall_status, explain_time_*, analysis_use_ollama), a needless try/except
+removed, the plan step's swallowed exception now logged, one context build instead of two,
+the shared "not given" constant used, a duplicate raw-output panel removed, the candidate-rule
+button keyed on the alert's source, the record write catches only OSError, a stale README path.
+
+The failing tests before these fixes:
+E   AssertionError: assert 'tdf_creatinine_pasted_only' not in ['tdf_creatinine_pasted_only']
+E   TypeError: got an unexpected keyword argument 'page_range'
+E   AssertionError: assert ['Not in your...in your plan'] == ['Partly in y...in your plan']
+E   assert 'cut_off' in ['invalid_json']
+E   AssertionError: assert ('tdf_creatinine_overdue' in ['tdf_creatinine_overdue', 'tdf_creatinine_overdue'] and 2 == 1)
+E   assert False
+E   assert ('internal detail 42' not in "<div style=...le(s) found."
+        AI review failed (the model server did not answer): only rule checks are shown. Issues the AI would have raised may be missing.
+FAILED tests/test_screen_small_fixes.py::test_a_failed_ai_review_shows_no_raw_error_text
+7 failed, 6 deselected in 22.70s
+E   AttributeError: module 'app' has no attribute 'run_alerts'   (tests/test_run_baseline.py, and the real rerun)
+E   assert ('internal detail 42' not in ...)   (tests/test_screen_small_fixes.py::test_a_failed_ai_review_shows_no_raw_error_text)

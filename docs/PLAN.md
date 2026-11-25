@@ -39,17 +39,40 @@ Version 1 of the revival is done when all four are true:
 
 Check: tests all pass; both branches exist; scanners run on a pull request.
 
-## Phase 1: Fix what the demo exposed
+## Phase 1: Fix everything the audit found
+
+The baseline exposed four faults. The owner then asked for a thorough repair: every function on
+the analysis path was read (121 of 121), 225 findings were grouped into 40 root causes, and an
+independent rerun confirmed all 48 serious ones. Details: `docs/audit/`. Each fix starts with a
+test that fails on the old code, ends with that test passing, and is logged in
+`docs/decisions.tsv`, `docs/refactor/moves.tsv` and, for new kinds of failure,
+`docs/lessons-learned.md`. Evidence for each fix is in `eval/fixes/`.
 
 - [x] 1.0 Baseline first: a script runs all 7 test patients through the A100 and saves every
       output to `eval/baseline/`. Every fix below is judged against this "before" snapshot.
       Done 2026-11-25: 3 runs per patient; findings in `eval/baseline/README.md`.
-- [ ] 1.1 Keep the fixed-rule alerts next to the AI alerts instead of dropping them.
-- [ ] 1.2 Stop showing "AGREE" when the model never said so.
-- [ ] 1.3 Tie results to the selected patient; save reviews and overrides as an audit record.
-- [ ] 1.4 Name the real source on each citation (Uganda, South Africa or WHO, with edition).
+- [x] 1.A Audit: read all 121 functions, group the 225 findings into 40 causes, verify the
+      serious ones independently, and separate the analysis from the screen (option B).
+- [x] Fix 1: delete the AI modes that could no longer run, and the dead copies of the plan screen.
+- [x] Fix 2: results belong to the patient and note they were run for (old item 1.3, first half).
+- [x] Fix 3: rule alerts are never dropped, and a failed AI review is never green (old item 1.1).
+- [x] Fix 4: lab results carry their unit, date and age, and notes are dated.
+- [x] Fix 5: drugs are recognised however they're typed, and the rules read the medicine list.
+- [x] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
+- [x] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
+      "Continue" (old item 1.2).
+- [x] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.
+- [x] Fix 9: save the visit record: reviews, overrides and reasons (old item 1.3, second half).
+      9b: reopen a patient's last results from the record, with no new AI call.
+- [x] Fix 10: small fixes, plus two dangerous retrieval faults pulled forward from 2B (the cleaner
+      deleting "<50" thresholds, and the backup index keeping only one guideline).
+- [x] 1.Z Rerun the baseline (7 patients, 3 runs each) and compare with `scripts/compare_runs.py`;
+      code review, security review, then merge into `development` and push after a yes.
 
-Check: rerun the baseline script; the before/after difference shows each fix and nothing else.
+Old item 1.4 (name the real source on each citation) moved into Phase 2B with the other
+retrieval work (G32 in `docs/audit/phase1-groups.tsv`), as the owner ruled.
+
+Check: rerun the baseline; the before/after difference shows each fix and nothing unexplained.
 
 ## Phase 2: Evaluation and first model comparison
 
@@ -60,7 +83,16 @@ numbers decide which parts of the pipeline earn their keep.
       test cases, then 20 to 30 new short cases written and labelled by clinicians (each lists the
       alerts it should raise and the guideline passages that support them).
 - [ ] 2.2 Scoring: for each case, which expected alerts were caught and which alerts were false
-      alarms. A model may help match wording, but a person spot-checks its matches.
+      alarms. A model may help match wording, but a person spot-checks its matches. Report three
+      numbers, each with how many cases it rests on:
+      - sensitivity (recall): of the problems a patient really has, how many the app caught. This is
+        "nothing missed", and for a safety tool it matters most.
+      - precision: of the alerts the app raised, how many were real problems.
+      - specificity: of the patients with nothing wrong, how many the app correctly left clear.
+      Working target from the owner: about 85%, to be set per measure with the doctor before the run.
+- [ ] 2.2b Write the method down so it can be reported: how many cases, who wrote and labelled
+      them, how a raised alert is matched to an expected one, how many runs per case (answers vary
+      between runs), and the date and model.
 - [ ] 2.3 Run the models: Llama 3.3 70B on the A100 and 2 or 3 OpenRouter models (MedGemma optional,
       as the original competition baseline).
 - [ ] 2.4 Results table plus all raw outputs saved (they feed the showcase in Phase 6).
@@ -73,6 +105,9 @@ Check: `python scripts/evaluate.py` rebuilds the table from saved outputs.
 The old results were "sometimes good, sometimes bad". This phase finds out why and fixes it,
 measuring every change on the Phase 2 cases. Background reading: `docs/research/RAG-OPTIONS.md`.
 
+Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
+They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
+
 - [ ] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
 - [ ] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
@@ -82,6 +117,10 @@ measuring every change on the Phase 2 cases. Background reading: `docs/research/
 - [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
 - [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
       their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
+- [ ] 2B.7 How the guideline knowledge is stored, decided on the 2B.1 numbers: plain Markdown as
+      today, Markdown split along the guideline's own sections, or structured records (JSON, one per
+      recommendation, with drug, condition, action, country and edition). Also which search fits
+      each: meaning search, keyword search, or both together, and filters by country and edition.
 - [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
       is extracted. Today the app searches 4 Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
       `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup
@@ -95,6 +134,8 @@ Check: the retrieval and answer scores before and after each change are in the d
 
 - [ ] 3.1 Design brief: clinicians first; Penda-style red/amber/green; review on the alert itself;
       guideline text beside the patient values.
+      Notes from Phase 1: the regimen pick-list should not offer "Select all" (Streamlit adds it);
+      lab entry is one row per result with a unit.
 - [ ] 3.2 Mock up the visit-review screen three ways (clinic workstation, guided case review,
       evidence-first). You pick.
 - [ ] 3.3 Finish the chosen direction: patient list, visit review, plan, audit record, plus colours
@@ -110,6 +151,13 @@ Check: you have picked a direction and signed off the screens.
 - [ ] 4.2 Endpoints: list patients, run a visit check, record acknowledge/override.
 - [ ] 4.3 Build the guideline index once and keep it, instead of rebuilding on every start.
 - [ ] 4.4 Tests that call the endpoints the way the frontend will.
+- [ ] 4.5 Move the visit records from fix 9's local files into Postgres.
+- [ ] 4.6 (suggested) Phase 1 code review follow-ups, best done as the API replaces the Streamlit
+      shell: move the add-case record building out of app.py into a typed endpoint; validate a
+      patient record once when it is loaded (4.1); have the model client return the reply with
+      its finish reason instead of setting attributes; keep the screen's session keys in one
+      place (today in ui/state.py, app.py and visit_record.restore); share one JSON bracket
+      scanner (screening and plan_json); drop unused fields (deterministic_alerts, used_llm).
 
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 
@@ -128,6 +176,8 @@ Check: a full visit works in Chrome; before/after screenshots against the Stream
 - [ ] 6.1 Publish showcase mode as a static site with A100 outputs for at least 10 cases.
 - [ ] 6.2 Two or three short explainer videos: the problem, a walkthrough, the evaluation.
 - [ ] 6.3 README rewrite: screen recording, results table, limitations, "not for clinical use".
+- [ ] 6.4 Clinician trial: once the trial version is up, the doctor working with the owner runs
+      the test cases and reports what to improve. Their findings become new Phase 2 cases.
 
 Check: the live Pages link works in a fresh browser with no VPN.
 
@@ -154,9 +204,12 @@ Check: the live Pages link works in a fresh browser with no VPN.
 ## Decisions waiting on you
 
 1. The design direction (after the Phase 3 mockups).
-2. Database: Postgres on Neon (your default) or a single SQLite file (simpler for a demo).
+2. Database: Postgres (owner, 2026-11-25), hosted somewhere like Railway or Cloudflare; the host
+   is still open. Until then the visit record is a local file (fix 9).
 3. Which OpenRouter models, and a spending cap.
 4. Whether Timothy and Dr Kintu write and label the cases, and how they are credited.
 5. Where the explainer videos live (YouTube, or small files in the repo).
 6. Whether to mirror this checklist as GitHub issues and milestones.
 7. Keep or cut the items marked "(suggested)", which were my additions.
+8. The target for each of sensitivity, precision and specificity (owner's working figure: about 85%),
+   agreed with the doctor before the evaluation run.

@@ -53,3 +53,24 @@ def test_safe_name_keeps_files_inside_the_folder() -> None:
     assert rb._safe_name("Kintu-Test 001") == "Kintu-Test_001"
     assert "/" not in rb._safe_name("../../etc/passwd")
     assert "\\" not in rb._safe_name("..\\..\\x")
+
+
+def test_the_baseline_script_runs_a_patient_end_to_end(monkeypatch, tmp_path) -> None:
+    # Phase 1 moved code out of app.py; the script must still run (it crashed on app.run_alerts).
+    from tests import pipeline_harness as h
+
+    monkeypatch.setenv("ARTEMIS_VISIT_RECORDS_DIR", str(tmp_path))
+    patient = next(p for p in h.patients() if p["patient_id"] == "P001")
+    client = h.ReplayClient(h._load("replies.json")["P001"])
+    monkeypatch.setattr(rb.app, "_get_rag_engine", lambda **_: h.RagEngine(
+        project_root=h.ROOT, guideline_paths=[], embedder=h.FakeEmbedder(), vector_store=h.FakeStore(h._load("corpus.json"))))
+    monkeypatch.setattr(rb.app, "openai_compat_config_from_env", lambda: h._ReplayConfig())
+    monkeypatch.setattr(rb.app, "OpenAICompatClient", lambda _cfg: client)
+    saved_st = rb.app.st
+    try:
+        out = rb.run_one(patient)
+    finally:
+        rb.app.st = saved_st
+    assert out["patient_id"] == "P001"
+    assert [a["title"] for a in out["rule_alerts"]] == ["Creatinine monitoring overdue while on TDF"]
+    assert out["alerts"] and out["overall_status"] == "YELLOW"

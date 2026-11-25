@@ -1,0 +1,90 @@
+Fix 8, after (2026-11-25).
+
+Tests: tests/test_ai_replies.py 17 passed (the 14 that failed before, see fix8-before.txt, plus
+3 guards: a cut inside a citation, an unreadable item in the list, an alert with no title).
+tests/test_results_banner.py: the 2 new cut-off / partly-read banner tests failed first, now pass.
+tests/test_ui_references.py (3) and tests/test_screen_ai_alert.py (1, the real screen run
+headlessly: incomplete-review banner, "Severity not given", References with the unseen citation
+marked). Whole suite: 104 passed. Code map check: 0 problems.
+
+Golden diff (replayed baseline replies, stand-in search), all 7 patients: alert titles, messages,
+severities, statuses and AI outcomes unchanged. Citations now carry shown_to_ai. Each AI alert's
+passages are the ones it cited and was shown, instead of a fresh search: often none in the
+harness, because its stand-in search returns different passages from the real index the saved
+replies were made with. Rule alerts' passages unchanged.
+
+Real run on the A100 (Llama 3.3 70B), every patient once, AI plan off:
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 1932.79it/s]
+===== P001 | 90 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine monitoring overdue while on TDF (severity: -)
+  [ai] Missing Recent Creatinine (severity: moderate)
+      ref: The AI cited no guideline passage for this alert.
+  [ai] Inadequate Virological Monitoring (severity: moderate)
+      ref: Guidelines, p.32
+  passages shown to the AI: 5
+===== P002 | 9 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [ai] Viral Load Monitoring (severity: low)
+      ref: Guidelines, p.32
+  [ai] Creatinine Monitoring (severity: low)
+      ref: Guidelines, p.20
+  passages shown to the AI: 5
+===== P003 | 9 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine missing while on TDF (severity: -)
+  [rule] Possible EFV neuropsychiatric side effects (severity: -)
+  [ai] EFV Neuropsychiatric Effects (severity: moderate)
+      ref: Guidelines, p.39
+      ref: Guidelines, p.55
+  passages shown to the AI: 5
+===== P004 | 11 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [ai] Abdominal Pain (severity: moderate)
+      ref: Guidelines, p.26
+  [ai] Missing Recent Lab Results (severity: moderate)
+      ref: Guidelines, p.21
+  passages shown to the AI: 5
+===== P006 | 23 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine recorded only as pasted text (severity: -)
+  [ai] Elevated Creatinine Level (severity: moderate)
+      ref: Guidelines, p.0: not among the passages the AI was given
+  [ai] Viral Load Monitoring (severity: low)
+      ref: Guidelines, p.49
+  [ai] DTG Use in Pregnancy (severity: low)
+      ref: Guidelines, p.50
+  [ai] Phosphate Level (severity: low)
+      ref: Guidelines, p.0: not among the passages the AI was given
+  [ai] Hemoglobin Level (severity: moderate)
+      ref: Guidelines, p.0: not among the passages the AI was given
+  passages shown to the AI: 5
+===== P005 | 12 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine recorded only as pasted text (severity: -)
+  [rule] NSAID use mentioned while on TDF (severity: -)
+  [rule] Proteinuria mentioned in notes (severity: -)
+  [ai] Renal Function Decline (severity: moderate)
+      ref: Guidelines, p.40
+  [ai] Potential Ibuprofen Interaction (severity: low)
+      ref: Guidelines, p.39
+  passages shown to the AI: 5
+===== Kintu-Test 001 | 23 s | status RED | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine recorded only as pasted text (severity: -)
+  [ai] Weight Gain on TLD (severity: moderate)
+      ref: Guidelines, p.8
+  [ai] Glucose Monitoring (severity: moderate)
+      ref: Guidelines, p.5
+  [ai] Blood Pressure Monitoring (severity: moderate)
+      ref: Guidelines, p.8
+  [ai] Lipid Profile (severity: moderate)
+      ref: Guidelines, p.25
+  [ai] Missing Assessment and Plan (severity: high)
+      ref: The AI cited no guideline passage for this alert.
+  passages shown to the AI: 5
+TOTALS: {'ai_alerts': 19, 'citations': 18, 'shown': 15, 'not_shown': 3, 'ai_refs': 15}
+
+Reading the run: every reply was read in full and ended normally ("stop"); no exact repeats;
+the server accepted the answer format with the four-value severity (no refusal note). Every
+severity was one of the four. 19 AI alerts made 18 citations: 15 to passages the AI was shown,
+3 (all P006) to a made-up "information_gap" passage on page 0, now marked as not given to the AI.
+Before, each alert listed about 5 passages from a fresh search; 273 of 335 in the baseline were
+never shown to the AI. Now an AI alert lists only what it cited and was shown (15 lines here).
+P006's "information_gap" citations: the prompt asks for empty citations when no passage supports
+an alert, and the model wrote a placeholder instead. Logged for Phase 2 (prompt).
+Kintu's AI review raised "Blood Pressure Monitoring" in this one run. Fix 8 did not change what
+the AI is asked, so this is run-to-run variation until the 1.Z rerun shows otherwise.

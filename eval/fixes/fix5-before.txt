@@ -1,0 +1,30 @@
+Fix 5, before (2026-11-25, commit c0f0367). tests/test_medicines_and_rules.py on the old code.
+
+E       AssertionError: assert ['TDF/3TC/DTG... for 3 years'] == ['TDF', '3TC', 'DTG']
+E         
+E         At index 0 diff: 'TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years' != 'TDF'
+E         Right contains 2 more items, first extra item: '3TC'
+E         Use -v to get more diff
+E       AssertionError: assert 'NSAID use mentioned while on TDF' in []
+E       AssertionError: assert 'Creatinine recorded only as pasted text' in []
+E       AssertionError: assert 'Proteinuria mentioned in notes' in []
+E        +  where [] = _titles({'patient_id': 'P005', 'age_years': 38, 'sex': 'F', 'art_regimen_current': ['TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years'], ...})
+E        +    where {'patient_id': 'P005', 'age_years': 38, 'sex': 'F', 'art_regimen_current': ['TDF/3TC/DTG (TLD) fixed-dose combination once daily. On this regimen for 3 years'], ...} = _patient('P0
+E       AssertionError: assert 'Possible EFV neuropsychiatric side effects' in ['Creatinine monitoring overdue while on TDF']
+E        +  where ['Creatinine monitoring overdue while on TDF'] = _titles({'patient_id': 'P001', 'name': 'John Doe', 'sex': 'M', 'age_years': 34, ...})
+E       AssertionError: assert 'NSAID use mentioned while on TDF' in ['Creatinine monitoring overdue while on TDF']
+E        +  where ['Creatinine monitoring overdue while on TDF'] = _titles({'patient_id': 'P001', 'name': 'John Doe', 'sex': 'M', 'age_years': 34, ...})
+E       AssertionError: assert ['None. Newly diagnosed HIV.'] == []
+E         
+E         Left contains one more item: 'None. Newly diagnosed HIV.'
+E         Use -v to get more diff
+E       ModuleNotFoundError: No module named 'scripts.convert_old_cases'
+FAILED tests/test_medicines_and_rules.py::test_a_regimen_written_as_a_sentence_is_read_as_drugs
+FAILED tests/test_medicines_and_rules.py::test_tenofovir_rules_fire_for_p005_who_takes_ibuprofen
+FAILED tests/test_medicines_and_rules.py::test_creatinine_only_in_pasted_text_is_not_called_missing
+FAILED tests/test_medicines_and_rules.py::test_proteinuria_in_the_lab_text_is_seen_and_a_negative_is_not
+FAILED tests/test_medicines_and_rules.py::test_a_regimen_typed_with_spaces_still_triggers_the_efavirenz_rule
+FAILED tests/test_medicines_and_rules.py::test_an_nsaid_on_the_medicine_list_is_seen
+FAILED tests/test_medicines_and_rules.py::test_words_like_none_on_the_medicine_list_are_not_medicines
+FAILED tests/test_medicines_and_rules.py::test_converting_the_old_cases_keeps_what_was_written_and_can_run_twice
+8 failed, 1 passed in 19.92s

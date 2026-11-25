@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from modules.patient_parser import build_patient_context
-from modules.stage1_summary import build_stage1_summary
+from artemis.patient.record import build_patient_context
+from artemis.patient.summary import build_stage1_summary
 
 
-def test_build_stage1_summary_structure_and_flags() -> None:
+def test_summary_carries_the_record_and_lists_only_truly_empty_fields() -> None:
     patient = {
         "patient_id": "p123",
-        "name": "Mr Test",
+        "art_regimen_current": ["TDF", "3TC", "DTG"],
         "today_encounter": {
             "date": "2024-01-01",
-            "note": "Plan: check creatinine and VL next visit.",
+            "note": "Check creatinine and VL next visit.",
         },
         "visits": [
             {
@@ -24,21 +24,21 @@ def test_build_stage1_summary_structure_and_flags() -> None:
         },
     }
 
-    ctx = build_patient_context(patient)
-    summary = build_stage1_summary(patient=patient, context=ctx)
+    summary = build_stage1_summary(patient=patient, context=build_patient_context(patient))
 
-    # Top-level keys
-    assert summary.get("patient_id") == "p123"
-    assert "encounter_date" in summary
-    assert isinstance(summary.get("current_regimen"), list)
-
-    # Labs
-    assert isinstance(summary.get("past_labs"), list)
-    assert isinstance(summary.get("current_labs"), dict)
-    # Today plan should capture lines starting with "Plan:"
-    assert any(line.startswith("Plan:") for line in summary.get("today_plan", []))
-
-    # Missing flags present
-    mf = summary.get("missing_flags")
-    assert isinstance(mf, dict)
-    assert set(["regimen_history", "non_hiv_meds", "past_plans", "past_complaints", "today_plan"]).issubset(mf.keys())
+    assert summary["patient_id"] == "p123"
+    assert summary["encounter_date"] == "2024-01-01"
+    assert summary["current_regimen"] == ["TDF", "3TC", "DTG"]
+    # Today's whole note is the plan, with or without a "Plan:" prefix (fix 6).
+    assert summary["assessment_and_plan_today"] == "Check creatinine and VL next visit."
+    assert summary["latest_labs"]["viral_load"]["value"] == "200"
+    assert summary["latest_labs"]["viral_load"]["unit"] == "copies/mL"
+    assert summary["latest_labs"]["creatinine"]["days_before_visit"] == 365
+    assert summary["not_recorded"] == [
+        "regimen history",
+        "other medications",
+        "complaints",
+        "examination findings",
+        "orders today",
+        "medicine changes today",
+    ]

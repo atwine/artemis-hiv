@@ -1,0 +1,72 @@
+Fix 8, before (2026-11-25, commit 9805d25). tests/test_ai_replies.py on the old code: 14 failed.
+
+E       AssertionError: assert [] == ['Alert 1']
+E         
+E         Right contains one more item: 'Alert 1'
+E         Use -v to get more diff
+E       AssertionError: assert ['screening_issue'] == ['Alert 1']
+E         
+E         At index 0 diff: 'screening_issue' != 'Alert 1'
+E         Use -v to get more diff
+>       assert debug["parse_status"] == "parse_failed"
+E       AssertionError: assert 'parsed_empty' == 'parse_failed'
+E         
+E         - parse_failed
+E         + parsed_empty
+E       AssertionError: assert [] == ['Alert 1']
+E         
+E         Right contains one more item: 'Alert 1'
+E         Use -v to get more diff
+E       AssertionError: assert [{'type': 'text', 'text': '[1'}] == '[1'
+E        +  where [{'type': 'text', 'text': '[1'}] = chat([{'role': 'user', 'content': 'hi'}])
+E        +    where chat = <artemis.ai.client.OpenAICompatClient object at 0x0000025DB2DD9DF0>.chat
+E       AssertionError: assert 'unreadable' == 'cut_off'
+E         
+E         - cut_off
+E         + unreadable
+E       AssertionError: assert ['Possible TD...nal toxicity'] == ['Possible TD...CNS toxicity']
+E         
+E         Right contains one more item: 'Possible EFV CNS toxicity'
+E         Use -v to get more diff
+E       AssertionError: assert 'Hb 9.1 then ...ne 1.4 mg/dL.' == 'Hb 9.1 then ...ne 1.4 mg/dL.'
+E         
+E         - Hb 9.1 then 7.2 g/dL. Hb 9.1 then 7.2 g/dL is falling. Creatinine 1.4 mg/dL.
+E         + Hb 9.1 then 7.2 g/dL. Creatinine 1.4 mg/dL.
+E       AssertionError: assert ['Alert 1'] == ['Alert 1', 'Other']
+E         
+E         Right contains one more item: 'Other'
+E         Use -v to get more diff
+E       AssertionError: assert 'severe' == 'not given'
+E         
+E         - not given
+E         + severe
+E       AssertionError: assert 'unspecified' == 'not given'
+E         
+E         - not given
+E         + unspecified
+E       AssertionError: assert ' High ' == 'high'
+E         
+E         - high
+E         +  High
+E       KeyError: 'shown_to_ai'
+E       AssertionError: assert ['c1', 'c2'] == ['c1']
+E         
+E         Left contains one more item: 'c2'
+E         Use -v to get more diff
+FAILED tests/test_ai_replies.py::test_a_bracketed_reference_before_the_list_is_not_read_as_the_list
+FAILED tests/test_ai_replies.py::test_a_single_alert_sent_without_a_list_is_read_as_one_alert
+FAILED tests/test_ai_replies.py::test_alerts_written_as_plain_strings_are_unreadable_not_empty
+FAILED tests/test_ai_replies.py::test_a_reply_cut_off_partway_keeps_the_complete_alerts_and_says_it_was_cut
+FAILED tests/test_ai_replies.py::test_the_client_reports_a_reply_the_server_cut_off
+FAILED tests/test_ai_replies.py::test_a_cut_off_review_is_never_green - Asser...
+FAILED tests/test_ai_replies.py::test_different_alerts_with_similar_titles_are_both_kept
+FAILED tests/test_ai_replies.py::test_messages_are_shown_as_written - Asserti...
+FAILED tests/test_ai_replies.py::test_only_exact_repeats_are_dropped_and_clashing_ids_are_kept_apart
+FAILED tests/test_ai_replies.py::test_severity_is_one_of_the_four_or_not_given[severe-not given]
+FAILED tests/test_ai_replies.py::test_severity_is_one_of_the_four_or_not_given[-not given]
+FAILED tests/test_ai_replies.py::test_severity_is_one_of_the_four_or_not_given[ High -high]
+FAILED tests/test_ai_replies.py::test_a_citation_to_a_passage_the_ai_was_not_shown_is_marked
+FAILED tests/test_ai_replies.py::test_an_ai_alerts_references_are_the_passages_it_was_shown_and_cited
+14 failed in 32.03s
+
+Also measured in the audit (replaying the 21 baseline replies and stub replies): a hepatitis B alert dropped as a look-alike title, a high viral-load alert merged into a creatinine alert, 'Hb 9.1 then 7.2' cut to 'Hb 9.1'; 273 of 335 listed References were never shown to the AI.

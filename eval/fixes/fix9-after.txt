@@ -1,0 +1,31 @@
+Fix 9, after (2026-11-25).
+
+Tests: tests/test_visit_record.py (6) and tests/test_screen_visit_record.py (3): all 9 failed
+first (8 in fix9-before.txt; the ninth, a saved line that can't be rebuilt, showed no warning and
+would have drawn an alert titled "None"), all pass now. Whole suite: 113 passed. Code map check:
+0 problems.
+Golden check unchanged: the record is not part of the harness output, and the harness and every
+test now send records to a throwaway folder (tests/conftest.py). No Data/visit_records folder
+appeared after the suite ran.
+
+Real screen in Chrome, against the A100 (Llama 3.3 70B), patient P001:
+1. Save: 3 alerts (1 rule, 2 AI), YELLOW. The record file got a checks_run line.
+2. Acknowledged two alerts, overrode the third with "Other" and no comment: Finalize stayed
+   disabled with "Finalize is disabled until all alerts are acknowledged or overridden with a
+   reason (the reason 'Other' needs a comment)." Screenshot: fix9-other-needs-a-comment.png.
+3. Typed a comment: Finalize enabled. Finalize: "Visit finalized and saved (2026-11-25 14:46 UTC)."
+4. Reloaded the page: no results shown, only "Show last saved results (2026-11-25 14:45 UTC,
+   finalized)". Pressed it: the same 3 alerts, "Saved results from 2026-11-25 14:45 UTC. No new AI
+   call was made.", the override with its reason and comment, and "Visit finalized and saved".
+   No "note changed" warning (same note). Screenshot: fix9-reopened-results.png.
+
+The record file after step 3 (one line per event, read back; visit id shortened, note left out):
+  checks_run bfdd728e 2026-11-25T14:45:01+00:00 | patient P001 | visit date 2026-01-22 | model ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4 | code b774bdb-dirty | AI review ok | status YELLOW
+     alert: rule | Creatinine monitoring overdue while on TDF | severity None
+     alert: ai | Missing Recent Creatinine | severity moderate
+     alert: ai | Inadequate Virological Monitoring | severity moderate
+  finalized bfdd728e 2026-11-25T14:46:46+00:00
+     decision: Creatinine monitoring overdue while on TDF | Acknowledge | - | -
+     decision: Missing Recent Creatinine | Acknowledge | - | -
+     decision: Inadequate Virological Monitoring | Override | Other | Viral load already requested at the last visit; result pending.
+("-dirty" in the code version: this run used the fix 9 code before it was committed.)

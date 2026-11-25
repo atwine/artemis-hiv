@@ -1,0 +1,29 @@
+E       AssertionError: assert 'None recorded' not in 'Patient ID:...vant issues.'
+E         
+E         'None recorded' is contained here:
+E            results:
+E           None recorded
+E           
+E           Stage 1 summary JSON:
+E         ?                                                                                                                                                                                                                           
+E         
+E         ...Full output truncated, use '-vv' to show
+E       AssertionError: assert 'viral load 40 copies/mL on 2025-10-01 (113 days before the visit)' in 'Patient ID: P001\nAge: 34 years\nSex: M\nEncounter date: 2026-01-22\n\nCurrent ART regimen: TDF, 3TC, DTG\nOther medi...\n\nNow
+E        +  where 'Patient ID: P001\nAge: 34 years\nSex: M\nEncounter date: 2026-01-22\n\nCurrent ART regimen: TDF, 3TC, DTG\nOther medi...\n\nNow output ONLY a JSON array of issues as described, or an empty array if there are no 
+E       AssertionError: assert 'Visit note (2025-12-15, intake):' in 'Patient ID: P002\nAge: 29 years\nSex: F\nEncounter date: 2026-01-22\n\nCurrent ART regimen: TDF, 3TC, DTG\nOther medi...\n\nNow output ONLY a JSON array of issu
+E       AssertionError: assert 'Pasted lab text (entered 2026-02-24, previous results):' in 'Patient ID: P005\nAge: 38 years\nSex: F\nEncounter date: 2026-02-24\n\nCurrent ART regimen: TDF/3TC/DTG (TLD) fixed-d...\n\nNow output ON
+E       AttributeError: 'LabResult' object has no attribute 'unit'
+E       ModuleNotFoundError: No module named 'artemis.patient.labs'
+E       ModuleNotFoundError: No module named 'artemis.patient.labs'
+E       ModuleNotFoundError: No module named 'artemis.patient.labs'
+E       ModuleNotFoundError: No module named 'artemis.patient.labs'
+FAILED tests/test_lab_input.py::test_structured_labs_reach_the_model_with_unit_date_and_age
+FAILED tests/test_lab_input.py::test_the_app_works_out_how_old_each_result_is
+FAILED tests/test_lab_input.py::test_todays_note_is_labelled_apart_from_earlier_visits
+FAILED tests/test_lab_input.py::test_pasted_lab_text_is_labelled_with_its_date_and_source
+FAILED tests/test_lab_input.py::test_labs_saved_in_the_new_shape_are_read_by_the_rules
+FAILED tests/test_lab_input.py::test_a_creatinine_in_mg_per_dl_keeps_its_unit
+FAILED tests/test_lab_input.py::test_a_creatinine_with_no_unit_that_looks_like_mg_per_dl_is_refused
+FAILED tests/test_lab_input.py::test_a_blank_unit_takes_the_usual_unit_and_keeps_the_value_as_typed
+FAILED tests/test_lab_input.py::test_a_date_in_another_format_is_refused_not_stamped_with_today
+9 failed in 9.31s

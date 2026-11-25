@@ -1,0 +1,34 @@
+Fix 10, before (2026-11-25, commit ecc8603).
+
+Measured on the code before the fix:
+- Trend labels the AI plan step read: P002 viral load "30 (2024-09-15) -> 20 (2025-09-15) - FALLING"
+  (both undetectable); P005, P006 and Kintu: a pasted lab paragraph labelled as a trend;
+  creatinine 70 -> 150 -> 140 -> 130 labelled FALLING; viral load 40, <50, 1200 read without the <50.
+- Guideline cleaner: "If VL < 50 copies/mL and CD4 > 200, continue." -> "If VL  200, continue."
+  Across the four guideline files it kept 289 thresholds such as "<50" or "> 200" (540 after).
+  A WHO figure block holding the 2025 DTG+3TC recommendation was dropped whole.
+- A failed call to a model server put the server's address in the error text shown on screen,
+  and the LLM settings panel printed the address.
+- Audit, measured: a damaged custom_patients.json read as empty, so the next added case wiped
+  every saved case; the backup guideline store kept only the last file indexed.
+
+The fix 10 tests on the old code (15 failed; the HTML-tags guard passed, as intended):
+E   AssertionError: assert 'If VL  200, continue.' == 'If VL < 50 c...00, continue.'
+E   AssertionError: assert ('Recommendation 2025' in '\n')
+E   AssertionError: assert ['uganda__0',..., 'uganda__2'] == ['uganda__0',..._0', 'who__1']
+E   AssertionError: assert ('Lab trends' not in 'Patient id:...e retrieved.'
+E   assert not True
+E   assert ('Model server call failed (http://<local test address>/v1): ConnectionError: HTTPConnectionPool(host=\'127.0.0.1\', port=9): Ma...blish a new connection: [WinError 10061] No connection could be made because t
+     +  where 'Model server call failed (http://<local test address>/v1): ConnectionError: HTTPConnectionPool(host=\'127.0.0.1\', port=9): Ma...blish a new connection: [WinError 10061] No connection could be made because
+        Model server call failed (http://127.0.0.1:9/v1): ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=9): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError("HTTPConnection(h
+D:\GitHub Repos\MedGemma_Kaggle_Competition_2026\.claude\worktrees\kaggle-project-review-89c107\tests\test_small_fixes.py:112: assert ('Model server call failed (http://<local test address>/v1): ConnectionError: HTTPConn
+E   ImportError: cannot import name 'ollama_host' from 'artemis.ai.client' (D:\GitHub Repos\MedGemma_Kaggle_Competition_2026\.claude\worktrees\kaggle-project-review-89c107\artemis\ai\client.py)
+E   ModuleNotFoundError: No module named 'artemis.patient.store'
+E   AttributeError: module 'app' has no attribute '_load_demo_patients'. Did you mean: '_load_custom_patients'?
+E   assert '10.0.0.1' not in "<div style=...he analysis."
+E   assert False
+E   assert (["**Regimen:** <span style='color: #2E86AB; font-weight: 600;'><b>TDF</b></span>"] and '&lt;b&gt;TDF&lt;/b&gt;' in "**Regimen:** <span style='color: #2E86AB; font-weight: 600;'><b>TDF</b></span>")
+E   assert '**Visit Type:** Not recorded' in ["<div style='background-color: #FFF4E6; padding: 12px; border-radius: 6px; border-left: 4px solid #F4A261; margin-bot...2E86AB; margin-top: 0;'>1. Patient Identifier & Visit 
+E   assert 'What the AI was given about the patient' in "<div style='background-color: #FFF4E6; padding: 12px; border-radius: 6px; border-left: 4px solid #F4A261; margin-bott...ecks)' to update them.\nGREEN: no alerts. T
+E   assert False
+15 failed, 1 passed in 31.29s

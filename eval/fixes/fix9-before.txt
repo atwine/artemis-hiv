@@ -1,0 +1,28 @@
+Fix 9, before (2026-11-25, commit cbd1d3d). The real screen, run headlessly (scratch script):
+
+Patient P001: alert 1 acknowledged; alert 2 overridden with reason 'Other' and no comment.
+Finalize button enabled: True
+Screen says: ['Visit finalized.', '4 guideline file(s) found.']
+Files written or changed by Finalize: none
+After reloading the page: analysis on screen: False | 'Visit finalized' shown: False
+
+The fix 9 tests on the old code (8 failed):
+E       AssertionError: assert [] == ['checks_run']
+E         Right contains one more item: 'checks_run'
+E         Use -v to get more diff
+E       AssertionError: assert not True
+E       ImportError: cannot import name 'visit_record' from 'artemis' 
+E       ImportError: cannot import name 'visit_record' from 'artemis' 
+E       ImportError: cannot import name 'visit_record' from 'artemis' 
+E       ImportError: cannot import name 'visit_record' from 'artemis' 
+E       AssertionError: assert False
+E       StopIteration
+FAILED tests/test_visit_record.py::test_running_the_checks_saves_a_record - A...
+FAILED tests/test_visit_record.py::test_other_as_an_override_reason_needs_a_written_comment
+FAILED tests/test_visit_record.py::test_saved_results_come_back_exactly_as_they_were_shown
+FAILED tests/test_visit_record.py::test_a_half_written_line_is_counted_and_the_lines_after_it_still_read
+FAILED tests/test_visit_record.py::test_a_patient_id_cannot_write_outside_the_records_folder
+FAILED tests/test_visit_record.py::test_patients_whose_ids_look_alike_never_share_records
+FAILED tests/test_screen_visit_record.py::test_finalize_saves_each_decision_and_other_needs_a_comment
+FAILED tests/test_screen_visit_record.py::test_a_patients_last_results_come_back_only_when_asked
+8 failed in 27.25s

@@ -112,7 +112,7 @@ ollama pull aadide/medgemma-1.5-4b-it-Q4_K_S
 ### Model selection
 
 By default the app uses:
-- `aadide/medgemma-1.5-4b-it-Q4_K_S` (`modules/llm_client.py:L20-L23`)
+- `aadide/medgemma-1.5-4b-it-Q4_K_S` (`artemis/ai/client.py`, `OllamaConfig`)
 
 To override the model without changing code:
 
@@ -178,7 +178,7 @@ If the model tag differs, set `OLLAMA_MODEL` as shown above.
 ### Reset the local vector DB
 
 Chroma persists locally under:
-- `storage/chroma/` (`modules/vector_store.py:L173-L185`)
+- `storage/chroma/` (`artemis/guidelines/vector_store.py`)
 
 To rebuild the index, stop the app and delete `storage/chroma/`.
 

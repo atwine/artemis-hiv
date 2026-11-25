@@ -1,0 +1,6 @@
+Fix 6, after (2026-11-25).
+
+Tests (tests/test_summary_facts.py): 5 passed (failed before). P002's summary now: not_recorded = other medications, orders today, medicine changes today; assessment_and_plan_today = 'Routine follow-up. Stable. Discussed DSD eligibility.'
+Golden diff: only the screening model's input changed, for all 7 patients.
+Real Save for P002 on the A100 (one run): exceptions: [] status: YELLOW | outcome: ok | error: None alert sections: ['Alert (AI review): Viral Load Monitoring', 'Alert (AI review): Creatinine Monitoring']  
+Baseline for P002: 3 to 5 alerts per run, including 'Missing Laboratory Results' (3 of 3) and 'No Current Clinician Plan' (1 of 3). Whether the two remaining monitoring alerts are due (VL 129 days, creatinine 38 days old) is a clinical call for Phase 2.

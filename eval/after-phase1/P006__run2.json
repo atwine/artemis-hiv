@@ -1,0 +1,694 @@
+{
+  "patient_id": "P006",
+  "git_commit": "a6fc3f9+uncommitted",
+  "model": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+  "seconds": 23.5,
+  "overall_status": "YELLOW",
+  "llm_error": null,
+  "expected_demo_outcome": null,
+  "rule_alerts": [
+    {
+      "alert_id": "tdf_creatinine_pasted_only",
+      "title": "Creatinine recorded only as pasted text",
+      "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "DTG"
+        ],
+        "creatinine": "pasted text only"
+      },
+      "query_hint": "TDF creatinine monitoring frequency",
+      "source": "rule"
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "tdf_creatinine_pasted_only",
+      "title": "Creatinine recorded only as pasted text",
+      "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+      "evidence": {
+        "regimen": [
+          "TDF",
+          "3TC",
+          "DTG"
+        ],
+        "creatinine": "pasted text only"
+      },
+      "query_hint": "TDF creatinine monitoring frequency",
+      "source": "rule"
+    },
+    {
+      "alert_id": "P006_001",
+      "title": "Elevated Creatinine Level",
+      "message": "Guidelines do not specify exact creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "toxicity",
+        "severity": "moderate",
+        "recommended_action": "Monitor renal function",
+        "citations": [
+          {
+            "page_number": 0,
+            "chunk_id": "information_gap",
+            "shown_to_ai": false
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P006_001",
+          "title": "Elevated Creatinine Level",
+          "message": "Guidelines do not specify exact creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered.",
+          "issue_type": "toxicity",
+          "severity": "moderate",
+          "recommended_action": "Monitor renal function",
+          "citations": [
+            {
+              "page_number": 0,
+              "chunk_id": "information_gap"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "P006_002",
+      "title": "Potential Drug Interaction",
+      "message": "DTG interacts with divalent cation-containing medications. Patient is taking ferrous sulfate, which may interact with DTG.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "drug_interaction",
+        "severity": "moderate",
+        "recommended_action": "Monitor for DTG efficacy",
+        "citations": [
+          {
+            "page_number": 48,
+            "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+            "shown_to_ai": true
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P006_002",
+          "title": "Potential Drug Interaction",
+          "message": "DTG interacts with divalent cation-containing medications. Patient is taking ferrous sulfate, which may interact with DTG.",
+          "issue_type": "drug_interaction",
+          "severity": "moderate",
+          "recommended_action": "Monitor for DTG efficacy",
+          "citations": [
+            {
+              "page_number": 48,
+              "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    },
+    {
+      "alert_id": "P006_003",
+      "title": "Viral Load Monitoring",
+      "message": "Guidelines recommend viral load monitoring at 6 months after ART initiation and every 6-12 months. Patient's viral load was last checked at baseline and after 3 months of ART.",
+      "evidence": {
+        "type": "llm_screening",
+        "issue_type": "monitoring_gap",
+        "severity": "low",
+        "recommended_action": "Schedule viral load test at 6 months",
+        "citations": [
+          {
+            "page_number": 50,
+            "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+            "shown_to_ai": true
+          }
+        ],
+        "raw_issue": {
+          "alert_id": "P006_003",
+          "title": "Viral Load Monitoring",
+          "message": "Guidelines recommend viral load monitoring at 6 months after ART initiation and every 6-12 months. Patient's viral load was last checked at baseline and after 3 months of ART.",
+          "issue_type": "monitoring_gap",
+          "severity": "low",
+          "recommended_action": "Schedule viral load test at 6 months",
+          "citations": [
+            {
+              "page_number": 50,
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+            }
+          ]
+        }
+      },
+      "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+      "source": "ai"
+    }
+  ],
+  "results": [
+    {
+      "alert_id": "tdf_creatinine_pasted_only",
+      "explanation": "Why this alert: A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.\nPatient evidence: {'regimen': ['TDF', '3TC', 'DTG'], 'creatinine': 'pasted text only'}\n\nGuideline excerpts:\n- (page=40) blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guideline\n- (page=7) Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Conti\n- (page=29) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+          "distance": 0.7774598598480225,
+          "metadata": {
+            "page_number": 40,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with deh"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+          "distance": 0.7818419337272644,
+          "metadata": {
+            "page_number": 7,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Continue routine creatinine monitoring Creatinine rise "
+        },
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+          "distance": 0.7824124693870544,
+          "metadata": {
+            "page_number": 29,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool"
+        },
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p6_c4",
+          "distance": 0.8147252798080444,
+          "metadata": {
+            "page_number": 6,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "1-3% of patients can be expected to develop DTG resistance within 1-3 years. 4,22,24,25 Prior InSTI exposure with RAL also puts a patient at an increased risk of DTG resistance. ## Common side-effects DTG and RAL are generally well tolerated, with most side-effects being mild and very rarely leading to discontinuation. DTG may cause a mild increase in serum creatinine due to interference with tubu"
+        },
+        {
+          "chunk_id": "who_guidelines.extraction__who_guidelines.extraction__p30_c3",
+          "distance": 0.8211586475372314,
+          "metadata": {
+            "source_path": "Data\\MarkDown Files\\WHO_guidelines.extraction.md",
+            "page_number": 30
+          },
+          "excerpt": "even trials reporting this outcome, but the absolute difference was small (mean difference range: -2.3 to -7.7 mL/min/1.73m2). Rise in total cholesterol was greater with TAF than TDF in all 10 studies reporting the outcome, but the absolute difference for this outcome was also small (mean difference range: +13 to + 35 mg/dL). Pregnancy adverse events were evaluated in one trial (VESTED study), and"
+        }
+      ]
+    },
+    {
+      "alert_id": "P006_001",
+      "explanation": "Why this alert: Guidelines do not specify exact creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function', 'citations': [{'page_number': 0, 'chunk_id': 'information_gap', 'shown_to_ai': False}], 'raw_issue': {'alert_id': 'P006_001', 'title': 'Elevated Creatinine Level', 'message': \"Guidelines do not specify exact creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered.\", 'issue_type': 'toxicity', 'severity': 'moderate', 'recommended_action': 'Monitor renal function', 'citations': [{'page_number': 0, 'chunk_id': 'information_gap'}]}}\n\nGuideline excerpts: none retrieved",
+      "explanation_used_llm": false,
+      "retrieved": []
+    },
+    {
+      "alert_id": "P006_002",
+      "explanation": "Why this alert: DTG interacts with divalent cation-containing medications. Patient is taking ferrous sulfate, which may interact with DTG.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'drug_interaction', 'severity': 'moderate', 'recommended_action': 'Monitor for DTG efficacy', 'citations': [{'page_number': 48, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4', 'shown_to_ai': True}], 'raw_issue': {'alert_id': 'P006_002', 'title': 'Potential Drug Interaction', 'message': 'DTG interacts with divalent cation-containing medications. Patient is taking ferrous sulfate, which may interact with DTG.', 'issue_type': 'drug_interaction', 'severity': 'moderate', 'recommended_action': 'Monitor for DTG efficacy', 'citations': [{'page_number': 48, 'chunk_id': 'sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4'}]}}\n\nGuideline excerpts:\n- (page=48) etween DTG and divalent cation-containing medication in pregnancy, since pregnant women frequently receive iron or calcium supplements and/or magnesium-/aluminium- containing antacids (see module 17). Patients returning to care in pregnancy after interrupting a first-line NNRTI regimen or those exposed to previous VTP regimens should be put directl",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+          "distance": 0.7669270038604736,
+          "metadata": {
+            "page_number": 48,
+            "source_path": "Data\\MarkDown Files\\SAHCS_Adult_ART_2024.md"
+          },
+          "excerpt": "etween DTG and divalent cation-containing medication in pregnancy, since pregnant women frequently receive iron or calcium supplements and/or magnesium-/aluminium- containing antacids (see module 17). Patients returning to care in pregnancy after interrupting a first-line NNRTI regimen or those exposed to previous VTP regimens should be put directly on a DTG-based regimen, rather than retrying an "
+        }
+      ]
+    },
+    {
+      "alert_id": "P006_003",
+      "explanation": "Why this alert: Guidelines recommend viral load monitoring at 6 months after ART initiation and every 6-12 months. Patient's viral load was last checked at baseline and after 3 months of ART.\nPatient evidence: {'type': 'llm_screening', 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Schedule viral load test at 6 months', 'citations': [{'page_number': 50, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2', 'shown_to_ai': True}], 'raw_issue': {'alert_id': 'P006_003', 'title': 'Viral Load Monitoring', 'message': \"Guidelines recommend viral load monitoring at 6 months after ART initiation and every 6-12 months. Patient's viral load was last checked at baseline and after 3 months of ART.\", 'issue_type': 'monitoring_gap', 'severity': 'low', 'recommended_action': 'Schedule viral load test at 6 months', 'citations': [{'page_number': 50, 'chunk_id': 'hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2'}]}}\n\nGuideline excerpts:\n- (page=50) -9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repe",
+      "explanation_used_llm": false,
+      "retrieved": [
+        {
+          "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+          "distance": 0.8017305731773376,
+          "metadata": {
+            "page_number": 50,
+            "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+          },
+          "excerpt": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment"
+        }
+      ]
+    }
+  ],
+  "screening": {
+    "raw_output": "[\n  {\n    \"alert_id\": \"P006_001\",\n    \"title\": \"Elevated Creatinine Level\",\n    \"message\": \"Guidelines do not specify exact creatinine thresholds. Patient's creatinine level increased from 0.8 mg/dL to 1.1 mg/dL after starting TDF/3TC/DTG. This could be due to TDF, but other non-drug causes should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor renal function\",\n    \"citations\": [{\"page_number\": 0, \"chunk_id\": \"information_gap\"}]\n  },\n  {\n    \"alert_id\": \"P006_002\",\n    \"title\": \"Potential Drug Interaction\",\n    \"message\": \"DTG interacts with divalent cation-containing medications. Patient is taking ferrous sulfate, which may interact with DTG.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor for DTG efficacy\",\n    \"citations\": [{\"page_number\": 48, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4\"}]\n  },\n  {\n    \"alert_id\": \"P006_003\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend viral load monitoring at 6 months after ART initiation and every 6-12 months. Patient's viral load was last checked at baseline and after 3 months of ART.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule viral load test at 6 months\",\n    \"citations\": [{\"page_number\": 50, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\"}]\n  }\n]",
+    "screening_bundle": [
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p49_c1",
+        "page_number": 49,
+        "quote": "TABLE 21: Timing of viral load monitoring during pregnancy, delivery and breastfeeding. Period ART initiation in pregnancy Already on ART at diagnosis of pregnancy Previously taken ART, not currently on treatment (ART interruption, ART for PMTCT) Newly diagnosed HIV infection during delivery or breastfeeding Antenatal VL at baseline and after 3 months of ART: if > 28 weeks' gestation, then repeat VL at delivery VL at first ANC visit VL at initiation of DTG-based regimen; repe"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p48_c4",
+        "page_number": 48,
+        "quote": "etween DTG and divalent cation-containing medication in pregnancy, since pregnant women frequently receive iron or calcium supplements and/or magnesium-/aluminium- containing antacids (see module 17). Patients returning to care in pregnancy after interrupting a first-line NNRTI regimen or those exposed to previous VTP regimens should be put directly on a DTG-based regimen, rather than retrying an NNRTI-regimen (see also module 16). As per the current PMTCT guidelines, women n"
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+        "page_number": 50,
+        "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+      },
+      {
+        "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p64_c1",
+        "page_number": 64,
+        "quote": "The ACTG A5372 trial showed that DTG needs to be given twice daily for 28 days if co-administered with rifapentine. 137 Rifapentine also affects the metabolism of common ARV drugs most affected by CYP induction such as all protease inhibitors (PIs) including LPV/r, and some non-nucleoside reverse transcriptase inhibitors (NNRTIs), including nevirapine. 138 All patients receiving ART should be considered for TPT after having been screened for active TB using a symptom screen, "
+      },
+      {
+        "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+        "page_number": 13,
+        "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+      }
+    ],
+    "parse_status": "parsed_nonempty",
+    "finish_reason": "stop",
+    "client_note": null,
+    "exact_repeats_dropped": 0
+  },
+  "patient_summary_seen": {
+    "patient_id": "P006",
+    "encounter_date": "2026-02-24",
+    "current_regimen": [
+      "TDF",
+      "3TC",
+      "DTG"
+    ],
+    "regimen_history": [],
+    "other_medications": [],
+    "complaints_today": "29-year-old woman presents for routine 3-month follow-up after initiating ART. No complaints. Feeling well, energy improved since starting treatment.",
+    "examination_today": "BP 110/70 mmHg. Weight 68kg (pre-pregnancy weight 62kg). Fundal height appropriate for dates. Fetal movements present. No oedema. Urine dipstick negative for protein.",
+    "assessment_and_plan_today": "",
+    "orders_today": [],
+    "medicine_changes_today": [],
+    "past_labs": [],
+    "latest_labs": {},
+    "not_recorded": [
+      "regimen history",
+      "other medications",
+      "assessment and plan today",
+      "orders today",
+      "medicine changes today"
+    ]
+  },
+  "plan_items": [
+    {
+      "action": "Uncertain: monitor renal function",
+      "reason": "Uncertain: no clear guidance on TDF toxicity monitoring in provided excerpts",
+      "model_decision": "Not Addressed"
+    },
+    {
+      "action": "Uncertain: monitor for liver enzyme elevations",
+      "reason": "Uncertain: no specific guidance on 3TC toxicity monitoring in provided excerpts",
+      "model_decision": "Not Addressed"
+    },
+    {
+      "action": "Uncertain: monitor for DTG-related adverse effects",
+      "reason": "Uncertain: excerpts mention DTG contraindications but not monitoring for toxicity",
+      "model_decision": "Not Addressed"
+    }
+  ],
+  "agentic_result": {
+    "updated_management_plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: no information on potential drug toxicity or adverse effects from current regimen TDF, 3TC, DTG in patient data or guideline excerpts\"}, \"problems\": [{\"problem\": \"Potential drug toxicity from TDF\", \"action\": \"Uncertain: monitor renal function\", \"reason\": \"Uncertain: no clear guidance on TDF toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential TDF toxicity\"}}, {\"problem\": \"Potential drug toxicity from 3TC\", \"action\": \"Uncertain: monitor for liver enzyme elevations\", \"reason\": \"Uncertain: no specific guidance on 3TC toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential 3TC toxicity\"}}, {\"problem\": \"Potential drug toxicity from DTG\", \"action\": \"Uncertain: monitor for DTG-related adverse effects\", \"reason\": \"Uncertain: excerpts mention DTG contraindications but not monitoring for toxicity\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential DTG toxicity\"}}], \"monitoring_plan\": \"Monitor renal function, liver enzymes, and DTG-related adverse effects\", \"patient_counselling\": [\"Report any adverse effects to healthcare provider\", \"Adhere to prescribed regimen\", \"Attend follow-up appointments for monitoring\"]}",
+    "plan_issues": [],
+    "used_chunks": [],
+    "warnings": [
+      "agentic flow is in Phase 1 skeleton mode; no real planning/retrieval/reasoning has been applied"
+    ],
+    "debug_info": {
+      "normalized_context": {
+        "question_text": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?",
+        "patient_raw": {
+          "patient_id": "P006",
+          "age_years": 29,
+          "sex": "F",
+          "art_regimen_current": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "other_medications": [],
+          "visits": [
+            {
+              "date": "2026-02-24",
+              "type": "intake",
+              "clinician_note": "Complaints & Symptoms:\n29-year-old woman presents for routine 3-month follow-up after initiating ART. No complaints. Feeling well, energy improved since starting treatment.\n\nExamination Findings:\nBP 110/70 mmHg. Weight 68kg (pre-pregnancy weight 62kg). Fundal height appropriate for dates. Fetal movements present. No oedema. Urine dipstick negative for protein.\n\nSignificant history prior to today's visit:\nHIV diagnosed 10 weeks ago during antenatal screening. Currently 22 weeks pregnant (second pregnancy, first child alive and well). No other medical conditions. No regular medications prior to ART. Taking ferrous sulfate and folic acid as prescribed."
+            }
+          ],
+          "labs": {
+            "labs_narrative": [
+              {
+                "date": "2026-02-24",
+                "narrative_text": "Trial--Trial",
+                "source": "today"
+              },
+              {
+                "date": "2026-02-24",
+                "narrative_text": "Creatinine: 1.1 mg/dL (baseline before ART: 0.8 mg/dL). eGFR: 78 mL/min/1.73m2. Urinalysis: Normal, no protein, no glucose. Viral load: 89 copies/mL (down from 125,000 at diagnosis). CD4: 389 cells/uL (was 312 at diagnosis). Hb: 10.8 g/dL. Phosphate: 3.8 mg/dL (normal).",
+                "source": "previous"
+              }
+            ]
+          },
+          "today_encounter": {
+            "date": "2026-02-24",
+            "note": "",
+            "orders": [],
+            "med_changes": []
+          },
+          "intake": {
+            "complaints_symptoms": "29-year-old woman presents for routine 3-month follow-up after initiating ART. No complaints. Feeling well, energy improved since starting treatment.",
+            "examination_findings": "BP 110/70 mmHg. Weight 68kg (pre-pregnancy weight 62kg). Fundal height appropriate for dates. Fetal movements present. No oedema. Urine dipstick negative for protein.",
+            "prior_history": "HIV diagnosed 10 weeks ago during antenatal screening. Currently 22 weeks pregnant (second pregnancy, first child alive and well). No other medical conditions. No regular medications prior to ART. Taking ferrous sulfate and folic acid as prescribed."
+          },
+          "art_regimen_as_entered": "TDF/3TC/DTG (TLD) initiated 10 weeks ago."
+        },
+        "patient_summary": {
+          "patient_id": "P006",
+          "encounter_date": "2026-02-24",
+          "current_regimen": [
+            "TDF",
+            "3TC",
+            "DTG"
+          ],
+          "regimen_history": [],
+          "other_medications": [],
+          "complaints_today": "29-year-old woman presents for routine 3-month follow-up after initiating ART. No complaints. Feeling well, energy improved since starting treatment.",
+          "examination_today": "BP 110/70 mmHg. Weight 68kg (pre-pregnancy weight 62kg). Fundal height appropriate for dates. Fetal movements present. No oedema. Urine dipstick negative for protein.",
+          "assessment_and_plan_today": "",
+          "orders_today": [],
+          "medicine_changes_today": [],
+          "past_labs": [],
+          "latest_labs": {},
+          "not_recorded": [
+            "regimen history",
+            "other medications",
+            "assessment and plan today",
+            "orders today",
+            "medicine changes today"
+          ]
+        },
+        "metadata": {
+          "top_k": 5
+        }
+      },
+      "subtasks": [
+        {
+          "name": "drug_toxicity_TDF",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for TDF.",
+          "retrieval_query": "TDF side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_3TC",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for 3TC.",
+          "retrieval_query": "3TC side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "drug_toxicity_DTG",
+          "description": "Retrieve guideline sections about known side effects, toxicity markers, monitoring requirements, and switching criteria for DTG.",
+          "retrieval_query": "DTG side effects toxicity monitoring renal hepatic haematological switching criteria contraindications",
+          "priority": "high"
+        },
+        {
+          "name": "symptom_toxicity_match",
+          "description": "Retrieve guideline sections that describe how specific symptoms (e.g. fatigue, bone pain, rash, reduced urine, nausea, peripheral neuropathy) can indicate ART drug toxicity, and how to confirm each suspected toxicity.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: which symptoms indicate drug toxicity, how to confirm suspected toxicity with lab tests, and what confirmatory investigations are recommended.",
+          "priority": "high"
+        },
+        {
+          "name": "doctors_plan_check",
+          "description": "Retrieve guideline sections about recommended clinical actions, required monitoring, counselling, and follow-up so the system can compare them against the doctor's current plan and flag any gaps.",
+          "retrieval_query": "Review this patient's symptoms, examination findings, and lab results (including trends over time). Could any of them be signs of drug toxicity from their current or past ART medications or co-medications? If so, what tests confirm it, and does the doctor's current plan adequately address the issue per Uganda HIV guidelines?\n\nFocus on: recommended actions after identifying drug toxicity, required lab monitoring intervals, patient counselling, when to switch regimen, and follow-up timing.",
+          "priority": "medium"
+        }
+      ],
+      "evidence_bundles": [
+        {
+          "subtask_name": "drug_toxicity_TDF",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5797921419143677
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.6078422665596008
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6132731437683105
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 10: Key highlights in Antiretroviral Therapy for people living with HIV - Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads assessed. If virally suppressed, their ART should be transitioned to optimal preferred first-line regimens. If not suppressed, the patients should be switched to second-line ART with IAC. - PLHIV initiated on DTG should be longitudinally monitored for adverse effects following recommended pharmacovigilance protocols. - Newly diagnosed pregnant and breastfeeding women shall be initiated on TDF+3TC+DTG or TAF+FTC+DTG. - Pregnant and breastfeeding women already on TLE should be maintained on this regimen until 6-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 50
+              },
+              "distance": 0.7077006697654724
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p18_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 • For HIV positive women and adolescent girls on TPT who get pregnant, continue and complete the TPT while closely monitoring for side effects. See *TB Preventive Treatment in Uganda 2020* for more information on determining eligibility for TPT. Table 41: TPT regimen for adolescents ≥ 15 years and adults on ART ARV Drug Regimen TPT regimen Options Rationale for TPT regimen TDF or AZT or ABC + 3TC + DTG or TAF+FTC + DTG Isoniazid (6H) or Isoniazid-Rifapentine-based regimens No dose adjustment of DTG with Isoniazid-Rifapentin-based regimen TDF or AZT or ABC + 3TC+ ATV/r TDF or AZT or ABC + 3TC + LPV/r or or TAF+FTC + LPV/r Isoniazid (6H) Co-administration of rifamycins (such as rifampicin) with protease inhibitors has been associated with reduction in plasma levels of protease inhibitors. TDF or AZT or ABC + 3TC+EFV or TAF+FTC + EFV Isoniazid (6H) or Isoniazid/ Rifapentine-based regimens A higher dose of EFV, i.e. 600mg is recommended if Isoniazid/ Rifapentin-based regimen is used Table 42: TPT regimen for children < 15 years on ART ARV Regimen TPT regimen options Rationale for TPT regimen",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 18
+              },
+              "distance": 0.7299319505691528
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_3TC",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 10
+              },
+              "distance": 0.5910019874572754
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.6110799312591553
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.627875804901123
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 10: Key highlights in Antiretroviral Therapy for people living with HIV - Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads assessed. If virally suppressed, their ART should be transitioned to optimal preferred first-line regimens. If not suppressed, the patients should be switched to second-line ART with IAC. - PLHIV initiated on DTG should be longitudinally monitored for adverse effects following recommended pharmacovigilance protocols. - Newly diagnosed pregnant and breastfeeding women shall be initiated on TDF+3TC+DTG or TAF+FTC+DTG. - Pregnant and breastfeeding women already on TLE should be maintained on this regimen until 6-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen.",
+              "metadata": {
+                "page_number": 50,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7189044952392578
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c2",
+              "document": "gations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE Antiretroviral drugs and other drugs used in HIV care can cause a wide range of toxicities, from low-grade intolerance that may be self-limiting to life-threatening side effects. Differentiating between ART toxicity (also known as adverse reactions) and complications of HIV disease is sometimes difficult. An observed toxicity could be due to a concurrent infectious process or due to a reaction to medications other than ARVs such as Isoniazid–induced hepatitis in a child on treatment for TB or a rash induced by Cotrimoxazole.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.7240757346153259
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "drug_toxicity_DTG",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 10
+              },
+              "distance": 0.5478533506393433
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.6012696027755737
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6235692501068115
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 10: Key highlights in Antiretroviral Therapy for people living with HIV - Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads assessed. If virally suppressed, their ART should be transitioned to optimal preferred first-line regimens. If not suppressed, the patients should be switched to second-line ART with IAC. - PLHIV initiated on DTG should be longitudinally monitored for adverse effects following recommended pharmacovigilance protocols. - Newly diagnosed pregnant and breastfeeding women shall be initiated on TDF+3TC+DTG or TAF+FTC+DTG. - Pregnant and breastfeeding women already on TLE should be maintained on this regimen until 6-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen.",
+              "metadata": {
+                "page_number": 50,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6835877895355225
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c2",
+              "document": "r within 2 weeks of ART initiation if newly identified HIV positive) * **Virally suppressed children currently on NNRTI**: Initiate TPT as soon as possible and complete course before ART optimization. * **Virally suppressed children currently on PI or DTG**: Initiate TPT if the child has been on ART for at least 3 months. * **Newly initiating ART**: Initiate TPT prophylaxis after 3 months on ART. **Co-administration of DTG and TPT** Although studies have found that the co-administration of DTG and INH is well tolerated, liver injury is a recognized adverse effect of each of 170",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 19
+              },
+              "distance": 0.7181161642074585
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "symptom_toxicity_match",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "page_number": 10,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.5947839021682739
+            },
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "page_number": 1,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md"
+              },
+              "distance": 0.604616641998291
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.6369473934173584
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 10: Key highlights in Antiretroviral Therapy for people living with HIV - Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads assessed. If virally suppressed, their ART should be transitioned to optimal preferred first-line regimens. If not suppressed, the patients should be switched to second-line ART with IAC. - PLHIV initiated on DTG should be longitudinally monitored for adverse effects following recommended pharmacovigilance protocols. - Newly diagnosed pregnant and breastfeeding women shall be initiated on TDF+3TC+DTG or TAF+FTC+DTG. - Pregnant and breastfeeding women already on TLE should be maintained on this regimen until 6-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen.",
+              "metadata": {
+                "page_number": 50,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7271943092346191
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c2",
+              "document": "gations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE Antiretroviral drugs and other drugs used in HIV care can cause a wide range of toxicities, from low-grade intolerance that may be self-limiting to life-threatening side effects. Differentiating between ART toxicity (also known as adverse reactions) and complications of HIV disease is sometimes difficult. An observed toxicity could be due to a concurrent infectious process or due to a reaction to medications other than ARVs such as Isoniazid–induced hepatitis in a child on treatment for TB or a rash induced by Cotrimoxazole.",
+              "metadata": {
+                "page_number": 29,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7362016439437866
+            }
+          ],
+          "summary": null
+        },
+        {
+          "subtask_name": "doctors_plan_check",
+          "chunks": [
+            {
+              "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/height/BMI for age< -3 z scores Adults: BMI < 16 Or MUAC 6 to 59 months: < 11.5cm 5 to < 10 years: < 13.5cm 10 to <15years: < 16.0cm 15 to 18 years: < 18.5cm Adults 18 years and above: < 19.0cm Pregnant/Lactating women: < 19.0cm Elderly 60 years and above: < 16.0cm : flowchart YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_Co_infectionScreening.extraction.md",
+                "page_number": 1
+              },
+              "distance": 0.5829283595085144
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r *Refer to Table 78 for complete list of ARV adverse effects/toxicities and recommended drug substitutions. 6.12 MONITORING RESPONSE TO ART This chapter provides guidance on how to and when to use clinical assessment and laboratory monitoring tests to monitor response to ART, ART side effects and toxicity, and how to diagnose ART treatment failure. The purpose of monitoring patients on ART is to assess: * Response to ART and diagnose treatment failure * Safety of the medicines- side effects and toxicity. * Adherence to ART Monitoring adherence to ART is covered in Chapter 11. The visit schedule and the recommended clinical and laboratory monitoring are in Table 77.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 10
+              },
+              "distance": 0.5894625782966614
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clinical indication *Unavailability of laboratory tests should not prevent transition. Use clinical screening to assess for adverse effects. ## 6.14 COMMON DRUG TOXICITIES IN HIV CARE",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 29
+              },
+              "distance": 0.6307421326637268
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 10: Key highlights in Antiretroviral Therapy for people living with HIV - Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads assessed. If virally suppressed, their ART should be transitioned to optimal preferred first-line regimens. If not suppressed, the patients should be switched to second-line ART with IAC. - PLHIV initiated on DTG should be longitudinally monitored for adverse effects following recommended pharmacovigilance protocols. - Newly diagnosed pregnant and breastfeeding women shall be initiated on TDF+3TC+DTG or TAF+FTC+DTG. - Pregnant and breastfeeding women already on TLE should be maintained on this regimen until 6-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen.",
+              "metadata": {
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md",
+                "page_number": 50
+              },
+              "distance": 0.7055455446243286
+            },
+            {
+              "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c1",
+              "document": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 75: Components of a comprehensive clinical assessment of PLHIV Components 1. Demographics (age, sex etc.) 2. Symptom Screen and Advanced Disease Pathway-ask all patients all questions 3. Screen for signs and symptoms of Hepatitis B and C infections, malaria, and other infections 4. Screen for pregnancy (women of reproductive age) 5. Screen for co-morbidities especially Hypertension, Diabetes, CA cervix 6. Screen for STIs 7. Screen for symptoms of depression, anxiety and substance abuse 8. Obtain previous history of ART 9. Obtain previous history of chronic illnesses (hypertension, DM, COPD, kidney disease) 10. Obtain a list of current medication(s) 11. Screen for side/adverse effects of medications. 12. Establish family planning methods currently in use 13. Assess development, sexual awareness, and behavioral issues in adolescents 14. Assess school attendance (children of school-going age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months",
+              "metadata": {
+                "page_number": 11,
+                "source_path": "Data\\MarkDown Files\\HIV_Guidelines_ART.extraction.md"
+              },
+              "distance": 0.7167757749557495
+            }
+          ],
+          "summary": null
+        }
+      ],
+      "updated_management_plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: no information on potential drug toxicity or adverse effects from current regimen TDF, 3TC, DTG in patient data or guideline excerpts\"}, \"problems\": [{\"problem\": \"Potential drug toxicity from TDF\", \"action\": \"Uncertain: monitor renal function\", \"reason\": \"Uncertain: no clear guidance on TDF toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential TDF toxicity\"}}, {\"problem\": \"Potential drug toxicity from 3TC\", \"action\": \"Uncertain: monitor for liver enzyme elevations\", \"reason\": \"Uncertain: no specific guidance on 3TC toxicity monitoring in provided excerpts\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential 3TC toxicity\"}}, {\"problem\": \"Potential drug toxicity from DTG\", \"action\": \"Uncertain: monitor for DTG-related adverse effects\", \"reason\": \"Uncertain: excerpts mention DTG contraindications but not monitoring for toxicity\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented for potential DTG toxicity\"}}], \"monitoring_plan\": \"Monitor renal function, liver enzymes, and DTG-related adverse effects\", \"patient_counselling\": [\"Report any adverse effects to healthcare provider\", \"Adhere to prescribed regimen\", \"Attend follow-up appointments for monitoring\"]}"
+    }
+  },
+  "status_log": [
+    "vLLM: idle",
+    "running: vLLM: screening for safety issues…",
+    "complete: vLLM connected (response received)"
+  ],
+  "repeat": 2
+}
