@@ -123,3 +123,13 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: fix 5. One function recognises the drugs however they're written, the form uses a
   pick-list, and the old cases were converted once with their original text kept.
 
+**14. "Found nothing" reported as "missing".**
+- Example: the summary flagged a field as missing whenever a keyword search found nothing. Today's
+  plan counted only on lines starting "Plan:", and other medicines were read from a field name no
+  record had. So all 7 patients were told "today's plan: missing" and "other medications:
+  missing", and the AI raised "No Current Clinician Plan" and "Incomplete Medication History"
+  for patients whose records had both.
+- Caught by: printing the summary for every patient next to their actual record.
+- Fix: fix 6. The summary carries the recorded values themselves, and lists a field as not
+  recorded only when it is truly empty.
+

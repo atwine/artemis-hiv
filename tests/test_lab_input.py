@@ -61,7 +61,8 @@ def test_the_app_works_out_how_old_each_result_is() -> None:
 def test_todays_note_is_labelled_apart_from_earlier_visits() -> None:
     text = _model_input("P002")
     assert "Visit note (2025-12-15, intake):" in text
-    assert "Today's note (2026-01-22):\nRoutine follow-up. Stable. Discussed DSD eligibility." in text
+    # Labelled as today's assessment and plan since fix 6 (the whole box is today's plan).
+    assert "Clinician's assessment and plan today (2026-01-22):\nRoutine follow-up. Stable. Discussed DSD eligibility." in text
 
 
 def test_pasted_lab_text_is_labelled_with_its_date_and_source() -> None:

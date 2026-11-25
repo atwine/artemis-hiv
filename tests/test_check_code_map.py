@@ -92,6 +92,20 @@ def test_a_function_moved_twice_is_followed_to_its_final_home(tmp_path: Path) ->
     assert any("new home modules/a.py:clear does not exist" in p for p in ccm.check(cmap, broken, root))
 
 
+def test_a_function_moved_and_later_deleted_on_purpose_is_accepted(tmp_path: Path) -> None:
+    root = _project(tmp_path)
+    cmap = _write(root / "map.tsv", ccm.MAP_COLUMNS, FULL_MAP)
+    moves = _write(
+        root / "moves.tsv",
+        ccm.MOVE_COLUMNS,
+        [
+            ["2026-11-25", "fix 4", "move", "app.py:guess", "modules/a.py:guess", "golden"],
+            ["2026-11-25", "fix 6", "delete", "modules/a.py:guess", "-", "no callers"],
+        ],
+    )
+    assert ccm.check(cmap, moves, root) == []
+
+
 def test_the_real_code_map_and_moves_log_match_the_code() -> None:
     # Every function is mapped, every recorded move really happened. See docs/refactor/README.md.
     assert ccm.check() == []

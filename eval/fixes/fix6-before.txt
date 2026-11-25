@@ -1,0 +1,25 @@
+Fix 6, before (2026-11-25, commit fa4fac7).
+
+What the Stage 1 summary told the model, for every patient:
+P001 missing_flags: {'regimen_history': False, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': True, 'today_plan': True} | today_plan: [] | today's note: 'Routine follow-up. No issues.'
+P002 missing_flags: {'regimen_history': False, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': True, 'today_plan': True} | today_plan: [] | today's note: 'Routine follow-up. Stable. Discussed DSD eligibility.'
+P003 missing_flags: {'regimen_history': False, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': False, 'today_plan': True} | today_plan: [] | today's note: 'Complains of insomnia; has vivid dreams. No suicidal ideati
+P004 missing_flags: {'regimen_history': False, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': False, 'today_plan': True} | today_plan: [] | today's note: 'Omusawo, mpulira obulumi mu lubuto, but appetite is okay.'
+P006 missing_flags: {'regimen_history': True, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': True, 'today_plan': True} | today_plan: [] | today's note: ''
+P005 missing_flags: {'regimen_history': True, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': False, 'today_plan': True} | today_plan: [] | today's note: ''
+Kintu-Test 001 missing_flags: {'regimen_history': True, 'non_hiv_meds': True, 'past_plans': True, 'past_complaints': False, 'today_plan': True} | today_plan: [] | today's note: ''
+
+Baseline alerts this fed: P002 'No Current Clinician Plan' (run 1), P003 'Lack of Clinician Plan' (runs 1, 3), P001 'Incomplete Medication History' (run 2), P006 'Missing Regimen History' (runs 2, 3).
+
+Tests written first (tests/test_summary_facts.py) on the old code:
+E       KeyError: 'other_medications'
+E       KeyError: 'assessment_and_plan_today'
+E       KeyError: 'not_recorded'
+E       KeyError: 'examination_today'
+E       assert "Clinician's assessment and plan today (2026-01-22):\nRoutine follow-up. Stable. Discussed DSD eligibility." in 'Patient ID: P002\nAge: 29 years\nSex: F\nEncounter date: 2026-01-22\n\nC
+FAILED tests/test_summary_facts.py::test_other_medicines_on_the_record_reach_the_summary
+FAILED tests/test_summary_facts.py::test_the_whole_assessment_and_plan_box_is_todays_plan
+FAILED tests/test_summary_facts.py::test_not_recorded_lists_only_fields_that_are_truly_empty
+FAILED tests/test_summary_facts.py::test_complaints_and_examination_findings_are_in_the_summary
+FAILED tests/test_summary_facts.py::test_the_model_reads_todays_assessment_and_plan_under_that_name
+5 failed in 24.84s

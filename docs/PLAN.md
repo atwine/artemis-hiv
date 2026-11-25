@@ -58,7 +58,7 @@ test that fails on the old code, ends with that test passing, and is logged in
 - [x] Fix 3: rule alerts are never dropped, and a failed AI review is never green (old item 1.1).
 - [x] Fix 4: lab results carry their unit, date and age, and notes are dated.
 - [x] Fix 5: drugs are recognised however they're typed, and the rules read the medicine list.
-- [ ] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
+- [x] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
 - [ ] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
       "Continue" (old item 1.2).
 - [ ] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.

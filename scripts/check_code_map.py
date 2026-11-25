@@ -112,9 +112,12 @@ def check(code_map: Path = CODE_MAP, moves: Path = MOVES, root: Path = ROOT) -> 
     # A function can move or be replaced more than once (a -> b, later b -> c). A row's new home is valid
     # when the chain of later moves ends at a function that exists.
     later_moves: Dict[Tuple[str, str], Tuple[str, str]] = {}
+    deleted_later: Set[Tuple[str, str]] = set()
     for r in move_rows:
         if r.get("what") in {"move", "rewrite"}:
             later_moves[_split_ref(r.get("from", ""))] = _split_ref(r.get("to", ""))
+        elif r.get("what") == "delete":
+            deleted_later.add(_split_ref(r.get("from", "")))
 
     def final_home(ref: Tuple[str, str]) -> Tuple[str, str]:
         seen = set()
@@ -134,7 +137,8 @@ def check(code_map: Path = CODE_MAP, moves: Path = MOVES, root: Path = ROOT) -> 
         src, dst = _split_ref(r.get("from", "")), _split_ref(r.get("to", ""))
         if what in {"move", "delete"} and src in on_disk:
             problems.append(f"{where}: {src[0]}:{src[1]} was {what}d but still exists")
-        if what in {"move", "rewrite"} and final_home(dst) not in on_disk:
+        home = final_home(dst)
+        if what in {"move", "rewrite"} and home not in on_disk and home not in deleted_later:
             problems.append(f"{where}: new home {dst[0]}:{dst[1]} does not exist")
     return problems
 

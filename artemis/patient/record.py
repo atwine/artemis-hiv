@@ -127,7 +127,9 @@ def build_patient_context(patient: Dict[str, Any]) -> PatientContext:
         if note:
             label = ", ".join(x for x in (v.get("date"), v.get("type")) if x) or "date not recorded"
             dated_parts.append(f"Visit note ({label}):\n{note}")
-    dated_parts.append(f"Today's note ({encounter_date.isoformat()}):\n{today_note or 'none written'}")
+    dated_parts.append(
+        f"Clinician's assessment and plan today ({encounter_date.isoformat()}):\n{today_note or 'none written'}"
+    )
 
     return PatientContext(
         patient_id=str(patient.get("patient_id")),
