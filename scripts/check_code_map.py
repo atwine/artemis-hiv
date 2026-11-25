@@ -109,11 +109,11 @@ def check(code_map: Path = CODE_MAP, moves: Path = MOVES, root: Path = ROOT) -> 
         problems.append(f"map: no such function {key[0]}:{key[1]}")
 
     move_rows = _rows(moves)
-    # A function can move more than once (a -> b, later b -> c). A row's new home is valid
+    # A function can move or be replaced more than once (a -> b, later b -> c). A row's new home is valid
     # when the chain of later moves ends at a function that exists.
     later_moves: Dict[Tuple[str, str], Tuple[str, str]] = {}
     for r in move_rows:
-        if r.get("what") == "move":
+        if r.get("what") in {"move", "rewrite"}:
             later_moves[_split_ref(r.get("from", ""))] = _split_ref(r.get("to", ""))
 
     def final_home(ref: Tuple[str, str]) -> Tuple[str, str]:
