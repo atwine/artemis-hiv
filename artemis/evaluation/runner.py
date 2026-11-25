@@ -86,11 +86,12 @@ def effective_temperature(temperature: Optional[float]) -> float:
     return DEFAULT_TEMPERATURE if temperature is None else float(temperature)
 
 
-def run_label(model: str, temperature: Optional[float]) -> str:
-    """A run's folder name. It always names the temperature used: saved runs are skipped on
-    resume, so runs at different temperatures must never share a folder. (Phase 2's first runs,
-    in folders without "-t", used the default of that time, 0.2.)"""
-    return f"{model}-t{effective_temperature(temperature):g}"
+def run_label(model: str, temperature: Optional[float], variant: str = "") -> str:
+    """A run's folder name. It always names the temperature used, and the setup under test when
+    there is one (a Phase 2B change): saved runs are skipped on resume, so runs at different
+    temperatures or setups must never share a folder. (Phase 2's first runs, in folders without
+    "-t", used the default of that time, 0.2.)"""
+    return f"{model}-t{effective_temperature(temperature):g}" + (f"-{variant}" if variant else "")
 
 
 def run_file_name(case_id: str, repeat: int) -> str:

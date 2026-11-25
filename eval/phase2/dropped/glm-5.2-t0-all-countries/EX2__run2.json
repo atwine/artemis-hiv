@@ -1,0 +1,221 @@
+{
+ "case_id": "EX2",
+ "model": "glm-5.2-t0",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 100.4,
+ "calls": [
+  {
+   "prompt_tokens": 1680,
+   "completion_tokens": 868,
+   "total_tokens": 2548,
+   "cost": 0.00314216,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00314216,
+    "upstream_inference_prompt_cost": 0.0010416,
+    "upstream_inference_completions_cost": 0.00210056
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2578,
+   "completion_tokens": 844,
+   "total_tokens": 3422,
+   "cost": 0.0073228,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0073228,
+    "upstream_inference_prompt_cost": 0.0036092,
+    "upstream_inference_completions_cost": 0.0037136
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.01046496,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_001",
+   "title": "AKI likely pre-renal from gastroenteritis, not TDF toxicity",
+   "message": "Guidelines note that intercurrent illnesses with dehydration or sepsis may cause renal deterioration in patients on TDF, requiring creatinine checking during hospital admissions. This patient has severe gastroenteritis with dehydration (BP 90/60, dry mucous membranes, reduced skin turgor), two affected family members suggesting infectious gastroenteritis, and a urea-to-creatinine ratio of 24:1 favouring pre-renal AKI. Urinalysis shows no protein or glucose, which argues against TDF-induced tubular toxicity. Baseline creatinine was normal (0.9) one year ago. The acute presentation over 5 days with hypovolaemia strongly supports pre-renal AKI rather than chronic TDF nephrotoxicity. Permanent discontinuation of TDF may be unnecessary if renal function recovers with fluid resuscitation.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Resuscitate with IV fluids and recheck creatinine before deciding on permanent TDF discontinuation. If renal function recovers, TDF may be continued with ongoing monitoring.",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 29,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_001",
+     "title": "AKI likely pre-renal from gastroenteritis, not TDF toxicity",
+     "message": "Guidelines note that intercurrent illnesses with dehydration or sepsis may cause renal deterioration in patients on TDF, requiring creatinine checking during hospital admissions. This patient has severe gastroenteritis with dehydration (BP 90/60, dry mucous membranes, reduced skin turgor), two affected family members suggesting infectious gastroenteritis, and a urea-to-creatinine ratio of 24:1 favouring pre-renal AKI. Urinalysis shows no protein or glucose, which argues against TDF-induced tubular toxicity. Baseline creatinine was normal (0.9) one year ago. The acute presentation over 5 days with hypovolaemia strongly supports pre-renal AKI rather than chronic TDF nephrotoxicity. Permanent discontinuation of TDF may be unnecessary if renal function recovers with fluid resuscitation.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Resuscitate with IV fluids and recheck creatinine before deciding on permanent TDF discontinuation. If renal function recovers, TDF may be continued with ongoing monitoring.",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2"
+      },
+      {
+       "page_number": 29,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_002",
+   "title": "DTG creatinine rise algorithm does not apply to acute AKI",
+   "message": "Guidelines describe a DTG-related creatinine rise algorithm for small, stable increases (<30 µmol/L) occurring within the first month of DTG initiation. This patient's creatinine rose from 0.9 to 2.4 mg/dL (increase ~133 µmol/L) after 2 years on DTG, which is far outside the DTG-related pattern. The magnitude and acuity are inconsistent with DTG-related creatinine elevation. This acute rise should be attributed to the gastroenteritis episode and managed with fluid resuscitation rather than DTG adjustment.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Do not attribute this acute creatinine rise to DTG. Focus on treating the underlying gastroenteritis and dehydration, then reassess renal function before considering regimen changes.",
+    "citations": [
+     {
+      "page_number": 7,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_002",
+     "title": "DTG creatinine rise algorithm does not apply to acute AKI",
+     "message": "Guidelines describe a DTG-related creatinine rise algorithm for small, stable increases (<30 µmol/L) occurring within the first month of DTG initiation. This patient's creatinine rose from 0.9 to 2.4 mg/dL (increase ~133 µmol/L) after 2 years on DTG, which is far outside the DTG-related pattern. The magnitude and acuity are inconsistent with DTG-related creatinine elevation. This acute rise should be attributed to the gastroenteritis episode and managed with fluid resuscitation rather than DTG adjustment.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Do not attribute this acute creatinine rise to DTG. Focus on treating the underlying gastroenteritis and dehydration, then reassess renal function before considering regimen changes.",
+     "citations": [
+      {
+       "page_number": 7,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_003",
+   "title": "If TDF stopped, guideline-recommended alternative is ABC+3TC+DTG",
+   "message": "Guidelines state that if renal impairment develops due to TDF, the recommended alternative regimen is ABC + 3TC + DTG. If the clinician decides to permanently discontinue TDF after this AKI episode, this specific switch should be used. However, given the pre-renal presentation, temporary TDF continuation with close monitoring during recovery may be more appropriate than permanent discontinuation.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "If TDF is permanently discontinued, switch to ABC + 3TC + DTG as per guideline. Consider temporary hold with reassessment after resuscitation instead.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_003",
+     "title": "If TDF stopped, guideline-recommended alternative is ABC+3TC+DTG",
+     "message": "Guidelines state that if renal impairment develops due to TDF, the recommended alternative regimen is ABC + 3TC + DTG. If the clinician decides to permanently discontinue TDF after this AKI episode, this specific switch should be used. However, given the pre-renal presentation, temporary TDF continuation with close monitoring during recovery may be more appropriate than permanent discontinuation.",
+     "issue_type": "plan_review",
+     "severity": "moderate",
+     "recommended_action": "If TDF is permanently discontinued, switch to ABC + 3TC + DTG as per guideline. Consider temporary hold with reassessment after resuscitation instead.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_001": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+  ],
+  "EX2_002": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1"
+  ],
+  "EX2_003": [
+   "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_001\",\n    \"title\": \"AKI likely pre-renal from gastroenteritis, not TDF toxicity\",\n    \"message\": \"Guidelines note that intercurrent illnesses with dehydration or sepsis may cause renal deterioration in patients on TDF, requiring creatinine checking during hospital admissions. This patient has severe gastroenteritis with dehydration (BP 90/60, dry mucous membranes, reduced skin turgor), two affected family members suggesting infectious gastroenteritis, and a urea-to-creatinine ratio of 24:1 favouring pre-renal AKI. Urinalysis shows no protein or glucose, which argues against TDF-induced tubular toxicity. Baseline creatinine was normal (0.9) one year ago. The acute presentation over 5 days with hypovolaemia strongly supports pre-renal AKI rather than chronic TDF nephrotoxicity. Permanent discontinuation of TDF may be unnecessary if renal function recovers with fluid resuscitation.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Resuscitate with IV fluids and recheck creatinine before deciding on permanent TDF discontinuation. If renal function recovers, TDF may be continued with ongoing monitoring.\",\n    \"citations\": [\n      {\"page_number\": 40, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2\"},\n      {\"page_number\": 29, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_002\",\n    \"title\": \"DTG creatinine rise algorithm does not apply to acute AKI\",\n    \"message\": \"Guidelines describe a DTG-related creatinine rise algorithm for small, stable increases (<30 µmol/L) occurring within the first month of DTG initiation. This patient's creatinine rose from 0.9 to 2.4 mg/dL (increase ~133 µmol/L) after 2 years on DTG, which is far outside the DTG-related pattern. The magnitude and acuity are inconsistent with DTG-related creatinine elevation. This acute rise should be attributed to the gastroenteritis episode and managed with fluid resuscitation rather than DTG adjustment.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Do not attribute this acute creatinine rise to DTG. Focus on treating the underlying gastroenteritis and dehydration, then reassess renal function before considering regimen changes.\",\n    \"citations\": [\n      {\"page_number\": 7, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_003\",\n    \"title\": \"If TDF stopped, guideline-recommended alternative is ABC+3TC+DTG\",\n    \"message\": \"Guidelines state that if renal impairment develops due to TDF, the recommended alternative regimen is ABC + 3TC + DTG. If the clinician decides to permanently discontinue TDF after this AKI episode, this specific switch should be used. However, given the pre-renal presentation, temporary TDF continuation with close monitoring during recovery may be more appropriate than permanent discontinuation.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"If TDF is permanently discontinued, switch to ABC + 3TC + DTG as per guideline. Consider temporary hold with reassessment after resuscitation instead.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p1_c1",
+    "page_number": 1,
+    "quote": "# ABBREVIATIONS /r: ritonavir-boosted 3TC: lamivudine ABC: abacavir ADR: adverse drug reaction AKI: acute kidney injury ALT: alanine transaminase ART: antiretroviral therapy ARV: antiretroviral AST: aspartate transaminase ATV: atazanavir ATV/r: atazanavir/ritonavir AZT: zidovudine bd: twice daily CD4+: cluster of differentiation 4 CM: cryptococcal meningitis CrAg: cryptococcal antigen CrCl: creatinine clearance CSF: cerebrospinal fluid CTX: cotrimoxazole CVS: cardiovascular d"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p29_c1",
+    "page_number": 29,
+    "quote": "TABLE 12: Recommended alternative initial antiretroviral therapy regimens in specific clinical situations where TDF + 3TC (or FTC) + DTG cannot be used. Scenario Alternative regimen Renal impairment at baseline (eGFR < 50 mL/min/1.73m²) ABC + 3TC + DTG or TAF + 3TC + DTG if eGFR 30-50 mL/min/1.73m² Renal impairment develops due to TDF ABC + 3TC + DTG Patient is intolerant of DTG side-effects TDF + 3TC (or FTC) + EFV, or TDF + 3TC (or FTC) + RPV Pure red cell aplasia develops "
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p38_c1",
+    "page_number": 38,
+    "quote": "Flowchart: - Start: - Confirmed virological failure on LPV/r or ATV/r second-line regimen and - Resistance to current PI (Stanford score > 14) and - No prior DTG failure - Decision/Branch 1 (from Start): - Path 1 (left): - DRV susceptible (Stanford score <= 15), or - DRV high level resistance (Stanford score >=60). - Path 2 (right): - DRV low- or intermediate-level resistance (Stanford score 15-59) - Action/Branch 1 (from Path 1): - Switch to TLD* - *If renal impairment or pr"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p40_c2",
+    "page_number": 40,
+    "quote": "blood count in patients on AZT. * In most patients taking PIs, only one lipid measurement is advised (at 3 months) unless dyslipidaemia is diagnosed, or other cardiovascular risk factors are present. In patients on TDF who are admitted to hospital, it is important to check creatinine (eGFR) even if it does not fall within these monitoring guidelines. This is because intercurrent illnesses with dehydration or sepsis may be associated with deterioration in renal function, in wh"
+   },
+   {
+    "chunk_id": "sahcs_adult_art_2024__sahcs_adult_art_2024__p7_c1",
+    "page_number": 7,
+    "quote": "Was the creatinine rise to be expected with DTG? - Rise in creatinine < 30 µmol/L - Occurred within the first month of initiating DTG* - Did not progress after the first month* *Routine monitoring of creatinine may only identify this 3 months after DTG initiation. Yes No Creatinine rise <20 μmol/L Likely DTG-related. Leave on current regimen. Continue routine creatinine monitoring Creatinine rise 20-30 μmol/L Likely DTG-related. Leave on current regimen. Check creatinine in 1"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Hold temporarily\",\"reason\":\"Patient has acute kidney injury (creatinine 2.4, up from 0.9) with severe dehydration from gastroenteritis; TDF is nephrotoxic and should be held temporarily while the AKI is treated and renal function is re-evaluated, rather than stopped permanently as the clinician suggests.\"},\"problems\":[{\"problem\":\"Acute kidney injury in the context of TDF-based ART and severe dehydration\",\"action\":\"Hold TDF temporarily, continue 3TC and DTG if possible, initiate IV fluid resuscitation, and repeat serum creatinine and eGFR after rehydration to determine if renal function recovers before deciding on permanent TDF discontinuation.\",\"reason\":\"The creatinine rose from 0.9 to 2.4 with severe dehydration and vomiting, suggesting pre-renal AKI that may be reversible; the guideline excerpt only addresses creatinine/eGFR screening for TDF and does not provide specific criteria for permanent discontinuation, so temporary holding is more appropriate pending renal recovery.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Disagree\",\"explanation\":\"The clinician plans to stop TDF permanently, but the AKI is likely acute and pre-renal from gastroenteritis/dehydration, so TDF should be held temporarily and renal function rechecked after rehydration before a permanent switch.\"}},{\"problem\":\"Severe gastroenteritis with dehydration (family cluster, 5 days)\",\"action\":\"Continue IV fluid resuscitation, send stool microscopy and culture, give empiric antibiotics as indicated, and monitor hydration status, urine output, and electrolytes.\",\"reason\":\"Two family members have the same illness suggesting infectious gastroenteritis; the guideline excerpt does not cover gastroenteritis management, so standard supportive and diagnostic care is appropriate.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan for IV fluids, empiric antibiotics, and stool microscopy appropriately addresses the gastroenteritis.\"}},{\"problem\":\"Need to reassess renal function before permanent ART changes\",\"action\":\"Repeat serum creatinine and eGFR after adequate rehydration (48–72 hours) and base any permanent regimen decision on renal recovery; if creatinine normalizes, TDF may be resumed.\",\"reason\":\"The guideline excerpt requires serum creatinine and eGFR monitoring for patients on TDF, and the current AKI may be pre-renal and reversible with hydration.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician mentions considering permanent TDF cessation but does not include a plan to recheck renal function after rehydration before making that decision.\"}},{\"problem\":\"Uncertain: guideline-based TDF toxicity management criteria\",\"action\":\"Uncertain: the provided guideline excerpt only covers screening procedures (serum creatinine and eGFR for naïve patients initiating TDF) and does not provide specific guidance on managing TDF-associated renal toxicity or when to permanently discontinue TDF.\",\"reason\":\"The excerpt is truncated and limited to initiation screening, so I cannot confirm the exact Uganda guideline thresholds for TDF discontinuation or substitution in established patients.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan to stop TDF permanently cannot be fully validated against the provided excerpt because it does not contain TDF toxicity management criteria.\"}}],\"monitoring_plan\":[\"Repeat serum creatinine and eGFR 48–72 hours after rehydration to assess renal recovery\",\"Monitor urine output, BP, and hydration status hourly during resuscitation\",\"Check serum electrolytes (sodium, potassium, bicarbonate) given vomiting and diarrhoea\",\"Review stool microscopy results to guide antibiotic therapy\",\"Reassess ART regimen decision once renal function stabilizes\"],\"patient_counselling\":[\"Explain that TDF is being held temporarily because of the kidney injury and may be restarted if kidney function recovers after rehydration\",\"Counsel on importance of completing IV fluids and returning for repeat creatinine testing before any permanent medication change is made\",\"Advise on oral rehydration and hygiene measures at home given the family cluster of gastroenteritis\",\"Reassure that viral load was suppressed (<50 copies/mL) and the temporary regimen change does not mean treatment failure\"]}",
+ "plan_issues": []
+}

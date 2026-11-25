@@ -35,6 +35,7 @@ from artemis.ai.client import (
 from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
+from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
 from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
@@ -76,9 +77,8 @@ NCD_GUIDELINE_PDF_PATH = (
 # Rationale: Markdown conversions of the guideline PDFs preserve table structures
 # that pypdf extraction drops. We now embed from the Markdown files instead of PDFs.
 GUIDELINE_MD_DIR = PROJECT_ROOT / "Data" / "MarkDown Files"
-GUIDELINE_PATHS: list[Path] = sorted(
-    p for p in GUIDELINE_MD_DIR.glob("*.md") if p.is_file()
-) if GUIDELINE_MD_DIR.is_dir() else []
+# Only the registered guidelines of the practice country: Ugandan guidance only (owner, 2026-11-25).
+GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY)
 
 # Rationale: persistent Chroma collections keep old indexed chunks; bump this
 # when the ingestion/cleaning/chunking logic changes to force a fresh collection.

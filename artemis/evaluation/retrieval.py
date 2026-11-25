@@ -14,7 +14,7 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Optional, Sequence, Set, Tuple
 
 from artemis.evaluation.cases import Case
 from artemis.guidelines.processor import _strip_markdown_noise, extract_markdown_page_texts
@@ -83,13 +83,17 @@ def score(results: Sequence[ItemResult]) -> Score:
     )
 
 
-def _gold(entry: Any) -> Tuple[GoldPassage, ...]:
+def _gold(entry: Any, allowed: Optional[Set[str]] = None) -> Tuple[GoldPassage, ...]:
     entries = entry if isinstance(entry, list) else [entry] if entry else []
-    return tuple(GoldPassage(str(e["document"]), str(e["quote"])) for e in entries)
+    gold = (GoldPassage(str(e["document"]), str(e["quote"])) for e in entries)
+    return tuple(g for g in gold if allowed is None or g.document in allowed)
 
 
-def case_items(case: Case) -> List[SearchItem]:
-    return [SearchItem(f"{case.case_id}:{p.id}", _gold(p.guideline)) for p in case.problems]
+def case_items(case: Case, allowed: Optional[Set[str]] = None) -> List[SearchItem]:
+    """One search item per expected problem. With `allowed` (guideline file stems), only passages
+    from those guidelines count: a problem whose only passage is from another country's guideline
+    is not in the searched guidelines at all."""
+    return [SearchItem(f"{case.case_id}:{p.id}", _gold(p.guideline, allowed)) for p in case.problems]
 
 
 def load_search_questions(path: Path) -> List[Tuple[SearchItem, str]]:
@@ -107,14 +111,17 @@ def _rows(kind: str, items: Sequence[SearchItem], returned: Sequence[Any]) -> Li
 
 def check_search(cases: Sequence[Case], questions: Sequence[Tuple[SearchItem, str]],
                  case_search: Callable[[Case], Sequence[Any]],
-                 question_search: Callable[[str], Sequence[Any]]) -> List[Dict[str, Any]]:
+                 question_search: Callable[[str], Sequence[Any]],
+                 allowed: Optional[Set[str]] = None) -> List[Dict[str, Any]]:
     """One row per item: where its gold first came back in the passages its search returned.
-    A case's items share the search the app runs for that visit; a question is searched as is."""
+    A case's items share the search the app runs for that visit; a question is searched as is.
+    `allowed` (guideline file stems) is what the app searches; other passages can't count."""
     rows: List[Dict[str, Any]] = []
     for case in cases:
-        rows += _rows("case", case_items(case), case_search(case))
+        rows += _rows("case", case_items(case, allowed), case_search(case))
     for item, question in questions:
-        rows += _rows("question", [item], question_search(question))
+        kept = SearchItem(item.item_id, tuple(g for g in item.gold if allowed is None or g.document in allowed))
+        rows += _rows("question", [kept], question_search(question))
     return rows
 
 

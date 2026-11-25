@@ -149,7 +149,7 @@ They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
       recommendation, with drug, condition, action, country and edition). Also which search fits
       each: meaning search, keyword search, or both together, and filters by country and edition.
 - [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
-      is extracted. Today the app searches 4 Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
+      is extracted. Today the app searches the 2 Ugandan Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
       `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup
       script that downloads them from the official sources. Either way, add a sources list (document,
       edition, official link) for citations. Whether the public repo may hold the guideline text is the

@@ -272,3 +272,15 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: the results script now prints the count for every problem, the AI's own catches
   without the rule alerts, and the plan cut-offs, so each number in the write-up can be
   checked against generated output.
+
+**28. A folder rule decides what the AI reads.**
+- Example: the app searched every Markdown file in its guideline folder. The South African and
+  WHO guidelines sat there beside the Ugandan ones, so 54% of the passages the AI read for
+  Ugandan patients were South African, and the search database still held 1,323 non-Ugandan
+  pieces in two old collections. Nobody chose that; it followed from "take every file".
+- Caught by: the search check, which lists the guideline each returned passage came from, and
+  the owner asking whether foreign documents were in the database.
+- Fix: Phase 2B. A register of approved guidelines with their country; the app loads only
+  Uganda's, the other files moved out of the folder, the database deleted and rebuilt, and
+  `scripts/check_index_sources.py` fails if any non-Ugandan piece is in it. Standalone questions
+  answered in the top 5 went from 3 of 20 to 13 of 20.

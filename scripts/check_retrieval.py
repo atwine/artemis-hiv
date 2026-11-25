@@ -47,14 +47,17 @@ def main(argv: Optional[list] = None) -> int:
         rag.ensure_indexed()
     cases = load_cases(args.cases)
     questions = load_search_questions(args.questions)
+    allowed = {p.stem for p in rb.app.GUIDELINE_PATHS}  # what the app searches: Ugandan guidance only
     rows = check_search(
         cases, questions,
         case_search=lambda c: screening_search(rag, patient_context_for(c.patient, _note(c)), DEPTH),
         question_search=lambda text: rag.search(text, top_k=DEPTH),
+        allowed=allowed,
     )
     shown = AnalysisOptions().top_k
     summary = summarize_check(rows)
-    gold = [g for c in cases for i in case_items(c) for g in i.gold] + [g for i, _ in questions for g in i.gold]
+    gold = ([g for c in cases for i in case_items(c, allowed) for g in i.gold]
+            + [g for i, _ in questions for g in i.gold if g.document in allowed])
     sane, misses = self_check(gold, lambda text: rag.search(text, top_k=DEPTH))
     out = args.out or ROOT / "eval" / "phase2b" / f"search-{args.label}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -65,13 +68,13 @@ def main(argv: Optional[list] = None) -> int:
                               ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     for r in rows:
-        rank = "not in the guidelines" if not r["covered"] else (f"rank {r['rank']}" if r["rank"] else "not found")
+        rank = "not in the searched guidelines" if not r["covered"] else (f"rank {r['rank']}" if r["rank"] else "not found")
         top = ", ".join(s.replace(".extraction", "") for s in r["sources"][:shown])
         print(f"{r['item']:<38} {rank:<22} top {shown}: {top}")
     for kind, s in summary.items():
         mrr = f"{s.mrr:.2f}" if s.mrr is not None else "n/a"
         print(f"{args.label} {kind}s: found in the top {shown} {s.found_in_5}/{s.covered}, top 10 {s.found_in_10}/{s.covered}, "
-              f"MRR {mrr}; {s.not_covered} not in the guidelines")
+              f"MRR {mrr}; {s.not_covered} not in the searched guidelines")
     print(f"self-check: {sane}/{len(gold)} gold quotes come back when searched word for word")
     for g in misses:
         print(f"  not back: {g.document} | {g.quote[:90]}")
