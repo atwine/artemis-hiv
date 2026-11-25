@@ -51,6 +51,21 @@ def cost_of(usages: List[Optional[Dict[str, Any]]], price_in: float, price_out: 
     return total
 
 
+def spent_in(folder: Path) -> float:
+    """Dollars recorded under a folder: each saved case run (.json) and each quiz answer (.jsonl line)."""
+    total = 0.0
+    for f in Path(folder).rglob("*.json*"):
+        if f.suffix not in (".json", ".jsonl"):
+            continue
+        lines = f.read_text(encoding="utf-8").splitlines() if f.suffix == ".jsonl" else [f.read_text(encoding="utf-8")]
+        for line in lines:
+            try:
+                total += float(json.loads(line).get("cost_usd") or 0)
+            except (ValueError, AttributeError):
+                continue
+    return total
+
+
 def check_budget(*, spent: float, checks: int, per_check: float, cap: float) -> None:
     if spent + checks * per_check > cap:
         raise BudgetExceeded(

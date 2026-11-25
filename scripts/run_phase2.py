@@ -19,7 +19,7 @@ import os
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -31,7 +31,8 @@ from dotenv import dotenv_values  # noqa: E402
 import run_baseline as rb  # noqa: E402  (imports the app; reused for removing the server address)
 from artemis.ai.client import OpenAICompatClient, OpenAICompatConfig, openai_compat_config_from_env  # noqa: E402
 from artemis.evaluation.cases import NO_KEY, load_cases  # noqa: E402
-from artemis.evaluation.runner import BudgetExceeded, check_budget, pending_runs, run_case, run_file_name  # noqa: E402
+from artemis.evaluation.runner import (BudgetExceeded, check_budget, pending_runs, run_case,  # noqa: E402
+                                       run_file_name, spent_in)
 
 OPENROUTER = "https://openrouter.ai/api/v1"
 # Measured on the A100, 2026-11-25: the largest visit check used 3,940 tokens in and 1,153 out.
@@ -45,20 +46,26 @@ PRESETS: Dict[str, Dict[str, Any]] = {
 }
 
 
-def _spent(folder: Path) -> float:
-    total = 0.0
-    for f in folder.rglob("*.json"):
-        try:
-            total += float(json.loads(f.read_text(encoding="utf-8")).get("cost_usd") or 0)
-        except (ValueError, AttributeError):
-            continue
-    return total
-
-
 def _prices(model_id: str) -> tuple:
     data = requests.get(f"{OPENROUTER}/models", timeout=60).json()["data"]
     m = next(x for x in data if x["id"] == model_id)
     return float(m["pricing"]["prompt"]), float(m["pricing"]["completion"])
+
+
+def model_config(model: str, temperature: Optional[float]) -> Tuple[OpenAICompatConfig, float, float]:
+    """The client settings for a preset, and its listed price per token in and out (0 for the A100)."""
+    preset = PRESETS[model]
+    if preset["openrouter"]:
+        key = (dotenv_values(ROOT / ".env").get("OPENROUTER_API_KEY") or "").strip()
+        if not key:
+            raise SystemExit("OPENROUTER_API_KEY is empty in .env")
+        price_in, price_out = _prices(preset["openrouter"])
+        return (OpenAICompatConfig(base_url=OPENROUTER, model=preset["openrouter"], api_key=key,
+                                   temperature=temperature, extra_body=preset["extra"]), price_in, price_out)
+    env = openai_compat_config_from_env()
+    if env is None:
+        raise SystemExit("LLM_BASE_URL is not set in .env")
+    return dataclasses.replace(env, temperature=temperature), 0.0, 0.0
 
 
 def _write(path: Path, record: Dict[str, Any]) -> None:
@@ -79,7 +86,6 @@ def main(argv: Optional[list] = None) -> int:
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
 
-    preset = PRESETS[args.model]
     label = args.model + (f"-t{args.temperature:g}" if args.temperature is not None else "")
     out = args.root / "runs" / label
     cases = load_cases(args.cases)
@@ -87,22 +93,9 @@ def main(argv: Optional[list] = None) -> int:
         raise SystemExit("every case needs its answer key before a run")
     todo = list(pending_runs(out, cases, args.repeats))
 
-    if preset["openrouter"]:
-        key = (dotenv_values(ROOT / ".env").get("OPENROUTER_API_KEY") or "").strip()
-        if not key:
-            raise SystemExit("OPENROUTER_API_KEY is empty in .env")
-        price_in, price_out = _prices(preset["openrouter"])
-        config = OpenAICompatConfig(base_url=OPENROUTER, model=preset["openrouter"], api_key=key,
-                                    temperature=args.temperature, extra_body=preset["extra"])
-    else:
-        price_in = price_out = 0.0
-        env = openai_compat_config_from_env()
-        if env is None:
-            raise SystemExit("LLM_BASE_URL is not set in .env")
-        config = dataclasses.replace(env, temperature=args.temperature)
-
+    config, price_in, price_out = model_config(args.model, args.temperature)
     per_check = (WORST_IN * price_in + WORST_OUT * price_out) * MARGIN
-    spent = _spent(args.root)
+    spent = spent_in(args.root)
     print(f"{label}: {len(todo)} checks to run; worst case ${per_check:.4f} each, "
           f"${len(todo) * per_check:.2f} in all; ${spent:.4f} spent so far; cap ${args.cap:.2f}")
     try:

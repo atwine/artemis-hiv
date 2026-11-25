@@ -129,6 +129,25 @@ def test_the_script_rebuilds_the_table_from_saved_runs(tmp_path: Path) -> None:
     assert "Viral load overdue -> vl" in matches and "missed: vl" in matches
 
 
+def test_the_script_adds_the_afrimedqa_table(tmp_path: Path) -> None:
+    (tmp_path / "cases").mkdir()
+    (tmp_path / "runs").mkdir()
+    quiz = tmp_path / "quiz"
+    quiz.mkdir()
+    rows = [{"sample_id": "a", "hiv": True, "specialty": "Pediatrics", "right": True, "cost_usd": 0.01},
+            {"sample_id": "b", "hiv": True, "specialty": "Infectious_Disease", "right": False, "cost_usd": 0.01},
+            {"sample_id": "c", "hiv": False, "specialty": "Infectious_Disease", "right": True, "cost_usd": 0.01}]
+    (quiz / "model-a.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    out = tmp_path / "results.md"
+    assert _evaluate_module().main(["--cases", str(tmp_path / "cases"), "--runs", str(tmp_path / "runs"),
+                                    "--quiz", str(quiz), "--out", str(out)]) == 0
+    text = out.read_text(encoding="utf-8")
+    assert "AfriMed-QA" in text
+    row = next(line for line in text.splitlines() if line.startswith("| model-a"))
+    for cell in ("67% (2/3)", "50% (1/2)", "$0.03"):
+        assert cell in row, (cell, row)
+
+
 def test_the_script_refuses_cases_without_an_answer_key(tmp_path: Path) -> None:
     cases = tmp_path / "cases"
     cases.mkdir()

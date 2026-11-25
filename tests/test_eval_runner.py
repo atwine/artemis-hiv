@@ -79,3 +79,13 @@ def test_runs_already_saved_are_skipped(tmp_path: Path) -> None:
     (tmp_path / run_file_name("P001", 1)).write_text("{}", encoding="utf-8")
     todo: List[tuple] = [(c.case_id, k) for c, k in pending_runs(tmp_path, cases, repeats=2)]
     assert todo == [("P001", 2), ("P002", 1), ("P002", 2)]
+
+
+def test_the_spend_counts_saved_runs_and_quiz_answers(tmp_path: Path) -> None:
+    from artemis.evaluation.runner import spent_in
+
+    (tmp_path / "runs").mkdir()
+    (tmp_path / "runs" / "P001__run1.json").write_text(json.dumps({"cost_usd": 0.25}), encoding="utf-8")
+    lines = [json.dumps({"cost_usd": 0.5}), json.dumps({"cost_usd": 0.125})]
+    (tmp_path / "quiz.jsonl").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    assert spent_in(tmp_path) == pytest.approx(0.875)

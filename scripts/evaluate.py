@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from artemis.evaluation.afrimedqa import accuracy  # noqa: E402
 from artemis.evaluation.cases import NO_KEY, Case, load_cases  # noqa: E402
 from artemis.evaluation.scoring import RunScore, score_run, summarize  # noqa: E402
 
@@ -99,10 +100,31 @@ def build(cases: List[Case], models: Dict[str, List[Dict[str, Any]]]) -> tuple:
     return "\n".join(table) + "\n", "\n".join(listing) + "\n"
 
 
+def quiz_table(folder: Path) -> str:
+    """The AfriMed-QA table: share of multiple-choice questions answered exactly right, per model."""
+    files = sorted(folder.glob("*.jsonl")) if folder.exists() else []
+    if not files:
+        return ""
+    lines = [
+        "", "## AfriMed-QA knowledge check", "",
+        "Exam-style multiple-choice questions on infectious disease or HIV (AfriMed-QA v2). This tests what",
+        "a model knows, not the app's job; it only helps narrow the models.", "",
+        "| Model | All questions | HIV-related | Infectious disease | Cost |", "|---|---|---|---|---|",
+    ]
+    for f in files:
+        rows = [json.loads(line) for line in f.read_text(encoding="utf-8").splitlines() if line.strip()]
+        acc = accuracy(rows)
+        cost = sum(float(r.get("cost_usd") or 0) for r in rows)
+        lines.append(f"| {f.stem} | {_pct(*acc['all'])} | {_pct(*acc['hiv'])} | {_pct(*acc['infectious_disease'])} | "
+                     f"${cost:.2f} |")
+    return "\n".join(lines) + "\n"
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--cases", type=Path, default=ROOT / "eval" / "cases")
     ap.add_argument("--runs", type=Path, default=ROOT / "eval" / "phase2" / "runs")
+    ap.add_argument("--quiz", type=Path, default=ROOT / "eval" / "phase2" / "afrimedqa")
     ap.add_argument("--out", type=Path, default=ROOT / "eval" / "phase2" / "results.md")
     args = ap.parse_args(argv)
     cases = load_cases(args.cases)
@@ -111,7 +133,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         raise SystemExit(f"no answer key yet for: {', '.join(unkeyed)}")
     table, listing = build(cases, _load_runs(args.runs))
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(table, encoding="utf-8")
+    args.out.write_text(table + quiz_table(args.quiz), encoding="utf-8")
     (args.out.parent / "matches.md").write_text(listing, encoding="utf-8")
     print(f"wrote {args.out} and matches.md")
     return 0
