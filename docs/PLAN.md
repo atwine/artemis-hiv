@@ -209,6 +209,11 @@ Everything that needs the doctor, done together once the app is built and runnin
       with the method written up (done criterion 2).
 - [ ] 7.5 Clinician trial (was 6.4): the doctor uses the running app on the test cases and reports
       what to improve. Their findings become new cases.
+- [ ] 7.6 Before 7.4's run, tidy the evaluation scripts (standards review of Phase 2; the owner
+      chose to push Phase 2 first, 2026-11-25): move the run loops, the spending checks and
+      "stop when a model call fails" from `scripts/run_phase2.py` and `scripts/run_afrimedqa.py`
+      into tested functions in `artemis/evaluation/`, share the helpers copied in two or three
+      places, and give the saved run record and quiz answer named types.
 
 Check: the README's accuracy table rests on clinician-checked cases, and `python scripts/evaluate.py`
 reproduces it.
