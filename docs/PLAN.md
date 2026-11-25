@@ -147,8 +147,11 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
 - Tried and dropped by their own rules: 5a, one search per drug and problem (cases 3/12 against
   4/12); 5c, keyword search beside meaning search (every gold passage now found from its own
   words, but cases 3/12 and questions 10/20).
-- Now: testing the premise both fixes shared, by searching each problem with its own short
-  description, as if the app knew what to look for.
+- Premise check (2026-11-26): searching each problem with its own short description, as if the
+  app knew what to look for, finds 6/12 (meaning search) or 7/12 (with keyword search) against
+  4/12 for the app's real search. The biggest lever is what the app searches for; 5 problems
+  stay missing even then, which the index fixes target. Fix 5c is out of the app again.
+- Next: the owner picks which lever goes first (what the app searches for, or the index).
 
 - [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
