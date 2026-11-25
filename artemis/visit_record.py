@@ -56,7 +56,7 @@ def app_version(project_root: Path) -> str:
 def _file_name(patient_id: str) -> str:
     """A safe file name for any patient id. The hash keeps look-alike ids ("a b", "a_b") apart."""
     safe = re.sub(r"[^A-Za-z0-9_-]+", "_", patient_id)[:40] or "patient"
-    return f"{safe}_{hashlib.sha1(patient_id.encode('utf-8')).hexdigest()[:10]}.jsonl"
+    return f"{safe}_{hashlib.sha256(patient_id.encode('utf-8')).hexdigest()[:10]}.jsonl"
 
 
 def _plan(agentic: Any) -> Any:
