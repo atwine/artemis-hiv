@@ -35,8 +35,10 @@ from artemis.evaluation.runner import (BudgetExceeded, check_budget, pending_run
                                        run_file_name, spent_in)
 
 OPENROUTER = "https://openrouter.ai/api/v1"
-# Measured on the A100, 2026-11-25: the largest visit check used 3,940 tokens in and 1,153 out.
-WORST_IN, WORST_OUT, MARGIN = 3940, 1153, 1.25
+# Worst case for one visit check, measured over all 330 Phase 2 checks (2026-11-25): 17,344 tokens
+# in, from a model whose plan was cut off and retried; 4,600 out, the app's ceiling (1,600 for the
+# alerts plus three plan tries of 1,000).
+WORST_IN, WORST_OUT, MARGIN = 17344, 4600, 1.25
 PRESETS: Dict[str, Dict[str, Any]] = {
     "llama-a100": {"openrouter": None, "extra": None},
     "deepseek-v3.2": {"openrouter": "deepseek/deepseek-v3.2",
@@ -116,6 +118,11 @@ def main(argv: Optional[list] = None) -> int:
     client = OpenAICompatClient(config)
     secrets = rb._server_strings()
     for case, k in todo:
+        try:
+            check_budget(spent=spent, checks=1, per_check=per_check, cap=args.cap)
+        except BudgetExceeded:
+            print(f"stopped before {case.case_id} #{k}: one more check could pass the ${args.cap:.2f} cap")
+            return 1
         record = rb._scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
                                     price_out=price_out, temperature=args.temperature), secrets)
         if record["llm_error"]:
@@ -126,9 +133,6 @@ def main(argv: Optional[list] = None) -> int:
         spent += record["cost_usd"]
         print(f"  {case.case_id} #{k}: {record['status']}, {len(record['alerts'])} alerts, "
               f"{record['seconds']} s, ${record['cost_usd']:.4f} (total ${spent:.4f})", flush=True)
-        if spent >= args.cap:
-            print(f"stopped: the ${args.cap:.2f} cap is reached")
-            return 1
     return 0
 
 

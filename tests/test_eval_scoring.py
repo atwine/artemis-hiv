@@ -78,6 +78,14 @@ def test_the_summary_numbers_and_their_counts() -> None:
     assert s.consistency == 0.5
 
 
+def test_a_problem_caught_only_by_a_rule_alert_is_not_the_ais_catch() -> None:
+    from artemis.evaluation.scoring import score_run, summarize
+
+    s = score_run(SICK, [_alert("Creatinine on TDF", source="rule"), _alert("Viral load overdue", source="ai")])
+    assert (s.caught, s.caught_by_ai) == ({"kidney", "vl"}, {"vl"})
+    assert (summarize([s]).caught, summarize([s]).caught_by_ai) == (2, 1)
+
+
 def test_no_runs_means_no_numbers_not_zeroes() -> None:
     from artemis.evaluation.scoring import summarize
 
@@ -107,13 +115,14 @@ def test_the_script_rebuilds_the_table_from_saved_runs(tmp_path: Path) -> None:
     runs = tmp_path / "runs" / "model-a"
     runs.mkdir(parents=True)
 
-    def run(case_id, k, alerts, cost=0.01, seconds=2.0, parse="parsed_nonempty"):
+    def run(case_id, k, alerts, cost=0.01, seconds=2.0, parse="parsed_nonempty", plan_issues=()):
         (runs / f"{case_id}__run{k}.json").write_text(json.dumps({
             "case_id": case_id, "model": "model-a", "repeat": k, "seconds": seconds, "cost_usd": cost,
-            "alerts": alerts, "screening": {"parse_status": parse}}))
+            "alerts": alerts, "screening": {"parse_status": parse}, "plan_text": "plan",
+            "plan_issues": list(plan_issues)}))
 
-    run("S1", 1, [_alert("Creatinine on TDF", cited=[("c1", True), ("c9", False)])])
-    run("S1", 2, [_alert("Creatinine on TDF", cited=[("c1", True)]), _alert("Viral load overdue")])
+    run("S1", 1, [_alert("Creatinine on TDF", cited=[("c1", True), ("c9", False)])], plan_issues=["cut_off"])
+    run("S1", 2, [_alert("Creatinine on TDF", cited=[("c1", True)]), _alert("Viral load overdue", source="rule")])
     run("C1", 1, [], parse="parsed_empty")
     run("C1", 2, [_alert("Something")], parse="cut_off")
 
@@ -122,9 +131,21 @@ def test_the_script_rebuilds_the_table_from_saved_runs(tmp_path: Path) -> None:
     assert ev.main(["--cases", str(cases), "--runs", str(tmp_path / "runs"), "--out", str(out)]) == 0
     text = out.read_text(encoding="utf-8")
     assert "preliminary" in text.lower()
-    row = next(line for line in text.splitlines() if line.startswith("| model-a"))
-    for cell in ("75% (3/4)", "75% (3/4)", "50% (1/2)", "0/2", "50%", "67% (2/3)", "75% (3/4)", "$0.04"):
-        assert cell in row, (cell, row)
+    lines = text.splitlines()
+    header = [c.strip() for c in next(line for line in lines if line.startswith("| Model | Runs")).strip("|").split("|")]
+    row = [c.strip() for c in next(line for line in lines if line.startswith("| model-a")).strip("|").split("|")]
+    cells = dict(zip(header, row))
+    assert cells["Problems caught"] == "75% (3/4)"
+    assert cells["Caught by the AI's own alerts"] == "50% (2/4)"  # the viral load came from a rule alert
+    assert cells["Alerts that were real"] == "75% (3/4)"
+    assert cells["Clear cases left clear"] == "50% (1/2)"
+    assert cells["Must-not broken"] == "0/2"
+    assert cells["Same answer across runs"] == "50%"
+    assert cells["Citations to passages shown"] == "67% (2/3)"
+    assert cells["Alert replies read in full"] == "75% (3/4)"
+    assert cells["Plans read in full"] == "75% (3/4)"
+    assert (cells["Cost"], cells["Cost per check"]) == ("$0.04", "$0.0100")
+    assert "| S1: kidney | 2/2 |" in text and "| S1: vl | 1/2 |" in text  # catches per expected problem
     matches = (tmp_path / "matches.md").read_text(encoding="utf-8")
     assert "Viral load overdue -> vl" in matches and "missed: vl" in matches
 

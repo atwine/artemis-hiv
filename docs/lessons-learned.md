@@ -261,3 +261,14 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Caught by: reading every "must not" hit in context before reporting the count.
 - Fix: the write-up gives the word-rule count beside a hand reading. The doctor's check of the
   matches in Phase 7 replaces both.
+
+**27. Numbers typed into a write-up drift from the data.**
+- Example: the Phase 2 write-up said 12 of 22 problems were caught every time by every model,
+  naming EX3's thyroid among them; the saved runs give 10, and DeepSeek caught the thyroid in 4
+  of 5. "1 catch in 25 runs" counted Llama twice (both temperatures). The counts came from a
+  scratch script that nothing kept, and the shared rule alerts quietly lifted every model's
+  catch rate.
+- Caught by: the spec review, which rebuilt every number from the saved runs.
+- Fix: the results script now prints the count for every problem, the AI's own catches
+  without the rule alerts, and the plan cut-offs, so each number in the write-up can be
+  checked against generated output.

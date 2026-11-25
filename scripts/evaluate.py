@@ -41,6 +41,7 @@ def _label_free(runs: List[Dict[str, Any]]) -> Dict[str, str]:
                 cited += 1
                 shown += 1 if c.get("shown_to_ai") else 0
     screened = [((r.get("screening") or {}).get("parse_status")) for r in runs if r.get("screening")]
+    plans = [r.get("plan_issues") or [] for r in runs if r.get("plan_text") is not None]
     seconds = [float(r["seconds"]) for r in runs if r.get("seconds") is not None]
     costs = [r.get("cost_usd") for r in runs]
     known = [float(c) for c in costs if c is not None]
@@ -48,9 +49,27 @@ def _label_free(runs: List[Dict[str, Any]]) -> Dict[str, str]:
     return {
         "citations": _pct(shown, cited),
         "read": _pct(sum(1 for s in screened if s in READ_IN_FULL), len(screened)),
+        "plans": _pct(sum(1 for issues in plans if "cut_off" not in issues), len(plans)),
         "seconds": f"{statistics.median(seconds):.1f}" if seconds else "n/a",
         "cost": cost,
+        "per_check": f"${sum(known) / len(known):.4f}" if known else "n/a",
     }
+
+
+def _per_problem(cases: List[Case], scores: Dict[str, List[RunScore]]) -> List[str]:
+    """Runs that caught each expected problem, out of that case's runs, per model."""
+    models = list(scores)
+    lines = ["", "## Catches per expected problem", "",
+             "Runs in which some alert caught the problem, out of that case's runs.", "",
+             "| Expected problem | " + " | ".join(models) + " |", "|---|" + "---|" * len(models)]
+    for case in cases:
+        for p in case.problems:
+            cells = []
+            for m in models:
+                runs = [s for s in scores[m] if s.case_id == case.case_id]
+                cells.append(f"{sum(p.id in s.caught for s in runs)}/{len(runs)}")
+            lines.append(f"| {case.case_id}: {p.id} | " + " | ".join(cells) + " |")
+    return lines
 
 
 def _load_runs(folder: Path) -> Dict[str, List[Dict[str, Any]]]:
@@ -68,13 +87,15 @@ def build(cases: List[Case], models: Dict[str, List[Dict[str, Any]]]) -> tuple:
         "Scored against a draft answer key that no clinician has checked yet (the doctor reviews it in",
         "Phase 7). These numbers steer the work; they are not the app's accuracy.",
         "",
-        "| Model | Runs | Problems caught | Alerts that were real | Clear cases left clear | Must-not broken | "
-        "Same answer across runs | Citations to passages shown | Replies read in full | Median seconds | Cost |",
-        "|---|---|---|---|---|---|---|---|---|---|---|",
+        "| Model | Runs | Problems caught | Caught by the AI's own alerts | Alerts that were real | "
+        "Clear cases left clear | Must-not broken | Same answer across runs | Citations to passages shown | "
+        "Alert replies read in full | Plans read in full | Median seconds | Cost | Cost per check |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     listing = ["# Phase 2 matches (preliminary)", "", "Every alert, and the expected problem it matched.", ""]
+    all_scores: Dict[str, List[RunScore]] = {}
     for model, runs in models.items():
-        scores: List[RunScore] = []
+        scores: List[RunScore] = all_scores.setdefault(model, [])
         listing.append(f"## {model}")
         for r in sorted(runs, key=lambda r: (str(r.get("case_id")), int(r.get("repeat") or 0))):
             case = by_id.get(str(r.get("case_id")))
@@ -93,10 +114,12 @@ def build(cases: List[Case], models: Dict[str, List[Dict[str, Any]]]) -> tuple:
         consistency = f"{round(100 * s.consistency)}%" if s.consistency is not None else "n/a"
         must_not = f"{s.must_not_broken_runs}/{s.must_not_runs}" if s.must_not_runs else "n/a"
         table.append(
-            f"| {model} | {s.runs} | {_pct(s.caught, s.expected)} | {_pct(s.matched_alerts, s.alerts)} | "
-            f"{_pct(s.clear_correct, s.clear_runs)} | {must_not} | {consistency} | {lf['citations']} | {lf['read']} | "
-            f"{lf['seconds']} | {lf['cost']} |"
+            f"| {model} | {s.runs} | {_pct(s.caught, s.expected)} | {_pct(s.caught_by_ai, s.expected)} | "
+            f"{_pct(s.matched_alerts, s.alerts)} | {_pct(s.clear_correct, s.clear_runs)} | {must_not} | {consistency} | "
+            f"{lf['citations']} | {lf['read']} | {lf['plans']} | {lf['seconds']} | {lf['cost']} | {lf['per_check']} |"
         )
+    if all_scores:
+        table += _per_problem(cases, all_scores)
     return "\n".join(table) + "\n", "\n".join(listing) + "\n"
 
 

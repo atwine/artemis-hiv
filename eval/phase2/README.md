@@ -25,8 +25,10 @@ with the clinician's note, plus an answer key:
 | EX4 | clinician example 4 | carbamazepine lowers dolutegravir; carbamazepine toxicity; low sodium; repeat viral load | blame adherence |
 | MR-KS | Mr K.S. use case | TDF kidney and bone harm; NSAID with TDF | |
 
-Each expected problem names its kind (drug harm, clash, missed monitoring, plan gap) and the
-guideline passage it rests on (the Uganda HIV guidelines in the app, or SAHCS guidance). Some cases also list
+Each expected problem names its kind (drug harm, clash, missed monitoring, plan gap). 13 of the
+22 also name the guideline passage they rest on (the Uganda HIV guidelines in the app, or SAHCS
+guidance). The other 9, mostly from the clinician examples, rest on the clinician's written
+answer and have no passage yet; Phase 7 adds them. Some cases also list
 "also fine" items: real problems a careful clinician might raise that are not required, such
 as Kintu's blood pressure. An alert on one of those is neither credited nor counted as extra.
 
@@ -71,30 +73,37 @@ runs.
 
 ### The app's job: 11 cases, 5 runs each
 
-| Model | Problems caught | Alerts that were real | Healthy patients left clear | Must-not broken: word rules / my reading | Same answer across runs | Median seconds | Cost of 55 checks |
-|---|---|---|---|---|---|---|---|
-| Llama 3.3 70B (A100) | 80% (88/110) | 81% (175/216) | 0/10 | 6/45 / 6/45 | 85% | 26 | free |
-| DeepSeek V3.2 | 77% (85/110) | 96% (176/184) | 10/10 | 7/45 / 0/45 | 76% | 28 | $0.06 |
-| GLM 5.2 | 86% (95/110) | 92% (194/212) | 8/10 | 8/45 / 0/45 | 82% | 14 | $0.41 |
-| Claude Haiku 5.5 | 82% (90/110) | 94% (152/162) | 5/10 | 9/45 / 4/45 | 82% | 24 | $0.17 |
+| Model | Problems caught (app: rules + AI) | Caught by the AI's own alerts | Alerts that were real | Healthy patients left clear | Must-not broken: word rules / my reading | Same answer across runs | Median seconds | Cost per check |
+|---|---|---|---|---|---|---|---|---|
+| Llama 3.3 70B (A100) | 80% (88/110) | 68% (75/110) | 81% (175/216) | 0/10 | 6/45 / 6/45 | 85% | 26 | free |
+| DeepSeek V3.2 | 77% (85/110) | 67% (74/110) | 96% (176/184) | 10/10 | 7/45 / 0/45 | 76% | 28 | $0.0011 |
+| GLM 5.2 | 86% (95/110) | 84% (92/110) | 92% (194/212) | 8/10 | 8/45 / 0/45 | 82% | 14 | $0.0075 |
+| Claude Haiku 5.5 | 82% (90/110) | 75% (83/110) | 94% (152/162) | 5/10 | 9/45 / 4/45 | 82% | 24 | $0.0032 |
 
-Every model cited only guideline passages it was shown (100%). Every reply was read in full
-except 3 of Haiku's 55, which were cut off.
+Every model cited only guideline passages it was shown (100%). Every alert reply was read in
+full except 3 of Haiku's 55. The plan reply is longer: Haiku's was cut off in 24 of 55 runs and
+GLM's in 2; Llama's and DeepSeek's never (measured). The plan isn't scored, but a cut-off plan
+means a shorter or missing plan on screen.
 
-1. **Every model catches the core problems** (measured). 12 of the 22 expected problems were
-   caught in all 5 runs by every model: TDF kidney harm, NSAIDs with TDF, efavirenz side
-   effects, overdue creatinine, carbamazepine lowering dolutegravir, the thyroid in EX3, and
-   others. The differences come from a few problems. Llama found EX4's low sodium in 1 of 5
-   runs; the others in 5 of 5. Haiku never flagged P006's creatinine rise (0 of 5). Only
-   DeepSeek and Haiku raised EX2's potassium and sodium. Every model missed the viral load
-   before a switch in P005 (1 catch in 25 runs) and amitriptyline's part in EX3's weight
-   gain (2 in 25). Those two may ask for more than the guideline passages say (inferred);
-   the doctor decides in Phase 7.
-2. **Llama's weakness is false alarms** (measured). It never left either healthy patient
+1. **Every model catches the core problems** (measured). 10 of the 22 expected problems were
+   caught in all 5 runs by every model: TDF kidney harm and NSAIDs with TDF (P005, MR-KS),
+   efavirenz side effects, overdue and missing creatinine, carbamazepine lowering
+   dolutegravir and its toxicity, the repeat viral load in EX4, and EX2's dehydration. The
+   differences come from a few problems. Llama found EX4's low sodium in 1 of 5 runs; the
+   others in 5 of 5. Haiku never flagged P006's creatinine rise (0 of 5). Only DeepSeek and
+   Haiku raised EX2's potassium and sodium. Across the four models, the viral load before a
+   switch in P005 was caught in 1 of 20 runs and amitriptyline's part in EX3's weight gain in
+   2 of 20. Those two may ask for more than the guideline passages say (inferred); the doctor
+   decides in Phase 7. `results.md` has the count for every problem.
+2. **Part of every model's score comes from the fixed rules** (measured). The app's rule
+   alerts are the same whichever model runs, and they caught some problems for every model
+   (P001's overdue creatinine, P003's missing creatinine). Counting only the AI's own alerts
+   separates the models more: GLM 84%, Haiku 75%, Llama 68%, DeepSeek 67%.
+3. **Llama's weakness is false alarms** (measured). It never left either healthy patient
    clear in 10 runs, and raised 41 extra alerts against DeepSeek's 8, Haiku's 10 and GLM's
    18. Its extras repeat: "Missing Recent Lab Results" on P004, which has recent labs (5 of 5
    runs), and "Viral Load Monitoring" and "Creatinine Monitoring" on P002, which has both.
-3. **The word rules misread "must not" on long alerts** (measured, then read by hand). On
+4. **The word rules misread "must not" on long alerts** (measured, then read by hand). On
    EX2 (kidney injury from dehydration, not TDF), DeepSeek, GLM and Haiku tripped "blames TDF"
    in every run, mostly by quoting the guideline's condition ("if renal impairment develops
    due to TDF, switch to ABC") while saying the cause is dehydration. On EX3 they quoted the
@@ -102,13 +111,13 @@ except 3 of Haiku's 55, which were cut off.
    only these as real (inferred, for the doctor to check): Llama's 5 "labs missing" on P004
    and one "consider switching from DTG" on EX3; Haiku's 3 EX2 runs that lean towards
    switching TDF for good, and one "continue TLD" on P005.
-4. **Word rules also favour long alerts when counting catches** (inferred). Median words per
+5. **Word rules also favour long alerts when counting catches** (inferred). Median words per
    alert: Llama 40, DeepSeek 70, Haiku 88, GLM 96 (measured). A longer alert contains more
    words, so it matches more rules. GLM's and Haiku's catch rates may be flattered, and
    Llama's short alerts under-credited, until a person checks the matches.
-5. **The citation fix worked** (measured). Before it (step 6), 92% of Llama's citations
+6. **The citation fix worked** (measured). Before it (step 6), 92% of Llama's citations
    (132/144) named a passage it had been shown; after it, 100% for every model.
-6. **Temperature 0 makes Llama repeat itself** (measured, Phase 1 item G38). Same answer
+7. **Temperature 0 makes Llama repeat itself** (measured, Phase 1 item G38). Same answer
    across runs went from 85% to 98%, with no real change elsewhere (78% caught against 80%,
    82% real alerts against 81%).
 
@@ -132,12 +141,20 @@ keys, so some of the 29 may be key errors (inferred).
 Recorded in the saved runs: $0.72. OpenRouter's account total: $0.93, the difference being
 trial calls while choosing models (measured). The cap was $5.
 
+The runner's worst-case estimate first came from one Llama check (3,940 tokens in, 1,153 out).
+The hosted models made up to 4 calls a check, so their real cost ran up to 3 to 4 times that
+estimate (measured: Haiku $0.0040 against $0.0012, GLM $0.0156 against $0.0042). With $0.72
+spent nothing was at risk, but the estimate now uses the largest check of all 330 (17,344 in,
+4,600 out), and both runners stop before a check that could pass the cap, not after.
+
 ### What this does and doesn't say
 
 Preliminary reading (inferred): for the app's job, the hosted models beat Llama mainly by
-raising far fewer false alarms. GLM 5.2 caught the most, was fastest and did best on the
-quiz; DeepSeek V3.2 was cheapest and the only one to leave both healthy patients clear every
-time. Haiku sits between them and is the only hosted model with real must-not breaks.
+raising far fewer false alarms. GLM 5.2 caught the most, with or without the rule alerts, was
+fastest and did best on the quiz. DeepSeek V3.2 was cheapest and the only one to leave both
+healthy patients clear every time, but its own alerts caught the fewest problems: it says
+less, both right and wrong. Haiku sits between them, is the only hosted model with real
+must-not breaks, and cut off its plan in almost half the runs.
 
 It is not yet a model choice. The answer key is a draft; the 110 expected problems are 22
 problems run 5 times, so the differences come down to a handful of problems; the word rules

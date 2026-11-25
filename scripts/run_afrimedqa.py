@@ -49,8 +49,11 @@ def main(argv: Optional[list] = None) -> int:
     todo = [q for q in load_questions(args.data) if q.sample_id not in done][: args.limit]
 
     config, price_in, price_out = model_config(args.model, 0.0)
-    worst = sum(len(json.dumps(messages(q))) / CHARS_PER_TOKEN * price_in + MAX_TOKENS * price_out
-                for q in todo) * MARGIN
+
+    def worst_for(q) -> float:
+        return (len(json.dumps(messages(q))) / CHARS_PER_TOKEN * price_in + MAX_TOKENS * price_out) * MARGIN
+
+    worst = sum(worst_for(q) for q in todo)
     spent = spent_in(args.root)
     print(f"{args.model}: {len(todo)} questions to ask ({len(done)} answered); worst case ${worst:.2f}; "
           f"${spent:.4f} spent so far; cap ${args.cap:.2f}")
@@ -68,6 +71,11 @@ def main(argv: Optional[list] = None) -> int:
     client = OpenAICompatClient(config)
     right = 0
     for i, q in enumerate(todo, 1):
+        try:
+            check_budget(spent=spent, checks=1, per_check=worst_for(q), cap=args.cap)
+        except BudgetExceeded:
+            print(f"stopped before question {q.sample_id}: one more could pass the ${args.cap:.2f} cap")
+            return 1
         reply = client.chat(messages(q), format=answer_format(q), options_override={"num_predict": MAX_TOKENS})
         if reply is None and client.last_error:
             # Not saved: a server outage is not an answer, and a saved one would be skipped on resume.
@@ -80,9 +88,6 @@ def main(argv: Optional[list] = None) -> int:
         right += row["right"]
         if i % 25 == 0 or i == len(todo):
             print(f"  {i}/{len(todo)} asked, {right} right, total ${spent:.4f}", flush=True)
-        if spent >= args.cap:
-            print(f"stopped: the ${args.cap:.2f} cap is reached")
-            return 1
     return 0
 
 

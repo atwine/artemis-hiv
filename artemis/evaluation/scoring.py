@@ -3,8 +3,9 @@
 For each run: which expected problems some alert caught, which were missed, how many alerts
 caught nothing expected (extra), and which "must not say" items an alert said. Across runs:
 
-- sensitivity: caught / expected, over runs of cases that have problems
-- precision: alerts that caught something / all alerts
+- sensitivity: caught / expected, over runs of cases that have problems; also counted for the
+  AI's own alerts alone, since the fixed-rule alerts are the same whichever model runs
+- precision: alerts that matched an expected or "also fine" problem / all alerts
 - specificity: runs of should-be-clear cases with no extra alert / those runs ("also fine"
   alerts are reasonable, so they neither count as catches nor as false alarms)
 - consistency: per case, the share of runs that agree on what was caught, what was wrongly said
@@ -43,6 +44,11 @@ class RunScore:
     must_not_broken: FrozenSet[str]
     matches: Tuple[AlertMatch, ...]
 
+    @property
+    def caught_by_ai(self) -> FrozenSet[str]:
+        """The expected problems an AI alert caught (rule alerts don't depend on the model)."""
+        return frozenset(pid for m in self.matches if m.source != "rule" for pid in m.problems)
+
 
 def alert_text(alert: Dict[str, Any]) -> str:
     evidence = alert.get("evidence") or {}
@@ -58,7 +64,7 @@ def score_run(case: Case, alerts: List[Dict[str, Any]]) -> RunScore:
             source=str(a.get("source") or "rule"),
             problems=tuple(p.id for p in case.problems if p.rule.matches(text)),
             must_not=tuple(m.id for m in case.must_not if m.rule.matches(text, skip_negated=True)),
-            also_fine=tuple(a.id for a in case.also_fine if a.rule.matches(text)),
+            also_fine=tuple(f.id for f in case.also_fine if f.rule.matches(text)),
         ))
     caught = frozenset(pid for m in matches for pid in m.problems)
     return RunScore(
@@ -78,6 +84,7 @@ def score_run(case: Case, alerts: List[Dict[str, Any]]) -> RunScore:
 class Summary:
     runs: int
     caught: int
+    caught_by_ai: int
     expected: int
     matched_alerts: int
     alerts: int
@@ -118,6 +125,7 @@ def summarize(scores: List[RunScore]) -> Summary:
     return Summary(
         runs=len(scores),
         caught=sum(len(s.caught) for s in sick),
+        caught_by_ai=sum(len(s.caught_by_ai) for s in sick),
         expected=sum(len(s.caught) + len(s.missed) for s in sick),
         matched_alerts=sum(s.alerts - s.extra for s in scores),
         alerts=sum(s.alerts for s in scores),
