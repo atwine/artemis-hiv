@@ -156,10 +156,19 @@ Check: the retrieval and answer scores before and after each change are in the d
       lab entry is one row per result with a unit.
 - [ ] 3.2 Mock up the visit-review screen three ways (clinic workstation, guided case review,
       evidence-first). You pick.
+      Changed by the owner (2026-11-26): five independent directions, each showing the whole
+      workflow, mixing ideas from the Design Library.
 - [ ] 3.3 Finish the chosen direction: patient list, visit review, plan, audit record, plus colours
       and type as reusable design tokens.
 
 Check: you have picked a direction and signed off the screens.
+
+Where it stands (2026-11-26): the brief (`docs/design/brief.md`), a shared made-up content kit
+(`docs/design/content-kit.md`) and five direction briefs (`docs/design/directions.md`) are
+written. The five directions (Triage Board, Guided Review, Evidence Desk, Patient Timeline,
+Note Co-pilot) are being built in the Paper file "Artemis-HIV", one page each, every page with
+a flow map and the eight workflow screens. Next: the owner reviews them and gives feedback;
+the pick goes in `docs/decisions.tsv`.
 
 ## Phase 4: Backend (FastAPI)
 
