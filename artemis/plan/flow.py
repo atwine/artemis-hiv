@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional
 
 from modules.embedder import Embedder
 from artemis.ai.client import OllamaClient
-from artemis.patient.record import build_patient_context, compute_lab_trends
+from artemis.patient.record import build_patient_context
 from artemis.plan.plan_json import first_json_object, strip_code_fences, validate_plan
 from artemis.guidelines.vector_store import VectorStore, VectorSearchResult
 
@@ -381,20 +381,6 @@ def _reason_updated_management_plan(
         )
         patient_id = patient.get("patient_id")
 
-        lab_trends_text = ""
-        try:
-            raw_labs = patient.get("labs") or {}
-            encounter_date_str = (patient.get("today_encounter") or {}).get("date")
-            enc_date = None
-            if encounter_date_str:
-                from datetime import datetime as _dt
-                enc_date = _dt.strptime(encounter_date_str, "%Y-%m-%d").date()
-            trends = compute_lab_trends(raw_labs, encounter_date=enc_date)
-            if trends:
-                lab_trends_text = "\n".join(t.summary_text for t in trends)
-        except Exception:
-            lab_trends_text = ""
-
         doctors_plan = ""
         try:
             today = patient.get("today_encounter") or {}
@@ -451,7 +437,6 @@ def _reason_updated_management_plan(
                     f"Question: {question}\n\n"
                     f"Patient summary (recorded facts; not_recorded lists empty fields):\n{summary_text}\n\n"
                     f"Patient notes, oldest first:\n{notes_text}\n\n"
-                    f"Lab trends:\n{lab_trends_text or 'No lab history available.'}\n\n"
                     f"Doctor's current plan:\n{doctors_plan}\n\n"
                     f"Guideline excerpts:\n{evidence_text}"
                 ),

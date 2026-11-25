@@ -88,6 +88,9 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Caught by: `git status` after the run showed the data file had changed. The file was restored
   from git.
 - Fix: fix 2. The patient file's location can be overridden, and the tests use a temporary copy.
+- Again in fix 10: a check script called the app directly and would have saved its visits into
+  the real visit records. It was stopped before any line was written. The test suite, the
+  baseline script and the check scripts now send records to throwaway folders themselves.
 
 **11. Slow work hidden by caching.**
 - Example: on every start the app re-read and re-embedded all four guideline files (about 880
@@ -157,6 +160,9 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: fix 8. The reader looks past bracketed words, accepts a single alert, keeps the complete
   alerts from a cut-off reply, and says which happened. A cut-off or partly read reply gets an
   amber banner and is never green.
+- The same pattern in the saved cases file (fix 10): any read error made the file count as
+  empty, so one bad character meant the next added case overwrote every saved case. A file
+  that can't be read is now reported, and nothing is written to it.
 
 **17. A clean-up written for one model, kept for the next.**
 - Example: the 4B model repeated itself, so a cleaner merged alerts whose titles were 75% alike
@@ -187,3 +193,34 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: fix 9. Each run of the checks and each Finalize adds a line to the patient's record file.
   The screen says "finalized and saved" only after the line is written, and says so when saving
   fails. "Other" needs a comment.
+- Related (fix 10): labels written ahead of time. Every alert's details said "LLM unavailable"
+  even when the AI had run, the status named a step that no longer existed ("generating audit
+  checklist"), and every patient showed "Visit Type: Routine". Labels now come from what ran
+  or what is recorded.
+
+**20. A cleaner that deletes what it doesn't recognise.**
+- Example: the guideline text cleaner removed anything between "<" and ">" as if it were an HTML
+  tag, so "If VL < 50 copies/mL and CD4 > 200, continue." became "If VL  200, continue." It also
+  dropped every "figure" block, one of which held a WHO 2025 treatment recommendation. Across the
+  four guideline files it kept 289 thresholds like "<50"; the fixed cleaner keeps 540.
+- Caught by: feeding the cleaner one real guideline sentence and reading what came out.
+- Fix: fix 10. It removes only named HTML tags, keeps the text of figure blocks, and the
+  guideline index is rebuilt.
+
+**21. A backup that quietly holds less.**
+- Example: when the guideline database can't open, the app falls back to an in-memory copy. That
+  copy replaced its contents with each file it was given, so only the last guideline file could be
+  searched, while indexing reported every passage as done.
+- Caught by: reading how the indexing loop and the backup store fit together, then indexing two
+  files and searching for the first.
+- Fix: fix 10. The backup adds each file's passages. Whether the app should also warn when it
+  falls back is a Phase 2B question.
+
+**22. A label more confident than the numbers.**
+- Example: lab "trends" were labelled by counting ups and downs. Creatinine 70, 150, 140, 130 was
+  "FALLING" although it nearly doubled; two undetectable viral loads (30, then 20) were "FALLING";
+  "<50" was dropped as not a number; and a pasted lab paragraph was labelled as a trend. The AI
+  plan step read these labels.
+- Caught by: printing the label next to the values for every patient.
+- Fix: fix 10 (owner's pick). The labels are gone; the AI reads the dated values themselves, and
+  trend rules come back when the doctor sets them.

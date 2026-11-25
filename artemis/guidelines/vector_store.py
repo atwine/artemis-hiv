@@ -138,16 +138,25 @@ class InMemoryVectorStore(VectorStore):
         if not chunks:
             return 0
 
-        self._ids = [c.chunk_id for c in chunks]
-        self._docs = [c.text for c in chunks]
-        self._metas = [
-            {"page_number": c.page_number, "source_path": c.source_path}
-            for c in chunks
-        ]
-
-        vectors = embedder.encode(self._docs)
-        self._embeddings = np.asarray(vectors, dtype=np.float32)
-        return len(self._ids)
+        # Add to what is already stored: the engine indexes one guideline file per call, and
+        # replacing the store kept only the last file (fix 10, G30). A passage indexed again
+        # replaces its old copy.
+        vectors = np.asarray(embedder.encode([c.text for c in chunks]), dtype=np.float32)
+        rows = list(self._embeddings) if self._embeddings is not None else []
+        position = {cid: i for i, cid in enumerate(self._ids)}
+        for c, vec in zip(chunks, vectors):
+            meta = {"page_number": c.page_number, "source_path": c.source_path}
+            if c.chunk_id in position:
+                i = position[c.chunk_id]
+                self._docs[i], self._metas[i], rows[i] = c.text, meta, vec
+            else:
+                position[c.chunk_id] = len(self._ids)
+                self._ids.append(c.chunk_id)
+                self._docs.append(c.text)
+                self._metas.append(meta)
+                rows.append(vec)
+        self._embeddings = np.vstack(rows)
+        return len(chunks)
 
     def query(
         self,

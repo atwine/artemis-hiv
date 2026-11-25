@@ -7,7 +7,7 @@
  
 from __future__ import annotations
 
-import json
+import html
 import logging
 import os
 import re
@@ -29,8 +29,10 @@ from artemis.ai.client import (
     OllamaClient,
     OllamaConfig,
     OpenAICompatClient,
+    list_ollama_models,
     openai_compat_config_from_env,
 )
+from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
 from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store
@@ -49,7 +51,6 @@ from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, n
 from artemis.visit import (
     AnalysisOptions,
     compute_overall_status,
-    extract_patient_facts_from_history,
     run_visit_analysis,
 )
 
@@ -81,7 +82,8 @@ GUIDELINE_PATHS: list[Path] = sorted(
 
 # Rationale: persistent Chroma collections keep old indexed chunks; bump this
 # when the ingestion/cleaning/chunking logic changes to force a fresh collection.
-GUIDELINE_INDEX_VERSION = 1
+# Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
+GUIDELINE_INDEX_VERSION = 2
 # Backward-compatible alias used by downstream code.
 GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
@@ -92,29 +94,14 @@ CANDIDATE_RULES_PATH = PROJECT_ROOT / "Data" / "candidate_rules.json"
 
 
 @st.cache_data
-def _load_patients(path: str, *, version: int = 1) -> List[Dict[str, Any]]:
-    # Rationale: cache synthetic demo data across reruns for responsiveness.
-    # The version parameter allows cache-busting when the JSON file changes.
+def _read_demo_patients(path: str, modified: float) -> List[Dict[str, Any]]:
+    # Cached per file version: `modified` (the file's time) changes when the file is edited.
     return load_mock_patients(Path(path))
 
 
-def _resolve_ollama_host() -> str:
-    """Resolve the Ollama host in the same way the Python client expects.
-
-    Mirrors the logic in artemis.ai.client.OllamaClient to avoid surprises when
-    listing models vs running chat calls.
-    """
-
-    raw_host = (os.getenv("OLLAMA_HOST") or "").strip()
-    if not raw_host:
-        return "http://localhost:11434"
-    host = raw_host
-    if "://" not in host:
-        host = f"http://{host}"
-    host = host.replace("http://0.0.0.0", "http://localhost").replace(
-        "https://0.0.0.0", "http://localhost"
-    )
-    return host
+def _load_demo_patients(path: Path) -> List[Dict[str, Any]]:
+    """The demo patients, reread whenever the file changes (the old cache key never changed)."""
+    return _read_demo_patients(str(path), path.stat().st_mtime)
 
 
 def _llm_name() -> str:
@@ -126,109 +113,20 @@ def _llm_name() -> str:
     return "OpenRouter" if "openrouter.ai" in cfg.base_url else "vLLM"
 
 
-def _list_ollama_models() -> List[str]:
-    """Return names of locally available Ollama models.
-
-    Uses the official ollama-python Client.list() endpoint, which queries the
-    /api/tags API under the hood. [src]
-    - https://raw.githubusercontent.com/ollama/ollama/main/docs/api.md
-    """
-
+def _save_cases(cases_file_ok: bool, items: List[Dict[str, Any]], what: str) -> bool:
+    """Write the saved cases file. On failure say so on screen and return False (fix 10, G16)."""
+    if not cases_file_ok:
+        st.error(f"{what}: the saved cases file can't be read (see above).")
+        return False
     try:
-        from ollama import Client  # type: ignore[import]
-    except Exception:
-        return []
-
-    try:
-        client = Client(host=_resolve_ollama_host(), timeout=5.0)
-        resp = client.list()
-    except Exception:
-        return []
-
-    models: List[str] = []
-
-    # Newer ollama-python may return an object with a `.models` attribute; older
-    # versions or direct HTTP clients may return a dict or list. Handle all
-    # three forms.
-    items: Any
-    if hasattr(resp, "models"):
-        items = resp.models  # type: ignore[attr-defined]
-    elif isinstance(resp, dict):
-        items = resp.get("models") or resp.get("data") or []
-    else:
-        items = resp
-
-    if isinstance(items, list):
-        for item in items:
-            # Object-style model (e.g., dataclass with `.name`).
-            if hasattr(item, "name") and isinstance(getattr(item, "name"), str):
-                name = getattr(item, "name")
-                if name:
-                    models.append(name)
-                continue
-
-            if isinstance(item, dict):
-                name = item.get("name") or item.get("model")
-                if isinstance(name, str) and name:
-                    models.append(name)
-            elif isinstance(item, str) and item:
-                models.append(item)
-
-    return models
+        write_json_list(CUSTOM_PATIENTS_PATH, items)
+        return True
+    except OSError as exc:
+        logger.warning("Saved cases file not written: %s", type(exc).__name__)
+        st.error(f"{what}: the saved cases file could not be written. Please try again.")
+        return False
 
 
-def _load_custom_patients(path: Path) -> List[Dict[str, Any]]:
-    try:
-        if not path.exists():
-            return []
-        with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        if not isinstance(data, list):
-            return []
-        out: List[Dict[str, Any]] = []
-        for item in data:
-            if isinstance(item, dict):
-                out.append(item)
-        return out
-    except Exception:
-        return []
-
-
-def _save_custom_patients(path: Path, patients: List[Dict[str, Any]]) -> None:
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("w", encoding="utf-8") as f:
-            json.dump(patients, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
-
-
-def _load_candidate_rules(path: Path) -> List[Dict[str, Any]]:
-    try:
-        if not path.exists():
-            return []
-        with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        if not isinstance(data, list):
-            return []
-        out: List[Dict[str, Any]] = []
-        for item in data:
-            if isinstance(item, dict):
-                out.append(item)
-        return out
-    except Exception:
-        return []
-
-
-def _save_candidate_rules(path: Path, rules: List[Dict[str, Any]]) -> None:
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("w", encoding="utf-8") as f:
-            json.dump(rules, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
- 
- 
 @st.cache_resource
 def _get_embedder(model_name: str, *, version: int = 2) -> Embedder:
     # Rationale: embedding model load is expensive; cache the instance.
@@ -287,7 +185,6 @@ def _init_session_state() -> None:
 
 
 # Moved to artemis/visit.py (Phase 1). Kept under the old names for callers.
-_extract_patient_facts_from_history = extract_patient_facts_from_history
 _compute_overall_status = compute_overall_status
 
 
@@ -349,7 +246,7 @@ def _run_analysis(
     st.session_state["agentic_debug_enabled"] = agentic_enabled
     st.session_state["agentic_debug_result"] = result.agentic_result
     st.session_state["analysis_screening_debug"] = result.screening_debug
-    st.session_state["analysis_screening_patient_facts"] = result.patient_facts
+    st.session_state["analysis_patient_summary"] = result.patient_summary
 
     for alert in result.alerts:
         st.session_state[f"alert_action_{alert.alert_id}"] = "Unreviewed"
@@ -415,13 +312,22 @@ def main() -> None:
         return
 
     # Cache-bust: ensure edits to Data/mock_patients.json appear without manual cache clear.
-    patients = _load_patients(str(MOCK_PATIENTS_PATH), version=2)
+    patients = _load_demo_patients(MOCK_PATIENTS_PATH)
     if not patients:
         st.error("No mock patients found in `Data/mock_patients.json`")
         return
 
     custom_session = list(st.session_state.get("custom_patients") or [])
-    custom_disk = _load_custom_patients(CUSTOM_PATIENTS_PATH)
+    try:
+        custom_disk = read_json_list(CUSTOM_PATIENTS_PATH)
+        cases_file_ok = True
+    except UnreadableFile as exc:
+        logger.warning("Saved cases file unreadable: %s", exc)
+        custom_disk, cases_file_ok = [], False
+        st.error(
+            "The saved cases file (custom_patients.json) can't be read, so cases can't be added or "
+            "deleted until it is fixed. Nothing in it has been changed."
+        )
     merged_custom: List[Dict[str, Any]] = []
     seen_ids = set()
     for p in custom_disk + custom_session:
@@ -613,16 +519,16 @@ def main() -> None:
 
                 # Rationale: keep the local list in sync so the newly added patient
                 # appears in the list immediately on this rerun.
-                custom_patients = custom_patients + [patient_record]
-                st.session_state["custom_patients"] = custom_patients
-                _save_custom_patients(CUSTOM_PATIENTS_PATH, custom_patients)
-                # Rationale: auto-select the newly added patient to make it clear
-                # the add succeeded.
-                st.session_state["selected_patient_label"] = patient_label(patient_record)
-                # Rationale: clear the Add patient case form after success to allow rapid entry.
-                st.session_state["add_case_flash_success"] = "Case added."
-                st.session_state["reset_add_case_form"] = True
-                st.rerun()
+                if _save_cases(cases_file_ok, custom_disk + [patient_record], "The case was not added"):
+                    custom_patients = custom_patients + [patient_record]
+                    st.session_state["custom_patients"] = custom_patients
+                    # Rationale: auto-select the newly added patient to make it clear
+                    # the add succeeded.
+                    st.session_state["selected_patient_label"] = patient_label(patient_record)
+                    # Rationale: clear the Add patient case form after success to allow rapid entry.
+                    st.session_state["add_case_flash_success"] = "Case added."
+                    st.session_state["reset_add_case_form"] = True
+                    st.rerun()
 
     if custom_patients:
         # Rationale: keep demo patients first, then any manually-added cases.
@@ -673,7 +579,7 @@ def main() -> None:
             st.markdown(f"**Sex:** {sex if sex else 'Not recorded'}")
             visit_date = patient.get('today_encounter', {}).get('date', 'Not recorded')
             st.markdown(f"**Visit Date:** {visit_date}")
-            st.markdown("**Visit Type:** Routine")
+            st.markdown(f"**Visit Type:** {(patient.get('today_encounter') or {}).get('type') or 'Not recorded'}")
             st.markdown("")
 
             # Section 2: Current ART Regimen
@@ -684,7 +590,8 @@ def main() -> None:
             """, unsafe_allow_html=True)
             art_regimen = patient.get('art_regimen_current', [])
             if art_regimen:
-                regimen_str = ", ".join(art_regimen)
+                # Escaped: the regimen can be typed text, and this line is drawn as HTML.
+                regimen_str = html.escape(", ".join(str(x) for x in art_regimen))
                 st.markdown(f"**Regimen:** <span style='color: #2E86AB; font-weight: 600;'>{regimen_str}</span>", unsafe_allow_html=True)
             else:
                 st.markdown("**Regimen:** None recorded")
@@ -804,23 +711,27 @@ def main() -> None:
                     key=f"confirm_delete_{selected_patient_id}",
                     disabled=not _confirmed,
                 ):
-                    custom_patients = [
-                        p
-                        for p in (custom_patients or [])
-                        if str(p.get("patient_id") or "") != selected_patient_id
-                    ]
-                    st.session_state["custom_patients"] = custom_patients
-                    _save_custom_patients(CUSTOM_PATIENTS_PATH, custom_patients)
+                    if _save_cases(
+                        cases_file_ok,
+                        [p for p in custom_disk if str(p.get("patient_id") or "") != selected_patient_id],
+                        "Nothing was deleted",
+                    ):
+                        custom_patients = [
+                            p
+                            for p in (custom_patients or [])
+                            if str(p.get("patient_id") or "") != selected_patient_id
+                        ]
+                        st.session_state["custom_patients"] = custom_patients
 
-                    # Rationale: reset derived UI state that may reference the deleted patient.
-                    # IMPORTANT: do not set selected_patient_label here; the selectbox widget
-                    # with key selected_patient_label has already been instantiated this run.
-                    # On rerun, the pre-selectbox guard will reset the selection if it no
-                    # longer exists in the patient list.
-                    clear_analysis(st.session_state)
-                    st.session_state.pop("pending_delete_patient_id", None)
-                    st.success(f"Deleted patient case: {selected_patient_id}")
-                    st.rerun()
+                        # Rationale: reset derived UI state that may reference the deleted patient.
+                        # IMPORTANT: do not set selected_patient_label here; the selectbox widget
+                        # with key selected_patient_label has already been instantiated this run.
+                        # On rerun, the pre-selectbox guard will reset the selection if it no
+                        # longer exists in the patient list.
+                        clear_analysis(st.session_state)
+                        st.session_state.pop("pending_delete_patient_id", None)
+                        st.success(f"Deleted patient case: {selected_patient_id}")
+                        st.rerun()
 
     today_note_default = (patient.get("today_encounter", {}) or {}).get("note") or ""
     # Rationale: key by patient_id so switching patients shows the correct note input.
@@ -859,7 +770,7 @@ def main() -> None:
             # Rationale: an OpenAI-compatible server (vLLM now, OpenRouter later) is set,
             # so the Ollama-only controls (local model list, num_ctx) do not apply.
             st.caption(
-                f"{_llm_name()} server: {remote_llm_cfg.base_url}  \n"
+                f"{_llm_name()} server (address in .env)  \n"
                 f"Model: {remote_llm_cfg.model or 'first one the server lists'}  \n"
                 "Set in .env (LLM_BASE_URL, LLM_MODEL)."
             )
@@ -872,7 +783,12 @@ def main() -> None:
             )
             env_model = (os.getenv("OLLAMA_MODEL") or "").strip()
 
-            discovered_models = _list_ollama_models()
+            discovered_models, ollama_error = list_ollama_models()
+            if ollama_error:
+                st.warning(
+                    f"Ollama isn't reachable ({ollama_error}; OLLAMA_HOST in .env), so the list below is "
+                    "only the default model and the AI review will fail until Ollama is running."
+                )
             base_options: List[str] = []
             if discovered_models:
                 base_options = list(dict.fromkeys(discovered_models))  # preserve order, de-dup
@@ -950,29 +866,24 @@ def main() -> None:
             "summary and guideline excerpts did not find any guideline-based safety issue."
         )
         _dbg = st.session_state.get("analysis_screening_debug") or {}
-        _facts = st.session_state.get("analysis_screening_patient_facts") or {}
+        _summary = st.session_state.get("analysis_patient_summary") or {}
         _parse_status = _dbg.get("parse_status") or "unknown"
         _bundle = _dbg.get("screening_bundle") or []
-        _meds = (_facts.get("medications_detected") or []) if isinstance(_facts, dict) else []
-        _symptoms = (_facts.get("symptoms_detected") or []) if isinstance(_facts, dict) else []
-        st.caption(
-            f"LLM screening audit: parse_status={_parse_status}; guideline_excerpts={len(_bundle)}; "
-            f"meds_detected={len(_meds)}; symptoms_detected={len(_symptoms)}"
-        )
+        st.caption(f"AI review: reply status {_parse_status}; guideline passages shown to the AI: {len(_bundle)}.")
         with st.expander("No-alert audit trail (LLM screening)", expanded=True):
-            if not _dbg and not _facts:
+            if not _dbg and not _summary:
                 st.info(
                     "Audit data was not captured for this run. Click Save again to re-run the analysis "
                     "and populate the no-alert audit trail."
                 )
-            st.markdown("**What patient facts were checked (from Patient History):**")
-            st.json(_facts)
-            st.markdown("**What guidelines were checked (retrieved excerpts):**")
+            st.markdown("**What the AI was given about the patient (the summary it read, with the dated notes and labs):**")
+            st.json(_summary)
+            st.markdown("**What guidelines the AI was shown:**")
             st.json(_bundle)
             st.markdown("**How the conclusion was reached:**")
             st.markdown(
                 "- The model was instructed to extract rules ONLY from the retrieved guideline excerpts.\n"
-                "- It compared those extracted rules to the patient facts in the history and Stage 1 summary.\n"
+                "- It compared them with the patient summary above, the dated notes and the lab table.\n"
                 f"- LLM output status: `{_dbg.get('parse_status') or 'unknown'}`."
             )
             # Rationale: show raw output for all cases to debug empty output issues
@@ -1108,13 +1019,10 @@ def main() -> None:
                         st.markdown("\n".join(f"{i + 1}. {line}" for i, line in enumerate(_ref_lines)))
 
                     # Rationale: move generation status/latency out of the main clinician view.
-                    if st.session_state.get("analysis_use_ollama"):
-                        st.caption("Deterministic fallback explanation (LLM unavailable).")
-                        err = st.session_state.get("analysis_ollama_error")
-                        if err:
-                            st.caption(f"{_llm_name()} debug: {err}")
+                    if alert.source == "ai":
+                        st.caption("Finding and recommended action written by the AI review.")
                     else:
-                        st.caption("Deterministic fallback explanation (LLM disabled).")
+                        st.caption("Finding written by the rule check, from the patient's record.")
 
                     st.markdown("**Guideline retrieval**")
                     if retrieved:
@@ -1133,12 +1041,17 @@ def main() -> None:
                         "Mark as candidate deterministic rule",
                         key=f"candidate_rule_{alert.alert_id}",
                     ):
-                        existing_rules = _load_candidate_rules(CANDIDATE_RULES_PATH)
+                        try:
+                            existing_rules = read_json_list(CANDIDATE_RULES_PATH)
+                        except UnreadableFile as exc:
+                            logger.warning("Candidate rules file unreadable: %s", exc)
+                            st.error("candidate_rules.json can't be read, so nothing was saved.")
+                            existing_rules = None
                         # Avoid duplicating the same alert_id in the candidate file.
                         existing_ids = {
-                            str(r.get("alert_id")) for r in existing_rules if isinstance(r, dict)
+                            str(r.get("alert_id")) for r in existing_rules or [] if isinstance(r, dict)
                         }
-                        if alert.alert_id not in existing_ids:
+                        if existing_rules is not None and alert.alert_id not in existing_ids:
                             candidate: Dict[str, Any] = {
                                 "alert_id": alert.alert_id,
                                 "title": alert.title,
@@ -1146,8 +1059,12 @@ def main() -> None:
                                 "evidence": alert.evidence,
                             }
                             existing_rules.append(candidate)
-                            _save_candidate_rules(CANDIDATE_RULES_PATH, existing_rules)
-                            st.success("Marked as candidate deterministic rule (saved under Data/candidate_rules.json).")
+                            try:
+                                write_json_list(CANDIDATE_RULES_PATH, existing_rules)
+                                st.success("Marked as candidate deterministic rule (saved under Data/candidate_rules.json).")
+                            except OSError as exc:
+                                logger.warning("Candidate rule not saved: %s", type(exc).__name__)
+                                st.error("The candidate rule could not be saved.")
 
     # Trial Result - Experimental formatted output display
     # Rationale: keep a single consolidated "Output" section even when there are no alerts,

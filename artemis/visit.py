@@ -12,7 +12,6 @@ Phase 1 fixes change it from here, each with its own test.
 from __future__ import annotations
 
 import copy
-import re
 import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
@@ -57,93 +56,13 @@ class AnalysisResult:
     screening_outcome: str
     screening_ran: bool
     screening_debug: Optional[Dict[str, Any]]
-    patient_facts: Optional[Dict[str, Any]]
+    # The recorded-facts summary the AI review read (fix 6); shown when nothing was found (fix 10).
+    patient_summary: Optional[Dict[str, Any]]
     agentic_enabled: bool
     agentic_result: Any
     agentic_reasoner: Optional[Dict[str, Any]]
     llm_error: Optional[str]
     explain_seconds: Dict[str, float] = field(default_factory=dict)
-
-
-def extract_patient_facts_from_history(notes_text: str) -> Dict[str, Any]:
-    # Rationale: deterministic, lightweight extraction so clinicians can see what the system
-    # believes is present in the free-text history even when no alerts are generated.
-    text = (notes_text or "").strip()
-    low = text.lower()
-
-    # Rationale: match common ART abbreviations and full names to reduce false "empty" fact extraction.
-    # This does not change alert logic; it only improves audit transparency.
-    arv_terms = {
-        "tdf": "TDF",
-        "tenofovir": "TDF",
-        "3tc": "3TC",
-        "lamivudine": "3TC",
-        "dtg": "DTG",
-        "dolutegravir": "DTG",
-        "azt": "AZT",
-        "zidovudine": "AZT",
-        "ftc": "FTC",
-        "emtricitabine": "FTC",
-        "efv": "EFV",
-        "efavirenz": "EFV",
-        "nvp": "NVP",
-        "nevirapine": "NVP",
-        "d4t": "D4T",
-        "stavudine": "D4T",
-        "abc": "ABC",
-        "abacavir": "ABC",
-        "taf": "TAF",
-    }
-    meds_norm = set()
-    for term, canon in arv_terms.items():
-        if re.search(rf"\b{re.escape(term)}\b", low):
-            meds_norm.add(canon)
-    meds_found = sorted(meds_norm)
-
-    symptom_terms = [
-        "bone pain",
-        "fracture",
-        "difficulty walking",
-        "proximal muscle weakness",
-        "weakness",
-        "fatigue",
-        "dizziness",
-    ]
-    symptoms_found = [t for t in symptom_terms if t in low]
-
-    key_line_terms = [
-        "current art",
-        "viral load",
-        "cd4",
-        "serum creatinine",
-        "creatinine",
-        "egfr",
-        "urinalysis",
-        "phosphate",
-        "alp",
-        "vitamin d",
-        "dexa",
-        "t-score",
-        "looser",
-    ]
-    key_lines: List[str] = []
-    for ln in (text.splitlines() or []):
-        s = ln.strip()
-        if not s:
-            continue
-        sl = s.lower()
-        if any(term in sl for term in key_line_terms):
-            key_lines.append(s)
-
-    # Bound the output so it remains readable in the UI.
-    return {
-        # Rationale: include minimal diagnostics so a clinician can confirm what text was actually checked.
-        "notes_text_char_count": len(text),
-        "notes_text_preview": (text[:300] + ("…" if len(text) > 300 else "")),
-        "medications_detected": meds_found,
-        "symptoms_detected": symptoms_found,
-        "key_history_lines": key_lines[:25],
-    }
 
 
 def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -> str:
@@ -248,16 +167,12 @@ def run_visit_analysis(
     )
     checklist_retrieved = _retrieve(rag, context=context, alert=checklist_seed, top_k=top_k)
 
-    if use_llm:
-        # Rationale: the first LLM call is a good proxy for "Ollama connected".
-        status(f"{llm_name}: generating audit checklist…", "running")
     # Optional: LLM-first screening mode — generate alerts directly from Stage 1 summary
     # and checklist evidence. Deterministic alerts remain the fallback when
     # screening fails (error or unparseable output).
     screening_ran = False
     screening_outcome = "not_run"
     screening_debug: Optional[Dict[str, Any]] = None
-    patient_facts: Optional[Dict[str, Any]] = None
     if use_llm and llm_client is not None:
         screening_ran = True
         status(f"{llm_name}: screening for safety issues…", "running")
@@ -269,8 +184,6 @@ def run_visit_analysis(
             llm_client=llm_client,
             debug=screening_debug,
         )
-        # Rationale: persist screening audit inputs/parse status for GREEN "no alerts" explanation.
-        patient_facts = extract_patient_facts_from_history(context.notes_text)
 
         parse_status = (screening_debug.get("parse_status") or "").strip().lower()
         last_err = llm_client.last_error
@@ -332,7 +245,7 @@ def run_visit_analysis(
         screening_outcome=screening_outcome,
         screening_ran=screening_ran,
         screening_debug=screening_debug,
-        patient_facts=patient_facts,
+        patient_summary=stage1_summary if screening_ran else None,
         agentic_enabled=options.agentic,
         agentic_result=agentic_result,
         agentic_reasoner=agentic_reasoner,

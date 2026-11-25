@@ -1,13 +1,6 @@
 # Where each function lives now and where it is going. Checked by scripts/check_code_map.py.
 file	function	does	target	status
-app.py	_load_patients	Loads the demo patient records from the sample data file.	artemis/patient/store.py	to-move
-app.py	_resolve_ollama_host	Works out the address of the local Ollama AI server from settings.	artemis/ai/	to-move
 app.py	_llm_name	Gives the display name of the AI server in use, for status labels.	artemis/ai/	to-move
-app.py	_list_ollama_models	Lists the AI models installed on the local Ollama server.	artemis/ai/	to-move
-app.py	_load_custom_patients	Reads the patient cases added on screen from their saved file.	artemis/patient/store.py	to-move
-app.py	_save_custom_patients	Saves the patient cases added on screen to their file.	artemis/patient/store.py	to-move
-app.py	_load_candidate_rules	Reads the saved list of proposed new alert rules from file.	artemis/rules/	to-move
-app.py	_save_candidate_rules	Saves the list of proposed new alert rules to file.	artemis/rules/	to-move
 app.py	_get_embedder	Creates the text-to-numbers model once and reuses it, since loading is slow.	ui/ (cached for the screen)	to-move
 app.py	_get_rag_engine	Builds the guideline search engine once per session and reuses it.	ui/ (cached for the screen)	to-move
 app.py	_init_session_state	Sets the starting values for everything the screen remembers between clicks.	ui/state.py	to-move
@@ -29,7 +22,6 @@ artemis/rules/checks.py	_check_efv_sleep_disturbance	Flags specific sleep compla
 artemis/rules/checks.py	_check_tdf_nsaid_use	Flags NSAID use, in the notes or on the medicine list, for a patient on TDF.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_possible_proteinuria	Flags protein in the urine, in the notes or pasted lab text, unless negated.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_suboptimal_bp_with_missed_amlodipine	Alerts when notes show poor blood pressure control with missed amlodipine doses.	artemis/rules/checks.py	moved
-artemis/visit.py	extract_patient_facts_from_history	Pulls drugs, conditions and other key facts out of the free-text history.	artemis/visit.py	moved
 artemis/visit.py	compute_overall_status	Sets the overall colour from the alerts; INCOMPLETE when nothing was found and the AI review did not finish cleanly.	artemis/visit.py	moved
 artemis/visit.py	_retrieve	Finds the guideline passages that relate to one alert.	artemis/visit.py	moved
 artemis/visit.py	run_visit_analysis	Runs the whole visit check: alerts, guideline lookup, AI screening and explanations.	artemis/visit.py	moved
@@ -68,8 +60,6 @@ artemis/patient/record.py	_days_between	Counts the days between two dates.	artem
 artemis/patient/record.py	load_mock_patients	Loads the demo patient records from a JSON file.	artemis/patient/record.py	moved
 artemis/patient/record.py	build_patient_context	Builds the patient summary the rules and AI read, including dated notes and labs.	artemis/patient/record.py	moved
 artemis/patient/record.py	days_since_lab	Counts days since a patient's latest result for a lab, or none if never done.	artemis/patient/record.py	moved
-artemis/patient/record.py	_extract_numeric	Reads the first number from a lab entry, ignoring its date.	artemis/patient/record.py	moved
-artemis/patient/record.py	compute_lab_trends	Works out whether each lab is rising, falling or steady over time.	artemis/patient/record.py	moved
 modules/rag_engine.py	RagEngine.__init__	Sets up the guideline search engine with its guideline files and storage.	artemis/guidelines/	to-move
 modules/rag_engine.py	RagEngine.ensure_indexed	Loads the guideline files into the search store once, if not already done.	artemis/guidelines/	to-move
 modules/rag_engine.py	RagEngine.retrieve_for_alert	Finds the guideline passages most relevant to an alert for this patient.	artemis/guidelines/	to-move
@@ -154,3 +144,11 @@ ui/review.py	_restore_visit	Puts a saved visit back on screen when its button is
 ui/review.py	offer_last_saved_results	Shows the button that reopens a patient's last saved results.	ui/review.py	stays
 ui/review.py	finalize_visit	Saves the decisions at Finalize, and finalizes only if the save worked.	ui/review.py	stays
 artemis/visit_record.py	_saved_alert	Rebuilds one saved alert, refusing a line that lacks its id, title or message.	artemis/visit_record.py	moved
+app.py	_read_demo_patients	Reads the demo patients file, cached until the file changes.	ui/	to-move
+app.py	_load_demo_patients	Gives the demo patients, rereading the file when it has changed.	ui/	to-move
+app.py	_save_cases	Writes the saved cases file, and says so on screen when it can't.	ui/	to-move
+artemis/ai/client.py	_hide_address	Removes the model server's address from error text.	artemis/ai/client.py	moved
+artemis/ai/client.py	ollama_host	Works out the local Ollama address from settings, keeping http or https.	artemis/ai/client.py	moved
+artemis/ai/client.py	list_ollama_models	Lists the models on the local Ollama server, or says why it can't be reached.	artemis/ai/client.py	moved
+artemis/patient/store.py	read_json_list	Reads a saved list file; a damaged file is reported, never read as empty.	artemis/patient/store.py	moved
+artemis/patient/store.py	write_json_list	Replaces a saved list file in one step, so a crash can't leave it half-written.	artemis/patient/store.py	moved

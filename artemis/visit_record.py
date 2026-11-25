@@ -96,7 +96,7 @@ def checks_entry(result: Any, *, note: str, visit_date: str, model: Optional[str
             for r in result.results
         ],
         "screening_debug": result.screening_debug,
-        "patient_facts": result.patient_facts,
+        "patient_summary": result.patient_summary,
         "agentic_enabled": bool(result.agentic_enabled),
         "plan": _plan(result.agentic_result),
     }
@@ -208,7 +208,7 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
         "analysis_results": results,
         "analysis_use_ollama": bool(checks.get("ai_review_ran")),
         "analysis_screening_debug": checks.get("screening_debug"),
-        "analysis_screening_patient_facts": checks.get("patient_facts"),
+        "analysis_patient_summary": checks.get("patient_summary"),
         "agentic_debug_enabled": bool(checks.get("agentic_enabled")),
         "agentic_debug_result": plan,
         "finalized": finalized is not None,

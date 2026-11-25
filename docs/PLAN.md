@@ -64,7 +64,7 @@ test that fails on the old code, ends with that test passing, and is logged in
 - [x] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.
 - [x] Fix 9: save the visit record: reviews, overrides and reasons (old item 1.3, second half).
       9b: reopen a patient's last results from the record, with no new AI call.
-- [ ] Fix 10: small fixes, plus two dangerous retrieval faults pulled forward from 2B (the cleaner
+- [x] Fix 10: small fixes, plus two dangerous retrieval faults pulled forward from 2B (the cleaner
       deleting "<50" thresholds, and the backup index keeping only one guideline).
 - [ ] 1.Z Rerun the baseline (7 patients, 3 runs each) and compare with `scripts/compare_runs.py`;
       code review, security review, then merge into `development` and push after a yes.

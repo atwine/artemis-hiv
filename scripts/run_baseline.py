@@ -208,7 +208,7 @@ def run_one(patient: Dict[str, Any]) -> Dict[str, Any]:
         "alerts": _to_jsonable(ss.get("analysis_alerts") or []),
         "results": _to_jsonable(results),
         "screening": _to_jsonable(ss.get("analysis_screening_debug")),
-        "patient_facts_seen": _to_jsonable(ss.get("analysis_screening_patient_facts")),
+        "patient_summary_seen": _to_jsonable(ss.get("analysis_patient_summary")),
         "plan_items": _plan_items(agentic),
         "agentic_result": _to_jsonable(agentic),
         "status_log": shim.status_log,

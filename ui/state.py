@@ -23,7 +23,7 @@ ANALYSIS_DEFAULTS: Dict[str, Any] = {
     "analysis_use_ollama": False,
     "analysis_ollama_error": None,
     "analysis_screening_debug": None,
-    "analysis_screening_patient_facts": None,
+    "analysis_patient_summary": None,
     "agentic_debug_enabled": False,
     "agentic_debug_result": None,
     "agentic_debug_reasoner": None,

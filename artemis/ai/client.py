@@ -12,7 +12,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 import os
-from typing import Any, ClassVar, Dict, List, Optional, TypedDict
+from typing import Any, ClassVar, Dict, List, Optional, Tuple, TypedDict
+from urllib.parse import urlsplit
 
 
 class ChatMessage(TypedDict):
@@ -40,6 +41,53 @@ class _ReplyState:
         return self._last_note
 
 
+def _hide_address(text: str, url: str) -> str:
+    """Error text without the server's address, which lives only in .env (fix 10, G26)."""
+    parts = urlsplit(url if "://" in url else f"http://{url}")
+    for secret in sorted({url, url.rstrip("/"), parts.netloc, parts.hostname or ""}, key=len, reverse=True):
+        if secret:
+            text = text.replace(secret, "<model server>")
+    return text
+
+
+def ollama_host() -> str:
+    """The Ollama address from OLLAMA_HOST, as the client will use it.
+
+    OLLAMA_HOST is often a bind address such as 0.0.0.0:11434, which a client can't connect
+    to, so 0.0.0.0 becomes localhost; the scheme (http or https) is kept (fix 10, G28).
+    """
+    raw = (os.getenv("OLLAMA_HOST") or "").strip()
+    if not raw:
+        return "http://localhost:11434"
+    host = raw if "://" in raw else f"http://{raw}"
+    return host.replace("://0.0.0.0", "://localhost")
+
+
+def list_ollama_models() -> Tuple[List[str], Optional[str]]:
+    """The models installed on the local Ollama server, and an error message when it can't be reached."""
+    try:
+        from ollama import Client
+    except Exception:
+        return [], "the Python package 'ollama' is not installed"
+    try:
+        resp = Client(host=ollama_host(), timeout=5.0).list()
+    except Exception as exc:
+        return [], f"{type(exc).__name__}"
+    items: Any = getattr(resp, "models", None)
+    if items is None:
+        items = (resp.get("models") or resp.get("data") or []) if isinstance(resp, dict) else resp
+    names: List[str] = []
+    for item in items if isinstance(items, list) else []:
+        name = getattr(item, "name", None) or getattr(item, "model", None)
+        if name is None and isinstance(item, dict):
+            name = item.get("name") or item.get("model")
+        if name is None and isinstance(item, str):
+            name = item
+        if isinstance(name, str) and name:
+            names.append(name)
+    return names, None
+
+
 @dataclass(frozen=True)
 class OllamaConfig:
     # Rationale: default to the locally pulled model tag to avoid mismatches.
@@ -47,7 +95,8 @@ class OllamaConfig:
     # Rationale: allow setting the context window per request without changing server env.
     # Matches Ollama `num_ctx` parameter. [src]
     # - https://raw.githubusercontent.com/ollama/ollama/main/docs/modelfile.mdx#valid-parameters-and-values
-    num_ctx: Optional[int] = None
+    # 8192, as on the settings panel; Ollama's own default is smaller and cuts long prompts (fix 10).
+    num_ctx: Optional[int] = 8192
 
 
 class OllamaClient(_ReplyState):
@@ -58,22 +107,7 @@ class OllamaClient(_ReplyState):
         model_override = os.getenv("OLLAMA_MODEL")
         self._model = model_override if model_override else cfg.model
 
-        # Rationale: ollama-python allows a custom host via Client(host=...). [src]
-        # - https://github.com/ollama/ollama-python#custom-client
-        # Note: OLLAMA_HOST is sometimes set to a bind address like 0.0.0.0:11434;
-        # clients cannot connect to 0.0.0.0, so we translate it to localhost. [src]
-        # - https://github.com/ollama/ollama-python/issues/407
-        raw_host = (os.getenv("OLLAMA_HOST") or "").strip()
-        if raw_host:
-            host = raw_host
-            if "://" not in host:
-                host = f"http://{host}"
-            host = host.replace("http://0.0.0.0", "http://localhost").replace(
-                "https://0.0.0.0", "http://localhost"
-            )
-            self._host = host
-        else:
-            self._host = "http://localhost:11434"
+        self._host = ollama_host()
 
         # Rationale: surface the last failure reason to the UI for debugging.
         self._last_error: Optional[str] = None
@@ -115,7 +149,7 @@ class OllamaClient(_ReplyState):
             self._last_finish_reason = None
             self._last_note = None
             # Rationale: use an explicit client so we can control the host used for
-            # connectivity debugging. Allow up to 5 minutes for long-running
+            # connectivity debugging. Allow up to 10 minutes for long-running
             # local model calls before treating them as timeouts.
             client = Client(host=self._host, timeout=600.0)
             # Rationale: keep outputs more deterministic for clinical UX.
@@ -203,7 +237,7 @@ class OllamaClient(_ReplyState):
             return None
         except Exception as e:
             # Rationale: local model may not be pulled/served yet; we degrade gracefully.
-            self._last_error = f"Ollama call failed (host={self._host}): {type(e).__name__}: {e}"
+            self._last_error = f"Ollama call failed: {type(e).__name__}: {_hide_address(str(e), self._host)}"
             return None
 
 
@@ -288,7 +322,7 @@ class OpenAICompatClient(_ReplyState):
         # Hosted gateways such as OpenRouter list hundreds, so the first one is arbitrary.
         if len(models) != 1:
             raise RuntimeError(
-                f"{len(models)} models listed at {self._base_url}/models; set LLM_MODEL to pick one"
+                f"{len(models)} models listed by the model server; set LLM_MODEL to pick one"
             )
         self._resolved_model = models[0]
         return self._resolved_model
@@ -354,5 +388,5 @@ class OpenAICompatClient(_ReplyState):
                 return None
             return content
         except Exception as e:
-            self._last_error = f"Model server call failed ({self._base_url}): {type(e).__name__}: {e}"
+            self._last_error = f"Model server call failed: {type(e).__name__}: {_hide_address(str(e), self._base_url)}"
             return None

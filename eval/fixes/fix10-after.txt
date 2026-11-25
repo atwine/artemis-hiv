@@ -1,0 +1,83 @@
+Fix 10, after (2026-11-25).
+
+Tests: tests/test_small_fixes.py (10) and tests/test_screen_small_fixes.py (6): the 15 that failed
+first now pass, and the HTML-tag guard still passes. Code map check: 0 problems.
+
+Golden diff (replayed baseline replies), all 7 patients: only two things changed. The plan prompt
+(no "Lab trends" line, so the plan calls' message hashes changed) and the status log (no
+"generating audit checklist"). Screening prompts, alerts, colours and plans are unchanged.
+
+Cleaner on the four real guideline files, old against new (thresholds such as "<50" or "> 200"):
+HIV_Guidelines_ART.extraction.md             thresholds kept: old  111  new  125 | text kept: old   83015 new   89721 chars
+HIV_Guidelines_Co_infectionScreening.extra   thresholds kept: old   82  new  135 | text kept: old   87040 new  105094 chars
+SAHCS_Adult_ART_2024.md                      thresholds kept: old   77  new  159 | text kept: old  165982 new  212252 chars
+WHO_guidelines.extraction.md                 thresholds kept: old   19  new  121 | text kept: old  298209 new  331127 chars
+total thresholds such as '<50' or '> 200': old 289 new 540
+WHO 2025 DTG+3TC recommendation in the cleaned text: True
+HTML tags left in the new cleaned text: 0
+
+Real run on the A100 (Llama 3.3 70B), every patient once, guideline index rebuilt (version 2):
+===== P001 | 88 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine monitoring overdue while on TDF (severity: -)
+  [ai] Missing Recent Creatinine (severity: moderate)
+      ref: The AI cited no guideline passage for this alert.
+  [ai] Inadequate Virological Monitoring (severity: low)
+      ref: Guidelines, p.32
+  passages shown to the AI: 5
+===== P002 | 10 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [ai] Viral Load Monitoring (severity: low)
+      ref: Guidelines, p.32
+  [ai] Creatinine Monitoring (severity: low)
+      ref: Guidelines, p.20
+  passages shown to the AI: 5
+===== P003 | 11 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine missing while on TDF (severity: -)
+  [rule] Possible EFV neuropsychiatric side effects (severity: -)
+  [ai] EFV Neuropsychiatric Effects (severity: moderate)
+      ref: Guidelines, p.55
+      ref: Guidelines, p.39
+  [ai] Mental Health Assessment (severity: low)
+      ref: Guidelines, p.55
+  passages shown to the AI: 5
+===== P004 | 10 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [ai] Abdominal Pain (severity: moderate)
+      ref: Guidelines, p.26
+  [ai] Missing Recent Lab Results (severity: moderate)
+      ref: Guidelines, p.21
+  passages shown to the AI: 5
+===== P006 | 16 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine recorded only as pasted text (severity: -)
+  [ai] Elevated Creatinine Level (severity: moderate)
+      ref: Guidelines, p.0: not among the passages the AI was given
+  [ai] Viral Load Monitoring (severity: low)
+      ref: Guidelines, p.13
+      ref: Guidelines, p.49
+  [ai] DTG-Based Regimen in Pregnancy (severity: moderate)
+      ref: Guidelines, p.48
+  passages shown to the AI: 5
+===== P005 | 11 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine recorded only as pasted text (severity: -)
+  [rule] NSAID use mentioned while on TDF (severity: -)
+  [rule] Proteinuria mentioned in notes (severity: -)
+  [ai] Renal Function Decline (severity: moderate)
+      ref: Guidelines, p.40
+  [ai] Viral Load Monitoring (severity: low)
+      ref: Guidelines, p.32
+  passages shown to the AI: 5
+===== Kintu-Test 001 | 16 s | status YELLOW | AI review: ok (read: parsed_nonempty, reply ended: stop, repeats dropped: 0)
+  [rule] Creatinine recorded only as pasted text (severity: -)
+  [ai] Weight Gain and Metabolic Changes (severity: moderate)
+      ref: Guidelines, p.8
+  [ai] Monitoring Gap for Renal Function (severity: low)
+      ref: Guidelines, p.25
+  [ai] Plan Problem for Weight Management (severity: low)
+      ref: Guidelines, p.8
+  passages shown to the AI: 5
+TOTALS: {'ai_alerts': 16, 'citations': 17, 'shown': 16, 'not_shown': 1, 'ai_refs': 16}
+Passages shown to the AI, all 7 patients: baseline (old cleaner) 35 passages with 9 thresholds like '<50'; fix 10 run 35 passages with 23.
+
+Screen, in Chrome (P001, reopened from the saved visit, no AI call): "Visit Type: Not recorded";
+the settings panel reads "vLLM server (address in .env)" with the model name and no address
+(fix10-settings-no-address.png); rule alerts say "Finding written by the rule check, from the
+patient's record", AI alerts "Finding and recommended action written by the AI review"; no
+"LLM unavailable" anywhere.

@@ -186,7 +186,13 @@ _ANCHOR_RE = re.compile(r"<a\s+id=['\"][^'\"]*['\"]\s*/?>", re.IGNORECASE)
 _ANCHOR_CLOSE_RE = re.compile(r"</a>", re.IGNORECASE)
 _SPECIAL_BLOCK_RE = re.compile(r"<::(.*?)::>", re.DOTALL)
 _HTML_TABLE_TAG_RE = re.compile(r"</?(table|tr|td)\b[^>]*>", re.IGNORECASE)
-_HTML_ANY_TAG_RE = re.compile(r"<[^>]+>")
+# Only real HTML tags. "<[^>]+>" also matched "< 50 copies/mL and CD4 >" and deleted
+# guideline thresholds (fix 10, G29).
+_HTML_TAG_RE = re.compile(
+    r"</?(?:a|b|i|u|em|strong|small|sup|sub|span|div|p|br|hr|img|font|center|h[1-6]|ul|ol|li|"
+    r"table|thead|tbody|tfoot|tr|td|th|caption|col|colgroup|figure|figcaption)\b[^<>]*>",
+    re.IGNORECASE,
+)
 
 
 def _strip_markdown_noise(text: str) -> str:
@@ -202,13 +208,11 @@ def _strip_markdown_noise(text: str) -> str:
         # (e.g. '<::logo: [Unknown] MODULE 9 ...::>'). These are decorative and add
         # no retrieval value.
         # Some variants omit the bracketed description (e.g. 'logo: Module 21 ...').
-        if re.match(r"^logo\s*:", inner, flags=re.IGNORECASE):
+        if re.match(r"^logo\s*:", inner, flags=re.IGNORECASE) or re.search(r":\s*logo\b", inner, re.IGNORECASE):
             return ""
-        # Note: some conversions may not preserve the trailing '::' consistently;
-        # match the marker keyword as a whole word to ensure we drop these blocks.
-        if re.search(r":\s*(figure|photo|image|logo|chemical structure)\b", inner, re.IGNORECASE):
-            return ""
-        return inner
+        # Figure, photo and image blocks can hold guideline text (a WHO recommendation sits in
+        # one), so keep their text and drop only the label (fix 10, G29).
+        return re.sub(r"\s*:\s*(figure|photo|image|chemical structure)\b", "", inner, flags=re.IGNORECASE)
 
     text = _SPECIAL_BLOCK_RE.sub(_special_block_repl, text)
 
@@ -235,7 +239,7 @@ def _strip_markdown_noise(text: str) -> str:
     text = re.sub(r"<table\b[^>]*>", "", text, flags=re.IGNORECASE)
 
     # Drop any remaining HTML tags.
-    text = _HTML_ANY_TAG_RE.sub("", text)
+    text = _HTML_TAG_RE.sub("", text)
 
     # Decode entity encodings (e.g., &lt; and &gt;) into their unicode characters.
     text = html.unescape(text)
