@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import pytest
 
@@ -193,3 +193,45 @@ def test_an_alert_with_no_title_or_message_is_shown_and_says_so() -> None:
     alerts, _ = _screen(json.dumps([_alert(1, title="", message=" ")]))
     assert alerts[0].title == "AI alert with no title"
     assert alerts[0].message == "The AI gave no explanation for this alert."
+
+
+# Phase 2, step 6: citations can only name passages the AI was shown
+
+class _Capture(Model):
+    def __init__(self) -> None:
+        super().__init__("[]")
+        self.formats: List[Any] = []
+        self.messages: List[Any] = []
+
+    def chat(self, messages, format=None, options_override=None):  # noqa: A002
+        self.formats.append(format)
+        self.messages.append(messages)
+        return self.reply
+
+
+def _screen_with(chunks):
+    p = copy.deepcopy(next(x for x in h.patients() if x["patient_id"] == "P001"))
+    ctx = build_patient_context(p)
+    model = _Capture()
+    generate_llm_screening_alerts(patient_context=ctx, stage1_summary=build_stage1_summary(patient=p, context=ctx),
+                                  screening_chunks=chunks, llm_client=model, debug={})
+    return model
+
+
+def test_the_answer_format_only_allows_citing_passages_the_ai_was_shown() -> None:
+    chunks = CHUNKS + [VectorSearchResult(chunk_id="c2", document="Two.", metadata={"page_number": 2}, distance=0.2)]
+    schema = _screen_with(chunks).formats[0]
+    citation = schema["items"]["properties"]["citations"]["items"]["properties"]["chunk_id"]
+    assert citation["enum"] == ["c1", "c2"]
+
+
+def test_with_no_passages_shown_there_is_nothing_to_cite() -> None:
+    schema = _screen_with([]).formats[0]
+    assert schema["items"]["properties"]["citations"]["maxItems"] == 0
+
+
+def test_the_prompt_says_to_leave_citations_empty_rather_than_invent_one() -> None:
+    system = _screen_with(CHUNKS).messages[0][0]["content"]
+    assert "information_gap\" with empty citations" not in system
+    assert "leave citations as an empty list" in system
+    assert '"page_number": 0' not in system

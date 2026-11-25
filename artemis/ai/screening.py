@@ -162,6 +162,7 @@ def generate_llm_screening_alerts(
         return []
 
     bundle = _build_screening_bundle(screening_chunks)
+    shown_chunk_ids = [str(c["chunk_id"]) for c in bundle]
 
     # Rationale: enforce valid JSON output to avoid parse failures in the UI.
     # Ollama supports structured outputs via the `format` parameter (json or JSON schema). [src]
@@ -179,11 +180,15 @@ def generate_llm_screening_alerts(
                 "recommended_action": {"type": "string"},
                 "citations": {
                     "type": "array",
+                    # Only the passages the AI was shown can be cited; with none shown, nothing can.
+                    # A server that follows the format can't produce an invented or placeholder
+                    # citation such as "information_gap" (Phase 2, step 6).
+                    **({} if shown_chunk_ids else {"maxItems": 0}),
                     "items": {
                         "type": "object",
                         "properties": {
                             "page_number": {"type": "integer"},
-                            "chunk_id": {"type": "string"},
+                            "chunk_id": {"type": "string", **({"enum": shown_chunk_ids} if shown_chunk_ids else {})},
                         },
                         "required": ["page_number", "chunk_id"],
                         "additionalProperties": True,
@@ -239,7 +244,7 @@ WHAT TO SCREEN FOR:
 RULES:
 - Only cite page_number and chunk_id values that appear in the provided excerpts. Never invent citations.
 - Only state guideline rules that the excerpts support. Do not invent thresholds or contraindications.
-- If guideline support is missing, use issue_type "information_gap" with empty citations.
+- If no excerpt supports an alert, leave citations as an empty list []. Put nothing in citations except a chunk_id from the excerpts.
 - Merge related excerpts: if 3 excerpts discuss the same topic, write ONE synthesized statement and list all citations.
 
 SEVERITY:
@@ -257,7 +262,7 @@ OUTPUT FORMAT — return ONLY a JSON array:
     "issue_type": "medication_safety|monitoring_gap|toxicity|drug_interaction|guideline_deviation|plan_review|plan_add|information_gap",
     "severity": "critical|high|moderate|low",
     "recommended_action": "Specific guideline-based action, max 40 words",
-    "citations": [{"page_number": 0, "chunk_id": "string"}]
+    "citations": [{"page_number": <the excerpt's page_number>, "chunk_id": "<the excerpt's chunk_id>"}]
   }
 ]
 
