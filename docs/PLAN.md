@@ -39,17 +39,40 @@ Version 1 of the revival is done when all four are true:
 
 Check: tests all pass; both branches exist; scanners run on a pull request.
 
-## Phase 1: Fix what the demo exposed
+## Phase 1: Fix everything the audit found
+
+The baseline exposed four faults. The owner then asked for a thorough repair: every function on
+the analysis path was read (121 of 121), 225 findings were grouped into 40 root causes, and an
+independent rerun confirmed all 48 serious ones. Details: `docs/audit/`. Each fix starts with a
+test that fails on the old code, ends with that test passing, and is logged in
+`docs/decisions.tsv`, `docs/refactor/moves.tsv` and, for new kinds of failure,
+`docs/lessons-learned.md`. Evidence for each fix is in `eval/fixes/`.
 
 - [x] 1.0 Baseline first: a script runs all 7 test patients through the A100 and saves every
       output to `eval/baseline/`. Every fix below is judged against this "before" snapshot.
       Done 2026-11-25: 3 runs per patient; findings in `eval/baseline/README.md`.
-- [ ] 1.1 Keep the fixed-rule alerts next to the AI alerts instead of dropping them.
-- [ ] 1.2 Stop showing "AGREE" when the model never said so.
-- [ ] 1.3 Tie results to the selected patient; save reviews and overrides as an audit record.
-- [ ] 1.4 Name the real source on each citation (Uganda, South Africa or WHO, with edition).
+- [x] 1.A Audit: read all 121 functions, group the 225 findings into 40 causes, verify the
+      serious ones independently, and separate the analysis from the screen (option B).
+- [x] Fix 1: delete the AI modes that could no longer run, and the dead copies of the plan screen.
+- [x] Fix 2: results belong to the patient and note they were run for (old item 1.3, first half).
+- [x] Fix 3: rule alerts are never dropped, and a failed AI review is never green (old item 1.1).
+- [x] Fix 4: lab results carry their unit, date and age, and notes are dated.
+- [ ] Fix 5: drugs are recognised however they're typed, and the rules read the medicine list.
+- [ ] Fix 6: no false "missing data" or "no plan" in the summary the AI reads.
+- [ ] Fix 7: the management plan shows only what the AI said: no invented "AGREE" or green
+      "Continue" (old item 1.2).
+- [ ] Fix 8: AI replies are read correctly, and nothing is cut, merged or dropped.
+- [ ] Fix 9: save the visit record: reviews, overrides and reasons (old item 1.3, second half).
+      9b: reopen a patient's last results from the record, with no new AI call.
+- [ ] Fix 10: small fixes, plus two dangerous retrieval faults pulled forward from 2B (the cleaner
+      deleting "<50" thresholds, and the backup index keeping only one guideline).
+- [ ] 1.Z Rerun the baseline (7 patients, 3 runs each) and compare with `scripts/compare_runs.py`;
+      code review, security review, then merge into `development` and push after a yes.
 
-Check: rerun the baseline script; the before/after difference shows each fix and nothing else.
+Old item 1.4 (name the real source on each citation) moved into Phase 2B with the other
+retrieval work (G32 in `docs/audit/phase1-groups.tsv`), as the owner ruled.
+
+Check: rerun the baseline; the before/after difference shows each fix and nothing unexplained.
 
 ## Phase 2: Evaluation and first model comparison
 

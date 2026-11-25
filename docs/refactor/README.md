@@ -39,6 +39,7 @@ web/                Next.js (Phase 5)
 3. Update `code-map.tsv`: new functions get a row, and moved ones change status.
 4. Add a row to `../decisions.tsv` with the decision or fix, the reason and the result.
    If the fix showed a new kind of silent failure, add it to `../lessons-learned.md`.
+   Tick the fix in `../PLAN.md` (Phase 1) once its tests pass.
 5. Run the checks. All must pass before the commit:
 
    ```bash
