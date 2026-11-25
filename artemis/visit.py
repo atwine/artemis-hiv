@@ -17,7 +17,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
-from modules.agentic_flow import QueryContext, run_agentic_flow
+from artemis.plan.flow import QueryContext, run_agentic_flow
 from artemis.rules.checks import Alert, run_alerts
 from modules.explanation_generator import generate_explanation
 from modules.llm_screening import generate_llm_screening_alerts

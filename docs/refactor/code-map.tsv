@@ -19,18 +19,18 @@ app.py	main	Draws the whole app screen and reacts to every click and input.	ui/ 
 app.py	main._json_loads_relaxed2	Reads slightly malformed JSON text by fixing common mistakes first.	ui/ (part of main)	to-move
 app.py	main._badge	Makes the coloured Switch, Hold or Continue label for an ART decision.	ui/ (part of main)	to-move
 app.py	main._safe	Cleans text so it can be shown safely inside the page.	ui/ (part of main)	to-move
-modules/agentic_flow.py	_normalize_input	Placeholder step that hands the question and patient data on unchanged.	artemis/plan/	to-move
-modules/agentic_flow.py	_plan_subtasks	Plans the guideline questions to ask, one per current drug plus symptom checks.	artemis/plan/	to-move
-modules/agentic_flow.py	_retrieve_evidence	Looks up guideline passages for each planned question.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason	Asks the AI to write the drug-toxicity checklist from the guideline passages.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason_updated_management_plan	Asks the AI for a structured updated management plan, checking and repairing it.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason_updated_management_plan._strip_code_fences	Removes code-fence marks that the AI sometimes wraps around its answer.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason_updated_management_plan._extract_first_json_object	Pulls the first complete JSON object out of the AI's reply text.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason_updated_management_plan._validate_plan_json	Lists the problems found in the AI's plan, such as missing parts.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason_updated_management_plan._organize_plan_json	Asks the AI to tidy and repair a flawed draft plan.	artemis/plan/	to-move
-modules/agentic_flow.py	_reason_updated_management_plan._build_plan_messages	Writes the instructions and patient data sent to the AI for the plan.	artemis/plan/	to-move
-modules/agentic_flow.py	_verify	Placeholder check that always reports the draft answer as fine.	artemis/plan/	to-move
-modules/agentic_flow.py	run_agentic_flow	Runs the whole toxicity-checklist process from planning to the AI's written answer.	artemis/plan/	to-move
+artemis/plan/flow.py	_normalize_input	Placeholder step that hands the question and patient data on unchanged.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_plan_subtasks	Plans the guideline questions to ask, one per current drug plus symptom checks.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_retrieve_evidence	Looks up guideline passages for each planned question.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason	Asks the AI to write the drug-toxicity checklist from the guideline passages.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan	Asks the AI for a structured updated management plan, checking and repairing it.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan._strip_code_fences	Removes code-fence marks that the AI sometimes wraps around its answer.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan._extract_first_json_object	Pulls the first complete JSON object out of the AI's reply text.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan._validate_plan_json	Lists the problems found in the AI's plan, such as missing parts.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan._organize_plan_json	Asks the AI to tidy and repair a flawed draft plan.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_reason_updated_management_plan._build_plan_messages	Writes the instructions and patient data sent to the AI for the plan.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	_verify	Placeholder check that always reports the draft answer as fine.	artemis/plan/flow.py	moved
+artemis/plan/flow.py	run_agentic_flow	Runs the whole toxicity-checklist process from planning to the AI's written answer.	artemis/plan/flow.py	moved
 artemis/rules/checks.py	run_alerts	Runs every fixed clinical rule and returns the alerts that fire.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_tdf_creatinine_overdue	Flags creatinine missing, overdue, or only in pasted text, for a patient on TDF.	artemis/rules/checks.py	moved
 artemis/rules/checks.py	_check_efv_sleep_disturbance	Flags specific sleep complaints, unless negated, for a patient on EFV.	artemis/rules/checks.py	moved
