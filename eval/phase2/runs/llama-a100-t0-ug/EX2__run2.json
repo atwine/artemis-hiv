@@ -1,0 +1,140 @@
+{
+ "case_id": "EX2",
+ "model": "llama-a100-t0-ug",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 23.7,
+ "calls": [
+  {
+   "prompt_tokens": 1705,
+   "total_tokens": 2115,
+   "completion_tokens": 410,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2517,
+   "total_tokens": 2840,
+   "completion_tokens": 323,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_001",
+   "title": "Acute Kidney Injury",
+   "message": "Guidelines state TDF can cause chronic kidney disease and acute kidney injury. Patient has acute kidney injury with creatinine 2.4 mg/dL, up from 0.9 mg/dL. Dehydration from gastroenteritis may also contribute to kidney injury. TDF may be a contributing factor, but non-drug causes like dehydration should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Monitor renal function, consider alternative to TDF",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_001",
+     "title": "Acute Kidney Injury",
+     "message": "Guidelines state TDF can cause chronic kidney disease and acute kidney injury. Patient has acute kidney injury with creatinine 2.4 mg/dL, up from 0.9 mg/dL. Dehydration from gastroenteritis may also contribute to kidney injury. TDF may be a contributing factor, but non-drug causes like dehydration should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Monitor renal function, consider alternative to TDF",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_002",
+   "title": "Monitoring Gap",
+   "message": "Guidelines recommend regular screening for patients on TDF, including serum creatinine and eGFR every 12 months. Patient's last recorded creatinine before the current visit was 375 days prior, indicating a potential monitoring gap.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Schedule regular renal function tests",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_002",
+     "title": "Monitoring Gap",
+     "message": "Guidelines recommend regular screening for patients on TDF, including serum creatinine and eGFR every 12 months. Patient's last recorded creatinine before the current visit was 375 days prior, indicating a potential monitoring gap.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Schedule regular renal function tests",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "EX2_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_001\",\n    \"title\": \"Acute Kidney Injury\",\n    \"message\": \"Guidelines state TDF can cause chronic kidney disease and acute kidney injury. Patient has acute kidney injury with creatinine 2.4 mg/dL, up from 0.9 mg/dL. Dehydration from gastroenteritis may also contribute to kidney injury. TDF may be a contributing factor, but non-drug causes like dehydration should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Monitor renal function, consider alternative to TDF\",\n    \"citations\": [{\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX2_002\",\n    \"title\": \"Monitoring Gap\",\n    \"message\": \"Guidelines recommend regular screening for patients on TDF, including serum creatinine and eGFR every 12 months. Patient's last recorded creatinine before the current visit was 375 days prior, indicating a potential monitoring gap.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Schedule regular renal function tests\",\n    \"citations\": [{\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+    "page_number": 15,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * ART patients with non supressed VL and/or WHO clinical Stage 3 or 4 disease. * PLHIV re-engaging in care after interrupting treatment for 3 or more months. * PLHIV who are on treatment or prophylaxis for cryptococcal infection to inform decision on when to stop fluconazole. **Other laboratory tests** Other laboratory tests should be done when clinically indicated (Table 76). Table 76: "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Hold temporarily\", \"reason\": \"Patient has acute kidney injury with elevated creatinine, which may be exacerbated by TDF, as indicated by the Uganda HIV guidelines, which recommend monitoring serum creatinine and eGFR for patients on TDF.\"},\n\"problems\": [\n{\"problem\": \"Acute kidney injury\", \"action\": \"Stop TDF temporarily and monitor creatinine and eGFR\", \"reason\": \"Elevated creatinine and acute kidney injury may be related to TDF toxicity, as suggested by the Uganda HIV guidelines.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan already considers stopping TDF permanently due to kidney injury.\"}},\n{\"problem\": \"Severe gastroenteritis with dehydration\", \"action\": \"Continue IV fluid resuscitation and empiric antibiotics\", \"reason\": \"Patient's symptoms and examination findings are consistent with severe gastroenteritis, and the clinician's plan already addresses this issue.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan includes IV fluid resuscitation and empiric antibiotics for gastroenteritis.\"}},\n{\"problem\": \"Viral load suppression\", \"action\": \"Monitor viral load\", \"reason\": \"Patient's latest viral load is suppressed, but monitoring is necessary to ensure continued suppression, especially if the ART regimen is modified.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention monitoring viral load.\"}}\n],\n\"monitoring_plan\": \"Monitor creatinine, eGFR, and viral load, with follow-up appointments to assess kidney function and ART regimen effectiveness.\",\n\"patient_counselling\": [\"Adhere to the modified treatment plan\", \"Monitor and report any changes in kidney function or overall health\", \"Maintain hydration and follow dietary advice for gastroenteritis recovery\"]}",
+ "plan_issues": []
+}

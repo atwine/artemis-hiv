@@ -19,7 +19,8 @@ from typing import Any, Callable, Dict, List, Optional
 from artemis.plan.flow import QueryContext, run_agentic_flow
 from artemis.rules.checks import Alert, run_alerts
 from modules.explanation_generator import generate_explanation
-from artemis.ai.screening import generate_llm_screening_alerts
+from artemis.ai.screening import generate_llm_screening_alerts, patient_facts
+from artemis.ai.search_questions import ask_search_questions
 from artemis.patient.record import build_patient_context
 
 logger = logging.getLogger(__name__)
@@ -105,11 +106,42 @@ def patient_context_for(patient: Dict[str, Any], today_note: str) -> Any:
     return build_patient_context(_with_note(patient, today_note))
 
 
-def screening_search(rag: RagEngine, context: Any, top_k: int) -> List[VectorSearchResult]:
-    """The guideline passages the AI screening reads. Today one fixed query plus the patient's
-    notes (a retrieval fault, G31, that Phase 2B measures and fixes). The search check calls this
-    too, so it measures exactly what the app does. (Fix 5a, one search per drug, medicine, rule
-    alert and symptom, was tried and dropped: 3 of 12 problems in the top 5 against 4 of 12.)"""
+def patient_summary_for(patient: Dict[str, Any], today_note: str) -> Dict[str, Any]:
+    """The recorded-facts summary the AI reads, as the analysis builds it."""
+    patient_copy = _with_note(patient, today_note)
+    return build_stage1_summary(patient=patient_copy, context=build_patient_context(patient_copy))
+
+
+QUESTION_PASSAGES = 2  # passages taken for each of the AI's questions
+SCREENING_MAX = 10  # passages the AI screening reads at most
+
+
+def merge_by_turns(result_lists: List[List[Any]], limit: int) -> List[Any]:
+    """Each search's best passage first, then each one's second, and so on, without repeats."""
+    merged: List[Any] = []
+    seen: set = set()
+    for rank in range(max((len(r) for r in result_lists), default=0)):
+        for results in result_lists:
+            if rank < len(results) and results[rank].chunk_id not in seen:
+                seen.add(results[rank].chunk_id)
+                merged.append(results[rank])
+    return merged[:limit]
+
+
+def screening_search(rag: RagEngine, context: Any, top_k: int, *, llm_client: Any = None,
+                     summary: Optional[Dict[str, Any]] = None,
+                     debug: Optional[Dict[str, Any]] = None) -> List[VectorSearchResult]:
+    """The guideline passages the AI screening reads. With an AI, it first writes the patient's own
+    guideline questions and each is searched (best 2 passages each, up to 10; Phase 2B fix 5q).
+    Without one, or when its reply is unusable, one fixed query plus the patient's notes (G31).
+    The search check calls this too, so it measures exactly what the app does. (Fix 5a, one
+    templated search per drug, medicine, rule alert and symptom, was tried and dropped.)"""
+    questions = (ask_search_questions(llm_client, patient_facts(context, summary))
+                 if llm_client is not None and summary is not None else [])
+    if debug is not None:
+        debug["search_questions"] = questions
+    if questions:
+        return merge_by_turns([rag.search(q, top_k=QUESTION_PASSAGES) for q in questions], SCREENING_MAX)
     checklist_seed = Alert(
         alert_id="llm_checklist_seed",
         title="Guideline audit checklist",
@@ -181,7 +213,12 @@ def run_visit_analysis(
 
     llm_error: Optional[str] = None
 
-    checklist_retrieved = screening_search(rag, context, top_k)
+    search_debug: Dict[str, Any] = {}
+    use_ai_search = use_llm and llm_client is not None
+    if use_ai_search:
+        status(f"{llm_name}: listing guideline questions for this patient…", "running")
+    checklist_retrieved = screening_search(rag, context, top_k, llm_client=llm_client if use_ai_search else None,
+                                           summary=stage1_summary, debug=search_debug)
 
     # Optional: LLM-first screening mode — generate alerts directly from Stage 1 summary
     # and checklist evidence. Deterministic alerts remain the fallback when
@@ -192,7 +229,7 @@ def run_visit_analysis(
     if use_llm and llm_client is not None:
         screening_ran = True
         status(f"{llm_name}: screening for safety issues…", "running")
-        screening_debug = {}
+        screening_debug = dict(search_debug)
         screening_alerts = generate_llm_screening_alerts(
             patient_context=context,
             stage1_summary=stage1_summary,

@@ -1,0 +1,161 @@
+{
+ "case_id": "P003",
+ "model": "llama-a100-t0-ug",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 16.2,
+ "calls": [
+  {
+   "prompt_tokens": 1424,
+   "total_tokens": 1698,
+   "completion_tokens": 274,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2144,
+   "total_tokens": 2344,
+   "completion_tokens": 200,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P003_TOXICITY_001",
+   "title": "EFV Toxicity",
+   "message": "Guidelines state EFV can cause persistent central nervous system toxicity, including insomnia and abnormal dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like stress or underlying conditions should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor patient's sleep and dreams, consider substituting EFV if symptoms persist.",
+    "citations": [
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 23,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_TOXICITY_001",
+     "title": "EFV Toxicity",
+     "message": "Guidelines state EFV can cause persistent central nervous system toxicity, including insomnia and abnormal dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like stress or underlying conditions should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor patient's sleep and dreams, consider substituting EFV if symptoms persist.",
+     "citations": [
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+      },
+      {
+       "page_number": 23,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "efv_sleep_disturbance": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ],
+  "P003_TOXICITY_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P003_TOXICITY_001\",\n    \"title\": \"EFV Toxicity\",\n    \"message\": \"Guidelines state EFV can cause persistent central nervous system toxicity, including insomnia and abnormal dreams. Patient complains of poor sleep and vivid dreams for several weeks. EFV is a known cause, but other factors like stress or underlying conditions should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor patient's sleep and dreams, consider substituting EFV if symptoms persist.\",\n    \"citations\": [{\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"}, {\"page_number\": 23, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 36,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabet"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine if current regimen is causing toxicity\", \"reason\": \"Patient complaints of poor sleep and vivid dreams, but guideline excerpts do not provide enough information to confirm drug toxicity from TDF, 3TC, or EFV\"}, \"problems\": [{\"problem\": \"Insomnia and vivid dreams\", \"action\": \"Investigate potential EFV toxicity\", \"reason\": \"EFV is known to cause neuropsychiatric side effects, including insomnia and vivid dreams\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan only notes the complaint without investigating potential EFV toxicity\"}}, {\"problem\": \"Potential renal toxicity from TDF\", \"action\": \"Check Serum creatinine & eGFR\", \"reason\": \"Guideline recommends screening for renal toxicity in patients initiating TDF\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not include renal function tests\"}}], \"monitoring_plan\": \"Check viral load, Serum creatinine & eGFR, and monitor for neuropsychiatric side effects\", \"patient_counselling\": [\"Discuss potential side effects of EFV\", \"Importance of adherence to regimen\", \"Monitoring for signs of renal toxicity\"]}",
+ "plan_issues": []
+}

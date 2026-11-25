@@ -1,0 +1,234 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "llama-a100-t0-ug",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 33.4,
+ "calls": [
+  {
+   "prompt_tokens": 1545,
+   "total_tokens": 1972,
+   "completion_tokens": 427,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2425,
+   "total_tokens": 3057,
+   "completion_tokens": 632,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU_001",
+   "title": "Weight Gain and Metabolic Changes",
+   "message": "Guidelines suggest monitoring for metabolic changes with DTG. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m² and impaired fasting glucose. DTG is a known cause of weight gain, but family history of Type 2 Diabetes should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor glucose and lipid profiles regularly",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_001",
+     "title": "Weight Gain and Metabolic Changes",
+     "message": "Guidelines suggest monitoring for metabolic changes with DTG. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m² and impaired fasting glucose. DTG is a known cause of weight gain, but family history of Type 2 Diabetes should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor glucose and lipid profiles regularly",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_002",
+   "title": "Blood Pressure Elevation",
+   "message": "Patient's blood pressure has increased from 118/74 mmHg to 138/88 mmHg since switching to TLD. Although not directly attributed to DTG, monitoring is necessary as HIV patients are at increased risk of cardiovascular disease.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Regularly monitor blood pressure",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_002",
+     "title": "Blood Pressure Elevation",
+     "message": "Patient's blood pressure has increased from 118/74 mmHg to 138/88 mmHg since switching to TLD. Although not directly attributed to DTG, monitoring is necessary as HIV patients are at increased risk of cardiovascular disease.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Regularly monitor blood pressure",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_003",
+   "title": "Lipid Profile Abnormalities",
+   "message": "Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. This could be related to the metabolic changes associated with DTG or other factors. Regular monitoring is recommended.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor lipid profiles and consider management strategies",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_003",
+     "title": "Lipid Profile Abnormalities",
+     "message": "Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. This could be related to the metabolic changes associated with DTG or other factors. Regular monitoring is recommended.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor lipid profiles and consider management strategies",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_004",
+   "title": "Missing Assessment and Plan",
+   "message": "No assessment and plan were documented for the patient's current visit. This is a gap in care that needs to be addressed to ensure appropriate management of the patient's condition.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Document assessment and plan for the patient",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_004",
+     "title": "Missing Assessment and Plan",
+     "message": "No assessment and plan were documented for the patient's current visit. This is a gap in care that needs to be addressed to ensure appropriate management of the patient's condition.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Document assessment and plan for the patient",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_005",
+   "title": "Monitoring Gaps",
+   "message": "Regular monitoring of glucose, lipid profiles, and blood pressure is crucial for patients on DTG. Ensure that these parameters are regularly checked and managed according to guidelines.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Schedule regular monitoring of glucose, lipids, and blood pressure",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_005",
+     "title": "Monitoring Gaps",
+     "message": "Regular monitoring of glucose, lipid profiles, and blood pressure is crucial for patients on DTG. Ensure that these parameters are regularly checked and managed according to guidelines.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Schedule regular monitoring of glucose, lipids, and blood pressure",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c1"
+  ],
+  "KINTU_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "KINTU_002": [],
+  "KINTU_003": [],
+  "KINTU_004": [],
+  "KINTU_005": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_001\",\n    \"title\": \"Weight Gain and Metabolic Changes\",\n    \"message\": \"Guidelines suggest monitoring for metabolic changes with DTG. Patient has gained significant weight since starting TLD, with a current BMI of 32.4 kg/m² and impaired fasting glucose. DTG is a known cause of weight gain, but family history of Type 2 Diabetes should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor glucose and lipid profiles regularly\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_002\",\n    \"title\": \"Blood Pressure Elevation\",\n    \"message\": \"Patient's blood pressure has increased from 118/74 mmHg to 138/88 mmHg since switching to TLD. Although not directly attributed to DTG, monitoring is necessary as HIV patients are at increased risk of cardiovascular disease.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Regularly monitor blood pressure\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_003\",\n    \"title\": \"Lipid Profile Abnormalities\",\n    \"message\": \"Patient's lipid profile shows elevated total cholesterol, LDL, and triglycerides. This could be related to the metabolic changes associated with DTG or other factors. Regular monitoring is recommended.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor lipid profiles and consider management strategies\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_004\",\n    \"title\": \"Missing Assessment and Plan\",\n    \"message\": \"No assessment and plan were documented for the patient's current visit. This is a gap in care that needs to be addressed to ensure appropriate management of the patient's condition.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Document assessment and plan for the patient\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"KINTU_005\",\n    \"title\": \"Monitoring Gaps\",\n    \"message\": \"Regular monitoring of glucose, lipid profiles, and blood pressure is crucial for patients on DTG. Ensure that these parameters are regularly checked and managed according to guidelines.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Schedule regular monitoring of glucose, lipids, and blood pressure\",\n    \"citations\": [{\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p25_c1",
+    "page_number": 25,
+    "quote": "258 8 Blood disorders (Aneamia, leucopenia, Thrombocytopeania) Bruising or bleeding (subcutaneous, mucosal petechia, nose or gum bleeding) (e.g. LZD, AZT, 3TC) 9 Cardiac symptoms (palpitations, fainting, easy fatigability) (e.g. BDQ, AZT) 10 Skin changes (new skin rashes or skin discoloration, dermatitis) (e.g. CFZ, H) 11 Breast enlargement (painful bilateral male breast enlargement) (e.g. ETO, EFV) 12 Thyroid symptoms (weight gain, constipation, dry skin, fatigue, neck swell"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c2",
+    "page_number": 39,
+    "quote": "r quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement Reassure, If symptoms persist, substitute EFV with DTG or LPV/r (if appropriate DTG formulation is not available) NVP Acute symptomatic hepatitis Hypersensitivity reaction, Stevens-Johnson Syndrome Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Severe or life-threatening rash with mucosal involvement (ulcers in the mouth or eyes) Substitute with DTG or LPV/r NVP"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information from guideline excerpts to determine the cause of weight gain and fatigue\", \"reason\": \"Patient has gained weight and feels tired since starting current HIV medication, but guideline excerpts do not provide enough information to determine if this is due to drug toxicity from TDF, 3TC, or DTG\"}, \n\"problems\": [{\"problem\": \"Weight gain\", \"action\": \"Uncertain: need more information to determine cause and appropriate action\", \"reason\": \"Patient has gained 17kg since switching to TDF, 3TC, DTG 18 months ago, but guideline excerpts do not provide clear guidance on managing weight gain as a potential side effect of these medications\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address weight gain\"}}, \n{\"problem\": \"Fatigue\", \"action\": \"Uncertain: need more information to determine cause and appropriate action\", \"reason\": \"Patient reports feeling more tired than usual since starting current HIV medication, but guideline excerpts do not provide clear guidance on managing fatigue as a potential side effect of TDF, 3TC, or DTG\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address fatigue\"}}, \n{\"problem\": \"Hypertension\", \"action\": \"Monitor blood pressure\", \"reason\": \"Patient's blood pressure has increased to 138/88 mmHg since baseline measurement of 118/74 mmHg\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address hypertension\"}}], \n\"monitoring_plan\": \"Monitor weight, blood pressure, and fasting glucose\", \n\"patient_counselling\": [\"Discuss potential side effects of medications\", \"Encourage healthy lifestyle habits to manage weight and blood pressure\", \"Schedule follow-up appointment to monitor labs and blood pressure\"]}",
+ "plan_issues": []
+}

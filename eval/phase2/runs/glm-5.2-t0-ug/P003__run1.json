@@ -1,0 +1,242 @@
+{
+ "case_id": "P003",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 16.4,
+ "calls": [
+  {
+   "prompt_tokens": 1400,
+   "completion_tokens": 743,
+   "total_tokens": 2143,
+   "cost": 0.0022172,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0022172,
+    "upstream_inference_prompt_cost": 0.000434,
+    "upstream_inference_completions_cost": 0.0017832
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2120,
+   "completion_tokens": 556,
+   "total_tokens": 2676,
+   "cost": 0.002462928,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002462928,
+    "upstream_inference_prompt_cost": 0.00136316,
+    "upstream_inference_completions_cost": 0.001099768
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.004680128,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P003_EFV_CNS_TOXICITY_001",
+   "title": "EFV CNS toxicity: insomnia and vivid dreams",
+   "message": "Guidelines list persistent CNS toxicity such as dizziness, insomnia, and abnormal dreams as a major adverse event of EFV requiring regimen substitution. Patient has been on EFV since February 2024 and now reports poor sleep and vivid dreams for several weeks. Neuropsychiatric symptoms including bad dreams and insomnia are specifically flagged for EFV in adverse event screening. Symptoms emerging long after initiation suggest persistent toxicity rather than transient early tolerance. No suicidal ideation is documented, which lowers immediate psychiatric risk, but persistence warrants action. Non-drug causes of insomnia were not assessed in the note.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Assess symptom severity and duration; if persistent CNS toxicity confirmed, substitute EFV per guideline (e.g., switch to alternative agent) and complete aDSM form.",
+    "citations": [
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 23,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_EFV_CNS_TOXICITY_001",
+     "title": "EFV CNS toxicity: insomnia and vivid dreams",
+     "message": "Guidelines list persistent CNS toxicity such as dizziness, insomnia, and abnormal dreams as a major adverse event of EFV requiring regimen substitution. Patient has been on EFV since February 2024 and now reports poor sleep and vivid dreams for several weeks. Neuropsychiatric symptoms including bad dreams and insomnia are specifically flagged for EFV in adverse event screening. Symptoms emerging long after initiation suggest persistent toxicity rather than transient early tolerance. No suicidal ideation is documented, which lowers immediate psychiatric risk, but persistence warrants action. Non-drug causes of insomnia were not assessed in the note.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Assess symptom severity and duration; if persistent CNS toxicity confirmed, substitute EFV per guideline (e.g., switch to alternative agent) and complete aDSM form.",
+     "citations": [
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+      },
+      {
+       "page_number": 23,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P003_ADSM_REPORTING_002",
+   "title": "Adverse drug reaction reporting not documented",
+   "message": "Guidelines require suspected adverse drug reactions to be documented on the aDSM form and submitted to the National Drug Authority. The clinician's plan for this patient records the insomnia and vivid dreams complaint but lists no orders, no medicine changes, and no adverse event reporting action. Neuropsychiatric symptoms are among the events that should trigger the aDSM screening checklist at every visit. This is a documentation and pharmacovigilance gap rather than a direct clinical harm.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "low",
+    "recommended_action": "Complete the aDSM form for the suspected EFV neuropsychiatric adverse event and submit to NDA per national reporting requirements.",
+    "citations": [
+     {
+      "page_number": 23,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 22,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_ADSM_REPORTING_002",
+     "title": "Adverse drug reaction reporting not documented",
+     "message": "Guidelines require suspected adverse drug reactions to be documented on the aDSM form and submitted to the National Drug Authority. The clinician's plan for this patient records the insomnia and vivid dreams complaint but lists no orders, no medicine changes, and no adverse event reporting action. Neuropsychiatric symptoms are among the events that should trigger the aDSM screening checklist at every visit. This is a documentation and pharmacovigilance gap rather than a direct clinical harm.",
+     "issue_type": "guideline_deviation",
+     "severity": "low",
+     "recommended_action": "Complete the aDSM form for the suspected EFV neuropsychiatric adverse event and submit to NDA per national reporting requirements.",
+     "citations": [
+      {
+       "page_number": 23,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+      },
+      {
+       "page_number": 22,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "efv_sleep_disturbance": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ],
+  "P003_EFV_CNS_TOXICITY_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ],
+  "P003_ADSM_REPORTING_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P003_EFV_CNS_TOXICITY_001\",\n    \"title\": \"EFV CNS toxicity: insomnia and vivid dreams\",\n    \"message\": \"Guidelines list persistent CNS toxicity such as dizziness, insomnia, and abnormal dreams as a major adverse event of EFV requiring regimen substitution. Patient has been on EFV since February 2024 and now reports poor sleep and vivid dreams for several weeks. Neuropsychiatric symptoms including bad dreams and insomnia are specifically flagged for EFV in adverse event screening. Symptoms emerging long after initiation suggest persistent toxicity rather than transient early tolerance. No suicidal ideation is documented, which lowers immediate psychiatric risk, but persistence warrants action. Non-drug causes of insomnia were not assessed in the note.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Assess symptom severity and duration; if persistent CNS toxicity confirmed, substitute EFV per guideline (e.g., switch to alternative agent) and complete aDSM form.\",\n    \"citations\": [\n      {\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"},\n      {\"page_number\": 23, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P003_ADSM_REPORTING_002\",\n    \"title\": \"Adverse drug reaction reporting not documented\",\n    \"message\": \"Guidelines require suspected adverse drug reactions to be documented on the aDSM form and submitted to the National Drug Authority. The clinician's plan for this patient records the insomnia and vivid dreams complaint but lists no orders, no medicine changes, and no adverse event reporting action. Neuropsychiatric symptoms are among the events that should trigger the aDSM screening checklist at every visit. This is a documentation and pharmacovigilance gap rather than a direct clinical harm.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Complete the aDSM form for the suspected EFV neuropsychiatric adverse event and submit to NDA per national reporting requirements.\",\n    \"citations\": [\n      {\"page_number\": 23, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\"},\n      {\"page_number\": 22, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 36,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabet"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: EFV is strongly associated with insomnia and vivid dreams, but the provided guideline excerpts only cover TDF screening procedures and do not contain EFV toxicity management guidance to confirm a switch.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"EFV-associated neuropsychiatric toxicity (insomnia and vivid dreams)\",\n      \"action\": \"Assess severity and duration of symptoms; if persistent and intolerable, consider substituting EFV with an alternative agent per Uganda HIV guidelines (e.g., dolutegravir-based regimen).\",\n      \"reason\": \"Patient on EFV since February 2024 now reports poor sleep and vivid dreams for several weeks, which are well-recognized EFV neuropsychiatric side effects, but the provided excerpts do not include EFV substitution criteria.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only documents the complaints without proposing any evaluation, intervention, or regimen change for suspected EFV toxicity.\"\n      }\n    },\n    {\n      \"problem\": \"Low-level viremia (viral load 60 copies/mL)\",\n      \"action\": \"Repeat viral load to confirm trend and assess adherence; if persistently above 50 copies/mL, evaluate for treatment failure per guidelines.\",\n      \"reason\": \"Patient's viral load of 60 copies/mL on 2025-08-10 is above the 50 copies/mL threshold for low-level viremia, but the provided excerpts do not contain specific low-level viremia management protocols.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention the viral load result or any follow-up testing despite it being above the detection threshold.\"\n      }\n    },\n    {\n      \"problem\": \"Missing baseline and monitoring labs (serum creatinine, eGFR)\",\n      \"action\": \"Order serum creatinine and eGFR to screen for TDF renal toxicity as part of routine monitoring.\",\n      \"reason\": \"Patient is on TDF and the Uganda guidelines specify serum creatinine and eGFR screening for patients on TDF, but no renal function labs are recorded.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not include any laboratory orders for TDF toxicity screening despite the guideline requirement.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": [\n    \"Repeat viral load within 3 months to assess trend of low-level viremia (current VL 60 copies/mL)\",\n    \"Order serum creatinine and eGFR at next visit for TDF renal toxicity screening\",\n    \"Follow up on insomnia and vivid dreams within 2-4 weeks to assess symptom progression or resolution\",\n    \"If symptoms persist or worsen, consider EFV substitution and monitor for symptom resolution\"\n  ],\n  \"patient_counselling\": [\n    \"Explain that insomnia and vivid dreams are common side effects of EFV and usually improve over time but can persist in some patients\",\n    \"Reassure that no suicidal ideation is present but advise to report immediately if such thoughts occur\",\n    \"Counsel on importance of adherence despite side effects and that alternative medications are available if symptoms become intolerable\",\n    \"Advise on good sleep hygiene practices and to take EFV at bedtime to reduce neuropsychiatric side effects\"\n  ]\n}",
+ "plan_issues": []
+}

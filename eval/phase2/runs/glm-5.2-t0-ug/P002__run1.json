@@ -1,0 +1,174 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 12.0,
+ "calls": [
+  {
+   "prompt_tokens": 1535,
+   "completion_tokens": 554,
+   "total_tokens": 2089,
+   "cost": 0.00129581672,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1304,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00129581672,
+    "upstream_inference_prompt_cost": 0.00027689992,
+    "upstream_inference_completions_cost": 0.0010189168
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2240,
+   "completion_tokens": 432,
+   "total_tokens": 2672,
+   "cost": 0.00243424,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00243424,
+    "upstream_inference_prompt_cost": 0.0013888,
+    "upstream_inference_completions_cost": 0.00104544
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0037300567199999995,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_FBS_MONITORING_GAP",
+   "title": "Missing FBS/RBS monitoring on DTG",
+   "message": "Guidelines require FBS/RBS monitoring (especially adults at risk on DTG) at scheduled visits. The patient is on DTG but no blood glucose testing has been recorded. The clinician's plan does not include any glucose monitoring. While the patient is young (29 years) and no diabetes risk factors are documented, DTG is associated with hyperglycaemia and routine screening is guideline-mandated.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order FBS/RBS at this visit and ensure ongoing periodic glucose monitoring per the schedule for patients on DTG.",
+    "citations": [
+     {
+      "page_number": 17,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_FBS_MONITORING_GAP",
+     "title": "Missing FBS/RBS monitoring on DTG",
+     "message": "Guidelines require FBS/RBS monitoring (especially adults at risk on DTG) at scheduled visits. The patient is on DTG but no blood glucose testing has been recorded. The clinician's plan does not include any glucose monitoring. While the patient is young (29 years) and no diabetes risk factors are documented, DTG is associated with hyperglycaemia and routine screening is guideline-mandated.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order FBS/RBS at this visit and ensure ongoing periodic glucose monitoring per the schedule for patients on DTG.",
+     "citations": [
+      {
+       "page_number": 17,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_LFT_MONITORING_GAP",
+   "title": "No LFTs recorded on TDF/3TC/DTG",
+   "message": "Guidelines list LFTs as a required laboratory test at scheduled follow-up visits. The patient is on TDF, 3TC, and DTG, all of which can cause hepatotoxicity, yet no liver function tests appear in the recorded labs. The clinician's plan does not include LFT ordering. No hepatic symptoms are reported, but baseline and periodic LFT monitoring is guideline-recommended for patients on this regimen.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order LFTs at this visit and ensure periodic hepatic monitoring per guideline schedule for patients on TDF/3TC/DTG.",
+    "citations": [
+     {
+      "page_number": 17,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_LFT_MONITORING_GAP",
+     "title": "No LFTs recorded on TDF/3TC/DTG",
+     "message": "Guidelines list LFTs as a required laboratory test at scheduled follow-up visits. The patient is on TDF, 3TC, and DTG, all of which can cause hepatotoxicity, yet no liver function tests appear in the recorded labs. The clinician's plan does not include LFT ordering. No hepatic symptoms are reported, but baseline and periodic LFT monitoring is guideline-recommended for patients on this regimen.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order LFTs at this visit and ensure periodic hepatic monitoring per guideline schedule for patients on TDF/3TC/DTG.",
+     "citations": [
+      {
+       "page_number": 17,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_FBS_MONITORING_GAP": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+  ],
+  "P002_LFT_MONITORING_GAP": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_FBS_MONITORING_GAP\",\n    \"title\": \"Missing FBS/RBS monitoring on DTG\",\n    \"message\": \"Guidelines require FBS/RBS monitoring (especially adults at risk on DTG) at scheduled visits. The patient is on DTG but no blood glucose testing has been recorded. The clinician's plan does not include any glucose monitoring. While the patient is young (29 years) and no diabetes risk factors are documented, DTG is associated with hyperglycaemia and routine screening is guideline-mandated.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order FBS/RBS at this visit and ensure ongoing periodic glucose monitoring per the schedule for patients on DTG.\",\n    \"citations\": [{\"page_number\": 17, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1\"}]\n  },\n  {\n    \"alert_id\": \"P002_LFT_MONITORING_GAP\",\n    \"title\": \"No LFTs recorded on TDF/3TC/DTG\",\n    \"message\": \"Guidelines list LFTs as a required laboratory test at scheduled follow-up visits. The patient is on TDF, 3TC, and DTG, all of which can cause hepatotoxicity, yet no liver function tests appear in the recorded labs. The clinician's plan does not include LFT ordering. No hepatic symptoms are reported, but baseline and periodic LFT monitoring is guideline-recommended for patients on this regimen.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order LFTs at this visit and ensure periodic hepatic monitoring per guideline schedule for patients on TDF/3TC/DTG.\",\n    \"citations\": [{\"page_number\": 17, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+    "page_number": 17,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD4 <200, X TB LAM if CD4 <200, X FBS/RBS (especially adults at risk on DTG) X X X X X X LFTs X Do other lab tests if clinically ind"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is stable on TDF/3TC/DTG with suppressed viral load (20 copies/mL) and normal creatinine (76 umol/L), with no symptoms or examination findings suggesting drug toxicity.\"},\"problems\":[{\"problem\":\"No evidence of drug toxicity from current ART regimen\",\"action\":\"Continue TDF/3TC/DTG and maintain routine monitoring per standard schedule.\",\"reason\":\"Patient has no complaints, no examination abnormalities, suppressed viral load, and normal creatinine, indicating no signs of TDF, 3TC, or DTG toxicity.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan of routine follow-up is appropriate given the absence of any toxicity indicators.\"}},{\"problem\":\"Pharmacovigilance monitoring for ART toxicity\",\"action\":\"Schedule routine creatinine and viral load monitoring at next scheduled visit; screen for DTG-related symptoms (neuropsychiatric, metabolic) and TDF-related renal/bone toxicity at each visit.\",\"reason\":\"Uganda guidelines emphasize pharmacovigilance for all patients on ART, and this patient on TDF and DTG requires ongoing renal and toxicity surveillance.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan notes routine follow-up but does not explicitly mention pharmacovigilance screening or schedule specific toxicity monitoring labs.\"}},{\"problem\":\"DSD eligibility assessment\",\"action\":\"Confirm DSD eligibility criteria are met (stable, suppressed viral load, good adherence) and enroll patient in appropriate DSD model if eligible.\",\"reason\":\"Patient has been stable on ART since 2022 with good adherence and consistently suppressed viral load, meeting likely criteria for differentiated service delivery.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan already discusses DSD eligibility, which aligns with the patient's stable clinical status.\"}}],\"monitoring_plan\":\"- Viral load: next routine VL per schedule (approximately 6-12 months)\\n- Creatinine: routine monitoring at next visit (TDF-related renal surveillance)\\n- Clinical screening at each visit: DTG neuropsychiatric symptoms, TDF renal/bone toxicity, 3TC-related issues\\n- Pharmacovigilance: report any adverse drug reactions per Uganda guidelines\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily with good adherence as you have been doing\",\"Report any new symptoms including unusual dreams, mood changes, bone pain, or urinary changes promptly\",\"You may be eligible for less frequent clinic visits through DSD programs given your stable status\",\"Maintain routine follow-up for viral load and creatinine monitoring\"]}",
+ "plan_issues": []
+}
