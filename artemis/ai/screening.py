@@ -147,27 +147,6 @@ def _as_written(patient_context: PatientContext) -> str:
     return f" (as written: {written})" if written and written != codes else ""
 
 
-def patient_facts(patient_context: PatientContext, stage1_summary: Dict[str, Any]) -> str:
-    """Everything the AI is told about the patient: regimen, other medicines, every dated note,
-    every dated lab and the summary. The screening and the guideline questions (Phase 2B fix 5q)
-    both read this, so the question writer sees what the screening sees."""
-    return (
-        f"Patient ID: {patient_context.patient_id}\n"
-        f"Age: {patient_context.age_years if patient_context.age_years is not None else 'Not recorded'} years\n"
-        f"Sex: {patient_context.sex if patient_context.sex else 'Not recorded'}\n"
-        f"Encounter date: {patient_context.encounter_date.isoformat()}\n\n"
-        f"Current ART regimen: {', '.join(patient_context.art_regimen_current) if patient_context.art_regimen_current else 'None'}"
-        f"{_as_written(patient_context)}\n"
-        f"Other medications: {', '.join(patient_context.other_medications) if patient_context.other_medications else 'None'}\n\n"
-        "Clinical notes, oldest first:\n"
-        f"{patient_context.dated_notes}\n\n"
-        "Laboratory results (age counted from the visit date):\n"
-        f"{patient_context.lab_section}\n\n"
-        "Stage 1 summary JSON:\n"
-        f"{json.dumps(stage1_summary, ensure_ascii=False)}"
-    )
-
-
 def generate_llm_screening_alerts(
     *,
     patient_context: PatientContext,
@@ -305,7 +284,19 @@ HARD LIMITS — FOLLOW STRICTLY:
     user: ChatMessage = {
         "role": "user",
         "content": (
-            f"{patient_facts(patient_context, stage1_summary)}\n\n"
+            f"Patient ID: {patient_context.patient_id}\n"
+            f"Age: {patient_context.age_years if patient_context.age_years is not None else 'Not recorded'} years\n"
+            f"Sex: {patient_context.sex if patient_context.sex else 'Not recorded'}\n"
+            f"Encounter date: {patient_context.encounter_date.isoformat()}\n\n"
+            f"Current ART regimen: {', '.join(patient_context.art_regimen_current) if patient_context.art_regimen_current else 'None'}"
+            f"{_as_written(patient_context)}\n"
+            f"Other medications: {', '.join(patient_context.other_medications) if patient_context.other_medications else 'None'}\n\n"
+            "Clinical notes, oldest first:\n"
+            f"{patient_context.dated_notes}\n\n"
+            "Laboratory results (age counted from the visit date):\n"
+            f"{patient_context.lab_section}\n\n"
+            "Stage 1 summary JSON:\n"
+            f"{json.dumps(stage1_summary, ensure_ascii=False)}\n\n"
             "Guideline evidence excerpts (screening bundle):\n"
             f"{json.dumps(bundle, ensure_ascii=False)}\n\n"
             "Now output ONLY a JSON array of issues as described, or an empty array if there are no clinically relevant issues."

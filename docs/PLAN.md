@@ -143,7 +143,8 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   the South African and WHO files are in `Data/Not searched - other countries/`, and the search
   database was rebuilt (`scripts/check_index_sources.py` passes). Questions in the top 5 went
   from 3/20 to 13/20; 10 of 22 problems now have no Ugandan passage.
-- Baselines, Uganda only: Llama end to end done (3 runs per case, temperature 0); GLM running.
+- Baselines, Uganda only (3 runs per case, temperature 0): the AI's own catches are 59% for
+  Llama (69% before, with all four guidelines) and 80% for GLM (84% before).
 - Tried and dropped by their own rules: 5a, one search per drug and problem (cases 3/12 against
   4/12); 5c, keyword search beside meaning search (every gold passage now found from its own
   words, but cases 3/12 and questions 10/20).
@@ -151,7 +152,14 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   app knew what to look for, finds 6/12 (meaning search) or 7/12 (with keyword search) against
   4/12 for the app's real search. The biggest lever is what the app searches for; 5 problems
   stay missing even then, which the index fixes target. Fix 5c is out of the app again.
-- Next: the owner picks which lever goes first (what the app searches for, or the index).
+- The owner picked the search wording first. Fix 5q (the AI writes the patient's guideline
+  questions, each searched) was tried with Llama writing them and dropped by its rule: 4/12, the
+  same as today. Llama's questions were short and generic ("TDF side effects") for every patient.
+  Whether a stronger question writer (GLM) does better is untested.
+- Next: how the guideline text is stored, measured on the standalone questions, the
+  ideal-description searches and the self-check: (b) cut along the guideline's own sections with
+  headings, then (d) a better search model and (e) a re-ranking step, which need downloads the
+  owner approves first.
 
 - [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
