@@ -35,7 +35,7 @@ Version 1 of the revival is done when all four are true:
 - [x] 0.5 Fix the 5 failing tests; move the loose `test_*.py` scripts out of the test run; lock package versions.
       Tests fixed (16 pass on GitHub); debugging scripts deleted; packages locked with pip-tools
       (`requirements.in` -> `requirements.txt`).
-- [ ] 0.6 (suggested) Stop storing the guideline PDFs in the repo; link to the official sources instead.
+- 0.6 moved to Phase 2B as 2B.6 (2026-11-25).
 
 Check: tests all pass; both branches exist; scanners run on a pull request.
 
@@ -81,6 +81,12 @@ measuring every change on the Phase 2 cases. Background reading: `docs/research/
 - [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
 - [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
       their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
+- [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
+      is extracted. Today the app searches 4 Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
+      `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup
+      script that downloads them from the official sources. Either way, add a sources list (document,
+      edition, official link) for citations. Whether the public repo may hold the guideline text is the
+      owner's call.
 
 Check: the retrieval and answer scores before and after each change are in the decision log.
 
