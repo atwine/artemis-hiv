@@ -1,13 +1,15 @@
 """Run the Phase 2 evaluation cases through the app with one model, saving every run.
 
     python scripts/run_phase2.py --model llama-a100 --repeats 5
-    python scripts/run_phase2.py --model llama-a100 --repeats 5 --temperature 0
+    python scripts/run_phase2.py --model llama-a100 --repeats 5 --temperature 0.2
     python scripts/run_phase2.py --model deepseek-v3.2 --repeats 5 --dry-run
 
-Runs go to eval/phase2/runs/<model>[-t<temperature>]/<case>__run<k>.json. Saved runs are
-skipped, so a stopped run resumes. OpenRouter models need OPENROUTER_API_KEY in .env; the spend
-across everything under eval/phase2 is checked before the run (a worst-case estimate must fit
-under --cap) and after every check. The A100 model's address is removed from saved files.
+Runs go to eval/phase2/runs/<model>-t<temperature>/<case>__run<k>.json, at the app's default
+temperature unless --temperature is given. (Folders without "-t" hold Phase 2's first runs, at
+that time's default of 0.2.) Saved runs are skipped, so a stopped run resumes. OpenRouter models
+need OPENROUTER_API_KEY in .env; the spend across everything under eval/phase2 is checked before
+the run (a worst-case estimate must fit under --cap) and before every check. The A100 model's
+address is removed from saved files.
 """
 
 from __future__ import annotations
@@ -31,8 +33,8 @@ from dotenv import dotenv_values  # noqa: E402
 import run_baseline as rb  # noqa: E402  (imports the app; reused for removing the server address)
 from artemis.ai.client import OpenAICompatClient, OpenAICompatConfig, openai_compat_config_from_env  # noqa: E402
 from artemis.evaluation.cases import NO_KEY, load_cases  # noqa: E402
-from artemis.evaluation.runner import (BudgetExceeded, check_budget, pending_runs, run_case,  # noqa: E402
-                                       run_file_name, spent_in)
+from artemis.evaluation.runner import (BudgetExceeded, check_budget, effective_temperature, pending_runs,  # noqa: E402
+                                       run_case, run_file_name, run_label, spent_in)
 
 OPENROUTER = "https://openrouter.ai/api/v1"
 # Worst case for one visit check, measured over all 330 Phase 2 checks (2026-11-25): 17,344 tokens
@@ -85,21 +87,22 @@ def main(argv: Optional[list] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--model", required=True, choices=sorted(PRESETS))
     ap.add_argument("--repeats", type=int, default=5)
-    ap.add_argument("--temperature", type=float, default=None, help="default: the app's own (0.2)")
+    ap.add_argument("--temperature", type=float, default=None, help="default: the app's own (DEFAULT_TEMPERATURE, 0)")
     ap.add_argument("--cap", type=float, default=5.0, help="dollars, across everything under eval/phase2")
     ap.add_argument("--cases", type=Path, default=ROOT / "eval" / "cases")
     ap.add_argument("--root", type=Path, default=ROOT / "eval" / "phase2")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
 
-    label = args.model + (f"-t{args.temperature:g}" if args.temperature is not None else "")
+    temperature = effective_temperature(args.temperature)
+    label = run_label(args.model, temperature)
     out = args.root / "runs" / label
     cases = load_cases(args.cases)
     if any(c.key_status == NO_KEY for c in cases):
         raise SystemExit("every case needs its answer key before a run")
     todo = list(pending_runs(out, cases, args.repeats))
 
-    config, price_in, price_out = model_config(args.model, args.temperature)
+    config, price_in, price_out = model_config(args.model, temperature)
     per_check = (WORST_IN * price_in + WORST_OUT * price_out) * MARGIN
     spent = spent_in(args.root)
     print(f"{label}: {len(todo)} checks to run; worst case ${per_check:.4f} each, "
@@ -124,7 +127,7 @@ def main(argv: Optional[list] = None) -> int:
             print(f"stopped before {case.case_id} #{k}: one more check could pass the ${args.cap:.2f} cap")
             return 1
         record = rb._scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
-                                    price_out=price_out, temperature=args.temperature), secrets)
+                                    price_out=price_out, temperature=temperature), secrets)
         if record["llm_error"]:
             # Not saved: a server outage is not a result, and a saved run would be skipped on resume.
             print(f"stopped at {case.case_id} #{k}: the model call failed ({record['llm_error']}); nothing saved for it")

@@ -14,6 +14,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
+from artemis.ai.client import DEFAULT_TEMPERATURE
 from artemis.evaluation.cases import Case, case_file_name
 from artemis.visit import AnalysisOptions, run_visit_analysis
 
@@ -78,6 +79,18 @@ def check_budget(*, spent: float, checks: int, per_check: float, cap: float) -> 
             f"${spent:.2f} spent + {checks} checks x ${per_check:.4f} (worst case) = "
             f"${spent + checks * per_check:.2f}, over the ${cap:.2f} cap"
         )
+
+
+def effective_temperature(temperature: Optional[float]) -> float:
+    """The temperature a run really uses: the one asked for, or the app's default."""
+    return DEFAULT_TEMPERATURE if temperature is None else float(temperature)
+
+
+def run_label(model: str, temperature: Optional[float]) -> str:
+    """A run's folder name. It always names the temperature used: saved runs are skipped on
+    resume, so runs at different temperatures must never share a folder. (Phase 2's first runs,
+    in folders without "-t", used the default of that time, 0.2.)"""
+    return f"{model}-t{effective_temperature(temperature):g}"
 
 
 def run_file_name(case_id: str, repeat: int) -> str:

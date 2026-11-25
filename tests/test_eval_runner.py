@@ -110,3 +110,11 @@ def test_an_unreadable_record_stops_the_spend_count_instead_of_counting_zero(tmp
     (tmp_path / name).write_text(text, encoding="utf-8")
     with pytest.raises(ValueError, match="can't read the cost"):
         spent_in(tmp_path)
+
+
+@pytest.mark.parametrize("temperature, label", [(None, "llama-a100-t0"), (0.0, "llama-a100-t0"), (0.2, "llama-a100-t0.2")])
+def test_a_run_folder_always_names_the_temperature_used(temperature, label) -> None:
+    # Saved runs are skipped on resume, so runs at different temperatures must never share a folder.
+    from artemis.evaluation.runner import run_label
+
+    assert run_label("llama-a100", temperature) == label

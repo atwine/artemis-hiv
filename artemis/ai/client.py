@@ -15,6 +15,11 @@ import os
 from typing import Any, ClassVar, Dict, List, Optional, Tuple, TypedDict
 from urllib.parse import urlsplit
 
+# The AI runs without added randomness, so the same record gets the same alerts (owner, G38,
+# 2026-11-25). Measured on Llama: at 0, 10 of 11 test patients got the same alerts on all 5 runs,
+# against 4 of 11 at 0.2, with catches and false alarms about the same (eval/phase2/README.md).
+DEFAULT_TEMPERATURE = 0.0
+
 
 class ChatMessage(TypedDict):
     role: str
@@ -152,11 +157,10 @@ class OllamaClient(_ReplyState):
             # connectivity debugging. Allow up to 10 minutes for long-running
             # local model calls before treating them as timeouts.
             client = Client(host=self._host, timeout=600.0)
-            # Rationale: keep outputs more deterministic for clinical UX.
             # Ollama supports passing generation parameters via `options` (e.g., temperature). [src]
             # - https://raw.githubusercontent.com/ollama/ollama/main/docs/api.md
             chat_options: Dict[str, Any] = {
-                "temperature": 0.2,
+                "temperature": DEFAULT_TEMPERATURE,
                 "num_predict": 128,
             }
             if self._num_ctx is not None:
@@ -249,7 +253,7 @@ class OpenAICompatConfig:
     model: Optional[str] = None
     api_key: Optional[str] = None
     timeout_s: float = 600.0
-    # Phase 2: a fixed temperature (None keeps the default 0.2), and extra request fields such as
+    # Phase 2: a fixed temperature (None keeps DEFAULT_TEMPERATURE), and extra request fields such as
     # OpenRouter's {"reasoning": {"enabled": False}, "usage": {"include": True}}.
     temperature: Optional[float] = None
     extra_body: Optional[Dict[str, Any]] = None
@@ -367,7 +371,7 @@ class OpenAICompatClient(_ReplyState):
             self._last_note = None
             self._last_usage = None
             options: Dict[str, Any] = {
-                "temperature": 0.2 if self._temperature is None else self._temperature,
+                "temperature": DEFAULT_TEMPERATURE if self._temperature is None else self._temperature,
                 "num_predict": 128,
             }
             if options_override:

@@ -48,7 +48,9 @@ phrases count only when not negated ("do not switch from DTG" is fine). Per mode
 **Runs.** Each case 5 times per model through the app's own analysis (`run_visit_analysis`,
 rules plus AI review plus plan step), at the app's temperature (0.2). Llama also ran 5 times
 at temperature 0, to see whether a fixed temperature makes the answers repeat (Phase 1 item
-G38). The AI plan is saved in each run but not scored.
+G38). The AI plan is saved in each run but not scored. After these runs the app switched to
+temperature 0 (owner's pick); run folders without "-t" in the name used 0.2, and new runs
+always name their temperature.
 
 **Models.** Llama 3.3 70B (4-bit) on the A100 is the baseline. DeepSeek V3.2, GLM 5.2 and
 Claude Haiku 5.5 ran through OpenRouter with thinking switched off. Claude Sonnet 5.5 was
