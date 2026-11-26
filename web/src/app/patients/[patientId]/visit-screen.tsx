@@ -184,6 +184,7 @@ function VisitView({
         {result && view.name === "results" && (
           <ResultsView
             check={result}
+            patient={patient}
             savedByAlert={savedByAlert}
             finalizeNote={finalizeNote}
             saveError={save.isError ? errorText(save.error) : null}

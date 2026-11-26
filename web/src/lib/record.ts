@@ -119,3 +119,30 @@ export function checkReads(
   const text = parts.join(", ");
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
 }
+
+/**
+ * What was checked (S7b), from the record: the regimen, every medicine (ARVs and others), lab
+ * results, lab notes when there are any, and notes (earlier visits plus today's).
+ */
+export function checkedCounts(
+  p: Pick<PatientDetail, "art_regimen_current" | "other_medications" | "labs" | "lab_notes" | "visits" | "today_encounter">,
+): { n: number; label: string }[] {
+  const meds = p.art_regimen_current.length + p.other_medications.filter((m) => m.trim()).length;
+  const labs = labCount(p.labs);
+  const todayNote = typeof p.today_encounter.note === "string" && p.today_encounter.note.trim() ? 1 : 0;
+  const notes = p.visits.length + todayNote;
+  const plural = (n: number, one: string, many: string) => ({ n, label: n === 1 ? one : many });
+  return [
+    { n: 1, label: "regimen" },
+    plural(meds, "medicine", "medicines"),
+    plural(labs, "lab result", "lab results"),
+    ...(p.lab_notes.length ? [plural(p.lab_notes.length, "lab note", "lab notes")] : []),
+    plural(notes, "note", "notes"),
+  ];
+}
+
+/** [first sentence, the rest]: for a headline's bold part. Splits only; no words change. */
+export function firstSentence(text: string): [string, string] {
+  const m = /^([\s\S]*?[.!?])\s+([\s\S]+)$/.exec(text.trim());
+  return m ? [m[1], m[2]] : [text.trim(), ""];
+}

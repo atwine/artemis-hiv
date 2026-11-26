@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { asSentence, checkReads, labCount, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
+import { asSentence, checkReads, checkedCounts, firstSentence, labCount, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
 
 test("a lab row: the latest result with its unit as recorded, and the earliest for comparison", () => {
   const rows = labRows(
@@ -68,4 +68,32 @@ test("what the checks read, from the record (S3)", () => {
     "Her regimen, 1 other medicine, 2 lab results, today's notes, Ugandan guideline passages.",
   );
   assert.equal(checkReads({ sex: "M", other_medications: [], labs: {}, lab_notes: [{ date: null, source: "", text: "x" }] }, false), "His regimen, lab notes, today's notes.");
+});
+
+test("what was checked (S7b): counts from the record", () => {
+  assert.deepEqual(
+    checkedCounts({
+      art_regimen_current: ["TDF", "3TC", "DTG"],
+      other_medications: ["Ibuprofen 400 mg"],
+      labs: { vl: [{ date: "2025-01-01", value: "40", unit: "", source: "" }] },
+      lab_notes: [{ date: null, source: "", text: "x" }],
+      visits: [{}, {}],
+      today_encounter: { note: "Stable." },
+    }),
+    [
+      { n: 1, label: "regimen" },
+      { n: 4, label: "medicines" },
+      { n: 1, label: "lab result" },
+      { n: 1, label: "lab note" },
+      { n: 3, label: "notes" },
+    ],
+  );
+});
+
+test("a banner's first sentence, for the headline's bold part", () => {
+  assert.deepEqual(firstSentence("GREEN: no alerts. The rule checks and the AI review found nothing."), [
+    "GREEN: no alerts.",
+    "The rule checks and the AI review found nothing.",
+  ]);
+  assert.deepEqual(firstSentence("One sentence only."), ["One sentence only.", ""]);
 });

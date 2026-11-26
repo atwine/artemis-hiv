@@ -101,3 +101,21 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await tray.getByRole("button", { name: "Accept alert" }).click();
   await expect(row).toContainText("Accepted");
 });
+
+// A visit with no alerts (S7b): the API's banner as the headline, and what was checked, so a quiet
+// screen never looks like a skipped one. Jane Roe (P002) raises no alert; the AI review is off.
+test("a quiet visit says what was checked", async ({ page }) => {
+  await page.goto("/patients/P002");
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  const quiet = page.getByRole("region", { name: "Check results" });
+  await expect(quiet).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await expect(quiet.getByRole("heading", { level: 2 })).toHaveText(
+    "No rule check was triggered. The AI review was switched off for this run.",
+  );
+  const checked = quiet.getByRole("list", { name: "What was checked" });
+  await expect(checked).toContainText("1regimen");
+  await expect(checked).toContainText("3medicines");
+  await expect(checked).toContainText("3lab results");
+  await expect(checked).toContainText("2notes");
+  await expect(page.getByText("GREEN", { exact: true })).toBeVisible(); // the status chip
+});

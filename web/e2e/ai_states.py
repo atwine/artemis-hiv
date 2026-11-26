@@ -1,4 +1,4 @@
-"""The status and banners the API would send for each way an AI review can end badly, for the
+"""The status and banners the API would send for each way an AI review can end ("ok" for the GREEN screen), for the
 screenshots of those states (e2e/screens.spec.ts). Built with the backend's own functions, so the
 wording is the API's; nothing calls a model.
 
@@ -18,7 +18,7 @@ from artemis.rules.checks import Alert  # noqa: E402
 from artemis.screen_text import status_banners  # noqa: E402
 from artemis.visit import compute_overall_status  # noqa: E402
 
-OUTCOMES = ("search_unavailable", "failed", "unreadable", "cut_off", "partly_read")
+OUTCOMES = ("ok", "search_unavailable", "failed", "unreadable", "cut_off", "partly_read")
 
 
 def main() -> None:

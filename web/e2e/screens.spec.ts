@@ -47,12 +47,14 @@ test("the shared frame, before and after the checks", async ({ page }) => {
 // The AI-review states the design doesn't draw (owner's decision 5). Each is a real reply to a
 // rule-checks-only visit check (no model call), with the AI outcome, status and banners the API
 // would send for it, computed by e2e/ai_states.py from the backend's own functions.
-type AiProblem = "search_unavailable" | "failed" | "unreadable" | "cut_off" | "partly_read";
+type AiProblem = "ok" | "search_unavailable" | "failed" | "unreadable" | "cut_off" | "partly_read";
 
 const STATES: { outcome: AiProblem; patient: string; file: string }[] = [
   { outcome: "search_unavailable", patient: "John Doe", file: "web-S7-search-unavailable.png" },
   { outcome: "failed", patient: "Jane Roe", file: "web-S7-ai-failed.png" },
   { outcome: "cut_off", patient: "John Doe", file: "web-S7-ai-cut-off.png" },
+  // GREEN (S7b): no alerts, and the AI review finished cleanly.
+  { outcome: "ok", patient: "Jane Roe", file: "web-S7b-green.png" },
 ];
 
 async function stubOutcome(page: Page, outcome: AiProblem) {
@@ -97,4 +99,12 @@ test("checks running, with the AI review", async ({ page }) => {
   await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
   await expect(page.getByRole("region", { name: "Checks running" })).toContainText("6 s of about 15 s", { timeout: 10_000 });
   await page.screenshot({ path: path.join(OUT, "web-S3-checks-running-ai.png") });
+});
+
+// GREEN with the AI review off (S7b's other banner): a real reply, nothing stubbed.
+test("a quiet visit with the AI review off", async ({ page }) => {
+  await page.goto("/patients/P002");
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("list", { name: "What was checked" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await page.screenshot({ path: path.join(OUT, "web-S7b-green-ai-off.png") });
 });
