@@ -1,0 +1,369 @@
+{
+ "case_id": "P005",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 74.2,
+ "calls": [
+  {
+   "prompt_tokens": 1461,
+   "completion_tokens": 480,
+   "total_tokens": 1941,
+   "cost": 0.00206742,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00206742,
+    "upstream_inference_prompt_cost": 0.00090582,
+    "upstream_inference_completions_cost": 0.0011616
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 763,
+   "completion_tokens": 101,
+   "total_tokens": 864,
+   "cost": 0.00071748,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00071748,
+    "upstream_inference_prompt_cost": 0.00047306,
+    "upstream_inference_completions_cost": 0.00024442
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2446,
+   "completion_tokens": 1046,
+   "total_tokens": 3492,
+   "cost": 0.00324912,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1664,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00324912,
+    "upstream_inference_prompt_cost": 0.0007178,
+    "upstream_inference_completions_cost": 0.00253132
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.006034019999999999,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "protein 1+"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "TDF contraindicated with eGFR <60",
+   "message": "Guidelines state TDF is contraindicated when GFR <60 mL/min. Patient's eGFR is 52 mL/min/1.73m² (CKD-EPI), below the 60 mL/min threshold. TDF has been prescribed for 3 years. The patient has no diabetes or hypertension, and urinalysis shows protein 1+, which may indicate TDF-related renal tubular damage. However, other causes of CKD should be excluded. TDF should be discontinued and replaced with TAF, which guidelines state is preferred over TDF.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "critical",
+    "recommended_action": "Discontinue TDF immediately and switch to TAF-based regimen. Investigate non-drug causes of renal impairment. Refer to nephrology if indicated.",
+    "citations": [
+     {
+      "page_number": 10,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "TDF contraindicated with eGFR <60",
+     "message": "Guidelines state TDF is contraindicated when GFR <60 mL/min. Patient's eGFR is 52 mL/min/1.73m² (CKD-EPI), below the 60 mL/min threshold. TDF has been prescribed for 3 years. The patient has no diabetes or hypertension, and urinalysis shows protein 1+, which may indicate TDF-related renal tubular damage. However, other causes of CKD should be excluded. TDF should be discontinued and replaced with TAF, which guidelines state is preferred over TDF.",
+     "issue_type": "medication_safety",
+     "severity": "critical",
+     "recommended_action": "Discontinue TDF immediately and switch to TAF-based regimen. Investigate non-drug causes of renal impairment. Refer to nephrology if indicated.",
+     "citations": [
+      {
+       "page_number": 10,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Rising creatinine trend over 5 years",
+   "message": "Guidelines require annual serum creatinine and eGFR monitoring for patients on TDF. Patient's creatinine has progressively risen from 0.9 (2020) to 1.4 mg/dL (2026), with eGFR declining to 52 mL/min/1.73m². This steady worsening over 5 years signals ongoing renal injury even if individual values were previously within range. Protein 1+ on urinalysis further supports renal tubular dysfunction. TDF nephrotoxicity is a likely contributor given the temporal relationship with 3 years of TDF use. Non-drug causes should also be evaluated.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Switch from TDF to TAF. Conduct comprehensive renal assessment including renal ultrasound and urine protein-to-creatinine ratio.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Rising creatinine trend over 5 years",
+     "message": "Guidelines require annual serum creatinine and eGFR monitoring for patients on TDF. Patient's creatinine has progressively risen from 0.9 (2020) to 1.4 mg/dL (2026), with eGFR declining to 52 mL/min/1.73m². This steady worsening over 5 years signals ongoing renal injury even if individual values were previously within range. Protein 1+ on urinalysis further supports renal tubular dysfunction. TDF nephrotoxicity is a likely contributor given the temporal relationship with 3 years of TDF use. Non-drug causes should also be evaluated.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Switch from TDF to TAF. Conduct comprehensive renal assessment including renal ultrasound and urine protein-to-creatinine ratio.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "TDF toxicity symptoms present",
+   "message": "Guidelines list exhaustion, extreme fatigue, muscle cramps, and headache as presenting signs of TDF toxicity including lactic acidosis and Fanconi syndrome. Patient reports mild fatigue over 2 months. While she attributes this to work schedule, TDF has been used for 3 years and renal function is declining with proteinuria, making TDF toxicity a plausible contributor. Against drug attribution: fatigue is non-specific and her busy schedule provides an alternative explanation. No muscle cramps or headache are reported. Given eGFR 52, TDF should be discontinued regardless.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Evaluate for TDF toxicity including LFTs, RFTs, and serum lactate. Discontinue TDF and switch to TAF given renal impairment.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "title": "TDF toxicity symptoms present",
+     "message": "Guidelines list exhaustion, extreme fatigue, muscle cramps, and headache as presenting signs of TDF toxicity including lactic acidosis and Fanconi syndrome. Patient reports mild fatigue over 2 months. While she attributes this to work schedule, TDF has been used for 3 years and renal function is declining with proteinuria, making TDF toxicity a plausible contributor. Against drug attribution: fatigue is non-specific and her busy schedule provides an alternative explanation. No muscle cramps or headache are reported. Given eGFR 52, TDF should be discontinued regardless.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Evaluate for TDF toxicity including LFTs, RFTs, and serum lactate. Discontinue TDF and switch to TAF given renal impairment.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "No clinician plan documented",
+   "message": "Guidelines require use of a screening tool to identify developing signs and symptoms in patients on ART, and TDF-specific annual creatinine and eGFR monitoring. No assessment or plan was documented for this visit despite abnormal eGFR (52), proteinuria, rising creatinine trend, and patient-reported fatigue. Required actions include renal evaluation, TDF discontinuation per contraindication criteria, and symptom screening. The absence of a plan represents a guideline deviation given the clear abnormalities present.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Document assessment addressing eGFR 52, proteinuria, and fatigue. Plan TDF discontinuation, renal workup, and ART regimen modification.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 10,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "title": "No clinician plan documented",
+     "message": "Guidelines require use of a screening tool to identify developing signs and symptoms in patients on ART, and TDF-specific annual creatinine and eGFR monitoring. No assessment or plan was documented for this visit despite abnormal eGFR (52), proteinuria, rising creatinine trend, and patient-reported fatigue. Required actions include renal evaluation, TDF discontinuation per contraindication criteria, and symptom screening. The absence of a plan represents a guideline deviation given the clear abnormalities present.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Document assessment addressing eGFR 52, proteinuria, and fatigue. Plan TDF discontinuation, renal workup, and ART regimen modification.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      },
+      {
+       "page_number": 10,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p15_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "ALERT_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does TDF require dose adjustment or substitution when eGFR falls below 60?",
+   "How often should creatinine and urinalysis be monitored for patients on TDF?",
+   "Can frequent ibuprofen use interact with TDF to worsen kidney function?",
+   "Does rising creatinine with proteinuria indicate TDF-induced kidney toxicity?",
+   "Is DTG associated with fatigue or weight changes requiring monitoring?",
+   "Should TDF be switched to ABC or AZT in patients with declining renal function?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"TDF contraindicated with eGFR <60\",\n    \"message\": \"Guidelines state TDF is contraindicated when GFR <60 mL/min. Patient's eGFR is 52 mL/min/1.73m² (CKD-EPI), below the 60 mL/min threshold. TDF has been prescribed for 3 years. The patient has no diabetes or hypertension, and urinalysis shows protein 1+, which may indicate TDF-related renal tubular damage. However, other causes of CKD should be excluded. TDF should be discontinued and replaced with TAF, which guidelines state is preferred over TDF.\",\n    \"issue_type\": \"medication_safety\",\n    \"severity\": \"critical\",\n    \"recommended_action\": \"Discontinue TDF immediately and switch to TAF-based regimen. Investigate non-drug causes of renal impairment. Refer to nephrology if indicated.\",\n    \"citations\": [\n      {\"page_number\": 10, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Rising creatinine trend over 5 years\",\n    \"message\": \"Guidelines require annual serum creatinine and eGFR monitoring for patients on TDF. Patient's creatinine has progressively risen from 0.9 (2020) to 1.4 mg/dL (2026), with eGFR declining to 52 mL/min/1.73m². This steady worsening over 5 years signals ongoing renal injury even if individual values were previously within range. Protein 1+ on urinalysis further supports renal tubular dysfunction. TDF nephrotoxicity is a likely contributor given the temporal relationship with 3 years of TDF use. Non-drug causes should also be evaluated.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Switch from TDF to TAF. Conduct comprehensive renal assessment including renal ultrasound and urine protein-to-creatinine ratio.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_003\",\n    \"title\": \"TDF toxicity symptoms present\",\n    \"message\": \"Guidelines list exhaustion, extreme fatigue, muscle cramps, and headache as presenting signs of TDF toxicity including lactic acidosis and Fanconi syndrome. Patient reports mild fatigue over 2 months. While she attributes this to work schedule, TDF has been used for 3 years and renal function is declining with proteinuria, making TDF toxicity a plausible contributor. Against drug attribution: fatigue is non-specific and her busy schedule provides an alternative explanation. No muscle cramps or headache are reported. Given eGFR 52, TDF should be discontinued regardless.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Evaluate for TDF toxicity including LFTs, RFTs, and serum lactate. Discontinue TDF and switch to TAF given renal impairment.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_004\",\n    \"title\": \"No clinician plan documented\",\n    \"message\": \"Guidelines require use of a screening tool to identify developing signs and symptoms in patients on ART, and TDF-specific annual creatinine and eGFR monitoring. No assessment or plan was documented for this visit despite abnormal eGFR (52), proteinuria, rising creatinine trend, and patient-reported fatigue. Required actions include renal evaluation, TDF discontinuation per contraindication criteria, and symptom screening. The absence of a plan represents a guideline deviation given the clear abnormalities present.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Document assessment addressing eGFR 52, proteinuria, and fatigue. Plan TDF discontinuation, renal workup, and ART regimen modification.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"},\n      {\"page_number\": 10, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia assoc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p48_c1",
+    "page_number": 48,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 82: Drug interactions Drug Family ARV Drug Interaction Action Anti-TB medicines NVP Rifampicin decreases NVP concentrations in blood. Could cause liver toxicity Do not co-administer NVP and rifampicin See Table 39 and Table 40 for TB/ARV co-management DTG Rifampicin lowers DTG levels Adjust DTG dose to twice daily ATV/r, LPV/r, DRV and RTV Rifampicin boosts metabolism of PIs If giv"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+    "page_number": 10,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2",
+    "page_number": 11,
+    "quote": "RAL with DTG or LPV/r after TB Treatment) AZT or ABC → +3TC+LPV/r Substitute Rifampicin with Rifabutin OR Double the am and pm dose of LPV/r AZT or ABC→+3TC+DRV/r Substitute Rifampicin with Rifabutin Note: for patients on rifapentine based regimen, look out for potential drug-drug interactions 162"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is on TLD with no specific complaints, stable weight, normal BP, and no examination findings suggesting toxicity; guidelines require serum creatinine and eGFR monitoring for TDF but no toxicity signs are present.\"},\"problems\":[{\"problem\":\"TDF renal toxicity screening overdue\",\"action\":\"Order serum creatinine and eGFR today as part of routine TDF monitoring per Uganda guidelines.\",\"reason\":\"Guidelines require serum creatinine and eGFR screening for patients on TDF, and no labs are recorded for this visit.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Mild fatigue possibly related to ART or comorbidity\",\"action\":\"Evaluate fatigue with CBC, renal function, and targeted history to rule out drug toxicity or other causes.\",\"reason\":\"Patient reports mild fatigue over 2 months while on TDF/3TC/DTG, and guidelines require screening for toxicity in symptomatic patients on ART.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Frequent ibuprofen use with TDF — potential nephrotoxicity\",\"action\":\"Counsel patient to reduce ibuprofen use and monitor renal function given concurrent TDF and chronic NSAID exposure 2-3 times weekly for 6 months.\",\"reason\":\"Uncertain: the provided guideline excerpts do not specifically address NSAID-TDF interaction, but TDF requires renal monitoring and chronic NSAID use may increase nephrotoxicity risk.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}}],\"monitoring_plan\":[\"Serum creatinine and eGFR today (TDF monitoring)\",\"CBC to evaluate fatigue\",\"Repeat renal function in 6 months or sooner if symptoms change\",\"Reassess fatigue at next visit; escalate workup if persistent or worsening\"],\"patient_counselling\":[\"Continue TLD with good adherence; do not stop or miss doses.\",\"Reduce ibuprofen use and report any changes in urination, swelling, or persistent fatigue.\",\"Return to clinic if fatigue worsens or new symptoms develop.\",\"Follow-up in 6 months or sooner if concerns arise.\"]}",
+ "plan_issues": []
+}

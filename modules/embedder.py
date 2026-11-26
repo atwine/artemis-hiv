@@ -46,15 +46,6 @@ class Embedder:
     def model_name(self) -> str:
         return self._config.model_name
 
-    def encode_queries(self, texts: List[str]) -> List[List[float]]:
-        """Encode search questions. A model that ships a "query" instruction (Qwen3-Embedding, for
-        example) gets it, as its makers recommend; guideline passages go through encode() plain
-        (Phase 2B fix 5f)."""
-        prompts = getattr(self._model, "prompts", None) or {}
-        if self._model is not None and texts and "query" in prompts:
-            return self._model.encode(texts, prompt_name="query").tolist()
-        return self.encode(texts)
-
     def encode(self, texts: List[str]) -> List[List[float]]:
         """Encode texts into dense vectors.
 

@@ -1,0 +1,233 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 35.8,
+ "calls": [
+  {
+   "prompt_tokens": 1534,
+   "completion_tokens": 570,
+   "total_tokens": 2104,
+   "cost": 0.0014982846,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0014982846,
+    "upstream_inference_prompt_cost": 1.05846e-05,
+    "upstream_inference_completions_cost": 0.0014877
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 734,
+   "completion_tokens": 65,
+   "total_tokens": 799,
+   "cost": 0.00027446,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 704,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00027446,
+    "upstream_inference_prompt_cost": 0.00011716,
+    "upstream_inference_completions_cost": 0.0001573
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2511,
+   "completion_tokens": 553,
+   "total_tokens": 3064,
+   "cost": 0.00249572,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00249572,
+    "upstream_inference_prompt_cost": 0.00115746,
+    "upstream_inference_completions_cost": 0.00133826
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0042684646,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_TDF_CREATININE_MONITORING",
+   "title": "TDF renal monitoring may be overdue",
+   "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's last creatinine was 76 umol/L on 2025-12-15 (38 days ago), which is within normal range. However, no eGFR was recorded. If the prior creatinine was also from 2025-12-15, the next 12-month TDF renal screening would fall due around December 2026. Confirm whether eGFR was calculated at the last visit, as TDF can cause chronic kidney disease, acute kidney injury, and Fanconi syndrome.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Verify eGFR was calculated with the December 2025 creatinine. If not, calculate eGFR now and ensure annual TDF renal monitoring schedule is documented.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_TDF_CREATININE_MONITORING",
+     "title": "TDF renal monitoring may be overdue",
+     "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's last creatinine was 76 umol/L on 2025-12-15 (38 days ago), which is within normal range. However, no eGFR was recorded. If the prior creatinine was also from 2025-12-15, the next 12-month TDF renal screening would fall due around December 2026. Confirm whether eGFR was calculated at the last visit, as TDF can cause chronic kidney disease, acute kidney injury, and Fanconi syndrome.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Verify eGFR was calculated with the December 2025 creatinine. If not, calculate eGFR now and ensure annual TDF renal monitoring schedule is documented.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_DTG_GLUCOSE_MONITORING",
+   "title": "DTG baseline glucose screening not documented",
+   "message": "Guidelines require baseline random or fasting blood glucose at the time of starting or switching to DTG, as hyperglycemia has been reported in previously non-diabetic adults on DTG. The patient has been on DTG since 2022, but no blood glucose result is recorded. While the patient is stable with no reported symptoms, the absence of any documented glucose screening represents a monitoring gap. Consider checking blood glucose at the next routine visit.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Perform a random or fasting blood glucose test at the next routine visit to address the undocumented DTG pharmacovigilance screening requirement.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_DTG_GLUCOSE_MONITORING",
+     "title": "DTG baseline glucose screening not documented",
+     "message": "Guidelines require baseline random or fasting blood glucose at the time of starting or switching to DTG, as hyperglycemia has been reported in previously non-diabetic adults on DTG. The patient has been on DTG since 2022, but no blood glucose result is recorded. While the patient is stable with no reported symptoms, the absence of any documented glucose screening represents a monitoring gap. Consider checking blood glucose at the next routine visit.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Perform a random or fasting blood glucose test at the next routine visit to address the undocumented DTG pharmacovigilance screening requirement.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c1"
+      },
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_TDF_CREATININE_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "P002_DTG_GLUCOSE_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "What creatinine monitoring schedule is required for TDF-based regimens?",
+   "How often should viral load be monitored for stable suppressed patients?",
+   "What are DSD eligibility criteria for stable patients on DTG-based ART?",
+   "Is pregnancy testing required for women of reproductive age on DTG?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_TDF_CREATININE_MONITORING\",\n    \"title\": \"TDF renal monitoring may be overdue\",\n    \"message\": \"Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's last creatinine was 76 umol/L on 2025-12-15 (38 days ago), which is within normal range. However, no eGFR was recorded. If the prior creatinine was also from 2025-12-15, the next 12-month TDF renal screening would fall due around December 2026. Confirm whether eGFR was calculated at the last visit, as TDF can cause chronic kidney disease, acute kidney injury, and Fanconi syndrome.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Verify eGFR was calculated with the December 2025 creatinine. If not, calculate eGFR now and ensure annual TDF renal monitoring schedule is documented.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P002_DTG_GLUCOSE_MONITORING\",\n    \"title\": \"DTG baseline glucose screening not documented\",\n    \"message\": \"Guidelines require baseline random or fasting blood glucose at the time of starting or switching to DTG, as hyperglycemia has been reported in previously non-diabetic adults on DTG. The patient has been on DTG since 2022, but no blood glucose result is recorded. While the patient is stable with no reported symptoms, the absence of any documented glucose screening represents a monitoring gap. Consider checking blood glucose at the next routine visit.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Perform a random or fasting blood glucose test at the next routine visit to address the undocumented DTG pharmacovigilance screening requirement.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c1\"},\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia assoc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c1",
+    "page_number": 27,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 83: Laboratory monitoring for Active Pharmacovigilance in non-sentinel sites Category of Patient Drugs Screening procedures ART naïve or experienced patient being initiated or switched to DTG or starting Isoniazid preventive therapy At the time of starting/switching to DTG or starting INH DTG 1. Review eligibility for DTG (Figure25) 2. Perform Baseline Random or Fasting Blood Gluco"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is stable on TDF/3TC/DTG since 2022 with suppressed viral load (20 copies/mL) and normal creatinine (76 umol/L), with no symptoms or signs of drug toxicity.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"No evidence of drug toxicity from current ART regimen\",\n      \"action\": \"Continue TDF/3TC/DTG and maintain routine monitoring per Uganda guidelines.\",\n      \"reason\": \"Patient has no complaints, normal examination, stable creatinine, and suppressed viral load, indicating no toxicity signals.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan to continue routine follow-up is appropriate given the absence of any toxicity indicators.\"\n      }\n    },\n    {\n      \"problem\": \"TDF renal toxicity screening per guideline requirements\",\n      \"action\": \"Continue scheduled serum creatinine and eGFR monitoring at routine intervals as per Uganda guidelines for patients on TDF.\",\n      \"reason\": \"Uganda guidelines require serum creatinine and eGFR screening for patients on TDF, and the most recent creatinine (76 umol/L, Dec 2025) is normal.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Gap\",\n        \"explanation\": \"The clinician's plan does not explicitly mention scheduling the next creatinine/eGFR monitoring, though the patient is clinically stable.\"\n      }\n    },\n    {\n      \"problem\": \"DSD eligibility assessment\",\n      \"action\": \"Complete DSD eligibility assessment including confirmed viral suppression and adherence documentation.\",\n      \"reason\": \"Patient has two consecutive suppressed viral loads (30 and 20 copies/mL) and good adherence since 2022, meeting criteria for DSD consideration.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician already discussed DSD eligibility, which aligns with the patient's stable status and suppressed viral load.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": [\n    \"Serum creatinine and eGFR at next routine visit (TDF monitoring per guidelines)\",\n    \"Viral load at next scheduled interval per national guidelines\",\n    \"Monitor for any new symptoms of drug toxicity at each visit\"\n  ],\n  \"patient_counselling\": [\n    \"Continue current ART with good adherence; no signs of drug toxicity detected.\",\n    \"Report any new symptoms such as nausea, rash, or changes in urination promptly.\",\n    \"DSD model may be appropriate given sustained viral suppression and stable clinical status.\"\n  ]\n}",
+ "plan_issues": []
+}

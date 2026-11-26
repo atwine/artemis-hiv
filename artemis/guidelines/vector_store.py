@@ -25,12 +25,6 @@ class VectorSearchResult:
     distance: float
 
 
-def _encode_query(embedder: Any, text: str) -> List[float]:
-    """A search question, encoded with the model's question instruction when it has one."""
-    encode = getattr(embedder, "encode_queries", None) or embedder.encode
-    return encode([text])[0]
-
-
 class VectorStore:
     def index_guidelines(self, chunks: List[GuidelineChunk], embedder: Embedder) -> int:
         raise NotImplementedError
@@ -105,7 +99,7 @@ class ChromaVectorStore(VectorStore):
         if not query_text.strip():
             return []
 
-        query_embedding = _encode_query(embedder, query_text)
+        query_embedding = embedder.encode([query_text])[0]
 
         # Query API documented here. [src]
         # https://docs.trychroma.com/docs/querying-collections/query-and-get
@@ -175,7 +169,7 @@ class InMemoryVectorStore(VectorStore):
         if not query_text.strip():
             return []
 
-        q = np.asarray(_encode_query(embedder, query_text), dtype=np.float32)
+        q = np.asarray(embedder.encode([query_text])[0], dtype=np.float32)
 
         # Cosine distance: 1 - cosine similarity.
         # Rationale: we use a standard similarity metric for dense embeddings.
