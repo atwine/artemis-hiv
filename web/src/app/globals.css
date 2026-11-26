@@ -1,26 +1,96 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  The design's tokens: Paper file "Artemis-HIV", token set "d7b" (the FINAL page,
+  "Day Rail with floating tray"). Names drop the "d7b-" prefix: --color-d7b-ink is --color-ink.
+  Tailwind's own colour palette is switched off, so every colour on screen is one of these.
+
+  d7b has no type-size or spacing tokens. The sizes below are the ones the FINAL screens use
+  (read with Paper's computed styles), named by their pixel size; spacing uses Tailwind's 4px
+  scale (p-5.5 is 22px).
+*/
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  --color-bg: #ffffff;
+  --color-surface: #fafafb;
+  --color-fill: #f3f4f6;
+  --color-line: #e6e7ea;
+  --color-line-strong: #cad0d9;
+  --color-ink: #1c1d1f;
+  --color-ink-2: #505967;
+  --color-muted: #6f7988;
+  --color-button: #202124;
+  --color-blue: #266df0;
+  --color-blue-wash: #e8f0ff;
+  --color-glow: #e6ecff;
+  --color-red: #c7302e;
+  --color-red-wash: #ffeceb;
+  --color-amber: #8a5a00;
+  --color-amber-wash: #fff3cc;
+  --color-green: #007d53;
+  --color-mint: #e0fced;
+  --color-grey: #505967;
+
+  /* Not in d7b: colours the FINAL screens use on the dark tray and the CHECKING chip. */
+  --color-tray-done: #3fb984;
+  --color-tray-done-wash: #ddf6e9;
+  --color-tray-label: #a7afbc;
+  --color-tray-todo: #7e8796;
+  --color-tray-number: #c9ced6;
+  --color-tray-text: #d5dae1;
+  --color-checking: #1f56c2;
+
+  --font-*: initial;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), "Source Serif 4", Georgia, serif;
+
+  --text-*: initial;
+  --text-11: 11px;
+  --text-11--line-height: 14px;
+  --text-12: 12px;
+  --text-12--line-height: 16px;
+  --text-13: 13px;
+  --text-13--line-height: 16px;
+  --text-14: 14px;
+  --text-14--line-height: 18px;
+  --text-15: 15px;
+  --text-15--line-height: 18px;
+  --text-20: 20px;
+  --text-20--line-height: 24px;
+
+  --radius-*: initial;
+  --radius-logo: 6px;
+  --radius-chip: 7px;
+  --radius-btn: 10px;
+  --radius-window: 16px;
+  --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-window: 0 8px 32px #1c1d1f14;
+  --shadow-tray: 0 12px 32px #1c1d1f38;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html,
+  body {
+    height: 100%;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-14);
+    line-height: var(--text-14--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+  }
 }

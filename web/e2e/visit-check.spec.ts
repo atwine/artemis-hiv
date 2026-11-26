@@ -10,14 +10,18 @@ const CREATININE_ALERT = "Alert (Rule check): Creatinine monitoring overdue whil
 
 test("a clinician runs the rule checks on a patient and decides every alert", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: /John Doe/ }).click();
+  const footer = page.getByRole("contentinfo");
+  await expect(footer).toContainText(DISCLAIMER);
+  await page.getByRole("main").getByRole("link", { name: "John Doe" }).click();
 
   await expect(page.getByRole("heading", { name: "John Doe", level: 1 })).toBeVisible();
   const notes = page.getByRole("textbox", { name: "Clinical notes" });
   await expect(notes).toHaveValue("Routine follow-up. No issues."); // today's note from the record
   await notes.fill("Routine follow-up. No complaints. Continue TLD, 3-month refill.");
   await expect(page.getByRole("checkbox", { name: "AI review" })).not.toBeChecked();
-  await page.getByRole("button", { name: "Run checks" }).click();
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  const reply = page.waitForResponse((r) => r.url().endsWith("/api/patients/P001/visits") && r.request().method() === "POST");
+  await tray.getByRole("button", { name: "Run checks" }).click();
 
   // The banners, card headings, disclaimer and finalize note are the API's own words.
   const results = page.getByRole("region", { name: "Check results" });
@@ -25,7 +29,9 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
   await expect(results.or(page.getByRole("main").getByRole("alert"))).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
   await expect(results.getByRole("status").filter({ hasText: /^YELLOW: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
-  await expect(results.getByText(DISCLAIMER)).toBeVisible();
+  // The footer's disclaimer, shown before any check, is the one the API sends.
+  expect((await (await reply).json()).disclaimer).toBe(DISCLAIMER);
+  await expect(footer).toContainText(DISCLAIMER);
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeVisible();
 
   const cards = results.getByRole("article");
@@ -35,7 +41,7 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
   await expect(creatinine).toHaveCount(1);
   await expect(creatinine.getByText("Related passages (found by a search for this alert)")).toBeVisible();
 
-  const save = results.getByRole("button", { name: "Save decisions" });
+  const save = tray.getByRole("button", { name: "Save decisions" });
   await expect(save).toBeDisabled(); // nothing decided yet
 
   // Override the creatinine alert. "Other" needs a comment before it can be saved.
@@ -57,4 +63,6 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
   await expect(creatinine.getByText(/^Saved: Override \(Other\)/)).toBeVisible();
   for (let i = 0; i < count; i++) await expect(cards.nth(i).getByText(/^Saved: /)).toBeVisible();
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeHidden();
+  await expect(tray.getByRole("list", { name: "Alerts" }).getByRole("listitem")).toHaveCount(count);
+  await expect(tray.getByText(/^Alert \d+, to do$/)).toHaveCount(0); // every dot is done
 });

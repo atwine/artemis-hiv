@@ -13,7 +13,8 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
 | 4 Backend (FastAPI) | in progress on branch `claude/phase4-backend-1abc8a` | 4.0-4.2, 4.4, 4.5, 4.7 done there (with `development` merged in), not merged back; 4.3, 4.6 and the Phase 4 check left |
-| 5 to 8 | not started | |
+| 5 Frontend (Next.js) | in progress on branch `claude/phase5-web-354110` | step 1 (bare flow + browser test) and the shared frame done, not merged; screens wait on 6 design answers and the backend search fix |
+| 6 to 8 | not started | |
 
 `docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
 
@@ -315,6 +316,10 @@ before anyone else uses the app (ACCESS.md section 6).
 ## Phase 5: Frontend (Next.js + shadcn)
 
 - [ ] 5.1 Set up the app with the design tokens.
+      2026-11-26: `web/` (Next.js 16, TypeScript, Tailwind, TanStack Query) runs a whole visit against
+      the API, types generated from its OpenAPI schema, a browser test against a throwaway Postgres;
+      the d7b tokens and the shared frame match the Paper FINAL screens (`docs/design/exports/phase5/`).
+      Left: shadcn/ui setup (Radix or Base UI, owner's call); the backend's `GUIDELINE_PDF_PATHS` fix.
 - [ ] 5.2 Visit review screen.
 - [ ] 5.3 Patient list and record.
 - [ ] 5.4 Plan and audit record views.
