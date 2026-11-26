@@ -1,0 +1,313 @@
+{
+ "case_id": "P006",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 69.9,
+ "calls": [
+  {
+   "prompt_tokens": 1427,
+   "completion_tokens": 473,
+   "total_tokens": 1900,
+   "cost": 0.00050084,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00050084,
+    "upstream_inference_prompt_cost": 0.0003211,
+    "upstream_inference_completions_cost": 0.00017974
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 715,
+   "completion_tokens": 99,
+   "total_tokens": 814,
+   "cost": 0.000264385,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000264385,
+    "upstream_inference_prompt_cost": 0.000185185,
+    "upstream_inference_completions_cost": 7.92e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3057,
+   "completion_tokens": 793,
+   "total_tokens": 3850,
+   "cost": 0.001426163,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.001426163,
+    "upstream_inference_prompt_cost": 0.000791763,
+    "upstream_inference_completions_cost": 0.0006344
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.002191388,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P006_001",
+   "title": "Rising creatinine on TDF",
+   "message": "Guidelines state TDF is contraindicated in kidney disease with eGFR below 60 ml/min. The patient's eGFR is 78 mL/min/1.73m2, which is above this threshold. However, creatinine has risen from 0.8 mg/dL to 1.1 mg/dL since starting TDF 10 weeks ago, which is a significant trend. Pregnancy can also affect renal function. TDF is a known cause of kidney injury, including acute kidney injury and Fanconi syndrome.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor renal function closely. Consider TDF dose adjustment or regimen switch if eGFR declines further or creatinine trend continues.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+      "page_number": 6,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+       "page_number": 6
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines state TDF is contraindicated in kidney disease with eGFR below 60 ml/min. The patient's eGFR is 78 mL/min/1.73m2, which is above this threshold. However, creatinine has risen from 0.8 mg/dL to 1.1 mg/dL since starting TDF 10 weeks ago, which is a significant trend. Pregnancy can also affect renal function. TDF is a known cause of kidney injury, including acute kidney injury and Fanconi syndrome.",
+     "recommended_action": "Monitor renal function closely. Consider TDF dose adjustment or regimen switch if eGFR declines further or creatinine trend continues.",
+     "severity": "moderate",
+     "title": "Rising creatinine on TDF"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_002",
+   "title": "Missing VL monitoring plan",
+   "message": "Guidelines specify that for pregnant women, viral load should be monitored every 3 months. The patient is 22 weeks pregnant and initiated ART 10 weeks ago. A viral load result of 89 copies/mL is available from today, but the next monitoring schedule is not documented in the clinician's plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Document a plan for the next viral load test in 3 months, as per guideline frequency for pregnant women.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+      "page_number": 13,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_002",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+       "page_number": 13
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines specify that for pregnant women, viral load should be monitored every 3 months. The patient is 22 weeks pregnant and initiated ART 10 weeks ago. A viral load result of 89 copies/mL is available from today, but the next monitoring schedule is not documented in the clinician's plan.",
+     "recommended_action": "Document a plan for the next viral load test in 3 months, as per guideline frequency for pregnant women.",
+     "severity": "moderate",
+     "title": "Missing VL monitoring plan"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_003",
+   "title": "No follow-up renal monitoring plan",
+   "message": "Guidelines recommend doing serum creatinine and eGFR for a naïve patient initiating ART with TDF at baseline. The patient has a baseline creatinine of 0.8 mg/dL recorded. However, the screening tool indicates ongoing monitoring is required, and there is no documented plan for the next renal function check.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule the next routine serum creatinine and eGFR test, as per monitoring schedule for patients on TDF.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+      "page_number": 29,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_003",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+       "page_number": 29
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines recommend doing serum creatinine and eGFR for a naïve patient initiating ART with TDF at baseline. The patient has a baseline creatinine of 0.8 mg/dL recorded. However, the screening tool indicates ongoing monitoring is required, and there is no documented plan for the next renal function check.",
+     "recommended_action": "Schedule the next routine serum creatinine and eGFR test, as per monitoring schedule for patients on TDF.",
+     "severity": "low",
+     "title": "No follow-up renal monitoring plan"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_004",
+   "title": "Anemia not addressed in plan",
+   "message": "The patient has mild anemia with Hb 10.8 g/dL. She is pregnant and taking ferrous sulfate. While anemia is common in pregnancy, it is also a potential side effect of some ARVs (e.g., zidovudine, not in her regimen). The provided guideline excerpts do not discuss anemia management or thresholds in pregnancy. The clinician's assessment and plan are blank, so it is unclear if this is being addressed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "low",
+    "recommended_action": "Address the anemia in the clinical plan, considering pregnancy and ART. Ensure ferrous sulfate adherence is assessed.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "P006_004",
+     "citations": [],
+     "issue_type": "information_gap",
+     "message": "The patient has mild anemia with Hb 10.8 g/dL. She is pregnant and taking ferrous sulfate. While anemia is common in pregnancy, it is also a potential side effect of some ARVs (e.g., zidovudine, not in her regimen). The provided guideline excerpts do not discuss anemia management or thresholds in pregnancy. The clinician's assessment and plan are blank, so it is unclear if this is being addressed.",
+     "recommended_action": "Address the anemia in the clinical plan, considering pregnancy and ART. Ensure ferrous sulfate adherence is assessed.",
+     "severity": "low",
+     "title": "Anemia not addressed in plan"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1"
+  ],
+  "P006_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2"
+  ],
+  "P006_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3"
+  ],
+  "P006_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+  ],
+  "P006_004": []
+ },
+ "screening": {
+  "search_questions": [
+   "Is TDF safe with creatinine increase from 0.8 to 1.1 mg/dL?",
+   "Is DTG safe in second trimester of pregnancy?",
+   "Does ferrous sulfate interact with TDF or DTG?",
+   "Is Hb 10.8 g/dL anemia a side effect of ART?",
+   "When is next viral load due after 89 copies/mL?",
+   "Should phosphate be monitored on TDF with normal level?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P006_001\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2\",\n        \"page_number\": 6\n      }\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines state TDF is contraindicated in kidney disease with eGFR below 60 ml/min. The patient's eGFR is 78 mL/min/1.73m2, which is above this threshold. However, creatinine has risen from 0.8 mg/dL to 1.1 mg/dL since starting TDF 10 weeks ago, which is a significant trend. Pregnancy can also affect renal function. TDF is a known cause of kidney injury, including acute kidney injury and Fanconi syndrome.\",\n    \"recommended_action\": \"Monitor renal function closely. Consider TDF dose adjustment or regimen switch if eGFR declines further or creatinine trend continues.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Rising creatinine on TDF\"\n  },\n  {\n    \"alert_id\": \"P006_002\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3\",\n        \"page_number\": 13\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines specify that for pregnant women, viral load should be monitored every 3 months. The patient is 22 weeks pregnant and initiated ART 10 weeks ago. A viral load result of 89 copies/mL is available from today, but the next monitoring schedule is not documented in the clinician's plan.\",\n    \"recommended_action\": \"Document a plan for the next viral load test in 3 months, as per guideline frequency for pregnant women.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Missing VL monitoring plan\"\n  },\n  {\n    \"alert_id\": \"P006_003\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19\",\n        \"page_number\": 29\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines recommend doing serum creatinine and eGFR for a naïve patient initiating ART with TDF at baseline. The patient has a baseline creatinine of 0.8 mg/dL recorded. However, the screening tool indicates ongoing monitoring is required, and there is no documented plan for the next renal function check.\",\n    \"recommended_action\": \"Schedule the next routine serum creatinine and eGFR test, as per monitoring schedule for patients on TDF.\",\n    \"severity\": \"low\",\n    \"title\": \"No follow-up renal monitoring plan\"\n  },\n  {\n    \"alert_id\": \"P006_004\",\n    \"citations\": [],\n    \"issue_type\": \"information_gap\",\n    \"message\": \"The patient has mild anemia with Hb 10.8 g/dL. She is pregnant and taking ferrous sulfate. While anemia is common in pregnancy, it is also a potential side effect of some ARVs (e.g., zidovudine, not in her regimen). The provided guideline excerpts do not discuss anemia management or thresholds in pregnancy. The clinician's assessment and plan are blank, so it is unclear if this is being addressed.\",\n    \"recommended_action\": \"Address the anemia in the clinical plan, considering pregnancy and ART. Ensure ferrous sulfate adherence is assessed.\",\n    \"severity\": \"low\",\n    \"title\": \"Anemia not addressed in plan\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 283,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+    "page_number": 6,
+    "quote": "6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS > When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400\nAdults and adolescents eligible for DTG should only be initiated on ABC+3TC+DTG if TDF is contraindicated (Table 74), including the following conditions: * Kidney disease and estimated glomerular filtration rate (GFR) below 60 ml/min. * Adolescents below 30kg of weight. When to use ABC+ 3TC +EFV400 or TAF +3TC+EFV400 Adults and adolescents should only be initiated on ABC+3TC+EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s26_c2",
+    "page_number": 35,
+    "quote": "WHAT TO EXPECT IN THE FIRST MONTHS OF ART\ndisease with severe immunodeficiency and existing coinfections and/or comorbidities, severely low hemoglobin, low body mass index, and very low CD4 cell counts or are severely malnourished. * More frequent visits and monitoring can help reduce this mortality. * Poor adherence in this period is also associated with the risk of early treatment failure and rapid development of drug resistance. IMMUNE RECONSTITUTION INFLAMMATORY SYNDROME "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\nFigure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Maintain"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s11_c1",
+    "page_number": 6,
+    "quote": "6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART > 6.8.1 When to use Alternative Firstline Regimens\nWhen to use TDF +3TC + EFV400 or TAF +FTC+EFV400 Pregnant and breastfeeding women will only be initiated if DTG is contraindicated (Table 74). When to use **ABC+3TC +EFV400 or TAF+FTC+EFV400** Pregnant or breastfeeding women should only be initiated on ABC+3TC+EFV if TDF and DTG are contraindicated (Table 74). 239 Consolidated Guidelines for the Prevention and Treat"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 238,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3",
+    "page_number": 262,
+    "quote": "uld be due to a concurrent infectious process or due to a reaction to medications other than ARVs such as Isoniazid–induced hepatitis in a child on treatment for TB or a rash induced by Cotrimoxazole. Drug-related side effects while on ART can occur immediately (soon after a drug has been administered), early (within the first days or weeks of treatment) or late (after months or years of treatment). Adverse reactions may be specific to a particular drug, or they may be generi"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c6",
+    "page_number": 14,
+    "quote": "6.12.3 Frequency of viral load monitoring\n3. Apply the red stickers for non-suppressed clients to flag non-suppressed client files. 4. Conduct a first intensive adherence counselling within 7-30 days of result return. 5. Record IAC sessions on HIV care card to support completion of 3 consecutive IAC sessions. 6. Form viral load focal teams with clinical-lab interface for routine review of non-suppressed files. 7. Utilization of non-suppressed registers. 8. Integrate viral loa"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is pregnant and asymptomatic on TDF/3TC/DTG, which is a recommended first-line regimen per guidelines.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"No baseline or routine monitoring labs documented\",\n      \"action\": \"Order baseline CD4, viral load, creatinine, ALT, and pregnancy-appropriate labs.\",\n      \"reason\": \"Guidelines recommend screening for advanced HIV disease and monitoring for ART toxicity, especially in pregnancy.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is empty, so no labs are ordered.\"\n      }\n    },\n    {\n      \"problem\": \"Potential for TDF-related renal toxicity in pregnancy\",\n      \"action\": \"Check serum creatinine and calculate creatinine clearance.\",\n      \"reason\": \"TDF requires renal monitoring, and pregnancy can alter renal function.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is empty, so no renal monitoring is ordered.\"\n      }\n    },\n    {\n      \"problem\": \"Need for DTG safety screening in pregnancy\",\n      \"action\": \"Screen for diabetes and mental health concerns using DTG screening tool.\",\n      \"reason\": \"Guidelines require DTG screening tool prior to initiation, especially for contraindications like diabetes.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is empty, so no DTG screening is documented.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Baseline CD4 and viral load; creatinine and ALT now and at least annually; repeat viral load at 6 months on ART and then every 12 months if suppressed; monitor for DTG side effects.\",\n  \"patient_counselling\": [\n    \"Importance of adherence to ART for her health and prevention of mother-to-child transmission.\",\n    \"Report any new symptoms like nausea, jaundice, mood changes, or excessive thirst.\",\n    \"Continue antenatal care and iron/folic acid supplements.\"\n  ]\n}",
+ "plan_issues": []
+}

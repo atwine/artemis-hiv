@@ -16,6 +16,8 @@ from tests import pipeline_harness as h
 
 
 class _LengthEmbedder:
+    loaded = True
+
     def encode(self, texts: List[str]) -> List[List[float]]:
         return [[float(len(t)), float(t.count("a")) + 1.0] for t in texts]
 

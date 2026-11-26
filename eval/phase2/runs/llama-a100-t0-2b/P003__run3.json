@@ -1,0 +1,227 @@
+{
+ "case_id": "P003",
+ "model": "llama-a100-t0-2b",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 21.0,
+ "calls": [
+  {
+   "prompt_tokens": 1424,
+   "total_tokens": 1698,
+   "completion_tokens": 274,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 599,
+   "total_tokens": 635,
+   "completion_tokens": 36,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2858,
+   "total_tokens": 3149,
+   "completion_tokens": 291,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P003_001",
+   "title": "EFV Side Effects",
+   "message": "Guidelines state EFV can cause persistent central nervous system toxicity, including insomnia and abnormal dreams. Patient complains of poor sleep and vivid dreams. EFV is a known cause, but other non-drug causes should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor and consider substitution if symptoms persist",
+    "citations": [
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_001",
+     "title": "EFV Side Effects",
+     "message": "Guidelines state EFV can cause persistent central nervous system toxicity, including insomnia and abnormal dreams. Patient complains of poor sleep and vivid dreams. EFV is a known cause, but other non-drug causes should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor and consider substitution if symptoms persist",
+     "citations": [
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P003_002",
+   "title": "Viral Load Monitoring",
+   "message": "Guidelines recommend viral load monitoring every 6 months for adults if the initial test is suppressed. Patient's last viral load test was 165 days before the visit, but the plan does not mention upcoming viral load testing.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule viral load test",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P003_002",
+     "title": "Viral Load Monitoring",
+     "message": "Guidelines recommend viral load monitoring every 6 months for adults if the initial test is suppressed. Patient's last viral load test was 165 days before the visit, but the plan does not mention upcoming viral load testing.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Schedule viral load test",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "efv_sleep_disturbance": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ],
+  "P003_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+  ],
+  "P003_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "EFV side effects",
+   "TDF toxicity signs",
+   "3TC interaction risks",
+   "Due lab tests",
+   "EFV pregnancy risks",
+   "Viral load monitoring"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P003_001\",\n    \"title\": \"EFV Side Effects\",\n    \"message\": \"Guidelines state EFV can cause persistent central nervous system toxicity, including insomnia and abnormal dreams. Patient complains of poor sleep and vivid dreams. EFV is a known cause, but other non-drug causes should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor and consider substitution if symptoms persist\",\n    \"citations\": [{\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"}]\n  },\n  {\n    \"alert_id\": \"P003_002\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend viral load monitoring every 6 months for adults if the initial test is suppressed. Patient's last viral load test was 165 days before the visit, but the plan does not mention upcoming viral load testing.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule viral load test\",\n    \"citations\": [{\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p47_c3",
+    "page_number": 47,
+    "quote": "sent back to CPHL 3. Resistance testing report sent to National 3L Technical Committee - makes treatment switch recommendation 4. National 3L Technical committee communicates to RRH 3rd Line committee 5. RRH 3rd Line Committee communicates to the district/IP about the decision made 6. Switch decision is implemented at the facility NOTE: With time, the switch decisions will be made by the RRH technical teams after capacity of the teams is built. 280"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p11_c2",
+    "page_number": 11,
+    "quote": "g age) 15. Determine progress with disclosure if not done already 16. Perform nutritional assessment: weight and height in all patients, plus mid-upper arm circumference (MUAC) in children 6-59 months 17. Assess growth and development in children under 5 years; monitor for changes 18. Ensure examination of vital signs, skin, eyes, oropharynx (presence of thrush), lymph nodes, lungs, heart, abdomen, genital tract (for STIs), extremities, nervous system 19. Determine WHO clinic"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 36,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c3",
+    "page_number": 18,
+    "quote": "medicines or any other medicine related problem. This section recommends heightened pharmacovigilance, re-emphasizes the systems in place for reporting and monitoring drug safety. **IMPORTANT OF PV** Approval of new medicines for use is based on the information from the pre-approval studies. However, these studies cannot identify all the possible adverse outcomes that a drug may cause, and several unexpected side effects manifest during clinical use which must be monitored, a"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c2",
+    "page_number": 6,
+    "quote": "C+3TC+EFV400: * If TDF is contraindicated and they are ineligible for DTG (Table 78). * If the client requires concurrent TB treatment and doubling the dose of DTG is not an option (Tables 30 and 31). ## 6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART Newly diagnosed HIV-infected pregnant and breastfeeding women will be initiated on Tenofovir tenofovir alefenamide, Lamivudine and Dolutegravir (TDF+ 3TC + DTG or TAF + FTC + DTG). ### 6.8.1 When to use Alternative "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 12,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine if current regimen is causing toxicity\", \"reason\": \"Patient complaints of poor sleep and vivid dreams, but guideline excerpts do not provide enough information to confirm drug toxicity from TDF, 3TC, or EFV\"}, \"problems\": [{\"problem\": \"Insomnia and vivid dreams\", \"action\": \"Investigate potential EFV toxicity\", \"reason\": \"EFV is known to cause neuropsychiatric side effects, including insomnia and vivid dreams\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan only notes the complaint without investigating potential EFV toxicity\"}}, {\"problem\": \"Potential renal toxicity from TDF\", \"action\": \"Check Serum creatinine & eGFR\", \"reason\": \"Guideline recommends screening for renal toxicity in patients initiating TDF\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not include renal function tests\"}}], \"monitoring_plan\": \"Check viral load, Serum creatinine & eGFR, and monitor for neuropsychiatric side effects\", \"patient_counselling\": [\"Discuss potential side effects of EFV\", \"Importance of adherence to regimen\", \"Monitoring for signs of renal toxicity\"]}",
+ "plan_issues": []
+}

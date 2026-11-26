@@ -1,0 +1,324 @@
+{
+ "case_id": "P006",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 55.5,
+ "calls": [
+  {
+   "prompt_tokens": 1414,
+   "completion_tokens": 516,
+   "total_tokens": 1930,
+   "cost": 0.00191036,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00191036,
+    "upstream_inference_prompt_cost": 0.00066164,
+    "upstream_inference_completions_cost": 0.00124872
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 727,
+   "completion_tokens": 121,
+   "total_tokens": 848,
+   "cost": 0.00071284,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00071284,
+    "upstream_inference_prompt_cost": 0.00042002,
+    "upstream_inference_completions_cost": 0.00029282
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2932,
+   "completion_tokens": 916,
+   "total_tokens": 3848,
+   "cost": 0.0081352,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0081352,
+    "upstream_inference_prompt_cost": 0.0041048,
+    "upstream_inference_completions_cost": 0.0040304
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.010758400000000001,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P006_TDF_CREATININE_RISE",
+   "title": "TDF: creatinine rose 0.8 to 1.1, eGFR 78",
+   "message": "Guidelines require serum creatinine and eGFR monitoring for patients on TDF. Creatinine rose from 0.8 mg/dL at baseline to 1.1 mg/dL after 10 weeks on TDF, with eGFR now 78 mL/min/1.73m². TDF is a known cause of renal toxicity including chronic kidney disease and Fanconi syndrome. The rise is modest and eGFR remains above the 60 mL/min contraindication threshold. However, the upward trend over just 10 weeks warrants close surveillance. Pregnancy itself increases renal workload, compounding TDF-related risk. No alternative cause for the creatinine rise is documented.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Repeat serum creatinine and eGFR within 4–6 weeks. If creatinine continues to rise or eGFR drops below 60, consider substituting TDF with TAF or alternative per guidelines.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 10,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_TDF_CREATININE_RISE",
+     "title": "TDF: creatinine rose 0.8 to 1.1, eGFR 78",
+     "message": "Guidelines require serum creatinine and eGFR monitoring for patients on TDF. Creatinine rose from 0.8 mg/dL at baseline to 1.1 mg/dL after 10 weeks on TDF, with eGFR now 78 mL/min/1.73m². TDF is a known cause of renal toxicity including chronic kidney disease and Fanconi syndrome. The rise is modest and eGFR remains above the 60 mL/min contraindication threshold. However, the upward trend over just 10 weeks warrants close surveillance. Pregnancy itself increases renal workload, compounding TDF-related risk. No alternative cause for the creatinine rise is documented.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Repeat serum creatinine and eGFR within 4–6 weeks. If creatinine continues to rise or eGFR drops below 60, consider substituting TDF with TAF or alternative per guidelines.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 10,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+      },
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_MISSING_CLINICIAN_PLAN",
+   "title": "No assessment or plan documented for today",
+   "message": "The clinician's assessment and plan for this visit is blank. This pregnant patient on TDF/3TC/DTG for 10 weeks has a rising creatinine trend and is in second trimester pregnancy, requiring documented clinical decision-making. Guidelines specify monitoring requirements for TDF including serum creatinine and eGFR, and DTG requires random blood sugar monitoring for hyperglycemia risk in the first 12 months. Absence of a documented plan risks missed follow-up on the creatinine trend and other required monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Document assessment and plan addressing renal monitoring for TDF, RBS for DTG hyperglycemia risk, and ongoing antenatal ART follow-up per guidelines.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_MISSING_CLINICIAN_PLAN",
+     "title": "No assessment or plan documented for today",
+     "message": "The clinician's assessment and plan for this visit is blank. This pregnant patient on TDF/3TC/DTG for 10 weeks has a rising creatinine trend and is in second trimester pregnancy, requiring documented clinical decision-making. Guidelines specify monitoring requirements for TDF including serum creatinine and eGFR, and DTG requires random blood sugar monitoring for hyperglycemia risk in the first 12 months. Absence of a documented plan risks missed follow-up on the creatinine trend and other required monitoring.",
+     "issue_type": "plan_review",
+     "severity": "moderate",
+     "recommended_action": "Document assessment and plan addressing renal monitoring for TDF, RBS for DTG hyperglycemia risk, and ongoing antenatal ART follow-up per guidelines.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      },
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_DTG_RBS_MONITORING_GAP",
+   "title": "DTG: random blood sugar not documented",
+   "message": "Guidelines recommend performing random blood sugar (RBS) every 3 months for patients at high risk of hyperglycemia during the first 12 months of DTG therapy. This patient has been on DTG for 10 weeks and is pregnant, a condition associated with gestational diabetes risk. No RBS result is documented. While she has no reported hyperglycemia symptoms, pregnancy itself increases metabolic risk, and DTG has been associated with hyperglycemia in non-diabetic adults.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Perform random blood sugar at this visit and repeat every 3 months during the first 12 months of DTG therapy, especially given pregnancy.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_DTG_RBS_MONITORING_GAP",
+     "title": "DTG: random blood sugar not documented",
+     "message": "Guidelines recommend performing random blood sugar (RBS) every 3 months for patients at high risk of hyperglycemia during the first 12 months of DTG therapy. This patient has been on DTG for 10 weeks and is pregnant, a condition associated with gestational diabetes risk. No RBS result is documented. While she has no reported hyperglycemia symptoms, pregnancy itself increases metabolic risk, and DTG has been associated with hyperglycemia in non-diabetic adults.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Perform random blood sugar at this visit and repeat every 3 months during the first 12 months of DTG therapy, especially given pregnancy.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      },
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1"
+  ],
+  "P006_TDF_CREATININE_RISE": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ],
+  "P006_MISSING_CLINICIAN_PLAN": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "P006_DTG_RBS_MONITORING_GAP": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does TDF require renal monitoring in pregnancy given creatinine rose from 0.8 to 1.1?",
+   "Is DTG safe and recommended during pregnancy at 22 weeks gestation?",
+   "Does DTG interact with ferrous sulfate or folic acid taken in pregnancy?",
+   "What monitoring labs are due 10 weeks after initiating TDF/3TC/DTG?",
+   "Is Hb of 10.8 g/dL during pregnancy on TDF/3TC/DTG concerning for anemia?",
+   "Does TDF toxicity cause proteinuria or phosphate changes needing monitoring?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P006_TDF_CREATININE_RISE\",\n    \"title\": \"TDF: creatinine rose 0.8 to 1.1, eGFR 78\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring for patients on TDF. Creatinine rose from 0.8 mg/dL at baseline to 1.1 mg/dL after 10 weeks on TDF, with eGFR now 78 mL/min/1.73m². TDF is a known cause of renal toxicity including chronic kidney disease and Fanconi syndrome. The rise is modest and eGFR remains above the 60 mL/min contraindication threshold. However, the upward trend over just 10 weeks warrants close surveillance. Pregnancy itself increases renal workload, compounding TDF-related risk. No alternative cause for the creatinine rise is documented.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Repeat serum creatinine and eGFR within 4–6 weeks. If creatinine continues to rise or eGFR drops below 60, consider substituting TDF with TAF or alternative per guidelines.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 10, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1\"},\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P006_MISSING_CLINICIAN_PLAN\",\n    \"title\": \"No assessment or plan documented for today\",\n    \"message\": \"The clinician's assessment and plan for this visit is blank. This pregnant patient on TDF/3TC/DTG for 10 weeks has a rising creatinine trend and is in second trimester pregnancy, requiring documented clinical decision-making. Guidelines specify monitoring requirements for TDF including serum creatinine and eGFR, and DTG requires random blood sugar monitoring for hyperglycemia risk in the first 12 months. Absence of a documented plan risks missed follow-up on the creatinine trend and other required monitoring.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Document assessment and plan addressing renal monitoring for TDF, RBS for DTG hyperglycemia risk, and ongoing antenatal ART follow-up per guidelines.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"},\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P006_DTG_RBS_MONITORING_GAP\",\n    \"title\": \"DTG: random blood sugar not documented\",\n    \"message\": \"Guidelines recommend performing random blood sugar (RBS) every 3 months for patients at high risk of hyperglycemia during the first 12 months of DTG therapy. This patient has been on DTG for 10 weeks and is pregnant, a condition associated with gestational diabetes risk. No RBS result is documented. While she has no reported hyperglycemia symptoms, pregnancy itself increases metabolic risk, and DTG has been associated with hyperglycemia in non-diabetic adults.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Perform random blood sugar at this visit and repeat every 3 months during the first 12 months of DTG therapy, especially given pregnancy.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"},\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c1",
+    "page_number": 4,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 c. Better Tolerability DTG shows improved tolerability versus current preferred regimens with substantial reductions in treatment-limiting adverse drug reactions. Specifically, patients can avoid some of the psychiatric adverse events of EFV (ie depression and suicidal tendencies). Overall, in country and WHO evidence supports DTG as a highly tolerated medicine that is less likely to res"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+    "page_number": 49,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Drug Family ARV Drug Interaction Action Anti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid Drugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole ATV/r Reduced con-centrations of Atazanavir Use alternatives like ranit-idine, cimetidine, etc. Polyvalent"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+    "page_number": 10,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c2",
+    "page_number": 6,
+    "quote": "C+3TC+EFV400: * If TDF is contraindicated and they are ineligible for DTG (Table 78). * If the client requires concurrent TB treatment and doubling the dose of DTG is not an option (Tables 30 and 31). ## 6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART Newly diagnosed HIV-infected pregnant and breastfeeding women will be initiated on Tenofovir tenofovir alefenamide, Lamivudine and Dolutegravir (TDF+ 3TC + DTG or TAF + FTC + DTG). ### 6.8.1 When to use Alternative "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia assoc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p40_c2",
+    "page_number": 40,
+    "quote": "amylase and Lipid profile. If deranged: Substitute with DTG If DTG contraindicated: (formulation not available): Substitute with RAL If RAL contraindicated and child is >3 years: Substitute with DRV/r AZT Severe anemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Refer to Blood Counts. Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain, discomfort or decrease in appetite. Pe"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is clinically well with no symptoms or signs of drug toxicity on TDF/3TC/DTG, and the regimen is appropriate for pregnancy per Uganda HIV guidelines.\"},\"problems\":[{\"problem\":\"Routine TDF toxicity monitoring (renal function)\",\"action\":\"Order serum creatinine and eGFR as part of routine monitoring for patients on TDF.\",\"reason\":\"Guidelines require serum creatinine and eGFR screening for patients on TDF, and no baseline or follow-up renal labs are recorded for this patient.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Routine ART and pregnancy monitoring labs\",\"action\":\"Order CD4 count, viral load (if due), HBsAg, and full blood count to screen for ART-related toxicity and pregnancy-related concerns.\",\"reason\":\"Patient is 22 weeks pregnant on ART with no recorded baseline or follow-up labs, and guidelines recommend routine lab monitoring for patients initiating ART.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"DTG screening for contraindications in pregnancy\",\"action\":\"Verify DTG screening tool was completed prior to initiation, checking for diabetes, renal/hepatic dysfunction, and other contraindications.\",\"reason\":\"Guidelines require use of a DTG screening tool prior to DTG initiation to identify contraindications, and this patient is pregnant with no documented screening.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}}],\"monitoring_plan\":\"- Serum creatinine and eGFR at baseline and every 3-6 months for TDF monitoring\\n- CD4 count and viral load per schedule (viral load at 3 months post-initiation)\\n- HBsAg screening if not yet done\\n- Full blood count and liver function tests if clinically indicated\\n- Continue routine antenatal monitoring per obstetric guidelines\",\"patient_counselling\":[\"Reassure patient that current regimen is safe in pregnancy and she is clinically well with no signs of toxicity\",\"Advise patient to report any new symptoms including nausea, vomiting, abdominal pain, or excessive urination\",\"Encourage adherence to TDF/3TC/DTG and continuation of ferrous sulfate and folic acid\",\"Inform patient that blood tests will be ordered to monitor kidney function and treatment response\"]}",
+ "plan_issues": []
+}

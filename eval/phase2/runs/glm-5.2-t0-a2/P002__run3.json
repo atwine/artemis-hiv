@@ -1,0 +1,230 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 151.7,
+ "calls": [
+  {
+   "prompt_tokens": 1535,
+   "completion_tokens": 421,
+   "total_tokens": 1956,
+   "cost": 0.00126396,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1472,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00126396,
+    "upstream_inference_prompt_cost": 0.00024514,
+    "upstream_inference_completions_cost": 0.00101882
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 734,
+   "completion_tokens": 107,
+   "total_tokens": 841,
+   "cost": 0.00142544,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00142544,
+    "upstream_inference_prompt_cost": 0.00095464,
+    "upstream_inference_completions_cost": 0.0004708
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4059,
+   "completion_tokens": 457,
+   "total_tokens": 4516,
+   "cost": 0.00291596,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1472,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00291596,
+    "upstream_inference_prompt_cost": 0.00181002,
+    "upstream_inference_completions_cost": 0.00110594
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00560536,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_TDF_CREATININE_MONITORING",
+   "title": "TDF renal monitoring may be overdue",
+   "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's most recent creatinine was 76 umol/L on 2025-12-15 (38 days ago), which is within normal range. However, no eGFR was recorded alongside this creatinine result. If the prior creatinine was performed at intake in 2022, the next 12-month monitoring may be due or overdue depending on exact prior dates. The clinician's plan does not include renal monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Confirm last creatinine/eGFR date. If >12 months ago, order serum creatinine and eGFR at this visit per TDF monitoring guidelines.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_TDF_CREATININE_MONITORING",
+     "title": "TDF renal monitoring may be overdue",
+     "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's most recent creatinine was 76 umol/L on 2025-12-15 (38 days ago), which is within normal range. However, no eGFR was recorded alongside this creatinine result. If the prior creatinine was performed at intake in 2022, the next 12-month monitoring may be due or overdue depending on exact prior dates. The clinician's plan does not include renal monitoring.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Confirm last creatinine/eGFR date. If >12 months ago, order serum creatinine and eGFR at this visit per TDF monitoring guidelines.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_VIRAL_LOAD_FREQUENCY",
+   "title": "Viral load monitoring frequency gap",
+   "message": "Guidelines state viral load should be measured 6 months after ART initiation and every 6-12 months or when clinically indicated. The patient's latest viral load was 20 copies/mL on 2025-09-15, approximately 4 months before this visit, which is within the acceptable 6-12 month interval. No viral load is due at this encounter. The clinician's plan does not mention viral load, which is appropriate given the recent test.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "No action needed now. Schedule next viral load by March 2026 to stay within 12-month interval.",
+    "citations": [
+     {
+      "page_number": 50,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_VIRAL_LOAD_FREQUENCY",
+     "title": "Viral load monitoring frequency gap",
+     "message": "Guidelines state viral load should be measured 6 months after ART initiation and every 6-12 months or when clinically indicated. The patient's latest viral load was 20 copies/mL on 2025-09-15, approximately 4 months before this visit, which is within the acceptable 6-12 month interval. No viral load is due at this encounter. The clinician's plan does not mention viral load, which is appropriate given the recent test.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "No action needed now. Schedule next viral load by March 2026 to stay within 12-month interval.",
+     "citations": [
+      {
+       "page_number": 50,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_TDF_CREATININE_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "P002_VIRAL_LOAD_FREQUENCY": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "What creatinine monitoring schedule is required for patients on TDF?",
+   "How often should viral load be monitored for stable patients on DTG-based ART?",
+   "What are the eligibility criteria for differentiated service delivery models in Uganda?",
+   "Does DTG require any specific monitoring for female patients of reproductive age?",
+   "What pregnancy testing or contraception counseling is needed for women on DTG?",
+   "Are there any routine lab tests overdue for stable patients on TDF, 3TC, and DTG?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_TDF_CREATININE_MONITORING\",\n    \"title\": \"TDF renal monitoring may be overdue\",\n    \"message\": \"Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's most recent creatinine was 76 umol/L on 2025-12-15 (38 days ago), which is within normal range. However, no eGFR was recorded alongside this creatinine result. If the prior creatinine was performed at intake in 2022, the next 12-month monitoring may be due or overdue depending on exact prior dates. The clinician's plan does not include renal monitoring.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Confirm last creatinine/eGFR date. If >12 months ago, order serum creatinine and eGFR at this visit per TDF monitoring guidelines.\",\n    \"citations\": [{\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}]\n  },\n  {\n    \"alert_id\": \"P002_VIRAL_LOAD_FREQUENCY\",\n    \"title\": \"Viral load monitoring frequency gap\",\n    \"message\": \"Guidelines state viral load should be measured 6 months after ART initiation and every 6-12 months or when clinically indicated. The patient's latest viral load was 20 copies/mL on 2025-09-15, approximately 4 months before this visit, which is within the acceptable 6-12 month interval. No viral load is due at this encounter. The clinician's plan does not mention viral load, which is appropriate given the recent test.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"No action needed now. Schedule next viral load by March 2026 to stay within 12-month interval.\",\n    \"citations\": [{\"page_number\": 50, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months 260"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4",
+    "page_number": 27,
+    "quote": "RT regimen* | | ART experienced reportedly adherent on ART < 14 days- 6 months Recent ART introduction or re-introduction | Continue ART at Admission** | | Continue 1st, 2nd or 3rd line ART regimen* | *Decision on which ART regimen to restart should be made according to patient's history, ART guidelines, HIV viral load and genotypic resistance testing if possible. If it is considered likely that the patient has developed resistance to 1st line ARVs, then restart with 2nd line containing boosted PI or DTG is possible. ** Unless documented to have a suppressed viral load at time of admission or within the month prior to admission, in which case continue ART 178"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p51_c2",
+    "page_number": 51,
+    "quote": "es. It addresses individuals' needs, informs targeted interventions with better outcomes among clients; improve access, coverage and quality of services and lead to efficient utilization of resources. This section presents the recommended differentiated service models for HTS, care and treatment for PLHIV and TB for adoption by the facilities and communities managing PHLIV. The details on how the differentiated care models will be implemented in Uganda are described in the Implementation guide for Differentiated Service Delivery Models (DSDM) for HIV and TB services in Uganda (version November 2022). ### 7.1.1 Core principles of differentiated service delivery The core principles of differentiated care are client-centered and improved health system efficiency. a) Client-centered care The core principle for differentiating care is to provide ART delivery in a way that acknowledges specific barriers identified by clients and empowers them to manage their disease with the support of the health system. WHO highlights the need for client-centered care to improve the quality of HIV care services. 284"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out adherence challenges. - The preferred second-line ART for adults, adolescents and children are either DTG-based or PI-based, depending on the failing first-line regimens. - Second and third line regimens shall be guided by genotype (resistance) testing. 283"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p2_c2",
+    "page_number": 2,
+    "quote": "-----------------------------------------------| | |Start treatment according to TB treatment guidelines : flowchart|Is TB : flowchart (Yes) --> Start first line TB treatment (2RHZE/4RH)⁴ : flowchart| |--------------------------------------------------| | (No) --> 1. Treat for other likely diagnoses according to clinical evaluation 2. If no clinical response, re-assess for TB after 2 weeks Refer to higher Centers for TB treatment if it is unavailable, or if MDRTB is diagnosed or in case of toxicity while on TB treatment 1. Positive ICF screen is presence of current cough, fever >2-week, noticeable weight loss, excessive night sweats, **if child**-poor weight gain and history of contact with a PTB patient 2. **Danger signs for adults** refer to signs of a seriously sick person and they include respiratory rate > 30/min, temperature >39 °C, heart rate 120/min and unable to walk unaided. **Danger signs for children** include lethargy, convulsions, inability to feed, repeated vomiting, temperature above 390c and tachycardia/ tachypnoea 3. Appropriate sample types include; sputum, CSF, Gastric aspirate, urine, stool 153"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < 30 ml/min or ml/min/1.73 m2 OR ≥ 50% decrease from participant's baseline o dialysis needed Cholesterol, Fasting, High ≥ 18 years of age 200 to < 240 mg/dL; 5.18 to < 6.19 mmol/L 240 to < 300 mg/dL; 6.19 to < 7.77 mmol/L ≥ 300 mg/dL; ≥ 7.77 mmol/L N/A LDL, Fasting, High ≥ 18 years of age 130 to < 160 mg/dL; 3.37 to < 4.12 mmol/L 160 to < 190 mg/dL; 4.12 to < 4.90 mmol/L ≥ 190 mg/dL; ≥ 4.90 mmol/L NA Triglycerides, Fasting, High 150 to 300 mg/dL; 1.71 to 3.42 mmol/L >300 to 500 mg/dL; >3.42 to 5.7 mmol/L >500 to < 1,000 mg/ dL; >5.7 to 11.4 mmol/L > 1,000 mg/dL; > 11.4 mmol/L 265 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut off points of 200 copies/ mL and 400 copies/mL respectively, as shown in Figure 58. A patient who has been on ART for more than 6 months and is responding to ART is considered virally suppressed at VL <200 copies/mL and <400 copies/mL for plasma and DBS samples, respectively. Facilities should constitute a multidisciplinary VL review committees to review, track, and make decisions to optimize ART regimen by switching to second-line, third- line, or a more potent regimen. At the minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p51_c1",
+    "page_number": 51,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 # 7 SERVICE DELIVERY APPROACHES This chapter will discuss differentiated service delivery for PLHIV including children, adolescents and Adults, the comprehensive community service delivery approach and continuous quality improvement in DSD. 7.1 DIFFERENTIATED SERVICE DELIVERY (DSD) Differentiated service delivery refers to various ways of providing HIV prevention, care and treatment services that are tailored to the needs and preferences of PLHIV with the aim of maintaining good clinical outcomes and improving efficiency in service delivery. Differentiated service delivery will improve the efficiency of existing approaches. It addresses individuals' needs, informs targeted interventions with better outcomes among clients; improve access, coverage and quality of services and lead to efficient utilization of resources."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c1",
+    "page_number": 50,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Box 10: Key highlights in Antiretroviral Therapy for people living with HIV - Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads assessed. If virally suppressed, their ART should be transitioned to optimal preferred first-line regimens. If not suppressed, the patients should be switched to second-line ART with IAC. - PLHIV initiated on DTG should be longitudinally monitored for adverse effects following recommended pharmacovigilance protocols. - Newly diagnosed pregnant and breastfeeding women shall be initiated on TDF+3TC+DTG or TAF+FTC+DTG. - Pregnant and breastfeeding women already on TLE should be maintained on this regimen until 6-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is stable on TDF/3TC/DTG with suppressed viral load (20 copies/mL) and normal creatinine (76 umol/L), with no symptoms or exam findings suggesting toxicity.\"},\"problems\":[{\"problem\":\"No evidence of drug toxicity on current regimen\",\"action\":\"Continue TDF/3TC/DTG and maintain routine monitoring per stable patient schedule.\",\"reason\":\"Patient has no complaints, no exam abnormalities, suppressed viral load, and normal creatinine, with no guideline-indicated toxicity signals.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan of routine follow-up and DSD eligibility discussion is appropriate for a stable patient without toxicity signs.\"}},{\"problem\":\"Pharmacovigilance monitoring for TDF/3TC/DTG toxicity\",\"action\":\"Continue scheduled creatinine monitoring and symptom assessment at routine visits; reinforce patient reporting of new symptoms.\",\"reason\":\"Guidelines emphasize pharmacovigilance for ART adverse events, and TDF requires ongoing renal monitoring even when current creatinine is normal.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan does not explicitly address ongoing pharmacovigilance or scheduled renal monitoring for TDF.\"}}],\"monitoring_plan\":\"- Creatinine at next routine visit (TDF renal monitoring)\\n- Viral load per national schedule for stable patients (next due ~2026-09)\\n- Symptom-directed monitoring: counsel patient to report polyuria, polydipsia, weight loss, neuropsychiatric symptoms, or renal symptoms\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily with good adherence; your viral load is suppressed and labs are normal.\",\"Report any new symptoms immediately—excessive urination, thirst, unexpected weight loss, or mood changes.\",\"You may be eligible for Differentiated Service Delivery (DSD) for less frequent clinic visits; discuss with your provider.\",\"Attend all scheduled follow-up visits for routine blood monitoring.\"]}",
+ "plan_issues": []
+}

@@ -1,0 +1,178 @@
+{
+ "case_id": "P006",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 31.5,
+ "calls": [
+  {
+   "prompt_tokens": 1427,
+   "completion_tokens": 501,
+   "total_tokens": 1928,
+   "cost": 0.00038668,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1344,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00038668,
+    "upstream_inference_prompt_cost": 0.0001963,
+    "upstream_inference_completions_cost": 0.00019038
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 715,
+   "completion_tokens": 89,
+   "total_tokens": 804,
+   "cost": 0.00013652,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 640,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00013652,
+    "upstream_inference_prompt_cost": 0.0001027,
+    "upstream_inference_completions_cost": 3.382e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3205,
+   "completion_tokens": 2,
+   "total_tokens": 3207,
+   "cost": 0.00065102,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1408,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00065102,
+    "upstream_inference_prompt_cost": 0.00065026,
+    "upstream_inference_completions_cost": 7.6e-07
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00117422,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Is TDF safe in pregnancy?",
+   "Is creatinine increase from 0.8 to 1.1 mg/dL a concern?",
+   "Is Hb 10.8 g/dL anemia needing action?",
+   "Is viral load 89 copies/mL at 10 weeks acceptable?",
+   "Should ferrous sulfate interact with TDF or DTG?",
+   "When is next viral load due?"
+  ],
+  "raw_output": "[]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s11_c1",
+    "page_number": 6,
+    "quote": "6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART > 6.8.1 When to use Alternative Firstline Regimens\nWhen to use TDF +3TC + EFV400 or TAF +FTC+EFV400 Pregnant and breastfeeding women will only be initiated if DTG is contraindicated (Table 74). When to use **ABC+3TC +EFV400 or TAF+FTC+EFV400** Pregnant or breastfeeding women should only be initiated on ABC+3TC+EFV if TDF and DTG are contraindicated (Table 74). 239 Consolidated Guidelines for the Prevention and Treat"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 265,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p31_c2",
+    "page_number": 182,
+    "quote": "bleeding under the skin, jaundice, and mental derangement. Screening for HBV All PLHIV initiating or failing on ART should be routinely screened for HBV infection using Hep B surface Antigen (HBsAg). Tests in persons diagnosed with HBV infection These tests should be done at baseline and at six months A complete blood count. Liver function tests (ALT,AST, albumin and bilirubin levels, and PTT). Abdominal ultrasound scan AFP and HBeAg if available. Treatment of HBV/HIV co-infe"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\nFigure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Maintain"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+    "page_number": 6,
+    "quote": "6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS > When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400\nAdults and adolescents eligible for DTG should only be initiated on ABC+3TC+DTG if TDF is contraindicated (Table 74), including the following conditions: * Kidney disease and estimated glomerular filtration rate (GFR) below 60 ml/min. * Adolescents below 30kg of weight. When to use ABC+ 3TC +EFV400 or TAF +3TC+EFV400 Adults and adolescents should only be initiated on ABC+3TC+EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c2",
+    "page_number": 239,
+    "quote": "C+3TC+EFV400: * If TDF is contraindicated and they are ineligible for DTG (Table 78). * If the client requires concurrent TB treatment and doubling the dose of DTG is not an option (Tables 30 and 31). ## 6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART Newly diagnosed HIV-infected pregnant and breastfeeding women will be initiated on Tenofovir tenofovir alefenamide, Lamivudine and Dolutegravir (TDF+ 3TC + DTG or TAF + FTC + DTG). ### 6.8.1 When to use Alternative "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p28_c3",
+    "page_number": 179,
+    "quote": "detect changes in renal function. • Routine administration of 40 mEq/day (mixed in 500ml NS over 4 hours) of potassium chloride or 1 tablet of 600mg twice daily while on amphotericin B can decrease the incidence of Amphotericin B-related hypokalemia. • For electrolyte supplementation, two tablets daily of Magnesium Chloride 310 mg or slow Magnesium Chloride 535mg or Magnesium trisilicate 250mg while on amphotericin B • Consider alternate day Amphotericin B if creatinine is >3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s20_c11",
+    "page_number": 18,
+    "quote": "Genotype testing\nEFV (1st line) or ATV/r (2nd line) Monitor/manage hyperglycaemia or DM as per standard guidelines** - (Implicit path from Recheck glucose in 2-4 weeks if not increased leads to Normal or stable) - **Grade III or IV* or glucosuria** - **Switch to EFV (1st line) or ATV/r (2nd line) Monitor/manage hyperglycaemia or DM as per standard guidelines** - **If No:** - **Higher risk for hyperglycemia?** - Age ≥ 45 - BMI ≥ 24 - History of high blood pressure - **If No:**"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 245,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 238,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   }
+  ],
+  "parse_status": "parsed_empty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is pregnant and asymptomatic on TDF/3TC/DTG, which is a recommended first-line regimen per guidelines.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"No baseline or follow-up viral load documented\",\n      \"action\": \"Order baseline viral load and CD4 count if not done, and schedule 6-month follow-up viral load.\",\n      \"reason\": \"Guidelines recommend viral load monitoring at ART initiation and 6 months to assess treatment efficacy.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's current plan is empty and does not mention any lab monitoring.\"\n      }\n    },\n    {\n      \"problem\": \"No documented screening for DTG contraindications\",\n      \"action\": \"Administer DTG screening tool to assess for diabetes, psychiatric conditions, and other contraindications.\",\n      \"reason\": \"Guidelines require use of a DTG screening tool prior to DTG initiation to check for contraindications.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's current plan is empty and does not mention DTG screening.\"\n      }\n    },\n    {\n      \"problem\": \"No routine antenatal and HIV monitoring labs ordered\",\n      \"action\": \"Order hemoglobin, renal function (creatinine), and liver function tests.\",\n      \"reason\": \"Pregnant patients on ART require monitoring for anemia and drug toxicities, such as renal impairment from TDF.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's current plan is empty and does not mention any lab orders.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order: Viral load (baseline), CD4 count, hemoglobin, creatinine, LFTs. Schedule next viral load at 6 months on ART. Monitor renal function every 6-12 months on TDF.\",\n  \"patient_counselling\": [\n    \"Adherence to ART for maternal health and prevention of mother-to-child transmission.\",\n    \"Importance of attending all antenatal visits.\",\n    \"Report any new symptoms like nausea, jaundice, or mood changes.\"\n  ]\n}",
+ "plan_issues": []
+}

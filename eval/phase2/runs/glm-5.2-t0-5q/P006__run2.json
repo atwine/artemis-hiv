@@ -1,0 +1,336 @@
+{
+ "case_id": "P006",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 20.5,
+ "calls": [
+  {
+   "prompt_tokens": 1420,
+   "completion_tokens": 550,
+   "total_tokens": 1970,
+   "cost": 0.00202708,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00202708,
+    "upstream_inference_prompt_cost": 0.00069608,
+    "upstream_inference_completions_cost": 0.001331
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 727,
+   "completion_tokens": 119,
+   "total_tokens": 846,
+   "cost": 0.000814289,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000814289,
+    "upstream_inference_prompt_cost": 5.089e-06,
+    "upstream_inference_completions_cost": 0.0008092
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2856,
+   "completion_tokens": 1149,
+   "total_tokens": 4005,
+   "cost": 0.00253679112,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2541,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00253679112,
+    "upstream_inference_prompt_cost": 0.00045388392,
+    "upstream_inference_completions_cost": 0.0020829072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00537816012,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Rising creatinine on TDF in pregnancy",
+   "message": "Guidelines list chronic kidney disease and Fanconi syndrome as TDF toxicities, with creatinine toxicity grading based on eGFR decline from baseline. Patient's creatinine rose from 0.8 to 1.1 mg/dL and eGFR fell from baseline to 78 mL/min/1.73m² after 10 weeks on TDF. This represents a >10% eGFR decline from baseline, meeting at least Grade 1 toxicity criteria. TDF is the likely contributor given the temporal relationship. Against drug attribution: pregnancy itself increases creatinine clearance demands, and 78 mL/min may partly reflect normal pregnancy-related physiology. Urinalysis is normal (no proteinuria, no glycosuria), and phosphate is normal, arguing against overt Fanconi syndrome. DTG can also affect tubular secretion but less commonly.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Continue TDF with close renal monitoring. Repeat creatinine/eGFR within 4 weeks. If progressive decline or proteinuria develops, consider switching to TAF-based regimen per guidelines.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 37,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+      "page_number": 32,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 37
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+       "page_number": 32
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines list chronic kidney disease and Fanconi syndrome as TDF toxicities, with creatinine toxicity grading based on eGFR decline from baseline. Patient's creatinine rose from 0.8 to 1.1 mg/dL and eGFR fell from baseline to 78 mL/min/1.73m² after 10 weeks on TDF. This represents a >10% eGFR decline from baseline, meeting at least Grade 1 toxicity criteria. TDF is the likely contributor given the temporal relationship. Against drug attribution: pregnancy itself increases creatinine clearance demands, and 78 mL/min may partly reflect normal pregnancy-related physiology. Urinalysis is normal (no proteinuria, no glycosuria), and phosphate is normal, arguing against overt Fanconi syndrome. DTG can also affect tubular secretion but less commonly.",
+     "recommended_action": "Continue TDF with close renal monitoring. Repeat creatinine/eGFR within 4 weeks. If progressive decline or proteinuria develops, consider switching to TAF-based regimen per guidelines.",
+     "severity": "moderate",
+     "title": "Rising creatinine on TDF in pregnancy"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Missing 6-month viral load monitoring plan",
+   "message": "Guidelines state viral load should be measured 6 months after ART initiation and every 6–12 months or when clinically indicated. Patient initiated ART 10 weeks ago and already has a viral load of 89 copies/mL, which is encouraging. However, the formal 6-month VL is still due around month 6. No clinician plan was documented today, so it is unclear whether the 6-month VL has been scheduled. Additionally, CD4 monitoring should continue per schedule. The current VL of 89 copies/mL is suppressed but not undetectable; the 6-month VL will confirm sustained suppression.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule the 6-month viral load test (approximately August 2026) and document a follow-up plan including ongoing CD4 and renal monitoring.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "page_number": 50,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+       "page_number": 50
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines state viral load should be measured 6 months after ART initiation and every 6–12 months or when clinically indicated. Patient initiated ART 10 weeks ago and already has a viral load of 89 copies/mL, which is encouraging. However, the formal 6-month VL is still due around month 6. No clinician plan was documented today, so it is unclear whether the 6-month VL has been scheduled. Additionally, CD4 monitoring should continue per schedule. The current VL of 89 copies/mL is suppressed but not undetectable; the 6-month VL will confirm sustained suppression.",
+     "recommended_action": "Schedule the 6-month viral load test (approximately August 2026) and document a follow-up plan including ongoing CD4 and renal monitoring.",
+     "severity": "low",
+     "title": "Missing 6-month viral load monitoring plan"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "DTG hyperglycaemia screening gap in pregnancy",
+   "message": "Guidelines require glucose screening before DTG initiation and glucose monitoring every 3 months for the first year in patients with risk factors for hyperglycaemia. Risk factors include BMI ≥25 kg/m². Patient's current weight is 68 kg; with pre-pregnancy weight of 62 kg and height unknown, BMI may exceed 25. No blood glucose result is documented. Pregnancy itself induces insulin resistance, compounding DTG's hyperglycaemia risk. Guidelines specify fasting glucose >6.95 mmol/L or non-fasting >8.89 mmol/L as thresholds for not initiating DTG. Without a documented glucose, hyperglycaemia risk is unassessed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Check blood glucose now and repeat every 3 months during the first year of DTG therapy, given pregnancy and possible elevated BMI.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "page_number": 38,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+      "page_number": 5,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+       "page_number": 38
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+       "page_number": 5
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines require glucose screening before DTG initiation and glucose monitoring every 3 months for the first year in patients with risk factors for hyperglycaemia. Risk factors include BMI ≥25 kg/m². Patient's current weight is 68 kg; with pre-pregnancy weight of 62 kg and height unknown, BMI may exceed 25. No blood glucose result is documented. Pregnancy itself induces insulin resistance, compounding DTG's hyperglycaemia risk. Guidelines specify fasting glucose >6.95 mmol/L or non-fasting >8.89 mmol/L as thresholds for not initiating DTG. Without a documented glucose, hyperglycaemia risk is unassessed.",
+     "recommended_action": "Check blood glucose now and repeat every 3 months during the first year of DTG therapy, given pregnancy and possible elevated BMI.",
+     "severity": "moderate",
+     "title": "DTG hyperglycaemia screening gap in pregnancy"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "Anaemia and missing LFTs on ART",
+   "message": "Guidelines list severe anaemia as a major toxicity of AZT and note that TDF toxicities require LFTs and RFTs when deranged. Patient's Hb is 10.8 g/dL, which is low for pregnancy (normal cutoff ≥11 g/dL). She is not on AZT, so anaemia is not drug-attributable to her current regimen. However, no cause has been investigated. She takes ferrous sulfate and folic acid, suggesting pre-existing iron deficiency or prophylactic use. Pregnancy-related haemodilution and iron deficiency are the most likely causes. Baseline Hb was not provided, so trend cannot be assessed. LFTs have not been documented despite 10 weeks on ART.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Investigate anaemia with iron studies and reticulocyte count. Perform LFTs as part of routine ART toxicity monitoring.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+      "page_number": 37,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+       "page_number": 37
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines list severe anaemia as a major toxicity of AZT and note that TDF toxicities require LFTs and RFTs when deranged. Patient's Hb is 10.8 g/dL, which is low for pregnancy (normal cutoff ≥11 g/dL). She is not on AZT, so anaemia is not drug-attributable to her current regimen. However, no cause has been investigated. She takes ferrous sulfate and folic acid, suggesting pre-existing iron deficiency or prophylactic use. Pregnancy-related haemodilution and iron deficiency are the most likely causes. Baseline Hb was not provided, so trend cannot be assessed. LFTs have not been documented despite 10 weeks on ART.",
+     "recommended_action": "Investigate anaemia with iron studies and reticulocyte count. Perform LFTs as part of routine ART toxicity monitoring.",
+     "severity": "low",
+     "title": "Anaemia and missing LFTs on ART"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p17_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+  ],
+  "ALERT_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does DTG need dose adjustment in second trimester of pregnancy?",
+   "Does TDF require monitoring for renal toxicity when eGFR is below 80?",
+   "Is the creatinine rise from 0.8 to 1.1 mg/dL significant on TDF?",
+   "What monitoring is due at 3 months after starting TDF/3TC/DTG?",
+   "Does ferrous sulfate interact with TDF or DTG absorption?",
+   "Is Hb of 10.8 g/dL in pregnancy related to TDF use?"
+  ],
+  "raw_output": "[\n{\n\"alert_id\": \"ALERT_001\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\",\n\"page_number\": 37\n},\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1\",\n\"page_number\": 32\n}\n],\n\"issue_type\": \"toxicity\",\n\"message\": \"Guidelines list chronic kidney disease and Fanconi syndrome as TDF toxicities, with creatinine toxicity grading based on eGFR decline from baseline. Patient's creatinine rose from 0.8 to 1.1 mg/dL and eGFR fell from baseline to 78 mL/min/1.73m² after 10 weeks on TDF. This represents a >10% eGFR decline from baseline, meeting at least Grade 1 toxicity criteria. TDF is the likely contributor given the temporal relationship. Against drug attribution: pregnancy itself increases creatinine clearance demands, and 78 mL/min may partly reflect normal pregnancy-related physiology. Urinalysis is normal (no proteinuria, no glycosuria), and phosphate is normal, arguing against overt Fanconi syndrome. DTG can also affect tubular secretion but less commonly.\",\n\"recommended_action\": \"Continue TDF with close renal monitoring. Repeat creatinine/eGFR within 4 weeks. If progressive decline or proteinuria develops, consider switching to TAF-based regimen per guidelines.\",\n\"severity\": \"moderate\",\n\"title\": \"Rising creatinine on TDF in pregnancy\"\n},\n{\n\"alert_id\": \"ALERT_002\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\",\n\"page_number\": 50\n}\n],\n\"issue_type\": \"monitoring_gap\",\n\"message\": \"Guidelines state viral load should be measured 6 months after ART initiation and every 6–12 months or when clinically indicated. Patient initiated ART 10 weeks ago and already has a viral load of 89 copies/mL, which is encouraging. However, the formal 6-month VL is still due around month 6. No clinician plan was documented today, so it is unclear whether the 6-month VL has been scheduled. Additionally, CD4 monitoring should continue per schedule. The current VL of 89 copies/mL is suppressed but not undetectable; the 6-month VL will confirm sustained suppression.\",\n\"recommended_action\": \"Schedule the 6-month viral load test (approximately August 2026) and document a follow-up plan including ongoing CD4 and renal monitoring.\",\n\"severity\": \"low\",\n\"title\": \"Missing 6-month viral load monitoring plan\"\n},\n{\n\"alert_id\": \"ALERT_003\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\",\n\"page_number\": 38\n},\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2\",\n\"page_number\": 5\n}\n],\n\"issue_type\": \"monitoring_gap\",\n\"message\": \"Guidelines require glucose screening before DTG initiation and glucose monitoring every 3 months for the first year in patients with risk factors for hyperglycaemia. Risk factors include BMI ≥25 kg/m². Patient's current weight is 68 kg; with pre-pregnancy weight of 62 kg and height unknown, BMI may exceed 25. No blood glucose result is documented. Pregnancy itself induces insulin resistance, compounding DTG's hyperglycaemia risk. Guidelines specify fasting glucose >6.95 mmol/L or non-fasting >8.89 mmol/L as thresholds for not initiating DTG. Without a documented glucose, hyperglycaemia risk is unassessed.\",\n\"recommended_action\": \"Check blood glucose now and repeat every 3 months during the first year of DTG therapy, given pregnancy and possible elevated BMI.\",\n\"severity\": \"moderate\",\n\"title\": \"DTG hyperglycaemia screening gap in pregnancy\"\n},\n{\n\"alert_id\": \"ALERT_004\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2\",\n\"page_number\": 37\n}\n],\n\"issue_type\": \"monitoring_gap\",\n\"message\": \"Guidelines list severe anaemia as a major toxicity of AZT and note that TDF toxicities require LFTs and RFTs when deranged. Patient's Hb is 10.8 g/dL, which is low for pregnancy (normal cutoff ≥11 g/dL). She is not on AZT, so anaemia is not drug-attributable to her current regimen. However, no cause has been investigated. She takes ferrous sulfate and folic acid, suggesting pre-existing iron deficiency or prophylactic use. Pregnancy-related haemodilution and iron deficiency are the most likely causes. Baseline Hb was not provided, so trend cannot be assessed. LFTs have not been documented despite 10 weeks on ART.\",\n\"recommended_action\": \"Investigate anaemia with iron studies and reticulocyte count. Perform LFTs as part of routine ART toxicity monitoring.\",\n\"severity\": \"low\",\n\"title\": \"Anaemia and missing LFTs on ART\"\n}\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c2",
+    "page_number": 6,
+    "quote": "C+3TC+EFV400: * If TDF is contraindicated and they are ineligible for DTG (Table 78). * If the client requires concurrent TB treatment and doubling the dose of DTG is not an option (Tables 30 and 31). ## 6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART Newly diagnosed HIV-infected pregnant and breastfeeding women will be initiated on Tenofovir tenofovir alefenamide, Lamivudine and Dolutegravir (TDF+ 3TC + DTG or TAF + FTC + DTG). ### 6.8.1 When to use Alternative "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabet"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is asymptomatic with no signs of toxicity on TDF/3TC/DTG, and the guideline excerpts do not indicate any contraindication or toxicity signal requiring a change.\"},\"problems\":[{\"problem\":\"Absence of documented assessment and plan for routine ART follow-up in a pregnant patient\",\"action\":\"Document a complete assessment and plan including adherence check, ART tolerance review, and pregnancy-specific monitoring per Uganda HIV guidelines.\",\"reason\":\"The patient is a 22-week pregnant woman on TDF/3TC/DTG with no clinician assessment or plan documented, and Uganda guidelines require structured follow-up for patients on ART.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this routine follow-up visit.\"}},{\"problem\":\"No baseline or follow-up lab results available to assess ART toxicity or treatment response\",\"action\":\"Order and review renal function (creatinine/eGFR), liver function tests, full blood count, and viral load as indicated for a patient 3 months after ART initiation.\",\"reason\":\"TDF requires renal monitoring and the patient has no recorded labs, so baseline and follow-up kidney function should be assessed per standard ART monitoring.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No lab orders were documented for this visit despite the patient being 3 months into ART.\"}},{\"problem\":\"Potential TDF-related renal toxicity cannot be excluded without creatinine/eGFR testing\",\"action\":\"Check serum creatinine and eGFR to screen for TDF nephrotoxicity, as no renal function results are on record.\",\"reason\":\"TDF is known to cause renal toxicity and the patient has no recorded renal function tests since ART initiation 10 weeks ago.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No renal function testing was ordered or documented.\"}}],\"monitoring_plan\":\"- Serum creatinine and eGFR at next visit (TDF monitoring)\\n- Liver function tests and full blood count\\n- HIV viral load per Uganda ART monitoring schedule (typically at 3-6 months after initiation)\\n- Routine antenatal monitoring per obstetric guidelines\\n- Urine dipstick for protein at each visit (already negative today)\",\"patient_counselling\":[\"Continue TDF, 3TC, and DTG as prescribed; report any new symptoms such as nausea, rash, yellow eyes, or changes in urination.\",\"Continue taking ferrous sulfate and folic acid as prescribed for pregnancy.\",\"Keep all scheduled antenatal and HIV follow-up appointments for lab monitoring.\",\"Report any reduced fetal movements or new complaints promptly.\"]}",
+ "plan_issues": []
+}

@@ -1,0 +1,371 @@
+{
+ "case_id": "P005",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 58.1,
+ "calls": [
+  {
+   "prompt_tokens": 1456,
+   "completion_tokens": 436,
+   "total_tokens": 1892,
+   "cost": 0.00036952,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1344,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00036952,
+    "upstream_inference_prompt_cost": 0.00020384,
+    "upstream_inference_completions_cost": 0.00016568
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 748,
+   "completion_tokens": 92,
+   "total_tokens": 840,
+   "cost": 0.00014624,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 640,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00014624,
+    "upstream_inference_prompt_cost": 0.00011128,
+    "upstream_inference_completions_cost": 3.496e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3008,
+   "completion_tokens": 1010,
+   "total_tokens": 4018,
+   "cost": 0.00087468,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2240,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00087468,
+    "upstream_inference_prompt_cost": 0.00049088,
+    "upstream_inference_completions_cost": 0.0003838
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0013904400000000002,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "protein 1+"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "TDF Contraindicated in Renal Impairment",
+   "message": "Guidelines state TDF is contraindicated in patients with kidney disease and an eGFR below 60 ml/min. The patient has an eGFR of 52 mL/min/1.73m2, placing them in CKD stage 3a. Creatinine has risen steadily from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026, indicating a progressive decline in renal function. TDF is a known cause of chronic kidney disease and acute kidney injury. However, the patient's regular use of ibuprofen (an NSAID) is also a significant nephrotoxic risk factor that could be contributing to the renal impairment.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "critical",
+    "recommended_action": "Discontinue TDF-containing regimen. Switch to an alternative first-line regimen as per guidelines, such as ABC+3TC+DTG.",
+    "citations": [
+     {
+      "page_number": 6,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "TDF Contraindicated in Renal Impairment",
+     "message": "Guidelines state TDF is contraindicated in patients with kidney disease and an eGFR below 60 ml/min. The patient has an eGFR of 52 mL/min/1.73m2, placing them in CKD stage 3a. Creatinine has risen steadily from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026, indicating a progressive decline in renal function. TDF is a known cause of chronic kidney disease and acute kidney injury. However, the patient's regular use of ibuprofen (an NSAID) is also a significant nephrotoxic risk factor that could be contributing to the renal impairment.",
+     "issue_type": "medication_safety",
+     "severity": "critical",
+     "recommended_action": "Discontinue TDF-containing regimen. Switch to an alternative first-line regimen as per guidelines, such as ABC+3TC+DTG.",
+     "citations": [
+      {
+       "page_number": 6,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2"
+      },
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Missing Annual Renal Monitoring",
+   "message": "Guidelines specify that for experienced patients on TDF, serum creatinine and eGFR should be done every 12 months. The patient is on TDF, but the lab trend shows results from 2020-2026, implying monitoring is occurring. However, the clinician's plan is blank, so it is unclear if continued annual monitoring is planned. The current renal impairment makes this monitoring even more critical.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "high",
+    "recommended_action": "Ensure serum creatinine and eGFR are monitored every 12 months as per protocol, and document this in the plan.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Missing Annual Renal Monitoring",
+     "message": "Guidelines specify that for experienced patients on TDF, serum creatinine and eGFR should be done every 12 months. The patient is on TDF, but the lab trend shows results from 2020-2026, implying monitoring is occurring. However, the clinician's plan is blank, so it is unclear if continued annual monitoring is planned. The current renal impairment makes this monitoring even more critical.",
+     "issue_type": "monitoring_gap",
+     "severity": "high",
+     "recommended_action": "Ensure serum creatinine and eGFR are monitored every 12 months as per protocol, and document this in the plan.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "Risk Factors for Hyperglycemia with DTG",
+   "message": "Guidelines recommend screening for hyperglycemia risk factors before initiating or transitioning to DTG. Risk factors include age ≥30 years, family history of DM, hypertension, or BMI ≥25 Kg/m². The patient is 38 years old (≥30). Her BMI is not calculated but her weight is stable at 64kg; height is not provided to assess BMI. The urinalysis shows 'glucose trace', which is a potential sign of hyperglycemia. The clinician's plan is blank, so screening and management are not addressed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Assess for hyperglycemia using the DM screening tool. Check blood glucose given age ≥30 and trace urine glucose.",
+    "citations": [
+     {
+      "page_number": 189,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "title": "Risk Factors for Hyperglycemia with DTG",
+     "message": "Guidelines recommend screening for hyperglycemia risk factors before initiating or transitioning to DTG. Risk factors include age ≥30 years, family history of DM, hypertension, or BMI ≥25 Kg/m². The patient is 38 years old (≥30). Her BMI is not calculated but her weight is stable at 64kg; height is not provided to assess BMI. The urinalysis shows 'glucose trace', which is a potential sign of hyperglycemia. The clinician's plan is blank, so screening and management are not addressed.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Assess for hyperglycemia using the DM screening tool. Check blood glucose given age ≥30 and trace urine glucose.",
+     "citations": [
+      {
+       "page_number": 189,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      },
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "Concurrent Nephrotoxic Drug Use",
+   "message": "The patient reports taking ibuprofen 400mg 2-3 times per week for the past 6 months. NSAIDs like ibuprofen are nephrotoxic, especially with chronic use. This is a compounding risk factor given the patient's pre-existing renal impairment (eGFR 52 mL/min) and TDF use, which also carries renal toxicity risk. The guideline excerpt on TDF toxicity lists 'lower back pain, change in urine volume' as presenting signs, but does not specifically address NSAID co-administration.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Advise to discontinue regular ibuprofen use. Recommend alternative analgesics (e.g., paracetamol) for headache management.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "title": "Concurrent Nephrotoxic Drug Use",
+     "message": "The patient reports taking ibuprofen 400mg 2-3 times per week for the past 6 months. NSAIDs like ibuprofen are nephrotoxic, especially with chronic use. This is a compounding risk factor given the patient's pre-existing renal impairment (eGFR 52 mL/min) and TDF use, which also carries renal toxicity risk. The guideline excerpt on TDF toxicity lists 'lower back pain, change in urine volume' as presenting signs, but does not specifically address NSAID co-administration.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Advise to discontinue regular ibuprofen use. Recommend alternative analgesics (e.g., paracetamol) for headache management.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s15_c4"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c3",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c18",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11"
+  ],
+  "ALERT_004": []
+ },
+ "screening": {
+  "search_questions": [
+   "Is creatinine 1.4 mg/dL a sign of TDF kidney toxicity?",
+   "Does ibuprofen interact with TDF for kidney risk?",
+   "Is eGFR 52 mL/min a reason to change TDF?",
+   "Is proteinuria 1+ a sign of kidney damage?",
+   "Is fatigue a side effect of DTG?",
+   "Is glucose trace in urine a sign of diabetes?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"TDF Contraindicated in Renal Impairment\",\n    \"message\": \"Guidelines state TDF is contraindicated in patients with kidney disease and an eGFR below 60 ml/min. The patient has an eGFR of 52 mL/min/1.73m2, placing them in CKD stage 3a. Creatinine has risen steadily from 0.9 mg/dL in 2020 to 1.4 mg/dL in 2026, indicating a progressive decline in renal function. TDF is a known cause of chronic kidney disease and acute kidney injury. However, the patient's regular use of ibuprofen (an NSAID) is also a significant nephrotoxic risk factor that could be contributing to the renal impairment.\",\n    \"issue_type\": \"medication_safety\",\n    \"severity\": \"critical\",\n    \"recommended_action\": \"Discontinue TDF-containing regimen. Switch to an alternative first-line regimen as per guidelines, such as ABC+3TC+DTG.\",\n    \"citations\": [\n      {\"page_number\": 6, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2\"},\n      {\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Missing Annual Renal Monitoring\",\n    \"message\": \"Guidelines specify that for experienced patients on TDF, serum creatinine and eGFR should be done every 12 months. The patient is on TDF, but the lab trend shows results from 2020-2026, implying monitoring is occurring. However, the clinician's plan is blank, so it is unclear if continued annual monitoring is planned. The current renal impairment makes this monitoring even more critical.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Ensure serum creatinine and eGFR are monitored every 12 months as per protocol, and document this in the plan.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_003\",\n    \"title\": \"Risk Factors for Hyperglycemia with DTG\",\n    \"message\": \"Guidelines recommend screening for hyperglycemia risk factors before initiating or transitioning to DTG. Risk factors include age ≥30 years, family history of DM, hypertension, or BMI ≥25 Kg/m². The patient is 38 years old (≥30). Her BMI is not calculated but her weight is stable at 64kg; height is not provided to assess BMI. The urinalysis shows 'glucose trace', which is a potential sign of hyperglycemia. The clinician's plan is blank, so screening and management are not addressed.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Assess for hyperglycemia using the DM screening tool. Check blood glucose given age ≥30 and trace urine glucose.\",\n    \"citations\": [\n      {\"page_number\": 189, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"},\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_004\",\n    \"title\": \"Concurrent Nephrotoxic Drug Use\",\n    \"message\": \"The patient reports taking ibuprofen 400mg 2-3 times per week for the past 6 months. NSAIDs like ibuprofen are nephrotoxic, especially with chronic use. This is a compounding risk factor given the patient's pre-existing renal impairment (eGFR 52 mL/min) and TDF use, which also carries renal toxicity risk. The guideline excerpt on TDF toxicity lists 'lower back pain, change in urine volume' as presenting signs, but does not specifically address NSAID co-administration.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Advise to discontinue regular ibuprofen use. Recommend alternative analgesics (e.g., paracetamol) for headache management.\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+    "page_number": 6,
+    "quote": "6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS > When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400\nAdults and adolescents eligible for DTG should only be initiated on ABC+3TC+DTG if TDF is contraindicated (Table 74), including the following conditions: * Kidney disease and estimated glomerular filtration rate (GFR) below 60 ml/min. * Adolescents below 30kg of weight. When to use ABC+ 3TC +EFV400 or TAF +3TC+EFV400 Adults and adolescents should only be initiated on ABC+3TC+EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 189,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p36_c2",
+    "page_number": 187,
+    "quote": "and increased gradually. * Lopinavir/r, ATV/r, and DRV/r can be used with close monitoring. * DTG should not be used. Figure 42: Algorithm for Screening, Diagnosis and Management of Diabetes Mellitus Assess for risk factors for DM among patients on ART or before initiating ART using DM Screening tool): flowchart From 'Assess for risk factors...' box, two paths emerge: Path 1: Risk factors are absent Re-assess every six months or when clinically indicated e.g., excessive thirs"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c1",
+    "page_number": 5,
+    "quote": "6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS > When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400\nAdults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p28_c3",
+    "page_number": 179,
+    "quote": "detect changes in renal function. • Routine administration of 40 mEq/day (mixed in 500ml NS over 4 hours) of potassium chloride or 1 tablet of 600mg twice daily while on amphotericin B can decrease the incidence of Amphotericin B-related hypokalemia. • For electrolyte supplementation, two tablets daily of Magnesium Chloride 310 mg or slow Magnesium Chloride 535mg or Magnesium trisilicate 250mg while on amphotericin B • Consider alternate day Amphotericin B if creatinine is >3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s5_c4",
+    "page_number": 4,
+    "quote": "6.5 FIRST-LINE ART REGIMENS FOR PATIENTS INITIATING ART\nc. Better Tolerability DTG shows improved tolerability versus current preferred regimens with substantial reductions in treatment-limiting adverse drug reactions. Specifically, patients can avoid some of the psychiatric adverse events of EFV (ie depression and suicidal tendencies). Overall, in country and WHO evidence supports DTG as a highly tolerated medicine that is less likely to result in treatment discontinuation. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+    "page_number": 38,
+    "quote": "TB Screening > 5.4.7.1 Diabetes Mellitus (DM) > Treatment For DM\n3. Check glucose* * Blood glucose or urine dipstick 4. Decision: High glucose**? **High blood glucose: Fasting>6.95, Non-fasting>8.89 High urine glucose: Any + - If YES, proceed to \"DO NOT INITIATE OR TRANSITION TO DTG\" - If NO, proceed to \"Initiate on DTG, glucose monitoring every 3 months for the 1st year\" **Outcomes:** - **DO NOT INITIATE OR TRANSITION TO DTG** Give ATV/r or maintain on EFV Monitor blood gluc"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Uncertain: The provided guideline excerpts are insufficient to assess for drug toxicity or make a regimen change decision.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Mild fatigue of unclear etiology\",\n      \"action\": \"Uncertain: The guideline excerpts provided do not contain information on evaluating fatigue or drug toxicity.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts are insufficient to link fatigue to ART toxicity or guide evaluation.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not mention fatigue.\"\n      }\n    },\n    {\n      \"problem\": \"Frequent ibuprofen use\",\n      \"action\": \"Uncertain: The guideline excerpts provided do not address co-medication use or potential nephrotoxicity.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts are insufficient to assess risk from ibuprofen use with TDF.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not mention ibuprofen use.\"\n      }\n    },\n    {\n      \"problem\": \"No documented assessment and plan for routine review\",\n      \"action\": \"Complete a standard HIV review including viral load, CD4, renal function, and adherence counseling.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts are insufficient to specify the required components of a routine review.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written'.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Uncertain: The provided guideline excerpts are insufficient to specify a monitoring plan.\",\n  \"patient_counselling\": [\n    \"Uncertain: The provided guideline excerpts are insufficient to specify counseling points.\"\n  ]\n}",
+ "plan_issues": []
+}

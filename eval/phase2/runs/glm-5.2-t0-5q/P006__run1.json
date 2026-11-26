@@ -1,0 +1,365 @@
+{
+ "case_id": "P006",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 22.9,
+ "calls": [
+  {
+   "prompt_tokens": 1420,
+   "completion_tokens": 537,
+   "total_tokens": 1957,
+   "cost": 0.00120589928,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1249,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00120589928,
+    "upstream_inference_prompt_cost": 0.00023242568,
+    "upstream_inference_completions_cost": 0.0009734736
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 727,
+   "completion_tokens": 89,
+   "total_tokens": 816,
+   "cost": 0.0014094,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0014094,
+    "upstream_inference_prompt_cost": 0.0010178,
+    "upstream_inference_completions_cost": 0.0003916
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2908,
+   "completion_tokens": 1162,
+   "total_tokens": 4070,
+   "cost": 0.002609608,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2500,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002609608,
+    "upstream_inference_prompt_cost": 0.0005031344,
+    "upstream_inference_completions_cost": 0.0021064736
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00522490728,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Rising creatinine on TDF warrants monitoring",
+   "message": "Guidelines require serum creatinine and eGFR monitoring for patients initiating TDF, and list chronic kidney disease and Fanconi syndrome as TDF toxicities. Patient's creatinine rose from 0.8 to 1.1 mg/dL and eGFR declined to 78 mL/min/1.73m² after 10 weeks on TDF. This upward creatinine trend warrants attention even though the absolute value remains near-normal. DTG and pregnancy also contribute. Evidence for drug attribution: TDF is nephrotoxic and the rise is temporally associated with initiation. Evidence against: pregnancy itself can affect renal parameters, and eGFR of 78 may reflect normal physiologic adaptation. Urinalysis is normal with no protein or glucose, arguing against significant tubular damage.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Repeat serum creatinine and eGFR at next visit. If creatinine continues rising or eGFR declines further, evaluate for TDF toxicity and consider renal-safe alternatives.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "page_number": 27,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 37,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+       "page_number": 27
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 37
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines require serum creatinine and eGFR monitoring for patients initiating TDF, and list chronic kidney disease and Fanconi syndrome as TDF toxicities. Patient's creatinine rose from 0.8 to 1.1 mg/dL and eGFR declined to 78 mL/min/1.73m² after 10 weeks on TDF. This upward creatinine trend warrants attention even though the absolute value remains near-normal. DTG and pregnancy also contribute. Evidence for drug attribution: TDF is nephrotoxic and the rise is temporally associated with initiation. Evidence against: pregnancy itself can affect renal parameters, and eGFR of 78 may reflect normal physiologic adaptation. Urinalysis is normal with no protein or glucose, arguing against significant tubular damage.",
+     "recommended_action": "Repeat serum creatinine and eGFR at next visit. If creatinine continues rising or eGFR declines further, evaluate for TDF toxicity and consider renal-safe alternatives.",
+     "severity": "moderate",
+     "title": "Rising creatinine on TDF warrants monitoring"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Viral load measured early; repeat at 6 months",
+   "message": "Guidelines state the first viral load for adults should be done 6 months after ART initiation, with a repeat VL >1000 copies/mL suggesting treatment failure. This patient's VL was checked at 10 weeks (89 copies/mL), which is earlier than the recommended 6-month schedule. While the result shows good early response, a VL at 6 months per protocol is still needed to confirm sustained suppression. The current VL of 89 copies/mL is above the 200 copies/mL suppression threshold mentioned in guidelines, indicating low-level viremia that should be monitored.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule repeat viral load at 6 months post-ART initiation per guideline schedule to confirm sustained suppression.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+      "page_number": 12,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "page_number": 50,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+       "page_number": 12
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+       "page_number": 50
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines state the first viral load for adults should be done 6 months after ART initiation, with a repeat VL >1000 copies/mL suggesting treatment failure. This patient's VL was checked at 10 weeks (89 copies/mL), which is earlier than the recommended 6-month schedule. While the result shows good early response, a VL at 6 months per protocol is still needed to confirm sustained suppression. The current VL of 89 copies/mL is above the 200 copies/mL suppression threshold mentioned in guidelines, indicating low-level viremia that should be monitored.",
+     "recommended_action": "Schedule repeat viral load at 6 months post-ART initiation per guideline schedule to confirm sustained suppression.",
+     "severity": "low",
+     "title": "Viral load measured early; repeat at 6 months"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "No glucose screening documented on DTG",
+   "message": "Guidelines require screening for hyperglycaemia risk factors when initiating DTG, with random blood glucose testing if 2 or more risk factors are present. This patient is on DTG and pregnant, but no blood glucose screening or risk factor assessment is documented. Pregnancy itself impairs glucose tolerance, making DTG-associated hyperglycaemia an additional concern. No RBS result appears in today's labs.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Assess hyperglycaemia risk factors and perform random blood glucose if indicated, given DTG use and pregnancy.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "page_number": 38,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+       "page_number": 38
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines require screening for hyperglycaemia risk factors when initiating DTG, with random blood glucose testing if 2 or more risk factors are present. This patient is on DTG and pregnant, but no blood glucose screening or risk factor assessment is documented. Pregnancy itself impairs glucose tolerance, making DTG-associated hyperglycaemia an additional concern. No RBS result appears in today's labs.",
+     "recommended_action": "Assess hyperglycaemia risk factors and perform random blood glucose if indicated, given DTG use and pregnancy.",
+     "severity": "moderate",
+     "title": "No glucose screening documented on DTG"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "HBV screening status not documented",
+   "message": "Guidelines state all PLHIV initiating ART should be routinely screened for HBV using HBsAg. No HBsAg result is documented for this patient, who was diagnosed with HIV 10 weeks ago and started on TDF/3TC/DTG. TDF and 3TC provide dual HBV activity, but knowing HBV co-infection status is important for ongoing monitoring, including liver function tests and abdominal ultrasound as specified in guidelines.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Perform HBsAg test if not already done, to screen for HBV co-infection per guideline recommendations.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p31_c2",
+      "page_number": 31,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p31_c2",
+       "page_number": 31
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines state all PLHIV initiating ART should be routinely screened for HBV using HBsAg. No HBsAg result is documented for this patient, who was diagnosed with HIV 10 weeks ago and started on TDF/3TC/DTG. TDF and 3TC provide dual HBV activity, but knowing HBV co-infection status is important for ongoing monitoring, including liver function tests and abdominal ultrasound as specified in guidelines.",
+     "recommended_action": "Perform HBsAg test if not already done, to screen for HBV co-infection per guideline recommendations.",
+     "severity": "low",
+     "title": "HBV screening status not documented"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_005",
+   "title": "No clinician plan documented for visit",
+   "message": "No clinician assessment or plan was documented for this visit. The patient has several findings requiring attention: rising creatinine on TDF, low-level viremia (89 copies/mL), haemoglobin of 10.8 g/dL suggesting mild anaemia in pregnancy, and no documented glucose or HBV screening. A documented plan is needed to address monitoring gaps and ensure guideline-recommended follow-up labs are ordered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Document assessment and plan addressing renal monitoring, VL scheduling at 6 months, glucose screening, HBV testing, and anaemia evaluation.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "ALERT_005",
+     "citations": [],
+     "issue_type": "plan_review",
+     "message": "No clinician assessment or plan was documented for this visit. The patient has several findings requiring attention: rising creatinine on TDF, low-level viremia (89 copies/mL), haemoglobin of 10.8 g/dL suggesting mild anaemia in pregnancy, and no documented glucose or HBV screening. A documented plan is needed to address monitoring gaps and ensure guideline-recommended follow-up labs are ordered.",
+     "recommended_action": "Document assessment and plan addressing renal monitoring, VL scheduling at 6 months, glucose screening, HBV testing, and anaemia evaluation.",
+     "severity": "moderate",
+     "title": "No clinician plan documented for visit"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p17_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "ALERT_004": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p31_c2"
+  ],
+  "ALERT_005": []
+ },
+ "screening": {
+  "search_questions": [
+   "Does rising creatinine on TDF require regimen change in pregnancy?",
+   "What renal monitoring is recommended for TDF in pregnant patients?",
+   "Is DTG safe and preferred during second trimester pregnancy?",
+   "Does ferrous sulfate interact with DTG absorption?",
+   "What follow-up viral load testing is due after early suppression?",
+   "Does Hb 10.8 require investigation for anaemia in pregnancy?"
+  ],
+  "raw_output": "[\n{\n\"alert_id\": \"ALERT_001\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\",\n\"page_number\": 27\n},\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\",\n\"page_number\": 37\n}\n],\n\"issue_type\": \"toxicity\",\n\"message\": \"Guidelines require serum creatinine and eGFR monitoring for patients initiating TDF, and list chronic kidney disease and Fanconi syndrome as TDF toxicities. Patient's creatinine rose from 0.8 to 1.1 mg/dL and eGFR declined to 78 mL/min/1.73m² after 10 weeks on TDF. This upward creatinine trend warrants attention even though the absolute value remains near-normal. DTG and pregnancy also contribute. Evidence for drug attribution: TDF is nephrotoxic and the rise is temporally associated with initiation. Evidence against: pregnancy itself can affect renal parameters, and eGFR of 78 may reflect normal physiologic adaptation. Urinalysis is normal with no protein or glucose, arguing against significant tubular damage.\",\n\"recommended_action\": \"Repeat serum creatinine and eGFR at next visit. If creatinine continues rising or eGFR declines further, evaluate for TDF toxicity and consider renal-safe alternatives.\",\n\"severity\": \"moderate\",\n\"title\": \"Rising creatinine on TDF warrants monitoring\"\n},\n{\n\"alert_id\": \"ALERT_002\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3\",\n\"page_number\": 12\n},\n{\n\"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\",\n\"page_number\": 50\n}\n],\n\"issue_type\": \"monitoring_gap\",\n\"message\": \"Guidelines state the first viral load for adults should be done 6 months after ART initiation, with a repeat VL >1000 copies/mL suggesting treatment failure. This patient's VL was checked at 10 weeks (89 copies/mL), which is earlier than the recommended 6-month schedule. While the result shows good early response, a VL at 6 months per protocol is still needed to confirm sustained suppression. The current VL of 89 copies/mL is above the 200 copies/mL suppression threshold mentioned in guidelines, indicating low-level viremia that should be monitored.\",\n\"recommended_action\": \"Schedule repeat viral load at 6 months post-ART initiation per guideline schedule to confirm sustained suppression.\",\n\"severity\": \"low\",\n\"title\": \"Viral load measured early; repeat at 6 months\"\n},\n{\n\"alert_id\": \"ALERT_003\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\",\n\"page_number\": 38\n}\n],\n\"issue_type\": \"monitoring_gap\",\n\"message\": \"Guidelines require screening for hyperglycaemia risk factors when initiating DTG, with random blood glucose testing if 2 or more risk factors are present. This patient is on DTG and pregnant, but no blood glucose screening or risk factor assessment is documented. Pregnancy itself impairs glucose tolerance, making DTG-associated hyperglycaemia an additional concern. No RBS result appears in today's labs.\",\n\"recommended_action\": \"Assess hyperglycaemia risk factors and perform random blood glucose if indicated, given DTG use and pregnancy.\",\n\"severity\": \"moderate\",\n\"title\": \"No glucose screening documented on DTG\"\n},\n{\n\"alert_id\": \"ALERT_004\",\n\"citations\": [\n{\n\"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p31_c2\",\n\"page_number\": 31\n}\n],\n\"issue_type\": \"monitoring_gap\",\n\"message\": \"Guidelines state all PLHIV initiating ART should be routinely screened for HBV using HBsAg. No HBsAg result is documented for this patient, who was diagnosed with HIV 10 weeks ago and started on TDF/3TC/DTG. TDF and 3TC provide dual HBV activity, but knowing HBV co-infection status is important for ongoing monitoring, including liver function tests and abdominal ultrasound as specified in guidelines.\",\n\"recommended_action\": \"Perform HBsAg test if not already done, to screen for HBV co-infection per guideline recommendations.\",\n\"severity\": \"low\",\n\"title\": \"HBV screening status not documented\"\n},\n{\n\"alert_id\": \"ALERT_005\",\n\"citations\": [],\n\"issue_type\": \"plan_review\",\n\"message\": \"No clinician assessment or plan was documented for this visit. The patient has several findings requiring attention: rising creatinine on TDF, low-level viremia (89 copies/mL), haemoglobin of 10.8 g/dL suggesting mild anaemia in pregnancy, and no documented glucose or HBV screening. A documented plan is needed to address monitoring gaps and ensure guideline-recommended follow-up labs are ordered.\",\n\"recommended_action\": \"Document assessment and plan addressing renal monitoring, VL scheduling at 6 months, glucose screening, HBV testing, and anaemia evaluation.\",\n\"severity\": \"moderate\",\n\"title\": \"No clinician plan documented for visit\"\n}\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c2",
+    "page_number": 6,
+    "quote": "C+3TC+EFV400: * If TDF is contraindicated and they are ineligible for DTG (Table 78). * If the client requires concurrent TB treatment and doubling the dose of DTG is not an option (Tables 30 and 31). ## 6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART Newly diagnosed HIV-infected pregnant and breastfeeding women will be initiated on Tenofovir tenofovir alefenamide, Lamivudine and Dolutegravir (TDF+ 3TC + DTG or TAF + FTC + DTG). ### 6.8.1 When to use Alternative "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 12,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p31_c2",
+    "page_number": 31,
+    "quote": "bleeding under the skin, jaundice, and mental derangement. Screening for HBV All PLHIV initiating or failing on ART should be routinely screened for HBV infection using Hep B surface Antigen (HBsAg). Tests in persons diagnosed with HBV infection These tests should be done at baseline and at six months A complete blood count. Liver function tests (ALT,AST, albumin and bilirubin levels, and PTT). Abdominal ultrasound scan AFP and HBeAg if available. Treatment of HBV/HIV co-infe"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is asymptomatic with no signs of toxicity on TDF/3TC/DTG, and the regimen is appropriate for pregnancy per Uganda guidelines.\"},\"problems\":[{\"problem\":\"No documented assessment or plan for routine ART follow-up in a pregnant patient\",\"action\":\"Document clinical assessment confirming patient is stable on ART, and outline a follow-up plan including routine pregnancy-related monitoring and ART adherence support.\",\"reason\":\"The patient is 22 weeks pregnant on TDF/3TC/DTG with no complaints, but no clinician assessment or plan was recorded for this visit.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented by the clinician for this visit.\"}},{\"problem\":\"Absence of baseline and follow-up lab results to screen for TDF renal and other ART toxicities\",\"action\":\"Order renal function (creatinine/eGFR), liver function tests, and HIV viral load as part of routine ART monitoring; verify baseline labs were done at initiation.\",\"reason\":\"TDF requires renal monitoring and the patient has no lab results recorded in the system to confirm absence of toxicity.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No orders or lab plan were documented by the clinician for this visit.\"}},{\"problem\":\"DTG screening for contraindications not documented\",\"action\":\"Confirm that DTG screening tool was completed prior to initiation, specifically checking for diabetes and other contraindications, and document results.\",\"reason\":\"Uganda guidelines require use of a DTG screening tool prior to DTG initiation to identify contraindications including known diabetes.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No documentation of DTG screening was found in the patient records.\"}}],\"monitoring_plan\":\"- Renal function (creatinine/eGFR) at next visit and periodically per TDF monitoring requirements\\n- HIV viral load at 6 months post-ART initiation per routine schedule\\n- Liver function tests if clinically indicated\\n- Routine antenatal monitoring per obstetric guidelines\\n- Repeat urine dipstick at each visit to monitor for proteinuria\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily as prescribed; adherence is critical for viral suppression and prevention of mother-to-child transmission.\",\"Report any new symptoms including nausea, vomiting, rash, or changes in urination immediately.\",\"Continue ferrous sulfate and folic acid as prescribed for pregnancy support.\",\"Attend all scheduled antenatal and HIV follow-up appointments for monitoring of both pregnancy and ART.\"]}",
+ "plan_issues": []
+}

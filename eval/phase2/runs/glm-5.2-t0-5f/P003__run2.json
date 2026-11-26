@@ -1,0 +1,373 @@
+{
+ "case_id": "P003",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 52.9,
+ "calls": [
+  {
+   "prompt_tokens": 1424,
+   "completion_tokens": 1000,
+   "total_tokens": 2424,
+   "cost": 0.00308784,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00308784,
+    "upstream_inference_prompt_cost": 0.00066784,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1453,
+   "completion_tokens": 495,
+   "total_tokens": 1948,
+   "cost": 0.0013650029,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 512,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0013650029,
+    "upstream_inference_prompt_cost": 7.30529e-05,
+    "upstream_inference_completions_cost": 0.00129195
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 573,
+   "completion_tokens": 95,
+   "total_tokens": 668,
+   "cost": 0.00055444,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00055444,
+    "upstream_inference_prompt_cost": 0.00032454,
+    "upstream_inference_completions_cost": 0.0002299
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2681,
+   "completion_tokens": 893,
+   "total_tokens": 3574,
+   "cost": 0.00342392,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00342392,
+    "upstream_inference_prompt_cost": 0.00126286,
+    "upstream_inference_completions_cost": 0.00216106
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0084312029,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  },
+  {
+   "alert_id": "EFV_INSOMNIA_VIVID_DREAMS",
+   "title": "EFV neuropsychiatric toxicity: insomnia and vivid dreams",
+   "message": "Guidelines list insomnia as a recognized toxicity of ARVs and provide EFV-specific management: if on EFV 600mg, lower the dose to 400mg; if on EFV 400mg, reassure, and if symptoms persist, substitute EFV with DTG. EFV 400mg has fewer adverse events than 600mg. Patient has been on EFV since February 2024 and presents with poor sleep and vivid dreams for several weeks. EFV is a well-known cause of neuropsychiatric side effects including insomnia and vivid dreams, supporting drug attribution. No alternative causes such as anxiety, depression, or substance use are documented, though these should be excluded. The clinician's plan does not address dose adjustment or substitution.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "If on EFV 600mg, reduce to 400mg. If already on 400mg, reassure; if symptoms persist, substitute EFV with DTG. Exclude other causes of insomnia.",
+    "citations": [
+     {
+      "page_number": 36,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 36,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EFV_INSOMNIA_VIVID_DREAMS",
+     "title": "EFV neuropsychiatric toxicity: insomnia and vivid dreams",
+     "message": "Guidelines list insomnia as a recognized toxicity of ARVs and provide EFV-specific management: if on EFV 600mg, lower the dose to 400mg; if on EFV 400mg, reassure, and if symptoms persist, substitute EFV with DTG. EFV 400mg has fewer adverse events than 600mg. Patient has been on EFV since February 2024 and presents with poor sleep and vivid dreams for several weeks. EFV is a well-known cause of neuropsychiatric side effects including insomnia and vivid dreams, supporting drug attribution. No alternative causes such as anxiety, depression, or substance use are documented, though these should be excluded. The clinician's plan does not address dose adjustment or substitution.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "If on EFV 600mg, reduce to 400mg. If already on 400mg, reassure; if symptoms persist, substitute EFV with DTG. Exclude other causes of insomnia.",
+     "citations": [
+      {
+       "page_number": 36,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2"
+      },
+      {
+       "page_number": 36,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "VL_MONITORING_OVERDUE",
+   "title": "Viral load monitoring overdue",
+   "message": "Guidelines recommend routine viral load monitoring for adults at 6 and 12 months after ART initiation, then every 12 months thereafter. Patient started ART in February 2024; the last viral load was on 2025-08-10 (approximately 12 months after initiation). The next routine viral load is now overdue as of the 2026-01-22 visit, approximately 165 days since the last test. The clinician's plan does not include a viral load order.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order a routine viral load test at this visit, as the annual monitoring interval has elapsed since the last test in August 2025.",
+    "citations": [
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "VL_MONITORING_OVERDUE",
+     "title": "Viral load monitoring overdue",
+     "message": "Guidelines recommend routine viral load monitoring for adults at 6 and 12 months after ART initiation, then every 12 months thereafter. Patient started ART in February 2024; the last viral load was on 2025-08-10 (approximately 12 months after initiation). The next routine viral load is now overdue as of the 2026-01-22 visit, approximately 165 days since the last test. The clinician's plan does not include a viral load order.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order a routine viral load test at this visit, as the annual monitoring interval has elapsed since the last test in August 2025.",
+     "citations": [
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      },
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "LOW_LEVEL_VIREMIA",
+   "title": "Low-level viremia on last viral load",
+   "message": "Guidelines note that viral load above 200 copies/mL is associated with risk of sexual transmission and subsequent virologic non-suppression, and incorporate WHO guidance to monitor low-level viremia. Patient's last viral load was 60 copies/mL, which is below the suppression cutoff of 200 copies/mL but represents detectable low-level viremia. This warrants enhanced monitoring to confirm re-suppression and rule out emerging resistance. No repeat viral load was ordered in the clinician's plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Repeat viral load to confirm re-suppression, given detectable low-level viremia at 60 copies/mL on the last test.",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "LOW_LEVEL_VIREMIA",
+     "title": "Low-level viremia on last viral load",
+     "message": "Guidelines note that viral load above 200 copies/mL is associated with risk of sexual transmission and subsequent virologic non-suppression, and incorporate WHO guidance to monitor low-level viremia. Patient's last viral load was 60 copies/mL, which is below the suppression cutoff of 200 copies/mL but represents detectable low-level viremia. This warrants enhanced monitoring to confirm re-suppression and rule out emerging resistance. No repeat viral load was ordered in the clinician's plan.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Repeat viral load to confirm re-suppression, given detectable low-level viremia at 60 copies/mL on the last test.",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      },
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+  ],
+  "efv_sleep_disturbance": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p51_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p13_c3"
+  ],
+  "EFV_INSOMNIA_VIVID_DREAMS": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+  ],
+  "VL_MONITORING_OVERDUE": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+  ],
+  "LOW_LEVEL_VIREMIA": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Can efavirenz cause insomnia and vivid dreams?",
+   "When should efavirenz be switched for neuropsychiatric side effects?",
+   "What alternative first-line regimen is recommended if efavirenz is not tolerated?",
+   "How often should viral load monitoring be done for stable patients?",
+   "Is a viral load of 60 copies/mL considered treatment failure?",
+   "What baseline labs are needed before switching from efavirenz?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EFV_INSOMNIA_VIVID_DREAMS\",\n    \"title\": \"EFV neuropsychiatric toxicity: insomnia and vivid dreams\",\n    \"message\": \"Guidelines list insomnia as a recognized toxicity of ARVs and provide EFV-specific management: if on EFV 600mg, lower the dose to 400mg; if on EFV 400mg, reassure, and if symptoms persist, substitute EFV with DTG. EFV 400mg has fewer adverse events than 600mg. Patient has been on EFV since February 2024 and presents with poor sleep and vivid dreams for several weeks. EFV is a well-known cause of neuropsychiatric side effects including insomnia and vivid dreams, supporting drug attribution. No alternative causes such as anxiety, depression, or substance use are documented, though these should be excluded. The clinician's plan does not address dose adjustment or substitution.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"If on EFV 600mg, reduce to 400mg. If already on 400mg, reassure; if symptoms persist, substitute EFV with DTG. Exclude other causes of insomnia.\",\n    \"citations\": [\n      {\"page_number\": 36, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2\"},\n      {\"page_number\": 36, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1\"},\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"VL_MONITORING_OVERDUE\",\n    \"title\": \"Viral load monitoring overdue\",\n    \"message\": \"Guidelines recommend routine viral load monitoring for adults at 6 and 12 months after ART initiation, then every 12 months thereafter. Patient started ART in February 2024; the last viral load was on 2025-08-10 (approximately 12 months after initiation). The next routine viral load is now overdue as of the 2026-01-22 visit, approximately 165 days since the last test. The clinician's plan does not include a viral load order.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order a routine viral load test at this visit, as the annual monitoring interval has elapsed since the last test in August 2025.\",\n    \"citations\": [\n      {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"},\n      {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"LOW_LEVEL_VIREMIA\",\n    \"title\": \"Low-level viremia on last viral load\",\n    \"message\": \"Guidelines note that viral load above 200 copies/mL is associated with risk of sexual transmission and subsequent virologic non-suppression, and incorporate WHO guidance to monitor low-level viremia. Patient's last viral load was 60 copies/mL, which is below the suppression cutoff of 200 copies/mL but represents detectable low-level viremia. This warrants enhanced monitoring to confirm re-suppression and rule out emerging resistance. No repeat viral load was ordered in the clinician's plan.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Repeat viral load to confirm re-suppression, given detectable low-level viremia at 60 copies/mL on the last test.\",\n    \"citations\": [\n      {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"},\n      {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+    "page_number": 36,
+    "quote": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p41_c1",
+    "page_number": 41,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 79: Criteria for switching ART due to treatment failure Failure Definition Comments Each criterion below can be used independently to determine treatment failure. You do not need to have both to diagnose treatment failure. It's important to note that the major criteria for switching ART in Uganda is Virologic failure with switch guided by HIV DR testing Virologic failure Two consec"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 36,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 12,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p13_c3",
+    "page_number": 13,
+    "quote": "V/r with EFV for the duration of TB treatment. After TB treatment optimize the regimen if virally suppressed. If not virally suppressed after TB treatment, switch to 2nd line or 3rd line (with HIVDR). If on LPV/r -based regimen* Double both the morning and evening doses of LPV/r. If virally suppressed after TB treatment, return to normal dose of LPV/r (if on 2nd line with previous DTG-based regimen) or optimize to DTG-based regimen if no previous DTG exposure. After TB treatm"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Switch\",\"reason\":\"Patient on EFV 600mg with insomnia and vivid dreams for several weeks; Uganda guidelines state that for patients on EFV 600mg, lower the dose of EFV to 400mg.\"},\"problems\":[{\"problem\":\"EFV-induced neuropsychiatric toxicity (insomnia, vivid dreams)\",\"action\":\"Reduce EFV dose from 600mg to 400mg as per Uganda HIV guidelines; if symptoms persist after dose reduction, consider substituting EFV with an alternative agent.\",\"reason\":\"Patient has poor sleep and vivid dreams on EFV-based regimen started February 2024, and guidelines specify lowering EFV to 400mg for such toxicity.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan only documents the complaints without any intervention or medicine change to address EFV-related toxicity.\"}},{\"problem\":\"Inadequate monitoring for TDF renal toxicity\",\"action\":\"Check serum creatinine and eGFR to screen for TDF-related renal toxicity.\",\"reason\":\"Patient is on TDF and guidelines require serum creatinine and eGFR screening for patients on TDF, but no renal labs are recorded.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention any renal monitoring for this patient on TDF.\"}},{\"problem\":\"Low-level viremia (viral load 60 copies/mL)\",\"action\":\"Repeat viral load in 3 months to assess trend and determine if enhanced adherence support or regimen review is needed.\",\"reason\":\"Latest viral load is 60 copies/mL which is above the undetectable threshold, and no repeat viral load or adherence assessment is documented.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not address the low-level viremia or plan for repeat viral load testing.\"}}],\"monitoring_plan\":\"Repeat viral load in 3 months; check serum creatinine and eGFR at next visit; reassess neuropsychiatric symptoms after EFV dose reduction.\",\"patient_counselling\":[\"Explain that insomnia and vivid dreams are known side effects of EFV and the dose will be reduced to help.\",\"Counsel on importance of adherence despite side effects and that symptoms often improve with dose adjustment.\",\"Advise to report any new or worsening symptoms including suicidal thoughts, rash, or jaundice immediately.\"]}",
+ "plan_issues": []
+}

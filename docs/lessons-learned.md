@@ -272,3 +272,32 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Fix: the results script now prints the count for every problem, the AI's own catches
   without the rule alerts, and the plan cut-offs, so each number in the write-up can be
   checked against generated output.
+
+**28. A folder rule decides what the AI reads.**
+- Example: the app searched every Markdown file in its guideline folder. The South African and
+  WHO guidelines sat there beside the Ugandan ones, so 54% of the passages the AI read for
+  Ugandan patients were South African, and the search database still held 1,323 non-Ugandan
+  pieces in two old collections. Nobody chose that; it followed from "take every file".
+- Caught by: the search check, which lists the guideline each returned passage came from, and
+  the owner asking whether foreign documents were in the database.
+- Fix: Phase 2B. A register of approved guidelines with their country; the app loads only
+  Uganda's, the other files moved out of the folder, the database deleted and rebuilt, and
+  `scripts/check_index_sources.py` fails if any non-Ugandan piece is in it. Standalone questions
+  answered in the top 5 went from 3 of 20 to 13 of 20.
+
+**29. A better search score is not a better app.**
+- Example: the Qwen3 search model found the right guideline passage far more often (questions
+  15/20 against 13/20; answer-key summaries 9/12 against 6/12), yet with it the AI caught fewer
+  problems (74% against 80%) and raised alerts on more healthy patients (1 of 6 left clear
+  against 3 of 6). The AI-written questions (5q) also found more passages with catches unchanged.
+- Caught by: each fix's keep rule had two parts, the search check and then the whole app end to
+  end, written before the run. Judged on the search check alone, Qwen3 would have been kept.
+- Fix: Phase 2B keeps the end-to-end check as the deciding one, and the write-up
+  (`eval/phase2b/README.md`) says so.
+
+**30. A page number has to be the book's page.**
+- Example: citations said "p.22", the 22nd page of our extract file; the rule is on printed page
+  255 of the guideline. A clinician turning to page 22 would find something else.
+- Caught by: the Phase 1 audit (G36), confirmed by matching extract pages to the PDF.
+- Fix: Phase 2B reads each extract page's printed number and refuses a file whose numbers do not
+  run in order; citations now read "Uganda HIV guidelines 2022, p.255".

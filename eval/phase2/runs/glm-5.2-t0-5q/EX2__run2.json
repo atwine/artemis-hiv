@@ -1,0 +1,287 @@
+{
+ "case_id": "EX2",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 18.9,
+ "calls": [
+  {
+   "prompt_tokens": 1680,
+   "completion_tokens": 844,
+   "total_tokens": 2524,
+   "cost": 0.0025464,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0025464,
+    "upstream_inference_prompt_cost": 0.0005208,
+    "upstream_inference_completions_cost": 0.0020256
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 942,
+   "completion_tokens": 94,
+   "total_tokens": 1036,
+   "cost": 0.00165944,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00165944,
+    "upstream_inference_prompt_cost": 0.00124584,
+    "upstream_inference_completions_cost": 0.0004136
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2971,
+   "completion_tokens": 953,
+   "total_tokens": 3924,
+   "cost": 0.0083526,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0083526,
+    "upstream_inference_prompt_cost": 0.0041594,
+    "upstream_inference_completions_cost": 0.0041932
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.01255844,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_TDF_AKI_REVERSIBLE",
+   "title": "AKI likely dehydration-induced; permanent TDF stop may be premature",
+   "message": "Guidelines list TDF as a cause of acute kidney injury, Fanconi syndrome, and chronic kidney disease, and recommend RFT monitoring. The patient's creatinine rose sharply from 0.9 to 2.4 over ~12 months. However, the clinical picture strongly favours pre-renal AKI from severe gastroenteritis: 5 days of vomiting and diarrhoea, two household contacts with the same illness, hypotension (90/60), tachycardia, dry mucous membranes, reduced skin turgor, and a high urea-to-creatinine ratio of 24:1. Urinalysis shows no protein or glucose, arguing against TDF-induced tubular toxicity. Guidelines advise substituting the responsible ARV for severe toxicities. Given the pre-renal picture, TDF may be safely continued after rehydration and renal recovery rather than stopped permanently.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Rehydrate and recheck creatinine in 48–72 hours. If creatinine trends toward baseline, TDF may be safely continued with ongoing renal monitoring rather than permanently discontinued.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 34,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_TDF_AKI_REVERSIBLE",
+     "title": "AKI likely dehydration-induced; permanent TDF stop may be premature",
+     "message": "Guidelines list TDF as a cause of acute kidney injury, Fanconi syndrome, and chronic kidney disease, and recommend RFT monitoring. The patient's creatinine rose sharply from 0.9 to 2.4 over ~12 months. However, the clinical picture strongly favours pre-renal AKI from severe gastroenteritis: 5 days of vomiting and diarrhoea, two household contacts with the same illness, hypotension (90/60), tachycardia, dry mucous membranes, reduced skin turgor, and a high urea-to-creatinine ratio of 24:1. Urinalysis shows no protein or glucose, arguing against TDF-induced tubular toxicity. Guidelines advise substituting the responsible ARV for severe toxicities. Given the pre-renal picture, TDF may be safely continued after rehydration and renal recovery rather than stopped permanently.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Rehydrate and recheck creatinine in 48–72 hours. If creatinine trends toward baseline, TDF may be safely continued with ongoing renal monitoring rather than permanently discontinued.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 34,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_TDF_RENAL_MONITORING_GAP",
+   "title": "TDF renal monitoring overdue — 12-month creatinine gap",
+   "message": "Guidelines require serum creatinine and eGFR monitoring for patients on TDF-containing regimens. The only prior creatinine was 375 days before today's visit (2025-02-14), and no creatinine was recorded at the 2025-08-20 routine visit despite the patient being on TLD for 2 years. This 12-month monitoring gap means early renal decline could have been missed. The current severe AKI (creatinine 2.4) might have been detected earlier with guideline-concordant monitoring. The clinician's plan does not specify a schedule for repeat creatinine after rehydration.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "After IV fluid resuscitation, recheck creatinine and eGFR within 48–72 hours, then establish regular TDF renal monitoring per guidelines.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_TDF_RENAL_MONITORING_GAP",
+     "title": "TDF renal monitoring overdue — 12-month creatinine gap",
+     "message": "Guidelines require serum creatinine and eGFR monitoring for patients on TDF-containing regimens. The only prior creatinine was 375 days before today's visit (2025-02-14), and no creatinine was recorded at the 2025-08-20 routine visit despite the patient being on TLD for 2 years. This 12-month monitoring gap means early renal decline could have been missed. The current severe AKI (creatinine 2.4) might have been detected earlier with guideline-concordant monitoring. The clinician's plan does not specify a schedule for repeat creatinine after rehydration.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "After IV fluid resuscitation, recheck creatinine and eGFR within 48–72 hours, then establish regular TDF renal monitoring per guidelines.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_AKI_SEVERITY_GRADING_SUBSTITUTION",
+   "title": "AKI severity grade and guideline-based TDF substitution pathway",
+   "message": "Guidelines grade renal toxicity by eGFR decline from baseline and recommend substituting the responsible ARV for severe reactions. The creatinine rose from 0.9 to 2.4 mg/dL, representing a substantial eGFR reduction likely meeting Grade 3 or 4 severity. Guidelines state that for severe toxicities, the responsible ARV should be substituted following specific substitution guidance. If the AKI does not improve with rehydration, TDF should be formally substituted rather than simply stopped, ensuring ART continuity with an appropriate alternative backbone.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "high",
+    "recommended_action": "If creatinine does not improve after rehydration, substitute TDF with an alternative NRTI per guideline substitution tables rather than stopping ART entirely.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 34,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 33,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_AKI_SEVERITY_GRADING_SUBSTITUTION",
+     "title": "AKI severity grade and guideline-based TDF substitution pathway",
+     "message": "Guidelines grade renal toxicity by eGFR decline from baseline and recommend substituting the responsible ARV for severe reactions. The creatinine rose from 0.9 to 2.4 mg/dL, representing a substantial eGFR reduction likely meeting Grade 3 or 4 severity. Guidelines state that for severe toxicities, the responsible ARV should be substituted following specific substitution guidance. If the AKI does not improve with rehydration, TDF should be formally substituted rather than simply stopped, ensuring ART continuity with an appropriate alternative backbone.",
+     "issue_type": "guideline_deviation",
+     "severity": "high",
+     "recommended_action": "If creatinine does not improve after rehydration, substitute TDF with an alternative NRTI per guideline substitution tables rather than stopping ART entirely.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+      },
+      {
+       "page_number": 34,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2"
+      },
+      {
+       "page_number": 33,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_TDF_AKI_REVERSIBLE": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2"
+  ],
+  "EX2_TDF_RENAL_MONITORING_GAP": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "EX2_AKI_SEVERITY_GRADING_SUBSTITUTION": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does TDF cause kidney injury and when should it be stopped or substituted?",
+   "What ART regimen should replace TDF in patients with acute kidney injury?",
+   "How often should creatinine be monitored for patients on TDF?",
+   "Is DTG safe to continue in acute kidney injury and does it need dose adjustment?",
+   "What criteria guide restarting TDF after recovery from acute kidney injury?",
+   "What monitoring is needed after switching from TDF to an alternative regimen?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_TDF_AKI_REVERSIBLE\",\n    \"title\": \"AKI likely dehydration-induced; permanent TDF stop may be premature\",\n    \"message\": \"Guidelines list TDF as a cause of acute kidney injury, Fanconi syndrome, and chronic kidney disease, and recommend RFT monitoring. The patient's creatinine rose sharply from 0.9 to 2.4 over ~12 months. However, the clinical picture strongly favours pre-renal AKI from severe gastroenteritis: 5 days of vomiting and diarrhoea, two household contacts with the same illness, hypotension (90/60), tachycardia, dry mucous membranes, reduced skin turgor, and a high urea-to-creatinine ratio of 24:1. Urinalysis shows no protein or glucose, arguing against TDF-induced tubular toxicity. Guidelines advise substituting the responsible ARV for severe toxicities. Given the pre-renal picture, TDF may be safely continued after rehydration and renal recovery rather than stopped permanently.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Rehydrate and recheck creatinine in 48–72 hours. If creatinine trends toward baseline, TDF may be safely continued with ongoing renal monitoring rather than permanently discontinued.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 34, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_TDF_RENAL_MONITORING_GAP\",\n    \"title\": \"TDF renal monitoring overdue — 12-month creatinine gap\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring for patients on TDF-containing regimens. The only prior creatinine was 375 days before today's visit (2025-02-14), and no creatinine was recorded at the 2025-08-20 routine visit despite the patient being on TLD for 2 years. This 12-month monitoring gap means early renal decline could have been missed. The current severe AKI (creatinine 2.4) might have been detected earlier with guideline-concordant monitoring. The clinician's plan does not specify a schedule for repeat creatinine after rehydration.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"After IV fluid resuscitation, recheck creatinine and eGFR within 48–72 hours, then establish regular TDF renal monitoring per guidelines.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_AKI_SEVERITY_GRADING_SUBSTITUTION\",\n    \"title\": \"AKI severity grade and guideline-based TDF substitution pathway\",\n    \"message\": \"Guidelines grade renal toxicity by eGFR decline from baseline and recommend substituting the responsible ARV for severe reactions. The creatinine rose from 0.9 to 2.4 mg/dL, representing a substantial eGFR reduction likely meeting Grade 3 or 4 severity. Guidelines state that for severe toxicities, the responsible ARV should be substituted following specific substitution guidance. If the AKI does not improve with rehydration, TDF should be formally substituted rather than simply stopped, ensuring ART continuity with an appropriate alternative backbone.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"If creatinine does not improve after rehydration, substitute TDF with an alternative NRTI per guideline substitution tables rather than stopping ART entirely.\",\n    \"citations\": [\n      {\"page_number\": 32, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1\"},\n      {\"page_number\": 34, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2\"},\n      {\"page_number\": 33, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2",
+    "page_number": 34,
+    "quote": "S tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices. * Side effects and toxicities of ARVs and TB medicines should be managed according to severity. For moderate and severe reactions, the responsible ARV or TB medicine should be substituted following the specific substitution guidance. For life-threatening reactions, ART and/or TB"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2",
+    "page_number": 33,
+    "quote": "T regimen should be switched to 2nd line. See Table 78 for side effects of commonly used ARVs and recommended substitutions. **HEPATOTOXICITY FOLLOWING CO-ADMINISTRATION OF ART AND TPT /TB MEDICINES** Co-administration of ART and TPT/TB medicines increases the likelihood of toxicities especially hepatotoxicity. Health workers should therefore take care to adequately screen patients for TPT eligibility prior to initiation of TPT. Once toxicity occurs, it should be managed appr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+    "page_number": 4,
+    "quote": "00 or an ATV/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia and a high baseline RBS or FBS should not be initiated/transitioned to DTG. Give an EFV400 or ATZ/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia with normal baseline RBS or FBS: Initiate or transition to DTG and monitor RBS or FBS every 3 months for 6 months. 237"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Hold temporarily\",\n    \"reason\": \"Patient has severe dehydration with acute kidney injury (creatinine rose from 0.9 to 2.4) on TDF-containing regimen; TDF is nephrotoxic and should be held temporarily while the AKI is managed and renal function is re-evaluated.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Acute kidney injury (creatinine 2.4, up from 0.9) in context of severe gastroenteritis and dehydration on TDF-based ART\",\n      \"action\": \"Hold TDF temporarily; aggressively rehydrate with IV fluids; recheck creatinine and eGFR daily until renal function recovers; resume TDF only if creatinine returns to baseline, otherwise switch to ABC-based regimen.\",\n      \"reason\": \"TDF is nephrotoxic and the guideline requires serum creatinine and eGFR monitoring; holding TDF during AKI from a likely reversible cause (dehydration) avoids worsening renal injury while allowing recovery assessment.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Gap\",\n        \"explanation\": \"Clinician plans IV fluids and is considering stopping TDF permanently, but does not clearly distinguish temporary hold from permanent switch or specify renal monitoring triggers for resumption.\"\n      }\n    },\n    {\n      \"problem\": \"Severe gastroenteritis with dehydration (BP 90/60, pulse 112, dry mucous membranes, reduced skin turgor, lethargy)\",\n      \"action\": \"Continue IV fluid resuscitation with isotonic crystalloids; monitor urine output, vital signs, and electrolytes; send stool microscopy and culture; give empiric antibiotics per local gastroenteritis protocols.\",\n      \"reason\": \"Two household contacts have similar illness suggesting infectious gastroenteritis; aggressive rehydration is essential to reverse prerenal AKI and prevent progression to irreversible renal injury.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"Clinician's plan for IV fluids, empiric antibiotics, and stool microscopy appropriately addresses the acute gastroenteritis.\"\n      }\n    },\n    {\n      \"problem\": \"Permanent discontinuation of TDF being considered without confirming irreversibility of renal injury\",\n      \"action\": \"Do not permanently stop TDF yet; hold temporarily and reassess renal function after rehydration; if creatinine does not recover to near baseline after volume restoration, then evaluate for permanent switch to ABC or AZT-based regimen.\",\n      \"reason\": \"The AKI is likely prerenal from severe dehydration and may be reversible with fluid resuscitation; permanent discontinuation is premature before renal recovery is assessed.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Disagree\",\n        \"explanation\": \"Clinician is considering permanent TDF discontinuation before confirming whether the AKI is reversible with treatment of the acute illness.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": [\n    \"Recheck serum creatinine and eGFR daily until returning to near baseline (0.9 mg/dL).\",\n    \"Monitor urine output, BP, and hydration status every 4–6 hours during resuscitation.\",\n    \"Check serum electrolytes (sodium, potassium, bicarbonate) for derangements from diarrhoea and AKI.\",\n    \"Repeat viral load in 3 months if regimen is modified or if interruption exceeds 2 weeks.\"\n  ],\n  \"patient_counselling\": [\n    \"Explain that TDF is being held temporarily because the kidneys are stressed by the severe dehydration, not necessarily permanently stopped.\",\n    \"Emphasize the importance of completing IV fluids and follow-up blood tests to determine if TDF can be safely restarted.\",\n    \"Advise on oral rehydration and hygiene measures at home given that family members also have similar illness.\",\n    \"Counsel that if TDF cannot be restarted, an alternative ARV will be provided to maintain viral suppression.\"\n  ]\n}",
+ "plan_issues": []
+}

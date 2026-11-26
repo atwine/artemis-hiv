@@ -1,0 +1,203 @@
+{
+ "case_id": "P004",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 16.1,
+ "calls": [
+  {
+   "prompt_tokens": 1533,
+   "completion_tokens": 635,
+   "total_tokens": 2168,
+   "cost": 0.0026173908,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1024,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0026173908,
+    "upstream_inference_prompt_cost": 0.0006895308,
+    "upstream_inference_completions_cost": 0.00192786
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 722,
+   "completion_tokens": 90,
+   "total_tokens": 812,
+   "cost": 0.00027477928,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 649,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00027477928,
+    "upstream_inference_prompt_cost": 0.00011162728,
+    "upstream_inference_completions_cost": 0.000163152
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2971,
+   "completion_tokens": 308,
+   "total_tokens": 3279,
+   "cost": 0.0032115636,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0032115636,
+    "upstream_inference_prompt_cost": 0.0022764756,
+    "upstream_inference_completions_cost": 0.000935088
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00610373368,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "TDF_ABDOMINAL_PAIN_LFT_RFT",
+   "title": "Abdominal pain: evaluate for TDF toxicity",
+   "message": "Guidelines list abdominal pain or discomfort as a presenting symptom of TDF-associated lactic acidosis or severe hepatomegaly with steatosis, and recommend performing LFTs and RFTs if these symptoms appear. The patient reports abdominal pain today while on TDF-containing TLD since March 2023. Evidence supporting drug attribution includes the direct match between the patient's symptom and the guideline-listed toxicity. Evidence against drug attribution includes the patient's preserved appetite and absence of fever, which makes an alternative gastrointestinal cause plausible. The clinician's plan documents the symptom but does not include any laboratory workup.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Perform LFTs and RFTs as recommended by guidelines for suspected TDF toxicity presenting with abdominal pain; evaluate for alternative GI causes.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 37,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+      "page_number": 37,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_ABDOMINAL_PAIN_LFT_RFT",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 37
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+       "page_number": 37
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines list abdominal pain or discomfort as a presenting symptom of TDF-associated lactic acidosis or severe hepatomegaly with steatosis, and recommend performing LFTs and RFTs if these symptoms appear. The patient reports abdominal pain today while on TDF-containing TLD since March 2023. Evidence supporting drug attribution includes the direct match between the patient's symptom and the guideline-listed toxicity. Evidence against drug attribution includes the patient's preserved appetite and absence of fever, which makes an alternative gastrointestinal cause plausible. The clinician's plan documents the symptom but does not include any laboratory workup.",
+     "recommended_action": "Perform LFTs and RFTs as recommended by guidelines for suspected TDF toxicity presenting with abdominal pain; evaluate for alternative GI causes.",
+     "severity": "moderate",
+     "title": "Abdominal pain: evaluate for TDF toxicity"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "TDF_ABDOMINAL_PAIN_LFT_RFT": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Can TDF cause abdominal pain as a side effect?",
+   "Does DTG cause abdominal pain or gastrointestinal side effects?",
+   "What monitoring labs are due for patients on TDF and how often?",
+   "Is a viral load of 25 copies/mL considered low-level viremia requiring action?",
+   "How often should viral load be monitored in stable patients on DTG?",
+   "What workup does Uganda recommend for abdominal pain in stable ART patients?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"TDF_ABDOMINAL_PAIN_LFT_RFT\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\",\n        \"page_number\": 37\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2\",\n        \"page_number\": 37\n      }\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines list abdominal pain or discomfort as a presenting symptom of TDF-associated lactic acidosis or severe hepatomegaly with steatosis, and recommend performing LFTs and RFTs if these symptoms appear. The patient reports abdominal pain today while on TDF-containing TLD since March 2023. Evidence supporting drug attribution includes the direct match between the patient's symptom and the guideline-listed toxicity. Evidence against drug attribution includes the patient's preserved appetite and absence of fever, which makes an alternative gastrointestinal cause plausible. The clinician's plan documents the symptom but does not include any laboratory workup.\",\n    \"recommended_action\": \"Perform LFTs and RFTs as recommended by guidelines for suspected TDF toxicity presenting with abdominal pain; evaluate for alternative GI causes.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Abdominal pain: evaluate for TDF toxicity\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 36,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p16_c1",
+    "page_number": 16,
+    "quote": "Table 77: Follow-up schedule for PLHIV and monitoring components Time Before ART During ART (light gray rectangle) DSD from 6 months After 12 months on ART Baseline 1 month 2 months 3 months 6 months 9 months 12 months 3 monthly 6 monthly 12 monthly Clinical assessment Comprehensive clinical assessment (Table57) X X X X X X x X X X Prepare for ART (refer to Section 7.5) X Assess readiness for ART (refer to Section 6.5) X Provide CTX X X X X X X x x** x** X** Provide FP if req"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p40_c1",
+    "page_number": 40,
+    "quote": "MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsadesde pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdominal pain that feels worse after eating, fever, rapid pulse, nausea and vomiting. Refer to Blood Lipid levels in Table 66."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+    "page_number": 12,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 virological monitoring provides an early and more accurate indication of treatment failure and indicates the need to switch from first line to second-line drugs, and from second- line to third-line drugs, toward reducing accumulation of drug-resistance mutations and improved clinical outcomes. Dolutegravir (DTG)-based regimens (e.g., tenofovir/lamivudine/dolutegravir [TLD]) have increase"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient has viral suppression (VL 25 copies/mL) and normal creatinine (82 umol/L) on TLD since 2023, with abdominal pain that is not yet attributed to drug toxicity; guidelines emphasize pharmacovigilance but do not mandate regimen switch without confirmed toxicity.\"}, \"problems\": [{\"problem\": \"Abdominal pain on TLD regimen — possible drug toxicity vs unrelated cause\", \"action\": \"Evaluate abdominal pain with focused history (location, timing, relation to meals, severity) and physical abdominal exam; order CBC, LFTs, lipase, and repeat creatinine to screen for TDF/3TC/DTG-related toxicity.\", \"reason\": \"Patient reports abdominal pain on TDF/3TC/DTG with no fever and no workup ordered, and guidelines emphasize pharmacovigilance to detect and manage ART-related adverse drug reactions.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The clinician documented abdominal pain but did not order any diagnostic tests or specify a management plan to investigate potential drug toxicity or other causes.\"}}, {\"problem\": \"No orders or medicine changes documented today despite active symptom\", \"action\": \"Document a structured assessment and plan addressing the abdominal pain, including differential diagnosis, ordered investigations, and symptomatic management or referral as indicated.\", \"reason\": \"The clinician's note only restates the complaint without a plan, which does not meet pharmacovigilance expectations for evaluating potential adverse drug reactions per Uganda guidelines.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No orders, medicine changes, or investigative plan were documented for the patient's abdominal pain.\"}}, {\"problem\": \"Renal function monitoring on TDF — last creatinine 78 days ago\", \"action\": \"Repeat serum creatinine and urinalysis (for proteinuria/glucosuria) as part of routine TDF toxicity monitoring at today's visit.\", \"reason\": \"Patient is on TDF which carries risk of nephrotoxicity, and the last creatinine was nearly 3 months ago with new abdominal symptoms that could indicate renal-related toxicity.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician did not order repeat renal function tests despite the patient being on TDF and presenting with new abdominal pain.\"}}], \"monitoring_plan\": \"Repeat creatinine and urinalysis today; LFTs and lipase to evaluate abdominal pain; repeat viral load per routine schedule (next due ~May 2026); return for review of labs within 1-2 weeks or sooner if pain worsens.\", \"patient_counselling\": [\"Report immediately if abdominal pain worsens, persists beyond a few days, or is accompanied by vomiting, jaundice, or reduced urine output.\", \"Continue taking TLD daily as prescribed unless advised otherwise by the clinician.\", \"Keep the follow-up appointment to review lab results and symptom progression.\"]}",
+ "plan_issues": []
+}

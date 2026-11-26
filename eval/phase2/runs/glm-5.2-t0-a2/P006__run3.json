@@ -1,0 +1,331 @@
+{
+ "case_id": "P006",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 14.1,
+ "calls": [
+  {
+   "prompt_tokens": 1420,
+   "completion_tokens": 595,
+   "total_tokens": 2015,
+   "cost": 0.00300088,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1408,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00300088,
+    "upstream_inference_prompt_cost": 0.00038288,
+    "upstream_inference_completions_cost": 0.002618
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 727,
+   "completion_tokens": 121,
+   "total_tokens": 848,
+   "cost": 0.00071284,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00071284,
+    "upstream_inference_prompt_cost": 0.00042002,
+    "upstream_inference_completions_cost": 0.00029282
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3919,
+   "completion_tokens": 1090,
+   "total_tokens": 5009,
+   "cost": 0.007438601,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.007438601,
+    "upstream_inference_prompt_cost": 2.6601e-05,
+    "upstream_inference_completions_cost": 0.007412
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.011152321,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P006_TDF_CREATININE_RISE",
+   "title": "TDF: creatinine rising, eGFR declining",
+   "message": "Guidelines require serum creatinine and eGFR monitoring for patients initiating TDF. Patient's creatinine rose from 0.8 to 1.1 mg/dL (38% increase) within 10 weeks of starting TDF, and eGFR is 78 mL/min/1.73m². TDF is a known cause of chronic kidney disease, acute kidney injury, and Fanconi syndrome. The guideline threshold for TDF-related renal concern is GFR < 60 mL/min; this patient's eGFR remains above that cutoff. However, the upward trend over a short period warrants close surveillance. Pregnancy itself increases renal blood flow, which normally lowers creatinine; a rising creatinine in pregnancy is more concerning. Non-drug causes such as dehydration or pre-eclampsia should be excluded, though BP is normal and urine dipstick is negative for protein.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Continue TDF with close renal monitoring. Repeat creatinine and eGFR at next visit. If eGFR falls below 60 or creatinine continues rising, substitute TDF with ABC per guidelines.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "page_number": 27,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 37,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_TDF_CREATININE_RISE",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+       "page_number": 27
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 37
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines require serum creatinine and eGFR monitoring for patients initiating TDF. Patient's creatinine rose from 0.8 to 1.1 mg/dL (38% increase) within 10 weeks of starting TDF, and eGFR is 78 mL/min/1.73m². TDF is a known cause of chronic kidney disease, acute kidney injury, and Fanconi syndrome. The guideline threshold for TDF-related renal concern is GFR < 60 mL/min; this patient's eGFR remains above that cutoff. However, the upward trend over a short period warrants close surveillance. Pregnancy itself increases renal blood flow, which normally lowers creatinine; a rising creatinine in pregnancy is more concerning. Non-drug causes such as dehydration or pre-eclampsia should be excluded, though BP is normal and urine dipstick is negative for protein.",
+     "recommended_action": "Continue TDF with close renal monitoring. Repeat creatinine and eGFR at next visit. If eGFR falls below 60 or creatinine continues rising, substitute TDF with ABC per guidelines.",
+     "severity": "moderate",
+     "title": "TDF: creatinine rising, eGFR declining"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_PREGNANCY_VL_MONITORING",
+   "title": "Schedule 6-month viral load per guidelines",
+   "message": "Guidelines state treatment should be monitored by measuring viral load 6 months after ART initiation and every 6–12 months or when clinically indicated. Patient initiated ART 10 weeks ago, so the 6-month VL is not yet due. Current VL of 89 copies/mL at 10 weeks demonstrates excellent early response. No monitoring gap exists at this time, but the 6-month VL should be scheduled at approximately 28 weeks gestation.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule viral load testing at 6 months post-ART initiation (around 28 weeks gestation) per guideline monitoring schedule.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "page_number": 50,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_PREGNANCY_VL_MONITORING",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+       "page_number": 50
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines state treatment should be monitored by measuring viral load 6 months after ART initiation and every 6–12 months or when clinically indicated. Patient initiated ART 10 weeks ago, so the 6-month VL is not yet due. Current VL of 89 copies/mL at 10 weeks demonstrates excellent early response. No monitoring gap exists at this time, but the 6-month VL should be scheduled at approximately 28 weeks gestation.",
+     "recommended_action": "Schedule viral load testing at 6 months post-ART initiation (around 28 weeks gestation) per guideline monitoring schedule.",
+     "severity": "low",
+     "title": "Schedule 6-month viral load per guidelines"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_ANEMO_PREGNANCY",
+   "title": "Mild anemia in pregnancy on ART",
+   "message": "Guidelines list severe anemia as a toxicity associated with AZT, with Hb < 8 g/dL triggering substitution. Patient's Hb is 10.8 g/dL, which is above the 8 g/dL threshold but indicates mild anemia in pregnancy. She is not on AZT; her regimen (TDF/3TC/DTG) is not a common cause of anemia. Physiologic hemodilution of pregnancy and iron deficiency are more likely contributors. She is already on ferrous sulfate and folic acid. Continued monitoring of Hb through pregnancy is warranted to ensure it does not decline further.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "low",
+    "recommended_action": "Continue iron and folate supplementation. Monitor Hb at routine antenatal visits. No ART change indicated at this level.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+      "page_number": 37,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_ANEMO_PREGNANCY",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+       "page_number": 37
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines list severe anemia as a toxicity associated with AZT, with Hb < 8 g/dL triggering substitution. Patient's Hb is 10.8 g/dL, which is above the 8 g/dL threshold but indicates mild anemia in pregnancy. She is not on AZT; her regimen (TDF/3TC/DTG) is not a common cause of anemia. Physiologic hemodilution of pregnancy and iron deficiency are more likely contributors. She is already on ferrous sulfate and folic acid. Continued monitoring of Hb through pregnancy is warranted to ensure it does not decline further.",
+     "recommended_action": "Continue iron and folate supplementation. Monitor Hb at routine antenatal visits. No ART change indicated at this level.",
+     "severity": "low",
+     "title": "Mild anemia in pregnancy on ART"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P006_CPT_PREGNANCY",
+   "title": "Cotrimoxazole preventive therapy indicated in pregnancy",
+   "message": "Guidelines prioritize cotrimoxazole preventive therapy for pregnant and breastfeeding women living with HIV. Patient is 22 weeks pregnant and newly initiated on ART but is not currently prescribed cotrimoxazole. CPT reduces risk of malaria, bacterial pneumonia, diarrheal disease, and mortality. Additional intermittent preventive treatment for malaria using SP is not required for pregnant women already on CPT.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_add",
+    "severity": "moderate",
+    "recommended_action": "Initiate cotrimoxazole preventive therapy per guidelines for pregnant women living with HIV, if not contraindicated.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p21_c2",
+      "page_number": 21,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P006_CPT_PREGNANCY",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p21_c2",
+       "page_number": 21
+      }
+     ],
+     "issue_type": "plan_add",
+     "message": "Guidelines prioritize cotrimoxazole preventive therapy for pregnant and breastfeeding women living with HIV. Patient is 22 weeks pregnant and newly initiated on ART but is not currently prescribed cotrimoxazole. CPT reduces risk of malaria, bacterial pneumonia, diarrheal disease, and mortality. Additional intermittent preventive treatment for malaria using SP is not required for pregnant women already on CPT.",
+     "recommended_action": "Initiate cotrimoxazole preventive therapy per guidelines for pregnant women living with HIV, if not contraindicated.",
+     "severity": "moderate",
+     "title": "Cotrimoxazole preventive therapy indicated in pregnancy"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p17_c2"
+  ],
+  "P006_TDF_CREATININE_RISE": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "P006_PREGNANCY_VL_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+  ],
+  "P006_ANEMO_PREGNANCY": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "P006_CPT_PREGNANCY": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p21_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does TDF require renal monitoring in pregnancy given creatinine rose from 0.8 to 1.1?",
+   "Is DTG safe and recommended during pregnancy at 22 weeks gestation?",
+   "Does DTG interact with ferrous sulfate or folic acid taken in pregnancy?",
+   "What monitoring labs are due 10 weeks after initiating TDF/3TC/DTG?",
+   "Is Hb of 10.8 g/dL during pregnancy on TDF/3TC/DTG concerning for anemia?",
+   "Does TDF toxicity cause proteinuria or phosphate changes needing monitoring?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P006_TDF_CREATININE_RISE\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\",\n        \"page_number\": 27\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\",\n        \"page_number\": 37\n      }\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring for patients initiating TDF. Patient's creatinine rose from 0.8 to 1.1 mg/dL (38% increase) within 10 weeks of starting TDF, and eGFR is 78 mL/min/1.73m². TDF is a known cause of chronic kidney disease, acute kidney injury, and Fanconi syndrome. The guideline threshold for TDF-related renal concern is GFR < 60 mL/min; this patient's eGFR remains above that cutoff. However, the upward trend over a short period warrants close surveillance. Pregnancy itself increases renal blood flow, which normally lowers creatinine; a rising creatinine in pregnancy is more concerning. Non-drug causes such as dehydration or pre-eclampsia should be excluded, though BP is normal and urine dipstick is negative for protein.\",\n    \"recommended_action\": \"Continue TDF with close renal monitoring. Repeat creatinine and eGFR at next visit. If eGFR falls below 60 or creatinine continues rising, substitute TDF with ABC per guidelines.\",\n    \"severity\": \"moderate\",\n    \"title\": \"TDF: creatinine rising, eGFR declining\"\n  },\n  {\n    \"alert_id\": \"P006_PREGNANCY_VL_MONITORING\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\",\n        \"page_number\": 50\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines state treatment should be monitored by measuring viral load 6 months after ART initiation and every 6–12 months or when clinically indicated. Patient initiated ART 10 weeks ago, so the 6-month VL is not yet due. Current VL of 89 copies/mL at 10 weeks demonstrates excellent early response. No monitoring gap exists at this time, but the 6-month VL should be scheduled at approximately 28 weeks gestation.\",\n    \"recommended_action\": \"Schedule viral load testing at 6 months post-ART initiation (around 28 weeks gestation) per guideline monitoring schedule.\",\n    \"severity\": \"low\",\n    \"title\": \"Schedule 6-month viral load per guidelines\"\n  },\n  {\n    \"alert_id\": \"P006_ANEMO_PREGNANCY\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2\",\n        \"page_number\": 37\n      }\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines list severe anemia as a toxicity associated with AZT, with Hb < 8 g/dL triggering substitution. Patient's Hb is 10.8 g/dL, which is above the 8 g/dL threshold but indicates mild anemia in pregnancy. She is not on AZT; her regimen (TDF/3TC/DTG) is not a common cause of anemia. Physiologic hemodilution of pregnancy and iron deficiency are more likely contributors. She is already on ferrous sulfate and folic acid. Continued monitoring of Hb through pregnancy is warranted to ensure it does not decline further.\",\n    \"recommended_action\": \"Continue iron and folate supplementation. Monitor Hb at routine antenatal visits. No ART change indicated at this level.\",\n    \"severity\": \"low\",\n    \"title\": \"Mild anemia in pregnancy on ART\"\n  },\n  {\n    \"alert_id\": \"P006_CPT_PREGNANCY\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p21_c2\",\n        \"page_number\": 21\n      }\n    ],\n    \"issue_type\": \"plan_add\",\n    \"message\": \"Guidelines prioritize cotrimoxazole preventive therapy for pregnant and breastfeeding women living with HIV. Patient is 22 weeks pregnant and newly initiated on ART but is not currently prescribed cotrimoxazole. CPT reduces risk of malaria, bacterial pneumonia, diarrheal disease, and mortality. Additional intermittent preventive treatment for malaria using SP is not required for pregnant women already on CPT.\",\n    \"recommended_action\": \"Initiate cotrimoxazole preventive therapy per guidelines for pregnant women living with HIV, if not contraindicated.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Cotrimoxazole preventive therapy indicated in pregnancy\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months 260"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out adherence challenges. - The preferred second-line ART for adults, adolescents and children are either DTG-based or PI-based, depending on the failing first-line regimens. - Second and third line regimens shall be guided by genotype (resistance) testing. 283"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "Nevirapine and some protease inhibitors. Monitor closely for toxicity. * TB medicines and Fluconazole: Rifampicin increases the metabolism of Fluconazole, thus increase the dose of Fluconazole by 50%. * Pregnant and breastfeeding women: Whereas there is no data against the use of Amphotericin B in pregnancy, it is not encouraged. There have been numerous reports of multiple congenital abnormalities associated with long-term use of high dose Fluconazole in the first trimester of pregnant women. The recommendation is to treat Cryptoccoccal Meningitis in pregnancy with Amphotericin B. Avoid Fluconazole during the first trimester and preferably start Fluconazole after delivery. Flucytosine is teratogenic in animals and should only be used when no alternative is available. In liver disease, use with caution. Figure 39: ART timing with CCM transcription of the content : flowchart | Patient Category | Action 1 | Action 2 | Action 3 | | :---------------------------------------------------------------------------------------------------------- | :----------------------- | :---------------- | :------------------------------------------- |"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Initiate or transition to DTG\" 3. Check glucose* * Blood glucose or urine dipstick 4. Decision: High glucose**? **High blood glucose: Fasting>6.95, Non-fasting>8.89 High urine glucose: Any + - If YES, proceed to \"DO NOT INITIATE OR TRANSITION TO DTG\" - If NO, proceed to \"Initiate on DTG, glucose monitoring every 3 months for the 1st year\" **Outcomes:** - **DO NOT INITIATE OR TRANSITION TO DTG** Give ATV/r or maintain on EFV Monitor blood glucose per diabetes management guidelines. - **Initiate on DTG, glucose monitoring every 3 months for the 1st year** see monitoring algorithm for PLHIV transitioned to DTG - **Initiate or transition to DTG** **Screening and management of complications of Diabetes Mellitus**"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes and/or GFR is < 60mls/min) then substitute with ABC If ABC is contraindicated: substitute with AZT ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "- If the neonate is well, initiate TPT. - Do not give BCG until 2 weeks after completing TPT (and stable on ART for children who are HIV positive). - Investigate for TB if neonate has symptoms for TB. - Evaluate and treat mother according to the guideline. : flowchart COTRIMOXAZOLE PREVENTIVE THERAPY Cotrimoxazole preventive therapy (CPT) can reduce the risk of malaria, diarrhoea and pneumonia caused by bacterial infections; hospitalization; and mortality. However, the benefits of CPT reduce markedly in clients who are stable on ART. For this reason, only certain categories of PLHIV listed below should be maintained on CPT. **The following groups have been prioritized for cotrimoxazole preventive therapy:** * All PLHIV newly initiating on ART. * Those having a current WHO stage 3 or 4 event or other symptoms of advanced disease. * Pregnant and breast-feeding women. Note: Additional intermittent preventive treatment for malaria using Sulfadoxine-Pyrimethamine (SP) is not required for pregnant women on CPT. 172"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p2_c2",
+    "page_number": 2,
+    "quote": "-----------------------------------------------| | |Start treatment according to TB treatment guidelines : flowchart|Is TB : flowchart (Yes) --> Start first line TB treatment (2RHZE/4RH)⁴ : flowchart| |--------------------------------------------------| | (No) --> 1. Treat for other likely diagnoses according to clinical evaluation 2. If no clinical response, re-assess for TB after 2 weeks Refer to higher Centers for TB treatment if it is unavailable, or if MDRTB is diagnosed or in case of toxicity while on TB treatment 1. Positive ICF screen is presence of current cough, fever >2-week, noticeable weight loss, excessive night sweats, **if child**-poor weight gain and history of contact with a PTB patient 2. **Danger signs for adults** refer to signs of a seriously sick person and they include respiratory rate > 30/min, temperature >39 °C, heart rate 120/min and unable to walk unaided. **Danger signs for children** include lethargy, convulsions, inability to feed, repeated vomiting, temperature above 390c and tachycardia/ tachypnoea 3. Appropriate sample types include; sputum, CSF, Gastric aspirate, urine, stool 153"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia associated with DTG has been reported among clients newly initiated on ART as well as among those already on ART and transitioned to DTG-based regimens, the hyperglycemia appears to occur more commonly among the latter group. Adults being initiated on DTG should be screened for risk factors for hyperglycemia: * Age ≥ 40 years * BMI≥ 24 kg/m2 * History of hypertension * Known diabetics should not be initiated or transitioned to DTG. Give an EFV400 or an ATV/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia and a high baseline RBS or FBS should not be initiated/transitioned to DTG. Give an EFV400 or ATZ/r-based regimen."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort decrease in appetite. Persistent vomiting resulting in severe dehydration Do Hb (if < 8mg/dl): Substitute with TDF If TDF is contraindicated: substitute with ABC NVP Acute symptomatic hepatitis Hypersensitivity reaction, Stevens-Johnson Syndrome (severe or life-threatening rash, mucosal involvement) Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Severe or life-threatening rash with mucosal involvement (ulcers in the mouth or eyes) Substitute or switch to appropriate regimen NOTE: NVP is not recommended in ART regimens. NVP should be substituted even in absence of ARs/ toxicity OR regimen switched if client is failing"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is clinically well with no symptoms or examination findings suggestive of drug toxicity from TDF/3TC/DTG, and Uganda HIV guidelines support DTG use in pregnancy.\"},\"problems\":[{\"problem\":\"No documented assessment or management plan for routine ART follow-up in a pregnant patient\",\"action\":\"Document a complete assessment and plan including adherence check, ART tolerance review, and confirmation that current TDF/3TC/DTG regimen is appropriate for pregnancy\",\"reason\":\"Uganda HIV guidelines require structured clinical evaluation at follow-up visits, and this pregnant patient on ART for 10 weeks has no documented plan despite being at a routine 3-month follow-up.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this routine follow-up visit.\"}},{\"problem\":\"Absence of baseline and follow-up lab results to screen for TDF and ART toxicity\",\"action\":\"Order renal function (creatinine/eGFR), liver function tests, and HIV viral load as part of routine monitoring on TDF-containing regimen\",\"reason\":\"TDF is associated with nephrotoxicity and Uganda HIV guidelines require baseline and periodic renal monitoring for patients on TDF-containing regimens, and no labs are recorded for this patient.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No lab orders were documented for this visit and no past labs are recorded.\"}},{\"problem\":\"DTG safety monitoring in pregnancy not documented\",\"action\":\"Screen for DTG-related contraindications including diabetes and document tolerance; confirm no neuropsychiatric symptoms\",\"reason\":\"Uganda HIV guidelines require use of a DTG screening tool prior to and during DTG use, checking for contraindications including known diabetes and neuropsychiatric adverse effects.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No DTG screening or safety monitoring was documented at this visit.\"}}],\"monitoring_plan\":[\"Order creatinine/eGFR and liver function tests now as baseline on TDF/3TC/DTG regimen\",\"Repeat renal function every 6 months while on TDF\",\"HIV viral load at 6 months on ART per Uganda guidelines\",\"Routine antenatal monitoring per obstetric schedule\",\"Monitor for DTG-related adverse effects: neuropsychiatric symptoms, weight gain, glucose intolerance at each visit\"],\"patient_counselling\":[\"Counsel patient that current regimen is safe in pregnancy and to continue TDF/3TC/DTG with good adherence\",\"Advise patient to report any new symptoms including nausea, abdominal pain, excessive urination, mood changes, or sleep disturbances which could indicate drug toxicity\",\"Reassure that weight gain of 6kg may reflect both pregnancy and possible DTG-related weight gain; continue routine antenatal monitoring\",\"Encourage continuation of ferrous sulfate and folic acid supplements as prescribed\"]}",
+ "plan_issues": []
+}

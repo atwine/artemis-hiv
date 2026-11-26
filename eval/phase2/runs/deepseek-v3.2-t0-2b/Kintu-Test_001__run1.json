@@ -1,0 +1,318 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 97.3,
+ "calls": [
+  {
+   "prompt_tokens": 1515,
+   "completion_tokens": 533,
+   "total_tokens": 2048,
+   "cost": 0.000818785,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000818785,
+    "upstream_inference_prompt_cost": 0.000392385,
+    "upstream_inference_completions_cost": 0.0004264
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 789,
+   "completion_tokens": 63,
+   "total_tokens": 852,
+   "cost": 0.00022908,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00022908,
+    "upstream_inference_prompt_cost": 0.00020514,
+    "upstream_inference_completions_cost": 2.394e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2668,
+   "completion_tokens": 969,
+   "total_tokens": 3637,
+   "cost": 0.001466212,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.001466212,
+    "upstream_inference_prompt_cost": 0.000691012,
+    "upstream_inference_completions_cost": 0.0007752
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.002514077,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU_DTG_HYPERGLYCEMIA_001",
+   "title": "DTG & Hyperglycemia Risk",
+   "message": "Guidelines report hyperglycemia among previously non-diabetic adults on DTG. The patient has multiple risk factors for hyperglycemia: age ≥30, family history of DM, and BMI ≥25 kg/m². Since transitioning to DTG (TLD) 18 months ago, she has developed impaired fasting glucose (118 mg/dL) and HbA1c in the pre-diabetic range (6.1%), alongside significant weight gain and acanthosis nigricans. However, lifestyle factors and genetic predisposition are also potential contributors to this metabolic syndrome.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Do not initiate or transition to DTG if high glucose is present. For this patient already on DTG, monitor glucose every 3 months for the first year.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+      "page_number": 4,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "page_number": 189,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+      "page_number": 38,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_DTG_HYPERGLYCEMIA_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+       "page_number": 4
+      },
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+       "page_number": 189
+      },
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+       "page_number": 38
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines report hyperglycemia among previously non-diabetic adults on DTG. The patient has multiple risk factors for hyperglycemia: age ≥30, family history of DM, and BMI ≥25 kg/m². Since transitioning to DTG (TLD) 18 months ago, she has developed impaired fasting glucose (118 mg/dL) and HbA1c in the pre-diabetic range (6.1%), alongside significant weight gain and acanthosis nigricans. However, lifestyle factors and genetic predisposition are also potential contributors to this metabolic syndrome.",
+     "recommended_action": "Do not initiate or transition to DTG if high glucose is present. For this patient already on DTG, monitor glucose every 3 months for the first year.",
+     "severity": "high",
+     "title": "DTG & Hyperglycemia Risk"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_MONITORING_GAP_002",
+   "title": "Missing DTG Glucose Monitoring",
+   "message": "Guidelines specify glucose monitoring every 3 months for the first year for patients initiated on or transitioned to DTG. The patient transitioned to DTG 18 months ago, and there is no indication of regular glucose monitoring during that first year in the provided history. The current labs show new-onset impaired fasting glucose and pre-diabetes.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Establish a schedule for regular glucose monitoring as per guidelines for patients on DTG.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+      "page_number": 38,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_MONITORING_GAP_002",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+       "page_number": 38
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines specify glucose monitoring every 3 months for the first year for patients initiated on or transitioned to DTG. The patient transitioned to DTG 18 months ago, and there is no indication of regular glucose monitoring during that first year in the provided history. The current labs show new-onset impaired fasting glucose and pre-diabetes.",
+     "recommended_action": "Establish a schedule for regular glucose monitoring as per guidelines for patients on DTG.",
+     "severity": "moderate",
+     "title": "Missing DTG Glucose Monitoring"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_OBESITY_METABOLIC_003",
+   "title": "Obesity & Metabolic Syndrome",
+   "message": "Obesity increases the risk of health problems like heart disease and diabetes. The patient's BMI has increased from 25.6 to 32.4 kg/m² (overweight to obese class I) since starting DTG, with a waist circumference of 96cm indicating central adiposity. She also has a dyslipidemia (high LDL, low HDL, high triglycerides) and new-onset elevated blood pressure. This constellation suggests a significant metabolic syndrome, which is a compounding risk factor for cardiovascular disease.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "medication_safety",
+    "severity": "high",
+    "recommended_action": "Address modifiable risk factors for obesity: counsel on healthy diet and physical activity.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+      "page_number": 190,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_OBESITY_METABOLIC_003",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+       "page_number": 190
+      }
+     ],
+     "issue_type": "medication_safety",
+     "message": "Obesity increases the risk of health problems like heart disease and diabetes. The patient's BMI has increased from 25.6 to 32.4 kg/m² (overweight to obese class I) since starting DTG, with a waist circumference of 96cm indicating central adiposity. She also has a dyslipidemia (high LDL, low HDL, high triglycerides) and new-onset elevated blood pressure. This constellation suggests a significant metabolic syndrome, which is a compounding risk factor for cardiovascular disease.",
+     "recommended_action": "Address modifiable risk factors for obesity: counsel on healthy diet and physical activity.",
+     "severity": "high",
+     "title": "Obesity & Metabolic Syndrome"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_PLAN_REVIEW_004",
+   "title": "Missing Clinical Plan",
+   "message": "The clinician's assessment and plan for today's visit is not written. The patient presents with significant new findings: weight gain, pre-diabetes, dyslipidemia, elevated blood pressure, and physical signs of insulin resistance (acanthosis nigricans). A comprehensive plan is required to address these metabolic complications, which may be related to her ART.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Formulate and document a clinical assessment and management plan addressing the metabolic abnormalities.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "KINTU_PLAN_REVIEW_004",
+     "citations": [],
+     "issue_type": "plan_review",
+     "message": "The clinician's assessment and plan for today's visit is not written. The patient presents with significant new findings: weight gain, pre-diabetes, dyslipidemia, elevated blood pressure, and physical signs of insulin resistance (acanthosis nigricans). A comprehensive plan is required to address these metabolic complications, which may be related to her ART.",
+     "recommended_action": "Formulate and document a clinical assessment and management plan addressing the metabolic abnormalities.",
+     "severity": "moderate",
+     "title": "Missing Clinical Plan"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s1_c1"
+  ],
+  "KINTU_DTG_HYPERGLYCEMIA_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11"
+  ],
+  "KINTU_MONITORING_GAP_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11"
+  ],
+  "KINTU_OBESITY_METABOLIC_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3"
+  ],
+  "KINTU_PLAN_REVIEW_004": []
+ },
+ "screening": {
+  "search_questions": [
+   "DTG weight gain and metabolic side effects",
+   "DTG and pre-diabetes management",
+   "DTG and dyslipidemia management",
+   "Monitoring for diabetes with DTG",
+   "DTG and hypertension management",
+   "DTG and acanthosis nigricans"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_DTG_HYPERGLYCEMIA_001\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1\",\n        \"page_number\": 4\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\",\n        \"page_number\": 189\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11\",\n        \"page_number\": 38\n      }\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines report hyperglycemia among previously non-diabetic adults on DTG. The patient has multiple risk factors for hyperglycemia: age ≥30, family history of DM, and BMI ≥25 kg/m². Since transitioning to DTG (TLD) 18 months ago, she has developed impaired fasting glucose (118 mg/dL) and HbA1c in the pre-diabetic range (6.1%), alongside significant weight gain and acanthosis nigricans. However, lifestyle factors and genetic predisposition are also potential contributors to this metabolic syndrome.\",\n    \"recommended_action\": \"Do not initiate or transition to DTG if high glucose is present. For this patient already on DTG, monitor glucose every 3 months for the first year.\",\n    \"severity\": \"high\",\n    \"title\": \"DTG & Hyperglycemia Risk\"\n  },\n  {\n    \"alert_id\": \"KINTU_MONITORING_GAP_002\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11\",\n        \"page_number\": 38\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines specify glucose monitoring every 3 months for the first year for patients initiated on or transitioned to DTG. The patient transitioned to DTG 18 months ago, and there is no indication of regular glucose monitoring during that first year in the provided history. The current labs show new-onset impaired fasting glucose and pre-diabetes.\",\n    \"recommended_action\": \"Establish a schedule for regular glucose monitoring as per guidelines for patients on DTG.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Missing DTG Glucose Monitoring\"\n  },\n  {\n    \"alert_id\": \"KINTU_OBESITY_METABOLIC_003\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3\",\n        \"page_number\": 190\n      }\n    ],\n    \"issue_type\": \"medication_safety\",\n    \"message\": \"Obesity increases the risk of health problems like heart disease and diabetes. The patient's BMI has increased from 25.6 to 32.4 kg/m² (overweight to obese class I) since starting DTG, with a waist circumference of 96cm indicating central adiposity. She also has a dyslipidemia (high LDL, low HDL, high triglycerides) and new-onset elevated blood pressure. This constellation suggests a significant metabolic syndrome, which is a compounding risk factor for cardiovascular disease.\",\n    \"recommended_action\": \"Address modifiable risk factors for obesity: counsel on healthy diet and physical activity.\",\n    \"severity\": \"high\",\n    \"title\": \"Obesity & Metabolic Syndrome\"\n  },\n  {\n    \"alert_id\": \"KINTU_PLAN_REVIEW_004\",\n    \"citations\": [],\n    \"issue_type\": \"plan_review\",\n    \"message\": \"The clinician's assessment and plan for today's visit is not written. The patient presents with significant new findings: weight gain, pre-diabetes, dyslipidemia, elevated blood pressure, and physical signs of insulin resistance (acanthosis nigricans). A comprehensive plan is required to address these metabolic complications, which may be related to her ART.\",\n    \"recommended_action\": \"Formulate and document a clinical assessment and management plan addressing the metabolic abnormalities.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Missing Clinical Plan\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+    "page_number": 4,
+    "quote": "6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT\nDTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia associated with DTG has been reported among clients newly initiated on ART as well as among those already on ART and transitioned to DTG-based regimens"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 189,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c2",
+    "page_number": 272,
+    "quote": "r quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement Reassure, If symptoms persist, substitute EFV with DTG or LPV/r (if appropriate DTG formulation is not available) NVP Acute symptomatic hepatitis Hypersensitivity reaction, Stevens-Johnson Syndrome Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Severe or life-threatening rash with mucosal involvement (ulcers in the mouth or eyes) Substitute with DTG or LPV/r NVP"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+    "page_number": 190,
+    "quote": "targets. Obesity is a preventable medical disorder involving excessive body fat and often increases the risk of health problems/diseases such as heart disease and diabetes ## Risk factors for obesity Although there are genetic, behavioural, metabolic and hormonal influences on body weight, obesity occurs when you take in more calories than you burn through normal daily activities and exercise. The risk factors that can be modified include; an unhealthy diet i.e high in calori"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 237,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia assoc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c11",
+    "page_number": 38,
+    "quote": "TB Screening > 5.4.7.1 Diabetes Mellitus (DM) > Treatment For DM\n3. Check glucose* * Blood glucose or urine dipstick 4. Decision: High glucose**? **High blood glucose: Fasting>6.95, Non-fasting>8.89 High urine glucose: Any + - If YES, proceed to \"DO NOT INITIATE OR TRANSITION TO DTG\" - If NO, proceed to \"Initiate on DTG, glucose monitoring every 3 months for the 1st year\" **Outcomes:** - **DO NOT INITIATE OR TRANSITION TO DTG** Give ATV/r or maintain on EFV Monitor blood gluc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s10_c1",
+    "page_number": 19,
+    "quote": "TB Screening > Timing of TPT in children\n* **Contacts of known TB patients**: Initiate TPT immediately (or within 2 weeks of ART initiation if newly identified HIV positive) * **Virally suppressed children currently on NNRTI**: Initiate TPT as soon as possible and complete course before ART optimization. * **Virally suppressed children currently on PI or DTG**: Initiate TPT if the child has been on ART for at least 3 months. * **Newly initiating ART**: Initiate TPT prophylaxi"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: The provided guideline excerpts do not contain specific information on managing weight gain or metabolic changes with TDF/3TC/DTG to justify a regimen change.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Weight gain and metabolic changes (obesity, acanthosis nigricans) potentially related to ART.\",\n      \"action\": \"Uncertain: The provided guideline excerpts do not specify tests or management for ART-associated weight gain or metabolic syndrome.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts do not contain information on evaluating or managing weight gain, acanthosis nigricans, or metabolic changes in patients on ART.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not mention the patient's weight gain or metabolic findings.\"\n      }\n    },\n    {\n      \"problem\": \"Elevated blood pressure (138/88 mmHg) and increased waist circumference (96cm).\",\n      \"action\": \"Uncertain: The provided guideline excerpts do not specify management for hypertension or metabolic syndrome in HIV patients.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts do not contain information on managing elevated blood pressure or waist circumference in the context of HIV care.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not address the elevated blood pressure or waist circumference.\"\n      }\n    },\n    {\n      \"problem\": \"Fatigue in a patient with new metabolic changes.\",\n      \"action\": \"Uncertain: The provided guideline excerpts do not specify evaluation for fatigue in this clinical context.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts do not contain information on assessing or managing fatigue in patients with weight gain and metabolic changes.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan is documented as 'none written' and does not address the patient's complaint of fatigue.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Uncertain: The provided guideline excerpts do not specify a monitoring plan for the patient's presenting symptoms and findings.\",\n  \"patient_counselling\": [\"Uncertain: The provided guideline excerpts do not specify counselling points for this clinical scenario.\"]\n}",
+ "plan_issues": []
+}

@@ -1,0 +1,300 @@
+{
+ "case_id": "P005",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 12.7,
+ "calls": [
+  {
+   "prompt_tokens": 1463,
+   "completion_tokens": 616,
+   "total_tokens": 2079,
+   "cost": 0.00218274,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00218274,
+    "upstream_inference_prompt_cost": 0.00069202,
+    "upstream_inference_completions_cost": 0.00149072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2367,
+   "completion_tokens": 1080,
+   "total_tokens": 3447,
+   "cost": 0.00368178,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00368178,
+    "upstream_inference_prompt_cost": 0.00106818,
+    "upstream_inference_completions_cost": 0.0026136
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00586452,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "protein 1+"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Rising creatinine and declining eGFR on TDF",
+   "message": "TDF is associated with renal toxicity including proximal tubular dysfunction and declining eGFR. This patient's creatinine has progressively risen from 0.9 mg/dL (2020) to 1.4 mg/dL (2026), with eGFR now 52 mL/min/1.73m². Urinalysis shows protein 1+ and trace glucose, consistent with proximal tubular damage. Evidence for drug attribution: steady creatinine rise temporally tracks 3 years of TDF exposure, and proteinuria plus glucosuria are hallmark features of TDF tubulopathy. Evidence against: no peripheral oedema, stable weight, and no costovertebral angle tenderness; alternative causes such as occasional ibuprofen use (2-3 times weekly for 6 months) or subclinical infection should also be evaluated. The progressive trend is concerning even though the latest value alone may appear modest.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Evaluate renal function trends and consider switching TDF to TAF or ABC. Assess for alternative causes of renal decline including NSAID-related nephropathy. Refer for nephrology evaluation if indicated.",
+    "citations": [
+     {
+      "page_number": 7,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "Rising creatinine and declining eGFR on TDF",
+     "message": "TDF is associated with renal toxicity including proximal tubular dysfunction and declining eGFR. This patient's creatinine has progressively risen from 0.9 mg/dL (2020) to 1.4 mg/dL (2026), with eGFR now 52 mL/min/1.73m². Urinalysis shows protein 1+ and trace glucose, consistent with proximal tubular damage. Evidence for drug attribution: steady creatinine rise temporally tracks 3 years of TDF exposure, and proteinuria plus glucosuria are hallmark features of TDF tubulopathy. Evidence against: no peripheral oedema, stable weight, and no costovertebral angle tenderness; alternative causes such as occasional ibuprofen use (2-3 times weekly for 6 months) or subclinical infection should also be evaluated. The progressive trend is concerning even though the latest value alone may appear modest.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Evaluate renal function trends and consider switching TDF to TAF or ABC. Assess for alternative causes of renal decline including NSAID-related nephropathy. Refer for nephrology evaluation if indicated.",
+     "citations": [
+      {
+       "page_number": 7,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "No clinician assessment or plan documented",
+   "message": "Guidelines require systematic screening and management of adverse drug reactions and comorbidities at each clinical visit. Today's encounter has no documented assessment or plan despite abnormal renal indices (creatinine 1.4, eGFR 52, proteinuria) and a 6-year progressive creatinine trend. The patient also reports mild fatigue and regular ibuprofen use. Without a plan, the renal abnormalities and potential TDF toxicity will go unaddressed. The clinician should document assessment, order appropriate follow-up labs, and outline management steps.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Document clinical assessment and management plan addressing renal function decline, proteinuria, ongoing TDF safety, and ibuprofen use. Order repeat renal panel and urine protein-to-creatinine ratio.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "No clinician assessment or plan documented",
+     "message": "Guidelines require systematic screening and management of adverse drug reactions and comorbidities at each clinical visit. Today's encounter has no documented assessment or plan despite abnormal renal indices (creatinine 1.4, eGFR 52, proteinuria) and a 6-year progressive creatinine trend. The patient also reports mild fatigue and regular ibuprofen use. Without a plan, the renal abnormalities and potential TDF toxicity will go unaddressed. The clinician should document assessment, order appropriate follow-up labs, and outline management steps.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Document clinical assessment and management plan addressing renal function decline, proteinuria, ongoing TDF safety, and ibuprofen use. Order repeat renal panel and urine protein-to-creatinine ratio.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "Ibuprofen use with renal impairment on TDF",
+   "message": "The patient takes ibuprofen 400 mg 2-3 times weekly for headaches over 6 months. With eGFR at 52 mL/min/1.73m² and evidence of TDF-associated renal toxicity (proteinuria, rising creatinine), concurrent NSAID use compounds risk of further kidney injury. Guidelines note that patients with uncontrolled comorbidities may suffer complications including chronic kidney disease. While occasional ibuprofen may be acceptable with normal renal function, this patient's compromised eGFR and active proteinuria make regular NSAID use hazardous. Alternative analgesics such as paracetamol should be considered for headache management.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "moderate",
+    "recommended_action": "Counsel patient to reduce or discontinue ibuprofen given renal impairment. Recommend paracetamol for headache relief. Address underlying causes of recurrent headaches including work-related stress.",
+    "citations": [
+     {
+      "page_number": 43,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "title": "Ibuprofen use with renal impairment on TDF",
+     "message": "The patient takes ibuprofen 400 mg 2-3 times weekly for headaches over 6 months. With eGFR at 52 mL/min/1.73m² and evidence of TDF-associated renal toxicity (proteinuria, rising creatinine), concurrent NSAID use compounds risk of further kidney injury. Guidelines note that patients with uncontrolled comorbidities may suffer complications including chronic kidney disease. While occasional ibuprofen may be acceptable with normal renal function, this patient's compromised eGFR and active proteinuria make regular NSAID use hazardous. Alternative analgesics such as paracetamol should be considered for headache management.",
+     "issue_type": "drug_interaction",
+     "severity": "moderate",
+     "recommended_action": "Counsel patient to reduce or discontinue ibuprofen given renal impairment. Recommend paracetamol for headache relief. Address underlying causes of recurrent headaches including work-related stress.",
+     "citations": [
+      {
+       "page_number": 43,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "Monitoring gaps: renal and metabolic labs overdue",
+   "message": "Guidelines list hyperglycemia/diabetes and abnormal weight gain as adverse events to screen for, particularly with DTG-containing regimens. This patient's urinalysis shows trace glucose, but no fasting blood glucose or HbA1c is documented. Additionally, no urine protein-to-creatinine ratio has been ordered to quantify the proteinuria detected on dipstick. Given the declining eGFR and TDF exposure, a quantitative protein assessment is essential to differentiate TDF tubulopathy from other renal pathology. No lipid panel is documented despite DTG being associated with metabolic changes. These monitoring gaps should be addressed in the plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order fasting blood glucose or HbA1c, urine protein-to-creatinine ratio, and lipid panel to complete safety monitoring for TDF/DTG regimen.",
+    "citations": [
+     {
+      "page_number": 26,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "title": "Monitoring gaps: renal and metabolic labs overdue",
+     "message": "Guidelines list hyperglycemia/diabetes and abnormal weight gain as adverse events to screen for, particularly with DTG-containing regimens. This patient's urinalysis shows trace glucose, but no fasting blood glucose or HbA1c is documented. Additionally, no urine protein-to-creatinine ratio has been ordered to quantify the proteinuria detected on dipstick. Given the declining eGFR and TDF exposure, a quantitative protein assessment is essential to differentiate TDF tubulopathy from other renal pathology. No lipid panel is documented despite DTG being associated with metabolic changes. These monitoring gaps should be addressed in the plan.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order fasting blood glucose or HbA1c, urine protein-to-creatinine ratio, and lipid panel to complete safety monitoring for TDF/DTG regimen.",
+     "citations": [
+      {
+       "page_number": 26,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+  ],
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c2"
+  ],
+  "ALERT_002": [],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2"
+  ],
+  "ALERT_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"Rising creatinine and declining eGFR on TDF\",\n    \"message\": \"TDF is associated with renal toxicity including proximal tubular dysfunction and declining eGFR. This patient's creatinine has progressively risen from 0.9 mg/dL (2020) to 1.4 mg/dL (2026), with eGFR now 52 mL/min/1.73m². Urinalysis shows protein 1+ and trace glucose, consistent with proximal tubular damage. Evidence for drug attribution: steady creatinine rise temporally tracks 3 years of TDF exposure, and proteinuria plus glucosuria are hallmark features of TDF tubulopathy. Evidence against: no peripheral oedema, stable weight, and no costovertebral angle tenderness; alternative causes such as occasional ibuprofen use (2-3 times weekly for 6 months) or subclinical infection should also be evaluated. The progressive trend is concerning even though the latest value alone may appear modest.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Evaluate renal function trends and consider switching TDF to TAF or ABC. Assess for alternative causes of renal decline including NSAID-related nephropathy. Refer for nephrology evaluation if indicated.\",\n    \"citations\": [{\"page_number\": 7, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c2\"}]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"No clinician assessment or plan documented\",\n    \"message\": \"Guidelines require systematic screening and management of adverse drug reactions and comorbidities at each clinical visit. Today's encounter has no documented assessment or plan despite abnormal renal indices (creatinine 1.4, eGFR 52, proteinuria) and a 6-year progressive creatinine trend. The patient also reports mild fatigue and regular ibuprofen use. Without a plan, the renal abnormalities and potential TDF toxicity will go unaddressed. The clinician should document assessment, order appropriate follow-up labs, and outline management steps.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Document clinical assessment and management plan addressing renal function decline, proteinuria, ongoing TDF safety, and ibuprofen use. Order repeat renal panel and urine protein-to-creatinine ratio.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"ALERT_003\",\n    \"title\": \"Ibuprofen use with renal impairment on TDF\",\n    \"message\": \"The patient takes ibuprofen 400 mg 2-3 times weekly for headaches over 6 months. With eGFR at 52 mL/min/1.73m² and evidence of TDF-associated renal toxicity (proteinuria, rising creatinine), concurrent NSAID use compounds risk of further kidney injury. Guidelines note that patients with uncontrolled comorbidities may suffer complications including chronic kidney disease. While occasional ibuprofen may be acceptable with normal renal function, this patient's compromised eGFR and active proteinuria make regular NSAID use hazardous. Alternative analgesics such as paracetamol should be considered for headache management.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Counsel patient to reduce or discontinue ibuprofen given renal impairment. Recommend paracetamol for headache relief. Address underlying causes of recurrent headaches including work-related stress.\",\n    \"citations\": [{\"page_number\": 43, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2\"}]\n  },\n  {\n    \"alert_id\": \"ALERT_004\",\n    \"title\": \"Monitoring gaps: renal and metabolic labs overdue\",\n    \"message\": \"Guidelines list hyperglycemia/diabetes and abnormal weight gain as adverse events to screen for, particularly with DTG-containing regimens. This patient's urinalysis shows trace glucose, but no fasting blood glucose or HbA1c is documented. Additionally, no urine protein-to-creatinine ratio has been ordered to quantify the proteinuria detected on dipstick. Given the declining eGFR and TDF exposure, a quantitative protein assessment is essential to differentiate TDF tubulopathy from other renal pathology. No lipid panel is documented despite DTG being associated with metabolic changes. These monitoring gaps should be addressed in the plan.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order fasting blood glucose or HbA1c, urine protein-to-creatinine ratio, and lipid panel to complete safety monitoring for TDF/DTG regimen.\",\n    \"citations\": [{\"page_number\": 26, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p43_c2",
+    "page_number": 43,
+    "quote": "< 102cm for males. Adherence counselling for integrated HIV Hypertension and diabetes Care * The goal of treatment is blood pressure <140/90mmHg, Diabetes is FBG < 7mmol/l and viral load< 200copies/ml * Patients with uncontrolled hypertension and blood sugar may suffer complication such as heart attack, stroke, chronic kidney disease, blindness, numbness of limbs and heart failure, * Hypertension, diabetes and HIV/ART treatment is lifelong. * Hypertension often has no symptom"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c2",
+    "page_number": 7,
+    "quote": "ibility that she was given the Abacavir because of a contraindication to Tenofovir. Screen the women carefully for eligibility for TDF before initiating TLD. RECOMMENDED FIRSTLINE REGIMEN FOR INITIAT- ING ART IN CHILDREN WEIGHING BETWEEN 20Kg TO LESS THAN 30KG (≥20Kg to <30Kg) **RECOMMENDED FIRSTLINE REGIMEN: ABC or TAF +3TC+DTG** All HIV-infected children weighing between 20kg to less than 30kg should be initiated on Abacavir or Tenofovir alefenamide + Lamivudine+ Dolutegrav"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is asymptomatic on TDF/3TC/DTG with stable weight, normal BP, no oedema, and no exam findings suggesting toxicity; no guideline indication to switch.\"},\"problems\":[{\"problem\":\"Possible TDF nephrotoxicity in setting of chronic NSAID (ibuprofen) co-use\",\"action\":\"Check serum creatinine and eGFR, and urine for proteinuria/glucosuria to screen for TDF nephrotoxicity.\",\"reason\":\"Patient takes ibuprofen 2-3 times weekly for 6 months alongside TDF, and TDF nephrotoxicity risk may be potentiated by concurrent NSAID use.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Mild fatigue over 2 months — evaluate for ART-related or non-ART causes\",\"action\":\"Check CBC, renal function, and consider HBV screening if not previously done; assess for anemia, renal dysfunction, or other causes of fatigue.\",\"reason\":\"Fatigue could reflect TDF-related renal dysfunction, prior AZT-related anemia sequelae, or non-ART etiologies, and the guideline excerpt is insufficient to attribute it definitively.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Routine 6-monthly lab monitoring not documented\",\"action\":\"Order viral load, CD4 count, serum creatinine/eGFR, and ALT as part of routine 6-monthly review per Uganda HIV guidelines.\",\"reason\":\"Patient is on TDF/3TC/DTG and due for routine 6-monthly monitoring labs, but none were ordered or documented.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No orders or plan were documented for this visit.\"}},{\"problem\":\"Chronic frequent ibuprofen use — assess renal safety with TDF\",\"action\":\"Counsel patient to reduce ibuprofen frequency and monitor renal function; consider alternative analgesia if headaches persist.\",\"reason\":\"Patient uses ibuprofen 2-3 times weekly for 6 months, which combined with TDF may increase nephrotoxicity risk.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}}],\"monitoring_plan\":\"- Serum creatinine/eGFR and urinalysis now, then at next routine visit\\n- Viral load and CD4 count at routine 6-monthly interval\\n- ALT at routine visit\\n- Repeat renal function if ibuprofen use continues or if fatigue worsens\",\"patient_counselling\":[\"Report any new nausea, vomiting, or decreased urine output immediately\",\"Reduce ibuprofen use; discuss alternative headache management strategies\",\"Continue ART with >95% adherence as currently maintained\",\"Return if fatigue worsens or new symptoms develop\"]}",
+ "plan_issues": []
+}

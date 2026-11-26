@@ -21,6 +21,7 @@ artemis/            the app's logic, with no screen code
   ai/               talking to the model, reading its replies
   plan/             the management plan
   visit.py          runs one visit check from start to finish
+  screen_text.py    the wording every screen shows (docs/screen-checklist.md)
   review.py         alert review and finalize rules
 ui/                 the Streamlit screen only
 backend/            FastAPI (Phase 4; the owner picked this name over api/, 2026-11-26)

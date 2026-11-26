@@ -1,0 +1,201 @@
+{
+ "case_id": "P001",
+ "model": "llama-a100-t0-2b",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 22.4,
+ "calls": [
+  {
+   "prompt_tokens": 1482,
+   "total_tokens": 1745,
+   "completion_tokens": 263,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 674,
+   "total_tokens": 708,
+   "completion_tokens": 34,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 3056,
+   "total_tokens": 3343,
+   "completion_tokens": 287,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "P001_001",
+   "title": "Renal Function Monitoring",
+   "message": "Guidelines recommend monitoring renal function with serum creatinine and eGFR for patients on TDF. Patient's latest creatinine level is 88 umol/L, which is over 1 year old. Recent renal function is not available.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Check serum creatinine and eGFR",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P001_001",
+     "title": "Renal Function Monitoring",
+     "message": "Guidelines recommend monitoring renal function with serum creatinine and eGFR for patients on TDF. Patient's latest creatinine level is 88 umol/L, which is over 1 year old. Recent renal function is not available.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Check serum creatinine and eGFR",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P001_002",
+   "title": "Viral Load Monitoring",
+   "message": "Guidelines recommend monitoring viral load to assess treatment efficacy. Patient's latest viral load is 40 copies/mL, which is over 3 months old. Recent viral load is not available.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Check viral load",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P001_002",
+     "title": "Viral Load Monitoring",
+     "message": "Guidelines recommend monitoring viral load to assess treatment efficacy. Patient's latest viral load is 40 copies/mL, which is over 3 months old. Recent viral load is not available.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Check viral load",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "P001_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "P001_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "TDF side effects",
+   "3TC interactions",
+   "DTG toxicity",
+   "Creatinine monitoring",
+   "Viral load target",
+   "Pregnancy risk"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P001_001\",\n    \"title\": \"Renal Function Monitoring\",\n    \"message\": \"Guidelines recommend monitoring renal function with serum creatinine and eGFR for patients on TDF. Patient's latest creatinine level is 88 umol/L, which is over 1 year old. Recent renal function is not available.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Check serum creatinine and eGFR\",\n    \"citations\": [{\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}]\n  },\n  {\n    \"alert_id\": \"P001_002\",\n    \"title\": \"Viral Load Monitoring\",\n    \"message\": \"Guidelines recommend monitoring viral load to assess treatment efficacy. Patient's latest viral load is 40 copies/mL, which is over 3 months old. Recent viral load is not available.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Check viral load\",\n    \"citations\": [{\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p47_c3",
+    "page_number": 47,
+    "quote": "sent back to CPHL 3. Resistance testing report sent to National 3L Technical Committee - makes treatment switch recommendation 4. National 3L Technical committee communicates to RRH 3rd Line committee 5. RRH 3rd Line Committee communicates to the district/IP about the decision made 6. Switch decision is implemented at the facility NOTE: With time, the switch decisions will be made by the RRH technical teams after capacity of the teams is built. 280"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "Nevirapine and some protease inhibitors. Monitor closely for toxicity. * TB medicines and Fluconazole: Rifampicin increases the metabolism of Fluconazole, thus increase the dose of Fluconazole by 50%. * Pregnant and breastfeeding women: Whereas there is no data against the use of Amphotericin B in pregnancy, it is not encouraged. There have been numerous reports of multiple congenital abnormalities associated with long-term use of high dose Fluconazole in the first trimester "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p44_c2",
+    "page_number": 44,
+    "quote": "+3TC+LPV/r NOTE: For details on the third-line ART, please see the third-line ART implementation guides. ABC+3TC+LPV/r AZT+3TC+DTG AZ- T+3TC+DRV/r ABC+3TC+DTG AZT+3TC+DRV/r AZ- T+3TC+LPV/r AZT+3TC+EFV AZT+3TC+NVP TAF + FTC + DTG or AB- C+3TC+DTG TAF+ FTC +LPV/r or AB- C+3TC+LPVr AZT+3TC+LPV/r TAF + FTC +DTG or AB- C+3TC+DTG TAF+ FTC + DRV/r or ABC+ 3TC+DRV/r AZT+3TC+DTG TAF+FTC + DRV/r or AB- C+3TC+ DRV/r TAF + FTC +LPV/r or AB- C+3TC+ LPV/r 277"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2",
+    "page_number": 33,
+    "quote": "T regimen should be switched to 2nd line. See Table 78 for side effects of commonly used ARVs and recommended substitutions. **HEPATOTOXICITY FOLLOWING CO-ADMINISTRATION OF ART AND TPT /TB MEDICINES** Co-administration of ART and TPT/TB medicines increases the likelihood of toxicities especially hepatotoxicity. Health workers should therefore take care to adequately screen patients for TPT eligibility prior to initiation of TPT. Once toxicity occurs, it should be managed appr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p28_c3",
+    "page_number": 28,
+    "quote": "detect changes in renal function. • Routine administration of 40 mEq/day (mixed in 500ml NS over 4 hours) of potassium chloride or 1 tablet of 600mg twice daily while on amphotericin B can decrease the incidence of Amphotericin B-related hypokalemia. • For electrolyte supplementation, two tablets daily of Magnesium Chloride 310 mg or slow Magnesium Chloride 535mg or Magnesium trisilicate 250mg while on amphotericin B • Consider alternate day Amphotericin B if creatinine is >3"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient has no new complaints, appears well, and has a viral load of 40 copies/mL, indicating the current regimen is effective.\"},\n\"problems\": [\n{\"problem\": \"Potential TDF toxicity\", \"action\": \"Monitor serum creatinine and eGFR\", \"reason\": \"TDF requires regular monitoring of serum creatinine and eGFR to detect potential toxicity.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention monitoring for TDF toxicity.\"}},\n{\"problem\": \"Potential DTG toxicity\", \"action\": \"Uncertain: no information on DTG screening tool results\", \"reason\": \"DTG requires screening for contraindications, but the results are not available.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention DTG screening.\"}}\n],\n\"monitoring_plan\": \"Monitor serum creatinine and eGFR regularly, repeat viral load in 6 months\",\n\"patient_counselling\": [\"Adhere to medication regimen\", \"Report any new symptoms or concerns\", \"Attend regular follow-up appointments\"]}",
+ "plan_issues": []
+}
