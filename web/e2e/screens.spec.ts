@@ -59,6 +59,7 @@ const STATES: { outcome: AiProblem; patient: string; file: string }[] = [
 
 async function stubOutcome(page: Page, outcome: AiProblem) {
   await page.route("**/api/patients/*/visits", async (route) => {
+    if (route.request().method() !== "POST") return route.continue(); // only the check, not past checks
     const reply = await route.fetch();
     const body = (await reply.json()) as VisitCheck;
     const severities = JSON.stringify(body.cards.map((c) => c.extension.severity ?? null));
@@ -89,6 +90,7 @@ for (const { outcome, patient, file } of STATES) {
 // model is called; the screenshot shows the screen 6 seconds in.
 test("checks running, with the AI review", async ({ page }) => {
   await page.route("**/api/patients/*/visits", async (route) => {
+    if (route.request().method() !== "POST") return route.continue(); // only the check, not past checks
     await new Promise((r) => setTimeout(r, 9000));
     await route.abort();
   });

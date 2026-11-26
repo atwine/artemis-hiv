@@ -30,6 +30,8 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
   const { patientId } = use(params);
   // A saved visit to reopen (from the clinic day): shown as saved, with no new check (S1 -> S4).
   const visitId = useSearchParams().get("visit");
+  // A visit this screen just created: the address then names it, but the screen carries on as it is.
+  const [created, setCreated] = useState<string | null>(null);
   const patient = useQuery({
     queryKey: ["patient", patientId],
     queryFn: async () =>
@@ -42,7 +44,8 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
   });
 
   if (patient.data && (!visitId || reopened.data)) {
-    return <Visit key={`${patient.data.patient_id}:${visitId ?? ""}`} patient={patient.data} reopened={reopened.data} />;
+    const opened = visitId && visitId !== created ? visitId : "";
+    return <Visit key={`${patient.data.patient_id}:${opened}`} patient={patient.data} reopened={opened ? reopened.data : undefined} onCreated={setCreated} />;
   }
   return (
     <Frame patientId={patientId} state="not_checked">
@@ -60,7 +63,7 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
 type CheckRequest = { note: string; useAi: boolean };
 type CheckMutation = UseMutationResult<VisitCheck, Error, CheckRequest>;
 
-function Visit({ patient, reopened }: { patient: PatientDetail; reopened?: SavedVisit }) {
+function Visit({ patient, reopened, onCreated }: { patient: PatientDetail; reopened?: SavedVisit; onCreated: (visitId: string) => void }) {
   const [note, setNote] = useState(reopened?.note ?? String(patient.today_encounter.note ?? ""));
   const [useAi, setUseAi] = useState(false);
   const router = useRouter();
@@ -86,6 +89,7 @@ function Visit({ patient, reopened }: { patient: PatientDetail; reopened?: Saved
       queryClient.setQueryData(["visit", done.visit_id], asSaved);
       refreshDay(queryClient, patient.patient_id);
       // The address names the saved visit, so Back or a reload reopens it, never a blank form.
+      onCreated(done.visit_id);
       router.replace(visitHref(patient.patient_id, done.visit_id));
     },
   });

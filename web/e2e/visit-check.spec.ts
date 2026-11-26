@@ -39,6 +39,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   // Hold the check for 1.5 s before it goes to the real backend, so the running screen is always
   // there to see, however fast the backend answers.
   await page.route("**/api/patients/*/visits", async (route) => {
+    if (route.request().method() !== "POST") return route.continue(); // only the check
     await new Promise((r) => setTimeout(r, 1500));
     await route.continue();
   });
