@@ -190,3 +190,52 @@ artemis/evaluation/runner.py	spent_in	Adds up the dollars recorded in saved case
 artemis/evaluation/scoring.py	RunScore.caught_by_ai	The expected problems an AI alert caught, leaving out the fixed-rule alerts every model shares.	artemis/evaluation/scoring.py	moved
 artemis/evaluation/runner.py	effective_temperature	The temperature a run really uses: the one asked for, or the app's default.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	run_label	A run's folder name, always naming the temperature used so runs at different temperatures never share a folder.	artemis/evaluation/runner.py	moved
+backend/__main__.py	main	Starts the backend server on the address the settings give (127.0.0.1 by default).	stays	stays
+backend/access.py	AccessMiddleware.__call__	Refuses any request that isn't from the app's own pages on this laptop, before any route runs.	stays	stays
+backend/access.py	AccessMiddleware.__init__	Keeps the settings the access check reads.	stays	stays
+backend/access.py	_host_name	Takes the computer name out of a Host header, without the port.	stays	stays
+backend/access.py	caller_role	Works out where a request comes from: this laptop's own pages, another website, or a rebinding trick.	stays	stays
+backend/access.py	can	Looks up one cell of the permission grid in ACCESS.md.	stays	stays
+backend/access.py	require	Makes a route check one permission before it runs.	stays	stays
+backend/access.py	require.check	Refuses the request when the permission is missing.	stays	stays
+backend/access.py	role_of	Reads the caller's role that the access check left on the request.	stays	stays
+backend/access.py	visible_patients	Gives the patients a role may list.	stays	stays
+backend/cards.py	_passage	Turns one saved guideline passage into the shape a card carries.	stays	stays
+backend/cards.py	_summary	Shortens an alert title to the 140 characters a CDS Hooks card allows.	stays	stays
+backend/cards.py	card_from_saved	Turns one saved alert and its passages into a CDS Hooks card.	stays	stays
+backend/cards.py	cards_from_entry	Turns a saved visit check's alerts into cards, refusing results that don't line up.	stays	stays
+backend/cards.py	indicator_for	Maps an alert's severity to a card's info, warning or critical.	stays	stays
+backend/cards.py	plan_from_entry	Gives the management plan from a saved visit check, or a plain message when it failed.	stays	stays
+backend/decisions.py	decision_rows	Checks acknowledge/override decisions against today's Finalize rules and builds the rows to save.	stays	stays
+backend/decisions.py	summary	Lists the latest decision on each alert and the alerts still undecided.	stays	stays
+backend/main.py	_find	Finds one patient by id, or answers 404.	stays	stays
+backend/main.py	_no_database	The reply when no visit-record database is set up.	stays	stays
+backend/main.py	_summary	Turns a patient record into one row of the patient list.	stays	stays
+backend/main.py	create_app	Builds the backend: access check, CORS and the routes.	stays	stays
+backend/main.py	create_app.get_patient	Route: one patient's record, without the demo answer key.	stays	stays
+backend/main.py	create_app.health	Route: says the backend is up.	stays	stays
+backend/main.py	create_app.list_patients	Route: the patient list.	stays	stays
+backend/main.py	create_app.record_decisions	Route: saves acknowledge/override decisions for a visit.	stays	stays
+backend/main.py	create_app.run_visit_check	Route: runs the visit check, saves it and returns the alerts as cards.	stays	stays
+backend/main.py	load_patients	Reads every patient and checks each record once; a bad one is reported, not skipped.	stays	stays
+backend/models.py	TodayEncounter._iso_date	Refuses a visit date that isn't YYYY-MM-DD.	stays	stays
+backend/records.py	_decision_rows	Builds decision rows for the database.	stays	stays
+backend/records.py	_read_file	Reads one visit-record file, counting lines it can't read.	stays	stays
+backend/records.py	_same_decision	Tells whether a decision is already in the database, so an import can be rerun.	stays	stays
+backend/records.py	_utc	Turns a saved time into a UTC time with its zone.	stays	stays
+backend/records.py	add_decisions	Saves decisions all together, or none.	stays	stays
+backend/records.py	check_from_entry	Turns a saved visit check into a database row.	stays	stays
+backend/records.py	entry_from_check	Turns a database row back into a saved visit check.	stays	stays
+backend/records.py	get_check	Reads one visit check from the database.	stays	stays
+backend/records.py	import_folder	Copies the visit-record files into the database; safe to rerun.	stays	stays
+backend/records.py	iso	Writes a time as ISO text in UTC.	stays	stays
+backend/records.py	json_safe	Makes a JSON-safe copy, with dates as text, as the files have.	stays	stays
+backend/records.py	latest_decisions	Gives the latest decision on each alert of a visit.	stays	stays
+backend/records.py	save_check	Saves one visit check.	stays	stays
+backend/services.py	_model_client	Makes a client for the model server in .env, or none.	stays	stays
+backend/services.py	_search	Builds the guideline search the way the Streamlit app does, once (until plan item 4.3).	stays	stays
+backend/services.py	default_services	Builds the real patients, search, model and database the routes use.	stays	stays
+backend/services.py	demo_patients	Gives a reader for the demo patient files.	stays	stays
+backend/services.py	demo_patients.read	Reads the demo patient files.	stays	stays
+backend/settings.py	_list	Reads a comma-separated setting.	stays	stays
+backend/settings.py	settings_from_env	Reads the backend's settings from the environment.	stays	stays

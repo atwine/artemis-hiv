@@ -33,7 +33,7 @@ def indicator_for(severity: Optional[str]) -> str:
 
 
 def _summary(title: str) -> str:
-    title = " ".join((title or "").split()) or "Alert"
+    title = " ".join(title.split()) or "Alert"
     return title if len(title) <= 140 else title[:139].rstrip() + "…"
 
 
@@ -49,33 +49,39 @@ def _passage(c: Dict[str, Any]) -> Passage:
     )
 
 
-def card_from_saved(alert: Dict[str, Any], result: Dict[str, Any]) -> Card:
-    """One saved alert and its saved result (passages and explanation) as a CDS Hooks card."""
-    alert_id = str(alert["alert_id"])
+def card_from_saved(alert: Dict[str, Any], result: Dict[str, Any], *, visit_id: str) -> Card:
+    """One saved alert and its saved result (passages and explanation) as a CDS Hooks card.
+
+    The saved alert has the fields artemis.visit_record.checks_entry gives it."""
+    alert_id = alert["alert_id"]
     kind = "ai" if alert.get("source") == "ai" else "rule"
     evidence = alert.get("evidence") or {}
-    severity = alert.get("severity") or evidence.get("severity")
+    severity = alert.get("severity")
     action = str(evidence.get("recommended_action") or "").strip()
     return Card(
-        uuid=alert_id,
-        summary=_summary(str(alert.get("title") or "")),
-        detail=str(alert.get("message") or ""),
+        uuid=f"{visit_id}:{alert_id}",
+        summary=_summary(alert["title"]),
+        detail=alert["message"],
         indicator=indicator_for(severity),
         source=_SOURCES[kind],
-        suggestions=[Suggestion(label=action, uuid=f"{alert_id}:suggestion")] if action else [],
+        suggestions=[Suggestion(label=action, uuid=f"{visit_id}:{alert_id}:suggestion")] if action else [],
         override_reasons=OVERRIDE_CODINGS,
         extension=CardExtension(
             alert_id=alert_id,
             kind=kind,
             severity=severity,
-            explanation=str((result.get("explanation") or {}).get("text") or ""),
+            explanation=(result.get("explanation") or {}).get("text") or "",
             passages=[_passage(c) for c in result.get("retrieved") or []],
         ),
     )
 
 
 def cards_from_entry(entry: Dict[str, Any]) -> List[Card]:
-    return [card_from_saved(a, r) for a, r in zip(entry.get("alerts") or [], entry.get("results") or [])]
+    alerts, results = entry.get("alerts") or [], entry.get("results") or []
+    if len(alerts) != len(results):
+        # The same check artemis.visit_record.restore makes: never show some cards and lose others.
+        raise ValueError("saved results don't line up with the saved alerts")
+    return [card_from_saved(a, r, visit_id=entry["visit_id"]) for a, r in zip(alerts, results)]
 
 
 def plan_from_entry(entry: Dict[str, Any]) -> Optional[Plan]:

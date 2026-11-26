@@ -10,7 +10,6 @@ with `python -m alembic -c backend/alembic.ini upgrade head`.
 
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
 
@@ -22,11 +21,12 @@ from sqlmodel import Session, create_engine  # noqa: E402
 
 from artemis import visit_record  # noqa: E402
 from backend import records  # noqa: E402
+from backend.settings import settings_from_env  # noqa: E402
 
 
 def main(argv: list) -> int:
     load_dotenv(ROOT / ".env")
-    url = os.getenv("ARTEMIS_DATABASE_URL")
+    url = settings_from_env().database_url
     if not url:
         print("Set ARTEMIS_DATABASE_URL (see backend/README.md).")
         return 2

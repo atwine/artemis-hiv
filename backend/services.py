@@ -9,7 +9,6 @@ from __future__ import annotations
 import functools
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 from sqlalchemy.engine import Engine
@@ -17,11 +16,10 @@ from sqlmodel import create_engine
 
 from artemis import visit_record
 from artemis.patient.store import read_json_list
-from backend.settings import Settings
+from backend.settings import PROJECT_ROOT, Settings
 
 logger = logging.getLogger(__name__)
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TOP_K = 5  # the Streamlit screen's default number of guideline passages per alert
 
 
@@ -35,18 +33,20 @@ class Services:
     top_k: int = TOP_K
 
 
-def _demo_patients() -> List[Dict[str, Any]]:
+def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:
     """The patients the Streamlit app shows, read (never written) from the same files."""
-    import os
 
-    custom = Path(os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json")
-    return read_json_list(PROJECT_ROOT / "Data" / "mock_patients.json") + read_json_list(custom)
+    def read() -> List[Dict[str, Any]]:
+        return read_json_list(PROJECT_ROOT / "Data" / "mock_patients.json") + read_json_list(settings.custom_patients_path)
+
+    return read
 
 
 @functools.lru_cache(maxsize=1)
 def _search() -> Any:
-    # The app's own engine, settings included, until plan item 4.3 (build the index once and
-    # keep it) replaces this. Imported here so the server starts without loading the model.
+    # Stopgap until plan item 4.3 (build the index once and keep it): the Streamlit app's own
+    # engine and settings, so both search the same index. Imported here so the server starts
+    # without loading the model. engine_version=5 is the value app._run_analysis passes.
     import app
 
     rag = app._get_rag_engine(
@@ -71,8 +71,10 @@ def _model_client() -> Optional[Any]:
 
 def default_services(settings: Settings) -> Services:
     engine = create_engine(settings.database_url, pool_pre_ping=True) if settings.database_url else None
+    if engine is None:
+        logger.warning("ARTEMIS_DATABASE_URL is not set: visit checks will be refused (see backend/README.md)")
     return Services(
-        patients=_demo_patients,
+        patients=demo_patients(settings),
         search=_search,
         model_client=_model_client,
         engine=engine,

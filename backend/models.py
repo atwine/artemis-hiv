@@ -15,10 +15,14 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from artemis.review import OVERRIDE_REASONS
 
-OverrideReason = Literal["Already addressed", "Not applicable", "Will address later", "Patient declined", "Other"]
-assert set(OverrideReason.__args__) == set(OVERRIDE_REASONS), "keep in step with artemis.review.OVERRIDE_REASONS"
+# Built from the one list the Streamlit screen uses too, so the two can't drift apart.
+OverrideReason = Literal[tuple(OVERRIDE_REASONS)]  # type: ignore[valid-type]
 
 Status = Literal["GREEN", "YELLOW", "RED", "INCOMPLETE"]
+# What happened to the AI review (artemis.visit.AnalysisResult.screening_outcome).
+AiReview = Literal["not_run", "ok", "failed", "unreadable", "cut_off", "partly_read"]
+AlertKind = Literal["rule", "ai"]
+Action = Literal["Acknowledge", "Override"]
 
 # --- Patients ---------------------------------------------------------------------------
 
@@ -88,22 +92,24 @@ class PatientDetail(BaseModel):
 # --- Cards (CDS Hooks) ------------------------------------------------------------------
 
 
-class _Out(BaseModel):
+class _CdsOut(BaseModel):
+    """CDS Hooks fields go out in the spec's camelCase (overrideReasons, isRecommended)."""
+
     model_config = ConfigDict(populate_by_name=True, serialize_by_alias=True)
 
 
-class Coding(_Out):
+class Coding(_CdsOut):
     code: str
     system: str
     display: str
 
 
-class Source(_Out):
+class Source(_CdsOut):
     label: str
     topic: Optional[Coding] = None
 
 
-class Suggestion(_Out):
+class Suggestion(_CdsOut):
     label: str
     uuid: str
     is_recommended: bool = Field(default=True, alias="isRecommended")
@@ -111,7 +117,7 @@ class Suggestion(_Out):
     actions: List[Dict[str, Any]] = []
 
 
-class Passage(_Out):
+class Passage(_CdsOut):
     """A guideline passage an alert rests on (plan done-criterion 4)."""
 
     chunk_id: str
@@ -121,16 +127,16 @@ class Passage(_Out):
     metadata: Dict[str, Any] = {}
 
 
-class CardExtension(_Out):
-    alert_id: str
-    kind: Literal["rule", "ai"]
+class CardExtension(_CdsOut):
+    alert_id: str  # the alert's own id, which decisions refer to
+    kind: AlertKind
     severity: Optional[str] = None
     explanation: str = ""
     passages: List[Passage] = []
 
 
-class Card(_Out):
-    uuid: str
+class Card(_CdsOut):
+    uuid: str  # unique per card: "<visit_id>:<alert_id>"
     summary: str = Field(max_length=140)
     detail: str
     indicator: Literal["info", "warning", "critical"]
@@ -166,8 +172,7 @@ class VisitCheckResponse(BaseModel):
     visit_date: str
     saved_at: str
     status: Status
-    # The AI review's outcome: not_run, ok, failed, unreadable, cut_off or partly_read.
-    ai_review: str
+    ai_review: AiReview
     model: Optional[str]
     cards: List[Card]
     plan: Optional[Plan]
@@ -182,7 +187,7 @@ class DecisionIn(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
     alert_id: str = Field(min_length=1, max_length=200)
-    action: Literal["Acknowledge", "Override"]
+    action: Action
     reason: Optional[OverrideReason] = None
     comment: str = Field(default="", max_length=2000)
 
@@ -195,7 +200,7 @@ class DecisionsRequest(BaseModel):
 
 class DecisionOut(BaseModel):
     alert_id: str
-    action: str
+    action: Action
     reason: str
     comment: str
     saved_at: str

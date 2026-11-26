@@ -23,7 +23,7 @@ artemis/            the app's logic, with no screen code
   visit.py          runs one visit check from start to finish
   review.py         alert review and finalize rules
 ui/                 the Streamlit screen only
-api/                FastAPI (Phase 4)
+backend/            FastAPI (Phase 4; the owner picked this name over api/, 2026-11-26)
 web/                Next.js (Phase 5)
 ```
 

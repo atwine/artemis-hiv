@@ -74,19 +74,20 @@ class AlertDecision(SQLModel, table=True):
     saved_at: datetime.datetime = Field(sa_column=Column(DateTime(timezone=True), nullable=False))
 
 
+# The "checks_run" entry's fields that are stored as they are (saved_at and ai_review are handled apart).
 _CHECK_FIELDS = [
     "visit_id", "patient_id", "visit_date", "note", "model", "app_version", "status", "ai_review_ran",
     "alerts", "results", "screening_debug", "patient_summary", "agentic_enabled", "plan",
 ]
 
 
-def plain(value: Any) -> Any:
+def json_safe(value: Any) -> Any:
     """JSON-safe copy: dates and other objects become text, as in the files (json default=str)."""
     return json.loads(json.dumps(value, ensure_ascii=False, default=str))
 
 
 def check_from_entry(entry: Dict[str, Any], *, origin: str) -> VisitCheck:
-    e = plain(entry)
+    e = json_safe(entry)
     return VisitCheck(
         **{k: e.get(k) for k in _CHECK_FIELDS},
         ai_review=e.get("ai_review") or "not_run",
@@ -97,13 +98,12 @@ def check_from_entry(entry: Dict[str, Any], *, origin: str) -> VisitCheck:
 
 def entry_from_check(row: VisitCheck) -> Dict[str, Any]:
     """The row back as a "checks_run" entry, the shape artemis.visit_record.restore reads."""
-    out: Dict[str, Any] = {"event": "checks_run"}
-    for k in ["visit_id", "patient_id", "visit_date", "saved_at", "note", "model", "app_version", "status",
-              "ai_review", "ai_review_ran", "alerts", "results", "screening_debug", "patient_summary",
-              "agentic_enabled", "plan"]:
-        out[k] = getattr(row, k)
-    out["saved_at"] = iso(row.saved_at)
-    return out
+    return {
+        "event": "checks_run",
+        **{k: getattr(row, k) for k in _CHECK_FIELDS},
+        "saved_at": iso(row.saved_at),
+        "ai_review": row.ai_review,
+    }
 
 
 def save_check(session: Session, entry: Dict[str, Any], *, origin: str) -> VisitCheck:

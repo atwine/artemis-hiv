@@ -1,7 +1,9 @@
 """The backend's routes (plan item 4.2). Each one is a thin shell: check access, read the
-request, call the existing code in artemis/, and shape the reply.
+request, call the existing code in artemis/ (and the plain functions in backend/), and shape
+the reply.
 
-Run with `python -m backend`. Who may call what: ACCESS.md (enforced in backend/access.py).
+Run with `python -m backend` (it builds the app with `create_app` when the server starts).
+Who may call what: ACCESS.md (enforced in backend/access.py).
 """
 
 from __future__ import annotations
@@ -9,7 +11,8 @@ from __future__ import annotations
 import copy
 import logging
 import uuid
-from typing import Any, Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,12 +22,11 @@ from sqlmodel import Session
 
 from artemis import visit_record
 from artemis.patient.store import UnreadableFile
-from artemis.review import alert_resolution_ok, decisions_from_state
-from artemis.rules.checks import Alert
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
 from backend.cards import cards_from_entry, plan_from_entry
+from backend.decisions import BadDecision, decision_rows, summary
 from backend.models import (
     DecisionOut,
     DecisionsRequest,
@@ -40,7 +42,11 @@ from backend.settings import Settings, settings_from_env
 
 logger = logging.getLogger(__name__)
 
-Loaded = Tuple[PatientRecord, Dict[str, Any]]  # the checked record, and the record as stored
+
+@dataclass(frozen=True)
+class Loaded:
+    record: PatientRecord  # checked once, when loaded
+    stored: Dict[str, Any]  # the record exactly as in the file, which the visit check reads
 
 
 def load_patients(services: Services) -> List[Loaded]:
@@ -61,12 +67,12 @@ def load_patients(services: Services) -> List[Loaded]:
             raise HTTPException(status_code=500, detail="The patient list could not be read.")
         if record.patient_id not in seen:  # the first record with an id wins, as on the screen
             seen.add(record.patient_id)
-            out.append((record, item))
+            out.append(Loaded(record=record, stored=item))
     return out
 
 
 def _find(services: Services, patient_id: str) -> Loaded:
-    found = next((p for p in load_patients(services) if p[0].patient_id == patient_id), None)
+    found = next((p for p in load_patients(services) if p.record.patient_id == patient_id), None)
     if found is None:
         raise HTTPException(status_code=404, detail="No such patient.")
     return found
@@ -79,12 +85,8 @@ def _summary(record: PatientRecord) -> PatientSummary:
     )
 
 
-def _saved_alerts(row: records.VisitCheck) -> List[Alert]:
-    return [
-        Alert(alert_id=a["alert_id"], title=a.get("title") or "", message=a.get("message") or "",
-              evidence=a.get("evidence") or {}, query_hint=a.get("query_hint") or "", source=a.get("source") or "rule")
-        for a in row.alerts
-    ]
+def _no_database() -> HTTPException:
+    return HTTPException(status_code=503, detail="The visit-record database is not set up.")
 
 
 def create_app(*, settings: Optional[Settings] = None, services: Optional[Services] = None) -> FastAPI:
@@ -105,21 +107,25 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
 
     @app.get("/api/patients", response_model=List[PatientSummary], dependencies=[Depends(require("patients", "view"))])
     def list_patients(request: Request) -> List[PatientSummary]:
-        loaded = visible_patients(role_of(request), load_patients(services))
-        return [_summary(record) for record, _ in loaded]
+        return [_summary(p.record) for p in visible_patients(role_of(request), load_patients(services))]
 
     @app.get("/api/patients/{patient_id}", response_model=PatientDetail, dependencies=[Depends(require("patients", "view"))])
     def get_patient(patient_id: str) -> Dict[str, Any]:
-        record, _ = _find(services, patient_id)
-        return record.model_dump()
+        return _find(services, patient_id).record.model_dump()
 
     @app.post(
         "/api/patients/{patient_id}/visits",
         response_model=VisitCheckResponse,
-        dependencies=[Depends(require("patients", "view")), Depends(require("visit_records", "create"))],
+        dependencies=[
+            Depends(require("patients", "view")),
+            Depends(require("visit_records", "create")),
+            Depends(require("guidelines", "view")),  # the cards quote guideline passages
+        ],
     )
     def run_visit_check(patient_id: str, body: VisitCheckRequest) -> VisitCheckResponse:
-        _, patient = _find(services, patient_id)
+        patient = _find(services, patient_id).stored
+        if services.engine is None:
+            raise _no_database()  # nothing could be saved or decided on, so nothing is run or paid for
         client = services.model_client() if body.use_ai else None
         if body.use_ai and client is None:
             raise HTTPException(status_code=503, detail="No AI model server is set up.")
@@ -133,7 +139,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         if isinstance(result.agentic_result, dict) and "error" in result.agentic_result:
             logger.warning("Plan step failed: %s", result.agentic_result.get("type"))
         visit_id, saved_at = uuid.uuid4().hex, visit_record.now_utc()
-        entry = records.plain(visit_record.checks_entry(
+        entry = records.json_safe(visit_record.checks_entry(
             result,
             note=body.note,
             visit_date=str((patient.get("today_encounter") or {}).get("date") or ""),
@@ -143,14 +149,13 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             saved_at=saved_at,
         ))
         saved = False
-        if services.engine is not None:
-            try:
-                with Session(services.engine) as session:
-                    records.save_check(session, entry, origin="api")
-                saved = True
-            except SQLAlchemyError as exc:
-                # The results are still shown, as on the Streamlit screen (fix 9).
-                logger.warning("Visit record not saved: %s", type(exc).__name__)
+        try:
+            with Session(services.engine) as session:
+                records.save_check(session, entry, origin="api")
+            saved = True
+        except SQLAlchemyError as exc:
+            # The results are still shown, as on the Streamlit screen (fix 9).
+            logger.warning("Visit record not saved: %s", type(exc).__name__)
         return VisitCheckResponse(
             visit_id=visit_id, patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
             saved_at=saved_at, status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
@@ -164,37 +169,23 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
     )
     def record_decisions(visit_id: str, body: DecisionsRequest) -> DecisionsResponse:
         if services.engine is None:
-            raise HTTPException(status_code=503, detail="The visit-record database is not set up.")
+            raise _no_database()
         with Session(services.engine) as session:
             row = records.get_check(session, visit_id)
             if row is None:
                 raise HTTPException(status_code=404, detail="No such visit.")
-            alerts = {a.alert_id: a for a in _saved_alerts(row)}
-            state: Dict[str, Any] = {}
-            for d in body.decisions:
-                if d.alert_id not in alerts:
-                    raise HTTPException(status_code=422, detail="An alert in the request isn't in this visit.")
-                state[f"alert_action_{d.alert_id}"] = d.action
-                state[f"alert_override_reason_{d.alert_id}"] = d.reason or ""
-                state[f"alert_override_comment_{d.alert_id}"] = d.comment
-                # Today's Finalize rule: an override needs a reason, and "Other" needs a comment.
-                if not alert_resolution_ok(state, d.alert_id):
-                    raise HTTPException(status_code=422, detail="An override needs a reason, and 'Other' needs a comment.")
-            chosen = [alerts[a] for a in dict.fromkeys(d.alert_id for d in body.decisions)]
-            records.add_decisions(session, visit_id, decisions_from_state(state, chosen), saved_at=visit_record.now_utc())
-            latest = records.latest_decisions(session, visit_id)
-            order = [a["alert_id"] for a in row.alerts]
-        return DecisionsResponse(
-            visit_id=visit_id,
-            decisions=[
-                DecisionOut(alert_id=a, action=latest[a].action, reason=latest[a].reason, comment=latest[a].comment, saved_at=records.iso(latest[a].saved_at))
-                for a in order if a in latest
-            ],
-            all_resolved=all(a in latest for a in order),
-            unresolved=[a for a in order if a not in latest],
-        )
+            # Read back through the same check the Streamlit app uses to reopen a saved visit.
+            alerts = visit_record.restore(records.entry_from_check(row))["analysis_alerts"]
+            try:
+                rows = decision_rows(alerts, body.decisions)
+            except BadDecision as exc:
+                raise HTTPException(status_code=422, detail=str(exc))
+            records.add_decisions(session, visit_id, rows, saved_at=visit_record.now_utc())
+            latest = {
+                a: DecisionOut(alert_id=a, action=d.action, reason=d.reason, comment=d.comment, saved_at=records.iso(d.saved_at))
+                for a, d in records.latest_decisions(session, visit_id).items()
+            }
+        decided, unresolved = summary([a.alert_id for a in alerts], latest)
+        return DecisionsResponse(visit_id=visit_id, decisions=decided, all_resolved=not unresolved, unresolved=unresolved)
 
     return app
-
-
-app = create_app()

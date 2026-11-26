@@ -1,6 +1,6 @@
 """Check that the code map and the moves log match the code on disk.
 
-docs/refactor/code-map.tsv has one row per function in app.py, modules/, ui/ and artemis/:
+docs/refactor/code-map.tsv has one row per function in app.py, modules/, ui/, artemis/ and backend/:
 
     file  function  does  target  status
 
@@ -46,9 +46,10 @@ WHATS = {"move", "delete", "rewrite"}
 
 def code_files(root: Path = ROOT) -> List[str]:
     files = ["app.py"] if (root / "app.py").exists() else []
-    for folder in ("modules", "ui", "artemis"):
+    for folder in ("modules", "ui", "artemis", "backend"):
         files += sorted(p.relative_to(root).as_posix() for p in (root / folder).rglob("*.py"))
-    return files
+    # Alembic migrations are generated history, one upgrade/downgrade pair each; they never move.
+    return [f for f in files if not f.startswith("backend/migrations/")]
 
 
 def functions_in(source: str) -> List[str]:

@@ -11,7 +11,7 @@ from backend.settings import settings_from_env
 def main() -> None:
     load_dotenv()
     s = settings_from_env()
-    uvicorn.run("backend.main:app", host=s.host, port=s.port)
+    uvicorn.run("backend.main:create_app", factory=True, host=s.host, port=s.port)
 
 
 if __name__ == "__main__":

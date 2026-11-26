@@ -16,7 +16,14 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 | POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
 | POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other", "comment": "..."}]}` |
 
-With the server running, `http://127.0.0.1:8000/docs` shows every route and its fields.
+A card's `uuid` is unique per visit (`<visit_id>:<alert_id>`); decisions use the alert's own id,
+`extension.alert_id`. With no database set up, a visit check is refused (503) before any model
+call, since nothing could be saved or decided on. If saving fails partway, the results still
+come back with `record_saved: false`, as on the Streamlit screen.
+
+With the server running, `http://127.0.0.1:8000/docs` lists every route and its fields. Its
+"Try it out" works for GET routes; POSTs from that page are refused, because the access rules
+allow only the frontend's address (ACCESS.md).
 
 ## Settings (`.env`)
 
@@ -35,6 +42,12 @@ python -m alembic -c backend/alembic.ini upgrade head     # create or update the
 python scripts/import_visit_records.py                   # copy the Phase 1 visit-record files in (safe to rerun)
 python -m backend                                        # serve on 127.0.0.1:8000
 ```
+
+`python -m backend` reads `.env` first. Running uvicorn by hand needs the settings in the
+environment and `uvicorn backend.main:create_app --factory --host 127.0.0.1`.
+
+The database itself: `docker compose -f backend/docker-compose.yml --env-file .env up -d`
+(needs `ARTEMIS_DB_PASSWORD` in `.env`; Docker Desktop must be open).
 
 The first visit check builds the guideline search the way the Streamlit app does, which loads
 the embedding model and, if the index isn't built yet, builds it. Plan item 4.3 replaces this.

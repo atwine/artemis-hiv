@@ -92,7 +92,8 @@ def test_visit_check_is_the_same_analysis_as_the_app(api):
     )
     assert body["status"] == direct.status
     assert body["ai_review"] == direct.screening_outcome == "ok"
-    assert [c["uuid"] for c in body["cards"]] == [a.alert_id for a in direct.alerts]
+    assert [c["extension"]["alert_id"] for c in body["cards"]] == [a.alert_id for a in direct.alerts]
+    assert [c["uuid"] for c in body["cards"]] == [f'{body["visit_id"]}:{a.alert_id}' for a in direct.alerts]
     assert body["patient_id"] == "P001"
     assert body["visit_date"] == "2026-01-22"
     assert body["model"] == "fake-model"
@@ -116,7 +117,7 @@ def test_cards_take_the_cds_hooks_shape(api):
 
 
 def test_rule_card(api):
-    card = next(c for c in _check(api).json()["cards"] if c["uuid"] == "tdf_creatinine_overdue")
+    card = next(c for c in _check(api).json()["cards"] if c["extension"]["alert_id"] == "tdf_creatinine_overdue")
     assert card["summary"] == "Creatinine monitoring overdue while on TDF"
     assert card["detail"].startswith("Creatinine last recorded")
     assert card["indicator"] == "warning"  # no severity on a rule alert counts as moderate
@@ -128,7 +129,7 @@ def test_rule_card(api):
 
 
 def test_ai_card_quotes_the_passages_it_cited(api):
-    card = next(c for c in _check(api).json()["cards"] if c["uuid"] == "P001_001")
+    card = next(c for c in _check(api).json()["cards"] if c["extension"]["alert_id"] == "P001_001")
     assert card["indicator"] == "warning"  # moderate
     assert card["extension"]["kind"] == "ai"
     assert card["extension"]["severity"] == "moderate"
@@ -155,7 +156,7 @@ def test_long_title_is_cut_to_140(api):
     from backend.cards import card_from_saved
 
     alert = {"alert_id": "a", "title": "x" * 300, "message": "m", "evidence": {}, "source": "rule", "severity": None}
-    card = card_from_saved(alert, {"retrieved": [], "explanation": {"text": "", "used_llm": False}})
+    card = card_from_saved(alert, {"retrieved": [], "explanation": {"text": "", "used_llm": False}}, visit_id="v1")
     assert len(card.summary) == 140
     assert card.summary.endswith("…")
 
@@ -165,7 +166,7 @@ def test_visit_check_without_ai_calls_no_model(api):
     assert api.model.calls == []
     assert body["ai_review"] == "not_run"
     assert body["model"] is None
-    assert [c["uuid"] for c in body["cards"]] == ["tdf_creatinine_overdue"]
+    assert [c["extension"]["alert_id"] for c in body["cards"]] == ["tdf_creatinine_overdue"]
 
 
 def test_failed_model_is_never_green(api):
@@ -184,6 +185,30 @@ def test_no_model_server_set_is_503_and_no_record(api):
         from backend.records import VisitCheck
 
         assert s.exec(select(VisitCheck)).all() == []
+
+
+def test_card_ids_differ_between_visits(api):
+    """CDS Hooks wants each card's uuid to be its own; the same alert in two visits gets two."""
+    first = _check(api).json()["cards"][0]["uuid"]
+    second = _check(api).json()["cards"][0]["uuid"]
+    assert first != second
+
+
+def test_no_database_set_is_503_before_any_model_call(api):
+    """Without a database the run couldn't be saved or decided on, so it isn't run (or paid for)."""
+    api.services.engine = None
+    r = _check(api)
+    assert r.status_code == 503
+    assert r.json() == {"detail": "The visit-record database is not set up."}
+    assert api.model.calls == []
+
+
+def test_alerts_and_results_out_of_step_are_an_error_not_lost_cards():
+    from backend.cards import cards_from_entry
+
+    entry = {"visit_id": "v1", "alerts": [{"alert_id": "a", "title": "t", "message": "m"}] * 2, "results": [{}]}
+    with pytest.raises(ValueError):
+        cards_from_entry(entry)
 
 
 def test_visit_check_with_the_plan(api):
@@ -209,7 +234,7 @@ def test_visit_check_is_saved_once_as_written(api):
     assert row.model == "fake-model"
     assert row.app_version == "test"
     assert row.origin == "api"
-    assert [a["alert_id"] for a in row.alerts] == [c["uuid"] for c in body["cards"]]
+    assert [a["alert_id"] for a in row.alerts] == [c["extension"]["alert_id"] for c in body["cards"]]
     assert len(row.results) == len(row.alerts)
 
 
@@ -261,12 +286,13 @@ def test_acknowledge_one_alert(api):
     assert body["decisions"][0]["alert_id"] == "tdf_creatinine_overdue"
     assert body["decisions"][0]["action"] == "Acknowledge"
     assert body["all_resolved"] is False
-    assert body["unresolved"] == [c["uuid"] for c in visit["cards"] if c["uuid"] != "tdf_creatinine_overdue"]
+    ids = [c["extension"]["alert_id"] for c in visit["cards"]]
+    assert body["unresolved"] == [i for i in ids if i != "tdf_creatinine_overdue"]
 
 
 def test_resolve_every_alert(api):
     visit = _check(api).json()
-    ids = [c["uuid"] for c in visit["cards"]]
+    ids = [c["extension"]["alert_id"] for c in visit["cards"]]
     decisions = [{"alert_id": ids[0], "action": "Override", "reason": "Already addressed"}]
     decisions += [{"alert_id": i, "action": "Acknowledge"} for i in ids[1:]]
     body = _decide(api, visit["visit_id"], *decisions).json()
