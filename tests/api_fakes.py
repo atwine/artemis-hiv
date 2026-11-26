@@ -22,9 +22,10 @@ from modules.rag_engine import RagEngine
 
 ROOT = Path(__file__).resolve().parents[1]
 GOLDEN = ROOT / "tests" / "golden"
-MOCK_PATIENTS = ROOT / "Data" / "mock_patients.json"
-CUSTOM_PATIENTS = ROOT / "Data" / "custom_patients.json"
-DEMO_DAY_PATIENTS = ROOT / "Data" / "demo_day_patients.json"
+# The tests' own made-up patients: a copy of the app's seed patients (P001-P009, Kintu-Test 001),
+# so tests never depend on the app's data (owner, 2026-11-27: the app's patients live only in the
+# database).
+FIXTURE_PATIENTS = ROOT / "tests" / "fixtures" / "patients.json"
 CLINIC_DAY = ROOT / "Data" / "demo_clinic_day.json"
 
 
@@ -98,12 +99,8 @@ def replies_for(patient_id: str) -> Dict[str, str]:
 
 
 def read_patients() -> List[Dict[str, Any]]:
-    """The demo patients, read (never written) from Data/."""
-    out: List[Dict[str, Any]] = []
-    for path in (MOCK_PATIENTS, CUSTOM_PATIENTS, DEMO_DAY_PATIENTS):
-        if path.exists():
-            out.extend(json.loads(path.read_text(encoding="utf-8")))
-    return out
+    """The tests' made-up patients (tests/fixtures/patients.json), read, never written."""
+    return json.loads(FIXTURE_PATIENTS.read_text(encoding="utf-8"))
 
 
 def read_clinic_day() -> Dict[str, Any]:

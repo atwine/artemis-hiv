@@ -3,14 +3,10 @@
 from __future__ import annotations
 
 import copy
-import json
-from pathlib import Path
 
 from artemis.patient.record import build_patient_context
 from artemis.rules.checks import run_alerts
 from tests import pipeline_harness as h
-
-ROOT = Path(__file__).resolve().parents[1]
 
 
 def _patient(pid: str) -> dict:
@@ -68,26 +64,3 @@ def test_an_nsaid_on_the_medicine_list_is_seen() -> None:
 def test_words_like_none_on_the_medicine_list_are_not_medicines() -> None:
     assert build_patient_context(_patient("P006")).other_medications == []
     assert build_patient_context(_patient("Kintu-Test 001")).other_medications == []
-
-
-# The one-time conversion of the three cases saved with the old form.
-
-def test_converting_the_old_cases_keeps_what_was_written_and_can_run_twice(tmp_path: Path) -> None:
-    from scripts.convert_old_cases import convert_file
-
-    path = tmp_path / "custom.json"
-    path.write_text((ROOT / "Data" / "custom_patients.json").read_text(encoding="utf-8"), encoding="utf-8")
-    convert_file(path)
-    once = path.read_text(encoding="utf-8")
-    convert_file(path)
-    assert path.read_text(encoding="utf-8") == once  # safe to run twice
-
-    cases = {p["patient_id"]: p for p in json.loads(once)}
-    p5 = cases["P005"]
-    assert p5["art_regimen_current"] == ["TDF", "3TC", "DTG"]
-    assert p5["art_regimen_as_entered"].startswith("TDF/3TC/DTG (TLD) fixed-dose combination")
-    assert p5["other_medications"] == []
-    assert "AZT/3TC/NVP for 2 years (2018-2020)" in p5["intake"]["prior_history"]
-    assert "AZT/3TC/NVP for 2 years (2018-2020)" in p5["visits"][0]["clinician_note"]
-    assert cases["P006"]["other_medications"] == []
-    assert cases["Kintu-Test 001"]["art_regimen_current"] == ["TDF", "3TC", "DTG"]

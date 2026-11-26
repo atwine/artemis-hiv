@@ -450,6 +450,8 @@ results they will value. These were raised and set aside, not dropped.
 
 - Changing a patient's record after it is added, with a history of every change (owner chose
   add-only for now, 4C.2).
+- Making new evaluation cases from patients in the database: `scripts/make_cases.py` built
+  `eval/cases/` from the old patient files and went with them (4C.2); the cases are kept.
 - The guideline index fingerprint reads line endings as they are on disk, so a Windows laptop and a
   Linux server name the same text differently and each builds its own index; the test pins only the
   model and version (owner chose "fix the test only", 2026-11-27).

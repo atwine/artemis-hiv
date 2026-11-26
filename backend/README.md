@@ -56,7 +56,7 @@ allow only the frontend's address (ACCESS.md).
 
 ```
 python -m alembic -c backend/alembic.ini upgrade head     # create or update the tables
-python scripts/load_patients.py                          # load the made-up patients from Data/ (safe to rerun)
+python scripts/patients_backup.py load                   # fill a new database with the made-up patients (safe to rerun)
 python scripts/import_visit_records.py                   # copy the Phase 1 visit-record files in (safe to rerun)
 python -m backend                                        # serve on 127.0.0.1:8000
 ```
@@ -71,6 +71,19 @@ The first visit check sets up the guideline search (`artemis/config.py`): it loa
 model and opens the kept index in `storage/chroma`, embedding only passages it doesn't hold yet
 (normally none; `python scripts/build_index.py` builds it ahead of time). The backend doesn't load
 the Streamlit app (plan 4C.1).
+
+## The patients' backup
+
+The database is the only copy of the app's patients (owner, 2026-11-27). Their backup is
+`backend/seed/patients.sql`, kept in the repo so a new database (a fresh laptop, the website's
+end-to-end tests) can be filled; the app never reads it.
+
+- Load it into a new database: `python scripts/patients_backup.py load`, after `alembic upgrade
+  head`. Safe to run again: rows already there are skipped.
+- Make it again after the patients change: `python scripts/patients_backup.py make`, then commit
+  the file. `tests/test_patients_backup.py` checks it holds the same patients as the tests'
+  own copy (`tests/fixtures/patients.json`).
+- Until plan 4C.6 deletes the old patient files, `python scripts/load_patients.py` loads them once.
 
 ## Tests
 
