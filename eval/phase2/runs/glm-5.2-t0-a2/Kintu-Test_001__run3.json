@@ -1,0 +1,386 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 140.9,
+ "calls": [
+  {
+   "prompt_tokens": 1519,
+   "completion_tokens": 694,
+   "total_tokens": 2213,
+   "cost": 0.0019147,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1472,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0019147,
+    "upstream_inference_prompt_cost": 0.00023522,
+    "upstream_inference_completions_cost": 0.00167948
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 810,
+   "completion_tokens": 113,
+   "total_tokens": 923,
+   "cost": 0.00040702,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00040702,
+    "upstream_inference_prompt_cost": 0.00013356,
+    "upstream_inference_completions_cost": 0.00027346
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3611,
+   "completion_tokens": 1600,
+   "total_tokens": 5211,
+   "cost": 0.00506634,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2176,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00506634,
+    "upstream_inference_prompt_cost": 0.00119434,
+    "upstream_inference_completions_cost": 0.003872
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00738806,
+ "status": "RED",
+ "screening_outcome": "cut_off",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "DTG-associated hyperglycemia and pre-diabetes",
+   "message": "Guidelines state that clients with 2 or more risk factors for hyperglycemia and high baseline glucose should not be initiated or transitioned to DTG. Hyperglycemia has been reported among HIV patients on DTG. This patient has multiple risk factors: age ≥30, family history of DM, and BMI ≥25. At TLD switch 18 months ago, fasting glucose was 92 mg/dL (normal), so DTG was permissible with glucose monitoring every 3 months for the first year. Now fasting glucose is 118 mg/dL and HbA1c 6.1%, both in pre-diabetic range. Evidence for drug attribution: DTG is temporally associated with rising glucose, and guidelines acknowledge DTG-related hyperglycemia. Evidence against: family history of DM and acanthosis nigricans suggest intrinsic insulin resistance. No glucose monitoring over the past 18 months is documented.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Assess whether DTG should be continued given pre-diabetes progression. If continued, monitor fasting glucose and HbA1c every 3 months. Consider switching to ATV/r or EFV400 per guidelines.",
+    "citations": [
+     {
+      "page_number": 35,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "DTG-associated hyperglycemia and pre-diabetes",
+     "message": "Guidelines state that clients with 2 or more risk factors for hyperglycemia and high baseline glucose should not be initiated or transitioned to DTG. Hyperglycemia has been reported among HIV patients on DTG. This patient has multiple risk factors: age ≥30, family history of DM, and BMI ≥25. At TLD switch 18 months ago, fasting glucose was 92 mg/dL (normal), so DTG was permissible with glucose monitoring every 3 months for the first year. Now fasting glucose is 118 mg/dL and HbA1c 6.1%, both in pre-diabetic range. Evidence for drug attribution: DTG is temporally associated with rising glucose, and guidelines acknowledge DTG-related hyperglycemia. Evidence against: family history of DM and acanthosis nigricans suggest intrinsic insulin resistance. No glucose monitoring over the past 18 months is documented.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Assess whether DTG should be continued given pre-diabetes progression. If continued, monitor fasting glucose and HbA1c every 3 months. Consider switching to ATV/r or EFV400 per guidelines.",
+     "citations": [
+      {
+       "page_number": 35,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2"
+      },
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      },
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Significant weight gain and obesity on DTG",
+   "message": "Guidelines identify obesity as a preventable disorder increasing risk of heart disease and diabetes. This patient gained 17 kg in 18 months on TLD (65 kg to 82 kg), with BMI rising from 25.6 to 32.4 kg/m², now classified as obese. Waist circumference 96 cm and acanthosis nigricans indicate central adiposity and insulin resistance. DTG is temporally associated with this rapid weight gain. Evidence against drug attribution: sedentary lifestyle and dietary factors may also contribute. The weight gain is compounding her pre-diabetes and dyslipidemia. No plan addresses weight management or lifestyle modification today.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Initiate lifestyle modification counseling including diet and physical activity. Consider DTG contribution to weight gain and evaluate regimen alternatives if weight gain continues.",
+    "citations": [
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 35,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Significant weight gain and obesity on DTG",
+     "message": "Guidelines identify obesity as a preventable disorder increasing risk of heart disease and diabetes. This patient gained 17 kg in 18 months on TLD (65 kg to 82 kg), with BMI rising from 25.6 to 32.4 kg/m², now classified as obese. Waist circumference 96 cm and acanthosis nigricans indicate central adiposity and insulin resistance. DTG is temporally associated with this rapid weight gain. Evidence against drug attribution: sedentary lifestyle and dietary factors may also contribute. The weight gain is compounding her pre-diabetes and dyslipidemia. No plan addresses weight management or lifestyle modification today.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Initiate lifestyle modification counseling including diet and physical activity. Consider DTG contribution to weight gain and evaluate regimen alternatives if weight gain continues.",
+     "citations": [
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3"
+      },
+      {
+       "page_number": 35,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "Dyslipidemia with adverse lipid profile",
+   "message": "Guidelines note that dyslipidemia is a risk factor for diabetes development in PLHIV and that antiretroviral drugs are a major cause of metabolic complications. This patient's lipid profile is markedly abnormal: total cholesterol 228 mg/dL, LDL 148 mg/dL, HDL 38 mg/dL, and triglycerides 212 mg/dL. This atherogenic pattern, combined with new hypertension (BP 138/88), obesity, and pre-diabetes, significantly increases cardiovascular risk. DTG and TDF can contribute to lipid changes, though TDF is generally lipid-neutral. No baseline lipid panel is available for comparison. No plan addresses lipid evaluation or management.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Evaluate dyslipidemia per cardiovascular risk stratification. Consider dietary intervention and statin therapy if indicated. Repeat lipid panel to confirm trend.",
+    "citations": [
+     {
+      "page_number": 35,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "title": "Dyslipidemia with adverse lipid profile",
+     "message": "Guidelines note that dyslipidemia is a risk factor for diabetes development in PLHIV and that antiretroviral drugs are a major cause of metabolic complications. This patient's lipid profile is markedly abnormal: total cholesterol 228 mg/dL, LDL 148 mg/dL, HDL 38 mg/dL, and triglycerides 212 mg/dL. This atherogenic pattern, combined with new hypertension (BP 138/88), obesity, and pre-diabetes, significantly increases cardiovascular risk. DTG and TDF can contribute to lipid changes, though TDF is generally lipid-neutral. No baseline lipid panel is available for comparison. No plan addresses lipid evaluation or management.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Evaluate dyslipidemia per cardiovascular risk stratification. Consider dietary intervention and statin therapy if indicated. Repeat lipid panel to confirm trend.",
+     "citations": [
+      {
+       "page_number": 35,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2"
+      },
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "Missing glucose monitoring per DTG guidelines",
+   "message": "Guidelines require glucose monitoring every 3 months for the first year when initiating or transitioning clients with 2 or more hyperglycemia risk factors to DTG. This patient had 3 risk factors (age ≥30, family history of DM, BMI ≥25) at TLD switch 18 months ago. No interim glucose or HbA1c results are documented in the 18 months since transition. Had monitoring occurred, pre-diabetes might have been detected earlier. The clinician's plan today is blank, with no glucose monitoring or diabetes screening scheduled.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Schedule fasting glucose and HbA1c every 3 months. Complete a full DM screening assessment and document a management plan addressing pre-diabetes.",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "title": "Missing glucose monitoring per DTG guidelines",
+     "message": "Guidelines require glucose monitoring every 3 months for the first year when initiating or transitioning clients with 2 or more hyperglycemia risk factors to DTG. This patient had 3 risk factors (age ≥30, family history of DM, BMI ≥25) at TLD switch 18 months ago. No interim glucose or HbA1c results are documented in the 18 months since transition. Had monitoring occurred, pre-diabetes might have been detected earlier. The clinician's plan today is blank, with no glucose monitoring or diabetes screening scheduled.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Schedule fasting glucose and HbA1c every 3 months. Complete a full DM screening assessment and document a management plan addressing pre-diabetes.",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      },
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c1"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3"
+  ],
+  "ALERT_004": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does dolutegravir cause weight gain and metabolic changes like pre-diabetes?",
+   "What monitoring is recommended for weight gain and metabolic changes on DTG?",
+   "Should fasting glucose and HbA1c be monitored regularly in patients on TLD?",
+   "What lipid monitoring is recommended for patients on dolutegravir-based regimens?",
+   "When should a patient on TLD with significant weight gain be switched to another regimen?",
+   "Does a family history of diabetes change monitoring recommendations for patients on DTG?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"DTG-associated hyperglycemia and pre-diabetes\",\n    \"message\": \"Guidelines state that clients with 2 or more risk factors for hyperglycemia and high baseline glucose should not be initiated or transitioned to DTG. Hyperglycemia has been reported among HIV patients on DTG. This patient has multiple risk factors: age ≥30, family history of DM, and BMI ≥25. At TLD switch 18 months ago, fasting glucose was 92 mg/dL (normal), so DTG was permissible with glucose monitoring every 3 months for the first year. Now fasting glucose is 118 mg/dL and HbA1c 6.1%, both in pre-diabetic range. Evidence for drug attribution: DTG is temporally associated with rising glucose, and guidelines acknowledge DTG-related hyperglycemia. Evidence against: family history of DM and acanthosis nigricans suggest intrinsic insulin resistance. No glucose monitoring over the past 18 months is documented.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Assess whether DTG should be continued given pre-diabetes progression. If continued, monitor fasting glucose and HbA1c every 3 months. Consider switching to ATV/r or EFV400 per guidelines.\",\n    \"citations\": [\n      {\"page_number\": 35, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2\"},\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"},\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3\"},\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Significant weight gain and obesity on DTG\",\n    \"message\": \"Guidelines identify obesity as a preventable disorder increasing risk of heart disease and diabetes. This patient gained 17 kg in 18 months on TLD (65 kg to 82 kg), with BMI rising from 25.6 to 32.4 kg/m², now classified as obese. Waist circumference 96 cm and acanthosis nigricans indicate central adiposity and insulin resistance. DTG is temporally associated with this rapid weight gain. Evidence against drug attribution: sedentary lifestyle and dietary factors may also contribute. The weight gain is compounding her pre-diabetes and dyslipidemia. No plan addresses weight management or lifestyle modification today.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Initiate lifestyle modification counseling including diet and physical activity. Consider DTG contribution to weight gain and evaluate regimen alternatives if weight gain continues.\",\n    \"citations\": [\n      {\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3\"},\n      {\"page_number\": 35, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_003\",\n    \"title\": \"Dyslipidemia with adverse lipid profile\",\n    \"message\": \"Guidelines note that dyslipidemia is a risk factor for diabetes development in PLHIV and that antiretroviral drugs are a major cause of metabolic complications. This patient's lipid profile is markedly abnormal: total cholesterol 228 mg/dL, LDL 148 mg/dL, HDL 38 mg/dL, and triglycerides 212 mg/dL. This atherogenic pattern, combined with new hypertension (BP 138/88), obesity, and pre-diabetes, significantly increases cardiovascular risk. DTG and TDF can contribute to lipid changes, though TDF is generally lipid-neutral. No baseline lipid panel is available for comparison. No plan addresses lipid evaluation or management.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Evaluate dyslipidemia per cardiovascular risk stratification. Consider dietary intervention and statin therapy if indicated. Repeat lipid panel to confirm trend.\",\n    \"citations\": [\n      {\"page_number\": 35, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2\"},\n      {\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_004\",\n    \"title\": \"Missing glucose monitoring per DTG guidelines\",\n    \"message\": \"Guidelines require glucose monitoring every 3 months for the first year when initiating or transitioning clients with 2 or more hyperglycemia risk factors to DTG. This patient had 3 risk factors (age ≥30, family history of DM, BMI ≥25) at TLD switch 18 months ago. No interim glucose or HbA1c results are documented in the 18 months since transition. Had monitoring occurred, pre-diabetes might have been detected earlier. The clinician's plan today is blank, with no glucose monitoring or diabetes screening scheduled.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Schedule fasting glucose and HbA1c every 3 months. Complete a full DM screening assessment and document a management plan addressing pre-diabetes.\",\n    \"citations\": [\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"},\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3\"},\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_005\",\n    \"title\": \"No clinician assessment or plan documented\",\n    \"message\": \"The clinician's assessment and plan for today's visit is blank. This patient presents with multiple guideline-requiring issues: new pre-diabetes, obesity with 17 kg weight gain, dyslipidemia, and borderline hypertension. Guidelines require DM screening every 6 months or when clinically indicated, with lifestyle modification for all at-risk patients. The absence of a documented plan means no actions are ordered for these significant metabolic abnormalities. Viral suppression is maintained (VL <50), but metabolic complications are unaddressed.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Document a comprehensive plan addressing pre-diabetes, dyslipidemia, weight management, and BP monitoring. Schedule follow-up with labs per DTG monitoring guidelines.\",\n    \"citations\": [\n",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p35_c2",
+    "page_number": 35,
+    "quote": "tuating viral load and CD4 cell count which cause a chronic inflammatory state which may induce insulin resistance. * Rapid weight gain, co-infection with Hepatitis C, dyslipidemia, and lipodystrophy. * Anti-retroviral drugs are a major cause of the development of DM in PLHIV. Protease inhibitors such as Lopinavir, and Ritonavir cause insulin resistance by causing lipodystrophy, impaired glucose transporter type 4 translocation, reduced adipocyte differentiation, reduced insulin secretion, and dyslipidemia with lipotoxicity. Hyperglycemia has been reported among HIV patients on DTG. Although causality has not yet been determined, systems for pharmacovigilance are recommended to assess the relationship and guide mitigation measures. ### Screening and diagnosis for DM Patients should be assessed for risk factors for DM before initiation of ART, while on ART, and when clinically indicated using the DM screening tool. All PLHIV should thereafter be re-screened every six months (see Figure 43). ### Treatment For DM"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Initiate or transition to DTG\" 3. Check glucose* * Blood glucose or urine dipstick 4. Decision: High glucose**? **High blood glucose: Fasting>6.95, Non-fasting>8.89 High urine glucose: Any + - If YES, proceed to \"DO NOT INITIATE OR TRANSITION TO DTG\" - If NO, proceed to \"Initiate on DTG, glucose monitoring every 3 months for the 1st year\" **Outcomes:** - **DO NOT INITIATE OR TRANSITION TO DTG** Give ATV/r or maintain on EFV Monitor blood glucose per diabetes management guidelines. - **Initiate on DTG, glucose monitoring every 3 months for the 1st year** see monitoring algorithm for PLHIV transitioned to DTG - **Initiate or transition to DTG** **Screening and management of complications of Diabetes Mellitus**"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+    "page_number": 12,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 virological monitoring provides an early and more accurate indication of treatment failure and indicates the need to switch from first line to second-line drugs, and from second- line to third-line drugs, toward reducing accumulation of drug-resistance mutations and improved clinical outcomes. Dolutegravir (DTG)-based regimens (e.g., tenofovir/lamivudine/dolutegravir [TLD]) have increased viral load suppression (VLS) rates to unprecedented levels, hence a need to actively monitor patients for low-level viremia to keep DTG a durable treatment option for as long as possible. Furthermore, low-level viraemia monitoring can enhances monitoring of achieving and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p8_c1",
+    "page_number": 8,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## 6.9 WHEN TO USE ALTERNATIVE FIRSTLINE REGIMENS When to use ABC+3TC+LPV/r Children who weigh between 20kg to <30kg should only be initiated on ABC+3TC+LPV/r if DTG is contraindicated or not tolerated (Table 78). When to use TAF/3TC/DTG Patients will be given TAF/3TC/DTG if ABC and AZT are contraindicated. TAF (when available) should be given to children who are older than 6 years and weigh ≥ 25kg. ## 6.10 RECOMMENDED FIRSTLINE REGIMEN FOR INITIATING ART IN CHILDREN LESS THAN 20KG **RECOMMENDED FIRSTLINE REGIMEN: ABC+3TC+DTG** All HIV-infected children weighing less than 20kg should be initiated on Abacavir + Lamivudine + Dolutegravir (ABC + 3TC + DTG) (Table 74) If DTG is contra-indicated, initiate on Abacavir + Lamivudine+ Ritonavir-boosted Lopinavir (ABC+3TC+LPV/r)."
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+    "page_number": 39,
+    "quote": "targets. Obesity is a preventable medical disorder involving excessive body fat and often increases the risk of health problems/diseases such as heart disease and diabetes ## Risk factors for obesity Although there are genetic, behavioural, metabolic and hormonal influences on body weight, obesity occurs when you take in more calories than you burn through normal daily activities and exercise. The risk factors that can be modified include; an unhealthy diet i.e high in calories, lacking in fruits and vegetables, b. inactivity: Sedentary lifestyle, c. Stress, d. some medical conditions can lead to weight gain 190"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabetes management guidelines. Flowchart: Action: Initiate or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+    "page_number": 4,
+    "quote": "00 or an ATV/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia and a high baseline RBS or FBS should not be initiated/transitioned to DTG. Give an EFV400 or ATZ/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia with normal baseline RBS or FBS: Initiate or transition to DTG and monitor RBS or FBS every 3 months for 6 months. 237"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p36_c2",
+    "page_number": 36,
+    "quote": "and increased gradually. * Lopinavir/r, ATV/r, and DRV/r can be used with close monitoring. * DTG should not be used. Figure 42: Algorithm for Screening, Diagnosis and Management of Diabetes Mellitus Assess for risk factors for DM among patients on ART or before initiating ART using DM Screening tool): flowchart From 'Assess for risk factors...' box, two paths emerge: Path 1: Risk factors are absent Re-assess every six months or when clinically indicated e.g., excessive thirst, frequent urination Path 2: Risk factors present Do random/fasting blood glucose: flowchart From 'Do random/fasting blood glucose' box, three paths emerge based on blood glucose levels: Path 2.1: FBG <7.0mmol/L Normal Re-screen every 6 months OR when clinically indicated Life style modification Path 2.2: FBG >7.0 - 18 mmol/L OR RBG >11.1 - 18mmols/1 Diabetes mellitus Treat as per national guidelines (see treatment protocol) Life style modification Path 2.3: FBG >18mmol/L OR RBG > 15 Diabetes mellitus Stabilize and consult/refer for insulin and further management Life style modification: flowchart 187"
+   }
+  ],
+  "parse_status": "cut_off",
+  "finish_reason": "length",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Uncertain: the provided guideline excerpts do not contain specific content on DTG-related weight gain or metabolic toxicity management, so a regimen change cannot be justified from the excerpts alone.\"},\"problems\":[{\"problem\":\"Significant weight gain (17 kg in 18 months, BMI 25.6→32.4) possibly related to DTG\",\"action\":\"Uncertain: guideline excerpts provided do not contain specific guidance on DTG-related weight gain management; consider clinical evaluation for metabolic causes and lifestyle intervention per standard care\",\"reason\":\"Uncertain: the excerpts do not include content on DTG-associated weight gain or obesity management to justify a specific action\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"New-onset elevated blood pressure (118/74→138/88 mmHg) and possible metabolic syndrome\",\"action\":\"Uncertain: guideline excerpts do not contain hypertension or metabolic syndrome management content; refer to standard clinical guidelines for evaluation and management\",\"reason\":\"Uncertain: the provided excerpts do not address hypertension screening or management in PLHIV on ART\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Acanthosis nigricans and fatigue suggesting possible insulin resistance or prediabetes (family history of T2DM, baseline fasting glucose 92 mg/dL)\",\"action\":\"Uncertain: guideline excerpts do not contain diabetes screening content; order fasting blood glucose and HbA1c per standard clinical practice\",\"reason\":\"Uncertain: the excerpts do not include diabetes screening or insulin resistance management recommendations\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No assessment or plan was documented for this visit.\"}},{\"problem\":\"Absence of any documented assessment or plan for today's visit\",\"action\":\"Document a complete assessment and management plan addressing weight gain, BP elevation, acanthosis nigricans, and fatigue with appropriate workup\",\"reason\":\"The patient presents with multiple new findings requiring clinical decision-making, and no plan was recorded.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician documented no assessment or plan for this encounter.\"}}],\"monitoring_plan\":[\"Order fasting blood glucose and HbA1c to screen for prediabetes/diabetes given acanthosis nigricans, family history, and weight gain\",\"Monitor blood pressure at follow-up; consider 24-hour BP assessment if persistently elevated\",\"Repeat weight, BMI, and waist circumference at next visit to track trend\",\"Order renal function and liver panel as baseline given TDF regimen and metabolic concerns\",\"Reassess in 4-6 weeks with lab results\",\"Triggers: if fasting glucose ≥126 mg/dL or HbA1c ≥6.5%, initiate diabetes management; if BP persistently ≥140/90, initiate hypertension treatment\"],\"patient_counselling\":[\"Counsel on lifestyle modifications including diet changes and increased physical activity given significant weight gain and metabolic risk factors\",\"Educate that DTG can be associated with weight gain; do not stop ART without consulting clinician\",\"Discuss importance of diabetes screening given family history and acanthosis nigricans\",\"Advise on home blood pressure monitoring if possible and salt reduction in diet\"]}",
+ "plan_issues": []
+}
