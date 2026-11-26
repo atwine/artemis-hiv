@@ -94,6 +94,14 @@ CASES: List[Case] = [
     Case("POST", "/api/visits/{visit_id}/finalize", "local", "/api/visits/nope/finalize", DENY, "no Finalize for a visit that doesn't exist"),
     Case("POST", "/api/visits/{visit_id}/finalize", "website", "/api/visits/{decided_visit_id}/finalize", DENY, "website: visit_records = -"),
     Case("POST", "/api/visits/{visit_id}/finalize", "rebinding", "/api/visits/{decided_visit_id}/finalize", DENY, "rebinding is refused by the Host check"),
+    Case("GET", "/api/visits/{visit_id}", "local", "/api/visits/{visit_id}", ALLOW, "local: visit_records = view(all)"),
+    Case("GET", "/api/visits/{visit_id}", "local", "/api/visits/nope", DENY, "an unknown visit is 404"),
+    Case("GET", "/api/visits/{visit_id}", "website", "/api/visits/{visit_id}", DENY, "website: visit_records = -"),
+    Case("GET", "/api/visits/{visit_id}", "rebinding", "/api/visits/{visit_id}", DENY, "rebinding is refused by the Host check"),
+    Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/P001/visits", ALLOW, "local: visit_records = view(all)"),
+    Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/NOPE/visits", DENY, "an unknown patient is 404"),
+    Case("GET", "/api/patients/{patient_id}/visits", "website", "/api/patients/P001/visits", DENY, "website: visit_records = -"),
+    Case("GET", "/api/patients/{patient_id}/visits", "rebinding", "/api/patients/P001/visits", DENY, "rebinding is refused by the Host check"),
 ]
 
 

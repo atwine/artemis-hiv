@@ -35,7 +35,13 @@ def _utc(value: Any) -> datetime.datetime:
 
 
 def iso(value: datetime.datetime) -> str:
-    return _utc(value).isoformat(timespec="seconds")
+    """ISO text in UTC: whole seconds, or microseconds when the time has them."""
+    return _utc(value).isoformat(timespec="auto")
+
+
+def now() -> str:
+    """This moment, to the microsecond, so two checks saved in one second still sort in order."""
+    return iso(datetime.datetime.now(datetime.timezone.utc))
 
 
 class VisitCheck(SQLModel, table=True):
@@ -160,6 +166,13 @@ def latest_decisions(session: Session, visit_id: str) -> Dict[str, AlertDecision
         select(AlertDecision).where(AlertDecision.visit_id == visit_id).order_by(AlertDecision.saved_at, AlertDecision.id)
     ).all()
     return {r.alert_id: r for r in rows}
+
+
+def checks_for(session: Session, patient_id: str) -> List[VisitCheck]:
+    """A patient's saved visit checks, newest first."""
+    return list(session.exec(
+        select(VisitCheck).where(VisitCheck.patient_id == patient_id).order_by(VisitCheck.saved_at.desc(), VisitCheck.visit_id)
+    ).all())
 
 
 def _last_decision_id(session: Session, visit_id: str) -> Optional[int]:

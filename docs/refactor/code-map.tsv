@@ -228,7 +228,7 @@ backend/records.py	check_from_entry	Turns a saved visit check into a database ro
 backend/records.py	entry_from_check	Turns a database row back into a saved visit check.	stays	stays
 backend/records.py	get_check	Reads one visit check from the database.	stays	stays
 backend/records.py	import_folder	Copies the visit-record files into the database; safe to rerun.	stays	stays
-backend/records.py	iso	Writes a time as ISO text in UTC.	stays	stays
+backend/records.py	iso	Writes a time as ISO text in UTC, with microseconds when the time has them.	stays	stays
 backend/records.py	json_safe	Makes a JSON-safe copy, with dates as text, as the files have.	stays	stays
 backend/records.py	latest_decisions	Gives the latest decision on each alert of a visit.	stays	stays
 backend/records.py	save_check	Saves one visit check.	stays	stays
@@ -283,3 +283,8 @@ backend/records.py	_last_decision_id	Gives the newest decision row of a visit.	s
 backend/records.py	add_finalize	Saves one Finalize, covering every decision saved so far.	stays	stays
 backend/records.py	current_finalize	Gives the Finalize that still holds, unless a later decision reopened the visit.	stays	stays
 backend/records.py	finalized_at	Gives when a visit was finalized, or none while it is open.	stays	stays
+backend/main.py	_visit_reply	Builds a visit check as the screen gets it, the same for a fresh check and a reopened one.	stays	stays
+backend/main.py	create_app.reopen_visit	Route: a saved visit as it was shown, with its decisions and Finalize, with no new AI call.	stays	stays
+backend/main.py	create_app.past_checks	Route: a patient's saved checks, newest first.	stays	stays
+backend/records.py	checks_for	Gives a patient's saved visit checks, newest first.	stays	stays
+backend/records.py	now	Gives this moment to the microsecond, so checks saved in one second still sort in order.	stays	stays

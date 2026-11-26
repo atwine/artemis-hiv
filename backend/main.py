@@ -40,8 +40,10 @@ from backend.models import (
     PatientDetail,
     PatientRecord,
     PatientSummary,
+    SavedVisit,
     VisitCheckRequest,
     VisitCheckResponse,
+    VisitSummary,
 )
 from backend.services import Services, default_services
 from backend.settings import Settings, settings_from_env
@@ -98,6 +100,17 @@ def _detail(p: Loaded) -> PatientDetail:
         labs.setdefault(e.test, []).append(LabResult(date=e.date.isoformat(), value=e.value, unit=e.unit, source=e.source))
     notes = [LabNote(date=n.date.isoformat() if n.date else None, source=n.source, text=n.text) for n in read_lab_notes(p.stored)]
     return PatientDetail(**{**p.record.model_dump(), "labs": labs, "lab_notes": notes})
+
+
+def _visit_reply(entry: Dict[str, Any], *, record_saved: bool) -> Dict[str, Any]:
+    """A saved "checks_run" entry as the screen gets it: the same for a fresh check and a reopened one."""
+    cards = cards_from_entry(entry)
+    return dict(
+        visit_id=entry["visit_id"], patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
+        saved_at=entry["saved_at"], status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
+        cards=cards, plan=plan_from_entry(entry), record_saved=record_saved,
+        banners=banners_for(entry), disclaimer=DISCLAIMER, finalize_note=FINALIZE_BLOCKED if cards else None,
+    )
 
 
 def _latest(session: Session, visit_id: str) -> Dict[str, DecisionOut]:
@@ -161,7 +174,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         )
         if isinstance(result.agentic_result, dict) and "error" in result.agentic_result:
             logger.warning("Plan step failed: %s", result.agentic_result.get("type"))
-        visit_id, saved_at = uuid.uuid4().hex, visit_record.now_utc()
+        visit_id, saved_at = uuid.uuid4().hex, records.now()
         entry = records.json_safe(visit_record.checks_entry(
             result,
             note=body.note,
@@ -179,13 +192,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         except SQLAlchemyError as exc:
             # The results are still shown, as on the Streamlit screen (fix 9).
             logger.warning("Visit record not saved: %s", type(exc).__name__)
-        cards = cards_from_entry(entry)
-        return VisitCheckResponse(
-            visit_id=visit_id, patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
-            saved_at=saved_at, status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
-            cards=cards, plan=plan_from_entry(entry), record_saved=saved,
-            banners=banners_for(entry), disclaimer=DISCLAIMER, finalize_note=FINALIZE_BLOCKED if cards else None,
-        )
+        return VisitCheckResponse(**_visit_reply(entry, record_saved=saved))
 
     @app.post(
         "/api/visits/{visit_id}/decisions",
@@ -242,5 +249,46 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 visit_id=visit_id, finalized_at=records.iso(current.finalized_at),
                 decisions=[DecisionOut(**d) for d in current.decisions],
             )
+
+    @app.get("/api/visits/{visit_id}", response_model=SavedVisit, dependencies=[
+        Depends(require("visit_records", "view")), Depends(require("guidelines", "view")),
+    ])
+    def reopen_visit(visit_id: str) -> SavedVisit:
+        """A saved visit as it was shown, with its decisions and Finalize. No new AI call."""
+        if services.engine is None:
+            raise _no_database()
+        with Session(services.engine) as session:
+            row = records.get_check(session, visit_id)
+            if row is None:
+                raise HTTPException(status_code=404, detail="No such visit.")
+            entry = records.entry_from_check(row)
+            latest = _latest(session, visit_id)
+            finalized = records.finalized_at(session, visit_id)
+        reply = _visit_reply(entry, record_saved=True)
+        decided, unresolved = summary([c.extension.alert_id for c in reply["cards"]], latest)
+        reply["finalize_note"] = FINALIZE_BLOCKED if unresolved and finalized is None else None
+        return SavedVisit(
+            **reply, note=entry["note"], decisions=decided, all_resolved=not unresolved,
+            unresolved=unresolved, finalized_at=finalized,
+        )
+
+    @app.get("/api/patients/{patient_id}/visits", response_model=List[VisitSummary], dependencies=[
+        Depends(require("patients", "view")), Depends(require("visit_records", "view")),
+    ])
+    def past_checks(patient_id: str) -> List[VisitSummary]:
+        """A patient's saved checks, newest first."""
+        _find(services, patient_id)
+        if services.engine is None:
+            raise _no_database()
+        with Session(services.engine) as session:
+            return [
+                VisitSummary(
+                    visit_id=row.visit_id, visit_date=row.visit_date, saved_at=records.iso(row.saved_at),
+                    status=row.status, ai_review=row.ai_review, model=row.model, alert_count=len(row.alerts),
+                    decided_count=len(records.latest_decisions(session, row.visit_id)),
+                    finalized_at=records.finalized_at(session, row.visit_id),
+                )
+                for row in records.checks_for(session, patient_id)
+            ]
 
     return app

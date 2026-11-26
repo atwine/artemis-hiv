@@ -220,6 +220,7 @@ class VisitCheckResponse(BaseModel):
 
 
 # --- Decisions --------------------------------------------------------------------------
+# (SavedVisit, below the decision shapes, is a visit check reopened with its decisions.)
 
 
 class DecisionIn(BaseModel):
@@ -253,6 +254,30 @@ class DecisionsResponse(BaseModel):
     unresolved: List[str]
     finalize_note: Optional[str]  # FINALIZE_BLOCKED while an alert waits for a decision
     # When the visit was finalized; None while open, including after a later decision reopened it.
+    finalized_at: Optional[str]
+
+
+class SavedVisit(VisitCheckResponse):
+    """A saved visit reopened (no new AI call): the check as it was shown, plus what was decided."""
+
+    note: str
+    decisions: List[DecisionOut]  # the latest decision on each decided alert, in alert order
+    all_resolved: bool
+    unresolved: List[str]
+    finalized_at: Optional[str]  # None while open, including after a later decision reopened it
+
+
+class VisitSummary(BaseModel):
+    """One of a patient's past checks, newest first."""
+
+    visit_id: str
+    visit_date: str
+    saved_at: str
+    status: Status
+    ai_review: AiReview
+    model: Optional[str]
+    alert_count: int
+    decided_count: int
     finalized_at: Optional[str]
 
 
