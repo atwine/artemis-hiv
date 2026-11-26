@@ -37,6 +37,7 @@ import streamlit as _streamlit  # noqa: E402
 
 import app  # noqa: E402  (loads .env and the app's settings)
 from artemis.ai.client import openai_compat_config_from_env  # noqa: E402
+from artemis.evaluation.scrub import scrub, server_strings  # noqa: E402
 from artemis.patient.record import build_patient_context  # noqa: E402
 from artemis.rules.checks import run_alerts  # noqa: E402
 
@@ -102,35 +103,6 @@ def _to_jsonable(obj: Any) -> Any:
     if isinstance(obj, (str, int, float, bool)) or obj is None:
         return obj
     return str(obj)
-
-
-_ROOT_PREFIXES = sorted(
-    {str(PROJECT_ROOT) + os.sep, PROJECT_ROOT.as_posix() + "/"}, key=len, reverse=True
-)
-
-
-def _scrub(obj: Any, secrets: List[str]) -> Any:
-    """Keep the model server's address and local folder paths out of saved files (the repo is public)."""
-    if isinstance(obj, str):
-        for s in secrets:
-            obj = obj.replace(s, "<model-server>")
-        for prefix in _ROOT_PREFIXES:
-            obj = obj.replace(prefix, "")
-        return obj
-    if isinstance(obj, dict):
-        return {k: _scrub(v, secrets) for k, v in obj.items()}
-    if isinstance(obj, list):
-        return [_scrub(v, secrets) for v in obj]
-    return obj
-
-
-def _server_strings() -> List[str]:
-    cfg = openai_compat_config_from_env()
-    if cfg is None:
-        return []
-    base = cfg.base_url.rstrip("/")
-    host = re.sub(r"^https?://", "", base).split("/")[0]
-    return sorted({base, host, host.split(":")[0]}, key=len, reverse=True)
 
 
 def _plan_items(agentic: Any) -> List[Dict[str, Any]]:
@@ -291,7 +263,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     # Baseline runs are not clinic visits: keep them out of the visit record (fix 9).
     os.environ["ARTEMIS_VISIT_RECORDS_DIR"] = tempfile.mkdtemp(prefix="artemis_baseline_records_")
-    secrets = _server_strings()
+    secrets = server_strings()
 
     patients = _load_patients()
     if args.patients:
@@ -325,7 +297,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                 print(f"skip {path.name} (exists)")
                 continue
             print(f"run  {pid} #{k} ...", flush=True)
-            data = _scrub(run_one(p), secrets)
+            data = scrub(run_one(p), secrets)
             data["repeat"] = k
             _write_json(path, data)
             print(f"     {data['overall_status']}, {len(data['alerts'])} alerts, {data['seconds']} s", flush=True)

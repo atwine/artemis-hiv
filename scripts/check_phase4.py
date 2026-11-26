@@ -68,7 +68,7 @@ def main() -> int:
     from sqlmodel import Session, SQLModel, create_engine
 
     load_dotenv(ROOT / ".env")
-    import app
+    from artemis import config
     from artemis.evaluation.cases import load_cases
     from backend import records
     from backend.main import create_app
@@ -77,7 +77,7 @@ def main() -> int:
 
     from artemis.guidelines.vector_store import ChromaVectorStore
 
-    rag = app._get_rag_engine(prefer_chroma=True, embedding_model_name=app.EMBEDDING_MODEL, engine_version=5)
+    rag = config.guideline_search()
     if not rag.search_ready or not isinstance(rag._vector_store, ChromaVectorStore):
         print("The search model or the kept Chroma index did not start; nothing checked.")
         return 1

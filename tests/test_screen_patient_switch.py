@@ -90,3 +90,25 @@ def test_adding_a_case_clears_the_form_and_selects_the_new_case(at: AppTest) -> 
     assert at.text_area(key="new_case_complaints").value == ""
     # The lab tables (fix 4) can't be filled by Streamlit's test runner; their rows are
     # converted by artemis.patient.labs.lab_rows_to_entries, tested in tests/test_lab_input.py.
+
+
+def test_the_form_saves_the_visit_details(at: AppTest) -> None:
+    """Decision 2 (owner, 2026-11-27: "A, both forms"): the Streamlit form takes the visit date,
+    visit type and today's note too, through the builder the API uses."""
+    import datetime
+
+    at.text_input(key="new_case_patient_id").input("T-901")
+    at.date_input(key="new_case_visit_date").set_value(datetime.date(2026, 11, 20))
+    at.selectbox(key="new_case_visit_type").select("Results review")
+    at.text_area(key="new_case_todays_note").input("Came back for the viral load result.")
+    next(b for b in at.button if b.label == "Add case to patient list").click().run()
+
+    assert not at.exception
+    saved = json.loads(Path(os.environ["ARTEMIS_CUSTOM_PATIENTS_PATH"]).read_text(encoding="utf-8"))[-1]
+    assert saved["patient_id"] == "T-901"
+    assert saved["today_encounter"]["date"] == "2026-11-20"
+    assert saved["today_encounter"]["visit_type"] == "Results review"
+    assert saved["today_encounter"]["note"] == "Came back for the viral load result."
+    assert at.selectbox(key="new_case_visit_type").value == ""  # the form is cleared
+    # The previous-ART table can't be filled by Streamlit's test runner; its rows are read by
+    # artemis.patient.new_case.previous_art_from_rows, tested in tests/test_add_case_details.py.

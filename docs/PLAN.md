@@ -3,7 +3,7 @@
 Snapshot taken 2026-11-18. Tick a box when its check passes, not when the code is written.
 Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/decisions.tsv`.
 
-## Where things stand (updated 2026-11-26)
+## Where things stand (updated 2026-11-27)
 
 | Phase | State | Open items |
 |---|---|---|
@@ -14,6 +14,7 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
 | 4 Backend (FastAPI) | done: 4.0-4.7 and the Phase 4 check (step 2 on `development`; the leftovers on branch `claude/phase4-leftovers`) | the plan wording when the guideline search is down waits on design decision 5 |
 | 5 Frontend (Next.js) | 5.1 and 5.2 on `development` (merged 0628908; owner approved each screen) | the clinic-day board, Finalize, the saved record, adding a case and the plan view use step 2's routes (branch `claude/phase4-step2`) |
+| 4C Full stack (owner, 2026-11-27) | not started | every app process on Postgres; Streamlit removed |
 | 6 to 8 | not started | |
 
 `docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
@@ -334,6 +335,62 @@ matched 2B exactly (33/33 runs, own catches 80%, real alerts 88%), and on the wa
 with problems made the visit check fail; fixed. Follow-up worth doing: the backend loads the whole
 Streamlit app (about 50 s of each start) just to reach its search engine.
 
+## Phase 4C: Full stack, everything in Postgres, Streamlit removed (owner, 2026-11-27)
+
+The owner's direction (2026-11-27): the Streamlit app was a demo and goes completely; the app is
+the Next.js website and the FastAPI backend only, and every process that stores or reads app data
+uses the Postgres database, "as close to reality as possible". Moving a process to the database
+comes before any feature that needs it (for example, a new case joining the clinic day).
+
+What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
+
+| Data | Where it lives now | Read or written by |
+|---|---|---|
+| Patients (records, labs, medicines, ART history, notes) | `Data/mock_patients.json`, `Data/demo_day_patients.json`, `Data/custom_patients.json` (adding a case appends here) | backend, Streamlit, evaluation |
+| The clinic day (clinic, clinician, date, appointment times) | `Data/demo_clinic_day.json`, edited by hand | backend |
+| Streamlit's own visit records | `Data/visit_records/*.jsonl` (the backend's are already in Postgres) | Streamlit only |
+| Streamlit's "save as a candidate rule" button | `Data/candidate_rules.json` (nothing else reads it) | Streamlit only |
+| The guideline search index | `storage/chroma` on disk (Chroma, owner's pick in 2B.5) | backend, evaluation |
+| The check limit (6 a minute) | in the backend's memory; a restart resets it | backend |
+| The app's setup (search model, index, model client) | `app.py`, the Streamlit file: the backend and the evaluation load it, about 50 s of each start | backend, evaluation |
+| Evaluation cases, answer keys and run results | `eval/` files in git | evaluation scripts |
+| The guideline text | `Data/MarkDown Files/` | index build |
+
+- [x] 4C.1 Move the app's setup (search model, guideline index, model client, constants) out of
+      `app.py` into `artemis/`, so the backend and the evaluation no longer load Streamlit.
+      Check: the backend starts without importing streamlit; the Phase 4 check replays the same.
+      Done 2026-11-27: `artemis/config.py` (guideline files, search model, index version, the
+      search) and `artemis/evaluation/scrub.py`; the backend already built its model client from
+      `artemis/ai/client.py`. Measured: a fresh process starts the backend and imports the
+      evaluation scripts with no streamlit loaded (`tests/test_no_streamlit_in_backend.py`); the
+      kept index keeps its name; the Phase 4 check MET, report unchanged. `scripts/run_baseline.py`
+      (the Streamlit screen's own runner) still loads Streamlit and goes in 4C.6.
+- [ ] 4C.2 Patients in Postgres: tables for a patient and their labs, medicines, ART history and
+      notes; the made-up patients imported once (safe to rerun); the API reads and adds patients
+      only through the database; adding a case is one database save.
+- [ ] 4C.3 The clinic day in Postgres: clinic, clinician, day and appointments as tables; the demo
+      day imported once; adding a case books its appointment in the same save; the board reads the
+      database. (Replaces decision 3 of the add-case work.)
+- [ ] 4C.4 The AI plan made on demand ("Compare plans") is saved in Postgres (already planned).
+- [ ] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
+      app does. Check: the Phase 4 check still matches 2B's numbers.
+- [ ] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
+      (`artemis/visit_record.py`, `Data/visit_records`), the screen's remembered values
+      (`artemis/session_keys.py`), the candidate-rules file and button, the Ollama client settings only the
+      Streamlit screen uses, the Streamlit screen tests, `streamlit` in the requirements, and
+      the Streamlit fields added to its add-case form; README and "How the app works.md" rewritten
+      for the website.
+- [ ] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
+- [ ] 4C.8 Owner decisions, asked one at a time: whether the evaluation's cases and results stay as
+      files in git (research records) or go into the database; whether the guideline index stays in
+      Chroma or moves into Postgres (pgvector); whether the check limit's count goes into Postgres;
+      what happens to the patient JSON files after the import (kept as the seed for a fresh
+      database, or deleted).
+
+Check: a full visit in Chrome (add a case, see it on the day, check, decide, finalize, compare
+plans, reopen the record) with every write landing in Postgres; `streamlit` appears nowhere in the
+code or requirements; tests pass on GitHub.
+
 ## Phase 5: Frontend (Next.js + shadcn)
 
 - [x] 5.1 Set up the app with the design tokens.
@@ -349,7 +406,7 @@ Streamlit app (about 50 s of each start) just to reach its search engine.
 - [ ] 5.4 Plan and audit record views. (Finalize with its confirm step, owner's decision 6, waits on the finalize route.)
 - [ ] 5.5 Showcase mode: the same screens read saved outputs instead of calling the API.
 
-Check: a full visit works in Chrome; before/after screenshots against the Streamlit app; every
+Check: a full visit works in Chrome; screenshots against the Paper design (owner, 2026-11-27: no Streamlit); every
 item of `docs/screen-checklist.md` shown and screenshotted.
 
 ## Phase 6: Showcase on GitHub Pages

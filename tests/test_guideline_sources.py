@@ -8,9 +8,9 @@ UGANDA = {"HIV_Guidelines_ART.extraction", "HIV_Guidelines_Co_infectionScreening
 
 
 def test_the_app_searches_only_the_ugandan_guidelines() -> None:
-    import app
+    from artemis import config
 
-    assert {p.stem for p in app.GUIDELINE_PATHS} == UGANDA
+    assert {p.stem for p in config.GUIDELINE_PATHS} == UGANDA
 
 
 def test_a_guideline_file_dropped_in_the_folder_is_never_used_unless_registered(tmp_path: Path) -> None:
@@ -22,14 +22,14 @@ def test_a_guideline_file_dropped_in_the_folder_is_never_used_unless_registered(
 
 
 def test_every_passage_in_the_index_comes_from_a_ugandan_guideline() -> None:
-    import app
+    from artemis import config
     from artemis.guidelines.sources import SOURCES
     from artemis.guidelines.vector_store import InMemoryVectorStore
     from modules.rag_engine import RagEngine
     from tests.pipeline_harness import FakeEmbedder
 
     store = InMemoryVectorStore()
-    RagEngine(project_root=app.PROJECT_ROOT, guideline_paths=app.GUIDELINE_PATHS, embedder=FakeEmbedder(),
+    RagEngine(project_root=config.PROJECT_ROOT, guideline_paths=config.GUIDELINE_PATHS, embedder=FakeEmbedder(),
               vector_store=store).ensure_indexed()
     countries = {SOURCES[Path(r.metadata["source_path"]).name].country for r in store.query("tenofovir", FakeEmbedder(), top_k=10_000)}
     assert countries == {"UG"}

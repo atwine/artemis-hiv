@@ -3,7 +3,8 @@
 The other API tests swap in a stand-in search, so a name the Streamlit app renamed (Phase 2B
 renamed GUIDELINE_PDF_PATHS to GUIDELINE_PATHS) went unnoticed there and made every real visit
 check fail. These tests go through the real `_search` setup; only the engine builder itself
-(app._get_rag_engine, which loads the search model) is replaced, so nothing is loaded or built.
+(artemis.config.guideline_search, which loads the search model) is replaced, so nothing is loaded
+or built. Since plan 4C.1 the setup no longer comes from app.py, the Streamlit file.
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ import pytest
 
 @pytest.fixture
 def real_search_setup(monkeypatch):
-    import app
+    from artemis import config
     from backend import services
     from tests.api_fakes import fake_search
 
@@ -23,27 +24,24 @@ def real_search_setup(monkeypatch):
     asked: Dict[str, Any] = {}
     indexed: List[bool] = []
 
-    def build(**kwargs):
-        asked.update(kwargs)
+    def build(*args, **kwargs):
+        asked.update({"args": args, **kwargs})
         return engine
 
-    monkeypatch.setattr(app, "_get_rag_engine", build)
+    monkeypatch.setattr(config, "guideline_search", build)
     monkeypatch.setattr(engine, "ensure_indexed", lambda **_: indexed.append(True) or 0)
     services._search.cache_clear()
-    yield {"app": app, "engine": engine, "asked": asked, "indexed": indexed}
+    yield {"config": config, "engine": engine, "asked": asked, "indexed": indexed}
     services._search.cache_clear()
 
 
 def test_search_setup_builds_the_apps_own_engine(real_search_setup):
     from backend import services
 
-    app = real_search_setup["app"]
+    config = real_search_setup["config"]
     assert services._search() is real_search_setup["engine"]
-    assert real_search_setup["asked"] == {
-        "prefer_chroma": True, "embedding_model_name": app.EMBEDDING_MODEL, "engine_version": 5,
-    }
-    # Indexed when the app has guideline files, as app._run_analysis does.
-    assert real_search_setup["indexed"] == ([True] if app.GUIDELINE_PATHS else [])
+    # Indexed when there are guideline files.
+    assert real_search_setup["indexed"] == ([True] if config.GUIDELINE_PATHS else [])
     services._search()
     assert len(real_search_setup["indexed"]) <= 1  # built once, then kept
 

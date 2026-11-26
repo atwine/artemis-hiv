@@ -1,8 +1,7 @@
 # Where each function lives now and where it is going. Checked by scripts/check_code_map.py.
 file	function	does	target	status
 app.py	_llm_name	Gives the display name of the AI server in use, for status labels.	artemis/ai/	to-move
-app.py	_get_embedder	Creates the text-to-numbers model once and reuses it, since loading is slow.	ui/ (cached for the screen)	to-move
-app.py	_get_rag_engine	Builds the guideline search engine once per session and reuses it.	ui/ (cached for the screen)	to-move
+app.py	_get_rag_engine	The Streamlit screen's name for the guideline search; calls artemis/config.py guideline_search.	- (goes with Streamlit, 4C.6)	stays
 app.py	_init_session_state	Sets the starting values for everything the screen remembers between clicks.	ui/state.py	to-move
 artemis/review.py	alert_resolution_ok	Says whether an alert has been acknowledged, or overridden with a reason.	artemis/review.py	moved
 artemis/review.py	can_finalize	Says whether the visit can be finalized, meaning every alert has been handled.	artemis/review.py	moved
@@ -233,6 +232,10 @@ backend/services.py	demo_patients	Gives a reader for the demo patient files, the
 backend/services.py	demo_patients.read	Reads the demo patient files.	stays	stays
 backend/settings.py	_list	Reads a comma-separated setting.	stays	stays
 backend/settings.py	settings_from_env	Reads the backend's settings from the environment.	stays	stays
+artemis/config.py	guideline_search	The guideline search, one per process: the search model and the kept Chroma index named after the model and the guideline text.	artemis/config.py	moved
+artemis/config.py	_guideline_search	Builds the guideline search once per search model and store choice, however the caller spells the arguments.	artemis/config.py	moved
+artemis/evaluation/scrub.py	scrub	Replaces the model server's address and removes this laptop's folder paths in a run before it is saved.	artemis/evaluation/scrub.py	moved
+artemis/evaluation/scrub.py	server_strings	The model server's address as it might appear in text (URL, host:port, host), longest first.	artemis/evaluation/scrub.py	moved
 artemis/evaluation/retrieval.py	_words	Splits text into lower-case words for quote matching.	artemis/evaluation/retrieval.py	moved
 artemis/evaluation/retrieval.py	contains_quote	Says whether a returned passage holds a gold quote, ignoring case, spacing and formatting; 8 words in a row are enough for a long quote.	artemis/evaluation/retrieval.py	moved
 artemis/evaluation/retrieval.py	first_hit	The rank of the first returned passage that holds any gold quote.	artemis/evaluation/retrieval.py	moved
@@ -287,10 +290,13 @@ backend/main.py	create_app.clinic_day	Route: the demo day's board, each booking 
 backend/main.py	day_counts	Counts the day board's booked, checked, finalized and left-in-red patients.	stays	stays
 backend/services.py	clinic_day_file	Gives a reader for the demo day's schedule file.	stays	stays
 backend/services.py	clinic_day_file.read	Reads the demo day's schedule file.	stays	stays
+artemis/patient/new_case.py	previous_art_from_rows	Reads the Streamlit form's previous-ART table (drugs separated by commas, start and end dates), or explains what's wrong.	stays	stays
+artemis/patient/new_case.py	_previous_art_errors	Lists what's wrong with the form's previous ART rows (drugs from the list, dates in order, ended by the visit).	stays	stays
 artemis/patient/new_case.py	_form_errors	Lists what's wrong with an add-case form, before any lab row is read.	stays	stays
 artemis/patient/new_case.py	_labs	Reads the form's today and previous lab rows into stored results, or explains what's wrong.	stays	stays
 artemis/patient/new_case.py	build_case_record	Builds the record for a new case from the add-case form, for the Streamlit form and the API.	stays	stays
 backend/main.py	create_app.add_case	Route: adds a new made-up case; an ID already in use is refused.	stays	stays
+backend/main.py	create_app.form_choices	Route: the add-case form's pick lists (ART combinations and drugs, lab tests with names and units).	stays	stays
 backend/services.py	custom_case_writer	Gives the function that adds a case to the added-cases file.	stays	stays
 backend/services.py	custom_case_writer.add	Adds one case to the added-cases file in one step, never over an unreadable file.	stays	stays
 artemis/screen_text.py	alert_values	Gives the patient values an alert is about, each as recorded, for the value box.	stays	stays
