@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 /** Before a check has run, while it runs, or the API's overall status once it has. */
 export type VisitState = "not_checked" | "checking" | VisitCheck["status"];
 
-export function StatusShape({ state, size }: { state: VisitState; size: 12 | 14 }) {
+export function StatusShape({ state, size }: { state: VisitState; size: 12 | 14 | 30 }) {
   const common = { width: size, height: size, viewBox: "0 0 14 14", "aria-hidden": true, className: "shrink-0" } as const;
   switch (state) {
     case "RED":

@@ -5,9 +5,10 @@ import { use, useId, useState } from "react";
 
 import { AppFrame, PaneContent, PaneHeader } from "@/components/frame/app-frame";
 import { DayRail } from "@/components/frame/day-rail";
-import { StatusChip, type VisitState } from "@/components/frame/status";
-import { Tray, type TrayProps } from "@/components/frame/tray";
+import { StatusChip, StatusShape, type VisitState } from "@/components/frame/status";
+import { Tray, type TrayButton, type TrayProps } from "@/components/frame/tray";
 import { api, errorText, unwrap, type Card, type DecisionOut, type Decisions, type PatientDetail, type VisitCheck } from "@/lib/api/client";
+import { cn } from "@/lib/cn";
 import { decisionsToSave, type Draft, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
 import { useRailEntries } from "@/lib/queries";
@@ -33,17 +34,18 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
   );
 }
 
-type CheckMutation = UseMutationResult<VisitCheck, Error, void>;
+// Variables: run the AI review this time whatever the box says ("Run the AI review again").
+type CheckMutation = UseMutationResult<VisitCheck, Error, { useAi?: boolean } | void>;
 
 function Visit({ patient }: { patient: PatientDetail }) {
   const [note, setNote] = useState(String(patient.today_encounter.note ?? ""));
   const [useAi, setUseAi] = useState(false);
   const check: CheckMutation = useMutation({
-    mutationFn: async () =>
+    mutationFn: async (vars) =>
       unwrap(
         await api.POST("/api/patients/{patient_id}/visits", {
           params: { path: { patient_id: patient.patient_id } },
-          body: { note, use_ai: useAi, include_plan: false },
+          body: { note, use_ai: vars?.useAi ?? useAi, include_plan: false },
         }),
       ),
   });
@@ -111,6 +113,7 @@ function VisitView({ patient, check, notesForm }: { patient: PatientDetail; chec
             savedIds: savedByAlert,
             canSave: Boolean(toSave) && !save.isPending && Boolean(result?.record_saved),
             onSave: () => save.mutate(),
+            onRetryAi: () => check.mutate({ useAi: true }),
           })}
         />
       }
@@ -173,12 +176,14 @@ function trayFor({
   savedIds,
   canSave,
   onSave,
+  onRetryAi,
 }: {
   pending: boolean;
   result: VisitCheck | undefined;
   savedIds: Map<string, DecisionOut>;
   canSave: boolean;
   onSave: () => void;
+  onRetryAi: () => void;
 }): TrayProps {
   const later = { plan: "todo", finalize: "todo" } as const;
   if (pending) {
@@ -195,15 +200,49 @@ function trayFor({
       primary: { label: "Run checks", form: NOTES_FORM },
     };
   }
-  return {
+  const hasAlerts = result.cards.length > 0;
+  const saveButton: TrayButton = { label: "Save decisions", onClick: onSave, disabled: !canSave };
+  const retry: TrayButton = { label: "Run the AI review again", onClick: onRetryAi };
+  const done = {
     notes: "done",
     checks: "done",
     alerts: result.cards.map((c) => (savedIds.has(c.extension.alert_id) ? "done" : "todo")),
     ...later,
-    lead: result.cards.length ? "Alerts." : "Checks done.",
-    rest: result.cards.length ? "Accept or override each one, then save." : undefined,
-    primary: result.cards.length ? { label: "Save decisions", onClick: onSave, disabled: !canSave } : undefined,
-  };
+  } as const;
+  switch (result.ai_review) {
+    // The design's S7a wording; running the review again can help when the model server failed.
+    case "failed":
+    case "unreadable":
+      return {
+        ...done,
+        lead: "AI review failed.",
+        rest: "Try again, or use rule checks only.",
+        ...(hasAlerts ? { primary: saveButton, secondary: retry } : { primary: retry }),
+      };
+    case "cut_off":
+    case "partly_read":
+      return {
+        ...done,
+        lead: "AI review incomplete.",
+        rest: hasAlerts ? "Review the alerts it read." : "Try again, or use rule checks only.",
+        ...(hasAlerts ? { primary: saveButton, secondary: retry } : { primary: retry }),
+      };
+    // Running again won't help until the search model setting is fixed.
+    case "search_unavailable":
+      return {
+        ...done,
+        lead: "Guideline search unavailable.",
+        rest: "Rule checks only.",
+        primary: hasAlerts ? saveButton : undefined,
+      };
+    default:
+      return {
+        ...done,
+        lead: hasAlerts ? "Alerts." : "Checks done.",
+        rest: hasAlerts ? "Accept or override each one, then save." : undefined,
+        primary: hasAlerts ? saveButton : undefined,
+      };
+  }
 }
 
 function Results({
@@ -224,11 +263,7 @@ function Results({
   return (
     <section aria-label="Check results" className="mt-8 flex max-w-3xl flex-col gap-4">
       <h2 className="text-20 font-semibold tracking-[-0.015em]">Check results</h2>
-      {check.banners.map((b, i) => (
-        <p key={i} role="status" data-level={b.level}>
-          {b.text}
-        </p>
-      ))}
+      <Banners check={check} />
       {!check.record_saved && <p role="alert">This check could not be saved, so its alerts cannot be decided here.</p>}
       {check.cards.map((card) => (
         <AlertCard
@@ -269,7 +304,8 @@ function AlertCard({
       {card.suggestions.map((s) => (
         <p key={s.uuid}>{s.label}</p>
       ))}
-      {ext.explanation && <p>{ext.explanation}</p>}
+      {/* ext.explanation is left off: today it carries raw data and passage dumps, which the
+          brief keeps off the main view (design question 9, for the backend). */}
 
       <h4 className="text-13 font-semibold text-ink-2">{ext.references_heading}</h4>
       <ul className="text-13 text-ink-2">
@@ -330,5 +366,39 @@ function AlertCard({
         </p>
       )}
     </article>
+  );
+}
+
+/**
+ * The API's banners. When the AI review didn't end cleanly, its banner comes first
+ * (screen_text.status_banners) and is shown in the Incomplete screen's (S7a) box, red or amber;
+ * the overall result follows in S7a's result row. Owner's decision 5, 2026-11-26.
+ */
+function Banners({ check }: { check: VisitCheck }) {
+  const aiProblem = !["ok", "not_run"].includes(check.ai_review);
+  const [first, ...rest] = check.banners;
+  const boxed = aiProblem && first && (first.level === "error" || first.level === "warning") ? first : null;
+  const rows = boxed ? rest : check.banners;
+  return (
+    <>
+      {boxed && (
+        <div
+          role="status"
+          data-level={boxed.level}
+          className={cn(
+            "flex max-w-240 items-center gap-4.5 rounded-[14px] border-2 px-6 py-5.5",
+            boxed.level === "error" ? "border-red bg-red-wash" : "border-amber bg-amber-wash",
+          )}
+        >
+          <StatusShape state={boxed.level === "error" ? "RED" : "AMBER"} size={30} />
+          <p className="text-16 font-medium text-ink">{boxed.text}</p>
+        </div>
+      )}
+      {rows.map((b, i) => (
+        <p key={i} role="status" data-level={b.level} className="flex h-15 max-w-240 items-center border-y border-line text-16 text-black">
+          {b.text}
+        </p>
+      ))}
+    </>
   );
 }
