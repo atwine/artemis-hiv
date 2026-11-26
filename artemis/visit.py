@@ -267,7 +267,9 @@ def run_visit_analysis(
         )
 
         parse_status = (screening_debug.get("parse_status") or "").strip().lower()
-        last_err = screening_debug.get("error")  # the screening call's own reply says (plan item 4.6)
+        # The screening call's own reply says (plan item 4.6). Taken out of the debug record, which is
+        # saved: error text can carry part of the model server's address (G26); it goes to the log.
+        last_err = screening_debug.pop("error", None)
         if last_err is not None:
             screening_outcome = "failed"
         elif parse_status in {"parsed_empty", "parsed_nonempty"}:

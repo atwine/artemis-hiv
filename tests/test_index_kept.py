@@ -119,3 +119,14 @@ def test_a_store_that_cannot_start_is_reported_not_silent(tmp_path: Path, caplog
         store = create_vector_store(project_root=tmp_path, prefer_chroma=True, collection_name="x")  # too short
     assert isinstance(store, InMemoryVectorStore)
     assert any("Chroma" in r.getMessage() and "ValueError" in r.getMessage() for r in caplog.records)
+
+
+def test_changing_how_passages_are_split_needs_a_new_index_version():
+    """The kept index skips passage ids it already holds, so a change to how the text is split
+    would keep stale passages unless the index version is bumped (same quiet failure as lesson 32)."""
+    import app
+    from modules.rag_engine import RagConfig
+
+    assert (RagConfig.chunk_size, RagConfig.overlap, app.GUIDELINE_INDEX_VERSION) == (1200, 200, 3), (
+        "Splitting changed: bump GUIDELINE_INDEX_VERSION in app.py, then update this test."
+    )

@@ -101,3 +101,23 @@ def test_a_lower_setting_is_obeyed(api):
     api.services.clock = FakeClock()
     client = TestClient(create_app(settings=Settings(visit_checks_per_minute=2), services=api.services), base_url="http://localhost")
     assert [client.post("/api/patients/P001/visits", json=NOTE, headers=LOCAL).status_code for _ in range(3)] == [200, 200, 429]
+
+
+import pytest  # noqa: E402
+
+
+@pytest.mark.parametrize("bad", ["0", "-3", "six"])
+def test_a_limit_below_one_or_not_a_number_is_refused_at_start(monkeypatch, bad):
+    """Checked once where the setting is read: 0 made every visit check fail with a 500 (review)."""
+    from backend.settings import settings_from_env
+
+    monkeypatch.setenv("ARTEMIS_VISIT_CHECKS_PER_MINUTE", bad)
+    with pytest.raises(ValueError, match="ARTEMIS_VISIT_CHECKS_PER_MINUTE"):
+        settings_from_env()
+
+
+def test_the_limiter_itself_refuses_a_limit_below_one():
+    from backend.limits import SlidingWindow
+
+    with pytest.raises(ValueError):
+        SlidingWindow(0, 60.0, lambda: 0.0)

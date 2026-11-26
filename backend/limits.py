@@ -16,6 +16,8 @@ class SlidingWindow:
     """At most `limit` uses in any `window` seconds."""
 
     def __init__(self, limit: int, window: float, clock: Callable[[], float]) -> None:
+        if limit < 1:
+            raise ValueError(f"a limit of {limit} would refuse every use; it must be at least 1")
         self._limit = limit
         self._window = window
         self._clock = clock
