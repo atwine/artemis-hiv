@@ -19,7 +19,8 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 The replies carry the screen's own words from `artemis/screen_text.py` (plan item 4.7,
 `docs/screen-checklist.md`), so the website only displays them: `banners` (level and text),
 `disclaimer` and `finalize_note` on a visit check; `heading`, `references_heading` and
-`references` on each card's `extension`; `citation` (for example "Uganda HIV Guidelines 2022 ·
+`references` on each card's `extension`, with `values` (the patient values the alert is about:
+label, value, unit, date) and `key_sentence` (the closest guideline sentence, or null); `citation` (for example "Uganda HIV Guidelines 2022 ·
 p. 255") on each passage; `finalize_note` on a decision reply until every alert is decided.
 
 A card's `uuid` is unique per visit (`<visit_id>:<alert_id>`); decisions use the alert's own id,

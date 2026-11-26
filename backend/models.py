@@ -236,6 +236,15 @@ class Passage(_CdsOut):
     metadata: Dict[str, Any] = {}
 
 
+class AlertValue(_CdsOut):
+    """One patient value an alert is about, as recorded (the design's '52 eGFR' box)."""
+
+    label: str  # e.g. "eGFR"
+    value: str  # as recorded, e.g. "52" or "<50"
+    unit: str
+    date: str  # YYYY-MM-DD
+
+
 class CardExtension(_CdsOut):
     alert_id: str  # the alert's own id, which decisions refer to
     kind: AlertKind
@@ -247,6 +256,10 @@ class CardExtension(_CdsOut):
     heading: str
     references_heading: str
     references: List[str] = []
+    # By code, no AI change (owner, 2026-11-26): the lab values the alert is about, and the one
+    # guideline sentence closest to it (None when none is close enough).
+    values: List[AlertValue] = []
+    key_sentence: Optional[str] = None
 
 
 class Card(_CdsOut):

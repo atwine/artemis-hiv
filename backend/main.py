@@ -110,9 +110,10 @@ def _detail(p: Loaded) -> PatientDetail:
     return PatientDetail(**{**fields, "labs": labs, "lab_notes": notes})
 
 
-def _visit_reply(entry: Dict[str, Any], *, record_saved: bool) -> Dict[str, Any]:
-    """A saved "checks_run" entry as the screen gets it: the same for a fresh check and a reopened one."""
-    cards = cards_from_entry(entry)
+def _visit_reply(entry: Dict[str, Any], *, record_saved: bool, labs: Optional[List[Any]] = None) -> Dict[str, Any]:
+    """A saved "checks_run" entry as the screen gets it: the same for a fresh check and a reopened
+    one. `labs` are the patient's lab results, for each card's value box."""
+    cards = cards_from_entry(entry, labs)
     return dict(
         visit_id=entry["visit_id"], patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
         saved_at=entry["saved_at"], status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
@@ -222,7 +223,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         except SQLAlchemyError as exc:
             # The results are still shown, as on the Streamlit screen (fix 9).
             logger.warning("Visit record not saved: %s", type(exc).__name__)
-        return VisitCheckResponse(**_visit_reply(entry, record_saved=saved))
+        return VisitCheckResponse(**_visit_reply(entry, record_saved=saved, labs=read_lab_entries(patient)))
 
     @app.post(
         "/api/visits/{visit_id}/decisions",
@@ -294,7 +295,9 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             entry = records.entry_from_check(row)
             latest = _latest(session, visit_id)
             finalized = records.finalized_at(session, visit_id)
-        reply = _visit_reply(entry, record_saved=True)
+        found = next((p for p in load_patients(services) if p.record.patient_id == entry["patient_id"]), None)
+        labs = read_lab_entries(found.stored) if found else []  # a case no longer listed: no value box
+        reply = _visit_reply(entry, record_saved=True, labs=labs)
         decided, unresolved = summary([c.extension.alert_id for c in reply["cards"]], latest)
         reply["finalize_note"] = FINALIZE_BLOCKED if unresolved and finalized is None else None
         return SavedVisit(

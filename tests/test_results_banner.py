@@ -59,3 +59,63 @@ def test_an_explanation_is_cut_back_to_its_plain_reason() -> None:
     )
     assert plain_explanation(raw) == "Creatinine last recorded 478 days ago."
     assert plain_explanation("") == ""
+
+
+def test_an_alerts_values_are_the_labs_it_is_about() -> None:
+    """The design's value box (owner, 2026-11-26: by code, no AI change): a rule's tests from a
+    table, an AI alert's tests from its own words; the latest result on or before the visit."""
+    import datetime
+
+    from artemis.patient.labs import read_lab_entries
+    from artemis.rules.checks import Alert
+    from artemis.screen_text import alert_values
+
+    patient = {"labs": {
+        "creatinine": [{"date": "2024-10-01", "value": "88", "unit": "umol/L"}, {"date": "2027-01-01", "value": "99", "unit": "umol/L"}],
+        "egfr": [{"date": "2026-01-05", "value": "52", "unit": "mL/min/1.73m2"}],
+        "viral_load": [{"date": "2025-10-01", "value": "40", "unit": "copies/mL"}],
+    }}
+    labs = read_lab_entries(patient)
+    visit = datetime.date(2026, 1, 22)
+    rule = Alert("tdf_creatinine_overdue", "Creatinine monitoring overdue while on TDF", "m", {}, "q")
+    assert alert_values(rule, labs, visit) == [
+        {"label": "creatinine", "value": "88", "unit": "umol/L", "date": "2024-10-01"},
+        {"label": "eGFR", "value": "52", "unit": "mL/min/1.73m2", "date": "2026-01-05"},
+    ]
+    ai = Alert("A1", "Missing Viral Load Monitoring", "The last VL was months ago.", {}, "q", source="ai")
+    assert alert_values(ai, labs, visit) == [{"label": "viral load", "value": "40", "unit": "copies/mL", "date": "2025-10-01"}]
+    words_only = Alert("A2", "Vivid dreams on efavirenz", "Sleep disturbance reported.", {}, "q", source="ai")
+    assert alert_values(words_only, labs, visit) == []
+
+
+def test_the_key_sentence_is_the_passage_sentence_closest_to_the_alert() -> None:
+    from artemis.guidelines.vector_store import VectorSearchResult
+    from artemis.rules.checks import Alert
+    from artemis.screen_text import key_sentence
+
+    passage = VectorSearchResult("c1", (
+        "Table 12: MONITORING SCHEDULE | Test | Frequency\n"
+        "Viral load testing is the preferred monitoring approach. "
+        "Check viral load every 6 months for patients on DTG-based ART. "
+        "Counsel on adherence."
+    ), {"page_number": 32}, 0.1)
+    alert = Alert("A1", "Missing viral load monitoring", "Viral load every 6 months is due on DTG-based ART.", {}, "q", source="ai")
+    assert key_sentence(alert, [passage]) == "Check viral load every 6 months for patients on DTG-based ART."
+    assert key_sentence(alert, []) is None
+    unrelated = Alert("A2", "Vivid dreams", "Sleep disturbance.", {}, "q")
+    assert key_sentence(unrelated, [passage]) is None
+
+
+def test_the_key_sentence_comes_from_flowchart_and_bullet_text_too() -> None:
+    """Passages are often one long line of flowchart or bullet text; "VL" means viral load."""
+    from artemis.guidelines.vector_store import VectorSearchResult
+    from artemis.rules.checks import Alert
+    from artemis.screen_text import key_sentence
+
+    text = ("Figure 4 outlines the virological monitoring of patients on DTG-based first-line ART. flowchart : "
+            "Patient on two NRTIs + DTG Check VL every 6 months* *If VL suppressed for 1 year, can reduce to "
+            "12 monthly - Provide enhanced adherence support - Repeat VL in 2-3 months")
+    passage = VectorSearchResult("c1", text, {"page_number": 32}, 0.1)
+    alert = Alert("A1", "Missing Viral Load Monitoring",
+                  "Guidelines recommend viral load monitoring every 6 months for patients on DTG-based ART.", {}, "q", source="ai")
+    assert key_sentence(alert, [passage]) == "Patient on two NRTIs + DTG Check VL every 6 months"

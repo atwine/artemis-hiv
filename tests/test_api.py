@@ -537,3 +537,21 @@ def test_card_explanations_are_plain_text_only(api):
             assert raw not in text, (card["uuid"], raw, text)
     ai = next(c for c in _check(api).json()["cards"] if c["extension"]["alert_id"] == "P001_001")
     assert ai["extension"]["explanation"] == ai["detail"]
+
+
+def test_cards_carry_the_values_box_and_the_key_sentence(api):
+    """Owner, 2026-11-26: both by code, no AI change."""
+    visit = _check(api).json()
+    rule = next(c for c in visit["cards"] if c["extension"]["alert_id"] == "tdf_creatinine_overdue")
+    assert rule["extension"]["values"] == [{"label": "creatinine", "value": "88", "unit": "umol/L", "date": "2024-10-01"}]
+    ai = next(c for c in visit["cards"] if c["extension"]["alert_id"] == "P001_001")
+    assert ai["extension"]["values"] == [{"label": "viral load", "value": "40", "unit": "copies/mL", "date": "2025-10-01"}]
+    for card in visit["cards"]:
+        for v in card["extension"]["values"]:
+            assert v["label"] and v["value"] and v["unit"] and v["date"]
+        sentence = card["extension"]["key_sentence"]
+        if sentence is not None:
+            assert any(sentence in p["text"] for p in card["extension"]["passages"]), card["uuid"]
+    reopened = api.client.get(f"/api/visits/{visit['visit_id']}", headers=LOCAL).json()
+    assert [c["extension"]["values"] for c in reopened["cards"]] == [c["extension"]["values"] for c in visit["cards"]]
+    assert [c["extension"]["key_sentence"] for c in reopened["cards"]] == [c["extension"]["key_sentence"] for c in visit["cards"]]

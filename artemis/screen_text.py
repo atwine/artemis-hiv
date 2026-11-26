@@ -7,10 +7,12 @@ state a visit can end in and what the screen must show for it.
 
 from __future__ import annotations
 
+import datetime
 import re
 from typing import Any, List, Optional, Tuple
 
 from artemis.guidelines.sources import citation_name
+from artemis.patient.labs import TEST_NAMES, LabEntry, latest_entries
 from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.rules.checks import Alert
 from artemis.visit import SEARCH_UNAVAILABLE
@@ -58,6 +60,62 @@ def plain_explanation(text: Any) -> str:
     out = re.split(r"\bpatient evidence\s*:\s*", out, maxsplit=1, flags=re.IGNORECASE)[0]
     out = re.split(r"\bguideline excerpts\s*:\s*", out, maxsplit=1, flags=re.IGNORECASE)[0]
     return out.strip()
+
+
+# The value box (owner, 2026-11-26: by code, no AI change). The lab tests each fixed rule is
+# about; any other alert's tests are the ones its own title and message name.
+RULE_TESTS = {
+    "tdf_creatinine_overdue": ["creatinine", "egfr"],
+    "tdf_creatinine_missing": ["creatinine", "egfr"],
+    "tdf_creatinine_pasted_only": ["creatinine", "egfr"],
+}
+_TEST_WORDS = [
+    ("viral_load", r"viral\s+load|\bVL\b"), ("cd4", r"\bCD4\b"), ("creatinine", r"creatinine"),
+    ("egfr", r"\beGFR\b"), ("hemoglobin", r"ha?emoglobin|\bHb\b"), ("alt", r"\bALT\b"),
+    ("fasting_glucose", r"glucose"), ("hba1c", r"\bHbA1c\b"), ("total_cholesterol", r"total\s+cholesterol"),
+    ("ldl", r"\bLDL\b"), ("hdl", r"\bHDL\b"), ("triglycerides", r"triglyceride"),
+]
+
+
+def alert_values(alert: Alert, labs: List[LabEntry], visit_date: datetime.date) -> List[dict]:
+    """The patient values an alert is about, each as recorded (label, value, unit, date): the
+    latest result of each test on or before the visit date. None when no test is named."""
+    text = f"{alert.title} {alert.message}"
+    tests = RULE_TESTS.get(alert.alert_id) or [t for t, words in _TEST_WORDS if re.search(words, text, re.IGNORECASE)]
+    latest = latest_entries(labs, visit_date)
+    return [
+        {"label": TEST_NAMES.get(t, t), "value": latest[t].value, "unit": latest[t].unit, "date": latest[t].date.isoformat()}
+        for t in tests if t in latest
+    ]
+
+
+def _words(text: str) -> set:
+    text = re.sub(r"\bVL\b", "viral load", text)  # the guidelines' shorthand
+    return {w for w in re.findall(r"[a-z0-9]+", text.lower()) if len(w) > 3}
+
+
+# Where a passage's text breaks into pieces: sentence ends, line breaks, bullets (" - "),
+# footnote stars and flowchart labels (" : ").
+_PIECES = re.compile(r"(?<=[.!?])\s+|\n+|\s+-\s+|\*+|\s+:\s+")
+
+
+def key_sentence(alert: Alert, passages: List[VectorSearchResult]) -> Optional[str]:
+    """The one guideline sentence that matters most for an alert (owner, 2026-11-26: by code): from
+    the alert's passages, the piece sharing the most words with the alert's title and message,
+    the first one on a tie. Table rows, headings in capitals, and pieces under 25 or over 300
+    characters are skipped; None when nothing shares at least two words."""
+    wanted = _words(f"{alert.title} {alert.message}")
+    best, best_score = None, 1
+    for p in passages:
+        for piece in _PIECES.split(p.document or ""):
+            piece = piece.strip(" ;,")
+            letters = [c for c in piece if c.isalpha()]
+            if "|" in piece or not 25 <= len(piece) <= 300 or (letters and sum(c.isupper() for c in letters) > 0.6 * len(letters)):
+                continue
+            score = len(wanted & _words(piece))
+            if score > best_score:
+                best, best_score = piece, score
+    return best
 
 
 def alert_heading(alert: Alert) -> str:

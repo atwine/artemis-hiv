@@ -9,6 +9,7 @@ website only displays it.
 
 from __future__ import annotations
 
+import datetime
 import re
 from typing import Any, Dict, List, Optional
 
@@ -16,8 +17,17 @@ from artemis import visit_record
 from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.review import OVERRIDE_REASONS
 from artemis.rules.checks import Alert
-from artemis.screen_text import alert_heading, alert_references, citation_line, plain_explanation, status_banners
-from backend.models import Banner, Card, CardExtension, Coding, Passage, Plan, Source, Suggestion
+from artemis.patient.labs import LabEntry
+from artemis.screen_text import (
+    alert_heading,
+    alert_references,
+    alert_values,
+    citation_line,
+    key_sentence,
+    plain_explanation,
+    status_banners,
+)
+from backend.models import AlertValue, Banner, Card, CardExtension, Coding, Passage, Plan, Source, Suggestion
 
 SYSTEM = "https://github.com/atwine/artemis-hiv"
 
@@ -57,7 +67,8 @@ def _passage(r: VectorSearchResult) -> Passage:
     )
 
 
-def card_from_saved(alert: Alert, retrieved: List[VectorSearchResult], explanation: str, *, severity: Optional[str], visit_id: str) -> Card:
+def card_from_saved(alert: Alert, retrieved: List[VectorSearchResult], explanation: str, *, severity: Optional[str],
+                    visit_id: str, values: Optional[List[dict]] = None) -> Card:
     """One alert, its passages and its explanation as a CDS Hooks card."""
     kind = "ai" if alert.source == "ai" else "rule"
     action = str((alert.evidence or {}).get("recommended_action") or "").strip()
@@ -79,20 +90,33 @@ def card_from_saved(alert: Alert, retrieved: List[VectorSearchResult], explanati
             heading=alert_heading(alert),
             references_heading=references_heading,
             references=references,
+            values=[AlertValue(**v) for v in values or []],
+            key_sentence=key_sentence(alert, retrieved),
         ),
     )
 
 
-def cards_from_entry(entry: Dict[str, Any]) -> List[Card]:
+def cards_from_entry(entry: Dict[str, Any], labs: Optional[List[LabEntry]] = None) -> List[Card]:
     """The saved visit check's alerts as cards. Read back through artemis.visit_record.restore,
     the check the Streamlit app reopens a visit with: results that don't line up with the alerts
     raise ValueError rather than show some cards and lose others."""
     restored = visit_record.restore(entry)
     severities = [a.get("severity") for a in entry.get("alerts") or []]
+    visit_date = _date(entry.get("visit_date"))
     return [
-        card_from_saved(r["alert"], r["retrieved"], plain_explanation(r["explanation"].text), severity=sev, visit_id=entry["visit_id"])
+        card_from_saved(
+            r["alert"], r["retrieved"], plain_explanation(r["explanation"].text), severity=sev, visit_id=entry["visit_id"],
+            values=alert_values(r["alert"], labs, visit_date) if labs and visit_date else [],
+        )
         for r, sev in zip(restored["analysis_results"], severities)
     ]
+
+
+def _date(text: Any) -> Optional[datetime.date]:
+    try:
+        return datetime.date.fromisoformat(str(text))
+    except ValueError:
+        return None
 
 
 def banners_for(entry: Dict[str, Any]) -> List[Banner]:
