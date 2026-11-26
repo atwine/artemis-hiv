@@ -7,20 +7,25 @@ a route first needs it, so starting the server loads no model and builds no inde
 from __future__ import annotations
 
 import functools
+import json
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
 from sqlalchemy.engine import Engine
 from sqlmodel import create_engine
 
 from artemis import visit_record
-from artemis.patient.store import read_json_list
+from artemis.patient.store import read_json_list, write_json_list
 from backend.settings import PROJECT_ROOT, Settings
 
 logger = logging.getLogger(__name__)
 
 TOP_K = 5  # the Streamlit screen's default number of guideline passages per alert
+
+
+def _no_case_writer(record: Dict[str, Any]) -> None:
+    raise RuntimeError("No case writer is set up for these services.")
 
 
 @dataclass
@@ -31,13 +36,41 @@ class Services:
     engine: Optional[Engine]  # the visit-record database
     app_version: str
     top_k: int = TOP_K
+    # The demo day's schedule as stored (Data/demo_clinic_day.json), checked by the route.
+    clinic_day: Callable[[], Dict[str, Any]] = field(default_factory=lambda: clinic_day_file(Settings()))
+    # Adds a new case. Only default_services gives it the real file (ARTEMIS_CUSTOM_PATIENTS_PATH);
+    # any other Services refuses, so a test or script can never write the real patient file.
+    add_case: Callable[[Dict[str, Any]], None] = field(default=_no_case_writer)
 
 
 def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:
-    """The patients the Streamlit app shows, read (never written) from the same files."""
+    """The patients the Streamlit app shows, plus the demo day's P007-P009, read (never written)."""
 
     def read() -> List[Dict[str, Any]]:
-        return read_json_list(PROJECT_ROOT / "Data" / "mock_patients.json") + read_json_list(settings.custom_patients_path)
+        return (
+            read_json_list(PROJECT_ROOT / "Data" / "mock_patients.json")
+            + read_json_list(settings.custom_patients_path)
+            + read_json_list(settings.demo_day_patients_path)
+        )
+
+    return read
+
+
+def custom_case_writer(settings: Settings) -> Callable[[Dict[str, Any]], None]:
+    """Adds one case to the added-cases file in one step (a temporary file, then a rename). A file
+    that can't be read raises UnreadableFile and is never overwritten (fix 10, G16)."""
+
+    def add(record: Dict[str, Any]) -> None:
+        write_json_list(settings.custom_patients_path, read_json_list(settings.custom_patients_path) + [record])
+
+    return add
+
+
+def clinic_day_file(settings: Settings) -> Callable[[], Dict[str, Any]]:
+    """The demo day's schedule, read (never written); changed only by editing the file (ACCESS.md)."""
+
+    def read() -> Dict[str, Any]:
+        return json.loads(settings.clinic_day_path.read_text(encoding="utf-8"))
 
     return read
 
@@ -77,4 +110,6 @@ def default_services(settings: Settings) -> Services:
         model_client=_model_client,
         engine=engine,
         app_version=visit_record.app_version(PROJECT_ROOT),
+        clinic_day=clinic_day_file(settings),
+        add_case=custom_case_writer(settings),
     )

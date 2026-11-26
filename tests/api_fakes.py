@@ -22,6 +22,8 @@ ROOT = Path(__file__).resolve().parents[1]
 GOLDEN = ROOT / "tests" / "golden"
 MOCK_PATIENTS = ROOT / "Data" / "mock_patients.json"
 CUSTOM_PATIENTS = ROOT / "Data" / "custom_patients.json"
+DEMO_DAY_PATIENTS = ROOT / "Data" / "demo_day_patients.json"
+CLINIC_DAY = ROOT / "Data" / "demo_clinic_day.json"
 
 
 def _words(text: str) -> set:
@@ -100,10 +102,15 @@ def replies_for(patient_id: str) -> Dict[str, str]:
 def read_patients() -> List[Dict[str, Any]]:
     """The demo patients, read (never written) from Data/."""
     out: List[Dict[str, Any]] = []
-    for path in (MOCK_PATIENTS, CUSTOM_PATIENTS):
+    for path in (MOCK_PATIENTS, CUSTOM_PATIENTS, DEMO_DAY_PATIENTS):
         if path.exists():
             out.extend(json.loads(path.read_text(encoding="utf-8")))
     return out
+
+
+def read_clinic_day() -> Dict[str, Any]:
+    """The demo day's schedule, read (never written) from Data/."""
+    return json.loads(CLINIC_DAY.read_text(encoding="utf-8"))
 
 
 def memory_engine():

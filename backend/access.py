@@ -25,9 +25,10 @@ from backend.settings import Settings
 # ACCESS.md section 3. A role, data kind or action missing here gets nothing.
 GRID: Dict[str, Dict[str, FrozenSet[str]]] = {
     "local": {
-        "patients": frozenset({"view"}),
-        "visit_records": frozenset({"create"}),
+        "patients": frozenset({"view", "create"}),
+        "visit_records": frozenset({"view", "create"}),
         "guidelines": frozenset({"view"}),
+        "clinic_day": frozenset({"view"}),
     },
 }
 

@@ -9,7 +9,7 @@ suggestions and overrideReasons, with ARTEMIS's own fields under `extension`.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Literal, Optional
+from typing import Annotated, Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -50,8 +50,8 @@ class PatientRecord(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     patient_id: str = Field(min_length=1, max_length=200)
-    name: str = ""
-    sex: str = ""
+    name: Optional[str] = ""
+    sex: Optional[str] = ""  # the Streamlit form saves null when it is left blank
     age_years: Optional[int] = None
     art_regimen_current: List[str] = []
     other_medications: List[str] = []
@@ -60,6 +60,34 @@ class PatientRecord(BaseModel):
     visits: List[Dict[str, Any]] = []
     labs: Dict[str, List[Dict[str, Any]]] = {}
     today_encounter: TodayEncounter
+
+
+class NewLabRow(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    test: str = Field(max_length=40)  # from artemis.patient.labs.TEST_UNITS, e.g. "creatinine"
+    date: str = Field(max_length=10)  # YYYY-MM-DD
+    value: str = Field(max_length=40)  # as written, e.g. "<50"; must hold a number
+    unit: str = Field(default="", max_length=20)  # one of the test's units; blank means its usual one
+    when: Literal["today", "previous"]
+
+
+class NewCase(BaseModel):
+    """A new made-up patient case (owner, 2026-11-26: the Streamlit form's fields and rules, plus
+    an optional name). Checked again by artemis.patient.new_case, the builder both forms share."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    patient_id: str = Field(max_length=40)
+    name: Optional[str] = Field(default=None, max_length=5000)
+    age_years: Optional[int] = None
+    sex: Optional[Literal["M", "F"]] = None
+    art_regimen: List[str] = Field(default=[], max_length=20)  # picks from the app's list, e.g. "TLD"
+    other_medications: List[Annotated[str, Field(max_length=200)]] = Field(default=[], max_length=50)  # one per item
+    complaints: str = Field(default="", max_length=5000)
+    examination_findings: str = Field(default="", max_length=5000)
+    prior_history: str = Field(default="", max_length=5000)
+    labs: List[NewLabRow] = Field(default=[], max_length=50)
 
 
 class PatientSummary(BaseModel):
@@ -110,6 +138,64 @@ class PatientDetail(BaseModel):
     today_encounter: Dict[str, Any]
 
 
+# --- The demo clinic day --------------------------------------------------------------------
+
+
+class Booking(BaseModel):
+    """One appointment in the schedule file."""
+
+    time: str = Field(pattern=r"^\d{2}:\d{2}$")  # HH:MM, the clinic's local time
+    patient_id: str = Field(min_length=1, max_length=200)
+    name: Optional[str] = None  # shown only when the patient's record has no name
+
+
+class ClinicDaySchedule(BaseModel):
+    """Data/demo_clinic_day.json, checked when it is read."""
+
+    clinic: str
+    room: str
+    clinician: str
+    date: datetime.date
+    appointments: List[Booking] = Field(min_length=1)
+
+
+BoardState = Literal["waiting", "needs_you", "done"]  # the design's Waiting / Needs you / Done
+
+
+class Appointment(BaseModel):
+    """One row of the day board: the booking, and the state of the patient's latest saved check."""
+
+    time: str
+    patient_id: str
+    name: str
+    age_years: Optional[int]
+    sex: str
+    regimen: str  # for example "TDF/3TC/DTG"
+    state: BoardState  # waiting: no check yet; needs_you: latest check not finalized; done: finalized
+    visit_id: Optional[str]
+    status: Optional[Status]
+    ai_review: Optional[AiReview]
+    alert_count: int
+    reviewed_count: int  # alerts with a saved decision
+    finalized_at: Optional[str]
+
+
+class DayCounts(BaseModel):
+    booked: int
+    checked: int
+    finalized: int
+    left_in_red: int  # latest check RED and not finalized
+
+
+class ClinicDay(BaseModel):
+    clinic: str
+    room: str
+    clinician: str
+    date: str  # YYYY-MM-DD
+    appointments: List[Appointment]
+    counts: DayCounts
+
+
 # --- Cards (CDS Hooks) ------------------------------------------------------------------
 
 
@@ -150,6 +236,15 @@ class Passage(_CdsOut):
     metadata: Dict[str, Any] = {}
 
 
+class AlertValue(_CdsOut):
+    """One patient value an alert is about, as recorded (the design's '52 eGFR' box)."""
+
+    label: str  # e.g. "eGFR"
+    value: str  # as recorded, e.g. "52" or "<50"
+    unit: str
+    date: str  # YYYY-MM-DD
+
+
 class CardExtension(_CdsOut):
     alert_id: str  # the alert's own id, which decisions refer to
     kind: AlertKind
@@ -161,6 +256,10 @@ class CardExtension(_CdsOut):
     heading: str
     references_heading: str
     references: List[str] = []
+    # By code, no AI change (owner, 2026-11-26): the lab values the alert is about, and the one
+    # guideline sentence closest to it (None when none is close enough).
+    values: List[AlertValue] = []
+    key_sentence: Optional[str] = None
 
 
 class Card(_CdsOut):
@@ -220,6 +319,7 @@ class VisitCheckResponse(BaseModel):
 
 
 # --- Decisions --------------------------------------------------------------------------
+# (SavedVisit, below the decision shapes, is a visit check reopened with its decisions.)
 
 
 class DecisionIn(BaseModel):
@@ -252,3 +352,41 @@ class DecisionsResponse(BaseModel):
     all_resolved: bool
     unresolved: List[str]
     finalize_note: Optional[str]  # FINALIZE_BLOCKED while an alert waits for a decision
+    # When the visit was finalized; None while open, including after a later decision reopened it.
+    finalized_at: Optional[str]
+
+
+class SavedVisit(VisitCheckResponse):
+    """A saved visit reopened (no new AI call): the check as it was shown, plus what was decided."""
+
+    note: str
+    decisions: List[DecisionOut]  # the latest decision on each decided alert, in alert order
+    all_resolved: bool
+    unresolved: List[str]
+    finalized_at: Optional[str]  # None while open, including after a later decision reopened it
+
+
+class VisitSummary(BaseModel):
+    """One of a patient's past checks, newest first."""
+
+    visit_id: str
+    visit_date: str
+    saved_at: str
+    status: Status
+    ai_review: AiReview
+    model: Optional[str]
+    alert_count: int
+    decided_count: int
+    finalized_at: Optional[str]
+
+
+class FinalizeRequest(BaseModel):
+    """Finalize takes no fields: the time is the server's, the decisions are the saved ones."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class FinalizeResponse(BaseModel):
+    visit_id: str
+    finalized_at: str
+    decisions: List[DecisionOut]  # the decision on each alert as finalized, in alert order

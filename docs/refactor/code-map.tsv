@@ -228,14 +228,14 @@ backend/records.py	check_from_entry	Turns a saved visit check into a database ro
 backend/records.py	entry_from_check	Turns a database row back into a saved visit check.	stays	stays
 backend/records.py	get_check	Reads one visit check from the database.	stays	stays
 backend/records.py	import_folder	Copies the visit-record files into the database; safe to rerun.	stays	stays
-backend/records.py	iso	Writes a time as ISO text in UTC.	stays	stays
+backend/records.py	iso	Writes a time as ISO text in UTC, with microseconds when the time has them.	stays	stays
 backend/records.py	json_safe	Makes a JSON-safe copy, with dates as text, as the files have.	stays	stays
 backend/records.py	latest_decisions	Gives the latest decision on each alert of a visit.	stays	stays
 backend/records.py	save_check	Saves one visit check.	stays	stays
 backend/services.py	_model_client	Makes a client for the model server in .env, or none.	stays	stays
 backend/services.py	_search	Builds the guideline search the way the Streamlit app does, once (until plan item 4.3).	stays	stays
 backend/services.py	default_services	Builds the real patients, search, model and database the routes use.	stays	stays
-backend/services.py	demo_patients	Gives a reader for the demo patient files.	stays	stays
+backend/services.py	demo_patients	Gives a reader for the demo patient files, the demo day's P007-P009 included.	stays	stays
 backend/services.py	demo_patients.read	Reads the demo patient files.	stays	stays
 backend/settings.py	_list	Reads a comma-separated setting.	stays	stays
 backend/settings.py	settings_from_env	Reads the backend's settings from the environment.	stays	stays
@@ -274,3 +274,34 @@ backend/cards.py	banners_for	Gives the coloured banners above a visit's results,
 artemis/statuses.py	status_name	Reads a saved status in today's name: an older record's YELLOW reads as AMBER.	stays	stays
 artemis/review.py	reason_options	Gives the override reasons the picker offers, keeping the reason a reopened visit was saved with selectable.	stays	stays
 backend/main.py	_detail	Builds a patient for the screen, each lab result with its value, unit and date apart.	stays	stays
+artemis/screen_text.py	plain_text	Removes inline citation fragments from a text; the references are listed apart.	stays	stays
+artemis/screen_text.py	plain_explanation	Cuts an alert explanation back to its reason, as the screen and the API show it.	stays	stays
+backend/decisions.py	ready_to_finalize	Applies today's Finalize rule to a visit's latest saved decisions.	stays	stays
+backend/main.py	_latest	Gives the latest saved decision on each alert of a visit, as the API sends it.	stays	stays
+backend/main.py	create_app.finalize_visit	Route: finalizes a visit once every alert is decided; again with nothing changed returns the same.	stays	stays
+backend/records.py	_last_decision_id	Gives the newest decision row of a visit.	stays	stays
+backend/records.py	add_finalize	Saves one Finalize, covering every decision saved so far.	stays	stays
+backend/records.py	current_finalize	Gives the Finalize that still holds, unless a later decision reopened the visit.	stays	stays
+backend/records.py	finalized_at	Gives when a visit was finalized, or none while it is open.	stays	stays
+backend/main.py	_visit_reply	Builds a visit check as the screen gets it, the same for a fresh check and a reopened one.	stays	stays
+backend/main.py	create_app.reopen_visit	Route: a saved visit as it was shown, with its decisions and Finalize, with no new AI call.	stays	stays
+backend/main.py	create_app.past_checks	Route: a patient's saved checks, newest first.	stays	stays
+backend/records.py	checks_for	Gives a patient's saved visit checks, newest first.	stays	stays
+backend/records.py	now	Gives this moment to the microsecond, so checks saved in one second still sort in order.	stays	stays
+backend/main.py	board_row	Builds one row of the day board from the booking, the patient and their latest saved check.	stays	stays
+backend/main.py	create_app.clinic_day	Route: the demo day's board, each booking with its patient's latest check state.	stays	stays
+backend/main.py	day_counts	Counts the day board's booked, checked, finalized and left-in-red patients.	stays	stays
+backend/services.py	clinic_day_file	Gives a reader for the demo day's schedule file.	stays	stays
+backend/services.py	clinic_day_file.read	Reads the demo day's schedule file.	stays	stays
+artemis/patient/new_case.py	_form_errors	Lists what's wrong with an add-case form, before any lab row is read.	stays	stays
+artemis/patient/new_case.py	_labs	Reads the form's today and previous lab rows into stored results, or explains what's wrong.	stays	stays
+artemis/patient/new_case.py	build_case_record	Builds the record for a new case from the add-case form, for the Streamlit form and the API.	stays	stays
+backend/main.py	create_app.add_case	Route: adds a new made-up case; an ID already in use is refused.	stays	stays
+backend/services.py	custom_case_writer	Gives the function that adds a case to the added-cases file.	stays	stays
+backend/services.py	custom_case_writer.add	Adds one case to the added-cases file in one step, never over an unreadable file.	stays	stays
+artemis/screen_text.py	alert_values	Gives the patient values an alert is about, each as recorded, for the value box.	stays	stays
+artemis/screen_text.py	_words	Gives a text's longer words, reading VL as viral load, for matching.	stays	stays
+artemis/screen_text.py	key_sentence	Picks the guideline sentence closest to an alert from its passages.	stays	stays
+backend/cards.py	_date	Reads a YYYY-MM-DD date, or none.	stays	stays
+artemis/screen_text.py	record_banners	Gives the banner for a visit check whose record couldn't be saved.	stays	stays
+backend/services.py	_no_case_writer	Refuses to add a case, for any services not set up with the real file.	stays	stays

@@ -50,6 +50,11 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
   Guidelines 2022 · p. 255" (the design's look, owner 2026-11-26: capital G, a middle dot with
   spaces, "p." and a space; no table or section number until plan item 8.5). Never the page's
   position in our extract file.
+- **The value box** (`alert_values`): the patient values the alert is about, each as recorded
+  (label, value, unit, date), the latest on or before the visit date. A creatinine rule shows
+  creatinine and eGFR; any other alert shows the tests its own words name. None when none is named.
+- **The key sentence** (`key_sentence`): the one guideline sentence closest to the alert, picked by
+  code from its passages; none when nothing is close enough (owner, 2026-11-26: no AI change).
 - **Guidance is Ugandan only** (G32): every passage comes from the register in
   `artemis/guidelines/sources.py`.
 
@@ -59,6 +64,11 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
   (`artemis/review.py`), and "Other" needs a comment.
 - Finalize stays disabled until every alert is handled, with the note `FINALIZE_BLOCKED`
   (`can_finalize` in `artemis/review.py`).
+
+- A visit check whose record could not be saved: an amber banner, `RECORD_NOT_SAVED` ("This check
+  could not be saved, so its alerts cannot be decided here."), from `record_banners` (owner,
+  2026-11-26). The API sends it in `banners`; the Streamlit screen keeps its own sentence, since
+  there a Finalize still saves to the file.
 
 ## 5. Always
 

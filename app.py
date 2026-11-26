@@ -10,7 +10,6 @@ from __future__ import annotations
 import html
 import logging
 import os
-import re
 import uuid
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
@@ -37,8 +36,9 @@ from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
 from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
 from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store, index_collection_name
-from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
-from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
+from artemis.patient.labs import TEST_UNITS, read_lab_notes
+from artemis.patient.medicines import REGIMEN_CHOICES
+from artemis.patient.new_case import CaseForm, build_case_record
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
@@ -47,7 +47,15 @@ from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize, reason_options
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
-from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED, alert_heading, alert_references, status_banners
+from artemis.screen_text import (
+    DISCLAIMER,
+    FINALIZE_BLOCKED,
+    alert_heading,
+    alert_references,
+    plain_explanation,
+    plain_text,
+    status_banners,
+)
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
 from artemis.visit import (
     AnalysisOptions,
@@ -315,6 +323,7 @@ def main() -> None:
         """, unsafe_allow_html=True)
 
         new_patient_id = st.text_input("Patient Identifier", key="new_case_patient_id")
+        new_name = st.text_input("Name (made up, optional)", key="new_case_name")
 
         col1, col2 = st.columns(2)
         with col1:
@@ -406,85 +415,42 @@ def main() -> None:
 
         if st.button("Add case to patient list"):
             pid = (new_patient_id or "").strip()
-            if not pid:
-                st.error("Patient ID is required.")
-            elif any((p.get("patient_id") == pid) for p in (list(patients) + custom_patients)):
+            # The demo day's P007-P009 too: the backend lists them, so their IDs are taken.
+            _demo_day = read_json_list(PROJECT_ROOT / "Data" / "demo_day_patients.json")
+            if pid and any((p.get("patient_id") == pid) for p in (list(patients) + custom_patients + _demo_day)):
                 st.error("That Patient ID already exists in the current patient list.")
             else:
-                encounter_iso = datetime.date.today().isoformat()
-
-
                 def _records(table) -> list:
                     if hasattr(table, "to_dict"):
                         return table.to_dict("records")
                     cols = list(table or {})
                     return [dict(zip(cols, vals)) for vals in zip(*(table[c] for c in cols))] if cols else []
 
-                labs_parsed: Dict[str, List[Dict[str, Any]]] = {}
-                lab_errors: List[str] = []
-                for _label, _table, _source in (
-                    ("Today's", new_todays_lab_rows, "today"),
-                    ("Previous", new_previous_lab_rows, "previous"),
-                ):
-                    _entries, _errors = lab_rows_to_entries(editor_rows(_records(_table)), source=_source)
-                    lab_errors += [f"{_label} lab results, {e}" for e in _errors]
-                    for _test, _rows in _entries.items():
-                        labs_parsed.setdefault(_test, []).extend(_rows)
-                if lab_errors:
-                    for _e in lab_errors:
+                # One builder for this form and the API (artemis/patient/new_case.py), same rules.
+                patient_record, case_errors = build_case_record(
+                    CaseForm(
+                        patient_id=pid,
+                        name=new_name or "",
+                        age_years=new_age,
+                        sex=new_sex or "",
+                        art_regimen=list(new_art_regimen or []),
+                        # One medicine per line; commas inside a line are part of it.
+                        other_medications=(new_other_meds or "").splitlines(),
+                        complaints=new_complaints or "",
+                        examination_findings=new_exam_findings or "",
+                        prior_history=new_prior_history or "",
+                        lab_rows=[
+                            (row, source)
+                            for table, source in ((new_todays_lab_rows, "today"), (new_previous_lab_rows, "previous"))
+                            for row in editor_rows(_records(table))
+                        ],
+                    ),
+                    today=datetime.date.today(),
+                )
+                if case_errors:
+                    for _e in case_errors:
                         st.error(_e)
                     st.stop()
-
-                # The picked drugs and combinations, as drug codes (TLD becomes TDF, 3TC, DTG).
-                art_regimen = regimen_codes(new_art_regimen or [])
-                # One medicine per line; commas inside a line are part of it.
-                other_meds = other_medicines((new_other_meds or "").splitlines())
-
-                patient_record: Dict[str, Any] = {
-                    "patient_id": pid,
-                    "age_years": new_age if new_age is not None else None,
-                    "sex": new_sex if new_sex else None,
-                    "art_regimen_current": art_regimen,
-                    "other_medications": other_meds,
-                    "visits": [],
-                    "labs": labs_parsed,
-                    "today_encounter": {
-                        "date": encounter_iso,
-                        "note": "",
-                        "orders": [],
-                        "med_changes": [],
-                    },
-                    "intake": {
-                        "complaints_symptoms": (new_complaints or ""),
-                        "examination_findings": (new_exam_findings or ""),
-                        "prior_history": (new_prior_history or ""),
-                    },
-                }
-
-                # BACKWARD COMPATIBILITY: Concatenate structured fields into legacy visits[] format
-                # so existing code (build_patient_context, RAG, LLM prompts) continues to work
-                legacy_note_parts = []
-                if patient_record["intake"]["complaints_symptoms"]:
-                    legacy_note_parts.append(
-                        f"Complaints & Symptoms:\n{patient_record['intake']['complaints_symptoms']}"
-                    )
-                if patient_record["intake"]["examination_findings"]:
-                    legacy_note_parts.append(
-                        f"Examination Findings:\n{patient_record['intake']['examination_findings']}"
-                    )
-                if patient_record["intake"]["prior_history"]:
-                    legacy_note_parts.append(
-                        f"Significant history prior to today's visit:\n{patient_record['intake']['prior_history']}"
-                    )
-
-                if legacy_note_parts:
-                    patient_record["visits"].append(
-                        {
-                            "date": encounter_iso,
-                            "type": "intake",
-                            "clinician_note": "\n\n".join(legacy_note_parts),
-                        }
-                    )
 
                 # Rationale: keep the local list in sync so the newly added patient
                 # appears in the list immediately on this rerun.
@@ -913,41 +879,9 @@ def main() -> None:
             with st.expander(alert_heading(alert), expanded=True):
                 # Rationale: present clinician-facing text without inline citation fragments
                 # and keep numbered references in one place for readability.
-                _finding_text = str(alert.message or "")
-                _finding_text = re.sub(
-                    r"\[\s*chunk_id\s*:\s*[^\],]+\s*,\s*page_number\s*:\s*(\d+)\s*\]",
-                    "",
-                    _finding_text,
-                    flags=re.IGNORECASE,
-                )
-                _finding_text = re.sub(r"\(page\s*=\s*\d+\)", "", _finding_text, flags=re.IGNORECASE)
-                _finding_text = re.sub(
-                    r"chunk[_\s]*id\s*[:=]\s*[^\s,\)\]]+",
-                    "",
-                    _finding_text,
-                    flags=re.IGNORECASE,
-                )
-
-                _why_text = str(explanation.text or "")
-                _why_text = re.sub(
-                    r"\[\s*chunk_id\s*:\s*[^\],]+\s*,\s*page_number\s*:\s*(\d+)\s*\]",
-                    "",
-                    _why_text,
-                    flags=re.IGNORECASE,
-                )
-                _why_text = re.sub(r"\(page\s*=\s*\d+\)", "", _why_text, flags=re.IGNORECASE)
-                _why_text = re.sub(
-                    r"chunk[_\s]*id\s*[:=]\s*[^\s,\)\]]+",
-                    "",
-                    _why_text,
-                    flags=re.IGNORECASE,
-                )
-
-                # Rationale: some explanations include duplicated headings and large raw
-                # dictionaries; strip them so the main UI reads like a normal note.
-                _why_text = re.sub(r"^\s*why this alert\s*:\s*", "", _why_text, flags=re.IGNORECASE)
-                _why_text = re.split(r"\bpatient evidence\s*:\s*", _why_text, maxsplit=1, flags=re.IGNORECASE)[0]
-                _why_text = re.split(r"\bguideline excerpts\s*:\s*", _why_text, maxsplit=1, flags=re.IGNORECASE)[0]
+                _finding_text = plain_text(alert.message)
+                # The reason alone, without the raw evidence or excerpts (shared with the API).
+                _why_text = plain_explanation(explanation.text)
 
 
                 if alert.source == "ai":

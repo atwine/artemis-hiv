@@ -12,8 +12,8 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 2 Preliminary evaluation | done, on `development` | |
 | 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
-| 4 Backend (FastAPI) | in progress on branch `claude/phase4-backend-1abc8a` | 4.0-4.2, 4.4, 4.5, 4.7 done there (with `development` merged in), not merged back; 4.3, 4.6 and the Phase 4 check left |
-| 5 Frontend (Next.js) | in progress on branch `claude/phase5-web-354110`, not merged | 5.1 and 5.2 done (owner approved each screen); the clinic-day board, Finalize, the saved record, adding a case and the plan view wait on backend routes |
+| 4 Backend (FastAPI) | 4.0-4.2, 4.4, 4.5, 4.7 on `development`; step 2 on branch `claude/phase4-step2` | 4.3, the rest of 4.6, and the Phase 4 check left |
+| 5 Frontend (Next.js) | 5.1 and 5.2 on `development` (merged 0628908; owner approved each screen) | the clinic-day board, Finalize, the saved record, adding a case and the plan view use step 2's routes (branch `claude/phase4-step2`) |
 | 6 to 8 | not started | |
 
 `docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
@@ -312,6 +312,14 @@ Docker (`backend/docker-compose.yml`, owner's pick) through SQLModel, with Alemb
 app still writes its own files. Left: 4.3 (keep the index; the owner kept Chroma in 2B.5, so
 ask before replacing it), 4.6, and this phase's check. Open: a limit on repeated visit checks,
 before anyone else uses the app (ACCESS.md section 6).
+
+Where it stands (2026-11-26, later): step 2 of the plan to join design, backend and app (the backend's
+share) is on branch `claude/phase4-step2`, not pushed: Finalize (a later decision reopens a visit),
+reopening a saved visit and a patient's past checks, the demo day board (P007-P009 drafted for the
+doctor), adding a case (one builder shared with the Streamlit form: 4.6's add-case suggestion),
+plain-text explanations, each alert's value box and key guideline sentence (by code, nothing
+spent), and a saved snapshot of the API's shape (`docs/api/openapi.json`). Waiting on design
+decision 5: the plan wording when the guideline search is down.
 
 ## Phase 5: Frontend (Next.js + shadcn)
 

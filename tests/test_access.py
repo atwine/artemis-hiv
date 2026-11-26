@@ -72,6 +72,7 @@ def _all_patient_ids() -> List[str]:
 
 
 DECISION = {"decisions": [{"alert_id": "tdf_creatinine_overdue", "action": "Acknowledge"}]}
+NEW_CASE = {"patient_id": "P100", "art_regimen": ["TLD"]}
 
 CASES: List[Case] = [
     Case("GET", "/api/patients", "local", "/api/patients", ALLOW, "local: patients = view(all)", only_ids=_all_patient_ids()),
@@ -90,6 +91,25 @@ CASES: List[Case] = [
     Case("POST", "/api/visits/{visit_id}/decisions", "local", "/api/visits/nope/decisions", DENY, "no decision on a visit that doesn't exist", body=DECISION),
     Case("POST", "/api/visits/{visit_id}/decisions", "website", "/api/visits/{visit_id}/decisions", DENY, "website: visit_records = -", body=DECISION),
     Case("POST", "/api/visits/{visit_id}/decisions", "rebinding", "/api/visits/{visit_id}/decisions", DENY, "rebinding is refused by the Host check", body=DECISION),
+    Case("POST", "/api/visits/{visit_id}/finalize", "local", "/api/visits/{decided_visit_id}/finalize", ALLOW, "local: visit_records = create(all)"),
+    Case("POST", "/api/visits/{visit_id}/finalize", "local", "/api/visits/nope/finalize", DENY, "no Finalize for a visit that doesn't exist"),
+    Case("POST", "/api/visits/{visit_id}/finalize", "website", "/api/visits/{decided_visit_id}/finalize", DENY, "website: visit_records = -"),
+    Case("POST", "/api/visits/{visit_id}/finalize", "rebinding", "/api/visits/{decided_visit_id}/finalize", DENY, "rebinding is refused by the Host check"),
+    Case("GET", "/api/visits/{visit_id}", "local", "/api/visits/{visit_id}", ALLOW, "local: visit_records = view(all)"),
+    Case("GET", "/api/visits/{visit_id}", "local", "/api/visits/nope", DENY, "an unknown visit is 404"),
+    Case("GET", "/api/visits/{visit_id}", "website", "/api/visits/{visit_id}", DENY, "website: visit_records = -"),
+    Case("GET", "/api/visits/{visit_id}", "rebinding", "/api/visits/{visit_id}", DENY, "rebinding is refused by the Host check"),
+    Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/P001/visits", ALLOW, "local: visit_records = view(all)"),
+    Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/NOPE/visits", DENY, "an unknown patient is 404"),
+    Case("GET", "/api/patients/{patient_id}/visits", "website", "/api/patients/P001/visits", DENY, "website: visit_records = -"),
+    Case("GET", "/api/patients/{patient_id}/visits", "rebinding", "/api/patients/P001/visits", DENY, "rebinding is refused by the Host check"),
+    Case("GET", "/api/clinic-day", "local", "/api/clinic-day", ALLOW, "local: clinic_day = view(all)"),
+    Case("GET", "/api/clinic-day", "website", "/api/clinic-day", DENY, "website: clinic_day = -"),
+    Case("GET", "/api/clinic-day", "rebinding", "/api/clinic-day", DENY, "rebinding is refused by the Host check"),
+    Case("POST", "/api/patients", "local", "/api/patients", ALLOW, "local: patients = create(all)", body=NEW_CASE),
+    Case("POST", "/api/patients", "local", "/api/patients", DENY, "an ID already in use is refused", body={**NEW_CASE, "patient_id": "P001"}),
+    Case("POST", "/api/patients", "website", "/api/patients", DENY, "website: patients = -", body=NEW_CASE),
+    Case("POST", "/api/patients", "rebinding", "/api/patients", DENY, "rebinding is refused by the Host check", body=NEW_CASE),
 ]
 
 
@@ -97,7 +117,13 @@ def _rows(api) -> Dict[str, int]:
     from backend.records import AlertDecision, VisitCheck
 
     with Session(api.engine) as s:
-        return {"checks": len(s.exec(select(VisitCheck)).all()), "decisions": len(s.exec(select(AlertDecision)).all())}
+        from backend.records import VisitFinalize
+
+        return {
+            "checks": len(s.exec(select(VisitCheck)).all()),
+            "decisions": len(s.exec(select(AlertDecision)).all()),
+            "finalized": len(s.exec(select(VisitFinalize)).all()),
+        }
 
 
 def _run_a_visit(api) -> str:
@@ -106,13 +132,27 @@ def _run_a_visit(api) -> str:
     return r.json()["visit_id"]
 
 
+def _run_and_decide_a_visit(api) -> str:
+    r = api.client.post("/api/patients/P001/visits", json=NOTE, headers=headers_for("local"))
+    assert r.status_code == 200, r.text
+    visit = r.json()
+    decisions = [{"alert_id": c["extension"]["alert_id"], "action": "Acknowledge"} for c in visit["cards"]]
+    r = api.client.post(f"/api/visits/{visit['visit_id']}/decisions", json={"decisions": decisions}, headers=headers_for("local"))
+    assert r.status_code == 200, r.text
+    return visit["visit_id"]
+
+
 def _denied(response) -> bool:
-    return response.status_code in (401, 403, 404)
+    return response.status_code in (401, 403, 404, 409)
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda c: c.id)
 def test_access_rule(api, case: Case):
-    url = case.url.replace("{visit_id}", _run_a_visit(api)) if "{visit_id}" in case.url else case.url
+    url = case.url
+    if "{visit_id}" in url:
+        url = url.replace("{visit_id}", _run_a_visit(api))
+    if "{decided_visit_id}" in url:
+        url = url.replace("{decided_visit_id}", _run_and_decide_a_visit(api))
     before = _rows(api)
     calls_before = len(api.model.calls)
     response = api.client.request(case.method, url, headers=headers_for(case.role), json=case.body)
@@ -124,6 +164,7 @@ def test_access_rule(api, case: Case):
         # A refused request leaves nothing behind and spends nothing.
         assert _rows(api) == before
         assert len(api.model.calls) == calls_before
+        assert api.added_cases == []
         return
     assert response.status_code < 400, (
         f"{case.role} was refused ({response.status_code}) on {case.method} {url} "
@@ -156,7 +197,9 @@ def test_every_route_is_in_the_route_map(api):
     from pathlib import Path
 
     text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
-    in_file = set(re.findall(r"^\| (GET|POST|PUT|PATCH|DELETE) \| (\S+) \|", text, re.MULTILINE))
+    # Rows marked "(planned)" are agreed but not built yet; each unit drops the mark with its route.
+    built = "\n".join(line for line in text.splitlines() if "(planned)" not in line)
+    in_file = set(re.findall(r"^\| (GET|POST|PUT|PATCH|DELETE) \| (\S+) \|", built, re.MULTILINE))
     in_app = {
         (m, r.path) for r in api.app.routes if isinstance(r, APIRoute) for m in r.methods - {"HEAD", "OPTIONS"}
     }
@@ -275,3 +318,42 @@ def test_database_container_is_on_this_laptop_only():
     ports = re.findall(r'^\s*-\s*"([^"]+:\d+)"\s*$', text, re.MULTILINE)
     assert ports and all(p.startswith("127.0.0.1:") for p in ports)
     assert re.search(r"POSTGRES_PASSWORD:\s*\$\{ARTEMIS_DB_PASSWORD:\?", text)
+
+
+def test_the_grid_in_code_matches_access_md():
+    """ACCESS.md section 3, the local row, against backend/access.py's GRID."""
+    import re
+    from pathlib import Path
+
+    from backend.access import GRID
+
+    text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
+    text = text[text.index("## 3. Permission grid"):text.index("## 4. Route map")]
+    header = re.search(r"^\| Role \| (.+) \|$", text, re.MULTILINE).group(1).split(" | ")
+    local = re.search(r"^\| local \| (.+) \|$", text, re.MULTILINE).group(1).split(" | ")
+    from_file = {data: {a.split("(")[0].strip() for a in cell.split(",")} for data, cell in zip(header, local) if cell != "-"}
+    assert from_file == {data: set(actions) for data, actions in GRID["local"].items()}
+    assert set(GRID) == {"local"}  # every other role gets nothing
+
+
+def test_route_map_lists_exactly_what_each_route_checks(api):
+    """ACCESS.md section 4 names every (data, action) each route requires, and no more."""
+    import re
+    from pathlib import Path
+
+    text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
+    in_file = {
+        (m, path, data, action)
+        for m, path, data, action in re.findall(r"^\| (GET|POST|PUT|PATCH|DELETE) \| (\S+) \| (\w+) \| (\S+) \|", text, re.MULTILINE)
+        if data != "public"
+    }
+    in_app = set()
+    for route in api.app.routes:
+        if not isinstance(route, APIRoute):
+            continue
+        for dep in route.dependant.dependencies:
+            name = getattr(dep.call, "__name__", "")
+            if name.startswith("require_"):
+                action, data = name[len("require_"):].split("_", 1)
+                in_app |= {(m, route.path, data, action) for m in route.methods - {"HEAD", "OPTIONS"}}
+    assert in_file == in_app
