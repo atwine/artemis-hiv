@@ -1,0 +1,22 @@
+# Local Postgres for the visit records (plan item 4.5; owner's choice 2026-11-26: Docker, using
+# the postgres:17 image already on this laptop). Reachable from this laptop only (127.0.0.1).
+#
+#   docker compose -f backend/docker-compose.yml --env-file .env up -d     # start
+#   docker compose -f backend/docker-compose.yml --env-file .env stop      # stop (data kept)
+#
+# The password comes from ARTEMIS_DB_PASSWORD in .env; it is never written here.
+name: artemis
+services:
+  db:
+    image: postgres:17@sha256:b8faeff7712663c2773a190181e1246e37e364b887611c04658c28b44e2408fe
+    environment:
+      POSTGRES_USER: artemis
+      POSTGRES_DB: artemis
+      POSTGRES_PASSWORD: ${ARTEMIS_DB_PASSWORD:?set ARTEMIS_DB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - artemis-pg:/var/lib/postgresql/data
+    restart: "no"
+volumes:
+  artemis-pg:

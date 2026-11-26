@@ -6,6 +6,9 @@ from typing import Any, Dict, List, Mapping
 
 from artemis.rules.checks import Alert
 
+# The reasons a clinician can give for overriding an alert (the Streamlit screen and the backend).
+OVERRIDE_REASONS = ["Already addressed", "Not applicable", "Will address later", "Patient declined", "Other"]
+
 
 def alert_resolution_ok(state: Mapping[str, Any], alert_id: str) -> bool:
     action = state.get(f"alert_action_{alert_id}")

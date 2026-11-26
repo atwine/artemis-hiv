@@ -24,7 +24,7 @@ artemis/            the app's logic, with no screen code
   screen_text.py    the wording every screen shows (docs/screen-checklist.md)
   review.py         alert review and finalize rules
 ui/                 the Streamlit screen only
-api/                FastAPI (Phase 4)
+backend/            FastAPI (Phase 4; the owner picked this name over api/, 2026-11-26)
 web/                Next.js (Phase 5)
 ```
 
