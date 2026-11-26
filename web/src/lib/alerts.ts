@@ -1,5 +1,6 @@
 // Plain functions for the alert screens: what each alert shows and where review goes next.
 import type { Card } from "./api/client";
+import { longDate } from "./record.ts";
 
 type Extension = Card["extension"];
 type Passage = Extension["passages"][number];
@@ -44,4 +45,33 @@ export function nextToReview(alertIds: string[], decided: Set<string>, current: 
     if (!decided.has(alertIds[i])) return i;
   }
   return null;
+}
+
+export type GuidelineQuote = {
+  /** What is quoted: the key sentence, or the passage from its start. */
+  text: string;
+  citation: string;
+  /** The whole passage, for "Show the whole passage". */
+  whole: string;
+  isKeySentence: boolean;
+};
+
+/**
+ * The guideline line an alert shows. The backend's key sentence when it sends one, with the
+ * citation of the passage it came from; otherwise the first passage the references name, quoted
+ * from its start (owner, 2026-11-26). Null when no passage is cited.
+ */
+export function guidelineQuote(ext: Pick<Extension, "key_sentence" | "references" | "passages">): GuidelineQuote | null {
+  const key = ext.key_sentence?.trim();
+  if (key) {
+    const from = ext.passages.find((p) => p.text.includes(key));
+    if (from) return { text: key, citation: from.citation ?? "", whole: from.text, isKeySentence: true };
+  }
+  const p = quotedPassage(ext);
+  return p ? { text: p.text, citation: p.citation ?? "", whole: p.text, isKeySentence: false } : null;
+}
+
+/** Over a patient value: "Rose today", or "John, 1 Oct 2024" when it was taken before the visit. */
+export function valueHeading(name: string, valueDate: string, visitDate: string): string {
+  return valueDate === visitDate ? `${firstName(name)} today` : `${firstName(name)}, ${longDate(valueDate)}`;
 }

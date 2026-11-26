@@ -1,6 +1,164 @@
 {
   "components": {
     "schemas": {
+      "AlertValue": {
+        "description": "One patient value an alert is about, as recorded (the design's '52 eGFR' box).",
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "value",
+          "unit",
+          "date"
+        ],
+        "title": "AlertValue",
+        "type": "object"
+      },
+      "Appointment": {
+        "description": "One row of the day board: the booking, and the state of the patient's latest saved check.",
+        "properties": {
+          "age_years": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age Years"
+          },
+          "ai_review": {
+            "anyOf": [
+              {
+                "enum": [
+                  "not_run",
+                  "ok",
+                  "failed",
+                  "unreadable",
+                  "cut_off",
+                  "partly_read",
+                  "search_unavailable"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ai Review"
+          },
+          "alert_count": {
+            "title": "Alert Count",
+            "type": "integer"
+          },
+          "finalized_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalized At"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "patient_id": {
+            "title": "Patient Id",
+            "type": "string"
+          },
+          "regimen": {
+            "title": "Regimen",
+            "type": "string"
+          },
+          "reviewed_count": {
+            "title": "Reviewed Count",
+            "type": "integer"
+          },
+          "sex": {
+            "title": "Sex",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "waiting",
+              "needs_you",
+              "done"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "GREEN",
+                  "AMBER",
+                  "RED",
+                  "INCOMPLETE"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "time": {
+            "title": "Time",
+            "type": "string"
+          },
+          "visit_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Visit Id"
+          }
+        },
+        "required": [
+          "time",
+          "patient_id",
+          "name",
+          "age_years",
+          "sex",
+          "regimen",
+          "state",
+          "visit_id",
+          "status",
+          "ai_review",
+          "alert_count",
+          "reviewed_count",
+          "finalized_at"
+        ],
+        "title": "Appointment",
+        "type": "object"
+      },
       "Banner": {
         "description": "One coloured banner above a visit's results (screen_text.status_banners).",
         "properties": {
@@ -107,6 +265,17 @@
             "title": "Heading",
             "type": "string"
           },
+          "key_sentence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key Sentence"
+          },
           "kind": {
             "enum": [
               "rule",
@@ -145,6 +314,14 @@
               }
             ],
             "title": "Severity"
+          },
+          "values": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/AlertValue"
+            },
+            "title": "Values",
+            "type": "array"
           }
         },
         "required": [
@@ -154,6 +331,46 @@
           "references_heading"
         ],
         "title": "CardExtension",
+        "type": "object"
+      },
+      "ClinicDay": {
+        "properties": {
+          "appointments": {
+            "items": {
+              "$ref": "#/components/schemas/Appointment"
+            },
+            "title": "Appointments",
+            "type": "array"
+          },
+          "clinic": {
+            "title": "Clinic",
+            "type": "string"
+          },
+          "clinician": {
+            "title": "Clinician",
+            "type": "string"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/DayCounts"
+          },
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "room": {
+            "title": "Room",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clinic",
+          "room",
+          "clinician",
+          "date",
+          "appointments",
+          "counts"
+        ],
+        "title": "ClinicDay",
         "type": "object"
       },
       "Coding": {
@@ -177,6 +394,34 @@
           "display"
         ],
         "title": "Coding",
+        "type": "object"
+      },
+      "DayCounts": {
+        "properties": {
+          "booked": {
+            "title": "Booked",
+            "type": "integer"
+          },
+          "checked": {
+            "title": "Checked",
+            "type": "integer"
+          },
+          "finalized": {
+            "title": "Finalized",
+            "type": "integer"
+          },
+          "left_in_red": {
+            "title": "Left In Red",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "booked",
+          "checked",
+          "finalized",
+          "left_in_red"
+        ],
+        "title": "DayCounts",
         "type": "object"
       },
       "DecisionIn": {
@@ -309,6 +554,17 @@
             ],
             "title": "Finalize Note"
           },
+          "finalized_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalized At"
+          },
           "unresolved": {
             "items": {
               "type": "string"
@@ -326,9 +582,43 @@
           "decisions",
           "all_resolved",
           "unresolved",
-          "finalize_note"
+          "finalize_note",
+          "finalized_at"
         ],
         "title": "DecisionsResponse",
+        "type": "object"
+      },
+      "FinalizeRequest": {
+        "additionalProperties": false,
+        "description": "Finalize takes no fields: the time is the server's, the decisions are the saved ones.",
+        "properties": {},
+        "title": "FinalizeRequest",
+        "type": "object"
+      },
+      "FinalizeResponse": {
+        "properties": {
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionOut"
+            },
+            "title": "Decisions",
+            "type": "array"
+          },
+          "finalized_at": {
+            "title": "Finalized At",
+            "type": "string"
+          },
+          "visit_id": {
+            "title": "Visit Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "visit_id",
+          "finalized_at",
+          "decisions"
+        ],
+        "title": "FinalizeResponse",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -402,6 +692,148 @@
           "source"
         ],
         "title": "LabResult",
+        "type": "object"
+      },
+      "NewCase": {
+        "additionalProperties": false,
+        "description": "A new made-up patient case (owner, 2026-11-26: the Streamlit form's fields and rules, plus\nan optional name). Checked again by artemis.patient.new_case, the builder both forms share.",
+        "properties": {
+          "age_years": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age Years"
+          },
+          "art_regimen": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "title": "Art Regimen",
+            "type": "array"
+          },
+          "complaints": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Complaints",
+            "type": "string"
+          },
+          "examination_findings": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Examination Findings",
+            "type": "string"
+          },
+          "labs": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/NewLabRow"
+            },
+            "maxItems": 50,
+            "title": "Labs",
+            "type": "array"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "other_medications": {
+            "default": [],
+            "items": {
+              "maxLength": 200,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Other Medications",
+            "type": "array"
+          },
+          "patient_id": {
+            "maxLength": 40,
+            "title": "Patient Id",
+            "type": "string"
+          },
+          "prior_history": {
+            "default": "",
+            "maxLength": 5000,
+            "title": "Prior History",
+            "type": "string"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "M",
+                  "F"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sex"
+          }
+        },
+        "required": [
+          "patient_id"
+        ],
+        "title": "NewCase",
+        "type": "object"
+      },
+      "NewLabRow": {
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "maxLength": 10,
+            "title": "Date",
+            "type": "string"
+          },
+          "test": {
+            "maxLength": 40,
+            "title": "Test",
+            "type": "string"
+          },
+          "unit": {
+            "default": "",
+            "maxLength": 20,
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 40,
+            "title": "Value",
+            "type": "string"
+          },
+          "when": {
+            "enum": [
+              "today",
+              "previous"
+            ],
+            "title": "When",
+            "type": "string"
+          }
+        },
+        "required": [
+          "test",
+          "date",
+          "value",
+          "when"
+        ],
+        "title": "NewLabRow",
         "type": "object"
       },
       "Passage": {
@@ -649,6 +1081,159 @@
         "title": "Plan",
         "type": "object"
       },
+      "SavedVisit": {
+        "description": "A saved visit reopened (no new AI call): the check as it was shown, plus what was decided.",
+        "properties": {
+          "ai_review": {
+            "enum": [
+              "not_run",
+              "ok",
+              "failed",
+              "unreadable",
+              "cut_off",
+              "partly_read",
+              "search_unavailable"
+            ],
+            "title": "Ai Review",
+            "type": "string"
+          },
+          "all_resolved": {
+            "title": "All Resolved",
+            "type": "boolean"
+          },
+          "banners": {
+            "items": {
+              "$ref": "#/components/schemas/Banner"
+            },
+            "title": "Banners",
+            "type": "array"
+          },
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/Card"
+            },
+            "title": "Cards",
+            "type": "array"
+          },
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionOut"
+            },
+            "title": "Decisions",
+            "type": "array"
+          },
+          "disclaimer": {
+            "title": "Disclaimer",
+            "type": "string"
+          },
+          "finalize_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalize Note"
+          },
+          "finalized_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalized At"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "patient_id": {
+            "title": "Patient Id",
+            "type": "string"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Plan"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "record_saved": {
+            "title": "Record Saved",
+            "type": "boolean"
+          },
+          "saved_at": {
+            "title": "Saved At",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "GREEN",
+              "AMBER",
+              "RED",
+              "INCOMPLETE"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "unresolved": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unresolved",
+            "type": "array"
+          },
+          "visit_date": {
+            "title": "Visit Date",
+            "type": "string"
+          },
+          "visit_id": {
+            "title": "Visit Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "visit_id",
+          "patient_id",
+          "visit_date",
+          "saved_at",
+          "status",
+          "ai_review",
+          "model",
+          "cards",
+          "plan",
+          "record_saved",
+          "banners",
+          "disclaimer",
+          "finalize_note",
+          "note",
+          "decisions",
+          "all_resolved",
+          "unresolved",
+          "finalized_at"
+        ],
+        "title": "SavedVisit",
+        "type": "object"
+      },
       "Source": {
         "properties": {
           "label": {
@@ -875,6 +1460,89 @@
         ],
         "title": "VisitCheckResponse",
         "type": "object"
+      },
+      "VisitSummary": {
+        "description": "One of a patient's past checks, newest first.",
+        "properties": {
+          "ai_review": {
+            "enum": [
+              "not_run",
+              "ok",
+              "failed",
+              "unreadable",
+              "cut_off",
+              "partly_read",
+              "search_unavailable"
+            ],
+            "title": "Ai Review",
+            "type": "string"
+          },
+          "alert_count": {
+            "title": "Alert Count",
+            "type": "integer"
+          },
+          "decided_count": {
+            "title": "Decided Count",
+            "type": "integer"
+          },
+          "finalized_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finalized At"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "saved_at": {
+            "title": "Saved At",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "GREEN",
+              "AMBER",
+              "RED",
+              "INCOMPLETE"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "visit_date": {
+            "title": "Visit Date",
+            "type": "string"
+          },
+          "visit_id": {
+            "title": "Visit Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "visit_id",
+          "visit_date",
+          "saved_at",
+          "status",
+          "ai_review",
+          "model",
+          "alert_count",
+          "decided_count",
+          "finalized_at"
+        ],
+        "title": "VisitSummary",
+        "type": "object"
       }
     }
   },
@@ -884,6 +1552,25 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/clinic-day": {
+      "get": {
+        "description": "The demo day's board: each booking with the state of the patient's latest saved check,\nwhenever it ran (owner, 2026-11-26).",
+        "operationId": "clinic_day_api_clinic_day_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClinicDay"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Clinic Day"
+      }
+    },
     "/api/health": {
       "get": {
         "operationId": "health_api_health_get",
@@ -926,6 +1613,43 @@
           }
         },
         "summary": "List Patients"
+      },
+      "post": {
+        "description": "Add a new made-up case where the Streamlit app keeps its added cases. Add only: an ID\nalready in use is refused (owner, 2026-11-26).",
+        "operationId": "add_case_api_patients_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Case"
       }
     },
     "/api/patients/{patient_id}": {
@@ -968,6 +1692,48 @@
       }
     },
     "/api/patients/{patient_id}/visits": {
+      "get": {
+        "description": "A patient's saved checks, newest first.",
+        "operationId": "past_checks_api_patients__patient_id__visits_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patient_id",
+            "required": true,
+            "schema": {
+              "title": "Patient Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VisitSummary"
+                  },
+                  "title": "Response Past Checks Api Patients  Patient Id  Visits Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Past Checks"
+      },
       "post": {
         "operationId": "run_visit_check_api_patients__patient_id__visits_post",
         "parameters": [
@@ -1014,6 +1780,46 @@
           }
         },
         "summary": "Run Visit Check"
+      }
+    },
+    "/api/visits/{visit_id}": {
+      "get": {
+        "description": "A saved visit as it was shown, with its decisions and Finalize. No new AI call.",
+        "operationId": "reopen_visit_api_visits__visit_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "visit_id",
+            "required": true,
+            "schema": {
+              "title": "Visit Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedVisit"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reopen Visit"
       }
     },
     "/api/visits/{visit_id}/decisions": {
@@ -1063,6 +1869,63 @@
           }
         },
         "summary": "Record Decisions"
+      }
+    },
+    "/api/visits/{visit_id}/finalize": {
+      "post": {
+        "description": "Close a visit once every alert is decided. Again with nothing changed: the same reply,\nnothing new saved. After a later decision reopened it: a new Finalize (owner, 2026-11-26).",
+        "operationId": "finalize_visit_api_visits__visit_id__finalize_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "visit_id",
+            "required": true,
+            "schema": {
+              "title": "Visit Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/FinalizeRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinalizeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Finalize Visit"
       }
     }
   }

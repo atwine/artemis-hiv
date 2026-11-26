@@ -75,6 +75,11 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(alert.getByRole("heading", { level: 2 })).toContainText(CREATININE);
   await expect(alert.getByText("Rule check", { exact: true })).toBeVisible();
   await expect(alert.getByText("Related passages (found by a search for this alert)")).toBeVisible();
+  // The patient's value the alert is about, as recorded (the design's "52 eGFR" box).
+  const values = alert.getByRole("list", { name: "Patient values" });
+  await expect(values).toContainText("John, 1 Oct 2024");
+  await expect(values).toContainText("88");
+  await expect(values).toContainText("umol/L");
   await expect(alert.getByText(/^Uganda HIV Guidelines 2022 · p\. \d+$/).first()).toBeVisible();
   const whole = alert.getByRole("button", { name: "Show the whole passage" });
   await expect(whole).toHaveAttribute("aria-expanded", "false");

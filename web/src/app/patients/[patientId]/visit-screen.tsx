@@ -205,7 +205,9 @@ function VisitView({
             onOpen={(i) => setView({ name: "alert", i })}
           />
         )}
-        {card && view.name === "alert" && <AlertView card={card} n={view.i + 1} />}
+        {card && view.name === "alert" && (
+          <AlertView card={card} n={view.i + 1} patientName={patient.name} visitDate={result?.visit_date ?? ""} />
+        )}
         {card && view.name === "override" && (
           <OverrideView
             card={card}

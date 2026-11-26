@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { firstName, nextToReview, quotedPassage, severityWord } from "./alerts.ts";
+import { firstName, guidelineQuote, nextToReview, quotedPassage, severityWord, valueHeading } from "./alerts.ts";
 
 const passage = (citation: string | null, text = "text") => ({ chunk_id: citation ?? "x", text, citation, metadata: {} });
 
@@ -35,4 +35,32 @@ test("the next alert to review comes after the current one, wrapping round; none
   assert.equal(nextToReview(["a", "b", "c"], new Set(["a"]), 0), 1);
   assert.equal(nextToReview(["a", "b", "c"], new Set(["b", "c"]), 1), 0);
   assert.equal(nextToReview(["a", "b"], new Set(["a", "b"]), 0), null);
+});
+
+test("the key sentence keeps the citation of the passage it came from", () => {
+  const ext = {
+    key_sentence: "If GFR is < 60mls/min then substitute with ABC.",
+    references: ["Uganda HIV Guidelines 2022 · p. 260", "Uganda HIV Guidelines 2022 · p. 270"],
+    passages: [
+      passage("Uganda HIV Guidelines 2022 · p. 260", "Do creatinine every 12 months."),
+      passage("Uganda HIV Guidelines 2022 · p. 270", "Do LFTs and RFTs. If GFR is < 60mls/min then substitute with ABC. More."),
+    ],
+  };
+  const q = guidelineQuote(ext);
+  assert.equal(q?.text, "If GFR is < 60mls/min then substitute with ABC.");
+  assert.equal(q?.citation, "Uganda HIV Guidelines 2022 · p. 270");
+  assert.equal(q?.whole, "Do LFTs and RFTs. If GFR is < 60mls/min then substitute with ABC. More.");
+  assert.equal(q?.isKeySentence, true);
+});
+
+test("with no key sentence, the first passage the references name is quoted from its start", () => {
+  const q = guidelineQuote({ key_sentence: null, references: ["Uganda HIV Guidelines 2022 · p. 9"], passages: [passage("Uganda HIV Guidelines 2022 · p. 9", "Start of the passage.")] });
+  assert.equal(q?.text, "Start of the passage.");
+  assert.equal(q?.isKeySentence, false);
+  assert.equal(guidelineQuote({ key_sentence: null, references: [], passages: [] }), null);
+});
+
+test("a value's heading: the first name and 'today', or the date it was taken", () => {
+  assert.equal(valueHeading("Rose Nabirye", "2026-02-24", "2026-02-24"), "Rose today");
+  assert.equal(valueHeading("John Doe", "2024-10-01", "2026-01-22"), "John, 1 Oct 2024");
 });
