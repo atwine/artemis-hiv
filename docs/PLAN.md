@@ -184,18 +184,29 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   (2.15.0+cu132, RTX 3050): the search index builds in 0.6 s instead of 4.3 s (MiniLM), 9.5 s
   instead of about 16 minutes (Qwen3), with the same search results (all 42 searches identical).
   `requirements.txt` keeps the processor build for CI.
-- Next (owner's call): fix 5g, the re-ranker bge-reranker-v2-m3 (2.3 GB, not yet downloaded); or
-  2B.3, the agentic search loop; or wrap up 2B with what is kept (Ugandan guidance only, the AI
-  question step, the checker).
+- Wrapped up (owner, 2026-11-26) with what is kept: Ugandan guidance only, the AI question step,
+  the measuring tools. Fix 5g and 2B.3 not tried: three search changes in a row did not raise
+  catches. The owner then decided G33 (a search model that fails to load switches the AI review
+  and the plan step off, with a red banner), G36 (citations show the printed page), 2B.7, 2B.6 and
+  2B.5 (below). The reviews added G37 (an edited guideline file gets a fresh stored index).
+- Final check (3 runs per case, temperature 0): GLM own catches 80%, Llama 55% (59% Uganda-only
+  baseline; passes by 1 point), DeepSeek 61% (67% in Phase 2 with all four guidelines at 0.2;
+  real alerts 91%, healthy left clear 5/6). Write-up: `eval/phase2b/README.md`; screenshots of
+  the banner and the citations in `eval/phase2b/`. Spent $2.00 of the $5 cap in all.
+- Open, carried to item 8.5 (records per recommendation): G34 (pieces longer than the search
+  model reads) and the rest of G31 (rule-alert searches use the fixed query builder).
 
 - [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
       Done 2026-11-25: `scripts/check_retrieval.py`, `scripts/diagnose_search.py`.
-- [ ] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
-      a re-ranking step), one at a time, keeping each only if the scores improve.
+- [x] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
+      a re-ranking step), one at a time, keeping each only if the scores improve. Done: 5a, 5b, 5c,
+      5d, 5e, 5a2, 5f tried and dropped by their rules; 5q (AI-written questions) kept.
 - [ ] 2B.3 Try an agentic loop like PolicyLens: plan the questions, search, judge whether the
-      results are good enough, search again if not.
-- [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
+      results are good enough, search again if not. Not tried: the owner wrapped up 2B first
+      (2026-11-26); better search did not raise catches twice.
+- [x] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
+      Done: `eval/phase2b/README.md`.
 - [x] 2B.5 Decided 2026-11-26 (owner, option B): keep Chroma and keep skipping its four advisories,
       with the reason in `.github/workflows/security-scans.yml`; 1.5.9 is still the newest release and
       the app never starts Chroma's HTTP server. Recheck on every chromadb upgrade. Replacing Chroma

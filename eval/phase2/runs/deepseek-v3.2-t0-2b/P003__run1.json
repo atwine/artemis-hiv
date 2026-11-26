@@ -1,0 +1,199 @@
+{
+ "case_id": "P003",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 25.5,
+ "calls": [
+  {
+   "prompt_tokens": 1414,
+   "completion_tokens": 443,
+   "total_tokens": 1857,
+   "cost": 0.00048606,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00048606,
+    "upstream_inference_prompt_cost": 0.00031772,
+    "upstream_inference_completions_cost": 0.00016834
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 582,
+   "completion_tokens": 58,
+   "total_tokens": 640,
+   "cost": 0.00017336,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00017336,
+    "upstream_inference_prompt_cost": 0.00015132,
+    "upstream_inference_completions_cost": 2.204e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2721,
+   "completion_tokens": 2,
+   "total_tokens": 2723,
+   "cost": 0.00060838,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00060838,
+    "upstream_inference_prompt_cost": 0.00060762,
+    "upstream_inference_completions_cost": 7.6e-07
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0012678,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_missing",
+   "title": "Creatinine missing while on TDF",
+   "message": "Consider ordering creatinine/eGFR monitoring for a patient on TDF; no recent creatinine result found in history.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "creatinine": null
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "efv_sleep_disturbance",
+   "title": "Possible EFV neuropsychiatric side effects",
+   "message": "Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "insomnia",
+     "vivid dreams",
+     "poor sleep"
+    ]
+   },
+   "query_hint": "Efavirenz sleep disturbance vivid dreams management",
+   "source": "rule"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_missing": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c14"
+  ],
+  "efv_sleep_disturbance": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c14",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c3"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "EFV side effects insomnia vivid dreams",
+   "EFV side effects neuropsychiatric symptoms",
+   "EFV side effects sleep disturbances",
+   "Viral load monitoring due date",
+   "CD4 monitoring due date",
+   "EFV side effects management"
+  ],
+  "raw_output": "[]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c3",
+    "page_number": 36,
+    "quote": "Managing IRIS\nInsomnia Hepatotoxicity Hypersensitivity reactions | Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping | Do RBS to confirm hyperglycaemia then substitute with EFV Insomnia: Ensure patient is taking DTG during the day if it persists th"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 272,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 269,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\nFigure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Maintain"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p14_c3",
+    "page_number": 247,
+    "quote": "from one regimen to a superior regimen after 3-consecutive IAC with scores ≥95% and a non-suppressed repeat VL. CD4 monitoring CD4 cell count testing can be performed using point of care technologies such as laboratory based CD4 analyzers and device -free semi-quantitative rapid tests. If a CD4 cell count is not readily available onsite, draw a sample and send to the nearby hub laboratory for testing. CD4 cell count is recommended in the following scenarios: * At baseline whe"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c2",
+    "page_number": 269,
+    "quote": "ality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement in men In case on EFV 600mg Lower the dose of EFV to 400mg. In case on EFV 400mg Reassure, If symptoms persist Substitute EFV with DTG If DTG is contraindicated: substitute with ATV/r 269 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c6",
+    "page_number": 14,
+    "quote": "6.12.3 Frequency of viral load monitoring\n3. Apply the red stickers for non-suppressed clients to flag non-suppressed client files. 4. Conduct a first intensive adherence counselling within 7-30 days of result return. 5. Record IAC sessions on HIV care card to support completion of 3 consecutive IAC sessions. 6. Form viral load focal teams with clinical-lab interface for routine review of non-suppressed files. 7. Utilization of non-suppressed registers. 8. Integrate viral loa"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s23_c9",
+    "page_number": 22,
+    "quote": "ACTIVE PHARMACOVIGILANCE\nThe tally data for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follo"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s7_c1",
+    "page_number": 5,
+    "quote": "6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT > 6.6.1 Rationale for Using EFV400\nStudies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can be co-administered with Rifampicin-containing anti-TB treatment, with co-administration well tolerated and pla"
+   }
+  ],
+  "parse_status": "parsed_empty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has CNS side effects (insomnia, vivid dreams) from EFV but no suicidal ideation, and guidelines recommend managing side effects or switching if severe.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"EFV-related CNS toxicity (insomnia, vivid dreams)\",\n      \"action\": \"Assess severity, consider switching to DTG if symptoms intolerable or persistent.\",\n      \"reason\": \"Guidelines list dizziness, insomnia, abnormal dreams as mental symptoms from EFV.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only notes the symptoms but does not propose any management action.\"\n      }\n    },\n    {\n      \"problem\": \"No recent renal function monitoring for TDF\",\n      \"action\": \"Order serum creatinine and eGFR.\",\n      \"reason\": \"Guidelines recommend serum creatinine & eGFR for patients on TDF.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention any lab orders or monitoring.\"\n      }\n    },\n    {\n      \"problem\": \"Viral load not suppressed (<1000 copies/mL)\",\n      \"action\": \"Ensure adherence counseling and repeat viral load in 3 months.\",\n      \"reason\": \"Latest viral load is 60 copies/mL, which is suppressed, but guidelines recommend monitoring.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not address viral load monitoring or adherence.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order serum creatinine/eGFR now. Repeat viral load in 3 months. Monitor for worsening CNS symptoms.\",\n  \"patient_counselling\": [\n    \"Counsel on EFV side effects and management strategies.\",\n    \"Reinforce adherence to maintain viral suppression.\",\n    \"Advise to report any suicidal thoughts immediately.\"\n  ]\n}",
+ "plan_issues": []
+}

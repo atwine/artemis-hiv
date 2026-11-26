@@ -1,0 +1,178 @@
+{
+ "case_id": "P001",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 42.3,
+ "calls": [
+  {
+   "prompt_tokens": 1487,
+   "completion_tokens": 325,
+   "total_tokens": 1812,
+   "cost": 0.00032708,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1408,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00032708,
+    "upstream_inference_prompt_cost": 0.00020358,
+    "upstream_inference_completions_cost": 0.0001235
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 663,
+   "completion_tokens": 79,
+   "total_tokens": 742,
+   "cost": 0.0002024,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0002024,
+    "upstream_inference_prompt_cost": 0.00017238,
+    "upstream_inference_completions_cost": 3.002e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3054,
+   "completion_tokens": 2,
+   "total_tokens": 3056,
+   "cost": 0.00069496,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00069496,
+    "upstream_inference_prompt_cost": 0.0006942,
+    "upstream_inference_completions_cost": 7.6e-07
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0012244399999999998,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Is creatinine monitoring overdue for TDF?",
+   "Is viral load monitoring overdue?",
+   "Any side effects of TDF, 3TC, DTG?",
+   "Any drug interactions with TDF, 3TC, DTG?",
+   "Any monitoring tests due for DTG?",
+   "Any monitoring tests due for 3TC?"
+  ],
+  "raw_output": "[]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\nFigure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Maintain"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 238,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 189,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c3",
+    "page_number": 23,
+    "quote": "Screening tool for Active Pharmacovigilance\nDoes the patient have any of the following symptoms or complaints? | Month of Visit\nJan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec\n1 | Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms)"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+    "page_number": 27,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nDTG | 1. Screen using screening tool to identify any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests.\nIsoniazid/ 3HP Prophylaxis | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests ba"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c6",
+    "page_number": 14,
+    "quote": "6.12.3 Frequency of viral load monitoring\n3. Apply the red stickers for non-suppressed clients to flag non-suppressed client files. 4. Conduct a first intensive adherence counselling within 7-30 days of result return. 5. Record IAC sessions on HIV care card to support completion of 3 consecutive IAC sessions. 6. Form viral load focal teams with clinical-lab interface for routine review of non-suppressed files. 7. Utilization of non-suppressed registers. 8. Integrate viral loa"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 269,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s9_c3",
+    "page_number": 18,
+    "quote": "TB Screening > Eligibility for TPT\nARV Drug Regimen | TPT regimen Options | Rationale for TPT regimen\nTDF or AZT or ABC + 3TC + DTG or TAF+FTC + DTG | Isoniazid (6H) or Isoniazid-Rifapentine-based regimens | No dose adjustment of DTG with Isoniazid-Rifapentin-based regimen\nTDF or AZT or ABC + 3TC+ ATV/r TDF or AZT or ABC + 3TC + LPV/r or or TAF+FTC + LPV/r | Isoniazid (6H) | Co-administration of rifamycins (such as rifampicin) with protease inhibitors has been associated with"
+   }
+  ],
+  "parse_status": "parsed_empty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is asymptomatic, virally suppressed, and has no recorded signs of toxicity from TDF, 3TC, or DTG.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"No recent renal function monitoring for TDF\",\n      \"action\": \"Order serum creatinine and eGFR.\",\n      \"reason\": \"Guidelines recommend serum creatinine & eGFR for patients on TDF, and the last creatinine was over a year ago.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan of 'Routine follow-up. No issues.' does not mention ordering any labs.\"\n      }\n    },\n    {\n      \"problem\": \"Inadequate pharmacovigilance for drug toxicity\",\n      \"action\": \"Order routine monitoring labs per guidelines.\",\n      \"reason\": \"Guidelines emphasize pharmacovigilance for early detection of drug toxicities.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not include any active monitoring for toxicity.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order serum creatinine and eGFR now. Schedule next viral load in 6-12 months.\",\n  \"patient_counselling\": [\n    \"Reinforce excellent adherence.\",\n    \"Report any new symptoms promptly.\",\n    \"Schedule next appointment.\"\n  ]\n}",
+ "plan_issues": []
+}

@@ -1,0 +1,201 @@
+{
+ "case_id": "Kintu-Test 001",
+ "model": "llama-a100-t0-2b",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 28.8,
+ "calls": [
+  {
+   "prompt_tokens": 1545,
+   "total_tokens": 1972,
+   "completion_tokens": 427,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 837,
+   "total_tokens": 877,
+   "completion_tokens": 40,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2852,
+   "total_tokens": 3163,
+   "completion_tokens": 311,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "KINTU_001",
+   "title": "Weight Gain and Hyperglycemia",
+   "message": "Guidelines note DTG may cause hyperglycemia. Patient has gained weight and has impaired fasting glucose. DTG is a possible cause, but family history of diabetes and increased BMI are also risk factors.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor glucose and weight",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_001",
+     "title": "Weight Gain and Hyperglycemia",
+     "message": "Guidelines note DTG may cause hyperglycemia. Patient has gained weight and has impaired fasting glucose. DTG is a possible cause, but family history of diabetes and increased BMI are also risk factors.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor glucose and weight",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      },
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "KINTU_002",
+   "title": "Renal Function",
+   "message": "Guidelines recommend monitoring renal function for TDF. Patient's creatinine is within normal limits, but monitoring is still necessary.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule regular renal function tests",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "KINTU_002",
+     "title": "Renal Function",
+     "message": "Guidelines recommend monitoring renal function for TDF. Patient's creatinine is within normal limits, but monitoring is still necessary.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Schedule regular renal function tests",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c1"
+  ],
+  "KINTU_001": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+  ],
+  "KINTU_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "TLD side effects",
+   "DTG and glucose",
+   "TDF kidney risks",
+   "3TC and fatigue",
+   "DTG in pre-diabetes",
+   "TLD in weight gain"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"KINTU_001\",\n    \"title\": \"Weight Gain and Hyperglycemia\",\n    \"message\": \"Guidelines note DTG may cause hyperglycemia. Patient has gained weight and has impaired fasting glucose. DTG is a possible cause, but family history of diabetes and increased BMI are also risk factors.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor glucose and weight\",\n    \"citations\": [{\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"}, {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2\"}]\n  },\n  {\n    \"alert_id\": \"KINTU_002\",\n    \"title\": \"Renal Function\",\n    \"message\": \"Guidelines recommend monitoring renal function for TDF. Patient's creatinine is within normal limits, but monitoring is still necessary.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule regular renal function tests\",\n    \"citations\": [{\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p47_c3",
+    "page_number": 47,
+    "quote": "sent back to CPHL 3. Resistance testing report sent to National 3L Technical Committee - makes treatment switch recommendation 4. National 3L Technical committee communicates to RRH 3rd Line committee 5. RRH 3rd Line Committee communicates to the district/IP about the decision made 6. Switch decision is implemented at the facility NOTE: With time, the switch decisions will be made by the RRH technical teams after capacity of the teams is built. 280"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+    "page_number": 39,
+    "quote": "targets. Obesity is a preventable medical disorder involving excessive body fat and often increases the risk of health problems/diseases such as heart disease and diabetes ## Risk factors for obesity Although there are genetic, behavioural, metabolic and hormonal influences on body weight, obesity occurs when you take in more calories than you burn through normal daily activities and exercise. The risk factors that can be modified include; an unhealthy diet i.e high in calori"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3",
+    "page_number": 29,
+    "quote": "uld be due to a concurrent infectious process or due to a reaction to medications other than ARVs such as Isoniazid–induced hepatitis in a child on treatment for TB or a rash induced by Cotrimoxazole. Drug-related side effects while on ART can occur immediately (soon after a drug has been administered), early (within the first days or weeks of treatment) or late (after months or years of treatment). Adverse reactions may be specific to a particular drug, or they may be generi"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia assoc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c1",
+    "page_number": 19,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ARV Regimen TPT regimen options Rationale for TPT regimen ABC or AZT+ 3TC+DTG Isoniazid (6H) or Isoniazid/Rifapentine-based regimens (for children aged > 2 years) or Rifampicin/ Isoniazid (3RH) Lack of data to support the use of Rifapentine among children aged < 2 years. Double the dose of DTG if 3RH is used ABC or AZT +3TC+ EFV Isoniazid (6H) or Isoniazid/Rifapentine-based regimens (for"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information from guideline excerpts to determine the cause of weight gain and fatigue\", \"reason\": \"Patient has gained weight and feels tired since starting current HIV medication, but guideline excerpts do not provide enough information to determine if this is due to drug toxicity from TDF, 3TC, or DTG\"}, \n\"problems\": [{\"problem\": \"Weight gain\", \"action\": \"Uncertain: need more information to determine cause and appropriate action\", \"reason\": \"Patient has gained 17kg since switching to TDF, 3TC, DTG 18 months ago, but guideline excerpts do not provide clear guidance on managing weight gain as a potential side effect of these medications\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address weight gain\"}}, \n{\"problem\": \"Fatigue\", \"action\": \"Uncertain: need more information to determine cause and appropriate action\", \"reason\": \"Patient reports feeling more tired than usual since starting current HIV medication, but guideline excerpts do not provide clear guidance on managing fatigue as a potential side effect of TDF, 3TC, or DTG\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address fatigue\"}}, \n{\"problem\": \"Hypertension\", \"action\": \"Monitor blood pressure\", \"reason\": \"Patient's blood pressure has increased to 138/88 mmHg since baseline measurement of 118/74 mmHg\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"No plan documented by the clinician to address hypertension\"}}], \n\"monitoring_plan\": \"Monitor weight, blood pressure, and fasting glucose\", \n\"patient_counselling\": [\"Discuss potential side effects of medications\", \"Encourage healthy lifestyle habits to manage weight and blood pressure\", \"Schedule follow-up appointment to monitor labs and blood pressure\"]}",
+ "plan_issues": []
+}

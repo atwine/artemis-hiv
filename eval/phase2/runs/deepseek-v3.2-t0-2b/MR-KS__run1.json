@@ -1,0 +1,392 @@
+{
+ "case_id": "MR-KS",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 76.1,
+ "calls": [
+  {
+   "prompt_tokens": 2192,
+   "completion_tokens": 453,
+   "total_tokens": 2645,
+   "cost": 0.00069214,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00069214,
+    "upstream_inference_prompt_cost": 0.00052,
+    "upstream_inference_completions_cost": 0.00017214
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1345,
+   "completion_tokens": 88,
+   "total_tokens": 1433,
+   "cost": 0.000418755,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000418755,
+    "upstream_inference_prompt_cost": 0.000348355,
+    "upstream_inference_completions_cost": 7.04e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3535,
+   "completion_tokens": 933,
+   "total_tokens": 4468,
+   "cost": 0.0011738,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 768,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0011738,
+    "upstream_inference_prompt_cost": 0.00081926,
+    "upstream_inference_completions_cost": 0.00035454
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0022846949999999998,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "TDF_TOXICITY_BACKPAIN",
+   "title": "TDF toxicity presenting as back pain",
+   "message": "Guidelines list lower back pain as a presenting sign for TDF toxicity, including chronic kidney disease and decreased bone mineral density. The patient reports persistent dull aching lower back pain and a heavy feeling in both thighs, worsening over 4 months. TDF is a known cause. However, the patient's occupation (truck driving) is a plausible non-drug cause for musculoskeletal pain.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Screen for TDF toxicity per guidelines: perform RFTs and consider bone health evaluation.",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_TOXICITY_BACKPAIN",
+     "title": "TDF toxicity presenting as back pain",
+     "message": "Guidelines list lower back pain as a presenting sign for TDF toxicity, including chronic kidney disease and decreased bone mineral density. The patient reports persistent dull aching lower back pain and a heavy feeling in both thighs, worsening over 4 months. TDF is a known cause. However, the patient's occupation (truck driving) is a plausible non-drug cause for musculoskeletal pain.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Screen for TDF toxicity per guidelines: perform RFTs and consider bone health evaluation.",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "TDF_MONITORING_GAP",
+   "title": "Missing TDF renal monitoring",
+   "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. The patient has been on TDF for 6 years, but the plan does not include this scheduled monitoring. The current creatinine is 112 umol/L, but a trend is not available.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order serum creatinine and eGFR as per guideline-mandated annual monitoring for TDF.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "TDF_MONITORING_GAP",
+     "title": "Missing TDF renal monitoring",
+     "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. The patient has been on TDF for 6 years, but the plan does not include this scheduled monitoring. The current creatinine is 112 umol/L, but a trend is not available.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order serum creatinine and eGFR as per guideline-mandated annual monitoring for TDF.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "HYPERTENSION_PLAN_GAP",
+   "title": "Suboptimal hypertension management",
+   "message": "Guidelines specify a stepped approach for hypertension. For BP ≥140/90 mmHg at follow-up, step 2 is amlodipine 5mg. The patient's BP is 146/94 mmHg on amlodipine 5mg, indicating uncontrolled hypertension. The clinician's plan only refills the same dose without escalation per the algorithm.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Follow hypertension management algorithm: if BP ≥140/90 on current dose, consider dose escalation or add-on therapy.",
+    "citations": [
+     {
+      "page_number": 42,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c7",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 42,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c6",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "HYPERTENSION_PLAN_GAP",
+     "title": "Suboptimal hypertension management",
+     "message": "Guidelines specify a stepped approach for hypertension. For BP ≥140/90 mmHg at follow-up, step 2 is amlodipine 5mg. The patient's BP is 146/94 mmHg on amlodipine 5mg, indicating uncontrolled hypertension. The clinician's plan only refills the same dose without escalation per the algorithm.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Follow hypertension management algorithm: if BP ≥140/90 on current dose, consider dose escalation or add-on therapy.",
+     "citations": [
+      {
+       "page_number": 42,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c7"
+      },
+      {
+       "page_number": 42,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c6"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "HYPOPHOSPHATEMIA_TDF",
+   "title": "Hypophosphatemia with TDF and proteinuria",
+   "message": "The patient has a low serum phosphate (0.78 mmol/L). TDF can cause Fanconi syndrome, presenting with hypophosphatemia and proteinuria. Trace proteinuria is noted. This combination raises concern for TDF-induced tubular toxicity. Non-drug causes like poor intake or malabsorption should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Evaluate for TDF-associated tubular dysfunction: check urine phosphate, glucose, and amino acids; consider discontinuing TDF if Fanconi syndrome is confirmed.",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "HYPOPHOSPHATEMIA_TDF",
+     "title": "Hypophosphatemia with TDF and proteinuria",
+     "message": "The patient has a low serum phosphate (0.78 mmol/L). TDF can cause Fanconi syndrome, presenting with hypophosphatemia and proteinuria. Trace proteinuria is noted. This combination raises concern for TDF-induced tubular toxicity. Non-drug causes like poor intake or malabsorption should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Evaluate for TDF-associated tubular dysfunction: check urine phosphate, glucose, and amino acids; consider discontinuing TDF if Fanconi syndrome is confirmed.",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s9_c3"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s20_c4",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c11"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c7",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c6",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c11",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c8"
+  ],
+  "TDF_TOXICITY_BACKPAIN": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+  ],
+  "TDF_MONITORING_GAP": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+  ],
+  "HYPERTENSION_PLAN_GAP": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c7",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c6"
+  ],
+  "HYPOPHOSPHATEMIA_TDF": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does low serum phosphate indicate TDF toxicity?",
+   "Does ibuprofen interact with TDF or amlodipine?",
+   "Is trace proteinuria a sign of TDF kidney damage?",
+   "Should creatinine be monitored for TDF with hypertension?",
+   "Is EFV safe with chronic back pain and ibuprofen use?",
+   "Does amlodipine require dose adjustment with TDF?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"TDF_TOXICITY_BACKPAIN\",\n    \"title\": \"TDF toxicity presenting as back pain\",\n    \"message\": \"Guidelines list lower back pain as a presenting sign for TDF toxicity, including chronic kidney disease and decreased bone mineral density. The patient reports persistent dull aching lower back pain and a heavy feeling in both thighs, worsening over 4 months. TDF is a known cause. However, the patient's occupation (truck driving) is a plausible non-drug cause for musculoskeletal pain.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Screen for TDF toxicity per guidelines: perform RFTs and consider bone health evaluation.\",\n    \"citations\": [\n      {\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6\"}\n    ]\n  },\n  {\n    \"alert_id\": \"TDF_MONITORING_GAP\",\n    \"title\": \"Missing TDF renal monitoring\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. The patient has been on TDF for 6 years, but the plan does not include this scheduled monitoring. The current creatinine is 112 umol/L, but a trend is not available.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order serum creatinine and eGFR as per guideline-mandated annual monitoring for TDF.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19\"}\n    ]\n  },\n  {\n    \"alert_id\": \"HYPERTENSION_PLAN_GAP\",\n    \"title\": \"Suboptimal hypertension management\",\n    \"message\": \"Guidelines specify a stepped approach for hypertension. For BP ≥140/90 mmHg at follow-up, step 2 is amlodipine 5mg. The patient's BP is 146/94 mmHg on amlodipine 5mg, indicating uncontrolled hypertension. The clinician's plan only refills the same dose without escalation per the algorithm.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Follow hypertension management algorithm: if BP ≥140/90 on current dose, consider dose escalation or add-on therapy.\",\n    \"citations\": [\n      {\"page_number\": 42, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c7\"},\n      {\"page_number\": 42, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c6\"}\n    ]\n  },\n  {\n    \"alert_id\": \"HYPOPHOSPHATEMIA_TDF\",\n    \"title\": \"Hypophosphatemia with TDF and proteinuria\",\n    \"message\": \"The patient has a low serum phosphate (0.78 mmol/L). TDF can cause Fanconi syndrome, presenting with hypophosphatemia and proteinuria. Trace proteinuria is noted. This combination raises concern for TDF-induced tubular toxicity. Non-drug causes like poor intake or malabsorption should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Evaluate for TDF-associated tubular dysfunction: check urine phosphate, glucose, and amino acids; consider discontinuing TDF if Fanconi syndrome is confirmed.\",\n    \"citations\": [\n      {\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c11",
+    "page_number": 45,
+    "quote": "TB Screening > Figure 48: Lifestyle Modification Counselling for Hypertension > Lifestyle Counselling\nPOTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES\nDrug | Common Side Effects | Management\nAmlodipine/Nifedipine | Lower limb edema (1-10%) | Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic.\nHeadache (7%), Palpitations (1-3%) | Usually self-limiting, observe on treatment.\nMale sexual disorder (1-2%) | Explore for other cause"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s7_c1",
+    "page_number": 5,
+    "quote": "6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT > 6.6.1 Rationale for Using EFV400\nStudies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can be co-administered with Rifampicin-containing anti-TB treatment, with co-administration well tolerated and pla"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c7",
+    "page_number": 42,
+    "quote": "TB Screening > 5.4.7.2 Screening, Diagnosis and Management of Hypertension\nStep 2: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks | Amlodipine 5mg | Amlodipine 5mg | Bendroflu- methiazide 2.5mg once daily | HC3\nStep 6: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks | Amlodipine 10mg + Valsartan 160mg + Hydrochlorothiazide 12.5mg | Amlodipine 10mg + Losartan 50mg + Hydrochlorothiazide 12.5mg | Bendroflumethiazide 5mg + Nifedipine 40mg bd + Captopril 50mg tds | HC4\nStep 7: If BP is ≥"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+    "page_number": 37,
+    "quote": "Managing IRIS\nMAJOR ADVERSE/ TOXICITY EVENTS | PRESENTING SIGNS/ SYMPTOMS | SUGGESTED MANAGEMENT\nTDF | Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis | Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. | Do LFTs and RFTs. If deranged (el"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s7_c2",
+    "page_number": 5,
+    "quote": "6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT > 6.6.1 Rationale for Using EFV400\nAll eligible HIV-infected adults and adolescents weighing ≥ 30kg should be initiated on Tenofovir or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74)."
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s27_c6",
+    "page_number": 42,
+    "quote": "TB Screening > 5.4.7.2 Screening, Diagnosis and Management of Hypertension\nStep 2: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks | Amlodipine 5mg | Amlodipine 5mg | Bendroflu- methiazide 2.5mg once daily | HC3\nStep 3: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks | Amlodipine 5mg + Valsartan 80mg | Amlodipine 5mg + Losartan 25mg | Bendroflu- methiazide 5mg once daily | HC3\nStep 4: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks | Amlodipine 10mg + Valsartan 80mg | Amlodipine 10mg + L"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is virologically suppressed and immunologically stable with no clear signs of ART toxicity per the provided guideline excerpts.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Suboptimal hypertension control with trace proteinuria\",\n      \"action\": \"Uncertain: The guideline excerpts provided are about hypertension medication side effects, not about managing hypertension in HIV patients.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts do not contain recommendations for managing hypertension or proteinuria in HIV patients.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan to refill amlodipine and encourage adherence addresses the hypertension.\"\n      }\n    },\n    {\n      \"problem\": \"Chronic musculoskeletal back pain\",\n      \"action\": \"Continue PRN ibuprofen and occupational counseling.\",\n      \"reason\": \"The patient's back pain is attributed to occupational strain, and the clinician's plan includes symptomatic management.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan includes PRN ibuprofen for the back pain.\"\n      }\n    },\n    {\n      \"problem\": \"Potential TDF-associated renal or bone toxicity\",\n      \"action\": \"Uncertain: The guideline excerpts provided do not contain recommendations for monitoring or managing TDF toxicity.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts are about hypertension medicines, not ART side effects or monitoring.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention assessment or monitoring for ART-related toxicity.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Routine 6-month review; check BP, creatinine, and urine dipstick at next visit.\",\n  \"patient_counselling\": [\n    \"Adherence to amlodipine for blood pressure control.\",\n    \"Use ibuprofen cautiously for back pain.\",\n    \"Importance of regular clinic follow-up.\"\n  ]\n}",
+ "plan_issues": []
+}

@@ -1,0 +1,252 @@
+{
+ "case_id": "P001",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 69.4,
+ "calls": [
+  {
+   "prompt_tokens": 1487,
+   "completion_tokens": 476,
+   "total_tokens": 1963,
+   "cost": 0.00038446,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1408,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00038446,
+    "upstream_inference_prompt_cost": 0.00020358,
+    "upstream_inference_completions_cost": 0.00018088
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 663,
+   "completion_tokens": 80,
+   "total_tokens": 743,
+   "cost": 0.0001279,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 576,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0001279,
+    "upstream_inference_prompt_cost": 9.75e-05,
+    "upstream_inference_completions_cost": 3.04e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3043,
+   "completion_tokens": 392,
+   "total_tokens": 3435,
+   "cost": 0.001101737,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.001101737,
+    "upstream_inference_prompt_cost": 0.000788137,
+    "upstream_inference_completions_cost": 0.0003136
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.001614097,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MONITORING_GAP_TDF_RENAL",
+   "title": "Overdue renal monitoring for TDF",
+   "message": "Guidelines state that for experienced patients on TDF, serum creatinine and eGFR should be performed every 12 months. The patient's last creatinine test was 478 days ago, which exceeds the annual monitoring interval. No renal function test is documented in the clinician's plan for this routine follow-up visit.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Perform serum creatinine and eGFR test as per the 12-month monitoring schedule for TDF.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+      "page_number": 29,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MONITORING_GAP_TDF_RENAL",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+       "page_number": 29
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines state that for experienced patients on TDF, serum creatinine and eGFR should be performed every 12 months. The patient's last creatinine test was 478 days ago, which exceeds the annual monitoring interval. No renal function test is documented in the clinician's plan for this routine follow-up visit.",
+     "recommended_action": "Perform serum creatinine and eGFR test as per the 12-month monitoring schedule for TDF.",
+     "severity": "moderate",
+     "title": "Overdue renal monitoring for TDF"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MONITORING_GAP_VIRAL_LOAD",
+   "title": "Plan missing next viral load schedule",
+   "message": "Guidelines for adults state viral load should be monitored every one year after the initial tests. The patient's last viral load was 113 days ago. While this is within a year, the clinician's plan for a routine follow-up does not mention scheduling the next annual test, creating a potential gap in future monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule the next annual viral load test to ensure continuous yearly monitoring.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+      "page_number": 245,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MONITORING_GAP_VIRAL_LOAD",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+       "page_number": 245
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines for adults state viral load should be monitored every one year after the initial tests. The patient's last viral load was 113 days ago. While this is within a year, the clinician's plan for a routine follow-up does not mention scheduling the next annual test, creating a potential gap in future monitoring.",
+     "recommended_action": "Schedule the next annual viral load test to ensure continuous yearly monitoring.",
+     "severity": "low",
+     "title": "Plan missing next viral load schedule"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2"
+  ],
+  "MONITORING_GAP_TDF_RENAL": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+  ],
+  "MONITORING_GAP_VIRAL_LOAD": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "When is next creatinine test due on TDF?",
+   "When is next viral load test due?",
+   "Any side effects of TDF, 3TC, DTG?",
+   "Any drug interactions with TDF, 3TC, DTG?",
+   "Any monitoring tests overdue for TDF?",
+   "Any symptoms needing urgent attention?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"MONITORING_GAP_TDF_RENAL\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19\",\n        \"page_number\": 29\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines state that for experienced patients on TDF, serum creatinine and eGFR should be performed every 12 months. The patient's last creatinine test was 478 days ago, which exceeds the annual monitoring interval. No renal function test is documented in the clinician's plan for this routine follow-up visit.\",\n    \"recommended_action\": \"Perform serum creatinine and eGFR test as per the 12-month monitoring schedule for TDF.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Overdue renal monitoring for TDF\"\n  },\n  {\n    \"alert_id\": \"MONITORING_GAP_VIRAL_LOAD\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3\",\n        \"page_number\": 245\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines for adults state viral load should be monitored every one year after the initial tests. The patient's last viral load was 113 days ago. While this is within a year, the clinician's plan for a routine follow-up does not mention scheduling the next annual test, creating a potential gap in future monitoring.\",\n    \"recommended_action\": \"Schedule the next annual viral load test to ensure continuous yearly monitoring.\",\n    \"severity\": \"low\",\n    \"title\": \"Plan missing next viral load schedule\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\nFigure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Maintain"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 238,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+    "page_number": 27,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nDTG | 1. Screen using screening tool to identify any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests.\nIsoniazid/ 3HP Prophylaxis | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests ba"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s1_c2",
+    "page_number": 1,
+    "quote": "YELLOW SIGNS Cough or shortness of breath Fever, chills or excessive night sweats > 1week Weight loss in the last month or CRP test >5mg/L Headache Double or blurry vision Decreased hearing Acting unusual to family, friends or provider Difficult or unstable walking Weak legs or arms White spots / thrush in mouth Difficulty or painful swallowing Diarrhea > 1week Red, purple or dark spots on skin Oral or anal ulcerations : flowchart Decision: YES to any question in Red Action: "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 245,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 269,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s9_c3",
+    "page_number": 18,
+    "quote": "TB Screening > Eligibility for TPT\nARV Drug Regimen | TPT regimen Options | Rationale for TPT regimen\nTDF or AZT or ABC + 3TC + DTG or TAF+FTC + DTG | Isoniazid (6H) or Isoniazid-Rifapentine-based regimens | No dose adjustment of DTG with Isoniazid-Rifapentin-based regimen\nTDF or AZT or ABC + 3TC+ ATV/r TDF or AZT or ABC + 3TC + LPV/r or or TAF+FTC + LPV/r | Isoniazid (6H) | Co-administration of rifamycins (such as rifampicin) with protease inhibitors has been associated with"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s31_c4",
+    "page_number": 47,
+    "quote": "TB Screening > Screening for depression, anxiety, substance and alcohol use disorder\nNTD TOOLKIT – Body functions and structures\nParticipant ID number: _________\nThe following questions are related to certain pains and problems, that may have bothered you in the last 30 days. If you think the question applies to you and you had to describe the problem in the last 30 days, answer YES. On the other hand, if the question does not apply to you and you did not have the problem in "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is asymptomatic, virally suppressed, and has no recorded signs of toxicity per guidelines.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"No recent renal function monitoring for TDF\",\n      \"action\": \"Order serum creatinine and eGFR.\",\n      \"reason\": \"Guidelines recommend serum creatinine & eGFR for patients on TDF, and the last creatinine was over a year ago.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan for today is 'Routine follow-up. No issues' and does not include ordering renal labs.\"\n      }\n    },\n    {\n      \"problem\": \"Potential for undetected DTG-related metabolic issues\",\n      \"action\": \"Uncertain: Need to assess for diabetes or other contraindications per DTG screening tool.\",\n      \"reason\": \"Uncertain: The guideline excerpt mentions a DTG screening tool for known diabetics, but patient data does not include diabetes screening or history.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention screening for DTG contraindications.\"\n      }\n    },\n    {\n      \"problem\": \"Inadequate pharmacovigilance for long-term ART\",\n      \"action\": \"Implement structured monitoring for common drug toxicities.\",\n      \"reason\": \"Guidelines emphasize pharmacovigilance for early detection of drug toxicities, which is not reflected in the current plan.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Disagree\",\n        \"explanation\": \"The clinician's plan states 'No issues' without proactive monitoring, contrary to guideline emphasis.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Check serum creatinine and eGFR now. Schedule routine creatinine/eGFR every 6-12 months while on TDF. Monitor for symptoms of toxicity.\",\n  \"patient_counselling\": [\n    \"Reinforce adherence as viral load is suppressed.\",\n    \"Advise to report any new symptoms promptly.\",\n    \"Discuss importance of routine lab monitoring.\"\n  ]\n}",
+ "plan_issues": []
+}
