@@ -28,8 +28,8 @@ Version 1 of the revival is done when all four are true:
    command (`python scripts/evaluate.py`) reproduces it (Phase 7; Phase 2 gives a preliminary one).
 3. Tests pass in GitHub's automatic checks on `development`.
 4. Every alert on screen quotes the guideline passage it rests on, with the document and edition.
-   (2026-11-26: citations name the guideline and its printed page, e.g. "Uganda HIV guidelines
-   2022, p.255"; showing the passage's own text on screen is still to do in Phase 5.)
+   (2026-11-26: citations name the guideline and its printed page, e.g. "Uganda HIV Guidelines
+   2022 · p. 255"; showing the passage's own text on screen is still to do in Phase 5.)
 
 ## Ground rules
 

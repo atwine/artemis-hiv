@@ -59,5 +59,5 @@ def test_a_cut_off_review_with_an_odd_alert_shows_every_warning(at: AppTest) -> 
     assert any(w.startswith("Severity not given") for w in warnings)
     shown = "\n".join(m.value for m in at.markdown)
     assert "References (the passages the AI was shown and cited)" in shown
-    assert "1. Guidelines, p.7" in shown
-    assert "2. Guidelines, p.99: not among the passages the AI was given" in shown
+    assert "1. Guidelines · p. 7" in shown
+    assert "2. Guidelines · p. 99: not among the passages the AI was given" in shown

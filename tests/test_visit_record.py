@@ -33,13 +33,39 @@ def test_running_the_checks_saves_a_record(tmp_path: Path) -> None:
 
 
 def test_other_as_an_override_reason_needs_a_written_comment() -> None:
-    state = {"alert_action_A1": "Override", "alert_override_reason_A1": "Other", "alert_override_comment_A1": "  "}
+    state = {"alert_action_A1": "Override", "alert_override_reason_A1": "Other (say why)", "alert_override_comment_A1": "  "}
     assert not alert_resolution_ok(state, "A1")
     state["alert_override_comment_A1"] = "Done at another clinic last week."
     assert alert_resolution_ok(state, "A1")
-    state["alert_override_reason_A1"] = "Already addressed"
+    state["alert_override_reason_A1"] = "Already done, not documented"
     state["alert_override_comment_A1"] = ""
     assert alert_resolution_ok(state, "A1")
+
+
+def test_the_override_reasons_are_the_designs_list() -> None:
+    """Owner, 2026-11-26 ("A, design's list"): the list in docs/design/brief.md, in its order."""
+    import re
+
+    from artemis.review import OTHER_REASON, OVERRIDE_REASONS
+
+    brief = (Path(__file__).resolve().parents[1] / "docs" / "design" / "brief.md").read_text(encoding="utf-8")
+    proposed = re.search(r"Proposed: (.*?)(?:\r?\n){2}", brief, re.S).group(1)
+    assert OVERRIDE_REASONS == [r.strip() for r in " ".join(proposed.split()).rstrip(".").split(" · ")]
+    assert OVERRIDE_REASONS[-1] == OTHER_REASON == "Other (say why)"
+
+
+def test_an_older_reason_still_shows_when_a_saved_visit_is_reopened() -> None:
+    """Saved decisions keep the reason they were saved with; the picker keeps it selectable."""
+    from artemis.review import OVERRIDE_REASONS, reason_options
+
+    assert reason_options("") == ["", *OVERRIDE_REASONS]
+    assert reason_options("Patient declined") == ["", *OVERRIDE_REASONS]
+    assert reason_options("Already addressed") == ["", *OVERRIDE_REASONS, "Already addressed"]
+
+
+def test_an_older_other_still_needs_its_comment() -> None:
+    state = {"alert_action_A1": "Override", "alert_override_reason_A1": "Other", "alert_override_comment_A1": ""}
+    assert not alert_resolution_ok(state, "A1")
 
 
 def test_saved_results_come_back_exactly_as_they_were_shown(tmp_path: Path) -> None:
@@ -97,3 +123,21 @@ def test_an_older_record_that_says_yellow_reopens_as_amber() -> None:
 
     old = {"event": "checks_run", "patient_id": "P001", "visit_id": "v", "status": "YELLOW", "alerts": [], "results": []}
     assert vr.restore(old)["analysis_status"] == "AMBER"
+
+
+def test_a_reopened_visit_remembers_the_reason_it_was_saved_with() -> None:
+    """The picker offers the saved reason from its own key, so switching away from an older
+    reason doesn't change the picker's options mid-choice (which blanks it in Streamlit)."""
+    from artemis import visit_record as vr
+    from ui.state import clear_analysis
+
+    alert = {"alert_id": "A1", "title": "t", "message": "m", "evidence": {}, "query_hint": "", "source": "rule"}
+    checks = {"event": "checks_run", "patient_id": "P001", "visit_id": "v", "status": "AMBER",
+              "alerts": [alert], "results": [{"retrieved": [], "explanation": {"text": "", "used_llm": False}}]}
+    finalized = {"event": "finalized", "visit_id": "v", "patient_id": "P001", "saved_at": "2026-11-20T08:00:00+00:00",
+                 "decisions": [{"alert_id": "A1", "action": "Override", "reason": "Already addressed", "comment": ""}]}
+    values = vr.restore(checks, finalized)
+    assert values["alert_saved_reason_A1"] == "Already addressed"
+    assert values["alert_override_reason_A1"] == "Already addressed"
+    clear_analysis(values)  # forgotten with the rest of the visit
+    assert "alert_saved_reason_A1" not in values

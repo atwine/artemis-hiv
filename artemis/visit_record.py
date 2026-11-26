@@ -219,5 +219,8 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
         d = decided.get(alert.alert_id) or {}
         values[f"alert_action_{alert.alert_id}"] = d.get("action") or "Unreviewed"
         values[f"alert_override_reason_{alert.alert_id}"] = d.get("reason") or ""
+        # The reason it was saved with, kept apart so the picker keeps offering an older one
+        # while the clinician changes their mind (artemis.review.reason_options).
+        values[f"alert_saved_reason_{alert.alert_id}"] = d.get("reason") or ""
         values[f"alert_override_comment_{alert.alert_id}"] = d.get("comment") or ""
     return values

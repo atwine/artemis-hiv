@@ -36,7 +36,7 @@ ANALYSIS_DEFAULTS: Dict[str, Any] = {
 }
 
 # Per-alert review choices and timings are stored under these prefixes plus the alert id.
-_PER_ALERT_PREFIXES = ("alert_action_", "alert_override_reason_", "alert_override_comment_")
+_PER_ALERT_PREFIXES = ("alert_action_", "alert_override_reason_", "alert_override_comment_", "alert_saved_reason_")
 
 
 def init_analysis_state(state: MutableMapping[str, Any]) -> None:
