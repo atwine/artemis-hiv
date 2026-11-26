@@ -150,11 +150,11 @@ Check: the retrieval and answer scores before and after each change are in the d
 
 ## Phase 3: Designs in Paper
 
-- [ ] 3.1 Design brief: clinicians first; Penda-style red/amber/green; review on the alert itself;
+- [x] 3.1 Design brief: clinicians first; Penda-style red/amber/green; review on the alert itself;
       guideline text beside the patient values.
       Notes from Phase 1: the regimen pick-list should not offer "Select all" (Streamlit adds it);
       lab entry is one row per result with a unit.
-- [ ] 3.2 Mock up the visit-review screen three ways (clinic workstation, guided case review,
+- [x] 3.2 Mock up the visit-review screen three ways (clinic workstation, guided case review,
       evidence-first). You pick.
       Changed by the owner (2026-11-26): five independent directions, each showing the whole
       workflow, mixing ideas from the Design Library.
@@ -163,12 +163,13 @@ Check: the retrieval and answer scores before and after each change are in the d
 
 Check: you have picked a direction and signed off the screens.
 
-Where it stands (2026-11-26): the brief (`docs/design/brief.md`), a shared made-up content kit
-(`docs/design/content-kit.md`) and five direction briefs (`docs/design/directions.md`) are
-written. The five directions (Triage Board, Guided Review, Evidence Desk, Patient Timeline,
-Note Co-pilot) are being built in the Paper file "Artemis-HIV", one page each, every page with
-a flow map and the eight workflow screens. Next: the owner reviews them and gives feedback;
-the pick goes in `docs/decisions.tsv`.
+Where it stands (2026-11-27): direction picked (decisions.tsv). After three rounds (15
+directions in the Paper file "Artemis-HIV"), the owner chose "Day Rail with floating tray"
+(page FINAL): Day Rail's clinical look and time rail, the clinic day as a board with a list
+view (from Clinic Board), and Checklist Tray's dark bottom tray that shows where the visit is
+(clinical notes, checks, alert dots, plan, finalize) and holds the next action. The writing box
+is called "Clinical notes"; no note signing. Brief, content kit, audits and feedback are in
+`docs/design/`. Next: 3.3 (sign off every screen of the final page, tidy the d7b tokens).
 
 ## Phase 4: Backend (FastAPI)
 

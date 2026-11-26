@@ -78,3 +78,5 @@ its own style, then drop the Clinic Board page. Work continues with 07 and 09 on
 Done (2026-11-27): the board-and-list first screen is in both 09 Checklist Tray and 07 Day Rail, each in its own style, with a Board | List switch; the writing box is now called "Clinical notes" (owner's pick). The Clinic Board page is dropped.
 
 Round 5 (2026-11-27): the owner likes Day Rail's look but Checklist Tray's bottom navigation bar. Three Day Rail variations with that bar, nothing else changed: 2A floating dark tray, 2B full-width step bar, 2C bar joined to the visit pane. Owner to pick one.
+
+Final (2026-11-27): owner picked 2A. The board and list screens, GREEN and the two add-case screens were added to the 2A page with the same floating tray; the page is renamed "★ FINAL".
