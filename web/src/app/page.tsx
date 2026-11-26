@@ -1,41 +1,12 @@
-"use client";
+import { Suspense } from "react";
 
-import Link from "next/link";
+import { DayScreen } from "./day-screen";
 
-import { AppFrame, PaneContent } from "@/components/frame/app-frame";
-import { DayRail } from "@/components/frame/day-rail";
-import { errorText } from "@/lib/api/client";
-import { DISCLAIMER } from "@/lib/demo";
-import { usePatients, useRailEntries } from "@/lib/queries";
-import { patientLine } from "@/lib/record";
-
-// Today's patients. The clinic-day board (design S1) comes with the screens, once the backend
-// serves the day's times and states; for now a plain list.
-export default function PatientsPage() {
-  const patients = usePatients();
-  const rail = useRailEntries();
-
+// The clinic day: the first screen of the app (Paper FINAL S1 and S1b).
+export default function DayPage() {
   return (
-    <AppFrame rail={<DayRail entries={rail} />} disclaimer={DISCLAIMER}>
-      <PaneContent>
-        <h1 className="mb-4 text-20 font-semibold tracking-[-0.015em]">Today&apos;s patients</h1>
-        {patients.isPending && <p className="text-muted-foreground">Loading patients…</p>}
-        {patients.isError && <p role="alert">{errorText(patients.error)}</p>}
-        {patients.data && (
-          <ul className="max-w-3xl divide-y divide-line border-y border-line">
-            {patients.data.map((p) => (
-              <li key={p.patient_id} className="flex items-baseline gap-4 py-3">
-                <Link href={`/patients/${encodeURIComponent(p.patient_id)}`} className="font-semibold text-ink underline-offset-2 hover:underline">
-                  {p.name}
-                </Link>
-                <span className="text-muted-foreground">
-                  {patientLine(p)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </PaneContent>
-    </AppFrame>
+    <Suspense fallback={<p>Loading…</p>}>
+      <DayScreen />
+    </Suspense>
   );
 }

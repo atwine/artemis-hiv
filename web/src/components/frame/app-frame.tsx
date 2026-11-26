@@ -1,9 +1,13 @@
+"use client";
+
 // The frame every screen shares (Paper FINAL, "Day Rail with floating tray"): top bar, the day
 // rail on the left, the visit pane, the floating tray, and the footer. Sized for 1366 x 768:
-// 56 + body + 94 + 44, with the body taking what is left.
+// 56 + body + 94 + 44, with the body taking what is left. The clinic day (S1) has no rail or pane:
+// its body is the page's own.
 import Link from "next/link";
 
-import { DEMO_CLINIC, DEMO_CLINICIAN } from "@/lib/demo";
+import { initials } from "@/lib/day";
+import { useClinicDay } from "@/lib/queries";
 
 export function AppFrame({
   rail,
@@ -11,7 +15,8 @@ export function AppFrame({
   tray,
   disclaimer,
 }: {
-  rail: React.ReactNode;
+  /** The day rail and the visit pane; without one, the body is the page's own (the clinic day). */
+  rail?: React.ReactNode;
   children: React.ReactNode;
   tray?: React.ReactNode;
   disclaimer: string;
@@ -19,19 +24,25 @@ export function AppFrame({
   return (
     <div className="flex h-dvh min-h-[600px] flex-col overflow-hidden bg-bg">
       <TopBar />
-      <div className="flex min-h-0 flex-1 gap-4 bg-surface pt-4 pr-6">
-        {rail}
-        <main className="flex min-w-0 flex-1 flex-col overflow-clip rounded-window border border-line bg-white shadow-window">
-          {children}
-        </main>
-      </div>
+      {rail ? (
+        <div className="flex min-h-0 flex-1 gap-4 bg-surface pt-4 pr-6">
+          {rail}
+          <main className="flex min-w-0 flex-1 flex-col overflow-clip rounded-window border border-line bg-white shadow-window">
+            {children}
+          </main>
+        </div>
+      ) : (
+        <main className="flex min-h-0 flex-1 gap-14 overflow-y-auto px-12 pt-10 pb-6">{children}</main>
+      )}
       {tray && <div className="flex shrink-0 bg-surface pt-3 pr-10 pb-3.5 pl-27">{tray}</div>}
       <Footer disclaimer={disclaimer} />
     </div>
   );
 }
 
+/** The app, then the clinic and the clinician from the API (no logins yet: the demo day's). */
 function TopBar() {
+  const day = useClinicDay().data;
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-line px-8">
       <div className="flex items-center gap-3.5">
@@ -41,14 +52,16 @@ function TopBar() {
           </span>
           <span className="text-15 font-bold tracking-[-0.01em] text-black">ARTEMIS-HIV</span>
         </Link>
-        <span className="text-14 text-muted-foreground">{DEMO_CLINIC}</span>
+        {day && <span className="text-14 text-muted-foreground">{`${day.clinic} · ${day.room}`}</span>}
       </div>
-      <div className="flex items-center gap-2.5">
-        <span className="text-14 text-ink-2">{DEMO_CLINICIAN.name}</span>
-        <span aria-hidden className="flex size-7 shrink-0 items-center justify-center rounded-full bg-fill text-11 font-semibold text-ink-2">
-          {DEMO_CLINICIAN.initials}
-        </span>
-      </div>
+      {day && (
+        <div className="flex items-center gap-2.5">
+          <span className="text-14 text-ink-2">{day.clinician}</span>
+          <span aria-hidden className="flex size-7 shrink-0 items-center justify-center rounded-full bg-fill text-11 font-semibold text-ink-2">
+            {initials(day.clinician)}
+          </span>
+        </div>
+      )}
     </header>
   );
 }

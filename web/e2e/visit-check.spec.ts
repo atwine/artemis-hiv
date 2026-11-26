@@ -19,7 +19,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
   await expect(footer).toContainText(DISCLAIMER);
-  await page.getByRole("main").getByRole("link", { name: "John Doe" }).click();
+  await page.goto("/patients/P001"); // John Doe isn't on the demo day; opened directly
 
   await expect(page.getByRole("heading", { name: "John Doe", level: 1 })).toBeVisible();
 

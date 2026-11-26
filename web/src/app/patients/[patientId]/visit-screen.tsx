@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { use, useState } from "react";
 
 import { AppFrame, PaneContent, PaneHeader } from "@/components/frame/app-frame";
@@ -8,7 +9,7 @@ import { DayRail } from "@/components/frame/day-rail";
 import { StatusChip, type VisitState } from "@/components/frame/status";
 import { Tray, type Step, type TrayButton, type TrayProps } from "@/components/frame/tray";
 import { firstName, nextToReview } from "@/lib/alerts";
-import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type PatientDetail, type VisitCheck } from "@/lib/api/client";
+import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type PatientDetail, type SavedVisit, type VisitCheck } from "@/lib/api/client";
 import { acceptDecision, NEEDS_COMMENT, overrideDecision, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
 import { useRailEntries } from "@/lib/queries";
@@ -24,18 +25,28 @@ const NOTES_FORM = "clinical-notes";
 
 export function VisitScreen({ params }: { params: Promise<{ patientId: string }> }) {
   const { patientId } = use(params);
+  // A saved visit to reopen (from the clinic day): shown as saved, with no new check (S1 -> S4).
+  const visitId = useSearchParams().get("visit");
   const patient = useQuery({
     queryKey: ["patient", patientId],
     queryFn: async () =>
       unwrap(await api.GET("/api/patients/{patient_id}", { params: { path: { patient_id: patientId } } })),
   });
+  const reopened = useQuery({
+    queryKey: ["visit", visitId],
+    queryFn: async () => unwrap(await api.GET("/api/visits/{visit_id}", { params: { path: { visit_id: visitId! } } })),
+    enabled: Boolean(visitId),
+  });
 
-  if (patient.data) return <Visit key={patient.data.patient_id} patient={patient.data} />;
+  if (patient.data && (!visitId || reopened.data)) {
+    return <Visit key={`${patient.data.patient_id}:${visitId ?? ""}`} patient={patient.data} reopened={reopened.data} />;
+  }
   return (
     <Frame patientId={patientId} state="not_checked">
       <PaneContent>
-        {patient.isPending && <p className="text-muted-foreground">Loading the record…</p>}
+        {(patient.isPending || reopened.isLoading) && <p className="text-muted-foreground">Loading the record…</p>}
         {patient.isError && <p role="alert">{errorText(patient.error)}</p>}
+        {reopened.isError && <p role="alert">{errorText(reopened.error)}</p>}
       </PaneContent>
     </Frame>
   );
@@ -46,8 +57,8 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
 type CheckRequest = { note: string; useAi: boolean };
 type CheckMutation = UseMutationResult<VisitCheck, Error, CheckRequest>;
 
-function Visit({ patient }: { patient: PatientDetail }) {
-  const [note, setNote] = useState(String(patient.today_encounter.note ?? ""));
+function Visit({ patient, reopened }: { patient: PatientDetail; reopened?: SavedVisit }) {
+  const [note, setNote] = useState(reopened?.note ?? String(patient.today_encounter.note ?? ""));
   const [useAi, setUseAi] = useState(false);
   const check: CheckMutation = useMutation({
     mutationFn: async (req: CheckRequest) =>
@@ -92,11 +103,15 @@ function Visit({ patient }: { patient: PatientDetail }) {
   );
 
   // A new check starts the review afresh.
+  // The visit on screen: a new check's result, else the saved visit reopened (until a new check runs).
+  const result: VisitCheck | undefined = check.data ?? (check.isIdle ? reopened : undefined);
   // The AI review this run: the box, unless "Run the AI review again" asked for it.
   const aiThisRun = check.variables?.useAi ?? useAi;
   return (
     <VisitView
-      key={check.data?.visit_id ?? "before"}
+      key={result?.visit_id ?? "before"}
+      result={result}
+      reopened={result === reopened ? reopened : undefined}
       patient={patient}
       check={check}
       notesForm={notesForm}
@@ -112,20 +127,25 @@ type View = { name: "notes" } | { name: "results" } | { name: "alert"; i: number
 function VisitView({
   patient,
   check,
+  result,
+  reopened,
   notesForm,
   aiThisRun,
   retryAi,
 }: {
   patient: PatientDetail;
   check: CheckMutation;
+  /** The visit on screen: a new check's result, or the saved visit reopened. */
+  result: VisitCheck | undefined;
+  /** Set when the visit on screen is a saved one reopened: its decisions so far. */
+  reopened: SavedVisit | undefined;
   notesForm: React.ReactNode;
   aiThisRun: boolean;
   retryAi: () => void;
 }) {
-  const result = check.data;
   const [view, setView] = useState<View>(result ? { name: "results" } : { name: "notes" });
-  const [saved, setSaved] = useState<DecisionOut[]>([]);
-  const [finalizeNote, setFinalizeNote] = useState<string | null>(result?.finalize_note ?? null);
+  const [saved, setSaved] = useState<DecisionOut[]>(reopened?.decisions ?? []);
+  const [finalizeNote, setFinalizeNote] = useState<string | null>(reopened ? reopened.finalize_note : (result?.finalize_note ?? null));
   const [comment, setComment] = useState("");
   const save = useMutation({
     mutationFn: async (decision: DecisionIn) =>
