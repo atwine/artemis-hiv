@@ -29,7 +29,7 @@ export type TrayProps = {
   /** Shown in place of the buttons, e.g. while the checks run. */
   status?: React.ReactNode;
   /** Steps that can be opened from the tray (to go back to the notes, the results or an alert). */
-  go?: { notes?: () => void; checks?: () => void; alert?: (i: number) => void };
+  go?: { notes?: () => void; checks?: () => void; alert?: (i: number) => void; finalize?: () => void };
 };
 
 export function Tray(props: TrayProps) {
@@ -53,7 +53,7 @@ export function Tray(props: TrayProps) {
             </li>
           )}
           <TextStep label="Plan" step={props.plan} />
-          <TextStep label="Finalize" step={props.finalize} />
+          <TextStep label="Finalize" step={props.finalize} onOpen={props.go?.finalize} />
         </ol>
         <span aria-hidden className="h-8 w-px shrink-0 bg-white/15" />
         <p className="text-15 leading-5 text-tray-text" aria-live="polite">
@@ -105,27 +105,30 @@ function MainStep({ label, step, onOpen }: { label: string; step: Step; onOpen?:
           step === "todo" && "text-tray-todo",
         )}
       >
-        {label}
-        <span className="sr-only">, {STEP_WORD[step]}</span>
+        <span aria-hidden>{label}</span>
+        <span className="sr-only">
+          {label}, {STEP_WORD[step]}
+        </span>
       </span>
      </Opens>
     </li>
   );
 }
 
-function TextStep({ label, step }: { label: string; step: Step }) {
+function TextStep({ label, step, onOpen }: { label: string; step: Step; onOpen?: () => void }) {
   return (
-    <li
-      aria-current={step === "current" ? "step" : undefined}
-      className={cn("text-13", step === "current" ? "font-semibold text-white" : "text-tray-todo")}
-    >
-      {step === "done" && (
-        <span aria-hidden className="text-tray-done">
-          ✓{" "}
+    <li aria-current={step === "current" ? "step" : undefined}>
+      <Opens onOpen={onOpen} className={cn("text-13", step === "current" ? "font-semibold text-white" : "text-tray-todo")}>
+        {step === "done" && (
+          <span aria-hidden className="text-tray-done">
+            ✓{" "}
+          </span>
+        )}
+        <span aria-hidden>{label}</span>
+        <span className="sr-only">
+          {label}, {STEP_WORD[step]}
         </span>
-      )}
-      {label}
-      <span className="sr-only">, {STEP_WORD[step]}</span>
+      </Opens>
     </li>
   );
 }

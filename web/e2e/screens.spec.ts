@@ -130,3 +130,22 @@ test("the clinic day, in the design's states", async ({ page }) => {
   await expect(page.getByRole("list", { name: "Today's visits" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S1b-list.png") });
 });
+
+// Finalize (S6a), its confirm step (owner's decision 6) and the saved record (S6b), with John Doe.
+test("finalize, the confirm and the record", async ({ page }) => {
+  await page.goto("/patients/P001");
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  await tray.getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await tray.getByRole("button", { name: /^Finalize, / }).click();
+  await expect(page.getByRole("region", { name: "Finalize" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S6a-finalize-locked.png") });
+  await page.getByRole("button", { name: /^Review alert 1/ }).click();
+  await tray.getByRole("button", { name: "Accept alert" }).click();
+  await tray.getByRole("button", { name: "Finalize visit" }).click();
+  await expect(tray).toContainText("Decisions can't be changed after this.");
+  await page.screenshot({ path: path.join(OUT, "web-S6-confirm.png") });
+  await tray.getByRole("button", { name: "Finalize", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S6b-record.png") });
+});

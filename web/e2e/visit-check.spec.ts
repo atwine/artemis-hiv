@@ -108,6 +108,38 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(tray).toContainText("You overrode it: Other (say why).");
   await tray.getByRole("button", { name: "Accept alert" }).click();
   await expect(row).toContainText("Accepted");
+
+  // Finalize asks first (owner's decision 6): a one-line confirm in the tray; "Go back" changes nothing.
+  await tray.getByRole("button", { name: "Finalize visit" }).click();
+  await expect(tray).toContainText("Finalize John's visit? Decisions can't be changed after this.");
+  await tray.getByRole("button", { name: "Go back" }).click();
+  await expect(tray).not.toContainText("Decisions can't be changed after this.");
+  await tray.getByRole("button", { name: "Finalize visit" }).click();
+  await tray.getByRole("button", { name: "Finalize", exact: true }).click();
+
+  // The saved visit record (S6b): what was checked and what was decided, read only.
+  const visitRecord = page.getByRole("region", { name: "Visit record" });
+  await expect(visitRecord.getByRole("heading", { level: 2 })).toContainText(/^Visit finalized \d\d:\d\d\./);
+  await expect(visitRecord.getByRole("list", { name: "Decisions" })).toContainText(/Accepted \d\d:\d\d/);
+  await expect(page.getByText(/^AMBER · FINALIZED$/)).toBeVisible();
+  await expect(tray.getByRole("button", { name: "Accept alert" })).toHaveCount(0);
+
+  // Reopening a finalized visit shows its record, with no new check and no way to change it.
+  await page.goto(`/patients/P001?visit=${reply.visit_id}`);
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Checks running" })).toHaveCount(0);
+});
+
+test("finalize stays locked until every alert has an answer", async ({ page }) => {
+  await page.goto("/patients/P001");
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  await tray.getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await tray.getByRole("button", { name: /^Finalize, / }).click(); // the tray's Finalize step ("Finalize, to do")
+  const finalize = page.getByRole("region", { name: "Finalize" });
+  await expect(finalize).toContainText(FINALIZE_BLOCKED); // the API's own words
+  await expect(tray.getByRole("button", { name: "Finalize visit" })).toBeDisabled();
+  await expect(tray).toContainText(/Finalize is locked\. 1 alert left to review\./);
 });
 
 // A visit with no alerts (S7b): the API's banner as the headline, and what was checked, so a quiet
