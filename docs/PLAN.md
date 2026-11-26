@@ -443,6 +443,23 @@ Everything that needs the doctor, done together once the app is built and runnin
 Check: the README's accuracy table rests on clinician-checked cases, and `python scripts/evaluate.py`
 reproduces it.
 
+## Later (set aside by the owner to reach a working first version)
+
+The goal first (owner, 2026-11-27): enough working app to prove the idea to the doctors, with
+results they will value. These were raised and set aside, not dropped.
+
+- Changing a patient's record after it is added, with a history of every change (owner chose
+  add-only for now, 4C.2).
+- The guideline index fingerprint reads line endings as they are on disk, so a Windows laptop and a
+  Linux server name the same text differently and each builds its own index; the test pins only the
+  model and version (owner chose "fix the test only", 2026-11-27).
+- Website checks on GitHub: lint, type check, unit tests, API-type drift and npm audit for `web/`
+  (owner: not now).
+- Rerun the same-passages comparison on the locked chromadb 1.5.9 (measured on 0.6.3 only; owner:
+  skip).
+- The tray's not-reached step names stay just under the contrast standard (owner kept the design's
+  grey); the accessibility test skips that one check.
+
 ## Phase 8: Stretch, as time allows
 
 - [ ] 8.1 CDS Hooks endpoint (patient-view hook, cards, feedback), so record systems such as
