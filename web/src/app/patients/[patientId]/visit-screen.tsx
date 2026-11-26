@@ -8,7 +8,7 @@ import { DayRail } from "@/components/frame/day-rail";
 import { StatusChip, StatusShape, type VisitState } from "@/components/frame/status";
 import { Tray, type TrayButton, type TrayProps } from "@/components/frame/tray";
 import { api, errorText, unwrap, type Card, type DecisionOut, type Decisions, type PatientDetail, type VisitCheck } from "@/lib/api/client";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 import { decisionsToSave, type Draft, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
 import { useRailEntries } from "@/lib/queries";
@@ -27,7 +27,7 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
   return (
     <Frame patientId={patientId} state="not_checked">
       <PaneContent>
-        {patient.isPending && <p className="text-muted">Loading the record…</p>}
+        {patient.isPending && <p className="text-muted-foreground">Loading the record…</p>}
         {patient.isError && <p role="alert">{errorText(patient.error)}</p>}
       </PaneContent>
     </Frame>

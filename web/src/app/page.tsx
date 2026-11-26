@@ -18,7 +18,7 @@ export default function PatientsPage() {
     <AppFrame rail={<DayRail entries={rail} />} disclaimer={DISCLAIMER}>
       <PaneContent>
         <h1 className="mb-4 text-20 font-semibold tracking-[-0.015em]">Today&apos;s patients</h1>
-        {patients.isPending && <p className="text-muted">Loading patients…</p>}
+        {patients.isPending && <p className="text-muted-foreground">Loading patients…</p>}
         {patients.isError && <p role="alert">{errorText(patients.error)}</p>}
         {patients.data && (
           <ul className="max-w-3xl divide-y divide-line border-y border-line">
@@ -27,7 +27,7 @@ export default function PatientsPage() {
                 <Link href={`/patients/${encodeURIComponent(p.patient_id)}`} className="font-semibold text-ink underline-offset-2 hover:underline">
                   {p.name}
                 </Link>
-                <span className="text-muted">
+                <span className="text-muted-foreground">
                   {p.patient_id} · {p.age_years ?? "?"} {p.sex} · {p.art_regimen_current.join("/")}
                 </span>
               </li>

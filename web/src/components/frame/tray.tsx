@@ -1,6 +1,6 @@
 // The floating dark tray: where the visit is (Clinical notes, Checks, one dot per alert, Plan,
 // Finalize), a one-line prompt, and the screen's one primary button.
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 
 export type Step = "todo" | "current" | "done";
 
@@ -122,7 +122,7 @@ function AlertDot({ n, step }: { n: number; step: Step }) {
       aria-current={step === "current" ? "step" : undefined}
       className={cn(
         "flex size-6.5 shrink-0 items-center justify-center rounded-full text-13",
-        step === "todo" && "border-[1.5px] border-muted text-tray-number",
+        step === "todo" && "border-[1.5px] border-muted-foreground text-tray-number",
         step === "current" && "bg-white font-bold text-ink",
         step === "done" && "bg-tray-done-wash",
       )}

@@ -2,7 +2,7 @@
 // visit screens so the pane leads.
 import Link from "next/link";
 
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 
 import { StatusShape, type VisitState } from "./status";
 

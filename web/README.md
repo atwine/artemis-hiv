@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ARTEMIS-HIV website (Phase 5)
 
-## Getting Started
+Next.js + TypeScript + Tailwind + shadcn/ui (Radix underneath), with TanStack Query for data. It
+talks to the FastAPI backend in `../backend` (see `../backend/README.md`); the browser calls the
+backend directly, and the backend lets in only this site's address (`../ACCESS.md`).
 
-First, run the development server:
+The look is the owner's chosen design, Paper file "Artemis-HIV", page "FINAL · Day Rail with
+floating tray". Its tokens (set "d7b") are the Tailwind theme in `src/app/globals.css`; the
+shared frame (top bar, day rail, pane, floating tray, footer) is in `src/components/frame/`.
+The screen wording (banners, alert headings, citations, disclaimer, finalize note) comes from
+the API and is shown as sent.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Run it
+
+```
+npm install
+npm run dev            # http://127.0.0.1:3000 (or http://localhost:3000)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The backend must be running on 127.0.0.1:8000 (`python -m backend` from the repo root). A
+different address goes in `NEXT_PUBLIC_ARTEMIS_API_URL`. It is not a secret: never put one in a
+`NEXT_PUBLIC_` variable, since those reach every visitor's browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Types from the backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`src/lib/api/schema.d.ts` is generated from the backend's own OpenAPI schema, so the website and
+the backend can't drift apart:
 
-## Learn More
+```
+npm run api:types      # regenerate after a backend change
+npm run api:check      # fails if the committed types no longer match the backend
+```
 
-To learn more about Next.js, take a look at the following resources:
+Both run `scripts/export_openapi.py` with the repo's Python (`PYTHON` overrides which one).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+npm run test:unit      # small checks of plain functions (Node's own test runner)
+npm run test:e2e       # the whole visit in a real browser
+```
 
-## Deploy on Vercel
+The browser tests drive the installed Chrome against the real backend and a throwaway Postgres
+in Docker (`e2e/stack.ts`): their own ports (web 3100, API 8100, database 5435), a fresh
+password each run, removed afterwards. No AI review runs, so nothing is spent. They need Docker
+Desktop open and the search model on disk (`ARTEMIS_MODEL_DIR` in `../.env`). The first check of
+a run loads the search model, so a run takes a minute or two.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`ARTEMIS_SCREENS=1 npx playwright test screens` saves 1366 x 768 screenshots to
+`../docs/design/exports/phase5/` for checking against the Paper screens, including the AI-review
+states the design doesn't draw (made from real rules-only replies; no model is called).

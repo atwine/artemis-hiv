@@ -1,7 +1,7 @@
 // A visit's state as a shape and a word, so colour never works alone (docs/design/brief.md):
 // red = square "!", amber = triangle, green = circle tick, incomplete = dashed circle.
 import type { VisitCheck } from "@/lib/api/client";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 
 /** Before a check has run, while it runs, or the API's overall status once it has. */
 export type VisitState = "not_checked" | "checking" | VisitCheck["status"];
@@ -44,7 +44,7 @@ export function StatusShape({ state, size }: { state: VisitState; size: 12 | 14 
           aria-hidden
           className={cn(
             "shrink-0 rounded-full border-[1.5px] border-solid",
-            size === 14 ? "size-3 border-muted" : "size-2.5 border-line-strong",
+            size === 14 ? "size-3 border-muted-foreground" : "size-2.5 border-line-strong",
           )}
         />
       );

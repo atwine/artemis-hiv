@@ -41,7 +41,7 @@ function TopBar() {
           </span>
           <span className="text-15 font-bold tracking-[-0.01em] text-black">ARTEMIS-HIV</span>
         </Link>
-        <span className="text-14 text-muted">{DEMO_CLINIC}</span>
+        <span className="text-14 text-muted-foreground">{DEMO_CLINIC}</span>
       </div>
       <div className="flex items-center gap-2.5">
         <span className="text-14 text-ink-2">{DEMO_CLINICIAN.name}</span>
@@ -55,7 +55,7 @@ function TopBar() {
 
 function Footer({ disclaimer }: { disclaimer: string }) {
   return (
-    <footer className="flex h-11 shrink-0 items-center justify-between border-t border-line bg-surface px-12 text-13 text-muted">
+    <footer className="flex h-11 shrink-0 items-center justify-between border-t border-line bg-surface px-12 text-13 text-muted-foreground">
       <p>{disclaimer}</p>
       {/* The design's one "Shortcuts" link; there are no shortcuts yet, so it isn't a link yet. */}
       <span aria-hidden>Shortcuts</span>
@@ -68,7 +68,7 @@ export function PaneHeader({ title, meta, aside }: { title: string; meta: string
   return (
     <div className="flex h-17 shrink-0 items-center justify-between border-b border-line px-8">
       <h1 className="text-20 font-semibold tracking-[-0.015em] text-black">
-        {title} <span className="font-medium text-muted">{meta}</span>
+        {title} <span className="font-medium text-muted-foreground">{meta}</span>
       </h1>
       <div className="flex items-center gap-5">
         {aside}

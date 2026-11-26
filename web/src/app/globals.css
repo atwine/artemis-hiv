@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 /*
   The design's tokens: Paper file "Artemis-HIV", token set "d7b" (the FINAL page,
@@ -22,7 +24,9 @@
   --color-line-strong: #cad0d9;
   --color-ink: #1c1d1f;
   --color-ink-2: #505967;
-  --color-muted: #6f7988;
+  /* d7b's "muted" (#6F7988) is a text colour; shadcn's "muted" is a background, so it is named
+     muted-foreground here, as shadcn names it (shadcn colours below). */
+  --color-muted-foreground: #6f7988;
   --color-button: #202124;
   --color-blue: #266df0;
   --color-blue-wash: #e8f0ff;
@@ -74,6 +78,33 @@
   --shadow-*: initial;
   --shadow-window: 0 8px 32px #1c1d1f14;
   --shadow-tray: 0 12px 32px #1c1d1f38;
+
+  /*
+    shadcn/ui's names (Radix underneath, owner 2026-11-26), pointed at the d7b colours so its
+    components wear the design. No dark mode: the design has none. Its chart and sidebar colours
+    get added when a component needs them.
+  */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-bg);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-bg);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-button);
+  --color-primary-foreground: var(--color-white);
+  --color-secondary: var(--color-fill);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-fill);
+  --color-accent: var(--color-fill);
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: var(--color-red);
+  --color-border: var(--color-line);
+  --color-input: var(--color-line-strong);
+  --color-ring: var(--color-blue);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: var(--radius-btn);
+  --radius-xl: 14px;
 }
 
 @layer base {
@@ -81,9 +112,12 @@
   body {
     height: 100%;
   }
+  * {
+    border-color: var(--color-border);
+  }
   body {
-    background: var(--color-bg);
-    color: var(--color-ink);
+    background: var(--color-background);
+    color: var(--color-foreground);
     font-family: var(--font-sans);
     font-size: var(--text-14);
     line-height: var(--text-14--line-height);
@@ -92,7 +126,7 @@
     font-synthesis: none;
   }
   :focus-visible {
-    outline: 2px solid var(--color-blue);
+    outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
 }
