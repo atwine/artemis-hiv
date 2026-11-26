@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { appointmentNote, clock, dayHeadline, initials, localDate, nextForYou, type DayAppointment } from "./day.ts";
+import { clock, localDate } from "./dates.ts";
+import { appointmentNote, dayHeadline, initials, nextForYou, type DayAppointment } from "./day.ts";
 
 const appt = (over: Partial<DayAppointment>): DayAppointment => ({
   time: "09:30",

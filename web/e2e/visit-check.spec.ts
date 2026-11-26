@@ -54,6 +54,8 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(results.or(page.getByRole("main").getByRole("alert"))).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
   const reply = (await (await replyPromise).json()) as VisitCheck;
+  // The address now names the saved visit, so Back or a reload reopens it instead of a blank form.
+  await expect(page).toHaveURL(new RegExp(`/patients/P001\\?visit=${reply.visit_id}$`));
   await expect(results.getByRole("status").filter({ hasText: /^AMBER: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeVisible();
   expect(reply.disclaimer).toBe(DISCLAIMER); // the footer's copy is the API's
@@ -123,6 +125,9 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(visitRecord.getByRole("list", { name: "Decisions" })).toContainText(/Accepted \d\d:\d\d/);
   await expect(page.getByText(/^AMBER · FINALIZED$/)).toBeVisible();
   await expect(tray.getByRole("button", { name: "Accept alert" })).toHaveCount(0);
+  await page.reload(); // a reload shows the record, never a new check
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
+  await expect(tray.getByRole("button", { name: "Run checks" })).toHaveCount(0);
 
   // Reopening a finalized visit shows its record, with no new check and no way to change it.
   await page.goto(`/patients/P001?visit=${reply.visit_id}`);

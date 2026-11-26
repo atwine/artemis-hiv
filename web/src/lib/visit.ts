@@ -1,6 +1,7 @@
 // Plain functions for Finalize (S6a) and the saved visit record (S6b).
 import type { DecisionOut, VisitCheck } from "./api/client";
-import { clock, type DayAppointment } from "./day.ts";
+import { clock } from "./dates.ts";
+import type { DayAppointment } from "./day.ts";
 
 /** "Accepted 09:47", or "Overridden 09:49 · Already done, not documented". */
 export function decisionLine(d: DecisionOut): string {

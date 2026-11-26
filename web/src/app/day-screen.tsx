@@ -9,10 +9,9 @@ import { useSearchParams } from "next/navigation";
 import { AppFrame } from "@/components/frame/app-frame";
 import { StatusChip } from "@/components/frame/status";
 import { errorText } from "@/lib/api/client";
-import { appointmentNote, dayHeadline, nextForYou, type DayAppointment } from "@/lib/day";
+import { appointmentLine, appointmentNote, dayHeadline, nextForYou, type DayAppointment } from "@/lib/day";
 import { DISCLAIMER } from "@/lib/demo";
 import { useClinicDay, visitHref } from "@/lib/queries";
-import { patientLine } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
 type Column = { state: DayAppointment["state"]; title: string; hint: string };
@@ -171,7 +170,7 @@ function Card({ a }: { a: DayAppointment }) {
           <span className={cn("text-16 leading-5 font-medium", a.state === "done" ? "text-ink-2" : "text-black")}>{a.name}</span>
           <span className="text-14 leading-5 text-muted-foreground">{a.time}</span>
         </span>
-        <span className="text-14 leading-[18px] text-muted-foreground">{patientLine({ ...a, art_regimen_current: [a.regimen] })}</span>
+        <span className="text-14 leading-[18px] text-muted-foreground">{appointmentLine(a)}</span>
       </span>
       {a.status && (
         <span className="flex items-center gap-2.5">
@@ -193,7 +192,7 @@ function CurrentCard({ a }: { a: DayAppointment }) {
           <span className="text-18 leading-[22px] font-semibold tracking-[-0.01em] text-black">{a.name}</span>
           <span className="text-14 leading-[22px] font-semibold text-ink">{a.time}</span>
         </span>
-        <span className="text-14 leading-[18px] text-ink-2">{patientLine({ ...a, art_regimen_current: [a.regimen] })}</span>
+        <span className="text-14 leading-[18px] text-ink-2">{appointmentLine(a)}</span>
       </span>
       {a.status && (
         <span className="flex items-center gap-2.5">
@@ -217,7 +216,7 @@ function DayList({ appointments, next }: { appointments: DayAppointment[]; next:
       {appointments.map((a) => {
         const current = a === next;
         const note = appointmentNote(a);
-        const line = patientLine({ ...a, art_regimen_current: [a.regimen] });
+        const line = appointmentLine(a);
         const href = visitHref(a.patient_id, a.visit_id);
         return (
           <li

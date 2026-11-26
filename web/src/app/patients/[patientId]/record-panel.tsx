@@ -6,9 +6,9 @@ import { useState } from "react";
 
 import { StatusShape } from "@/components/frame/status";
 import { api, errorText, unwrap, type PatientDetail } from "@/lib/api/client";
-import { clock, localDate } from "@/lib/day";
+import { clock, localDate, longDate } from "@/lib/dates";
 import { visitHref } from "@/lib/queries";
-import { labCount, labName, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "@/lib/record";
+import { labCount, labName, labRows, otherMedicines, possessive, previousArt, todaySummary } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
 const NONE = "None recorded";

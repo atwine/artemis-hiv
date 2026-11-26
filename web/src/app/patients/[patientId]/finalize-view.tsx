@@ -3,7 +3,7 @@
 // only its record: reopening it never asks the AI again and offers nothing to change.
 import { StatusShape } from "@/components/frame/status";
 import type { DecisionOut, VisitCheck } from "@/lib/api/client";
-import { clock } from "@/lib/day";
+import { clock } from "@/lib/dates";
 import { firstName } from "@/lib/alerts";
 import { aiReviewWords, decisionLine, stillToReview } from "@/lib/visit";
 import { cn } from "@/lib/utils";

@@ -2,6 +2,8 @@
 // Values and units are shown as recorded, never converted (owner, 2026-11-26).
 import type { PatientDetail } from "./api/client";
 
+import { longDate } from "./dates.ts";
+
 type Labs = PatientDetail["labs"];
 type LabResult = Labs[string][number];
 
@@ -27,14 +29,6 @@ export function labName(key: string): string {
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-/** "2026-05-12" -> "12 May 2026"; anything else as it came. */
-export function longDate(iso: string): string {
-  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
-  if (!m) return iso;
-  return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
-}
 
 function withUnit(r: LabResult): string {
   return r.unit.trim() ? `${r.value} ${r.unit.trim()}` : r.value;

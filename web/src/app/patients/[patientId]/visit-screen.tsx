@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient, type UseMutationResult } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, type QueryClient, type UseMutationResult } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { use, useState } from "react";
 
@@ -63,6 +63,8 @@ type CheckMutation = UseMutationResult<VisitCheck, Error, CheckRequest>;
 function Visit({ patient, reopened }: { patient: PatientDetail; reopened?: SavedVisit }) {
   const [note, setNote] = useState(reopened?.note ?? String(patient.today_encounter.note ?? ""));
   const [useAi, setUseAi] = useState(false);
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const check: CheckMutation = useMutation({
     mutationFn: async (req: CheckRequest) =>
       unwrap(
@@ -71,6 +73,21 @@ function Visit({ patient, reopened }: { patient: PatientDetail; reopened?: Saved
           body: { note: req.note, use_ai: req.useAi, include_plan: false },
         }),
       ),
+    onSuccess: (done, req) => {
+      // The saved visit as GET /api/visits/{id} would send it, so reopening it needs no fetch.
+      const asSaved: SavedVisit = {
+        ...done,
+        note: req.note,
+        decisions: [],
+        all_resolved: done.cards.length === 0,
+        unresolved: done.cards.map((c) => c.extension.alert_id),
+        finalized_at: null,
+      };
+      queryClient.setQueryData(["visit", done.visit_id], asSaved);
+      refreshDay(queryClient, patient.patient_id);
+      // The address names the saved visit, so Back or a reload reopens it, never a blank form.
+      router.replace(visitHref(patient.patient_id, done.visit_id));
+    },
   });
 
   // Before the checks (Paper FINAL S2): the record on the left, the notes box on the right.
@@ -105,7 +122,6 @@ function Visit({ patient, reopened }: { patient: PatientDetail; reopened?: Saved
     </div>
   );
 
-  // A new check starts the review afresh.
   // The visit on screen: a new check's result, else the saved visit reopened (until a new check runs).
   const result: VisitCheck | undefined = check.data ?? (check.isIdle ? reopened : undefined);
   // The AI review this run: the box, unless "Run the AI review again" asked for it.
@@ -130,7 +146,7 @@ type View =
   | { name: "results" }
   | { name: "alert"; i: number }
   | { name: "override"; i: number; other: boolean }
-  | { name: "finalize" };
+  | { name: "finalize"; confirming: boolean };
 
 function VisitView({
   patient,
@@ -154,12 +170,11 @@ function VisitView({
   const router = useRouter();
   const queryClient = useQueryClient();
   const day = useClinicDay().data;
+  const visitId = result?.visit_id;
   const [view, setView] = useState<View>(result ? { name: "results" } : { name: "notes" });
   const [saved, setSaved] = useState<DecisionOut[]>(reopened?.decisions ?? []);
   const [finalizeNote, setFinalizeNote] = useState<string | null>(reopened ? reopened.finalize_note : (result?.finalize_note ?? null));
   const [finalizedAt, setFinalizedAt] = useState<string | null>(reopened?.finalized_at ?? null);
-  // Finalize asks first (owner's decision 6): the tray shows a one-line confirm.
-  const [confirming, setConfirming] = useState(false);
   const [comment, setComment] = useState("");
   const save = useMutation({
     mutationFn: async (decision: DecisionIn) =>
@@ -173,6 +188,8 @@ function VisitView({
       setSaved(reply.decisions);
       setFinalizeNote(reply.finalize_note);
       setComment("");
+      keepSaved(queryClient, visitId, { decisions: reply.decisions, finalize_note: reply.finalize_note, all_resolved: reply.all_resolved, unresolved: reply.unresolved });
+      refreshDay(queryClient, patient.patient_id);
       // On to the next alert still to review, or back to the results when none is left.
       const ids = result!.cards.map((c) => c.extension.alert_id);
       const decided = new Set(reply.decisions.map((d) => d.alert_id));
@@ -186,8 +203,8 @@ function VisitView({
     onSuccess: (reply) => {
       setSaved(reply.decisions);
       setFinalizedAt(reply.finalized_at);
-      setConfirming(false);
-      void queryClient.invalidateQueries({ queryKey: ["clinic-day"] });
+      keepSaved(queryClient, visitId, { decisions: reply.decisions, finalized_at: reply.finalized_at });
+      refreshDay(queryClient, patient.patient_id);
     },
   });
   const savedByAlert = new Map(saved.map((d) => [d.alert_id, d]));
@@ -216,21 +233,16 @@ function VisitView({
             patientName: patient.name,
             comment,
             finalizedAt,
-            confirming,
             next,
             go: (v) => {
               setComment("");
-              setConfirming(false);
               setView(v);
             },
             accept: () => card && decide(acceptDecision(card.extension.alert_id)),
             saveOther: () => card && decide(overrideDecision(card.extension.alert_id, NEEDS_COMMENT, comment)),
             retryAi,
-            askToFinalize: () => {
-              setView({ name: "finalize" });
-              setConfirming(true);
-            },
-            cancelFinalize: () => setConfirming(false),
+            askToFinalize: () => setView({ name: "finalize", confirming: true }),
+            cancelFinalize: () => setView({ name: "finalize", confirming: false }),
             finalize: () => {
               if (!finalize.isPending) finalize.mutate();
             },
@@ -296,7 +308,7 @@ function VisitView({
             )}
             {(save.isError || finalize.isError) && view.name !== "results" && (
               <p role="alert" className="mt-4 text-red">
-                {errorText(save.error ?? finalize.error)}
+                {errorText(finalize.isError ? finalize.error : save.error)}
               </p>
             )}
           </>
@@ -343,7 +355,6 @@ function trayFor(t: {
   patientName: string;
   comment: string;
   finalizedAt: string | null;
-  confirming: boolean;
   next: DayAppointment | null;
   go: (v: View) => void;
   accept: () => void;
@@ -396,7 +407,7 @@ function trayFor(t: {
       notes: () => go({ name: "notes" }),
       checks: () => go({ name: "results" }),
       alert: (i: number) => go({ name: "alert", i }),
-      finalize: () => go({ name: "finalize" }),
+      finalize: () => go({ name: "finalize", confirming: false }),
     },
   };
   const retry: TrayButton = { label: "Run the AI review again", onClick: t.retryAi };
@@ -407,7 +418,7 @@ function trayFor(t: {
     : { label: "Finalize visit", onClick: t.askToFinalize, disabled: saving || !result.record_saved };
 
   if (view.name === "finalize") {
-    if (t.confirming && !left) {
+    if (view.confirming && !left) {
       return {
         ...steps,
         lead: `Finalize ${first}'s visit?`,
@@ -479,4 +490,16 @@ function savedSummary(saved: Map<string, DecisionOut>): string {
   const accepted = words.filter((w) => w === "Accepted").length;
   const overridden = words.length - accepted;
   return [accepted && `${accepted} accepted`, overridden && `${overridden} overridden`].filter(Boolean).join(", ") + ".";
+}
+
+/** After a check, a decision or a finalize: the day, its rail and the past checks show it. */
+function refreshDay(queryClient: QueryClient, patientId: string) {
+  void queryClient.invalidateQueries({ queryKey: ["clinic-day"] });
+  void queryClient.invalidateQueries({ queryKey: ["past-checks", patientId] });
+}
+
+/** Keep the cached saved visit in step, so reopening it (board, rail, past checks) is never stale. */
+function keepSaved(queryClient: QueryClient, visitId: string | undefined, change: Partial<SavedVisit>) {
+  if (!visitId) return;
+  queryClient.setQueryData<SavedVisit>(["visit", visitId], (old) => (old ? { ...old, ...change } : old));
 }

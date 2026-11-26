@@ -2,6 +2,9 @@
 // which visit carries the one main button.
 import type { components } from "./api/schema";
 
+import { clock, MONTHS } from "./dates.ts";
+import { patientLine } from "./record.ts";
+
 export type DayAppointment = components["schemas"]["Appointment"];
 
 const WORDS = ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
@@ -16,7 +19,6 @@ function capitalised(s: string): string {
 }
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /** ["Thursday 26 Nov.", "Seven patients, one waiting on you."] (S1's headline). */
 export function dayHeadline(isoDate: string, booked: number, needYou: number): [string, string] {
@@ -27,11 +29,6 @@ export function dayHeadline(isoDate: string, booked: number, needYou: number): [
   return [first, `${patients}, ${inWords(needYou)} waiting on you.`];
 }
 
-/** "08:52", in this computer's time zone. */
-export function clock(iso: string): string {
-  const t = new Date(iso);
-  return `${String(t.getHours()).padStart(2, "0")}:${String(t.getMinutes()).padStart(2, "0")}`;
-}
 
 const AI_TROUBLE: Partial<Record<NonNullable<DayAppointment["ai_review"]>, string>> = {
   failed: "AI review failed",
@@ -64,8 +61,7 @@ export function initials(name: string): string {
     .slice(0, 2);
 }
 
-/** "26 Nov 2026": a saved time's date in this computer's time zone (the same as clock()). */
-export function localDate(iso: string): string {
-  const t = new Date(iso);
-  return `${t.getDate()} ${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
+/** A day card's patient line: "P005 · 38 F · TDF/3TC/DTG". */
+export function appointmentLine(a: DayAppointment): string {
+  return patientLine({ ...a, art_regimen_current: [a.regimen] });
 }

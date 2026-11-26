@@ -124,7 +124,9 @@ function Guideline({
   return (
     <div className={cn("flex min-w-0 flex-1 flex-col gap-2.5 px-6.5 py-5.5", divided && "border-l border-line")}>
       <p className="text-13 font-semibold tracking-[0.06em] text-muted-foreground uppercase">{heading}</p>
-      <p className={cn("max-w-[78ch] font-serif text-19 text-black", !isKeySentence && !open && "line-clamp-3")}>“{(isKeySentence ? quote : whole).trim()}”</p>
+      <p id={isKeySentence ? undefined : id} className={cn("max-w-[78ch] font-serif text-19 text-black", !isKeySentence && !open && "line-clamp-3")}>
+        “{(isKeySentence ? quote : whole).trim()}”
+      </p>
       {isKeySentence && open && (
         <p id={id} className="max-w-[78ch] font-serif text-16 leading-6 text-ink-2">
           {whole.trim()}

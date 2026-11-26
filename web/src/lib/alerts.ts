@@ -1,6 +1,6 @@
 // Plain functions for the alert screens: what each alert shows and where review goes next.
 import type { Card } from "./api/client";
-import { longDate } from "./record.ts";
+import { longDate } from "./dates.ts";
 
 type Extension = Card["extension"];
 type Passage = Extension["passages"][number];
