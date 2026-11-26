@@ -16,7 +16,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from sqlalchemy import JSON, Column, DateTime, Text
+from sqlalchemy import JSON, Column, DateTime, Text, UniqueConstraint
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, Session, SQLModel, select
 
@@ -87,13 +88,15 @@ class VisitFinalize(SQLModel, table=True):
     until it is finalized again (owner, 2026-11-26), and every Finalize stays in the record."""
 
     __tablename__ = "visit_finalize"
+    # One Finalize per set of decisions: two Finalize calls racing can't both save.
+    __table_args__ = (UniqueConstraint("visit_id", "last_decision_id", name="uq_visit_finalize_covers"),)
 
     id: Optional[int] = Field(default=None, primary_key=True)
     visit_id: str = Field(foreign_key="visit_check.visit_id", index=True, max_length=64)
     finalized_at: datetime.datetime = Field(sa_column=Column(DateTime(timezone=True), nullable=False))
-    # The newest decision row this Finalize covers (None for a visit with no alerts). A decision
+    # The newest decision row this Finalize covers (0 for a visit with no decisions). A decision
     # row with a higher id was added afterwards, so the visit is open again.
-    last_decision_id: Optional[int] = None
+    last_decision_id: int = 0
     # The decision on each alert as finalized, in alert order, as the files' "finalized" line has.
     decisions: List[Dict[str, Any]] = Field(sa_column=Column(Json, nullable=False))
 
@@ -189,7 +192,7 @@ def current_finalize(session: Session, visit_id: str) -> Optional[VisitFinalize]
     if latest is None:
         return None
     newest = _last_decision_id(session, visit_id)
-    return latest if newest is None or (latest.last_decision_id or 0) >= newest else None
+    return latest if newest is None or latest.last_decision_id >= newest else None
 
 
 def finalized_at(session: Session, visit_id: str) -> Optional[str]:
@@ -199,13 +202,18 @@ def finalized_at(session: Session, visit_id: str) -> Optional[str]:
 
 
 def add_finalize(session: Session, visit_id: str, decisions: List[Dict[str, Any]], *, finalized_at: Any) -> VisitFinalize:
-    """Record a Finalize covering every decision saved so far."""
-    row = VisitFinalize(
-        visit_id=visit_id, finalized_at=_utc(finalized_at),
-        last_decision_id=_last_decision_id(session, visit_id), decisions=json_safe(decisions),
-    )
+    """Record a Finalize covering every decision saved so far. If one covering the same decisions
+    was saved meanwhile (two calls racing), that one is returned and nothing new is saved."""
+    covers = _last_decision_id(session, visit_id) or 0
+    row = VisitFinalize(visit_id=visit_id, finalized_at=_utc(finalized_at), last_decision_id=covers, decisions=json_safe(decisions))
     session.add(row)
-    session.commit()
+    try:
+        session.commit()
+    except IntegrityError:
+        session.rollback()
+        return session.exec(
+            select(VisitFinalize).where(VisitFinalize.visit_id == visit_id, VisitFinalize.last_decision_id == covers)
+        ).one()
     return row
 
 
@@ -253,10 +261,19 @@ def import_folder(session: Session, folder: Path) -> Dict[str, int]:
             known = session.exec(
                 select(VisitFinalize.id).where(VisitFinalize.visit_id == str(visit_id), VisitFinalize.finalized_at == when)
             ).first()
-            if known is None:  # each Finalize line once, covering the decisions saved up to it
+            covers = _last_decision_id(session, str(visit_id)) or 0
+            same = session.exec(
+                select(VisitFinalize.id).where(VisitFinalize.visit_id == str(visit_id), VisitFinalize.last_decision_id == covers)
+            ).first()
+            if known is None and same is None:  # each Finalize line once, covering the decisions saved up to it
+                # In the shape the API saves, so a Finalize reads back the same either way.
                 session.add(VisitFinalize(
-                    visit_id=str(visit_id), finalized_at=when, last_decision_id=_last_decision_id(session, str(visit_id)),
-                    decisions=json_safe(list(e.get("decisions") or [])),
+                    visit_id=str(visit_id), finalized_at=when, last_decision_id=covers,
+                    decisions=[
+                        {"alert_id": str(d["alert_id"]), "action": str(d["action"]), "reason": str(d.get("reason") or ""),
+                         "comment": str(d.get("comment") or ""), "saved_at": iso(when)}
+                        for d in e.get("decisions") or []
+                    ],
                 ))
                 session.flush()
                 report["finalized_added"] += 1

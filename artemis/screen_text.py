@@ -32,6 +32,10 @@ _PARTIAL_REASON = {
 }
 NOT_SHOWN = "not among the passages the AI was given"
 DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only."
+# A visit check whose record couldn't be saved: the API can't take decisions on it (owner,
+# 2026-11-26; the website's wording). The Streamlit screen keeps its own sentence, since there
+# a Finalize still saves to the file.
+RECORD_NOT_SAVED = "This check could not be saved, so its alerts cannot be decided here."
 FINALIZE_BLOCKED = ("Finalize is disabled until all alerts are acknowledged or overridden with a reason "
                     "(the reason 'Other (say why)' needs a comment).")
 
@@ -79,7 +83,7 @@ _TEST_WORDS = [
 
 def alert_values(alert: Alert, labs: List[LabEntry], visit_date: datetime.date) -> List[dict]:
     """The patient values an alert is about, each as recorded (label, value, unit, date): the
-    latest result of each test on or before the visit date. None when no test is named."""
+    latest result of each test on or before the visit date. Empty when no test is named."""
     text = f"{alert.title} {alert.message}"
     tests = RULE_TESTS.get(alert.alert_id) or [t for t, words in _TEST_WORDS if re.search(words, text, re.IGNORECASE)]
     latest = latest_entries(labs, visit_date)
@@ -157,6 +161,11 @@ def status_banners(status: Optional[str], screening_outcome: str, alert_count: i
     elif status == "GREEN":
         banners.append(("info", "No rule check was triggered. The AI review was switched off for this run."))
     return banners
+
+
+def record_banners(*, saved: bool) -> List[Banner]:
+    """The banner for a visit check that couldn't be saved; none when it was."""
+    return [] if saved else [("warning", RECORD_NOT_SAVED)]
 
 
 def citation_line(source_path: Any, page_number: Any) -> str:

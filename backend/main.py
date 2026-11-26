@@ -32,6 +32,7 @@ from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
 from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
 from backend.models import (
+    Booking,
     Appointment,
     ClinicDay,
     ClinicDaySchedule,
@@ -118,7 +119,8 @@ def _visit_reply(entry: Dict[str, Any], *, record_saved: bool, labs: Optional[Li
         visit_id=entry["visit_id"], patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
         saved_at=entry["saved_at"], status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
         cards=cards, plan=plan_from_entry(entry), record_saved=record_saved,
-        banners=banners_for(entry), disclaimer=DISCLAIMER, finalize_note=FINALIZE_BLOCKED if cards else None,
+        banners=banners_for(entry, record_saved=record_saved), disclaimer=DISCLAIMER,
+        finalize_note=FINALIZE_BLOCKED if cards else None,
     )
 
 
@@ -130,7 +132,7 @@ def _latest(session: Session, visit_id: str) -> Dict[str, DecisionOut]:
     }
 
 
-def board_row(booking: Any, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
+def board_row(booking: Booking, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
               finalized: Optional[str]) -> Appointment:
     """One row of the day board, from the booking, the patient and their latest saved check."""
     state = "waiting" if latest is None else ("done" if finalized else "needs_you")
@@ -243,7 +245,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 rows = decision_rows(alerts, body.decisions)
             except BadDecision as exc:
                 raise HTTPException(status_code=422, detail=str(exc))
-            records.add_decisions(session, visit_id, rows, saved_at=visit_record.now_utc())
+            records.add_decisions(session, visit_id, rows, saved_at=records.now())
             latest = _latest(session, visit_id)
             finalized = records.finalized_at(session, visit_id)  # None: a new decision reopens a visit
         decided, unresolved = summary([a.alert_id for a in alerts], latest)
@@ -274,7 +276,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                     raise HTTPException(status_code=422, detail=FINALIZE_BLOCKED)
                 decided, _ = summary([a.alert_id for a in alerts], latest)
                 current = records.add_finalize(
-                    session, visit_id, [d.model_dump() for d in decided], finalized_at=visit_record.now_utc()
+                    session, visit_id, [d.model_dump() for d in decided], finalized_at=records.now()
                 )
             return FinalizeResponse(
                 visit_id=visit_id, finalized_at=records.iso(current.finalized_at),

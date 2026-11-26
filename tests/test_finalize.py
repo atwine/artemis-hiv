@@ -125,3 +125,44 @@ def test_finalize_takes_no_body_fields(api):
     _decide_all(api, visit)
     r = api.client.post(f"/api/visits/{visit['visit_id']}/finalize", json={"finalized_at": "2020-01-01"}, headers=LOCAL)
     assert r.status_code == 422
+
+
+def test_finalize_again_on_a_visit_imported_from_the_files(api, tmp_path):
+    """A Finalize copied from the Streamlit files reads back like one made through the API."""
+    from artemis import visit_record
+    from backend import records
+    from tests.test_visit_records_db import _checks, _finalized
+
+    folder = tmp_path / "visit_records"
+    for e in (_checks(), _finalized()):
+        visit_record.append_entry(folder, e)
+    with Session(api.engine) as s:
+        records.import_folder(s, folder)
+    r = _finalize(api, "v1")
+    assert r.status_code == 200, r.text
+    assert r.json()["finalized_at"] == "2026-11-20T08:05:00+00:00"
+    assert r.json()["decisions"][0]["saved_at"] == "2026-11-20T08:05:00+00:00"
+
+
+def test_two_finalizes_of_the_same_decisions_save_one_row(api):
+    """Even if two Finalize calls race, the database keeps one row per set of decisions."""
+    from backend import records
+
+    visit = _check(api)
+    _decide_all(api, visit)
+    with Session(api.engine) as s:
+        first = records.add_finalize(s, visit["visit_id"], [], finalized_at="2026-11-26T10:00:00+00:00")
+        second = records.add_finalize(s, visit["visit_id"], [], finalized_at="2026-11-26T10:00:01+00:00")
+        assert second.id == first.id
+    assert len(_finalize_rows(api, visit["visit_id"])) == 1
+
+
+def test_decision_and_finalize_times_have_the_same_shape_as_check_times(api):
+    import re
+
+    visit = _check(api)
+    body = _decide_all(api, visit)
+    final = _finalize(api, visit["visit_id"]).json()
+    iso = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{6})?\+00:00$")
+    for t in [visit["saved_at"], final["finalized_at"], *[d["saved_at"] for d in body["decisions"]]]:
+        assert iso.match(t), t

@@ -24,7 +24,7 @@ class Settings:
     # SQLAlchemy address of the visit-record database, e.g.
     # postgresql+psycopg://artemis:...@127.0.0.1:5434/artemis
     database_url: Optional[str] = None
-    # The added patient cases, the same file (and setting) the Streamlit app uses. Read only.
+    # The added patient cases, the same file (and setting) the Streamlit app uses; POST /api/patients adds to it.
     custom_patients_path: Path = PROJECT_ROOT / "Data" / "custom_patients.json"
     # The design's demo-day patients P007-P009 (owner, 2026-11-26), and the demo day's schedule.
     demo_day_patients_path: Path = PROJECT_ROOT / "Data" / "demo_day_patients.json"

@@ -252,6 +252,9 @@ def test_a_failed_save_still_returns_the_results(api):
     assert r.status_code == 200
     assert r.json()["record_saved"] is False
     assert r.json()["cards"]
+    from artemis.screen_text import RECORD_NOT_SAVED
+
+    assert ["warning", RECORD_NOT_SAVED] in [[b["level"], b["text"]] for b in r.json()["banners"]]
 
 
 @pytest.mark.parametrize(

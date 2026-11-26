@@ -22,6 +22,7 @@ from artemis.screen_text import (
     alert_heading,
     alert_references,
     alert_values,
+    record_banners,
     citation_line,
     key_sentence,
     plain_explanation,
@@ -119,12 +120,10 @@ def _date(text: Any) -> Optional[datetime.date]:
         return None
 
 
-def banners_for(entry: Dict[str, Any]) -> List[Banner]:
-    """The coloured banners above the results (docs/screen-checklist.md sections 1 and 2)."""
-    return [
-        Banner(level=level, text=text)
-        for level, text in status_banners(entry["status"], entry["ai_review"], len(entry.get("alerts") or []))
-    ]
+def banners_for(entry: Dict[str, Any], *, record_saved: bool = True) -> List[Banner]:
+    """The coloured banners above the results (docs/screen-checklist.md sections 1, 2 and 4)."""
+    found = status_banners(entry["status"], entry["ai_review"], len(entry.get("alerts") or []))
+    return [Banner(level=level, text=text) for level, text in found + record_banners(saved=record_saved)]
 
 
 def plan_from_entry(entry: Dict[str, Any]) -> Optional[Plan]:

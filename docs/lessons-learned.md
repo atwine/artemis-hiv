@@ -91,6 +91,11 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Again in fix 10: a check script called the app directly and would have saved its visits into
   the real visit records. It was stopped before any line was written. The test suite, the
   baseline script and the check scripts now send records to throwaway folders themselves.
+- And again in Phase 4 step 2 (2026-11-26): the backend's add-case writer defaulted to the real
+  `Data/custom_patients.json`, so a new test that built the services without a writer appended a
+  test record there while it was still red. `git status` showed it; the file was restored from
+  git. Fix in structure this time: only the real server setup gets the file writer, and any other
+  setup refuses to add a case (`tests/test_add_case.py` checks it).
 
 **11. Slow work hidden by caching.**
 - Example: on every start the app re-read and re-embedded all four guideline files (about 880

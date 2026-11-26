@@ -6,7 +6,8 @@ The rules are the Streamlit form's, with the size limits the owner agreed for th
   already in use is the caller's check, since it needs the patient list);
 - age 0-120 and sex M or F are optional, and a made-up name is optional;
 - ART drugs come from the app's pick list (REGIMEN_CHOICES);
-- complaints, examination findings and history are text, each up to 5,000 characters;
+- complaints, examination findings and history are text, each up to 5,000 characters, and each
+  other-medicine line up to 200;
 - lab results are rows read by artemis.patient.labs.lab_rows_to_entries, at most 50 in all.
 Nothing is built when anything is wrong: the errors say what to fix.
 """
@@ -23,6 +24,7 @@ from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_
 
 MAX_TEXT = 5000
 MAX_LAB_ROWS = 50
+MAX_MEDICINE = 200  # characters in one medicine line
 _PATIENT_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 \-]{0,39}$")
 _LAB_LABELS = {"today": "Today's", "previous": "Previous"}
 
@@ -61,6 +63,8 @@ def _form_errors(form: CaseForm) -> List[str]:
                         ("Examination Findings", form.examination_findings), ("Prior history", form.prior_history)):
         if len(text or "") > MAX_TEXT:
             errors.append(f"{label}: at most 5,000 characters.")
+    if any(len(m) > MAX_MEDICINE for m in form.other_medications):
+        errors.append(f"Other medications: each at most {MAX_MEDICINE} characters.")
     if len(form.lab_rows) > MAX_LAB_ROWS:
         errors.append(f"At most {MAX_LAB_ROWS} lab results per case.")
     return errors

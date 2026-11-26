@@ -415,7 +415,9 @@ def main() -> None:
 
         if st.button("Add case to patient list"):
             pid = (new_patient_id or "").strip()
-            if pid and any((p.get("patient_id") == pid) for p in (list(patients) + custom_patients)):
+            # The demo day's P007-P009 too: the backend lists them, so their IDs are taken.
+            _demo_day = read_json_list(PROJECT_ROOT / "Data" / "demo_day_patients.json")
+            if pid and any((p.get("patient_id") == pid) for p in (list(patients) + custom_patients + _demo_day)):
                 st.error("That Patient ID already exists in the current patient list.")
             else:
                 def _records(table) -> list:

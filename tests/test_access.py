@@ -334,3 +334,26 @@ def test_the_grid_in_code_matches_access_md():
     from_file = {data: {a.split("(")[0].strip() for a in cell.split(",")} for data, cell in zip(header, local) if cell != "-"}
     assert from_file == {data: set(actions) for data, actions in GRID["local"].items()}
     assert set(GRID) == {"local"}  # every other role gets nothing
+
+
+def test_route_map_lists_exactly_what_each_route_checks(api):
+    """ACCESS.md section 4 names every (data, action) each route requires, and no more."""
+    import re
+    from pathlib import Path
+
+    text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
+    in_file = {
+        (m, path, data, action)
+        for m, path, data, action in re.findall(r"^\| (GET|POST|PUT|PATCH|DELETE) \| (\S+) \| (\w+) \| (\S+) \|", text, re.MULTILINE)
+        if data != "public"
+    }
+    in_app = set()
+    for route in api.app.routes:
+        if not isinstance(route, APIRoute):
+            continue
+        for dep in route.dependant.dependencies:
+            name = getattr(dep.call, "__name__", "")
+            if name.startswith("require_"):
+                action, data = name[len("require_"):].split("_", 1)
+                in_app |= {(m, route.path, data, action) for m in route.methods - {"HEAD", "OPTIONS"}}
+    assert in_file == in_app

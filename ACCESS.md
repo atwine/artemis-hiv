@@ -58,12 +58,16 @@ refused, and each case has size limits. The schedule changes only by editing its
 | GET | /api/patients/{patient_id} | patients | view |
 | POST | /api/patients/{patient_id}/visits | patients | view |
 | POST | /api/patients/{patient_id}/visits | visit_records | create |
+| POST | /api/patients/{patient_id}/visits | guidelines | view |
 | POST | /api/visits/{visit_id}/decisions | visit_records | create |
 | POST | /api/visits/{visit_id}/finalize | visit_records | create |
 | GET | /api/visits/{visit_id} | visit_records | view |
+| GET | /api/visits/{visit_id} | guidelines | view |
+| GET | /api/patients/{patient_id}/visits | patients | view |
 | GET | /api/patients/{patient_id}/visits | visit_records | view |
 | POST | /api/patients | patients | create |
 | GET | /api/clinic-day | clinic_day | view |
+| GET | /api/clinic-day | patients | view |
 | GET | /api/clinic-day | visit_records | view |
 
 `POST /api/patients/{patient_id}/visits` runs the visit check. It can call the AI model, which

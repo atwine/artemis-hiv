@@ -24,6 +24,10 @@ logger = logging.getLogger(__name__)
 TOP_K = 5  # the Streamlit screen's default number of guideline passages per alert
 
 
+def _no_case_writer(record: Dict[str, Any]) -> None:
+    raise RuntimeError("No case writer is set up for these services.")
+
+
 @dataclass
 class Services:
     patients: Callable[[], List[Dict[str, Any]]]  # the patient records as stored, in file order
@@ -34,8 +38,9 @@ class Services:
     top_k: int = TOP_K
     # The demo day's schedule as stored (Data/demo_clinic_day.json), checked by the route.
     clinic_day: Callable[[], Dict[str, Any]] = field(default_factory=lambda: clinic_day_file(Settings()))
-    # Adds a new case where the Streamlit app keeps its added cases (ARTEMIS_CUSTOM_PATIENTS_PATH).
-    add_case: Callable[[Dict[str, Any]], None] = field(default_factory=lambda: custom_case_writer(Settings()))
+    # Adds a new case. Only default_services gives it the real file (ARTEMIS_CUSTOM_PATIENTS_PATH);
+    # any other Services refuses, so a test or script can never write the real patient file.
+    add_case: Callable[[Dict[str, Any]], None] = field(default=_no_case_writer)
 
 
 def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:

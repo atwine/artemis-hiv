@@ -46,3 +46,13 @@ def test_a_result_outside_the_shared_lists_is_refused() -> None:
         _result(screening_outcome="timed_out")
     with pytest.raises(ValueError):
         _result(status="BLUE")
+
+
+def test_an_unsaved_check_has_its_banner_and_is_in_the_checklist() -> None:
+    """Owner, 2026-11-26: when a check can't be saved, the screen says so in this one wording."""
+    from artemis.screen_text import RECORD_NOT_SAVED, record_banners
+
+    assert RECORD_NOT_SAVED == "This check could not be saved, so its alerts cannot be decided here."
+    assert record_banners(saved=False) == [("warning", RECORD_NOT_SAVED)]
+    assert record_banners(saved=True) == []
+    assert "`RECORD_NOT_SAVED`" in CHECKLIST

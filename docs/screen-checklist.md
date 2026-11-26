@@ -65,6 +65,11 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
 - Finalize stays disabled until every alert is handled, with the note `FINALIZE_BLOCKED`
   (`can_finalize` in `artemis/review.py`).
 
+- A visit check whose record could not be saved: an amber banner, `RECORD_NOT_SAVED` ("This check
+  could not be saved, so its alerts cannot be decided here."), from `record_banners` (owner,
+  2026-11-26). The API sends it in `banners`; the Streamlit screen keeps its own sentence, since
+  there a Finalize still saves to the file.
+
 ## 5. Always
 
 - The disclaimer `DISCLAIMER`: "Decision support only. Clinician retains final authority.

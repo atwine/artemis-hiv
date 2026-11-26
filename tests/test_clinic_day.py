@@ -11,7 +11,7 @@ import json
 LOCAL = {"Origin": "http://localhost:3000"}
 DESIGN_DAY = [
     ("08:40", "P004", "Amina Nansubuga"), ("09:05", "P003", "Sam Kato"), ("09:30", "P005", "Rose Nabirye"),
-    ("09:50", "P006", "David Mugisha"), ("10:10", "P007", "Esther Nakimuli"), ("10:25", "P008", "Peter Okot"),
+    ("09:50", "P006", "Joan Nakato"), ("10:10", "P007", "Esther Nakimuli"), ("10:25", "P008", "Peter Okot"),
     ("10:40", "P009", "Ruth Akello"),
 ]
 

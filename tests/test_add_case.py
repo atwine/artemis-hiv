@@ -145,3 +145,18 @@ def test_the_real_writer_never_overwrites_an_unreadable_file(tmp_path):
     with pytest.raises(UnreadableFile):
         custom_case_writer(Settings(custom_patients_path=path))({"patient_id": "NEW"})
     assert path.read_text(encoding="utf-8") == "{not json"
+
+
+def test_each_medicine_line_has_a_length_limit(api):
+    assert api.client.post("/api/patients", json=_body(other_medications=["a" * 201]), headers=LOCAL).status_code == 422
+    record, errors = build_case_record(_form(other_medications=["a" * 201]), today=TODAY)
+    assert record is None and any("200" in e for e in errors)
+
+
+def test_services_built_without_a_writer_never_write_the_real_file():
+    """Only default_services wires the real file; any other Services refuses to add a case."""
+    from backend.services import Services
+
+    services = Services(patients=list, search=lambda: None, model_client=lambda: None, engine=None, app_version="x")
+    with pytest.raises(RuntimeError):
+        services.add_case({"patient_id": "NEW"})

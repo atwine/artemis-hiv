@@ -9,7 +9,7 @@ suggestions and overrideReasons, with ARTEMIS's own fields under `extension`.
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, List, Literal, Optional
+from typing import Annotated, Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -83,7 +83,7 @@ class NewCase(BaseModel):
     age_years: Optional[int] = None
     sex: Optional[Literal["M", "F"]] = None
     art_regimen: List[str] = Field(default=[], max_length=20)  # picks from the app's list, e.g. "TLD"
-    other_medications: List[str] = Field(default=[], max_length=50)  # one medicine per item
+    other_medications: List[Annotated[str, Field(max_length=200)]] = Field(default=[], max_length=50)  # one per item
     complaints: str = Field(default="", max_length=5000)
     examination_findings: str = Field(default="", max_length=5000)
     prior_history: str = Field(default="", max_length=5000)
