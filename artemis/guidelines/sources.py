@@ -22,15 +22,23 @@ class GuidelineSource:
     file: str  # the Markdown file in Data/MarkDown Files
     country: str  # ISO 3166 code
     title: str
+    short: str  # how a citation names it, before the printed page
 
 
 SOURCES: Dict[str, GuidelineSource] = {s.file: s for s in (
     GuidelineSource("HIV_Guidelines_ART.extraction.md", "UG",
-                    "Consolidated Guidelines for the Prevention and Treatment of HIV and AIDS in Uganda, 2022 (ART)"),
+                    "Consolidated Guidelines for the Prevention and Treatment of HIV and AIDS in Uganda, 2022 (ART)",
+                    "Uganda HIV guidelines 2022"),
     GuidelineSource("HIV_Guidelines_Co_infectionScreening.extraction.md", "UG",
                     "Consolidated Guidelines for the Prevention and Treatment of HIV and AIDS in Uganda, 2022 "
-                    "(co-infections and screening)"),
+                    "(co-infections and screening)", "Uganda HIV guidelines 2022"),
 )}
+
+
+def citation_name(source_path: object) -> str:
+    """The guideline's name in a citation; "Guidelines" for a file outside the register."""
+    source = SOURCES.get(Path(str(source_path or "")).name)
+    return source.short if source else "Guidelines"
 
 
 def guideline_paths(folder: Path, country: str) -> List[Path]:

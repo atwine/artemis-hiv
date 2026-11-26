@@ -83,7 +83,8 @@ GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY
 # Rationale: persistent Chroma collections keep old indexed chunks; bump this
 # when the ingestion/cleaning/chunking logic changes to force a fresh collection.
 # Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
-GUIDELINE_INDEX_VERSION = 2
+# Version 3 (G36): page numbers are the guideline's printed pages.
+GUIDELINE_INDEX_VERSION = 3
 # The search model that turns guideline text and queries into meanings (one setting the app and
 # the scripts share). Phase 2B fix 5d tried BAAI/bge-small-en-v1.5 (512 word-pieces) and dropped it
 # by its keep rule; fix 5f tried Qwen/Qwen3-Embedding-0.6B and dropped it the same way (it found
