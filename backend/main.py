@@ -21,6 +21,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session
 
 from artemis import visit_record
+from artemis.patient.labs import read_lab_entries, read_lab_notes
 from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import records
@@ -32,6 +33,8 @@ from backend.models import (
     DecisionOut,
     DecisionsRequest,
     DecisionsResponse,
+    LabNote,
+    LabResult,
     PatientDetail,
     PatientRecord,
     PatientSummary,
@@ -86,6 +89,15 @@ def _summary(record: PatientRecord) -> PatientSummary:
     )
 
 
+def _detail(p: Loaded) -> PatientDetail:
+    """A patient for the screen, each lab result with its value, unit and date apart."""
+    labs: Dict[str, List[LabResult]] = {}
+    for e in read_lab_entries(p.stored):
+        labs.setdefault(e.test, []).append(LabResult(date=e.date.isoformat(), value=e.value, unit=e.unit, source=e.source))
+    notes = [LabNote(date=n.date.isoformat() if n.date else None, source=n.source, text=n.text) for n in read_lab_notes(p.stored)]
+    return PatientDetail(**{**p.record.model_dump(), "labs": labs, "lab_notes": notes})
+
+
 def _no_database() -> HTTPException:
     return HTTPException(status_code=503, detail="The visit-record database is not set up.")
 
@@ -111,8 +123,8 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         return [_summary(p.record) for p in visible_patients(role_of(request), load_patients(services))]
 
     @app.get("/api/patients/{patient_id}", response_model=PatientDetail, dependencies=[Depends(require("patients", "view"))])
-    def get_patient(patient_id: str) -> Dict[str, Any]:
-        return _find(services, patient_id).record.model_dump()
+    def get_patient(patient_id: str) -> PatientDetail:
+        return _detail(_find(services, patient_id))
 
     @app.post(
         "/api/patients/{patient_id}/visits",

@@ -46,7 +46,7 @@ def test_a_cut_off_review_with_an_odd_alert_shows_every_warning(at: AppTest) -> 
     chunk = VectorSearchResult(chunk_id="c1", document="text", metadata={"page_number": 7}, distance=0.1)
     at.session_state["analysis_ran"] = True
     at.session_state["analysis_patient_id"] = patient_id
-    at.session_state["analysis_status"] = "YELLOW"
+    at.session_state["analysis_status"] = "AMBER"
     at.session_state["analysis_screening_outcome"] = "cut_off"
     at.session_state["analysis_alerts"] = [alert]
     at.session_state["analysis_results"] = [
@@ -59,5 +59,5 @@ def test_a_cut_off_review_with_an_odd_alert_shows_every_warning(at: AppTest) -> 
     assert any(w.startswith("Severity not given") for w in warnings)
     shown = "\n".join(m.value for m in at.markdown)
     assert "References (the passages the AI was shown and cited)" in shown
-    assert "1. Guidelines, p.7" in shown
-    assert "2. Guidelines, p.99: not among the passages the AI was given" in shown
+    assert "1. Guidelines · p. 7" in shown
+    assert "2. Guidelines · p. 99: not among the passages the AI was given" in shown

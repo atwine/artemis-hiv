@@ -26,7 +26,7 @@ def _checks(visit_id="v1", patient_id="P001", saved_at="2026-11-20T08:00:00+00:0
     return {
         "event": "checks_run", "visit_id": visit_id, "patient_id": patient_id, "visit_date": "2026-01-22",
         "saved_at": saved_at, "note": "Routine follow-up.", "model": "llama", "app_version": "abc123",
-        "status": "YELLOW", "ai_review": "ok", "ai_review_ran": True,
+        "status": "AMBER", "ai_review": "ok", "ai_review_ran": True,
         "alerts": [{"alert_id": "a1", "title": "T", "message": "M", "evidence": {}, "query_hint": "", "source": "rule", "severity": None}],
         "results": [{"retrieved": [], "explanation": {"text": "E", "used_llm": False}}],
         "screening_debug": {"parse_status": "parsed_nonempty"}, "patient_summary": {"x": 1},
@@ -194,3 +194,43 @@ def test_on_real_postgres(tmp_path):
     finally:
         engine.dispose()
         command.downgrade(cfg, "base")
+
+
+def test_an_older_file_that_says_yellow_is_stored_as_amber(tmp_path):
+    engine = memory_engine()
+    old = _checks()
+    old["status"] = "YELLOW"
+    with Session(engine) as s:
+        records.import_folder(s, _folder(tmp_path, old))
+    with Session(engine) as s:
+        assert s.get(VisitCheck, "v1").status == "AMBER"
+
+
+def test_the_amber_migration_renames_saved_rows_and_is_safe_twice(tmp_path):
+    """Alembic 0002: rows saved as YELLOW become AMBER; running it again changes nothing;
+    going back down restores YELLOW."""
+    from alembic import command
+    from sqlalchemy import text
+
+    url = f"sqlite:///{(tmp_path / 'm.db').as_posix()}"
+    cfg = _alembic_config(url)
+    command.upgrade(cfg, "0001")
+    engine = create_engine(url)
+    row = records.check_from_entry(_checks(), origin="api")
+    with engine.begin() as conn:
+        for vid, status in [("v1", "YELLOW"), ("v2", "RED"), ("v3", "YELLOW")]:
+            values = {**row.model_dump(), "visit_id": vid, "status": status}
+            conn.execute(VisitCheck.__table__.insert().values(**values))
+
+    def statuses():
+        with engine.connect() as conn:
+            return dict(conn.execute(text("SELECT visit_id, status FROM visit_check ORDER BY visit_id")).all())
+
+    command.upgrade(cfg, "head")
+    assert statuses() == {"v1": "AMBER", "v2": "RED", "v3": "AMBER"}
+    command.downgrade(cfg, "0001")
+    command.upgrade(cfg, "head")  # a second run
+    assert statuses() == {"v1": "AMBER", "v2": "RED", "v3": "AMBER"}
+    command.downgrade(cfg, "0001")
+    assert statuses() == {"v1": "YELLOW", "v2": "RED", "v3": "YELLOW"}
+    engine.dispose()

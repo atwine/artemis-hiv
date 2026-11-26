@@ -16,11 +16,11 @@ def test_mock_patients_rule_expectations_smoke() -> None:
     for p in patients:
         ctx = build_patient_context(p)
         alerts = run_alerts(ctx)
-        outcomes[ctx.patient_id] = "YELLOW" if alerts else "GREEN"
+        outcomes[ctx.patient_id] = "AMBER" if alerts else "GREEN"
 
-    assert outcomes["P001"] == "YELLOW"
+    assert outcomes["P001"] == "AMBER"
     assert outcomes["P002"] == "GREEN"
-    assert outcomes["P003"] == "YELLOW"
+    assert outcomes["P003"] == "AMBER"
 
 
 def _base_patient(*, note: str, regimen: list[str] | None = None) -> dict:

@@ -12,15 +12,15 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 |---|---|---|
 | GET | /api/health | `{"status": "ok"}` |
 | GET | /api/patients | the patient list (from `Data/mock_patients.json` and `Data/custom_patients.json`, read only) |
-| GET | /api/patients/{patient_id} | one patient's record |
+| GET | /api/patients/{patient_id} | one patient's record; `labs` maps each test to its results, each with `date`, `value`, `unit` and `source` in the unit it was recorded in (never converted); typed-in lab text comes apart as `lab_notes` |
 | POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
-| POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other", "comment": "..."}]}` |
+| POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other (say why)", "comment": "..."}]}`; reasons are `artemis/review.py` `OVERRIDE_REASONS` |
 
 The replies carry the screen's own words from `artemis/screen_text.py` (plan item 4.7,
 `docs/screen-checklist.md`), so the website only displays them: `banners` (level and text),
 `disclaimer` and `finalize_note` on a visit check; `heading`, `references_heading` and
-`references` on each card's `extension`; `citation` (for example "Uganda HIV guidelines 2022,
-p.255") on each passage; `finalize_note` on a decision reply until every alert is decided.
+`references` on each card's `extension`; `citation` (for example "Uganda HIV Guidelines 2022 ·
+p. 255") on each passage; `finalize_note` on a decision reply until every alert is decided.
 
 A card's `uuid` is unique per visit (`<visit_id>:<alert_id>`); decisions use the alert's own id,
 `extension.alert_id`. With no database set up, a visit check is refused (503) before any model

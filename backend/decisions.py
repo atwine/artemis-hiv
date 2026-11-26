@@ -2,7 +2,7 @@
 
 Plain functions; the route in backend/main.py only reads and saves. The rules are today's
 Finalize rules from artemis/review.py, used as they are: an override needs a reason, and
-"Other" needs a comment.
+"Other (say why)" needs a comment.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ def decision_rows(alerts: Sequence[Alert], decisions: Sequence[DecisionIn]) -> L
         state[f"alert_override_reason_{d.alert_id}"] = d.reason or ""
         state[f"alert_override_comment_{d.alert_id}"] = d.comment
         if not alert_resolution_ok(state, d.alert_id):
-            raise BadDecision("An override needs a reason, and 'Other' needs a comment.")
+            raise BadDecision("An override needs a reason, and 'Other (say why)' needs a comment.")
     chosen = [by_id[i] for i in dict.fromkeys(d.alert_id for d in decisions)]
     return decisions_from_state(state, chosen)
 

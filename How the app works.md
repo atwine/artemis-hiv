@@ -79,7 +79,7 @@ This runs the analysis.
 
 After it runs, you will see:
 
-- A status summary (for example: **GREEN** or **YELLOW**)
+- A status summary (for example: **GREEN** or **AMBER**)
 - A list of alerts (if any)
 
 ### Step 5: Review each alert
@@ -109,13 +109,14 @@ For each alert, choose an action:
   - You must select an **Override reason** (required).
   - You may add an **Override comment** (optional) to document your thinking.
 
-Examples of override reasons include:
+The override reasons are:
 
-- Already addressed
-- Not applicable
-- Will address later
+- Already done, not documented
+- Test not available here
+- Not right for this patient
 - Patient declined
-- Other
+- Will address at next visit
+- Other (say why), which needs a comment
 
 ### Step 7: Finalize / Close visit
 
@@ -123,12 +124,12 @@ Once all alerts are acknowledged or overridden (with a reason), the **Finalize /
 
 Clicking Finalize marks the visit as completed in the app.
 
-## What “GREEN” and “YELLOW” mean
+## What “GREEN” and “AMBER” mean
 
 - **GREEN**
   - No alerts were detected.
 
-- **YELLOW**
+- **AMBER** (called YELLOW before 2026-11-26)
   - One or more alerts were detected and should be reviewed before finalizing.
 
 ## Advanced settings (optional)

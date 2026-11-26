@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from artemis.plan.flow import AgenticResult
 from artemis.rules.checks import Alert
+from artemis.statuses import status_name
 from modules.explanation_generator import ExplanationResult
 from artemis.guidelines.vector_store import VectorSearchResult
 
@@ -202,7 +203,7 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
         "analysis_visit_id": checks.get("visit_id"),
         "analysis_saved_at": checks.get("saved_at"),
         "analysis_restored": True,
-        "analysis_status": checks.get("status"),
+        "analysis_status": status_name(checks.get("status")),
         "analysis_screening_outcome": checks.get("ai_review") or "not_run",
         "analysis_alerts": alerts,
         "analysis_results": results,
@@ -218,5 +219,8 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
         d = decided.get(alert.alert_id) or {}
         values[f"alert_action_{alert.alert_id}"] = d.get("action") or "Unreviewed"
         values[f"alert_override_reason_{alert.alert_id}"] = d.get("reason") or ""
+        # The reason it was saved with, kept apart so the picker keeps offering an older one
+        # while the clinician changes their mind (artemis.review.reason_options).
+        values[f"alert_saved_reason_{alert.alert_id}"] = d.get("reason") or ""
         values[f"alert_override_comment_{alert.alert_id}"] = d.get("comment") or ""
     return values

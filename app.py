@@ -44,7 +44,7 @@ from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
 from artemis.ai.screening import NO_SEVERITY
 from artemis import visit_record
-from artemis.review import OVERRIDE_REASONS, can_finalize as review_can_finalize
+from artemis.review import can_finalize as review_can_finalize, reason_options
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
 from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED, alert_heading, alert_references, status_banners
@@ -853,7 +853,7 @@ def main() -> None:
                 "- It compared them with the patient summary above, the dated notes and the lab table.\n"
                 f"- LLM output status: `{_dbg.get('parse_status') or 'unknown'}`."
             )
-    # Rationale: show raw LLM output for all cases (GREEN, YELLOW, RED) to debug parsing issues
+    # Rationale: show raw LLM output for all cases (GREEN, AMBER, RED) to debug parsing issues
     _dbg = st.session_state.get("analysis_screening_debug") or {}
     if _dbg.get("raw_output"):
         with st.expander("Debug: Raw LLM screening output", expanded=False):
@@ -1090,11 +1090,11 @@ def main() -> None:
             if st.session_state.get(f"alert_action_{alert.alert_id}") == "Override":
                 st.selectbox(
                     "Override reason (required)",
-                    ["", *OVERRIDE_REASONS],
+                    reason_options(st.session_state.get(f"alert_saved_reason_{alert.alert_id}") or ""),
                     key=f"alert_override_reason_{alert.alert_id}",
                 )
                 st.text_area(
-                    "Override comment (required for Other)",
+                    "Override comment (required for 'Other (say why)')",
                     key=f"alert_override_comment_{alert.alert_id}",
                     height=80,
                 )

@@ -28,10 +28,10 @@ class GuidelineSource:
 SOURCES: Dict[str, GuidelineSource] = {s.file: s for s in (
     GuidelineSource("HIV_Guidelines_ART.extraction.md", "UG",
                     "Consolidated Guidelines for the Prevention and Treatment of HIV and AIDS in Uganda, 2022 (ART)",
-                    "Uganda HIV guidelines 2022"),
+                    "Uganda HIV Guidelines 2022"),
     GuidelineSource("HIV_Guidelines_Co_infectionScreening.extraction.md", "UG",
                     "Consolidated Guidelines for the Prevention and Treatment of HIV and AIDS in Uganda, 2022 "
-                    "(co-infections and screening)", "Uganda HIV guidelines 2022"),
+                    "(co-infections and screening)", "Uganda HIV Guidelines 2022"),
 )}
 
 

@@ -30,7 +30,7 @@ _PARTIAL_REASON = {
 NOT_SHOWN = "not among the passages the AI was given"
 DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only."
 FINALIZE_BLOCKED = ("Finalize is disabled until all alerts are acknowledged or overridden with a reason "
-                    "(the reason 'Other' needs a comment).")
+                    "(the reason 'Other (say why)' needs a comment).")
 
 
 def alert_heading(alert: Alert) -> str:
@@ -63,8 +63,8 @@ def status_banners(status: Optional[str], screening_outcome: str, alert_count: i
 
     if status == "RED":
         banners.append(("error", f"RED: {alert_count} alert(s) to consider (at least one high/critical issue)."))
-    elif status == "YELLOW":
-        banners.append(("warning", f"YELLOW: {alert_count} alert(s) to consider."))
+    elif status == "AMBER":
+        banners.append(("warning", f"AMBER: {alert_count} alert(s) to consider."))
     elif status == "INCOMPLETE":
         banners.append(("info", "No rule check was triggered."))
     elif status == "GREEN" and screening_outcome == "ok":
@@ -76,8 +76,8 @@ def status_banners(status: Optional[str], screening_outcome: str, alert_count: i
 
 def citation_line(source_path: Any, page_number: Any) -> str:
     """One guideline citation: the guideline's name and its printed page (G36),
-    e.g. "Uganda HIV guidelines 2022, p.255"."""
-    return f"{citation_name(source_path)}, p.{page_number}"
+    e.g. "Uganda HIV Guidelines 2022 · p. 255" (the design's look, owner 2026-11-26)."""
+    return f"{citation_name(source_path)} · p. {page_number}"
 
 
 def _unique(lines: List[str]) -> List[str]:
@@ -106,7 +106,7 @@ def alert_references(alert: Alert, retrieved: List[VectorSearchResult]) -> Tuple
             # Not among the passages the AI was shown: the page is the passage's own when it is known,
             # otherwise only the AI's claim.
             page = passage.metadata.get("page_number") if passage is not None else c.get("page_number")
-            lines.append(f"Guidelines, p.{page if page is not None else '?'}: {NOT_SHOWN}")
+            lines.append(f"Guidelines · p. {page if page is not None else '?'}: {NOT_SHOWN}")
     if not lines:
         lines = ["The AI cited no guideline passage for this alert."]
     return "References (the passages the AI was shown and cited)", _unique(lines)
