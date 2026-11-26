@@ -196,7 +196,11 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
 - [ ] 2B.3 Try an agentic loop like PolicyLens: plan the questions, search, judge whether the
       results are good enough, search again if not.
 - [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
-- [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
+- [x] 2B.5 Decided 2026-11-26 (owner, option B): keep Chroma and keep skipping its four advisories,
+      with the reason in `.github/workflows/security-scans.yml`; 1.5.9 is still the newest release and
+      the app never starts Chroma's HTTP server. Recheck on every chromadb upgrade. Replacing Chroma
+      with the simple saved search (about 27 fewer libraries) stays an option for Phase 4.3.
+      The item was: revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
       their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
 - [x] 2B.7 Decided 2026-11-26 (owner, option A): plain text cut into pieces stays, the best setup
       measured end to end; sections (fix 5b) measured worse on questions and patients; one record
