@@ -76,3 +76,5 @@ Next: combinations. Put Clinic Board's S1 (board + list + add patient) into 09 a
 its own style, then drop the Clinic Board page. Work continues with 07 and 09 only.
 
 Done (2026-11-27): the board-and-list first screen is in both 09 Checklist Tray and 07 Day Rail, each in its own style, with a Board | List switch; the writing box is now called "Clinical notes" (owner's pick). The Clinic Board page is dropped.
+
+Round 5 (2026-11-27): the owner likes Day Rail's look but Checklist Tray's bottom navigation bar. Three Day Rail variations with that bar, nothing else changed: 2A floating dark tray, 2B full-width step bar, 2C bar joined to the visit pane. Owner to pick one.
