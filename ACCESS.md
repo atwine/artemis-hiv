@@ -103,16 +103,17 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
   returns the first one's result without saving again; an unfinished visit is refused (422).
 - Someone reopens a visit by guessing its id. Covered by: visit ids are random (uuid4), and an
   unknown id is 404; there is only one role that may read visits anyway.
-- The owner's own page gets stuck and runs the visit check over and over. Not covered: see
-  section 6.
+- The owner's own page gets stuck and runs the visit check over and over. Covered by: at most
+  6 visit checks a minute (`ARTEMIS_VISIT_CHECKS_PER_MINUTE`); the next is refused (429) before
+  anything runs or is spent (owner, 2026-11-26; `tests/test_check_limit.py`).
 
 ## 6. Open questions for the owner
 
 - No logins yet. Fine while only the owner uses it on this laptop with synthetic patients;
   logins (better-auth in the Next.js app) must come before anyone else uses it, and this file
   gets redone then.
-- Repeated visit checks: no request limit yet (owner, 2026-11-26: note it, add the limit
-  before anyone else uses the app). OpenRouter's spending cap is the backstop meanwhile.
+- Repeated visit checks: decided 2026-11-26, at most 6 a minute (section 5). Kept in memory,
+  so it resets when the server restarts; revisit with logins (a limit per user).
 - If real patient data were ever used: which law applies (Uganda's Data Protection and Privacy
   Act, 2019 is the likely one), whether consent must be recorded, how long visit records are
   kept, and whether notes may go to a third-party model API outside Uganda (OpenRouter does
