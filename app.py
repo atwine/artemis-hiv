@@ -43,12 +43,11 @@ from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
 from artemis.ai.screening import NO_SEVERITY
-from ui.references import alert_references
 from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
-from ui.results_banner import status_banners
+from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED, alert_heading, alert_references, status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
 from artemis.visit import (
     AnalysisOptions,
@@ -275,9 +274,7 @@ def main() -> None:
         st.success(_flash)
 
     st.title("ARTEMIS-HIV")
-    st.caption(
-        "Decision support only. Clinician retains final authority. Synthetic data only."
-    )
+    st.caption(DISCLAIMER)
 
     if not MOCK_PATIENTS_PATH.exists():
         st.error("Mock patients file not found: `Data/mock_patients.json`")
@@ -913,8 +910,7 @@ def main() -> None:
             retrieved: List[VectorSearchResult] = item["retrieved"]
             explanation: ExplanationResult = item["explanation"]
 
-            _source = "AI review" if getattr(alert, "source", "rule") == "ai" else "Rule check"
-            with st.expander(f"Alert ({_source}): {alert.title}", expanded=True):
+            with st.expander(alert_heading(alert), expanded=True):
                 # Rationale: present clinician-facing text without inline citation fragments
                 # and keep numbered references in one place for readability.
                 _finding_text = str(alert.message or "")
@@ -1118,10 +1114,7 @@ def main() -> None:
     if st.session_state.get("finalized"):
         st.success(f"Visit finalized and saved ({when(st.session_state.get('analysis_finalized_at'))}).")
     elif st.session_state.get("analysis_ran") and alerts and not can_finalize:
-        st.info(
-            "Finalize is disabled until all alerts are acknowledged or overridden with a reason "
-            "(the reason 'Other' needs a comment)."
-        )
+        st.info(FINALIZE_BLOCKED)
 
     st.markdown("""
         <div style='background-color: #E8F4F8; padding: 15px; border-radius: 8px; border-left: 4px solid #2E86AB; margin: 20px 0;'>

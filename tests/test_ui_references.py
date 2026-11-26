@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from artemis.rules.checks import Alert
 from artemis.guidelines.vector_store import VectorSearchResult
-from ui.references import alert_references
+from artemis.screen_text import alert_references
 
 
 def _chunk(cid: str, page: int) -> VectorSearchResult:

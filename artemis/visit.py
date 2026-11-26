@@ -47,6 +47,12 @@ class AnalysisOptions:
     agentic: bool = False
 
 
+# Every way the AI review can end, and every overall status: the API and the screens are built
+# from these lists, and AnalysisResult refuses any other value (docs/screen-checklist.md).
+AI_REVIEW_OUTCOMES = ("not_run", "ok", "failed", "unreadable", "cut_off", "partly_read", "search_unavailable")
+STATUSES = ("GREEN", "YELLOW", "RED", "INCOMPLETE")
+
+
 @dataclass
 class AnalysisResult:
     patient_id: Optional[str]
@@ -66,6 +72,13 @@ class AnalysisResult:
     agentic_result: Any
     agentic_reasoner: Optional[Dict[str, Any]]
     llm_error: Optional[str]
+
+    def __post_init__(self) -> None:
+        if self.screening_outcome not in AI_REVIEW_OUTCOMES:
+            raise ValueError(f"unknown AI review result {self.screening_outcome!r}: add it to AI_REVIEW_OUTCOMES "
+                             "and to docs/screen-checklist.md")
+        if self.status not in STATUSES:
+            raise ValueError(f"unknown status {self.status!r}: add it to STATUSES and to docs/screen-checklist.md")
 
 
 def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -> str:

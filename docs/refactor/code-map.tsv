@@ -83,7 +83,7 @@ ui/state.py	init_analysis_state	Sets starting values for the analysis results th
 ui/state.py	clear_analysis	Forgets the last analysis completely, including each alert's review.	ui/state.py	stays
 ui/state.py	analysis_belongs_to	Says whether the shown results are for this patient or nothing has run.	ui/state.py	stays
 ui/state.py	note_changed	Says whether the shown results came from a different note than the one on screen.	ui/state.py	stays
-ui/results_banner.py	status_banners	Chooses the coloured banners at the top of the Results section.	ui/results_banner.py	stays
+artemis/screen_text.py	status_banners	Chooses the coloured banners at the top of a visit's results, for every screen.	artemis/screen_text.py	moved
 app.py	main._lab_table	Draws one add-case lab table: test, date, value and unit per row.	ui/ (part of main)	to-move
 app.py	main._records	Turns a lab table's contents into a list of rows.	ui/ (part of main)	to-move
 app.py	main._show_labs	Shows a patient's lab results in Patient Details, then any pasted lab text.	ui/ (part of main)	to-move
@@ -125,8 +125,8 @@ artemis/ai/screening.py	read_alert_list	Finds the list of alerts in the AI's rep
 artemis/ai/screening.py	_severity	Keeps the AI's severity if it is one of the four, otherwise 'not given'.	artemis/ai/screening.py	moved
 artemis/ai/screening.py	_marked_citations	Marks each passage the AI cited with whether it was shown that passage.	artemis/ai/screening.py	moved
 artemis/visit.py	_cited_passages	Lists the passages an AI alert cited from those the AI was shown.	artemis/visit.py	moved
-ui/references.py	_unique	Drops repeated lines, keeping the order.	ui/references.py	stays
-ui/references.py	alert_references	Builds the References list under an alert: what the AI cited, or what a search found.	ui/references.py	stays
+artemis/screen_text.py	_unique	Drops repeated lines, keeping the order.	artemis/screen_text.py	moved
+artemis/screen_text.py	alert_references	Builds the References list under an alert: what the AI cited, or what a search found.	artemis/screen_text.py	moved
 artemis/review.py	decisions_from_state	Lists the clinician's decision on each alert, as saved at Finalize.	artemis/review.py	moved
 artemis/visit_record.py	now_utc	Gives the current time in UTC, for the visit record.	artemis/visit_record.py	moved
 artemis/visit_record.py	app_version	Gives the code version (git commit) saved with each visit record.	artemis/visit_record.py	moved
@@ -218,3 +218,6 @@ artemis/guidelines/processor.py	printed_page_numbers	Works out each extract page
 artemis/guidelines/sources.py	citation_name	Gives the short name a citation uses for a guideline file.	artemis/guidelines/sources.py	moved
 artemis/guidelines/processor.py	_clean_pages	Cleans each page of a converted guideline file, keeping the first pages only when asked.	artemis/guidelines/processor.py	moved
 artemis/guidelines/vector_store.py	index_collection_name	Names the stored search index after the search model and a fingerprint of the guideline text (G37).	artemis/guidelines/vector_store.py	moved
+artemis/screen_text.py	citation_line	Writes one guideline citation: the guideline's name and its printed page.	artemis/screen_text.py	moved
+artemis/visit.py	AnalysisResult.__post_init__	Refuses an AI review result or status that is not on the shared lists the screens are built from.	artemis/visit.py	moved
+artemis/screen_text.py	alert_heading	Writes an alert's heading, saying whether the AI review or a rule check raised it.	artemis/screen_text.py	moved

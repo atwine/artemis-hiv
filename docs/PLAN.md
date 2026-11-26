@@ -262,6 +262,11 @@ Check: you have picked a direction and signed off the screens.
       place (today in ui/state.py, app.py and visit_record.restore); share one JSON bracket
       scanner (screening and plan_json); drop unused fields (deterministic_alerts, used_llm).
 
+- [ ] 4.7 (owner, 2026-11-26) The API follows `docs/screen-checklist.md`: its AI-review result and
+      status types are built from `AI_REVIEW_OUTCOMES` and `STATUSES` in `artemis/visit.py` (which
+      adds `search_unavailable`), and it sends the wording from `artemis/screen_text.py` (banners,
+      alert headings, citation lines) so the website only displays it.
+
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 
 ## Phase 5: Frontend (Next.js + shadcn)
@@ -272,7 +277,8 @@ Check: the evaluation script runs through the API and matches Phase 2's numbers.
 - [ ] 5.4 Plan and audit record views.
 - [ ] 5.5 Showcase mode: the same screens read saved outputs instead of calling the API.
 
-Check: a full visit works in Chrome; before/after screenshots against the Streamlit app.
+Check: a full visit works in Chrome; before/after screenshots against the Streamlit app; every
+item of `docs/screen-checklist.md` shown and screenshotted.
 
 ## Phase 6: Showcase on GitHub Pages
 

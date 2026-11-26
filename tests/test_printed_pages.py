@@ -10,7 +10,7 @@ import pytest
 from artemis.guidelines.processor import printed_page_numbers, process_markdown_guidelines
 from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.rules.checks import Alert
-from ui.references import alert_references
+from artemis.screen_text import alert_references
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "Data" / "MarkDown Files" / "HIV_Guidelines_ART.extraction.md"

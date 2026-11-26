@@ -11,7 +11,7 @@ import pytest
 from artemis.visit import AnalysisOptions, compute_overall_status, run_visit_analysis
 from modules.rag_engine import RagEngine
 from tests import pipeline_harness as h
-from ui.results_banner import status_banners
+from artemis.screen_text import status_banners
 
 ROOT = Path(__file__).resolve().parents[1]
 
