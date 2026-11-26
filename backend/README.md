@@ -11,10 +11,19 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 | Method | Route | What it does |
 |---|---|---|
 | GET | /api/health | `{"status": "ok"}` |
-| GET | /api/patients | the patient list (from `Data/mock_patients.json` and `Data/custom_patients.json`, read only) |
+| GET | /api/patients | the patient list (from `Data/mock_patients.json`, `Data/custom_patients.json` and `Data/demo_day_patients.json`, read only) |
+| POST | /api/patients | add a new made-up case (201), written where the Streamlit app keeps added cases; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
 | GET | /api/patients/{patient_id} | one patient's record; `labs` maps each test to its results, each with `date`, `value`, `unit` and `source` in the unit it was recorded in (never converted); typed-in lab text comes apart as `lab_notes` |
 | POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
-| POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other (say why)", "comment": "..."}]}`; reasons are `artemis/review.py` `OVERRIDE_REASONS` |
+| POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other (say why)", "comment": "..."}]}`; reasons are `artemis/review.py` `OVERRIDE_REASONS`; the reply says `finalized_at` (null while open) |
+| POST | /api/visits/{visit_id}/finalize | finalize once every alert is decided (422 with `FINALIZE_BLOCKED` otherwise); again with nothing changed returns the same; a later decision reopens the visit |
+| GET | /api/visits/{visit_id} | reopen a saved visit as it was shown, with its note, decisions and `finalized_at`; no new AI call |
+| GET | /api/patients/{patient_id}/visits | a patient's saved checks, newest first |
+| GET | /api/clinic-day | the demo day board (`Data/demo_clinic_day.json`): each booking with `state` waiting / needs_you / done from the patient's latest check, and the header counts |
+
+The API's published shape is saved in `docs/api/openapi.json` (the website builds its types from
+it); `tests/test_openapi_snapshot.py` fails when it changes by accident. After a deliberate change:
+`python scripts/export_openapi.py`, with the locked package versions, and commit the new file.
 
 The replies carry the screen's own words from `artemis/screen_text.py` (plan item 4.7,
 `docs/screen-checklist.md`), so the website only displays them: `banners` (level and text),
