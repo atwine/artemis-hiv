@@ -20,7 +20,6 @@ import pandas as pd
 import streamlit as st
 
 from artemis.rules.checks import Alert
-from modules.embedder import Embedder, EmbedderConfig
 from modules.explanation_generator import ExplanationResult
 
 
@@ -34,11 +33,11 @@ from artemis.ai.client import (
 from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
-from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
-from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store, index_collection_name
+from artemis.config import EMBEDDING_MODEL, GUIDELINE_PATHS, guideline_search
+from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.patient.labs import TEST_UNITS, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES
-from artemis.patient.new_case import CaseForm, build_case_record
+from artemis.patient.new_case import PREVIOUS_ART_COLUMNS, VISIT_TYPES, CaseForm, build_case_record, previous_art_from_rows
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
@@ -74,23 +73,7 @@ from dotenv import load_dotenv  # noqa: E402
 
 load_dotenv(PROJECT_ROOT / ".env", override=False)
 
-# Rationale: Markdown conversions of the guideline PDFs preserve table structures
-# that pypdf extraction drops. We now embed from the Markdown files instead of PDFs.
-GUIDELINE_MD_DIR = PROJECT_ROOT / "Data" / "MarkDown Files"
-# Only the registered guidelines of the practice country: Ugandan guidance only (owner, 2026-11-25).
-GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY)
-
-# Rationale: persistent Chroma collections keep old indexed chunks; bump this
-# when the ingestion/cleaning/chunking logic changes to force a fresh collection.
-# Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
-# Version 3 (G36): page numbers are the guideline's printed pages.
-GUIDELINE_INDEX_VERSION = 3
-# The search model that turns guideline text and queries into meanings (one setting the app and
-# the scripts share). Phase 2B fix 5d tried BAAI/bge-small-en-v1.5 (512 word-pieces) and dropped it
-# by its keep rule; fix 5f tried Qwen/Qwen3-Embedding-0.6B and dropped it the same way (it found
-# more passages but the AI caught fewer problems). The index is per model, so changing it builds
-# a fresh one.
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+# The guideline files, search model and index now live in artemis/config.py (plan 4C.1).
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
 CUSTOM_PATIENTS_PATH = Path(
     os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json"
@@ -132,33 +115,9 @@ def _save_cases(cases_file_ok: bool, items: List[Dict[str, Any]], what: str) -> 
         return False
 
 
-@st.cache_resource
-def _get_embedder(model_name: str, *, version: int = 2) -> Embedder:
-    # Rationale: embedding model load is expensive; cache the instance.
-    return Embedder(EmbedderConfig(model_name=model_name))
-
-
-@st.cache_resource
-def _get_rag_engine(
-    *,
-    prefer_chroma: bool,
-    embedding_model_name: str,
-    engine_version: int = 3,
-) -> RagEngine:
-    # Rationale: keep a single vector store + embedder + engine per session.
-    embedder = _get_embedder(embedding_model_name, version=2)
-    # One stored index per search model and guideline text: an edited file gets a fresh one (G37).
-    vector_store = create_vector_store(
-        project_root=PROJECT_ROOT,
-        prefer_chroma=prefer_chroma,
-        collection_name=index_collection_name(embedding_model_name, GUIDELINE_PATHS, GUIDELINE_INDEX_VERSION),
-    )
-    return RagEngine(
-        project_root=PROJECT_ROOT,
-        guideline_paths=GUIDELINE_PATHS,
-        embedder=embedder,
-        vector_store=vector_store,
-    )
+def _get_rag_engine(*, prefer_chroma: bool, embedding_model_name: str) -> RagEngine:
+    """The guideline search the backend uses too (artemis/config.py); one per process."""
+    return guideline_search(embedding_model_name, prefer_chroma=prefer_chroma)
 
 
 def _init_session_state() -> None:
@@ -186,8 +145,6 @@ def _run_analysis(
     rag = _get_rag_engine(
         prefer_chroma=prefer_chroma,
         embedding_model_name=embedding_model_name,
-        # Rationale: cache-bust to refresh vector_store Chroma filter fix and related changes.
-        engine_version=5,
     )
     if GUIDELINE_PATHS:
         rag.ensure_indexed()
@@ -326,6 +283,12 @@ def main() -> None:
         new_patient_id = st.text_input("Patient Identifier", key="new_case_patient_id")
         new_name = st.text_input("Name (made up, optional)", key="new_case_name")
 
+        _visit_col1, _visit_col2 = st.columns(2)
+        with _visit_col1:
+            new_visit_date = st.date_input("Visit date", value=datetime.date.today(), key="new_case_visit_date")
+        with _visit_col2:
+            new_visit_type = st.selectbox("Visit type", options=["", *VISIT_TYPES], key="new_case_visit_type")
+
         col1, col2 = st.columns(2)
         with col1:
             new_age = st.number_input(
@@ -349,6 +312,29 @@ def main() -> None:
             REGIMEN_CHOICES,
             key="new_case_art_regimen",
             help="Pick a combination (TLD = TDF + 3TC + DTG) or the single drugs.",
+        )
+
+        st.caption(
+            "Optional: previous ART, one row per regimen. Drugs from the list above, separated by "
+            "commas (e.g. TLE, or AZT, 3TC, NVP), with the dates it started and ended."
+        )
+        new_previous_art_rows = st.data_editor(
+            pd.DataFrame(
+                {
+                    "drugs": pd.Series(dtype="object"),
+                    "start_date": pd.Series(dtype="datetime64[ns]"),
+                    "end_date": pd.Series(dtype="datetime64[ns]"),
+                }
+            )[PREVIOUS_ART_COLUMNS],
+            key="new_case_previous_art",
+            num_rows="dynamic",
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "drugs": st.column_config.TextColumn("Drugs", help="e.g. TLE, or AZT, 3TC, NVP"),
+                "start_date": st.column_config.DateColumn("Started", format="YYYY-MM-DD"),
+                "end_date": st.column_config.DateColumn("Ended", format="YYYY-MM-DD"),
+            },
         )
 
         new_other_meds = st.text_area(
@@ -409,6 +395,13 @@ def main() -> None:
                 },
             )
 
+        new_todays_note = st.text_area(
+            "Today's clinical note",
+            key="new_case_todays_note",
+            height=80,
+            help="The note for today's visit; the visit checks read it.",
+        )
+
         st.markdown("**Today's laboratory results**")
         new_todays_lab_rows = _lab_table("new_case_today_labs", datetime.date.today())
         st.markdown("**Previous laboratory results**")
@@ -427,6 +420,9 @@ def main() -> None:
                     cols = list(table or {})
                     return [dict(zip(cols, vals)) for vals in zip(*(table[c] for c in cols))] if cols else []
 
+                previous_art, art_errors = previous_art_from_rows(
+                    editor_rows(_records(new_previous_art_rows), PREVIOUS_ART_COLUMNS)
+                )
                 # One builder for this form and the API (artemis/patient/new_case.py), same rules.
                 patient_record, case_errors = build_case_record(
                     CaseForm(
@@ -445,9 +441,14 @@ def main() -> None:
                             for table, source in ((new_todays_lab_rows, "today"), (new_previous_lab_rows, "previous"))
                             for row in editor_rows(_records(table))
                         ],
+                        visit_date=new_visit_date,
+                        visit_type=new_visit_type or "",
+                        previous_art=previous_art,
+                        todays_note=new_todays_note or "",
                     ),
                     today=datetime.date.today(),
                 )
+                case_errors = art_errors + case_errors
                 if case_errors:
                     for _e in case_errors:
                         st.error(_e)

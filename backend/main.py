@@ -22,8 +22,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session
 
 from artemis import visit_record
-from artemis.patient.labs import read_lab_entries, read_lab_notes
-from artemis.patient.new_case import CaseForm, build_case_record
+from artemis.patient.labs import TEST_NAMES, TEST_UNITS, read_lab_entries, read_lab_notes
+from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
+from artemis.patient.new_case import VISIT_TYPES, CaseForm, PreviousArt, build_case_record
 from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import records
@@ -43,12 +44,15 @@ from backend.models import (
     DecisionsResponse,
     FinalizeRequest,
     FinalizeResponse,
+    FormChoices,
+    LabTestChoice,
     LabNote,
     LabResult,
     NewCase,
     PatientDetail,
     PatientRecord,
     PatientSummary,
+    RegimenChoice,
     SavedVisit,
     VisitCheckRequest,
     VisitCheckResponse,
@@ -369,6 +373,15 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             date=schedule.date.isoformat(), appointments=rows, counts=day_counts(rows),
         )
 
+    @app.get("/api/form-choices", response_model=FormChoices, dependencies=[Depends(require("form_choices", "view"))])
+    def form_choices() -> FormChoices:
+        """The add-case form's pick lists, so the website offers only what add-case accepts."""
+        return FormChoices(
+            art_regimens=[RegimenChoice(choice=c, drugs=COMBINATIONS.get(c, [c])) for c in REGIMEN_CHOICES],
+            lab_tests=[LabTestChoice(test=t, name=TEST_NAMES[t], units=units) for t, units in TEST_UNITS.items()],
+            visit_types=list(VISIT_TYPES),
+        )
+
     @app.post("/api/patients", response_model=PatientDetail, status_code=201, dependencies=[
         Depends(require("patients", "create")),
     ])
@@ -380,6 +393,8 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             art_regimen=body.art_regimen, other_medications=body.other_medications, complaints=body.complaints,
             examination_findings=body.examination_findings, prior_history=body.prior_history,
             lab_rows=[(r.model_dump(exclude={"when"}), r.when) for r in body.labs],
+            visit_date=body.visit_date, visit_type=body.visit_type or "", todays_note=body.todays_note,
+            previous_art=[PreviousArt(regimen=a.regimen, start_date=a.start_date, end_date=a.end_date) for a in body.previous_art],
         )
         record, errors = build_case_record(form, today=datetime.date.today())
         if errors:

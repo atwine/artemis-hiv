@@ -110,6 +110,9 @@ CASES: List[Case] = [
     Case("POST", "/api/patients", "local", "/api/patients", DENY, "an ID already in use is refused", body={**NEW_CASE, "patient_id": "P001"}),
     Case("POST", "/api/patients", "website", "/api/patients", DENY, "website: patients = -", body=NEW_CASE),
     Case("POST", "/api/patients", "rebinding", "/api/patients", DENY, "rebinding is refused by the Host check", body=NEW_CASE),
+    Case("GET", "/api/form-choices", "local", "/api/form-choices", ALLOW, "local: form_choices = view(all)"),
+    Case("GET", "/api/form-choices", "website", "/api/form-choices", DENY, "website: form_choices = - (owner: this laptop only)"),
+    Case("GET", "/api/form-choices", "rebinding", "/api/form-choices", DENY, "rebinding is refused by the Host check"),
 ]
 
 

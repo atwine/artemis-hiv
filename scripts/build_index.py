@@ -23,14 +23,14 @@ def main() -> int:
 
     load_dotenv(ROOT / ".env")
     started = time.perf_counter()
-    import app  # the app's own engine and settings, so both search the same index
+    from artemis import config  # the guideline search the backend uses too
 
-    rag = app._get_rag_engine(prefer_chroma=True, embedding_model_name=app.EMBEDDING_MODEL, engine_version=5)
+    rag = config.guideline_search()
     if not rag.search_ready:
-        print("The search model did not load, so nothing was built (see the app log).")
+        print("The search model did not load, so nothing was built (see the log).")
         return 1
-    added = rag.ensure_indexed() if app.GUIDELINE_PATHS else 0
-    print(f"{app.EMBEDDING_MODEL}: {added} passage(s) embedded; ready in {time.perf_counter() - started:.1f} s")
+    added = rag.ensure_indexed() if config.GUIDELINE_PATHS else 0
+    print(f"{config.EMBEDDING_MODEL}: {added} passage(s) embedded; ready in {time.perf_counter() - started:.1f} s")
     return 0
 
 

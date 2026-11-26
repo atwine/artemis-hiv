@@ -1,11 +1,14 @@
 # Access rules: ARTEMIS-HIV backend
 
-Last confirmed by the owner on 2026-11-26 (Phase 4, plan item 4.0; step 2 routes added the same day).
+Last confirmed by the owner on 2026-11-26 (Phase 4, plan item 4.0; step 2 routes and the add-case
+form's pick lists added the same day).
 
 The backend (`backend/`) is a local tool. It has no logins yet and holds only made-up
 (synthetic) patients. The rules below are about where a request comes from, not who is logged
 in. Logins come with the Next.js frontend (Phase 5), before anyone but the owner uses the app;
-this file gets redone then.
+this file gets redone then. Every route's rule also gets redone if the backend is ever deployed
+off this laptop (for example to Railway): "this laptop only" means nothing on a server (owner,
+2026-11-26).
 
 ## 1. Data
 
@@ -15,6 +18,7 @@ this file gets redone then.
 | visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome) and each acknowledge/override decision | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
 | clinic_day | the demo day's schedule: made-up clinic, clinician, date, appointment times and patient ids, kept as a data file in the repo | internal (synthetic only) |
+| form_choices | the add-case form's pick lists: ART combinations and drugs, lab tests with their names and units, visit types (from the code) | public |
 
 ## 2. Roles
 
@@ -37,12 +41,16 @@ How each is told apart, before any route runs (`backend/access.py`):
 
 ## 3. Permission grid
 
-| Role | patients | visit_records | guidelines | clinic_day |
-|---|---|---|---|---|
-| local | view(all), create(all) | view(all), create(all) | view(all) | view(all) |
-| network | - | - | - | - |
-| website | - | - | - | - |
-| anonymous | - | - | - | - |
+| Role | patients | visit_records | guidelines | clinic_day | form_choices |
+|---|---|---|---|---|---|
+| local | view(all), create(all) | view(all), create(all) | view(all) | view(all) | view(all) |
+| network | - | - | - | - | - |
+| website | - | - | - | - | - |
+| anonymous | - | - | - | - | - |
+
+The pick lists hold nothing private, but they follow the same rule as every other route
+except the health check (owner, 2026-11-26: "A, this laptop only"), so there is one rule to
+keep track of.
 
 Nobody can edit or delete patients, visit records or the schedule through the backend
 (owner, 2026-11-26). Visit records are written once and never changed: a new decision is a new
@@ -69,6 +77,7 @@ refused, and each case has size limits. The schedule changes only by editing its
 | GET | /api/clinic-day | clinic_day | view |
 | GET | /api/clinic-day | patients | view |
 | GET | /api/clinic-day | visit_records | view |
+| GET | /api/form-choices | form_choices | view |
 
 `POST /api/patients/{patient_id}/visits` runs the visit check. It can call the AI model, which
 can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`, view).
