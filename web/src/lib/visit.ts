@@ -1,5 +1,5 @@
 // Plain functions for Finalize (S6a) and the saved visit record (S6b).
-import type { DecisionOut, VisitCheck } from "./api/client";
+import type { DecisionOut } from "./api/client";
 import { clock } from "./dates.ts";
 import type { DayAppointment } from "./day.ts";
 
@@ -22,19 +22,4 @@ export function stillToReview(alertIds: string[], decided: Set<string>): string 
   if (!open.length) return null;
   if (open.length === 1) return `Alert ${open[0]} still needs Accept or Override.`;
   return `Alerts ${open.slice(0, -1).join(", ")} and ${open[open.length - 1]} still need Accept or Override.`;
-}
-
-const AI_REVIEW_WORDS: Record<VisitCheck["ai_review"], string> = {
-  ok: "Complete",
-  not_run: "Switched off for this check",
-  failed: "Failed: the model server did not answer",
-  unreadable: "Failed: the reply could not be read",
-  cut_off: "Incomplete: the reply was cut off",
-  partly_read: "Incomplete: part of the reply could not be read",
-  search_unavailable: "Not run: guideline search unavailable",
-};
-
-/** How the AI review ended, for the record (S6b's "AI review" row). */
-export function aiReviewWords(outcome: VisitCheck["ai_review"]): string {
-  return AI_REVIEW_WORDS[outcome];
 }

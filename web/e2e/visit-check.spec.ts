@@ -123,6 +123,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   // The saved visit record (S6b): what was checked and what was decided, read only.
   const visitRecord = page.getByRole("region", { name: "Visit record" });
   await expect(visitRecord.getByRole("heading", { level: 2 })).toContainText(/^Visit finalized \d\d:\d\d\./);
+  await expect(visitRecord).toContainText(reply.ai_review_label); // the API's label for how the AI review ended
   await expect(visitRecord.getByRole("list", { name: "Decisions" })).toContainText(/Accepted \d\d:\d\d/);
   await expect(page.getByText(/^AMBER · FINALIZED$/)).toBeVisible();
   await expect(tray.getByRole("button", { name: "Accept alert" })).toHaveCount(0);

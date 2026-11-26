@@ -5,7 +5,7 @@ import { StatusShape } from "@/components/frame/status";
 import type { DecisionOut, VisitCheck } from "@/lib/api/client";
 import { clock } from "@/lib/dates";
 import { firstName } from "@/lib/alerts";
-import { aiReviewWords, decisionLine, stillToReview } from "@/lib/visit";
+import { decisionLine, stillToReview } from "@/lib/visit";
 import { cn } from "@/lib/utils";
 
 function Done() {
@@ -92,7 +92,7 @@ export function RecordView({
     ["Visit", check.visit_id],
     ["Checks run", `${clock(check.saved_at)} · finalized ${clock(finalizedAt)}`],
     ["Model", check.model ?? "None: rule checks only"],
-    ["AI review", aiReviewWords(check.ai_review)],
+    ["AI review", check.ai_review_label],
   ];
   return (
     <section aria-label="Visit record" className="flex flex-col gap-6">

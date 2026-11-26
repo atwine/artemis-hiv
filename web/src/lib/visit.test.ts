@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import type { DayAppointment } from "./day.ts";
-import { aiReviewWords, decisionLine, nextPatient, stillToReview } from "./visit.ts";
+import { decisionLine, nextPatient, stillToReview } from "./visit.ts";
 
 const appt = (patient_id: string, time: string, state: DayAppointment["state"]): DayAppointment => ({
   time, patient_id, name: `${patient_id} Name`, age_years: 30, sex: "F", regimen: "TLD", state,
-  visit_id: null, status: null, ai_review: null, alert_count: 0, reviewed_count: 0, finalized_at: null,
+  visit_id: null, status: null, ai_review: null, ai_review_label: null, ai_review_card_label: null, alert_count: 0, reviewed_count: 0, finalized_at: null,
 });
 
 test("a decision in the record: what was decided, when, and why", () => {
@@ -29,10 +29,4 @@ test("which alerts still need an answer, by number", () => {
   assert.equal(stillToReview(["a", "b", "c", "d", "e"], new Set(["a", "d"])), "Alerts 2, 3 and 5 still need Accept or Override.");
   assert.equal(stillToReview(["a"], new Set()), "Alert 1 still needs Accept or Override.");
   assert.equal(stillToReview(["a"], new Set(["a"])), null);
-});
-
-test("the AI review in the record, in words", () => {
-  assert.equal(aiReviewWords("ok"), "Complete");
-  assert.equal(aiReviewWords("not_run"), "Switched off for this check");
-  assert.equal(aiReviewWords("search_unavailable"), "Not run: guideline search unavailable");
 });
