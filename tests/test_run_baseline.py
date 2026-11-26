@@ -73,4 +73,4 @@ def test_the_baseline_script_runs_a_patient_end_to_end(monkeypatch, tmp_path) ->
         rb.app.st = saved_st
     assert out["patient_id"] == "P001"
     assert [a["title"] for a in out["rule_alerts"]] == ["Creatinine monitoring overdue while on TDF"]
-    assert out["alerts"] and out["overall_status"] == "YELLOW"
+    assert out["alerts"] and out["overall_status"] == "AMBER"

@@ -8,7 +8,8 @@ How it stays true:
 
 - **The wording lives in one place**, `artemis/screen_text.py`. Every screen takes its text from
   there instead of writing its own. The API sends that text; the website displays it.
-- **The lists live in one place**, `artemis/visit.py`: `AI_REVIEW_OUTCOMES` and `STATUSES`. A visit
+- **The lists live in one place**, `artemis/statuses.py` (re-exported by `artemis/visit.py`, and
+  small so scripts can read it fast): `AI_REVIEW_OUTCOMES` and `STATUSES`. A visit
   result with any other value is refused (`AnalysisResult.__post_init__`), and the API's types are
   built from these lists, like the override reasons in `artemis/review.py`.
 - **A test keeps this file honest**: `tests/test_screen_checklist.py` fails if a result or status is
@@ -32,7 +33,7 @@ How it stays true:
 | Status | When | The screen must show |
 |---|---|---|
 | `RED` | At least one high or critical alert | Red banner with the number of alerts |
-| `YELLOW` | Alerts, none high or critical | Amber banner with the number of alerts |
+| `AMBER` | Alerts, none high or critical | Amber banner with the number of alerts (called YELLOW before 2026-11-26; older records read as AMBER) |
 | `GREEN` | No alerts and the AI review finished cleanly or was off | Green "no alerts" (AI ran) or blue "no rule check triggered, AI off" |
 | `INCOMPLETE` | No alerts, but the AI review did not finish cleanly | Blue "no rule check was triggered", under the AI review's own banner; never green |
 

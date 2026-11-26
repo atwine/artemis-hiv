@@ -20,6 +20,8 @@ from sqlalchemy import JSON, Column, DateTime, Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, Session, SQLModel, select
 
+from artemis.statuses import status_name
+
 Json = JSON().with_variant(JSONB(), "postgresql")
 
 
@@ -88,6 +90,7 @@ def json_safe(value: Any) -> Any:
 
 def check_from_entry(entry: Dict[str, Any], *, origin: str) -> VisitCheck:
     e = json_safe(entry)
+    e["status"] = status_name(e.get("status"))  # an older file may say YELLOW (owner, 2026-11-26)
     return VisitCheck(
         **{k: e.get(k) for k in _CHECK_FIELDS},
         ai_review=e.get("ai_review") or "not_run",

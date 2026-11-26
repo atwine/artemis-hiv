@@ -47,10 +47,9 @@ class AnalysisOptions:
     agentic: bool = False
 
 
-# Every way the AI review can end, and every overall status: the API and the screens are built
-# from these lists, and AnalysisResult refuses any other value (docs/screen-checklist.md).
-AI_REVIEW_OUTCOMES = ("not_run", "ok", "failed", "unreadable", "cut_off", "partly_read", "search_unavailable")
-STATUSES = ("GREEN", "YELLOW", "RED", "INCOMPLETE")
+# Every way the AI review can end, and every overall status, now in artemis/statuses.py (a file
+# with no heavy imports); re-exported here so `from artemis.visit import STATUSES` keeps working.
+from artemis.statuses import AI_REVIEW_OUTCOMES, STATUSES, status_name  # noqa: E402,F401
 
 
 @dataclass
@@ -82,7 +81,7 @@ class AnalysisResult:
 
 
 def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -> str:
-    """GREEN, YELLOW or RED from the alerts; INCOMPLETE when nothing was found but the AI review
+    """GREEN, AMBER or RED from the alerts; INCOMPLETE when nothing was found but the AI review
     did not finish cleanly (failed, unreadable, cut off or partly read)."""
     if not alerts:
         return "GREEN" if screening_outcome in {"ok", "not_run"} else "INCOMPLETE"
@@ -101,7 +100,7 @@ def compute_overall_status(alerts: List[Alert], screening_outcome: str = "ok") -
 
     if max_rank >= 2:
         return "RED"
-    return "YELLOW"
+    return "AMBER"
 
 
 def _retrieve(rag: RagEngine, *, context: Any, alert: Alert, top_k: int) -> List[VectorSearchResult]:

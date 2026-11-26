@@ -74,7 +74,7 @@ def test_labels_say_what_happened(cases: Path) -> None:
     ai = Alert("A1", "Missing viral load", "No viral load in 6 months.", {"type": "llm_screening", "severity": "moderate"}, "", source="ai")
     at.session_state["analysis_ran"] = True
     at.session_state["analysis_patient_id"] = "P001"
-    at.session_state["analysis_status"] = "YELLOW"
+    at.session_state["analysis_status"] = "AMBER"
     at.session_state["analysis_screening_outcome"] = "ok"
     at.session_state["analysis_alerts"] = [ai]
     at.session_state["analysis_results"] = [

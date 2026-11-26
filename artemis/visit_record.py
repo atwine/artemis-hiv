@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from artemis.plan.flow import AgenticResult
 from artemis.rules.checks import Alert
+from artemis.statuses import status_name
 from modules.explanation_generator import ExplanationResult
 from artemis.guidelines.vector_store import VectorSearchResult
 
@@ -202,7 +203,7 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
         "analysis_visit_id": checks.get("visit_id"),
         "analysis_saved_at": checks.get("saved_at"),
         "analysis_restored": True,
-        "analysis_status": checks.get("status"),
+        "analysis_status": status_name(checks.get("status")),
         "analysis_screening_outcome": checks.get("ai_review") or "not_run",
         "analysis_alerts": alerts,
         "analysis_results": results,

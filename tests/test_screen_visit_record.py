@@ -55,7 +55,7 @@ def test_finalize_saves_each_decision_and_other_needs_a_comment(records: Path) -
     at.session_state["analysis_ran"] = True
     at.session_state["analysis_patient_id"] = "P001"
     at.session_state["analysis_visit_id"] = "visit-1"
-    at.session_state["analysis_status"] = "YELLOW"
+    at.session_state["analysis_status"] = "AMBER"
     at.session_state["analysis_screening_outcome"] = "ok"
     at.session_state["analysis_alerts"] = alerts
     at.session_state["analysis_results"] = [

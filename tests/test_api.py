@@ -377,7 +377,7 @@ def test_result_and_status_types_come_from_the_one_list():
     assert get_args(Status) == STATUSES
 
 
-@pytest.mark.parametrize("status", ["GREEN", "YELLOW", "RED", "INCOMPLETE"])
+@pytest.mark.parametrize("status", ["GREEN", "AMBER", "RED", "INCOMPLETE"])
 @pytest.mark.parametrize("outcome", ["not_run", "ok", "failed", "unreadable", "cut_off", "partly_read", "search_unavailable"])
 def test_every_result_and_status_can_be_sent(status, outcome):
     from artemis.visit import AI_REVIEW_OUTCOMES, STATUSES

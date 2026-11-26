@@ -63,8 +63,8 @@ def status_banners(status: Optional[str], screening_outcome: str, alert_count: i
 
     if status == "RED":
         banners.append(("error", f"RED: {alert_count} alert(s) to consider (at least one high/critical issue)."))
-    elif status == "YELLOW":
-        banners.append(("warning", f"YELLOW: {alert_count} alert(s) to consider."))
+    elif status == "AMBER":
+        banners.append(("warning", f"AMBER: {alert_count} alert(s) to consider."))
     elif status == "INCOMPLETE":
         banners.append(("info", "No rule check was triggered."))
     elif status == "GREEN" and screening_outcome == "ok":

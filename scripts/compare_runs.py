@@ -18,6 +18,9 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from artemis.statuses import status_name  # noqa: E402  (no heavy imports)
+
 Run = Dict[str, Any]
 
 
@@ -45,7 +48,8 @@ def _sources(r: Run) -> str:
 
 
 MEASURES: Dict[str, Callable[[Run], Any]] = {
-    "status": lambda r: r.get("overall_status"),
+    # Older runs say YELLOW for what is now AMBER (owner, 2026-11-26): the same result.
+    "status": lambda r: status_name(r.get("overall_status")),
     "alerts": lambda r: len(r.get("alerts") or []),
     "rule alerts": lambda r: len(r.get("rule_alerts") or []),
     "rule alerts kept on screen": lambda r: sum(
