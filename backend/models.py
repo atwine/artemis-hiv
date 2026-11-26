@@ -14,13 +14,14 @@ from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from artemis.review import OVERRIDE_REASONS
+from artemis.visit import AI_REVIEW_OUTCOMES, STATUSES
 
 # Built from the one list the Streamlit screen uses too, so the two can't drift apart.
 OverrideReason = Literal[tuple(OVERRIDE_REASONS)]  # type: ignore[valid-type]
 
-Status = Literal["GREEN", "YELLOW", "RED", "INCOMPLETE"]
-# What happened to the AI review (artemis.visit.AnalysisResult.screening_outcome).
-AiReview = Literal["not_run", "ok", "failed", "unreadable", "cut_off", "partly_read"]
+# Built from artemis/visit.py's lists, which docs/screen-checklist.md covers one by one (plan 4.7).
+Status = Literal[STATUSES]  # type: ignore[valid-type]
+AiReview = Literal[AI_REVIEW_OUTCOMES]  # type: ignore[valid-type]  # how the AI review ended
 AlertKind = Literal["rule", "ai"]
 Action = Literal["Acknowledge", "Override"]
 
@@ -123,7 +124,9 @@ class Passage(_CdsOut):
     chunk_id: str
     text: str
     source_path: Optional[str] = None
-    page_number: Optional[int] = None
+    page_number: Optional[int] = None  # the guideline's printed page (G36)
+    # The screen's citation, e.g. "Uganda HIV guidelines 2022, p.255" (screen_text.citation_line).
+    citation: Optional[str] = None
     metadata: Dict[str, Any] = {}
 
 
@@ -133,6 +136,11 @@ class CardExtension(_CdsOut):
     severity: Optional[str] = None
     explanation: str = ""
     passages: List[Passage] = []
+    # The screen's own words (artemis/screen_text.py): "Alert (Rule check): ...", and the
+    # reference list with its heading.
+    heading: str
+    references_heading: str
+    references: List[str] = []
 
 
 class Card(_CdsOut):
@@ -148,6 +156,13 @@ class Card(_CdsOut):
 
 
 # --- Visit check ------------------------------------------------------------------------
+
+
+class Banner(BaseModel):
+    """One coloured banner above a visit's results (screen_text.status_banners)."""
+
+    level: Literal["success", "info", "warning", "error"]  # green, blue, amber, red
+    text: str
 
 
 class VisitCheckRequest(BaseModel):
@@ -178,6 +193,10 @@ class VisitCheckResponse(BaseModel):
     plan: Optional[Plan]
     # False when the visit record couldn't be saved; the results are still shown, as in the app.
     record_saved: bool
+    # The screen's own words for this result (artemis/screen_text.py), shown as they are.
+    banners: List[Banner]
+    disclaimer: str
+    finalize_note: Optional[str]  # FINALIZE_BLOCKED while an alert waits for a decision
 
 
 # --- Decisions --------------------------------------------------------------------------
@@ -212,3 +231,4 @@ class DecisionsResponse(BaseModel):
     decisions: List[DecisionOut]
     all_resolved: bool
     unresolved: List[str]
+    finalize_note: Optional[str]  # FINALIZE_BLOCKED while an alert waits for a decision

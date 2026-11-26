@@ -155,8 +155,10 @@ def test_indicator_follows_severity(severity, indicator):
 def test_long_title_is_cut_to_140(api):
     from backend.cards import card_from_saved
 
-    alert = {"alert_id": "a", "title": "x" * 300, "message": "m", "evidence": {}, "source": "rule", "severity": None}
-    card = card_from_saved(alert, {"retrieved": [], "explanation": {"text": "", "used_llm": False}}, visit_id="v1")
+    from artemis.rules.checks import Alert
+
+    alert = Alert(alert_id="a", title="x" * 300, message="m", evidence={}, query_hint="")
+    card = card_from_saved(alert, [], "", severity=None, visit_id="v1")
     assert len(card.summary) == 140
     assert card.summary.endswith("…")
 
@@ -360,3 +362,120 @@ def test_a_changed_mind_keeps_both_and_the_latest_counts(api):
     assert rows[1].title == "Creatinine monitoring overdue while on TDF"
     assert rows[1].source == "rule"
 
+
+
+# Plan item 4.7: the API follows docs/screen-checklist.md and sends artemis/screen_text.py's wording.
+
+
+def test_result_and_status_types_come_from_the_one_list():
+    from typing import get_args
+
+    from artemis.visit import AI_REVIEW_OUTCOMES, STATUSES
+    from backend.models import AiReview, Status
+
+    assert get_args(AiReview) == AI_REVIEW_OUTCOMES
+    assert get_args(Status) == STATUSES
+
+
+@pytest.mark.parametrize("status", ["GREEN", "YELLOW", "RED", "INCOMPLETE"])
+@pytest.mark.parametrize("outcome", ["not_run", "ok", "failed", "unreadable", "cut_off", "partly_read", "search_unavailable"])
+def test_every_result_and_status_can_be_sent(status, outcome):
+    from artemis.visit import AI_REVIEW_OUTCOMES, STATUSES
+    from backend.models import VisitCheckResponse
+
+    assert outcome in AI_REVIEW_OUTCOMES and status in STATUSES
+    VisitCheckResponse(
+        visit_id="v", patient_id="P", visit_date="2026-01-22", saved_at="2026-01-22T08:00:00+00:00",
+        status=status, ai_review=outcome, model=None, cards=[], plan=None, record_saved=True,
+        banners=[], disclaimer="d", finalize_note=None,
+    )
+
+
+def test_banners_and_disclaimer_are_the_screens_own_words(api):
+    from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED, status_banners
+
+    body = _check(api).json()
+    expected = status_banners(body["status"], body["ai_review"], len(body["cards"]))
+    assert [(b["level"], b["text"]) for b in body["banners"]] == expected
+    assert body["disclaimer"] == DISCLAIMER
+    assert body["finalize_note"] == FINALIZE_BLOCKED  # alerts are waiting for a decision
+
+
+def test_card_heading_and_references_are_the_screens_own_words(api):
+    from artemis.screen_text import alert_heading, alert_references, citation_line
+
+    visit = _check(api).json()
+    from backend.records import VisitCheck
+
+    with Session(api.engine) as s:
+        from artemis.visit_record import restore
+        from backend.records import entry_from_check
+
+        restored = restore(entry_from_check(s.get(VisitCheck, visit["visit_id"])))
+    for card, result in zip(visit["cards"], restored["analysis_results"]):
+        alert = result["alert"]
+        heading, lines = alert_references(alert, result["retrieved"])
+        assert card["extension"]["heading"] == alert_heading(alert)
+        assert card["extension"]["references_heading"] == heading
+        assert card["extension"]["references"] == lines
+        for p in card["extension"]["passages"]:
+            expected = citation_line(p["source_path"], p["page_number"]) if p["page_number"] is not None else None
+            assert p["citation"] == expected
+
+
+def test_ai_card_reference_names_the_guideline_and_printed_page(api):
+    card = next(c for c in _check(api).json()["cards"] if c["extension"]["alert_id"] == "P001_001")
+    assert card["extension"]["heading"] == "Alert (AI review): Missing Viral Load Monitoring"
+    assert card["extension"]["references"]
+    assert all(", p." in line for line in card["extension"]["references"])
+
+
+def test_search_model_not_loaded_turns_the_ai_off_and_says_so(api):
+    """docs/screen-checklist.md, search_unavailable: red banner, AI review and plan off, rule
+    alerts with no guideline references."""
+    from artemis.visit import SEARCH_UNAVAILABLE
+    from tests.api_fakes import fake_search
+
+    broken = fake_search(ready=False)
+    api.services.search = lambda: broken
+    r = _check(api, include_plan=True)
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["ai_review"] == "search_unavailable"
+    assert body["banners"][0]["level"] == "error"
+    assert SEARCH_UNAVAILABLE in body["banners"][0]["text"]
+    assert api.model.calls == []
+    assert body["cards"] and all(c["extension"]["kind"] == "rule" for c in body["cards"])
+    assert all(c["extension"]["passages"] == [] and c["extension"]["references"] == [] for c in body["cards"])
+    # The plan step didn't run, so there's no plan and no "could not be produced" message; the
+    # red banner says why, as on the Streamlit screen.
+    assert body["plan"] is None
+
+
+def test_a_plan_step_that_ran_and_failed_says_so():
+    from backend.cards import plan_from_entry
+
+    failed = plan_from_entry({"agentic_enabled": True, "plan": {"error": "boom", "type": "RuntimeError"}})
+    assert failed.error == "The management plan could not be produced."
+    assert "boom" not in failed.model_dump_json()
+    assert plan_from_entry({"agentic_enabled": True, "plan": None}) is None  # did not run
+    assert plan_from_entry({"agentic_enabled": False, "plan": None}) is None  # not asked for
+
+
+def test_finalize_note_clears_once_every_alert_is_decided(api):
+    from artemis.screen_text import FINALIZE_BLOCKED
+
+    visit = _check(api).json()
+    ids = [c["extension"]["alert_id"] for c in visit["cards"]]
+    first = _decide(api, visit["visit_id"], {"alert_id": ids[0], "action": "Acknowledge"}).json()
+    assert first["finalize_note"] == (FINALIZE_BLOCKED if len(ids) > 1 else None)
+    rest = _decide(api, visit["visit_id"], *[{"alert_id": i, "action": "Acknowledge"} for i in ids]).json()
+    assert rest["finalize_note"] is None
+
+
+def test_no_alerts_means_nothing_to_finalize(api):
+    api.services.patients = lambda: [{**next(p for p in read_patients() if p["patient_id"] == "P001"), "labs": {"creatinine": [{"date": "2026-01-01", "value_umol_per_l": 80}]}}]
+    body = _check(api, use_ai=False).json()
+    if body["cards"]:
+        pytest.skip("this patient still raises a rule alert")
+    assert body["finalize_note"] is None

@@ -12,7 +12,7 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 2 Preliminary evaluation | done, on `development` | |
 | 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
-| 4 Backend (FastAPI) | in progress on branch `claude/phase4-backend-1abc8a` | 4.0-4.2, 4.4, 4.5 done there, not merged; 4.3, 4.6, 4.7 and the Phase 4 check left |
+| 4 Backend (FastAPI) | in progress on branch `claude/phase4-backend-1abc8a` | 4.0-4.2, 4.4, 4.5, 4.7 done there (with `development` merged in), not merged back; 4.3, 4.6 and the Phase 4 check left |
 | 5 to 8 | not started | |
 
 `docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
@@ -290,30 +290,27 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
       place (today in ui/state.py, app.py and visit_record.restore); share one JSON bracket
       scanner (screening and plan_json); drop unused fields (deterministic_alerts, used_llm).
 
-- [ ] 4.7 (owner, 2026-11-26) The API follows `docs/screen-checklist.md`: its AI-review result and
+- [x] 4.7 (owner, 2026-11-26) The API follows `docs/screen-checklist.md`: its AI-review result and
       status types are built from `AI_REVIEW_OUTCOMES` and `STATUSES` in `artemis/visit.py` (which
       adds `search_unavailable`), and it sends the wording from `artemis/screen_text.py` (banners,
       alert headings, citation lines) so the website only displays it.
 
-Where it stands (2026-11-26): 4.0, 4.1, 4.2, 4.4 and 4.5 are done on branch
-`claude/phase4-backend-1abc8a` (92 backend tests pass there) and are ticked on that branch, not
-here yet. Before it merges, the branch takes in `development` (Phase 2B) and does 4.7, since its
-list of AI-review results lacks `search_unavailable`. 4.3 is no longer blocked by 2B; replacing
-Chroma with the simple saved search is an option there (2B.5).
-
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 
-Where it stands (2026-11-26): 4.0, 4.1, 4.2, 4.4 and 4.5 done on branch
-`claude/phase4-backend-1abc8a` (not pushed). The backend is in `backend/` (owner's pick; how to
-run it: `backend/README.md`). `ACCESS.md` holds the owner's rules: no logins yet, only the app's
-own pages on this laptop may call it, nothing is edited or deleted; `tests/test_access.py`
-proves them. Alerts go out as CDS Hooks cards with the cited passages under `extension`. The
-visit check calls `artemis.visit.run_visit_analysis` unchanged. Visit records go into Postgres
-17 in Docker (`backend/docker-compose.yml`, owner's pick) through SQLModel, with Alembic
-migrations; `scripts/import_visit_records.py` copies the Phase 1 files in (none existed yet).
-The Streamlit app still writes its own files. Waiting on Phase 2B: 4.3, the parts of 4.6 in the
-AI and plan code, and this phase's check. Open: a limit on repeated visit checks, before anyone
-else uses the app (ACCESS.md section 6).
+Where it stands (2026-11-26): 4.0, 4.1, 4.2, 4.4, 4.5 and 4.7 done on branch
+`claude/phase4-backend-1abc8a`, with `development` (Phase 2B) merged in; not pushed. The backend
+is in `backend/` (owner's pick; how to run it: `backend/README.md`). `ACCESS.md` holds the
+owner's rules: no logins yet, only the app's own pages on this laptop may call it, nothing is
+edited or deleted; `tests/test_access.py` proves them. Alerts go out as CDS Hooks cards with
+the cited passages, and every reply carries the screen's wording from `artemis/screen_text.py`
+(banners, headings, references, citation lines, disclaimer, finalize note); the result and
+status types come from `artemis/visit.py`'s lists, `search_unavailable` included. The visit
+check calls `artemis.visit.run_visit_analysis` unchanged. Visit records go into Postgres 17 in
+Docker (`backend/docker-compose.yml`, owner's pick) through SQLModel, with Alembic migrations;
+`scripts/import_visit_records.py` copies the Phase 1 files in (none existed yet). The Streamlit
+app still writes its own files. Left: 4.3 (keep the index; the owner kept Chroma in 2B.5, so
+ask before replacing it), 4.6, and this phase's check. Open: a limit on repeated visit checks,
+before anyone else uses the app (ACCESS.md section 6).
 
 ## Phase 5: Frontend (Next.js + shadcn)
 

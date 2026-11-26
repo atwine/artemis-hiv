@@ -25,7 +25,8 @@ from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
-from backend.cards import cards_from_entry, plan_from_entry
+from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED
+from backend.cards import banners_for, cards_from_entry, plan_from_entry
 from backend.decisions import BadDecision, decision_rows, summary
 from backend.models import (
     DecisionOut,
@@ -156,10 +157,12 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         except SQLAlchemyError as exc:
             # The results are still shown, as on the Streamlit screen (fix 9).
             logger.warning("Visit record not saved: %s", type(exc).__name__)
+        cards = cards_from_entry(entry)
         return VisitCheckResponse(
             visit_id=visit_id, patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
             saved_at=saved_at, status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
-            cards=cards_from_entry(entry), plan=plan_from_entry(entry), record_saved=saved,
+            cards=cards, plan=plan_from_entry(entry), record_saved=saved,
+            banners=banners_for(entry), disclaimer=DISCLAIMER, finalize_note=FINALIZE_BLOCKED if cards else None,
         )
 
     @app.post(
@@ -186,6 +189,9 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 for a, d in records.latest_decisions(session, visit_id).items()
             }
         decided, unresolved = summary([a.alert_id for a in alerts], latest)
-        return DecisionsResponse(visit_id=visit_id, decisions=decided, all_resolved=not unresolved, unresolved=unresolved)
+        return DecisionsResponse(
+            visit_id=visit_id, decisions=decided, all_resolved=not unresolved, unresolved=unresolved,
+            finalize_note=FINALIZE_BLOCKED if unresolved else None,
+        )
 
     return app

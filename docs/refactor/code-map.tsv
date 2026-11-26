@@ -200,9 +200,9 @@ backend/access.py	require	Makes a route check one permission before it runs.	sta
 backend/access.py	require.check	Refuses the request when the permission is missing.	stays	stays
 backend/access.py	role_of	Reads the caller's role that the access check left on the request.	stays	stays
 backend/access.py	visible_patients	Gives the patients a role may list.	stays	stays
-backend/cards.py	_passage	Turns one saved guideline passage into the shape a card carries.	stays	stays
+backend/cards.py	_passage	Turns one guideline passage into the shape a card carries, with its citation line.	stays	stays
 backend/cards.py	_summary	Shortens an alert title to the 140 characters a CDS Hooks card allows.	stays	stays
-backend/cards.py	card_from_saved	Turns one saved alert and its passages into a CDS Hooks card.	stays	stays
+backend/cards.py	card_from_saved	Turns one alert, its passages and explanation into a CDS Hooks card with the screen's heading and references.	stays	stays
 backend/cards.py	cards_from_entry	Turns a saved visit check's alerts into cards, refusing results that don't line up.	stays	stays
 backend/cards.py	indicator_for	Maps an alert's severity to a card's info, warning or critical.	stays	stays
 backend/cards.py	plan_from_entry	Gives the management plan from a saved visit check, or a plain message when it failed.	stays	stays
@@ -270,3 +270,4 @@ artemis/guidelines/vector_store.py	index_collection_name	Names the stored search
 artemis/screen_text.py	citation_line	Writes one guideline citation: the guideline's name and its printed page.	artemis/screen_text.py	moved
 artemis/visit.py	AnalysisResult.__post_init__	Refuses an AI review result or status that is not on the shared lists the screens are built from.	artemis/visit.py	moved
 artemis/screen_text.py	alert_heading	Writes an alert's heading, saying whether the AI review or a rule check raised it.	artemis/screen_text.py	moved
+backend/cards.py	banners_for	Gives the coloured banners above a visit's results, in the screen's own words (screen_text).	stays	stays

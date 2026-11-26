@@ -29,6 +29,11 @@ def _words(text: str) -> set:
 
 
 class FakeEmbedder:
+    loaded = True  # the search model loaded (RagEngine.search_ready); see fake_search(ready=False)
+
+    def __init__(self, loaded: bool = True) -> None:
+        self.loaded = loaded
+
     def encode(self, texts: List[str]) -> List[List[float]]:
         return [[0.0] for _ in texts]
 
@@ -51,9 +56,10 @@ class FakeStore(VectorStore):
         ]
 
 
-def fake_search() -> RagEngine:
+def fake_search(*, ready: bool = True) -> RagEngine:
+    """ready=False is a search model that did not load (G33): the AI review is switched off."""
     corpus = json.loads((GOLDEN / "corpus.json").read_text(encoding="utf-8"))
-    return RagEngine(project_root=ROOT, guideline_paths=[], embedder=FakeEmbedder(), vector_store=FakeStore(corpus))
+    return RagEngine(project_root=ROOT, guideline_paths=[], embedder=FakeEmbedder(loaded=ready), vector_store=FakeStore(corpus))
 
 
 class FakeModel:
