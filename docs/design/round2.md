@@ -42,3 +42,21 @@ Each builds the same workflow stages (clinic list, visit before checks, checks r
 review with override reason, plan comparison, finalize, saved record, INCOMPLETE, GREEN, add
 patient case), split into as many small screens as the budget needs, plus a cover with a flow
 map. No note signing anywhere: the final step is "Finalize visit".
+
+## Owner feedback on round 2 (Paper comments, 2026-11-27)
+
+- 08 Clinic Board: "I like this one, it's a good signal of design to follow ... make some
+  changes here and there." It becomes the lead direction.
+- 05 Note Co-pilot: kept, but "I can't tell where the clinician inputs their thoughts ... I
+  have a tough time following through: make it more obvious and remove the parts I don't
+  think will be necessary."
+- 07 Colleague Chat: "should be changed to something else: I don't like the design."
+- 09 Paper Care Card: "not this: please redo it with other signals in the design library."
+- 06 Ward Round Deck: "No! Not this one." Dropped.
+- 10 Tablet Bedside: "remove it completely." Its screens are deleted.
+- Working rule: at most two builder agents at a time, to save credits.
+
+Round 3: one builder reworks 05 and finishes 08; another replaces 07 and 09 with two new
+directions that keep what the owner liked in 08 (patient cards in clear columns, the visit
+opening as a sheet over the board, soft bands, one step at a time) but use different
+Design Library systems.
