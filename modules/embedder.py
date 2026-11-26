@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 import hashlib
 import math
+import os
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -29,10 +30,12 @@ class Embedder:
         try:
             if SentenceTransformer is not None:
                 # Safe weights only (safetensors): a pickled model file can run code when loaded.
+                # ARTEMIS_MODEL_DIR (set in .env) keeps the weights in the owner's folder on drive D.
                 self._model = SentenceTransformer(
                     self._config.model_name,
                     device=self._config.device,
                     model_kwargs={"use_safetensors": True},
+                    cache_folder=os.environ.get("ARTEMIS_MODEL_DIR") or None,
                 )
         except Exception:
             self._model = None
@@ -42,6 +45,15 @@ class Embedder:
     @property
     def model_name(self) -> str:
         return self._config.model_name
+
+    def encode_queries(self, texts: List[str]) -> List[List[float]]:
+        """Encode search questions. A model that ships a "query" instruction (Qwen3-Embedding, for
+        example) gets it, as its makers recommend; guideline passages go through encode() plain
+        (Phase 2B fix 5f)."""
+        prompts = getattr(self._model, "prompts", None) or {}
+        if self._model is not None and texts and "query" in prompts:
+            return self._model.encode(texts, prompt_name="query").tolist()
+        return self.encode(texts)
 
     def encode(self, texts: List[str]) -> List[List[float]]:
         """Encode texts into dense vectors.

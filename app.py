@@ -86,8 +86,10 @@ GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY
 GUIDELINE_INDEX_VERSION = 2
 # The search model that turns guideline text and queries into meanings (one setting the app and
 # the scripts share). Phase 2B fix 5d tried BAAI/bge-small-en-v1.5 (512 word-pieces) and dropped it
-# by its keep rule. The index is per model, so changing it builds a fresh one.
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+# by its keep rule. Fix 5f (under test): Qwen/Qwen3-Embedding-0.6B passed its search check
+# (eval/phase2b/search-5f-qwen3.json); GLM end to end decides it. The index is per model, so
+# changing it builds a fresh one.
+EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-0.6B"
 # Backward-compatible alias used by downstream code.
 GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
