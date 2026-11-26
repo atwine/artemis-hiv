@@ -74,3 +74,5 @@ Ranking: 1 = 09 Checklist Tray, 2 = 07 Day Rail, 3 = 08 Clinic Board (its first 
 
 Next: combinations. Put Clinic Board's S1 (board + list + add patient) into 09 and 07, each in
 its own style, then drop the Clinic Board page. Work continues with 07 and 09 only.
+
+Done (2026-11-27): the board-and-list first screen is in both 09 Checklist Tray and 07 Day Rail, each in its own style, with a Board | List switch; the writing box is now called "Clinical notes" (owner's pick). The Clinic Board page is dropped.
