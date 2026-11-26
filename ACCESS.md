@@ -1,6 +1,6 @@
 # Access rules: ARTEMIS-HIV backend
 
-Last confirmed by the owner on 2026-11-26 (Phase 4, plan item 4.0).
+Last confirmed by the owner on 2026-11-26 (Phase 4, plan item 4.0; step 2 routes added the same day).
 
 The backend (`backend/`) is a local tool. It has no logins yet and holds only made-up
 (synthetic) patients. The rules below are about where a request comes from, not who is logged
@@ -14,6 +14,7 @@ this file gets redone then.
 | patients | the synthetic test patients: notes, lab results, medicines (`Data/mock_patients.json`, `Data/custom_patients.json`) | sensitive: health (synthetic only) |
 | visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome) and each acknowledge/override decision | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
+| clinic_day | the demo day's schedule: made-up clinic, clinician, date, appointment times and patient ids, kept as a data file in the repo | internal (synthetic only) |
 
 ## 2. Roles
 
@@ -36,16 +37,17 @@ How each is told apart, before any route runs (`backend/access.py`):
 
 ## 3. Permission grid
 
-| Role | patients | visit_records | guidelines |
-|---|---|---|---|
-| local | view(all) | create(all) | view(all) |
-| network | - | - | - |
-| website | - | - | - |
-| anonymous | - | - | - |
+| Role | patients | visit_records | guidelines | clinic_day |
+|---|---|---|---|---|
+| local | view(all), create(all) | view(all), create(all) | view(all) | view(all) |
+| network | - | - | - | - |
+| website | - | - | - | - |
+| anonymous | - | - | - | - |
 
-Nobody can edit or delete patients or visit records through the backend. Visit records are
-written once and never changed: a new decision is a new row, and the latest one counts.
-Reading back past visits is not in this round (owner, 2026-11-26).
+Nobody can edit or delete patients, visit records or the schedule through the backend
+(owner, 2026-11-26). Visit records are written once and never changed: a new decision is a new
+row, and the latest one counts. Adding a patient adds a new case only: an id already in use is
+refused, and each case has size limits. The schedule changes only by editing its file.
 
 ## 4. Route map
 
@@ -57,6 +59,15 @@ Reading back past visits is not in this round (owner, 2026-11-26).
 | POST | /api/patients/{patient_id}/visits | patients | view |
 | POST | /api/patients/{patient_id}/visits | visit_records | create |
 | POST | /api/visits/{visit_id}/decisions | visit_records | create |
+| POST | /api/visits/{visit_id}/finalize | visit_records | create (planned) |
+| GET | /api/visits/{visit_id} | visit_records | view (planned) |
+| GET | /api/patients/{patient_id}/visits | visit_records | view (planned) |
+| POST | /api/patients | patients | create (planned) |
+| GET | /api/clinic-day | clinic_day | view (planned) |
+| GET | /api/clinic-day | visit_records | view (planned) |
+
+Rows marked "(planned)" are agreed and being built (step 2); `tests/test_access.py` checks each
+one against the app once the mark is dropped.
 
 `POST /api/patients/{patient_id}/visits` runs the visit check. It can call the AI model, which
 can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`, view).
@@ -81,6 +92,16 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
   "Other" with no comment. Covered by: refused (422), same rules as today's Finalize.
 - A request sends fields the screen doesn't show (for example `"source": "rule"` on a
   decision). Covered by: the request models forbid unknown fields (422).
+- A website adds a made-up patient case in the background, or finalizes a visit. Covered by:
+  grid rows website = `-`; the `Origin` check refuses it (403) before the route runs.
+- A new case reuses an existing patient id to overwrite or shadow a case. Covered by: refused
+  (409); cases are only ever added.
+- A stuck page sends a huge case (thousands of lab rows, megabytes of text). Covered by: the
+  case's size limits (422).
+- Finalize is sent twice, or before every alert is decided. Covered by: a second Finalize
+  returns the first one's result without saving again; an unfinished visit is refused (422).
+- Someone reopens a visit by guessing its id. Covered by: visit ids are random (uuid4), and an
+  unknown id is 404; there is only one role that may read visits anyway.
 - The owner's own page gets stuck and runs the visit check over and over. Not covered: see
   section 6.
 

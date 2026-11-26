@@ -156,7 +156,9 @@ def test_every_route_is_in_the_route_map(api):
     from pathlib import Path
 
     text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
-    in_file = set(re.findall(r"^\| (GET|POST|PUT|PATCH|DELETE) \| (\S+) \|", text, re.MULTILINE))
+    # Rows marked "(planned)" are agreed but not built yet; each unit drops the mark with its route.
+    built = "\n".join(line for line in text.splitlines() if "(planned)" not in line)
+    in_file = set(re.findall(r"^\| (GET|POST|PUT|PATCH|DELETE) \| (\S+) \|", built, re.MULTILINE))
     in_app = {
         (m, r.path) for r in api.app.routes if isinstance(r, APIRoute) for m in r.methods - {"HEAD", "OPTIONS"}
     }
@@ -275,3 +277,19 @@ def test_database_container_is_on_this_laptop_only():
     ports = re.findall(r'^\s*-\s*"([^"]+:\d+)"\s*$', text, re.MULTILINE)
     assert ports and all(p.startswith("127.0.0.1:") for p in ports)
     assert re.search(r"POSTGRES_PASSWORD:\s*\$\{ARTEMIS_DB_PASSWORD:\?", text)
+
+
+def test_the_grid_in_code_matches_access_md():
+    """ACCESS.md section 3, the local row, against backend/access.py's GRID."""
+    import re
+    from pathlib import Path
+
+    from backend.access import GRID
+
+    text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
+    text = text[text.index("## 3. Permission grid"):text.index("## 4. Route map")]
+    header = re.search(r"^\| Role \| (.+) \|$", text, re.MULTILINE).group(1).split(" | ")
+    local = re.search(r"^\| local \| (.+) \|$", text, re.MULTILINE).group(1).split(" | ")
+    from_file = {data: {a.split("(")[0].strip() for a in cell.split(",")} for data, cell in zip(header, local) if cell != "-"}
+    assert from_file == {data: set(actions) for data, actions in GRID["local"].items()}
+    assert set(GRID) == {"local"}  # every other role gets nothing
