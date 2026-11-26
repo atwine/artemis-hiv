@@ -26,6 +26,9 @@ class Settings:
     database_url: Optional[str] = None
     # The added patient cases, the same file (and setting) the Streamlit app uses. Read only.
     custom_patients_path: Path = PROJECT_ROOT / "Data" / "custom_patients.json"
+    # The design's demo-day patients P007-P009 (owner, 2026-11-26), and the demo day's schedule.
+    demo_day_patients_path: Path = PROJECT_ROOT / "Data" / "demo_day_patients.json"
+    clinic_day_path: Path = PROJECT_ROOT / "Data" / "demo_clinic_day.json"
 
 
 def _list(value: Optional[str], default: Tuple[str, ...]) -> Tuple[str, ...]:

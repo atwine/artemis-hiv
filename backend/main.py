@@ -30,6 +30,10 @@ from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
 from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
 from backend.models import (
+    Appointment,
+    ClinicDay,
+    ClinicDaySchedule,
+    DayCounts,
     DecisionOut,
     DecisionsRequest,
     DecisionsResponse,
@@ -119,6 +123,28 @@ def _latest(session: Session, visit_id: str) -> Dict[str, DecisionOut]:
         a: DecisionOut(alert_id=a, action=d.action, reason=d.reason, comment=d.comment, saved_at=records.iso(d.saved_at))
         for a, d in records.latest_decisions(session, visit_id).items()
     }
+
+
+def board_row(booking: Any, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
+              finalized: Optional[str]) -> Appointment:
+    """One row of the day board, from the booking, the patient and their latest saved check."""
+    state = "waiting" if latest is None else ("done" if finalized else "needs_you")
+    return Appointment(
+        time=booking.time, patient_id=record.patient_id, name=record.name or booking.name or record.patient_id,
+        age_years=record.age_years, sex=record.sex, regimen="/".join(record.art_regimen_current), state=state,
+        visit_id=latest.visit_id if latest else None, status=latest.status if latest else None,
+        ai_review=latest.ai_review if latest else None, alert_count=len(latest.alerts) if latest else 0,
+        reviewed_count=reviewed, finalized_at=finalized,
+    )
+
+
+def day_counts(rows: List[Appointment]) -> DayCounts:
+    return DayCounts(
+        booked=len(rows),
+        checked=sum(r.state != "waiting" for r in rows),
+        finalized=sum(r.state == "done" for r in rows),
+        left_in_red=sum(r.status == "RED" and r.state != "done" for r in rows),
+    )
 
 
 def _no_database() -> HTTPException:
@@ -290,5 +316,36 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 )
                 for row in records.checks_for(session, patient_id)
             ]
+
+    @app.get("/api/clinic-day", response_model=ClinicDay, dependencies=[
+        Depends(require("clinic_day", "view")), Depends(require("patients", "view")),
+        Depends(require("visit_records", "view")),
+    ])
+    def clinic_day() -> ClinicDay:
+        """The demo day's board: each booking with the state of the patient's latest saved check,
+        whenever it ran (owner, 2026-11-26)."""
+        patients = {p.record.patient_id: p.record for p in load_patients(services)}
+        try:
+            schedule = ClinicDaySchedule.model_validate(services.clinic_day())
+            missing = [b.patient_id for b in schedule.appointments if b.patient_id not in patients]
+            if missing:
+                raise ValueError(f"{len(missing)} booking(s) for patients with no record")
+        except (OSError, ValueError) as exc:  # pydantic's ValidationError is a ValueError
+            logger.warning("Clinic day not read: %s", type(exc).__name__)
+            raise HTTPException(status_code=500, detail="The clinic day could not be read.")
+        if services.engine is None:  # nothing can have been checked
+            rows = [board_row(b, patients[b.patient_id], None, 0, None) for b in schedule.appointments]
+        else:
+            rows = []
+            with Session(services.engine) as session:
+                for b in schedule.appointments:
+                    latest = next(iter(records.checks_for(session, b.patient_id)), None)
+                    reviewed = len(records.latest_decisions(session, latest.visit_id)) if latest else 0
+                    finalized = records.finalized_at(session, latest.visit_id) if latest else None
+                    rows.append(board_row(b, patients[b.patient_id], latest, reviewed, finalized))
+        return ClinicDay(
+            clinic=schedule.clinic, room=schedule.room, clinician=schedule.clinician,
+            date=schedule.date.isoformat(), appointments=rows, counts=day_counts(rows),
+        )
 
     return app

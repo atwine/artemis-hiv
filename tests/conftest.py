@@ -24,7 +24,7 @@ class Api:
         from backend.main import create_app
         from backend.services import Services
         from backend.settings import Settings
-        from tests.api_fakes import FakeModel, fake_search, memory_engine, read_patients, replies_for
+        from tests.api_fakes import FakeModel, fake_search, memory_engine, read_clinic_day, read_patients, replies_for
 
         self.model: Optional[Any] = FakeModel(replies_for("P001"))
         self.engine = memory_engine()
@@ -35,6 +35,7 @@ class Api:
             model_client=lambda: self.model,
             engine=self.engine,
             app_version="test",
+            clinic_day=read_clinic_day,
         )
         self.app = create_app(settings=Settings(), services=self.services)
         self.client = TestClient(self.app, base_url="http://localhost")

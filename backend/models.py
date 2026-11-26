@@ -110,6 +110,64 @@ class PatientDetail(BaseModel):
     today_encounter: Dict[str, Any]
 
 
+# --- The demo clinic day --------------------------------------------------------------------
+
+
+class Booking(BaseModel):
+    """One appointment in the schedule file."""
+
+    time: str = Field(pattern=r"^\d{2}:\d{2}$")  # HH:MM, the clinic's local time
+    patient_id: str = Field(min_length=1, max_length=200)
+    name: Optional[str] = None  # shown only when the patient's record has no name
+
+
+class ClinicDaySchedule(BaseModel):
+    """Data/demo_clinic_day.json, checked when it is read."""
+
+    clinic: str
+    room: str
+    clinician: str
+    date: datetime.date
+    appointments: List[Booking] = Field(min_length=1)
+
+
+BoardState = Literal["waiting", "needs_you", "done"]  # the design's Waiting / Needs you / Done
+
+
+class Appointment(BaseModel):
+    """One row of the day board: the booking, and the state of the patient's latest saved check."""
+
+    time: str
+    patient_id: str
+    name: str
+    age_years: Optional[int]
+    sex: str
+    regimen: str  # for example "TDF/3TC/DTG"
+    state: BoardState  # waiting: no check yet; needs_you: latest check not finalized; done: finalized
+    visit_id: Optional[str]
+    status: Optional[Status]
+    ai_review: Optional[AiReview]
+    alert_count: int
+    reviewed_count: int  # alerts with a saved decision
+    finalized_at: Optional[str]
+
+
+class DayCounts(BaseModel):
+    booked: int
+    checked: int
+    finalized: int
+    left_in_red: int  # latest check RED and not finalized
+
+
+class ClinicDay(BaseModel):
+    clinic: str
+    room: str
+    clinician: str
+    date: str  # YYYY-MM-DD
+    appointments: List[Appointment]
+    counts: DayCounts
+
+
 # --- Cards (CDS Hooks) ------------------------------------------------------------------
 
 

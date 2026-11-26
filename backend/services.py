@@ -7,8 +7,9 @@ a route first needs it, so starting the server loads no model and builds no inde
 from __future__ import annotations
 
 import functools
+import json
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
 from sqlalchemy.engine import Engine
@@ -31,13 +32,28 @@ class Services:
     engine: Optional[Engine]  # the visit-record database
     app_version: str
     top_k: int = TOP_K
+    # The demo day's schedule as stored (Data/demo_clinic_day.json), checked by the route.
+    clinic_day: Callable[[], Dict[str, Any]] = field(default_factory=lambda: clinic_day_file(Settings()))
 
 
 def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:
-    """The patients the Streamlit app shows, read (never written) from the same files."""
+    """The patients the Streamlit app shows, plus the demo day's P007-P009, read (never written)."""
 
     def read() -> List[Dict[str, Any]]:
-        return read_json_list(PROJECT_ROOT / "Data" / "mock_patients.json") + read_json_list(settings.custom_patients_path)
+        return (
+            read_json_list(PROJECT_ROOT / "Data" / "mock_patients.json")
+            + read_json_list(settings.custom_patients_path)
+            + read_json_list(settings.demo_day_patients_path)
+        )
+
+    return read
+
+
+def clinic_day_file(settings: Settings) -> Callable[[], Dict[str, Any]]:
+    """The demo day's schedule, read (never written); changed only by editing the file (ACCESS.md)."""
+
+    def read() -> Dict[str, Any]:
+        return json.loads(settings.clinic_day_path.read_text(encoding="utf-8"))
 
     return read
 
@@ -77,4 +93,5 @@ def default_services(settings: Settings) -> Services:
         model_client=_model_client,
         engine=engine,
         app_version=visit_record.app_version(PROJECT_ROOT),
+        clinic_day=clinic_day_file(settings),
     )

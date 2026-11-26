@@ -63,8 +63,8 @@ refused, and each case has size limits. The schedule changes only by editing its
 | GET | /api/visits/{visit_id} | visit_records | view |
 | GET | /api/patients/{patient_id}/visits | visit_records | view |
 | POST | /api/patients | patients | create (planned) |
-| GET | /api/clinic-day | clinic_day | view (planned) |
-| GET | /api/clinic-day | visit_records | view (planned) |
+| GET | /api/clinic-day | clinic_day | view |
+| GET | /api/clinic-day | visit_records | view |
 
 Rows marked "(planned)" are agreed and being built (step 2); `tests/test_access.py` checks each
 one against the app once the mark is dropped.

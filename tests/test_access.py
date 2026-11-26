@@ -102,6 +102,9 @@ CASES: List[Case] = [
     Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/NOPE/visits", DENY, "an unknown patient is 404"),
     Case("GET", "/api/patients/{patient_id}/visits", "website", "/api/patients/P001/visits", DENY, "website: visit_records = -"),
     Case("GET", "/api/patients/{patient_id}/visits", "rebinding", "/api/patients/P001/visits", DENY, "rebinding is refused by the Host check"),
+    Case("GET", "/api/clinic-day", "local", "/api/clinic-day", ALLOW, "local: clinic_day = view(all)"),
+    Case("GET", "/api/clinic-day", "website", "/api/clinic-day", DENY, "website: clinic_day = -"),
+    Case("GET", "/api/clinic-day", "rebinding", "/api/clinic-day", DENY, "rebinding is refused by the Host check"),
 ]
 
 

@@ -235,7 +235,7 @@ backend/records.py	save_check	Saves one visit check.	stays	stays
 backend/services.py	_model_client	Makes a client for the model server in .env, or none.	stays	stays
 backend/services.py	_search	Builds the guideline search the way the Streamlit app does, once (until plan item 4.3).	stays	stays
 backend/services.py	default_services	Builds the real patients, search, model and database the routes use.	stays	stays
-backend/services.py	demo_patients	Gives a reader for the demo patient files.	stays	stays
+backend/services.py	demo_patients	Gives a reader for the demo patient files, the demo day's P007-P009 included.	stays	stays
 backend/services.py	demo_patients.read	Reads the demo patient files.	stays	stays
 backend/settings.py	_list	Reads a comma-separated setting.	stays	stays
 backend/settings.py	settings_from_env	Reads the backend's settings from the environment.	stays	stays
@@ -288,3 +288,8 @@ backend/main.py	create_app.reopen_visit	Route: a saved visit as it was shown, wi
 backend/main.py	create_app.past_checks	Route: a patient's saved checks, newest first.	stays	stays
 backend/records.py	checks_for	Gives a patient's saved visit checks, newest first.	stays	stays
 backend/records.py	now	Gives this moment to the microsecond, so checks saved in one second still sort in order.	stays	stays
+backend/main.py	board_row	Builds one row of the day board from the booking, the patient and their latest saved check.	stays	stays
+backend/main.py	create_app.clinic_day	Route: the demo day's board, each booking with its patient's latest check state.	stays	stays
+backend/main.py	day_counts	Counts the day board's booked, checked, finalized and left-in-red patients.	stays	stays
+backend/services.py	clinic_day_file	Gives a reader for the demo day's schedule file.	stays	stays
+backend/services.py	clinic_day_file.read	Reads the demo day's schedule file.	stays	stays
