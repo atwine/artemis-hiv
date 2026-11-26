@@ -28,11 +28,13 @@ from backend import records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
 from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
-from backend.decisions import BadDecision, decision_rows, summary
+from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
 from backend.models import (
     DecisionOut,
     DecisionsRequest,
     DecisionsResponse,
+    FinalizeRequest,
+    FinalizeResponse,
     LabNote,
     LabResult,
     PatientDetail,
@@ -96,6 +98,14 @@ def _detail(p: Loaded) -> PatientDetail:
         labs.setdefault(e.test, []).append(LabResult(date=e.date.isoformat(), value=e.value, unit=e.unit, source=e.source))
     notes = [LabNote(date=n.date.isoformat() if n.date else None, source=n.source, text=n.text) for n in read_lab_notes(p.stored)]
     return PatientDetail(**{**p.record.model_dump(), "labs": labs, "lab_notes": notes})
+
+
+def _latest(session: Session, visit_id: str) -> Dict[str, DecisionOut]:
+    """The latest saved decision on each alert of the visit, as the API sends it."""
+    return {
+        a: DecisionOut(alert_id=a, action=d.action, reason=d.reason, comment=d.comment, saved_at=records.iso(d.saved_at))
+        for a, d in records.latest_decisions(session, visit_id).items()
+    }
 
 
 def _no_database() -> HTTPException:
@@ -196,14 +206,41 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             except BadDecision as exc:
                 raise HTTPException(status_code=422, detail=str(exc))
             records.add_decisions(session, visit_id, rows, saved_at=visit_record.now_utc())
-            latest = {
-                a: DecisionOut(alert_id=a, action=d.action, reason=d.reason, comment=d.comment, saved_at=records.iso(d.saved_at))
-                for a, d in records.latest_decisions(session, visit_id).items()
-            }
+            latest = _latest(session, visit_id)
+            finalized = records.finalized_at(session, visit_id)  # None: a new decision reopens a visit
         decided, unresolved = summary([a.alert_id for a in alerts], latest)
         return DecisionsResponse(
             visit_id=visit_id, decisions=decided, all_resolved=not unresolved, unresolved=unresolved,
-            finalize_note=FINALIZE_BLOCKED if unresolved else None,
+            finalize_note=FINALIZE_BLOCKED if unresolved else None, finalized_at=finalized,
         )
+
+    @app.post(
+        "/api/visits/{visit_id}/finalize",
+        response_model=FinalizeResponse,
+        dependencies=[Depends(require("visit_records", "create"))],
+    )
+    def finalize_visit(visit_id: str, body: Optional[FinalizeRequest] = None) -> FinalizeResponse:
+        """Close a visit once every alert is decided. Again with nothing changed: the same reply,
+        nothing new saved. After a later decision reopened it: a new Finalize (owner, 2026-11-26)."""
+        if services.engine is None:
+            raise _no_database()
+        with Session(services.engine) as session:
+            row = records.get_check(session, visit_id)
+            if row is None:
+                raise HTTPException(status_code=404, detail="No such visit.")
+            alerts = visit_record.restore(records.entry_from_check(row))["analysis_alerts"]
+            current = records.current_finalize(session, visit_id)
+            if current is None:
+                latest = _latest(session, visit_id)
+                if not ready_to_finalize(alerts, latest):
+                    raise HTTPException(status_code=422, detail=FINALIZE_BLOCKED)
+                decided, _ = summary([a.alert_id for a in alerts], latest)
+                current = records.add_finalize(
+                    session, visit_id, [d.model_dump() for d in decided], finalized_at=visit_record.now_utc()
+                )
+            return FinalizeResponse(
+                visit_id=visit_id, finalized_at=records.iso(current.finalized_at),
+                decisions=[DecisionOut(**d) for d in current.decisions],
+            )
 
     return app

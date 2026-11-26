@@ -58,7 +58,7 @@ def test_import_the_files(tmp_path):
     folder = _folder(tmp_path, _checks(), _finalized())
     with Session(engine) as s:
         report = records.import_folder(s, folder)
-    assert report == {"checks_added": 1, "decisions_added": 1, "already_there": 0, "unreadable_lines": 0, "skipped": 0}
+    assert report == {"checks_added": 1, "decisions_added": 1, "finalized_added": 1, "already_there": 0, "unreadable_lines": 0, "skipped": 0}
     with Session(engine) as s:
         row = s.get(VisitCheck, "v1")
         assert row.note == "Routine follow-up."
@@ -234,3 +234,30 @@ def test_the_amber_migration_renames_saved_rows_and_is_safe_twice(tmp_path):
     command.downgrade(cfg, "0001")
     assert statuses() == {"v1": "YELLOW", "v2": "RED", "v3": "YELLOW"}
     engine.dispose()
+
+
+def test_a_finalized_file_visit_is_finalized_in_the_database(tmp_path):
+    from backend.records import VisitFinalize
+
+    engine = memory_engine()
+    folder = _folder(tmp_path, _checks(), _finalized())
+    with Session(engine) as s:
+        records.import_folder(s, folder)
+        records.import_folder(s, folder)  # a second run adds nothing
+    with Session(engine) as s:
+        rows = s.exec(select(VisitFinalize)).all()
+        assert len(rows) == 1
+        assert rows[0].visit_id == "v1"
+        assert records.iso(rows[0].finalized_at) == "2026-11-20T08:05:00+00:00"
+        assert records.finalized_at(s, "v1") == "2026-11-20T08:05:00+00:00"
+
+
+def test_a_later_decision_in_the_files_reopens_the_visit(tmp_path):
+    """Two Finalize lines: the later one counts, and the visit is finalized as of it."""
+    engine = memory_engine()
+    folder = _folder(tmp_path, _checks(), _finalized(), _finalized(saved_at="2026-11-20T09:00:00+00:00", action="Override"))
+    with Session(engine) as s:
+        records.import_folder(s, folder)
+        assert records.finalized_at(s, "v1") == "2026-11-20T09:00:00+00:00"
+        records.add_decisions(s, "v1", _finalized()["decisions"], saved_at="2026-11-20T09:30:00+00:00")
+        assert records.finalized_at(s, "v1") is None

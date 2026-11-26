@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
-from artemis.review import alert_resolution_ok, decisions_from_state
+from artemis.review import alert_resolution_ok, can_finalize, decisions_from_state
 from artemis.rules.checks import Alert
 from backend.models import DecisionIn, DecisionOut
 
@@ -34,6 +34,16 @@ def decision_rows(alerts: Sequence[Alert], decisions: Sequence[DecisionIn]) -> L
             raise BadDecision("An override needs a reason, and 'Other (say why)' needs a comment.")
     chosen = [by_id[i] for i in dict.fromkeys(d.alert_id for d in decisions)]
     return decisions_from_state(state, chosen)
+
+
+def ready_to_finalize(alerts: Sequence[Alert], latest: Mapping[str, DecisionOut]) -> bool:
+    """Today's Finalize rule (artemis.review.can_finalize) on the latest saved decisions."""
+    state: Dict[str, Any] = {"analysis_ran": True}
+    for alert_id, d in latest.items():
+        state[f"alert_action_{alert_id}"] = d.action
+        state[f"alert_override_reason_{alert_id}"] = d.reason
+        state[f"alert_override_comment_{alert_id}"] = d.comment
+    return can_finalize(state, list(alerts))
 
 
 def summary(alert_ids: Sequence[str], latest: Mapping[str, DecisionOut]) -> Tuple[List[DecisionOut], List[str]]:

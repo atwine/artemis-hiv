@@ -90,6 +90,10 @@ CASES: List[Case] = [
     Case("POST", "/api/visits/{visit_id}/decisions", "local", "/api/visits/nope/decisions", DENY, "no decision on a visit that doesn't exist", body=DECISION),
     Case("POST", "/api/visits/{visit_id}/decisions", "website", "/api/visits/{visit_id}/decisions", DENY, "website: visit_records = -", body=DECISION),
     Case("POST", "/api/visits/{visit_id}/decisions", "rebinding", "/api/visits/{visit_id}/decisions", DENY, "rebinding is refused by the Host check", body=DECISION),
+    Case("POST", "/api/visits/{visit_id}/finalize", "local", "/api/visits/{decided_visit_id}/finalize", ALLOW, "local: visit_records = create(all)"),
+    Case("POST", "/api/visits/{visit_id}/finalize", "local", "/api/visits/nope/finalize", DENY, "no Finalize for a visit that doesn't exist"),
+    Case("POST", "/api/visits/{visit_id}/finalize", "website", "/api/visits/{decided_visit_id}/finalize", DENY, "website: visit_records = -"),
+    Case("POST", "/api/visits/{visit_id}/finalize", "rebinding", "/api/visits/{decided_visit_id}/finalize", DENY, "rebinding is refused by the Host check"),
 ]
 
 
@@ -97,7 +101,13 @@ def _rows(api) -> Dict[str, int]:
     from backend.records import AlertDecision, VisitCheck
 
     with Session(api.engine) as s:
-        return {"checks": len(s.exec(select(VisitCheck)).all()), "decisions": len(s.exec(select(AlertDecision)).all())}
+        from backend.records import VisitFinalize
+
+        return {
+            "checks": len(s.exec(select(VisitCheck)).all()),
+            "decisions": len(s.exec(select(AlertDecision)).all()),
+            "finalized": len(s.exec(select(VisitFinalize)).all()),
+        }
 
 
 def _run_a_visit(api) -> str:
@@ -106,13 +116,27 @@ def _run_a_visit(api) -> str:
     return r.json()["visit_id"]
 
 
+def _run_and_decide_a_visit(api) -> str:
+    r = api.client.post("/api/patients/P001/visits", json=NOTE, headers=headers_for("local"))
+    assert r.status_code == 200, r.text
+    visit = r.json()
+    decisions = [{"alert_id": c["extension"]["alert_id"], "action": "Acknowledge"} for c in visit["cards"]]
+    r = api.client.post(f"/api/visits/{visit['visit_id']}/decisions", json={"decisions": decisions}, headers=headers_for("local"))
+    assert r.status_code == 200, r.text
+    return visit["visit_id"]
+
+
 def _denied(response) -> bool:
     return response.status_code in (401, 403, 404)
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda c: c.id)
 def test_access_rule(api, case: Case):
-    url = case.url.replace("{visit_id}", _run_a_visit(api)) if "{visit_id}" in case.url else case.url
+    url = case.url
+    if "{visit_id}" in url:
+        url = url.replace("{visit_id}", _run_a_visit(api))
+    if "{decided_visit_id}" in url:
+        url = url.replace("{decided_visit_id}", _run_and_decide_a_visit(api))
     before = _rows(api)
     calls_before = len(api.model.calls)
     response = api.client.request(case.method, url, headers=headers_for(case.role), json=case.body)

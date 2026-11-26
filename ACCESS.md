@@ -59,7 +59,7 @@ refused, and each case has size limits. The schedule changes only by editing its
 | POST | /api/patients/{patient_id}/visits | patients | view |
 | POST | /api/patients/{patient_id}/visits | visit_records | create |
 | POST | /api/visits/{visit_id}/decisions | visit_records | create |
-| POST | /api/visits/{visit_id}/finalize | visit_records | create (planned) |
+| POST | /api/visits/{visit_id}/finalize | visit_records | create |
 | GET | /api/visits/{visit_id} | visit_records | view (planned) |
 | GET | /api/patients/{patient_id}/visits | visit_records | view (planned) |
 | POST | /api/patients | patients | create (planned) |

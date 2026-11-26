@@ -252,3 +252,17 @@ class DecisionsResponse(BaseModel):
     all_resolved: bool
     unresolved: List[str]
     finalize_note: Optional[str]  # FINALIZE_BLOCKED while an alert waits for a decision
+    # When the visit was finalized; None while open, including after a later decision reopened it.
+    finalized_at: Optional[str]
+
+
+class FinalizeRequest(BaseModel):
+    """Finalize takes no fields: the time is the server's, the decisions are the saved ones."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class FinalizeResponse(BaseModel):
+    visit_id: str
+    finalized_at: str
+    decisions: List[DecisionOut]  # the decision on each alert as finalized, in alert order
