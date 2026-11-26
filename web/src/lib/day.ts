@@ -30,20 +30,15 @@ export function dayHeadline(isoDate: string, booked: number, needYou: number): [
 }
 
 
-const AI_TROUBLE: Partial<Record<NonNullable<DayAppointment["ai_review"]>, string>> = {
-  failed: "AI review failed",
-  unreadable: "AI review failed",
-  cut_off: "AI review incomplete",
-  partly_read: "AI review incomplete",
-  search_unavailable: "Guideline search unavailable",
-};
-
-/** The line under a card's status: alerts reviewed, the AI review's trouble, or when it was finalized. */
+/**
+ * The line under a card's status: alerts reviewed, the API's short label for an AI review that
+ * didn't finish cleanly (ai_review_card_label), or when it was finalized.
+ */
 export function appointmentNote(a: DayAppointment): string | null {
   if (a.state === "done") return a.finalized_at ? `Finalized ${clock(a.finalized_at)}` : "Finalized";
   if (a.state !== "needs_you") return null;
   if (a.alert_count > 0) return `${a.reviewed_count} of ${a.alert_count} ${a.alert_count === 1 ? "alert" : "alerts"} reviewed`;
-  return (a.ai_review && AI_TROUBLE[a.ai_review]) || "No alerts";
+  return a.ai_review_card_label ?? "No alerts";
 }
 
 /** The visit the main button opens: the first, by time, that needs you. */

@@ -117,7 +117,7 @@ test("the clinic day, in the design's states", async ({ page }) => {
     P004: { state: "done", visit_id: "v4", status: "GREEN", ai_review: "ok", finalized_at: "2026-11-26T06:52:00Z" },
     P003: { state: "done", visit_id: "v3", status: "AMBER", ai_review: "ok", alert_count: 1, reviewed_count: 1, finalized_at: "2026-11-26T07:18:00Z" },
     P005: { state: "needs_you", visit_id: "v5", status: "RED", ai_review: "ok", alert_count: 5, reviewed_count: 2 },
-    P006: { state: "needs_you", visit_id: "v6", status: "INCOMPLETE", ai_review: "failed" },
+    P006: { state: "needs_you", visit_id: "v6", status: "INCOMPLETE", ai_review: "failed", ai_review_card_label: "AI review failed" },
   };
   await page.route("**/api/clinic-day", async (route) => {
     const reply = await route.fetch();

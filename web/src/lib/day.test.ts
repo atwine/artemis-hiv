@@ -15,6 +15,8 @@ const appt = (over: Partial<DayAppointment>): DayAppointment => ({
   visit_id: null,
   status: null,
   ai_review: null,
+  ai_review_label: null,
+  ai_review_card_label: null,
   alert_count: 0,
   reviewed_count: 0,
   finalized_at: null,
@@ -27,9 +29,9 @@ test("the headline: the day, then how many patients and how many need you, in wo
   assert.deepEqual(dayHeadline("2026-11-26", 23, 2), ["Thursday 26 Nov.", "23 patients, two waiting on you."]);
 });
 
-test("a card's note: alerts reviewed, the AI review's trouble, or when it was finalized", () => {
+test("a card's note: alerts reviewed, the API's card label, or when it was finalized", () => {
   assert.equal(appointmentNote(appt({ state: "needs_you", status: "RED", alert_count: 5, reviewed_count: 2 })), "2 of 5 alerts reviewed");
-  assert.equal(appointmentNote(appt({ state: "needs_you", status: "INCOMPLETE", ai_review: "failed" })), "AI review failed");
+  assert.equal(appointmentNote(appt({ state: "needs_you", status: "INCOMPLETE", ai_review: "failed", ai_review_card_label: "AI review failed" })), "AI review failed");
   assert.equal(appointmentNote(appt({ state: "needs_you", status: "GREEN", ai_review: "ok" })), "No alerts");
   assert.match(appointmentNote(appt({ state: "done", status: "GREEN", finalized_at: "2026-11-26T06:52:00Z" })) ?? "", /^Finalized \d\d:\d\d$/);
   assert.equal(appointmentNote(appt({ state: "waiting" })), null);

@@ -184,6 +184,10 @@ export interface components {
             age_years: number | null;
             /** Ai Review */
             ai_review: ("not_run" | "ok" | "failed" | "unreadable" | "cut_off" | "partly_read" | "search_unavailable") | null;
+            /** Ai Review Card Label */
+            ai_review_card_label: string | null;
+            /** Ai Review Label */
+            ai_review_label: string | null;
             /** Alert Count */
             alert_count: number;
             /** Finalized At */
@@ -590,6 +594,10 @@ export interface components {
              * @enum {string}
              */
             ai_review: "not_run" | "ok" | "failed" | "unreadable" | "cut_off" | "partly_read" | "search_unavailable";
+            /** Ai Review Card Label */
+            ai_review_card_label: string | null;
+            /** Ai Review Label */
+            ai_review_label: string;
             /** All Resolved */
             all_resolved: boolean;
             /** Banners */
@@ -683,6 +691,10 @@ export interface components {
              * @enum {string}
              */
             ai_review: "not_run" | "ok" | "failed" | "unreadable" | "cut_off" | "partly_read" | "search_unavailable";
+            /** Ai Review Card Label */
+            ai_review_card_label: string | null;
+            /** Ai Review Label */
+            ai_review_label: string;
             /** Banners */
             banners: components["schemas"]["Banner"][];
             /** Cards */
@@ -720,6 +732,10 @@ export interface components {
              * @enum {string}
              */
             ai_review: "not_run" | "ok" | "failed" | "unreadable" | "cut_off" | "partly_read" | "search_unavailable";
+            /** Ai Review Card Label */
+            ai_review_card_label: string | null;
+            /** Ai Review Label */
+            ai_review_label: string;
             /** Alert Count */
             alert_count: number;
             /** Decided Count */
