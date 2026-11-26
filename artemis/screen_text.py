@@ -128,6 +128,29 @@ def alert_heading(alert: Alert) -> str:
     return f"Alert ({source}): {alert.title}"
 
 
+# How the AI review ended, in the screens' words (owner, 2026-11-26: "A, from the backend"; the
+# website's wording). The record label is the saved visit's "AI review" row; the card label is the
+# day board's note, only for a review that didn't finish cleanly (a clean one shows its alerts).
+AI_REVIEW_LABELS = {
+    "ok": "Complete",
+    "not_run": "Switched off for this check",
+    "failed": "Failed: the model server did not answer",
+    "unreadable": "Failed: the reply could not be read",
+    "cut_off": "Incomplete: the reply was cut off",
+    "partly_read": "Incomplete: part of the reply could not be read",
+    "search_unavailable": "Not run: guideline search unavailable",
+}
+AI_REVIEW_CARD_LABELS = {
+    "ok": None,
+    "not_run": None,
+    "failed": "AI review failed",
+    "unreadable": "AI review failed",
+    "cut_off": "AI review incomplete",
+    "partly_read": "AI review incomplete",
+    "search_unavailable": "Guideline search unavailable",
+}
+
+
 def status_banners(status: Optional[str], screening_outcome: str, alert_count: int) -> List[Banner]:
     """The coloured banners at the top of a visit's results."""
     banners: List[Banner] = []

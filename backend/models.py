@@ -175,6 +175,8 @@ class Appointment(BaseModel):
     visit_id: Optional[str]
     status: Optional[Status]
     ai_review: Optional[AiReview]
+    ai_review_label: Optional[str]  # None while waiting
+    ai_review_card_label: Optional[str]  # the board's note; None while waiting or when it finished cleanly
     alert_count: int
     reviewed_count: int  # alerts with a saved decision
     finalized_at: Optional[str]
@@ -308,6 +310,10 @@ class VisitCheckResponse(BaseModel):
     saved_at: str
     status: Status
     ai_review: AiReview
+    # How the AI review ended, in the screens' words (artemis/screen_text.py): the record label,
+    # and the day board's short label (None when the review finished cleanly).
+    ai_review_label: str
+    ai_review_card_label: Optional[str]
     model: Optional[str]
     cards: List[Card]
     plan: Optional[Plan]
@@ -375,6 +381,8 @@ class VisitSummary(BaseModel):
     saved_at: str
     status: Status
     ai_review: AiReview
+    ai_review_label: str
+    ai_review_card_label: Optional[str]
     model: Optional[str]
     alert_count: int
     decided_count: int

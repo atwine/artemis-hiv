@@ -395,6 +395,7 @@ def test_every_result_and_status_can_be_sent(status, outcome):
     VisitCheckResponse(
         visit_id="v", patient_id="P", visit_date="2026-01-22", saved_at="2026-01-22T08:00:00+00:00",
         status=status, ai_review=outcome, model=None, cards=[], plan=None, record_saved=True,
+        ai_review_label="x", ai_review_card_label=None,
         banners=[], disclaimer="d", finalize_note=None,
     )
 
@@ -568,3 +569,27 @@ def test_a_plan_with_problems_comes_back_with_its_issue_codes(api):
     assert r.status_code == 200, r.text
     plan = r.json()["plan"]
     assert plan["issues"] and all(isinstance(i, str) for i in plan["issues"])
+
+
+def test_replies_carry_the_ai_review_labels(api):
+    """The visit, saved-visit and day-board replies send the labels, so the website only displays them."""
+    from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS
+
+    api.model = FakeModel({}, fail=True)
+    visit = _check(api).json()
+    assert visit["ai_review"] == "failed"
+    assert visit["ai_review_label"] == AI_REVIEW_LABELS["failed"]
+    assert visit["ai_review_card_label"] == AI_REVIEW_CARD_LABELS["failed"]
+    saved = api.client.get(f"/api/visits/{visit['visit_id']}", headers=LOCAL).json()
+    assert (saved["ai_review_label"], saved["ai_review_card_label"]) == (visit["ai_review_label"], visit["ai_review_card_label"])
+    past = api.client.get("/api/patients/P001/visits", headers=LOCAL).json()[0]
+    assert past["ai_review_label"] == AI_REVIEW_LABELS["failed"]
+    board = api.client.get("/api/clinic-day", headers=LOCAL).json()
+    waiting = next(a for a in board["appointments"] if a["state"] == "waiting")
+    assert waiting["ai_review_label"] is None and waiting["ai_review_card_label"] is None
+
+
+def test_a_clean_ai_review_has_no_card_label(api):
+    visit = _check(api).json()
+    assert visit["ai_review"] == "ok"
+    assert visit["ai_review_label"] == "Complete" and visit["ai_review_card_label"] is None

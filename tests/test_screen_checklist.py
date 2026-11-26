@@ -56,3 +56,29 @@ def test_an_unsaved_check_has_its_banner_and_is_in_the_checklist() -> None:
     assert record_banners(saved=False) == [("warning", RECORD_NOT_SAVED)]
     assert record_banners(saved=True) == []
     assert "`RECORD_NOT_SAVED`" in CHECKLIST
+
+
+def test_every_ai_review_result_has_its_record_and_card_label() -> None:
+    """Owner, 2026-11-26 ("A, from the backend"): the screens show these, sent by the backend."""
+    from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS
+
+    assert set(AI_REVIEW_LABELS) == set(AI_REVIEW_OUTCOMES) == set(AI_REVIEW_CARD_LABELS)
+    assert all(AI_REVIEW_LABELS[o] for o in AI_REVIEW_OUTCOMES)
+    # A card label only where the review didn't finish cleanly; a clean one shows the alerts instead.
+    assert [o for o in AI_REVIEW_OUTCOMES if AI_REVIEW_CARD_LABELS[o] is None] == ["not_run", "ok"]
+    for o in AI_REVIEW_OUTCOMES:
+        assert f"`{AI_REVIEW_LABELS[o]}`" in CHECKLIST or AI_REVIEW_LABELS[o] in CHECKLIST, o
+
+
+def test_the_labels_are_the_websites_wording() -> None:
+    from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS
+
+    assert AI_REVIEW_LABELS == {
+        "ok": "Complete", "not_run": "Switched off for this check",
+        "failed": "Failed: the model server did not answer", "unreadable": "Failed: the reply could not be read",
+        "cut_off": "Incomplete: the reply was cut off", "partly_read": "Incomplete: part of the reply could not be read",
+        "search_unavailable": "Not run: guideline search unavailable",
+    }
+    assert AI_REVIEW_CARD_LABELS["failed"] == AI_REVIEW_CARD_LABELS["unreadable"] == "AI review failed"
+    assert AI_REVIEW_CARD_LABELS["cut_off"] == AI_REVIEW_CARD_LABELS["partly_read"] == "AI review incomplete"
+    assert AI_REVIEW_CARD_LABELS["search_unavailable"] == "Guideline search unavailable"
