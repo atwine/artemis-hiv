@@ -22,6 +22,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/form-choices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Form Choices
+         * @description The add-case form's pick lists, so the website offers only what add-case accepts.
+         */
+        get: operations["form_choices_api_form_choices_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -395,6 +415,18 @@ export interface components {
             /** Visit Id */
             visit_id: string;
         };
+        /**
+         * FormChoices
+         * @description The add-case form's lists, the same ones the Streamlit form uses (owner, 2026-11-26).
+         */
+        FormChoices: {
+            /** Art Regimens */
+            art_regimens: components["schemas"]["RegimenChoice"][];
+            /** Lab Tests */
+            lab_tests: components["schemas"]["LabTestChoice"][];
+            /** Visit Types */
+            visit_types: string[];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -425,6 +457,15 @@ export interface components {
             unit: string;
             /** Value */
             value: string;
+        };
+        /** LabTestChoice */
+        LabTestChoice: {
+            /** Name */
+            name: string;
+            /** Test */
+            test: string;
+            /** Units */
+            units: string[];
         };
         /**
          * NewCase
@@ -464,12 +505,26 @@ export interface components {
             /** Patient Id */
             patient_id: string;
             /**
+             * Previous Art
+             * @default []
+             */
+            previous_art: components["schemas"]["PreviousArtIn"][];
+            /**
              * Prior History
              * @default
              */
             prior_history: string;
             /** Sex */
             sex?: ("M" | "F") | null;
+            /**
+             * Todays Note
+             * @default
+             */
+            todays_note: string;
+            /** Visit Date */
+            visit_date?: string | null;
+            /** Visit Type */
+            visit_type?: ("Routine review" | "First visit" | "Unscheduled visit" | "Results review") | null;
         };
         /** NewLabRow */
         NewLabRow: {
@@ -583,6 +638,31 @@ export interface components {
             issues: string[];
             /** Management Plan */
             management_plan?: string | null;
+        };
+        /**
+         * PreviousArtIn
+         * @description One regimen the patient took before, with when it started and ended.
+         */
+        PreviousArtIn: {
+            /**
+             * End Date
+             * Format: date
+             */
+            end_date: string;
+            /** Regimen */
+            regimen: string[];
+            /**
+             * Start Date
+             * Format: date
+             */
+            start_date: string;
+        };
+        /** RegimenChoice */
+        RegimenChoice: {
+            /** Choice */
+            choice: string;
+            /** Drugs */
+            drugs: string[];
         };
         /**
          * SavedVisit
@@ -781,6 +861,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClinicDay"];
+                };
+            };
+        };
+    };
+    form_choices_api_form_choices_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormChoices"];
                 };
             };
         };

@@ -63,6 +63,8 @@ def test_the_backend_searches_the_same_index_the_app_did():
     assert [p.name for p in config.GUIDELINE_PATHS]  # the Ugandan guidelines
     assert all(p.is_file() for p in config.GUIDELINE_PATHS)
     name = index_collection_name(config.EMBEDDING_MODEL, config.GUIDELINE_PATHS, config.GUIDELINE_INDEX_VERSION)
-    # The kept index's name as app.py computed it before the move (2026-11-27): unchanged, so the
-    # index already on disk is reused, not rebuilt.
-    assert name == "guidelines_all-minilm-l6-v2_1e4068fad8a4_v3"
+    # The middle part is a fingerprint of the guideline files' bytes, which differ between a Windows
+    # checkout (CRLF) and GitHub's Linux one (LF), so only the parts that name the model and the
+    # version are pinned here (owner, 2026-11-27: fix the test only; the line-ending fix is on the
+    # plan's Later list).
+    assert name.startswith("guidelines_all-minilm-l6-v2_") and name.endswith("_v3")

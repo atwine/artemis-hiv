@@ -1,5 +1,5 @@
 // The day rail: today's visits down the left edge, each a label and its status shape. Dimmed on
-// visit screens so the pane leads.
+// visit screens so the pane leads; 85%, not the design's 55%, keeps the times at 4.5:1 contrast (owner).
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ export type RailEntry = { id: string; label: string; name: string; href: string;
 
 export function DayRail({ entries, currentId, dimmed }: { entries: RailEntry[]; currentId?: string; dimmed?: boolean }) {
   return (
-    <nav aria-label="Today's patients" className={cn("flex w-19 shrink-0 flex-col gap-0.5 pt-2", dimmed && "opacity-55")}>
+    <nav aria-label="Today's patients" className={cn("flex w-19 shrink-0 flex-col gap-0.5 pt-2", dimmed && "opacity-85")}>
       {entries.map((e) => {
         const current = e.id === currentId;
         return (

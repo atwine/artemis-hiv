@@ -46,6 +46,12 @@ password each run, removed afterwards. No AI review runs, so nothing is spent. T
 Desktop open and the search model on disk (`ARTEMIS_MODEL_DIR` in `../.env`). The first check of
 a run loads the search model, so a run takes a minute or two.
 
+`e2e/a11y.spec.ts` runs axe-core on every built screen against WCAG 2.2 AA and fails on any
+problem it finds. One exception, the owner's choice: the tray's not-yet-reached step names keep the
+design's grey (4.4:1), so only their contrast check is skipped. A clean run is a floor, not proof:
+keyboard use and screen-reader wording still need a person. `ARTEMIS_A11Y_REPORT=<folder>` also
+writes each screen's full axe result there.
+
 `ARTEMIS_SCREENS=1 npx playwright test screens` saves 1366 x 768 screenshots to
 `../docs/design/exports/phase5/` for checking against the Paper screens, including the AI-review
 states the design doesn't draw (made from real rules-only replies; no model is called).

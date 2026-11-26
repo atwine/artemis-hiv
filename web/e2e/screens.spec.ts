@@ -1,12 +1,11 @@
 // Screenshots of the website at the design's 1366 x 768, for checking it side by side with the
 // Paper FINAL screens (docs/design/exports/phase5/). Runs only when asked:
 //   ARTEMIS_SCREENS=1 npx playwright test screens
-import { execFileSync } from "node:child_process";
 import path from "node:path";
 
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-import type { VisitCheck } from "../src/lib/api/client";
+import { stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
 
 const OUT = path.resolve(__dirname, "..", "..", "docs", "design", "exports", "phase5");
 
@@ -42,12 +41,8 @@ test("the shared frame, before and after the checks", async ({ page }) => {
   await page.screenshot({ path: path.join(OUT, "web-S4d-override-other.png") });
 });
 
-// The AI-review states the design doesn't draw (owner's decision 5). Each is a real reply to a
-// rule-checks-only visit check (no model call), with the AI outcome, status and banners the API
-// would send for it, computed by e2e/ai_states.py from the backend's own functions.
-type AiProblem = "ok" | "search_unavailable" | "failed" | "unreadable" | "cut_off" | "partly_read";
-
-const STATES: { outcome: AiProblem; patient: string; file: string }[] = [
+// The AI-review states the design doesn't draw (owner's decision 5); see e2e/stubs.ts.
+const STATES: { outcome: AiOutcome; patient: string; file: string }[] = [
   { outcome: "search_unavailable", patient: "P001", file: "web-S7-search-unavailable.png" },
   { outcome: "failed", patient: "P002", file: "web-S7-ai-failed.png" },
   { outcome: "unreadable", patient: "P002", file: "web-S7-ai-unreadable.png" },
@@ -56,23 +51,6 @@ const STATES: { outcome: AiProblem; patient: string; file: string }[] = [
   // GREEN (S7b): no alerts, and the AI review finished cleanly.
   { outcome: "ok", patient: "P002", file: "web-S7b-green.png" },
 ];
-
-async function stubOutcome(page: Page, outcome: AiProblem) {
-  await page.route("**/api/patients/*/visits", async (route) => {
-    if (route.request().method() !== "POST") return route.continue(); // only the check, not past checks
-    const reply = await route.fetch();
-    const body = (await reply.json()) as VisitCheck;
-    const severities = JSON.stringify(body.cards.map((c) => c.extension.severity ?? null));
-    const states = JSON.parse(
-      execFileSync(process.env.PYTHON || "python", [path.join(__dirname, "ai_states.py"), severities], { encoding: "utf8" }),
-    );
-    const cards =
-      outcome === "search_unavailable" // no search, so no guideline references (screen checklist)
-        ? body.cards.map((c) => ({ ...c, extension: { ...c.extension, references: [], passages: [] } }))
-        : body.cards;
-    await route.fulfill({ response: reply, json: { ...body, ...states[outcome], ai_review: outcome, cards } });
-  });
-}
 
 for (const { outcome, patient, file } of STATES) {
   test(`the AI review ended "${outcome}"`, async ({ page }) => {
@@ -110,21 +88,9 @@ test("a quiet visit with the AI review off", async ({ page }) => {
 });
 
 // The clinic day as the design draws it (S1, S1b): the real day from the API, with the design's
-// states laid over it (two finalized, Rose needing review, one AI review failed). Only the screenshot
-// sees this; the browser test checks the real states (e2e/board.spec.ts).
+// states laid over it (e2e/stubs.ts). Only the screenshot sees this; the browser test checks the real states (e2e/board.spec.ts).
 test("the clinic day, in the design's states", async ({ page }) => {
-  const DESIGN: Record<string, object> = {
-    P004: { state: "done", visit_id: "v4", status: "GREEN", ai_review: "ok", finalized_at: "2026-11-26T06:52:00Z" },
-    P003: { state: "done", visit_id: "v3", status: "AMBER", ai_review: "ok", alert_count: 1, reviewed_count: 1, finalized_at: "2026-11-26T07:18:00Z" },
-    P005: { state: "needs_you", visit_id: "v5", status: "RED", ai_review: "ok", alert_count: 5, reviewed_count: 2 },
-    P006: { state: "needs_you", visit_id: "v6", status: "INCOMPLETE", ai_review: "failed", ai_review_card_label: "AI review failed" },
-  };
-  await page.route("**/api/clinic-day", async (route) => {
-    const reply = await route.fetch();
-    const day = await reply.json();
-    day.appointments = day.appointments.map((a: { patient_id: string }) => ({ ...a, ...(DESIGN[a.patient_id] ?? {}) }));
-    await route.fulfill({ response: reply, json: day });
-  });
+  await stubDesignDay(page);
   await page.goto("/");
   await expect(page.getByRole("link", { name: "Continue review" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S1-board.png") });

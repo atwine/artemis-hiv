@@ -63,8 +63,9 @@ export function FinalizeView({
               </span>
               {left && <span className="text-14 text-ink-2">{left}</span>}
             </span>
+            {/* The design's darker blue: the usual blue reads at 4.1:1 on the pink row (owner, 2026-11-27). */}
             {left && (
-              <button type="button" onClick={() => onReview(firstOpen)} className="cursor-pointer text-15 font-semibold text-blue">
+              <button type="button" onClick={() => onReview(firstOpen)} className="cursor-pointer text-15 font-semibold text-checking">
                 Review alert {firstOpen + 1} <span aria-hidden>→</span>
               </button>
             )}
