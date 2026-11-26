@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.visit import AnalysisOptions, compute_overall_status, run_visit_analysis
 from modules.rag_engine import RagEngine
 from tests import pipeline_harness as h
@@ -22,16 +23,13 @@ class _BrokenSearchModel(h.FakeEmbedder):
 
 class _CountingModel:
     model = "stub"
-    last_error = None
-    last_note = None
-    last_finish_reason = "stop"
 
     def __init__(self) -> None:
         self.calls = 0
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.calls += 1
-        return "[]"
+        return ChatReply("[]", finish_reason="stop")
 
 
 def _run(embedder, model):

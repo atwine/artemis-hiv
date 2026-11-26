@@ -30,6 +30,7 @@ import streamlit as _streamlit  # noqa: E402
 
 import app  # noqa: E402
 from modules.rag_engine import RagEngine  # noqa: E402
+from artemis.ai.client import ChatReply  # noqa: E402
 from artemis.guidelines.vector_store import VectorSearchResult, VectorStore  # noqa: E402
 
 SETTINGS: Dict[str, Any] = {
@@ -85,7 +86,6 @@ class ReplayClient:
 
     def __init__(self, replies: Dict[str, str]) -> None:
         self._replies = replies
-        self.last_error: Optional[str] = None
         self.calls: List[Dict[str, str]] = []
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
@@ -98,7 +98,7 @@ class ReplayClient:
             kind = "agentic_answer"
         digest = hashlib.sha1(json.dumps(messages, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
         self.calls.append({"kind": kind, "messages_sha1": digest[:12]})
-        return self._replies.get(kind, "")
+        return ChatReply(self._replies.get(kind, ""))
 
 
 class _ReplayConfig:

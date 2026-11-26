@@ -43,12 +43,10 @@ artemis/guidelines/processor.py	extract_markdown_page_texts	Splits a guideline M
 artemis/guidelines/processor.py	process_markdown_guidelines	Turns a guideline Markdown file into searchable pieces labelled with page numbers.	artemis/guidelines/processor.py	moved
 artemis/ai/client.py	OllamaClient.__init__	Sets up the connection to the local Ollama AI server from settings.	artemis/ai/client.py	moved
 artemis/ai/client.py	OllamaClient.model	Gives the name of the AI model being used.	artemis/ai/client.py	moved
-artemis/ai/client.py	OllamaClient.last_error	Gives the most recent AI error message, if any.	artemis/ai/client.py	moved
 artemis/ai/client.py	OllamaClient.chat	Sends a conversation to the local Ollama AI and returns its reply.	artemis/ai/client.py	moved
 artemis/ai/client.py	openai_compat_config_from_env	Reads the AI server address, model and key from settings, if set.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient.__init__	Sets up the connection to an OpenAI-style AI server such as vLLM or OpenRouter.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient.model	Gives the name of the AI model being used.	artemis/ai/client.py	moved
-artemis/ai/client.py	OpenAICompatClient.last_error	Gives the most recent AI error message, if any.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient._headers	Builds the request headers, including the access key when there is one.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient._resolve_model	Asks the server which model it serves, when only one is available.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient._response_format	Converts the requested reply format into the form this kind of server expects.	artemis/ai/client.py	moved
@@ -115,8 +113,6 @@ artemis/plan/plan_json.py	validate_plan	Lists what is wrong with a plan, or noth
 artemis/plan/view.py	_texts	Turns a plan field into a list of non-empty lines.	artemis/plan/view.py	stays
 artemis/plan/view.py	plan_html	Draws the plan for the screen, escaping all AI text.	artemis/plan/view.py	stays
 artemis/plan/view.py	read_plan	Decides what the clinician sees for each plan item and the regimen decision.	artemis/plan/view.py	stays
-artemis/ai/client.py	_ReplyState.last_finish_reason	Says why the AI's last reply ended: finished, or cut at the length limit.	artemis/ai/client.py	moved
-artemis/ai/client.py	_ReplyState.last_note	Gives a note about the last reply, such as the server refusing the answer format.	artemis/ai/client.py	moved
 artemis/ai/client.py	_text_of	Joins a reply sent as a list of parts into one text.	artemis/ai/client.py	moved
 artemis/ai/screening.py	_is_alert	Tells whether a piece of the AI's reply looks like an alert.	artemis/ai/screening.py	moved
 artemis/ai/screening.py	_read_list	Reads a list from the AI's reply one item at a time, noting if it was cut or broken.	artemis/ai/screening.py	moved
@@ -176,7 +172,6 @@ artemis/evaluation/runner.py	check_budget	Refuses a run whose worst-case cost wo
 artemis/evaluation/runner.py	run_file_name	The saved file name for one case and repeat.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	pending_runs	Lists the case runs not saved yet, so a stopped run resumes.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	run_case	Runs one case through the app's analysis with a model and returns the record to save.	artemis/evaluation/runner.py	moved
-artemis/ai/client.py	OpenAICompatClient.last_usage	Gives the usage the server reported for the last reply.	artemis/ai/client.py	moved
 artemis/evaluation/afrimedqa.py	load_questions	Reads the AfriMed-QA multiple-choice questions that are infectious disease or mention HIV.	artemis/evaluation/afrimedqa.py	moved
 artemis/evaluation/afrimedqa.py	messages	Builds the quiz prompt, saying how many options to pick.	artemis/evaluation/afrimedqa.py	moved
 artemis/evaluation/afrimedqa.py	answer_format	The quiz reply format: the right number of the question's own option keys.	artemis/evaluation/afrimedqa.py	moved

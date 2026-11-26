@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import build_patient_context
 from artemis.patient.summary import build_stage1_summary
@@ -36,10 +37,10 @@ class Model:
     model = "stub"
 
     def __init__(self, reply: Optional[str], *, finish: str = "stop", error: Optional[str] = None) -> None:
-        self.reply, self.last_error, self.last_finish_reason = reply, error, finish
+        self.reply, self.error, self.finish = reply, error, finish
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
-        return self.reply
+        return ChatReply(self.reply, finish_reason=self.finish, error=self.error)
 
 
 def _screen(reply: Optional[str], *, finish: str = "stop"):
@@ -98,8 +99,9 @@ def test_the_client_reports_a_reply_the_server_cut_off(monkeypatch: pytest.Monke
 
     monkeypatch.setattr(requests, "post", lambda *a, **k: Resp())
     client = OpenAICompatClient(OpenAICompatConfig(base_url="http://example.invalid/v1", model="m"))
-    assert client.chat([{"role": "user", "content": "hi"}]) == "[1"  # list-of-parts content is joined
-    assert client.last_finish_reason == "length"
+    reply = client.chat([{"role": "user", "content": "hi"}])
+    assert reply.text == "[1"  # list-of-parts content is joined
+    assert reply.finish_reason == "length"
 
 
 def test_a_cut_off_review_is_never_green() -> None:
@@ -206,7 +208,7 @@ class _Capture(Model):
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.formats.append(format)
         self.messages.append(messages)
-        return self.reply
+        return ChatReply(self.reply, finish_reason=self.finish, error=self.error)
 
 
 def _screen_with(chunks):

@@ -299,7 +299,7 @@ HARD LIMITS — FOLLOW STRICTLY:
     #   (~50 words), which is too short to catch phrase-level loops. 256 tokens (~200
     #   words) covers the full length of a typical alert message.
     #   [src] https://docs.ollama.com/modelfile — repeat_last_n controls the window.
-    llm_text = llm_client.chat(
+    reply = llm_client.chat(
         [system, user],
         format=output_schema,
         options_override={
@@ -308,7 +308,7 @@ HARD LIMITS — FOLLOW STRICTLY:
             "repeat_last_n": 256,
         },
     )
-    finish_reason = getattr(llm_client, "last_finish_reason", None)
+    llm_text, finish_reason = reply.text, reply.finish_reason
     issues, parse_status = read_alert_list(llm_text or "", finish_reason=finish_reason)
     if debug is not None:
         # Rationale: persist the exact inputs/outputs used for screening so GREEN results
@@ -317,7 +317,8 @@ HARD LIMITS — FOLLOW STRICTLY:
         debug["screening_bundle"] = bundle
         debug["parse_status"] = parse_status
         debug["finish_reason"] = finish_reason
-        debug["client_note"] = getattr(llm_client, "last_note", None)
+        debug["client_note"] = reply.note
+        debug["error"] = reply.error  # why there was no reply, if there wasn't one (artemis.visit reads it)
 
     shown_ids = {str(c.get("chunk_id")) for c in bundle}
     alerts: List[Alert] = []

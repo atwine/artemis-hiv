@@ -164,11 +164,12 @@ def main() -> None:
             },
         ]
 
-        llm_answer = llm.chat(messages)
+        reply = llm.chat(messages)
+        llm_answer = reply.text
         if llm_answer is None:
             print("[!] LLM call failed or returned no content.")
-            if llm.last_error:
-                print("    Last error:", llm.last_error)
+            if reply.error:
+                print("    Last error:", reply.error)
         else:
             print("LLM answer:")
             print(llm_answer)

@@ -30,9 +30,9 @@ class MeteredClient:
         self._client = client
         self.usages: List[Optional[Dict[str, Any]]] = []
 
-    def chat(self, *args: Any, **kwargs: Any) -> Optional[str]:
+    def chat(self, *args: Any, **kwargs: Any) -> Any:
         reply = self._client.chat(*args, **kwargs)
-        self.usages.append(getattr(self._client, "last_usage", None))
+        self.usages.append(reply.usage)
         return reply
 
     def __getattr__(self, name: str) -> Any:

@@ -267,7 +267,7 @@ def run_visit_analysis(
         )
 
         parse_status = (screening_debug.get("parse_status") or "").strip().lower()
-        last_err = llm_client.last_error
+        last_err = screening_debug.get("error")  # the screening call's own reply says (plan item 4.6)
         if last_err is not None:
             screening_outcome = "failed"
         elif parse_status in {"parsed_empty", "parsed_nonempty"}:
