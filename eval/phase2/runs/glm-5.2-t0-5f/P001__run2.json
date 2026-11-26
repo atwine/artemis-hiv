@@ -1,0 +1,288 @@
+{
+ "case_id": "P001",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 42.6,
+ "calls": [
+  {
+   "prompt_tokens": 1466,
+   "completion_tokens": 1000,
+   "total_tokens": 2466,
+   "cost": 0.00311388,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00311388,
+    "upstream_inference_prompt_cost": 0.00069388,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1495,
+   "completion_tokens": 450,
+   "total_tokens": 1945,
+   "cost": 0.003070465,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003070465,
+    "upstream_inference_prompt_cost": 1.0465e-05,
+    "upstream_inference_completions_cost": 0.00306
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 649,
+   "completion_tokens": 73,
+   "total_tokens": 722,
+   "cost": 0.000561701,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000561701,
+    "upstream_inference_prompt_cost": 0.000417307,
+    "upstream_inference_completions_cost": 0.000144394
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2469,
+   "completion_tokens": 557,
+   "total_tokens": 3026,
+   "cost": 0.00247936,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00247936,
+    "upstream_inference_prompt_cost": 0.00113142,
+    "upstream_inference_completions_cost": 0.00134794
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.009225406,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Overdue serum creatinine monitoring on TDF",
+   "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for patients on TDF. The patient's last creatinine was 478 days ago (2024-10-01), exceeding the 12-month interval. TDF can cause chronic kidney disease, acute kidney injury, and Fanconi syndrome. No renal monitoring was ordered at today's visit. The prior creatinine of 88 umol/L was normal, but no current renal function data is available to assess ongoing TDF safety.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order serum creatinine and eGFR now; ensure annual renal monitoring is scheduled for all patients on TDF-based ART.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "Overdue serum creatinine monitoring on TDF",
+     "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for patients on TDF. The patient's last creatinine was 478 days ago (2024-10-01), exceeding the 12-month interval. TDF can cause chronic kidney disease, acute kidney injury, and Fanconi syndrome. No renal monitoring was ordered at today's visit. The prior creatinine of 88 umol/L was normal, but no current renal function data is available to assess ongoing TDF safety.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order serum creatinine and eGFR now; ensure annual renal monitoring is scheduled for all patients on TDF-based ART.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      },
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Low-level viremia on current regimen",
+   "message": "Guidelines define viral suppression as plasma ≤200 copies/mL but note that low-level viremia above the detection threshold warrants attention. The patient's latest viral load is 40 copies/mL (2025-10-01), which is suppressed but detectable. Persistent low-level viremia can be associated with risk of subsequent virologic non-suppression. The clinician's plan does not address this detectable result. Repeat viral load testing per routine annual schedule is indicated to confirm ongoing suppression.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue routine annual viral load monitoring; consider repeat VL at next visit to confirm sustained suppression given detectable low-level result.",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Low-level viremia on current regimen",
+     "message": "Guidelines define viral suppression as plasma ≤200 copies/mL but note that low-level viremia above the detection threshold warrants attention. The patient's latest viral load is 40 copies/mL (2025-10-01), which is suppressed but detectable. Persistent low-level viremia can be associated with risk of subsequent virologic non-suppression. The clinician's plan does not address this detectable result. Repeat viral load testing per routine annual schedule is indicated to confirm ongoing suppression.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue routine annual viral load monitoring; consider repeat VL at next visit to confirm sustained suppression given detectable low-level result.",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      },
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "How often should creatinine be monitored in patients on TDF?",
+   "How often should viral load be monitored in stable patients on ART?",
+   "Is a viral load of 40 copies/mL considered suppressed or low-level viremia?",
+   "What baseline or follow-up labs are due for a patient on TDF, 3TC, and DTG?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"Overdue serum creatinine monitoring on TDF\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring every 12 months for patients on TDF. The patient's last creatinine was 478 days ago (2024-10-01), exceeding the 12-month interval. TDF can cause chronic kidney disease, acute kidney injury, and Fanconi syndrome. No renal monitoring was ordered at today's visit. The prior creatinine of 88 umol/L was normal, but no current renal function data is available to assess ongoing TDF safety.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order serum creatinine and eGFR now; ensure annual renal monitoring is scheduled for all patients on TDF-based ART.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"},\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Low-level viremia on current regimen\",\n    \"message\": \"Guidelines define viral suppression as plasma ≤200 copies/mL but note that low-level viremia above the detection threshold warrants attention. The patient's latest viral load is 40 copies/mL (2025-10-01), which is suppressed but detectable. Persistent low-level viremia can be associated with risk of subsequent virologic non-suppression. The clinician's plan does not address this detectable result. Repeat viral load testing per routine annual schedule is indicated to confirm ongoing suppression.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue routine annual viral load monitoring; consider repeat VL at next visit to confirm sustained suppression given detectable low-level result.\",\n    \"citations\": [\n      {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"},\n      {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 12,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c3",
+    "page_number": 13,
+    "quote": "ies/mL: (Connects back to \"Maintain preferred ARV drug regimen, Continue routine viral load\") - High level Viremia - Plasma & DBS: ≥1,000 - Provide IAC (3-6 months); 3 C- good IAC sessions scores >95% - Conduct CD4 testing & manage appropriately - Repeat VL using 2 plasma samples - If ≥1,000 copies/mL: - Conduct HIV DR testing & switch to appropriate regimen; - Continue PSS & counseling - If ≤200 copies/mL: (Connects back to \"Maintain preferred ARV drug regimen, Continue rout"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient has no complaints, appears well, has a suppressed viral load of 40 copies/mL, and a normal creatinine of 88 umol/L, with no signs of drug toxicity from TDF, 3TC, or DTG per available data.\"},\"problems\":[{\"problem\":\"Stale renal function monitoring (last creatinine 478 days ago)\",\"action\":\"Order serum creatinine and eGFR today to screen for TDF-related nephrotoxicity per guideline requirement for patients on TDF.\",\"reason\":\"Guidelines require serum creatinine and eGFR screening for patients on TDF, and the last creatinine was over 15 months ago.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan of routine follow-up with no issues does not include ordering creatinine or eGFR despite the last value being over 15 months old.\"}},{\"problem\":\"Viral load of 40 copies/mL near lower limit of detection\",\"action\":\"Confirm whether this is a blip or low-level viremia by reviewing prior viral load trends and repeating viral load in 3-6 months per guidelines.\",\"reason\":\"A viral load of 40 copies/mL is detectable but below the 1000 copies/mL threshold for treatment failure, and guidelines recommend repeat testing to confirm suppression.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan does not address the near-detectable viral load or mention plans for repeat testing to confirm ongoing suppression.\"}}],\"monitoring_plan\":\"- Repeat serum creatinine and eGFR now (overdue by >15 months)\\n- Repeat viral load in 3-6 months to confirm suppression given value of 40 copies/mL\\n- Monitor for signs of TDF nephrotoxicity, DTG-related weight gain or metabolic effects, and 3TC-related toxicity at each visit\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily with good adherence as reported\",\"Report any new symptoms including changes in urination, weight, or neurological symptoms immediately\",\"Maintain routine follow-up appointments for lab monitoring\"]}",
+ "plan_issues": []
+}

@@ -1,0 +1,315 @@
+{
+ "case_id": "EX3",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 87.3,
+ "calls": [
+  {
+   "prompt_tokens": 2056,
+   "completion_tokens": 482,
+   "total_tokens": 2538,
+   "cost": 0.000918104,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000918104,
+    "upstream_inference_prompt_cost": 0.000532504,
+    "upstream_inference_completions_cost": 0.0003856
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1357,
+   "completion_tokens": 89,
+   "total_tokens": 1446,
+   "cost": 0.000422663,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000422663,
+    "upstream_inference_prompt_cost": 0.000351463,
+    "upstream_inference_completions_cost": 7.12e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3793,
+   "completion_tokens": 927,
+   "total_tokens": 4720,
+   "cost": 0.001723987,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.001723987,
+    "upstream_inference_prompt_cost": 0.000982387,
+    "upstream_inference_completions_cost": 0.0007416
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0030647540000000003,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_001",
+   "title": "Review DTG Switch Rationale",
+   "message": "Guidelines report hyperglycemia among clients on DTG. The patient's fasting glucose is 5.6 mmol/L, which is within the normal range per the provided grading table. However, the clinician's plan to switch from DTG is based on weight gain. The guideline excerpts do not list weight gain as a specific adverse effect of DTG, suggesting the weight gain may have other causes.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Evaluate other causes of weight gain (e.g., hypothyroidism, lifestyle) before switching ART due to DTG.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+      "page_number": 4,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+       "page_number": 4
+      }
+     ],
+     "issue_type": "plan_review",
+     "message": "Guidelines report hyperglycemia among clients on DTG. The patient's fasting glucose is 5.6 mmol/L, which is within the normal range per the provided grading table. However, the clinician's plan to switch from DTG is based on weight gain. The guideline excerpts do not list weight gain as a specific adverse effect of DTG, suggesting the weight gain may have other causes.",
+     "recommended_action": "Evaluate other causes of weight gain (e.g., hypothyroidism, lifestyle) before switching ART due to DTG.",
+     "severity": "moderate",
+     "title": "Review DTG Switch Rationale"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_002",
+   "title": "Unaddressed Dyslipidemia",
+   "message": "The patient has significant dyslipidemia with LDL 4.2 mmol/L and total cholesterol 6.4 mmol/L. No guideline excerpts provide specific lipid management thresholds for patients on ART. However, given the patient's obesity (BMI 33) and these results, cardiovascular risk is elevated. The clinician's plan does not address lipid management.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Assess cardiovascular risk and initiate appropriate management for dyslipidemia per general medical guidelines.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_002",
+     "citations": [],
+     "issue_type": "monitoring_gap",
+     "message": "The patient has significant dyslipidemia with LDL 4.2 mmol/L and total cholesterol 6.4 mmol/L. No guideline excerpts provide specific lipid management thresholds for patients on ART. However, given the patient's obesity (BMI 33) and these results, cardiovascular risk is elevated. The clinician's plan does not address lipid management.",
+     "recommended_action": "Assess cardiovascular risk and initiate appropriate management for dyslipidemia per general medical guidelines.",
+     "severity": "moderate",
+     "title": "Unaddressed Dyslipidemia"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_003",
+   "title": "Overdue Renal Function Test",
+   "message": "Guidelines recommend monitoring renal function for patients on TDF. The latest creatinine (72 umol/L from 196 days ago) is normal, but it is outdated. Regular monitoring is required to screen for TDF-associated chronic kidney disease, acute kidney injury, and Fanconi syndrome.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Perform renal function tests (creatinine, eGFR) as part of routine monitoring for TDF.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 270,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_003",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 270
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines recommend monitoring renal function for patients on TDF. The latest creatinine (72 umol/L from 196 days ago) is normal, but it is outdated. Regular monitoring is required to screen for TDF-associated chronic kidney disease, acute kidney injury, and Fanconi syndrome.",
+     "recommended_action": "Perform renal function tests (creatinine, eGFR) as part of routine monitoring for TDF.",
+     "severity": "moderate",
+     "title": "Overdue Renal Function Test"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_004",
+   "title": "Obesity Management Gap",
+   "message": "Guidelines state obesity involves excessive body fat and increases risk of diseases like heart disease and diabetes. The patient has a BMI of 33 (obese) with significant weight gain. The clinician's plan focuses on an ART switch but does not include lifestyle modification counselling, which is a modifiable risk factor for obesity.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "information_gap",
+    "severity": "moderate",
+    "recommended_action": "Provide lifestyle modification counselling addressing diet and physical activity for weight management.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+      "page_number": 190,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_004",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+       "page_number": 190
+      }
+     ],
+     "issue_type": "information_gap",
+     "message": "Guidelines state obesity involves excessive body fat and increases risk of diseases like heart disease and diabetes. The patient has a BMI of 33 (obese) with significant weight gain. The clinician's plan focuses on an ART switch but does not include lifestyle modification counselling, which is a modifiable risk factor for obesity.",
+     "recommended_action": "Provide lifestyle modification counselling addressing diet and physical activity for weight management.",
+     "severity": "moderate",
+     "title": "Obesity Management Gap"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_005",
+   "title": "Uncontrolled Hypothyroidism",
+   "message": "The patient has poorly controlled hypothyroidism with TSH 12.4 mIU/L (target <4.5) and symptoms of tiredness, feeling cold, and constipation. Levothyroxine non-adherence ('Often forgets the thyroid tablet') is the most likely cause. Uncontrolled hypothyroidism is a known cause of weight gain and dyslipidemia, which are present. The clinician's plan to 'Continue levothyroxine 50 mcg' does not address the adherence issue or the subtherapeutic dose.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Address levothyroxine adherence, consider dose adjustment, and re-check TSH after intervention.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_005",
+     "citations": [],
+     "issue_type": "toxicity",
+     "message": "The patient has poorly controlled hypothyroidism with TSH 12.4 mIU/L (target <4.5) and symptoms of tiredness, feeling cold, and constipation. Levothyroxine non-adherence ('Often forgets the thyroid tablet') is the most likely cause. Uncontrolled hypothyroidism is a known cause of weight gain and dyslipidemia, which are present. The clinician's plan to 'Continue levothyroxine 50 mcg' does not address the adherence issue or the subtherapeutic dose.",
+     "recommended_action": "Address levothyroxine adherence, consider dose adjustment, and re-check TSH after intervention.",
+     "severity": "high",
+     "title": "Uncontrolled Hypothyroidism"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1"
+  ],
+  "EX3_002": [],
+  "EX3_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "EX3_004": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3"
+  ],
+  "EX3_005": []
+ },
+ "screening": {
+  "search_questions": [
+   "Does DTG cause weight gain?",
+   "Is TSH 12.4 mIU/L a sign of hypothyroidism?",
+   "Does DTG interact with levothyroxine?",
+   "Does DTG interact with amitriptyline?",
+   "Is creatinine 72 umol/L normal for a 45-year-old female?",
+   "Is fasting glucose 5.6 mmol/L normal?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_001\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1\",\n        \"page_number\": 4\n      }\n    ],\n    \"issue_type\": \"plan_review\",\n    \"message\": \"Guidelines report hyperglycemia among clients on DTG. The patient's fasting glucose is 5.6 mmol/L, which is within the normal range per the provided grading table. However, the clinician's plan to switch from DTG is based on weight gain. The guideline excerpts do not list weight gain as a specific adverse effect of DTG, suggesting the weight gain may have other causes.\",\n    \"recommended_action\": \"Evaluate other causes of weight gain (e.g., hypothyroidism, lifestyle) before switching ART due to DTG.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Review DTG Switch Rationale\"\n  },\n  {\n    \"alert_id\": \"EX3_002\",\n    \"citations\": [],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"The patient has significant dyslipidemia with LDL 4.2 mmol/L and total cholesterol 6.4 mmol/L. No guideline excerpts provide specific lipid management thresholds for patients on ART. However, given the patient's obesity (BMI 33) and these results, cardiovascular risk is elevated. The clinician's plan does not address lipid management.\",\n    \"recommended_action\": \"Assess cardiovascular risk and initiate appropriate management for dyslipidemia per general medical guidelines.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Unaddressed Dyslipidemia\"\n  },\n  {\n    \"alert_id\": \"EX3_003\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\",\n        \"page_number\": 270\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines recommend monitoring renal function for patients on TDF. The latest creatinine (72 umol/L from 196 days ago) is normal, but it is outdated. Regular monitoring is required to screen for TDF-associated chronic kidney disease, acute kidney injury, and Fanconi syndrome.\",\n    \"recommended_action\": \"Perform renal function tests (creatinine, eGFR) as part of routine monitoring for TDF.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Overdue Renal Function Test\"\n  },\n  {\n    \"alert_id\": \"EX3_004\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3\",\n        \"page_number\": 190\n      }\n    ],\n    \"issue_type\": \"information_gap\",\n    \"message\": \"Guidelines state obesity involves excessive body fat and increases risk of diseases like heart disease and diabetes. The patient has a BMI of 33 (obese) with significant weight gain. The clinician's plan focuses on an ART switch but does not include lifestyle modification counselling, which is a modifiable risk factor for obesity.\",\n    \"recommended_action\": \"Provide lifestyle modification counselling addressing diet and physical activity for weight management.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Obesity Management Gap\"\n  },\n  {\n    \"alert_id\": \"EX3_005\",\n    \"citations\": [],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"The patient has poorly controlled hypothyroidism with TSH 12.4 mIU/L (target <4.5) and symptoms of tiredness, feeling cold, and constipation. Levothyroxine non-adherence ('Often forgets the thyroid tablet') is the most likely cause. Uncontrolled hypothyroidism is a known cause of weight gain and dyslipidemia, which are present. The clinician's plan to 'Continue levothyroxine 50 mcg' does not address the adherence issue or the subtherapeutic dose.\",\n    \"recommended_action\": \"Address levothyroxine adherence, consider dose adjustment, and re-check TSH after intervention.\",\n    \"severity\": \"high\",\n    \"title\": \"Uncontrolled Hypothyroidism\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p39_c3",
+    "page_number": 190,
+    "quote": "targets. Obesity is a preventable medical disorder involving excessive body fat and often increases the risk of health problems/diseases such as heart disease and diabetes ## Risk factors for obesity Although there are genetic, behavioural, metabolic and hormonal influences on body weight, obesity occurs when you take in more calories than you burn through normal daily activities and exercise. The risk factors that can be modified include; an unhealthy diet i.e high in calori"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s10_c3",
+    "page_number": 20,
+    "quote": "TB Screening > Timing of TPT in children\nIn case TLE stock is not available: Transition to DTG and initiate TPT after 3 months. Note: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c8",
+    "page_number": 49,
+    "quote": "6.17.2 When a patient on second line has suspected resistance to secondline ART > 6.17.3 Recommended third-line regimens for adults, adolescents and children\nDrug Family | ARV Drug | Interaction | Action\nAnti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin | EFV, DTG, Etravirine, | Carbamazepine decreases DTG levels by 30-70% | Use valproic acid\nDrugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole | ATV/r | Reduced con-cent"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 265,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p31_c2",
+    "page_number": 264,
+    "quote": "nvestigations are available. For laboratory investigations not included, refer to DAIDS Grading tables for grading: https://rsc.niaid.nih.gov/clinical-research-sites/daids-adverse-event-grading-tables Random Blood Sugar 116 to 160 mg/dL 6.44 to < 8.89 mmol/L > 160 to 250 mg/dL 8.89 to < 13.89 mmol/L > 250 to 500 mg/dL 13.89 to < 27.75 mmol/L ≥ 500 mg/dL ≥ 27.75 mmol/L Fasting Blood Sugar 110 to 125 mg/dL 6.11 to < 6.95 mmol/L > 125 to 250 mg/dL 6.95 to < 13.89 mmol/L > 250 to"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s6_c1",
+    "page_number": 4,
+    "quote": "6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT\nDTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia associated with DTG has been reported among clients newly initiated on ART as well as among those already on ART and transitioned to DTG-based regimens"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c11",
+    "page_number": 45,
+    "quote": "TB Screening > Figure 48: Lifestyle Modification Counselling for Hypertension > Lifestyle Counselling\nPOTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES\nDrug | Common Side Effects | Management\nAmlodipine/Nifedipine | Lower limb edema (1-10%) | Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic.\nHeadache (7%), Palpitations (1-3%) | Usually self-limiting, observe on treatment.\nMale sexual disorder (1-2%) | Explore for other cause"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 171,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c11",
+    "page_number": 50,
+    "quote": "6.17.2 When a patient on second line has suspected resistance to secondline ART > 6.17.3 Recommended third-line regimens for adults, adolescents and children\n- Optimization of ART regimens with more efficacious and durable drugs and simplified dosing is recommended for improved long-term viral suppression. - The preferred first-line ART for all adults, adolescents and children is Dolutegravir-based. - PLHIV on NNRTI-based first-line regimens should have their viral loads asse"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Uncertain\",\n    \"reason\": \"Uncertain: The provided guideline excerpts do not contain specific criteria for switching ART due to weight gain or hypothyroidism symptoms.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Possible untreated hypothyroidism causing weight gain and symptoms\",\n      \"action\": \"Order TSH and free T4 tests.\",\n      \"reason\": \"Patient has symptoms of tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed reflexes, and often forgets levothyroxine.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only mentions continuing levothyroxine but does not address assessing thyroid function or adherence.\"\n      }\n    },\n    {\n      \"problem\": \"Dyslipidemia requiring cardiovascular risk assessment\",\n      \"action\": \"Calculate cardiovascular risk score and consider statin therapy.\",\n      \"reason\": \"Patient has elevated total cholesterol (6.4 mmol/L), LDL (4.2 mmol/L), and triglycerides (2.3 mmol/L).\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention the abnormal lipid results or any management for dyslipidemia.\"\n      }\n    },\n    {\n      \"problem\": \"Potential ART-related weight gain\",\n      \"action\": \"Uncertain: The guideline excerpts provided do not specify actions for managing DTG-associated weight gain.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts do not contain management steps for weight gain on DTG.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan to consider switching from DTG due to weight gain directly addresses this potential problem.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Check TSH, free T4. Repeat lipid panel in 3-6 months. Monitor weight and BMI at each visit.\",\n  \"patient_counselling\": [\n    \"Importance of daily levothyroxine adherence.\",\n    \"Discuss healthy diet and exercise for weight management.\",\n    \"Review cardiovascular risk factors.\"\n  ]\n}",
+ "plan_issues": []
+}

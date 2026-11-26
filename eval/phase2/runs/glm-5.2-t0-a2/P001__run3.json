@@ -1,0 +1,239 @@
+{
+ "case_id": "P001",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 157.3,
+ "calls": [
+  {
+   "prompt_tokens": 1455,
+   "completion_tokens": 630,
+   "total_tokens": 2085,
+   "cost": 0.0024267,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0024267,
+    "upstream_inference_prompt_cost": 0.0009021,
+    "upstream_inference_completions_cost": 0.0015246
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 649,
+   "completion_tokens": 62,
+   "total_tokens": 711,
+   "cost": 0.00055242,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00055242,
+    "upstream_inference_prompt_cost": 0.00040238,
+    "upstream_inference_completions_cost": 0.00015004
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3213,
+   "completion_tokens": 451,
+   "total_tokens": 3664,
+   "cost": 0.00308348,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00308348,
+    "upstream_inference_prompt_cost": 0.00199206,
+    "upstream_inference_completions_cost": 0.00109142
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0060626,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Overdue TDF renal monitoring",
+   "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's most recent creatinine was 478 days before this visit, exceeding the annual monitoring interval. No renal monitoring was ordered in today's plan. TDF can cause renal toxicity, making regular surveillance essential. The latest creatinine of 88 umol/L appears normal, but no recent trend can be assessed given the 15-month gap.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order serum creatinine and eGFR at this visit and ensure annual renal monitoring is scheduled for TDF-based ART.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "Overdue TDF renal monitoring",
+     "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's most recent creatinine was 478 days before this visit, exceeding the annual monitoring interval. No renal monitoring was ordered in today's plan. TDF can cause renal toxicity, making regular surveillance essential. The latest creatinine of 88 umol/L appears normal, but no recent trend can be assessed given the 15-month gap.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order serum creatinine and eGFR at this visit and ensure annual renal monitoring is scheduled for TDF-based ART.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Low-level viremia on DTG regimen",
+   "message": "Guidelines emphasize active monitoring for low-level viremia in patients on DTG-based regimens to preserve DTG durability. Viral load of 40 copies/mL is below the suppression cutoff of 200 copies/mL for plasma samples, confirming virologic suppression. However, detectable low-level viremia warrants enhanced adherence support and close follow-up to prevent progression to treatment failure. No repeat viral load was ordered in today's plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Provide adherence counseling and schedule a follow-up viral load per guideline monitoring frequency to ensure sustained suppression.",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Low-level viremia on DTG regimen",
+     "message": "Guidelines emphasize active monitoring for low-level viremia in patients on DTG-based regimens to preserve DTG durability. Viral load of 40 copies/mL is below the suppression cutoff of 200 copies/mL for plasma samples, confirming virologic suppression. However, detectable low-level viremia warrants enhanced adherence support and close follow-up to prevent progression to treatment failure. No repeat viral load was ordered in today's plan.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Provide adherence counseling and schedule a follow-up viral load per guideline monitoring frequency to ensure sustained suppression.",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1"
+      },
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "How often should creatinine be monitored for patients on TDF?",
+   "Is a viral load of 40 copies/mL on DTG-based regimen considered suppressed or low-level viremia?",
+   "What monitoring tests are due for routine follow-up on TDF, 3TC, and DTG?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"Overdue TDF renal monitoring\",\n    \"message\": \"Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The patient's most recent creatinine was 478 days before this visit, exceeding the annual monitoring interval. No renal monitoring was ordered in today's plan. TDF can cause renal toxicity, making regular surveillance essential. The latest creatinine of 88 umol/L appears normal, but no recent trend can be assessed given the 15-month gap.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order serum creatinine and eGFR at this visit and ensure annual renal monitoring is scheduled for TDF-based ART.\",\n    \"citations\": [{\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Low-level viremia on DTG regimen\",\n    \"message\": \"Guidelines emphasize active monitoring for low-level viremia in patients on DTG-based regimens to preserve DTG durability. Viral load of 40 copies/mL is below the suppression cutoff of 200 copies/mL for plasma samples, confirming virologic suppression. However, detectable low-level viremia warrants enhanced adherence support and close follow-up to prevent progression to treatment failure. No repeat viral load was ordered in today's plan.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Provide adherence counseling and schedule a follow-up viral load per guideline monitoring frequency to ensure sustained suppression.\",\n    \"citations\": [{\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1\"}, {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months 260"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+    "page_number": 12,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 virological monitoring provides an early and more accurate indication of treatment failure and indicates the need to switch from first line to second-line drugs, and from second- line to third-line drugs, toward reducing accumulation of drug-resistance mutations and improved clinical outcomes. Dolutegravir (DTG)-based regimens (e.g., tenofovir/lamivudine/dolutegravir [TLD]) have increased viral load suppression (VLS) rates to unprecedented levels, hence a need to actively monitor patients for low-level viremia to keep DTG a durable treatment option for as long as possible. Furthermore, low-level viraemia monitoring can enhances monitoring of achieving and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabetes management guidelines. Flowchart: Action: Initiate or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < 30 ml/min or ml/min/1.73 m2 OR ≥ 50% decrease from participant's baseline o dialysis needed Cholesterol, Fasting, High ≥ 18 years of age 200 to < 240 mg/dL; 5.18 to < 6.19 mmol/L 240 to < 300 mg/dL; 6.19 to < 7.77 mmol/L ≥ 300 mg/dL; ≥ 7.77 mmol/L N/A LDL, Fasting, High ≥ 18 years of age 130 to < 160 mg/dL; 3.37 to < 4.12 mmol/L 160 to < 190 mg/dL; 4.12 to < 4.90 mmol/L ≥ 190 mg/dL; ≥ 4.90 mmol/L NA Triglycerides, Fasting, High 150 to 300 mg/dL; 1.71 to 3.42 mmol/L >300 to 500 mg/dL; >3.42 to 5.7 mmol/L >500 to < 1,000 mg/ dL; >5.7 to 11.4 mmol/L > 1,000 mg/dL; > 11.4 mmol/L 265 Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut off points of 200 copies/ mL and 400 copies/mL respectively, as shown in Figure 58. A patient who has been on ART for more than 6 months and is responding to ART is considered virally suppressed at VL <200 copies/mL and <400 copies/mL for plasma and DBS samples, respectively. Facilities should constitute a multidisciplinary VL review committees to review, track, and make decisions to optimize ART regimen by switching to second-line, third- line, or a more potent regimen. At the minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Initiate or transition to DTG\" 3. Check glucose* * Blood glucose or urine dipstick 4. Decision: High glucose**? **High blood glucose: Fasting>6.95, Non-fasting>8.89 High urine glucose: Any + - If YES, proceed to \"DO NOT INITIATE OR TRANSITION TO DTG\" - If NO, proceed to \"Initiate on DTG, glucose monitoring every 3 months for the 1st year\" **Outcomes:** - **DO NOT INITIATE OR TRANSITION TO DTG** Give ATV/r or maintain on EFV Monitor blood glucose per diabetes management guidelines. - **Initiate on DTG, glucose monitoring every 3 months for the 1st year** see monitoring algorithm for PLHIV transitioned to DTG - **Initiate or transition to DTG** **Screening and management of complications of Diabetes Mellitus**"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient has no complaints, appears well, viral load is suppressed at 40 copies/mL, and creatinine is normal at 88 umol/L, so there is no evidence of drug toxicity requiring a regimen change.\"},\"problems\":[{\"problem\":\"TDF renal toxicity monitoring gap\",\"action\":\"Order serum creatinine and eGFR at this visit; last creatinine was 478 days ago and guidelines require monitoring for patients on TDF.\",\"reason\":\"Patient is on TDF and last creatinine was 478 days ago, while guidelines require serum creatinine and eGFR screening for patients on TDF.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan of routine follow-up with no issues does not include ordering creatinine/eGFR monitoring despite the last creatinine being over 15 months old.\"}},{\"problem\":\"DTG contraindication screening\",\"action\":\"Screen for diabetes and other DTG contraindications using the DTG screening tool at this visit.\",\"reason\":\"Guidelines require use of a DTG screening tool prior to and during DTG use to identify contraindications including known diabetes, and this has not been documented.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention any DTG contraindication screening despite guidelines requiring it.\"}},{\"problem\":\"Pharmacovigilance assessment\",\"action\":\"Document a structured assessment for potential ART and co-medication adverse drug reactions at this visit.\",\"reason\":\"Guidelines emphasize the importance of pharmacovigilance for all patients on ART, and the clinician's plan does not address this.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan states routine follow-up with no issues but does not include any pharmacovigilance assessment as emphasized by guidelines.\"}},{\"problem\":\"Viral load suppression status\",\"action\":\"Continue current ART regimen and reinforce adherence; next viral load per schedule.\",\"reason\":\"Patient's viral load is 40 copies/mL on 2025-10-01, confirming suppression, and no toxicity signs are present.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan to continue routine follow-up is appropriate given the suppressed viral load and absence of clinical issues.\"}}],\"monitoring_plan\":\"- Order serum creatinine and eGFR now (overdue by >15 months)\\n- Repeat viral load per national schedule (last VL 2025-10-01)\\n- Screen for DTG contraindications including diabetes at this visit\\n- Report any adverse drug reactions per pharmacovigilance guidelines\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG consistently as prescribed; your viral load is suppressed.\",\"Report any new symptoms such as excessive urination, increased thirst, or unusual tiredness immediately.\",\"You will need a blood test today to check your kidney function as part of routine TDF monitoring.\"]}",
+ "plan_issues": []
+}

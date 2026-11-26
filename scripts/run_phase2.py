@@ -89,6 +89,7 @@ def main(argv: Optional[list] = None) -> int:
     ap.add_argument("--model", required=True, choices=sorted(PRESETS))
     ap.add_argument("--repeats", type=int, default=5)
     ap.add_argument("--temperature", type=float, default=None, help=f"default: the app's own ({DEFAULT_TEMPERATURE:g})")
+    ap.add_argument("--variant", default="", help="names the setup under test (Phase 2B), so its runs get their own folder")
     ap.add_argument("--cap", type=float, default=5.0, help="dollars, across everything under eval/phase2")
     ap.add_argument("--cases", type=Path, default=ROOT / "eval" / "cases")
     ap.add_argument("--root", type=Path, default=ROOT / "eval" / "phase2")
@@ -96,7 +97,7 @@ def main(argv: Optional[list] = None) -> int:
     args = ap.parse_args(argv)
 
     temperature = effective_temperature(args.temperature)
-    label = run_label(args.model, temperature)
+    label = run_label(args.model, temperature, args.variant)
     out = args.root / "runs" / label
     cases = load_cases(args.cases)
     if any(c.key_status == NO_KEY for c in cases):
@@ -116,8 +117,8 @@ def main(argv: Optional[list] = None) -> int:
         return 0
 
     out.mkdir(parents=True, exist_ok=True)
-    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name="all-MiniLM-L6-v2", engine_version=5)
-    if rb.app.GUIDELINE_PDF_PATHS:
+    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
+    if rb.app.GUIDELINE_PATHS:
         rag.ensure_indexed()
     client = OpenAICompatClient(config)
     secrets = rb._server_strings()

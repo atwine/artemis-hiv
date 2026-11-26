@@ -1,0 +1,147 @@
+{
+ "case_id": "P004",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 10.4,
+ "calls": [
+  {
+   "prompt_tokens": 1533,
+   "completion_tokens": 555,
+   "total_tokens": 2088,
+   "cost": 0.00407748,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00407748,
+    "upstream_inference_prompt_cost": 0.00163548,
+    "upstream_inference_completions_cost": 0.002442
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2260,
+   "completion_tokens": 298,
+   "total_tokens": 2558,
+   "cost": 0.002041388,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002041388,
+    "upstream_inference_prompt_cost": 1.4988e-05,
+    "upstream_inference_completions_cost": 0.0020264
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0061188679999999995,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_ADR_SCREENING_001",
+   "title": "Abdominal pain: ADR screening and reporting required",
+   "message": "Guidelines require all healthcare workers to screen for suspected adverse drug reactions at each encounter using the Drug Safety Screening checklist, and all suspected ADRs should be recorded and reported. The patient reports new abdominal pain today, but the clinician's plan does not document formal ADR screening or submit an aDSM form. Abdominal pain could relate to TDF-associated nephrotoxicity or hepatotoxicity, though the patient's appetite is preserved and no fever is noted, arguing against acute infection or severe hepatobiliary disease.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Complete the Drug Safety Screening checklist for abdominal pain, document findings in the ART card or eMRS, and submit an aDSM form if an ADR is suspected.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+      "page_number": 21,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "page_number": 23,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_ADR_SCREENING_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+       "page_number": 21
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+       "page_number": 23
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines require all healthcare workers to screen for suspected adverse drug reactions at each encounter using the Drug Safety Screening checklist, and all suspected ADRs should be recorded and reported. The patient reports new abdominal pain today, but the clinician's plan does not document formal ADR screening or submit an aDSM form. Abdominal pain could relate to TDF-associated nephrotoxicity or hepatotoxicity, though the patient's appetite is preserved and no fever is noted, arguing against acute infection or severe hepatobiliary disease.",
+     "recommended_action": "Complete the Drug Safety Screening checklist for abdominal pain, document findings in the ART card or eMRS, and submit an aDSM form if an ADR is suspected.",
+     "severity": "moderate",
+     "title": "Abdominal pain: ADR screening and reporting required"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_ADR_SCREENING_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_ADR_SCREENING_001\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\",\n        \"page_number\": 21\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\",\n        \"page_number\": 23\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines require all healthcare workers to screen for suspected adverse drug reactions at each encounter using the Drug Safety Screening checklist, and all suspected ADRs should be recorded and reported. The patient reports new abdominal pain today, but the clinician's plan does not document formal ADR screening or submit an aDSM form. Abdominal pain could relate to TDF-associated nephrotoxicity or hepatotoxicity, though the patient's appetite is preserved and no fever is noted, arguing against acute infection or severe hepatobiliary disease.\",\n    \"recommended_action\": \"Complete the Drug Safety Screening checklist for abdominal pain, document findings in the ART card or eMRS, and submit an aDSM form if an ADR is suspected.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Abdominal pain: ADR screening and reporting required\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+    "page_number": 38,
+    "quote": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdo"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient has suppressed viral load (25 copies/mL) and normal creatinine (82 umol/L), and abdominal pain without fever does not clearly indicate ART toxicity requiring regimen change.\"},\"problems\":[{\"problem\":\"Abdominal pain on TDF/3TC/DTG regimen\",\"action\":\"Uncertain: guideline excerpts only emphasize pharmacovigilance importance without specifying workup; clinically, evaluate with abdominal exam, consider LFTs, lipase, and renal function to rule out drug toxicity vs other causes.\",\"reason\":\"Patient reports abdominal pain without fever on TLD since March 2023, and guidelines emphasize pharmacovigilance but do not provide specific toxicity diagnostic criteria in the available excerpts.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan only documents the symptom without any diagnostic workup, symptomatic management, or toxicity assessment.\"}},{\"problem\":\"Pharmacovigilance assessment for potential ART drug toxicity\",\"action\":\"Uncertain: available guideline excerpts emphasize pharmacovigilance importance but lack specific toxicity evaluation protocols; clinically, assess TDF renal effects with repeat creatinine, consider 3TC/DTG adverse effects, and report suspected toxicity per guidelines.\",\"reason\":\"Guidelines stress pharmacovigilance for all ART patients, and this patient has new abdominal pain that warrants toxicity consideration, but the excerpts do not detail specific diagnostic steps.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention any pharmacovigilance assessment or toxicity screening despite new symptoms.\"}},{\"problem\":\"Inadequate clinical evaluation of abdominal pain\",\"action\":\"Perform focused abdominal examination, order CBC, LFTs, lipase, and repeat creatinine to evaluate abdominal pain etiology including potential drug toxicity.\",\"reason\":\"Patient has abdominal pain with appetite preserved and no fever, requiring systematic evaluation to differentiate ART toxicity from gastrointestinal, hepatic, or pancreatic causes.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician documented only the complaint without ordering any diagnostic tests or performing documented abdominal examination.\"}}],\"monitoring_plan\":\"Repeat serum creatinine to trend renal function (last 82 umol/L in Nov 2025); repeat viral load at next scheduled visit; if abdominal pain persists, order LFTs, lipase, and CBC to evaluate toxicity vs other causes.\",\"patient_counselling\":[\"Report any worsening abdominal pain, vomiting, jaundice, or reduced urine output immediately.\",\"Continue taking TLD daily as prescribed; do not stop without medical advice.\",\"Return for follow-up if abdominal pain does not resolve or new symptoms develop.\"]}",
+ "plan_issues": []
+}

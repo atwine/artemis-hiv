@@ -1,0 +1,122 @@
+{
+ "case_id": "P001",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 9.1,
+ "calls": [
+  {
+   "prompt_tokens": 1455,
+   "completion_tokens": 531,
+   "total_tokens": 1986,
+   "cost": 0.0012181356,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1280,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0012181356,
+    "upstream_inference_prompt_cost": 0.0002415204,
+    "upstream_inference_completions_cost": 0.0009766152
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2128,
+   "completion_tokens": 3,
+   "total_tokens": 2131,
+   "cost": 0.0003382874,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1915,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0003382874,
+    "upstream_inference_prompt_cost": 0.0003327698,
+    "upstream_inference_completions_cost": 5.5176e-06
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.001556423,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   }
+  ],
+  "parse_status": "parsed_empty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is clinically well with suppressed viral load (40 copies/mL) and normal creatinine (88 umol/L) on TDF/3TC/DTG with no signs of toxicity.\"},\"problems\":[{\"problem\":\"Stale renal monitoring on TDF (creatinine last checked 478 days ago)\",\"action\":\"Order serum creatinine and eGFR today to screen for TDF nephrotoxicity per guideline requirement.\",\"reason\":\"Guidelines require serum creatinine and eGFR screening for patients on TDF, and the last creatinine was over 15 months ago.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan of routine follow-up with no issues does not include ordering renal function tests despite TDF use.\"}},{\"problem\":\"No evidence of current drug toxicity\",\"action\":\"Continue TDF/3TC/DTG and document absence of toxicity symptoms at this visit.\",\"reason\":\"Patient has no complaints, appears well on examination, and has normal creatinine and suppressed viral load.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan to continue routine follow-up aligns with the absence of clinical or laboratory toxicity signals.\"}},{\"problem\":\"Pharmacovigilance screening not documented\",\"action\":\"Screen for DTG contraindications (diabetes, psychiatric history) and document adverse drug reaction assessment per pharmacovigilance guidelines.\",\"reason\":\"Guidelines emphasize pharmacovigilance and DTG screening, and there is no documentation of contraindication screening since regimen initiation.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician plans routine follow-up but does not document pharmacovigilance or DTG contraindication screening as emphasized by guidelines.\"}}],\"monitoring_plan\":\"- Serum creatinine and eGFR today (overdue by >15 months)\\n- Viral load per national schedule (last VL Oct 2025: 40 copies/mL, suppressed)\\n- Repeat creatinine/eGFR at least every 6-12 months while on TDF\\n- Monitor for DTG-related neuropsychiatric symptoms and metabolic changes\",\"patient_counselling\":[\"Continue taking TDF/3TC/DTG daily with good adherence as your viral load is suppressed\",\"Report any new symptoms including unusual tiredness, bone pain, mood changes, or sleep disturbances\",\"You are due for a kidney function blood test today before leaving the clinic\",\"Maintain regular follow-up appointments for ongoing monitoring\"]}",
+ "plan_issues": []
+}

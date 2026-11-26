@@ -1,0 +1,254 @@
+{
+ "case_id": "EX3",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 196.4,
+ "calls": [
+  {
+   "prompt_tokens": 2038,
+   "completion_tokens": 1000,
+   "total_tokens": 3038,
+   "cost": 0.00674248,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00674248,
+    "upstream_inference_prompt_cost": 0.00234248,
+    "upstream_inference_completions_cost": 0.0044
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2067,
+   "completion_tokens": 867,
+   "total_tokens": 2934,
+   "cost": 0.00224029,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2048,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00224029,
+    "upstream_inference_prompt_cost": 0.00015949,
+    "upstream_inference_completions_cost": 0.0020808
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3068,
+   "completion_tokens": 716,
+   "total_tokens": 3784,
+   "cost": 0.00345056,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00345056,
+    "upstream_inference_prompt_cost": 0.00171784,
+    "upstream_inference_completions_cost": 0.00173272
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2987,
+   "completion_tokens": 850,
+   "total_tokens": 3837,
+   "cost": 0.00390894,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00390894,
+    "upstream_inference_prompt_cost": 0.00185194,
+    "upstream_inference_completions_cost": 0.002057
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.01634227,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_001",
+   "title": "Uncontrolled hypothyroidism despite levothyroxine",
+   "message": "Patient has TSH 12.4 mIU/L (target below 4.5) with low Free T4, indicating persistent hypothyroidism. She reports often forgetting the thyroid tablet, which is the likely primary cause of poor control. Symptoms including tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes are all consistent with hypothyroidism. These overlap with DTG-related weight gain but are better explained by undertreated hypothyroidism. The weight gain (9 kg over a year) may be substantially driven by uncontrolled hypothyroidism rather than DTG alone. Switching DTG for weight gain without first correcting thyroid function may not address the root cause.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Address levothyroxine adherence and up-titrate dose to achieve TSH target before attributing weight gain to DTG. Recheck TSH in 6–8 weeks.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_001",
+     "title": "Uncontrolled hypothyroidism despite levothyroxine",
+     "message": "Patient has TSH 12.4 mIU/L (target below 4.5) with low Free T4, indicating persistent hypothyroidism. She reports often forgetting the thyroid tablet, which is the likely primary cause of poor control. Symptoms including tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes are all consistent with hypothyroidism. These overlap with DTG-related weight gain but are better explained by undertreated hypothyroidism. The weight gain (9 kg over a year) may be substantially driven by uncontrolled hypothyroidism rather than DTG alone. Switching DTG for weight gain without first correcting thyroid function may not address the root cause.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Address levothyroxine adherence and up-titrate dose to achieve TSH target before attributing weight gain to DTG. Recheck TSH in 6–8 weeks.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_002",
+   "title": "DTG weight gain vs hypothyroidism attribution",
+   "message": "Guidelines list abnormal weight gain as a recognised DTG side effect. Patient gained 9 kg in one year with BMI now 33. However, uncontrolled hypothyroidism (TSH 12.4, low Free T4) is an equally plausible cause of weight gain, and the clinician's plan to switch DTG does not address this. Evidence for DTG attribution: weight gain temporally follows DTG use and guidelines recognise it. Evidence against: hypothyroidism is untreated/poorly controlled, and symptoms (cold intolerance, constipation, dry skin, puffiness, delayed reflexes) point to thyroid dysfunction. Correcting hypothyroidism first is essential before concluding DTG is the cause.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Optimise hypothyroidism treatment first; reassess weight after TSH normalises before deciding to switch DTG.",
+    "citations": [
+     {
+      "page_number": 26,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_002",
+     "title": "DTG weight gain vs hypothyroidism attribution",
+     "message": "Guidelines list abnormal weight gain as a recognised DTG side effect. Patient gained 9 kg in one year with BMI now 33. However, uncontrolled hypothyroidism (TSH 12.4, low Free T4) is an equally plausible cause of weight gain, and the clinician's plan to switch DTG does not address this. Evidence for DTG attribution: weight gain temporally follows DTG use and guidelines recognise it. Evidence against: hypothyroidism is untreated/poorly controlled, and symptoms (cold intolerance, constipation, dry skin, puffiness, delayed reflexes) point to thyroid dysfunction. Correcting hypothyroidism first is essential before concluding DTG is the cause.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Optimise hypothyroidism treatment first; reassess weight after TSH normalises before deciding to switch DTG.",
+     "citations": [
+      {
+       "page_number": 26,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_003",
+   "title": "Dyslipidaemia and hyperglycaemia risk with DTG and obesity",
+   "message": "Guidelines require assessing hyperglycaemia risk before DTG use, with BMI ≥25 as a risk factor. Patient has BMI 33 and multiple hyperglycaemia risk factors (age ≥30, obesity). Fasting glucose is 5.6 mmol/L, below the high-glucose threshold (>6.95 mmol/L fasting) that would contraindicate DTG. However, LDL 4.2 and total cholesterol 6.4 mmol/L indicate dyslipidaemia, compounding cardiovascular risk with obesity. Guidelines recommend glucose monitoring every 3 months for the first year after DTG transition. No 3-monthly glucose monitoring is evident in the plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor fasting glucose every 3 months for the first year per DTG guidelines. Address dyslipidaemia with lifestyle measures and consider lipid-lowering therapy.",
+    "citations": [
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_003",
+     "title": "Dyslipidaemia and hyperglycaemia risk with DTG and obesity",
+     "message": "Guidelines require assessing hyperglycaemia risk before DTG use, with BMI ≥25 as a risk factor. Patient has BMI 33 and multiple hyperglycaemia risk factors (age ≥30, obesity). Fasting glucose is 5.6 mmol/L, below the high-glucose threshold (>6.95 mmol/L fasting) that would contraindicate DTG. However, LDL 4.2 and total cholesterol 6.4 mmol/L indicate dyslipidaemia, compounding cardiovascular risk with obesity. Guidelines recommend glucose monitoring every 3 months for the first year after DTG transition. No 3-monthly glucose monitoring is evident in the plan.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor fasting glucose every 3 months for the first year per DTG guidelines. Address dyslipidaemia with lifestyle measures and consider lipid-lowering therapy.",
+     "citations": [
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      },
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_001": [],
+  "EX3_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1"
+  ],
+  "EX3_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_001\",\n    \"title\": \"Uncontrolled hypothyroidism despite levothyroxine\",\n    \"message\": \"Patient has TSH 12.4 mIU/L (target below 4.5) with low Free T4, indicating persistent hypothyroidism. She reports often forgetting the thyroid tablet, which is the likely primary cause of poor control. Symptoms including tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes are all consistent with hypothyroidism. These overlap with DTG-related weight gain but are better explained by undertreated hypothyroidism. The weight gain (9 kg over a year) may be substantially driven by uncontrolled hypothyroidism rather than DTG alone. Switching DTG for weight gain without first correcting thyroid function may not address the root cause.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Address levothyroxine adherence and up-titrate dose to achieve TSH target before attributing weight gain to DTG. Recheck TSH in 6–8 weeks.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"EX3_002\",\n    \"title\": \"DTG weight gain vs hypothyroidism attribution\",\n    \"message\": \"Guidelines list abnormal weight gain as a recognised DTG side effect. Patient gained 9 kg in one year with BMI now 33. However, uncontrolled hypothyroidism (TSH 12.4, low Free T4) is an equally plausible cause of weight gain, and the clinician's plan to switch DTG does not address this. Evidence for DTG attribution: weight gain temporally follows DTG use and guidelines recognise it. Evidence against: hypothyroidism is untreated/poorly controlled, and symptoms (cold intolerance, constipation, dry skin, puffiness, delayed reflexes) point to thyroid dysfunction. Correcting hypothyroidism first is essential before concluding DTG is the cause.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Optimise hypothyroidism treatment first; reassess weight after TSH normalises before deciding to switch DTG.\",\n    \"citations\": [{\"page_number\": 26, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX3_003\",\n    \"title\": \"Dyslipidaemia and hyperglycaemia risk with DTG and obesity\",\n    \"message\": \"Guidelines require assessing hyperglycaemia risk before DTG use, with BMI ≥25 as a risk factor. Patient has BMI 33 and multiple hyperglycaemia risk factors (age ≥30, obesity). Fasting glucose is 5.6 mmol/L, below the high-glucose threshold (>6.95 mmol/L fasting) that would contraindicate DTG. However, LDL 4.2 and total cholesterol 6.4 mmol/L indicate dyslipidaemia, compounding cardiovascular risk with obesity. Guidelines recommend glucose monitoring every 3 months for the first year after DTG transition. No 3-monthly glucose monitoring is evident in the plan.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor fasting glucose every 3 months for the first year per DTG guidelines. Address dyslipidaemia with lifestyle measures and consider lipid-lowering therapy.\",\n    \"citations\": [\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"},\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabet"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Uncertain\",\"reason\":\"Uncertain: the provided guideline excerpts do not contain specific guidance on switching DTG for weight gain, and the patient's symptoms may be primarily due to inadequately treated hypothyroidism rather than DTG toxicity.\"},\"problems\":[{\"problem\":\"Inadequately treated hypothyroidism with poor levothyroxine adherence causing weight gain, tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes\",\"action\":\"Check TSH and free T4 today; counsel patient on daily levothyroxine adherence; adjust levothyroxine dose based on TSH results before attributing weight gain to DTG.\",\"reason\":\"The patient reports often forgetting levothyroxine and has classic hypothyroid signs on examination, which can fully explain the 9 kg weight gain and presenting symptoms.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan attributes weight gain to TLD and considers switching DTG but does not investigate or address the poorly controlled hypothyroidism or levothyroxine non-adherence.\"}},{\"problem\":\"Dyslipidemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L) with BMI 33 requiring cardiovascular risk assessment and management\",\"action\":\"Assess cardiovascular risk; initiate lifestyle counselling; consider statin therapy per risk assessment; repeat fasting lipid profile after thyroid optimization.\",\"reason\":\"The patient has elevated LDL and total cholesterol with BMI 33, and guideline excerpts note potential hepatotoxicity concerns with ART drugs though specific lipid management guidance is not provided.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention the abnormal lipid results or any management of dyslipidemia.\"}},{\"problem\":\"Need for DTG contraindication reassessment given significant weight gain, BMI 33, and metabolic abnormalities\",\"action\":\"Use the DTG screening tool to reassess contraindications including diabetes risk, given fasting glucose 5.6 mmol/L and BMI 33.\",\"reason\":\"Guidelines require use of a DTG screening tool prior to DTG initiation and list contraindications including known diabetics, and this patient has metabolic risk factors warranting reassessment.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician considers switching from DTG for weight gain but does not formally screen for DTG contraindications or metabolic contraindications using the screening tool.\"}}],\"monitoring_plan\":\"Check TSH and free T4 now; repeat fasting lipid profile in 3 months after thyroid optimization; monitor creatinine annually (last 72 umol/L Aug 2025); repeat viral load per schedule (last suppressed Nov 2025); monitor weight and BMI at each visit; check fasting glucose annually given BMI 33.\",\"patient_counselling\":[\"Emphasize the importance of taking levothyroxine every morning consistently; missing doses can cause weight gain, tiredness, and cold intolerance.\",\"Explain that weight gain may be from poorly controlled hypothyroidism, not necessarily the ART; thyroid tests will help determine the cause.\",\"Counsel on lifestyle modifications including diet and physical activity given BMI 33 and abnormal lipids.\",\"Inform that DTG switch is being considered but thyroid function must be evaluated first to avoid unnecessary regimen changes.\"]}",
+ "plan_issues": []
+}

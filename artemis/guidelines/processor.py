@@ -246,6 +246,32 @@ def _strip_markdown_noise(text: str) -> str:
     return text
 
 
+def _markdown_segments(md_path: Path) -> List[str]:
+    # The converted Markdown files use <!-- PAGE BREAK --> as the page delimiter, mirroring the
+    # original PDF page boundaries.
+    return re.split(r"<!--\s*PAGE\s+BREAK\s*-->", md_path.read_text(encoding="utf-8"))
+
+
+def printed_page_numbers(segments: List[str]) -> List[int]:
+    """The printed page number of each page of an extract (G36, owner's decision 2026-11-26).
+
+    Each page of the Ugandan extracts ends with its printed number; a page whose number was lost
+    in conversion takes it from its neighbours, since the pages run in order. Numbers that do not
+    run in order, or none at all, are refused: a citation must never name the wrong page."""
+    found = {}
+    for i, seg in enumerate(segments):
+        lines = [line.strip() for line in seg.strip().splitlines() if line.strip()]
+        if lines and re.fullmatch(r"\d{1,4}", lines[-1]):
+            found[i] = int(lines[-1])
+    if not found:
+        raise ValueError("no printed page numbers found in the guideline extract")
+    offsets = {n - i for i, n in found.items()}
+    if len(offsets) != 1:
+        raise ValueError("the printed page numbers in the guideline extract do not run in order")
+    start = offsets.pop()
+    return [start + i for i in range(len(segments))]
+
+
 def extract_markdown_page_texts(
     md_path: Path,
     *,
@@ -253,19 +279,12 @@ def extract_markdown_page_texts(
 ) -> List[str]:
     """Split a Markdown file into page-equivalent segments using ``<!-- PAGE BREAK -->``."""
 
-    raw = md_path.read_text(encoding="utf-8")
-    # Rationale: the converted Markdown files use <!-- PAGE BREAK --> as the page delimiter,
-    # mirroring the original PDF page boundaries.
-    segments = re.split(r"<!--\s*PAGE\s+BREAK\s*-->", raw)
+    return _clean_pages(_markdown_segments(md_path), max_pages)
 
+
+def _clean_pages(segments: List[str], max_pages: Optional[int]) -> List[str]:
     # The content before the first PAGE BREAK is page 1.
-    page_texts: List[str] = []
-    limit = len(segments) if max_pages is None else min(max_pages, len(segments))
-    for seg in segments[:limit]:
-        cleaned = _strip_markdown_noise(seg).strip()
-        page_texts.append(cleaned)
-
-    return page_texts
+    return [_strip_markdown_noise(seg).strip() for seg in segments[:max_pages]]
 
 
 def process_markdown_guidelines(
@@ -284,7 +303,9 @@ def process_markdown_guidelines(
     if not md_path.exists():
         raise FileNotFoundError(f"Guideline Markdown file not found: {md_path}")
 
-    page_texts = extract_markdown_page_texts(md_path, max_pages=max_pages)
+    segments = _markdown_segments(md_path)
+    page_texts = _clean_pages(segments, max_pages)
+    printed = printed_page_numbers(segments)
 
     # Rationale: derive a stable file-level prefix from the stem so chunk IDs
     # are unique across multiple Markdown source files.
@@ -300,7 +321,7 @@ def process_markdown_guidelines(
                     chunk_id=f"{file_prefix}__p{idx}_c{j}",
                     text=chunk_text,
                     source_path=str(md_path),
-                    page_number=idx,
+                    page_number=printed[idx - 1],
                 )
             )
 

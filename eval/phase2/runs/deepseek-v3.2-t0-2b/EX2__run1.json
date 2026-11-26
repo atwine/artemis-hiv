@@ -1,0 +1,324 @@
+{
+ "case_id": "EX2",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 65.1,
+ "calls": [
+  {
+   "prompt_tokens": 1681,
+   "completion_tokens": 465,
+   "total_tokens": 2146,
+   "cost": 0.000807379,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000807379,
+    "upstream_inference_prompt_cost": 0.000435379,
+    "upstream_inference_completions_cost": 0.000372
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 930,
+   "completion_tokens": 65,
+   "total_tokens": 995,
+   "cost": 0.0002665,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0002665,
+    "upstream_inference_prompt_cost": 0.0002418,
+    "upstream_inference_completions_cost": 2.47e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3285,
+   "completion_tokens": 883,
+   "total_tokens": 4168,
+   "cost": 0.00118964,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00118964,
+    "upstream_inference_prompt_cost": 0.0008541,
+    "upstream_inference_completions_cost": 0.00033554
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0022635190000000003,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_AKI_TDF_001",
+   "title": "Acute Kidney Injury with TDF",
+   "message": "Guidelines list TDF as a cause of acute kidney injury and chronic kidney disease. The patient has an acute kidney injury (creatinine 2.4 mg/dL, up from 0.9 mg/dL) with dehydration from severe gastroenteritis. Evidence for TDF attribution includes the known toxicity. Evidence against includes a clear non-drug cause (dehydration from gastroenteritis) and a high urea-to-creatinine ratio (24:1) suggestive of pre-renal azotemia.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Do LFTs and RFTs. If deranged, manage per toxicity guidelines.",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_AKI_TDF_001",
+     "title": "Acute Kidney Injury with TDF",
+     "message": "Guidelines list TDF as a cause of acute kidney injury and chronic kidney disease. The patient has an acute kidney injury (creatinine 2.4 mg/dL, up from 0.9 mg/dL) with dehydration from severe gastroenteritis. Evidence for TDF attribution includes the known toxicity. Evidence against includes a clear non-drug cause (dehydration from gastroenteritis) and a high urea-to-creatinine ratio (24:1) suggestive of pre-renal azotemia.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Do LFTs and RFTs. If deranged, manage per toxicity guidelines.",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_TDF_CONTRA_002",
+   "title": "TDF Contraindication in Kidney Disease",
+   "message": "Guidelines state TDF is contraindicated in kidney disease with eGFR below 60 ml/min. The patient's acute kidney injury likely corresponds to an eGFR below 60 ml/min, creating a contraindication. The clinician's plan to consider stopping TDF permanently aligns with this guideline.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "high",
+    "recommended_action": "Substitute TDF with an alternative regimen, such as ABC+3TC+DTG, as TDF is contraindicated.",
+    "citations": [
+     {
+      "page_number": 6,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_TDF_CONTRA_002",
+     "title": "TDF Contraindication in Kidney Disease",
+     "message": "Guidelines state TDF is contraindicated in kidney disease with eGFR below 60 ml/min. The patient's acute kidney injury likely corresponds to an eGFR below 60 ml/min, creating a contraindication. The clinician's plan to consider stopping TDF permanently aligns with this guideline.",
+     "issue_type": "guideline_deviation",
+     "severity": "high",
+     "recommended_action": "Substitute TDF with an alternative regimen, such as ABC+3TC+DTG, as TDF is contraindicated.",
+     "citations": [
+      {
+       "page_number": 6,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_MONITOR_GAP_003",
+   "title": "Missing TDF Renal Monitoring",
+   "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. The patient has been on TDF for 2 years, and the last recorded creatinine was 375 days ago. This gap exceeds the 12-month monitoring interval.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Perform serum creatinine and eGFR as per the 12-month monitoring schedule for patients on TDF.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_MONITOR_GAP_003",
+     "title": "Missing TDF Renal Monitoring",
+     "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. The patient has been on TDF for 2 years, and the last recorded creatinine was 375 days ago. This gap exceeds the 12-month monitoring interval.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Perform serum creatinine and eGFR as per the 12-month monitoring schedule for patients on TDF.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_HYPOKALEMIA_004",
+   "title": "Hypokalemia Risk with TDF",
+   "message": "Guidelines list exhaustion, extreme fatigue, and muscle cramps as presenting signs for TDF toxicity, which can be associated with electrolyte disturbances like hypokalemia. The patient has hypokalemia (potassium 3.1 mmol/L) and symptoms of dizziness and fatigue from dehydration. This electrolyte abnormality compounds the risk in the setting of acute kidney injury.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor potassium closely and correct hypokalemia, especially in the context of kidney injury.",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_HYPOKALEMIA_004",
+     "title": "Hypokalemia Risk with TDF",
+     "message": "Guidelines list exhaustion, extreme fatigue, and muscle cramps as presenting signs for TDF toxicity, which can be associated with electrolyte disturbances like hypokalemia. The patient has hypokalemia (potassium 3.1 mmol/L) and symptoms of dizziness and fatigue from dehydration. This electrolyte abnormality compounds the risk in the setting of acute kidney injury.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor potassium closely and correct hypokalemia, especially in the context of kidney injury.",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_AKI_TDF_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+  ],
+  "EX2_TDF_CONTRA_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2"
+  ],
+  "EX2_MONITOR_GAP_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+  ],
+  "EX2_HYPOKALEMIA_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "TDF kidney toxicity with acute kidney injury",
+   "TDF stopping criteria for kidney injury",
+   "DTG side effects with gastroenteritis",
+   "DTG drug interactions with antibiotics",
+   "Creatinine monitoring frequency on TDF",
+   "Potassium monitoring on TDF with kidney injury"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_AKI_TDF_001\",\n    \"title\": \"Acute Kidney Injury with TDF\",\n    \"message\": \"Guidelines list TDF as a cause of acute kidney injury and chronic kidney disease. The patient has an acute kidney injury (creatinine 2.4 mg/dL, up from 0.9 mg/dL) with dehydration from severe gastroenteritis. Evidence for TDF attribution includes the known toxicity. Evidence against includes a clear non-drug cause (dehydration from gastroenteritis) and a high urea-to-creatinine ratio (24:1) suggestive of pre-renal azotemia.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Do LFTs and RFTs. If deranged, manage per toxicity guidelines.\",\n    \"citations\": [\n      {\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_TDF_CONTRA_002\",\n    \"title\": \"TDF Contraindication in Kidney Disease\",\n    \"message\": \"Guidelines state TDF is contraindicated in kidney disease with eGFR below 60 ml/min. The patient's acute kidney injury likely corresponds to an eGFR below 60 ml/min, creating a contraindication. The clinician's plan to consider stopping TDF permanently aligns with this guideline.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Substitute TDF with an alternative regimen, such as ABC+3TC+DTG, as TDF is contraindicated.\",\n    \"citations\": [\n      {\"page_number\": 6, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_MONITOR_GAP_003\",\n    \"title\": \"Missing TDF Renal Monitoring\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. The patient has been on TDF for 2 years, and the last recorded creatinine was 375 days ago. This gap exceeds the 12-month monitoring interval.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Perform serum creatinine and eGFR as per the 12-month monitoring schedule for patients on TDF.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_HYPOKALEMIA_004\",\n    \"title\": \"Hypokalemia Risk with TDF\",\n    \"message\": \"Guidelines list exhaustion, extreme fatigue, and muscle cramps as presenting signs for TDF toxicity, which can be associated with electrolyte disturbances like hypokalemia. The patient has hypokalemia (potassium 3.1 mmol/L) and symptoms of dizziness and fatigue from dehydration. This electrolyte abnormality compounds the risk in the setting of acute kidney injury.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor potassium closely and correct hypokalemia, especially in the context of kidney injury.\",\n    \"citations\": [\n      {\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s9_c2",
+    "page_number": 6,
+    "quote": "6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS > When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400\nAdults and adolescents eligible for DTG should only be initiated on ABC+3TC+DTG if TDF is contraindicated (Table 74), including the following conditions: * Kidney disease and estimated glomerular filtration rate (GFR) below 60 ml/min. * Adolescents below 30kg of weight. When to use ABC+ 3TC +EFV400 or TAF +3TC+EFV400 Adults and adolescents should only be initiated on ABC+3TC+EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p40_c1",
+    "page_number": 273,
+    "quote": "MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsadesde pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdominal pain that feels worse after eating, fever, rapid pulse, nausea and vomiting. Refer to Blood Lipid levels in Table 66."
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2",
+    "page_number": 162,
+    "quote": "RAL with DTG or LPV/r after TB Treatment) AZT or ABC → +3TC+LPV/r Substitute Rifampicin with Rifabutin OR Double the am and pm dose of LPV/r AZT or ABC→+3TC+DRV/r Substitute Rifampicin with Rifabutin Note: for patients on rifapentine based regimen, look out for potential drug-drug interactions 162"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s27_c6",
+    "page_number": 37,
+    "quote": "Managing IRIS\nMAJOR ADVERSE/ TOXICITY EVENTS | PRESENTING SIGNS/ SYMPTOMS | SUGGESTED MANAGEMENT\nTDF | Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis | Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. | Do LFTs and RFTs. If deranged (el"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 269,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 171,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+    "page_number": 27,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nDTG | 1. Screen using screening tool to identify any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests.\nIsoniazid/ 3HP Prophylaxis | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests ba"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s18_c2",
+    "page_number": 27,
+    "quote": "TB Screening > Diagnosis of Cryptococcal Meningitis > Treatment of Cryptococcal Meningitis\n* Antifungals and cardiac glycosides (e.g. Digoxin): Increased risk of cardiac toxicity, especially in clients with hypokalemia. Monitor potassium very closely. * Antifungals and antiepileptic medicines: Antifungals may increase serum concentration of carbamazepine, alprazolam, and other benzodiazepines. May need to reduce antiepileptic by 50% if concurrently using or monitor very close"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Switch\",\n    \"reason\": \"The patient has acute kidney injury (creatinine 2.4 mg/dL) and TDF is associated with renal toxicity, so a switch is indicated.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Acute kidney injury and severe dehydration\",\n      \"action\": \"Continue IV fluid resuscitation and monitor urine output and creatinine.\",\n      \"reason\": \"The patient has severe gastroenteritis with dehydration and acute kidney injury (creatinine 2.4 mg/dL).\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan includes IV fluid resuscitation for severe gastroenteritis with dehydration and acute kidney injury.\"\n      }\n    },\n    {\n      \"problem\": \"Potential TDF-associated renal toxicity\",\n      \"action\": \"Switch ART regimen to one without TDF (e.g., TAF or AZT-based).\",\n      \"reason\": \"The patient has acute kidney injury (creatinine 2.4 mg/dL) and TDF is associated with renal toxicity.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan includes considering stopping TDF permanently because of the kidney injury.\"\n      }\n    },\n    {\n      \"problem\": \"Severe gastroenteritis requiring empiric treatment\",\n      \"action\": \"Administer empiric antibiotics for gastroenteritis pending stool microscopy.\",\n      \"reason\": \"The patient has severe watery diarrhoea and vomiting for 5 days, and two family members have the same illness.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan includes empiric antibiotics for gastroenteritis pending stool microscopy.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Monitor creatinine and urine output daily; repeat creatinine after rehydration; check electrolytes.\",\n  \"patient_counselling\": [\"Importance of oral rehydration and seeking care for diarrhoea.\", \"Explanation of ART regimen change due to kidney injury.\", \"Adherence to new ART regimen after switch.\"]\n}",
+ "plan_issues": []
+}

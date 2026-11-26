@@ -1,0 +1,251 @@
+{
+ "case_id": "P001",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 185.8,
+ "calls": [
+  {
+   "prompt_tokens": 1455,
+   "completion_tokens": 1000,
+   "total_tokens": 2455,
+   "cost": 0.00310706,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00310706,
+    "upstream_inference_prompt_cost": 0.00068706,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1484,
+   "completion_tokens": 597,
+   "total_tokens": 2081,
+   "cost": 0.00419368,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00419368,
+    "upstream_inference_prompt_cost": 0.00156688,
+    "upstream_inference_completions_cost": 0.0026268
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 649,
+   "completion_tokens": 36,
+   "total_tokens": 685,
+   "cost": 0.00099404,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00099404,
+    "upstream_inference_prompt_cost": 0.00083564,
+    "upstream_inference_completions_cost": 0.0001584
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2342,
+   "completion_tokens": 480,
+   "total_tokens": 2822,
+   "cost": 0.00444232,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00444232,
+    "upstream_inference_prompt_cost": 0.00233032,
+    "upstream_inference_completions_cost": 0.002112
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0127371,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Overdue serum creatinine monitoring on TDF",
+   "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for patients on TDF. The patient's most recent creatinine was 88 umol/L on 2024-10-01, which is 478 days (over 15 months) before this visit. No creatinine was ordered at this encounter, creating a monitoring gap exceeding the 12-month interval. The clinician's plan notes routine follow-up with no issues and includes no renal function testing.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order serum creatinine and eGFR now, as the patient is over 12 months since last renal function monitoring on TDF.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "Overdue serum creatinine monitoring on TDF",
+     "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for patients on TDF. The patient's most recent creatinine was 88 umol/L on 2024-10-01, which is 478 days (over 15 months) before this visit. No creatinine was ordered at this encounter, creating a monitoring gap exceeding the 12-month interval. The clinician's plan notes routine follow-up with no issues and includes no renal function testing.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order serum creatinine and eGFR now, as the patient is over 12 months since last renal function monitoring on TDF.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Viral load near suppression threshold",
+   "message": "Guidelines define viral suppression as VL <200 copies/mL for plasma samples. The patient's viral load was 40 copies/mL on 2025-10-01, which is suppressed. However, per guidelines, adults require VL monitoring every 12 months after the initial 6- and 12-month tests if suppressed. The most recent VL was 113 days ago, so the next VL is not yet due. No action is needed at this visit.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "No viral load action needed now; ensure next VL is scheduled at approximately 12 months from the 2025-10-01 test.",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Viral load near suppression threshold",
+     "message": "Guidelines define viral suppression as VL <200 copies/mL for plasma samples. The patient's viral load was 40 copies/mL on 2025-10-01, which is suppressed. However, per guidelines, adults require VL monitoring every 12 months after the initial 6- and 12-month tests if suppressed. The most recent VL was 113 days ago, so the next VL is not yet due. No action is needed at this visit.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "No viral load action needed now; ensure next VL is scheduled at approximately 12 months from the 2025-10-01 test.",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+      },
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Is creatinine monitoring overdue after 478 days on TDF and DTG?",
+   "When should viral load be repeated after a result of 40 copies/mL?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"Overdue serum creatinine monitoring on TDF\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring every 12 months for patients on TDF. The patient's most recent creatinine was 88 umol/L on 2024-10-01, which is 478 days (over 15 months) before this visit. No creatinine was ordered at this encounter, creating a monitoring gap exceeding the 12-month interval. The clinician's plan notes routine follow-up with no issues and includes no renal function testing.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order serum creatinine and eGFR now, as the patient is over 12 months since last renal function monitoring on TDF.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Viral load near suppression threshold\",\n    \"message\": \"Guidelines define viral suppression as VL <200 copies/mL for plasma samples. The patient's viral load was 40 copies/mL on 2025-10-01, which is suppressed. However, per guidelines, adults require VL monitoring every 12 months after the initial 6- and 12-month tests if suppressed. The most recent VL was 113 days ago, so the next VL is not yet due. No action is needed at this visit.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"No viral load action needed now; ensure next VL is scheduled at approximately 12 months from the 2025-10-01 test.\",\n    \"citations\": [\n      {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3\"},\n      {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months 260"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut off points of 200 copies/ mL and 400 copies/mL respectively, as shown in Figure 58. A patient who has been on ART for more than 6 months and is responding to ART is considered virally suppressed at VL <200 copies/mL and <400 copies/mL for plasma and DBS samples, respectively. Facilities should constitute a multidisciplinary VL review committees to review, track, and make decisions to optimize ART regimen by switching to second-line, third- line, or a more potent regimen. At the minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes and/or GFR is < 60mls/min) then substitute with ABC If ABC is contraindicated: substitute with AZT ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 12,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months after initiation of ART. The second VL following the first suppressed viral load should be done at 12 months after initiation of ART and thereafter every 12 months if it is suppressed. If not suppressed, follow the algorithm in Figure 58. 3. HIV positive pregnant and breastfeeding women: If newly initiated on ART at ANC, conduct a VL test at 3 months on ART. If VL supressed 245"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient has no complaints, appears well, has good adherence, viral load is suppressed at 40 copies/mL, and creatinine is normal at 88 umol/L, so there is no evidence of drug toxicity requiring any regimen change.\"},\"problems\":[{\"problem\":\"Stale renal monitoring on TDF — creatinine last checked 478 days ago\",\"action\":\"Order serum creatinine and eGFR at this visit to screen for TDF-related nephrotoxicity per Uganda HIV guidelines which require serum creatinine and eGFR monitoring for patients on TDF.\",\"reason\":\"Patient has been on TDF for over 3 years and the most recent creatinine is from 2024-10-01 (478 days ago), exceeding reasonable monitoring intervals for TDF renal safety screening.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan of routine follow-up with no issues does not include ordering renal function tests despite the creatinine being over 15 months old.\"}},{\"problem\":\"Viral load suppression confirmed but no documentation of next scheduled VL\",\"action\":\"Document the next viral load monitoring date per Uganda HIV guidelines scheduling, given current VL of 40 copies/mL confirms suppression.\",\"reason\":\"Patient's viral load of 40 copies/mL from 2025-10-01 confirms ongoing suppression on TDF/3TC/DTG, and guidelines require scheduled repeat viral load monitoring for suppressed patients.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician notes routine follow-up but does not explicitly document when the next viral load should be repeated.\"}},{\"problem\":\"Absence of documented DTG screening for contraindications (diabetes, psychiatric history)\",\"action\":\"Review and document whether DTG screening tool was completed at initiation, including screening for diabetes and psychiatric conditions per Uganda HIV guidelines.\",\"reason\":\"Uganda HIV guidelines require use of a DTG screening tool prior to DTG initiation to identify contraindications including known diabetics and psychiatric conditions, and there is no record of this screening.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan does not mention reviewing or documenting DTG screening status.\"}}],\"monitoring_plan\":\"- Order serum creatinine and eGFR now (last creatinine 478 days ago)\\n- Repeat viral load per national schedule (last VL 2025-10-01, suppressed at 40 copies/mL)\\n- Schedule routine clinical follow-up with adherence assessment\",\"patient_counselling\":[\"Continue taking TDF, 3TC, and DTG daily as prescribed; your viral load is suppressed and treatment is working well\",\"Report any new symptoms immediately including excessive urination, weight loss, or mood changes which could indicate medication side effects\",\"Maintain good adherence as reported to keep your viral load suppressed\"]}",
+ "plan_issues": []
+}

@@ -83,7 +83,7 @@ ui/state.py	init_analysis_state	Sets starting values for the analysis results th
 ui/state.py	clear_analysis	Forgets the last analysis completely, including each alert's review.	ui/state.py	stays
 ui/state.py	analysis_belongs_to	Says whether the shown results are for this patient or nothing has run.	ui/state.py	stays
 ui/state.py	note_changed	Says whether the shown results came from a different note than the one on screen.	ui/state.py	stays
-ui/results_banner.py	status_banners	Chooses the coloured banners at the top of the Results section.	ui/results_banner.py	stays
+artemis/screen_text.py	status_banners	Chooses the coloured banners at the top of a visit's results, for every screen.	artemis/screen_text.py	moved
 app.py	main._lab_table	Draws one add-case lab table: test, date, value and unit per row.	ui/ (part of main)	to-move
 app.py	main._records	Turns a lab table's contents into a list of rows.	ui/ (part of main)	to-move
 app.py	main._show_labs	Shows a patient's lab results in Patient Details, then any pasted lab text.	ui/ (part of main)	to-move
@@ -125,8 +125,8 @@ artemis/ai/screening.py	read_alert_list	Finds the list of alerts in the AI's rep
 artemis/ai/screening.py	_severity	Keeps the AI's severity if it is one of the four, otherwise 'not given'.	artemis/ai/screening.py	moved
 artemis/ai/screening.py	_marked_citations	Marks each passage the AI cited with whether it was shown that passage.	artemis/ai/screening.py	moved
 artemis/visit.py	_cited_passages	Lists the passages an AI alert cited from those the AI was shown.	artemis/visit.py	moved
-ui/references.py	_unique	Drops repeated lines, keeping the order.	ui/references.py	stays
-ui/references.py	alert_references	Builds the References list under an alert: what the AI cited, or what a search found.	ui/references.py	stays
+artemis/screen_text.py	_unique	Drops repeated lines, keeping the order.	artemis/screen_text.py	moved
+artemis/screen_text.py	alert_references	Builds the References list under an alert: what the AI cited, or what a search found.	artemis/screen_text.py	moved
 artemis/review.py	decisions_from_state	Lists the clinician's decision on each alert, as saved at Finalize.	artemis/review.py	moved
 artemis/visit_record.py	now_utc	Gives the current time in UTC, for the visit record.	artemis/visit_record.py	moved
 artemis/visit_record.py	app_version	Gives the code version (git commit) saved with each visit record.	artemis/visit_record.py	moved
@@ -190,3 +190,34 @@ artemis/evaluation/runner.py	spent_in	Adds up the dollars recorded in saved case
 artemis/evaluation/scoring.py	RunScore.caught_by_ai	The expected problems an AI alert caught, leaving out the fixed-rule alerts every model shares.	artemis/evaluation/scoring.py	moved
 artemis/evaluation/runner.py	effective_temperature	The temperature a run really uses: the one asked for, or the app's default.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	run_label	A run's folder name, always naming the temperature used so runs at different temperatures never share a folder.	artemis/evaluation/runner.py	moved
+artemis/evaluation/retrieval.py	_words	Splits text into lower-case words for quote matching.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	contains_quote	Says whether a returned passage holds a gold quote, ignoring case, spacing and formatting; 8 words in a row are enough for a long quote.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	first_hit	The rank of the first returned passage that holds any gold quote.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	score	Found in the top 5 and top 10, and mean reciprocal rank, over the items the guidelines cover.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	_gold	Reads a problem's guideline passage(s) into gold quotes.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	case_items	One search item per expected problem of a case, with its gold quotes.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	missing_quotes	Gold quotes not found whole in their guideline file as the app cleans it.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	load_search_questions	Reads the standalone search questions and their gold quotes.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	_rows	One check row per item: the rank of its gold in what its search returned, and each passage's guideline file.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	check_search	Runs the app's search for each case and each question and ranks every item's gold quote.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	self_check	Searches each gold quote word for word; a quote that doesn't come back points at the index or the matching, not the query.	artemis/evaluation/retrieval.py	moved
+artemis/evaluation/retrieval.py	summarize_check	Found in the top 5 and 10 and mean reciprocal rank, for cases and questions apart.	artemis/evaluation/retrieval.py	moved
+artemis/visit.py	_with_note	A copy of the patient record with today's note added.	artemis/visit.py	moved
+artemis/visit.py	patient_context_for	The patient context the analysis searches with, from the record and today's note.	artemis/visit.py	moved
+artemis/visit.py	screening_search	The guideline passages the AI screening reads; the search check calls it too.	artemis/visit.py	moved
+modules/rag_engine.py	RagEngine.search	Searches the guidelines with plain text as written (the Phase 2B search check).	artemis/guidelines/	to-move
+artemis/guidelines/sources.py	guideline_paths	The registered guideline files of one country present in the folder; an unregistered file is never searched.	artemis/guidelines/sources.py	moved
+artemis/ai/screening.py	patient_facts	Everything the AI is told about the patient: regimen, medicines, dated notes and labs, and the summary.	artemis/ai/screening.py	moved
+artemis/ai/search_questions.py	ask_search_questions	The AI lists up to 6 short guideline questions about the patient.	artemis/ai/search_questions.py	moved
+artemis/visit.py	merge_by_turns	Each search's best passage first, then each one's second, without repeats.	artemis/visit.py	moved
+artemis/visit.py	patient_summary_for	The recorded-facts summary the AI reads, as the analysis builds it.	artemis/visit.py	moved
+modules/embedder.py	Embedder.loaded	Says whether the search model loaded (False means the weak word-hashing backup is in use).	artemis/guidelines/	to-move
+modules/rag_engine.py	RagEngine.search_ready	Says whether guideline search can be trusted (its model loaded); the AI review is off when not.	artemis/guidelines/	to-move
+artemis/guidelines/processor.py	_markdown_segments	Splits a converted guideline file at its page breaks.	artemis/guidelines/processor.py	moved
+artemis/guidelines/processor.py	printed_page_numbers	Works out each extract page's printed page number in the guideline book (G36).	artemis/guidelines/processor.py	moved
+artemis/guidelines/sources.py	citation_name	Gives the short name a citation uses for a guideline file.	artemis/guidelines/sources.py	moved
+artemis/guidelines/processor.py	_clean_pages	Cleans each page of a converted guideline file, keeping the first pages only when asked.	artemis/guidelines/processor.py	moved
+artemis/guidelines/vector_store.py	index_collection_name	Names the stored search index after the search model and a fingerprint of the guideline text (G37).	artemis/guidelines/vector_store.py	moved
+artemis/screen_text.py	citation_line	Writes one guideline citation: the guideline's name and its printed page.	artemis/screen_text.py	moved
+artemis/visit.py	AnalysisResult.__post_init__	Refuses an AI review result or status that is not on the shared lists the screens are built from.	artemis/visit.py	moved
+artemis/screen_text.py	alert_heading	Writes an alert's heading, saying whether the AI review or a rule check raised it.	artemis/screen_text.py	moved

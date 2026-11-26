@@ -1,0 +1,321 @@
+{
+ "case_id": "EX4",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 56.4,
+ "calls": [
+  {
+   "prompt_tokens": 1802,
+   "completion_tokens": 524,
+   "total_tokens": 2326,
+   "cost": 0.000443,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1728,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.000443,
+    "upstream_inference_prompt_cost": 0.00024388,
+    "upstream_inference_completions_cost": 0.00019912
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1045,
+   "completion_tokens": 88,
+   "total_tokens": 1133,
+   "cost": 0.00018034,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 960,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00018034,
+    "upstream_inference_prompt_cost": 0.0001469,
+    "upstream_inference_completions_cost": 3.344e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3486,
+   "completion_tokens": 882,
+   "total_tokens": 4368,
+   "cost": 0.00097528,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2048,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00097528,
+    "upstream_inference_prompt_cost": 0.00064012,
+    "upstream_inference_completions_cost": 0.00033516
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00159862,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX4_001",
+   "title": "Carbamazepine-DTG interaction causing virologic failure",
+   "message": "Guidelines state carbamazepine decreases dolutegravir (DTG) levels by 30-70%. The patient started carbamazepine two weeks ago and now has a detectable viral load of 1,240 copies/mL despite reported good adherence. This timing suggests the interaction is the likely cause of treatment failure. The clinician's plan does not address this interaction.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Switch from carbamazepine to valproic acid per guidelines, or change ART regimen to one not affected by enzyme inducers.",
+    "citations": [
+     {
+      "page_number": 282,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 49,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c8",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_001",
+     "title": "Carbamazepine-DTG interaction causing virologic failure",
+     "message": "Guidelines state carbamazepine decreases dolutegravir (DTG) levels by 30-70%. The patient started carbamazepine two weeks ago and now has a detectable viral load of 1,240 copies/mL despite reported good adherence. This timing suggests the interaction is the likely cause of treatment failure. The clinician's plan does not address this interaction.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Switch from carbamazepine to valproic acid per guidelines, or change ART regimen to one not affected by enzyme inducers.",
+     "citations": [
+      {
+       "page_number": 282,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+      },
+      {
+       "page_number": 49,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c8"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_002",
+   "title": "Carbamazepine toxicity with hyponatremia",
+   "message": "The patient has symptoms (nystagmus, ataxia, tremor) and a carbamazepine level of 14 mcg/mL, above the therapeutic range (4-12). Concurrent hyponatremia (Na 128 mmol/L) is a known complication of carbamazepine and can exacerbate neurotoxicity. The clinician's plan to reduce the dose and repeat the level is appropriate.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Implement planned carbamazepine dose reduction, monitor sodium, and assess for symptom resolution.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX4_002",
+     "title": "Carbamazepine toxicity with hyponatremia",
+     "message": "The patient has symptoms (nystagmus, ataxia, tremor) and a carbamazepine level of 14 mcg/mL, above the therapeutic range (4-12). Concurrent hyponatremia (Na 128 mmol/L) is a known complication of carbamazepine and can exacerbate neurotoxicity. The clinician's plan to reduce the dose and repeat the level is appropriate.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Implement planned carbamazepine dose reduction, monitor sodium, and assess for symptom resolution.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_003",
+   "title": "Elevated ALT requires monitoring",
+   "message": "Patient ALT is 68 U/L. Guidelines provide grading for transaminase elevations but do not specify a normal range or action threshold for this value. Both valproate and ART can cause hepatotoxicity. A non-drug cause, such as a concurrent infectious process, should also be considered per guidelines.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor ALT trend, assess for other causes of liver injury, and consider more frequent testing if symptoms develop.",
+    "citations": [
+     {
+      "page_number": 265,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 262,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_003",
+     "title": "Elevated ALT requires monitoring",
+     "message": "Patient ALT is 68 U/L. Guidelines provide grading for transaminase elevations but do not specify a normal range or action threshold for this value. Both valproate and ART can cause hepatotoxicity. A non-drug cause, such as a concurrent infectious process, should also be considered per guidelines.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor ALT trend, assess for other causes of liver injury, and consider more frequent testing if symptoms develop.",
+     "citations": [
+      {
+       "page_number": 265,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+      },
+      {
+       "page_number": 262,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_004",
+   "title": "Viral load failure algorithm not applied",
+   "message": "Guidelines state that for a patient with a non-suppressed viral load after six months on ART, a 10-point package should be applied, including engaging a multidisciplinary switch team. The patient's viral load is now detectable at 1,240 copies/mL. The clinician's plan only expresses uncertainty without initiating the guideline-mandated failure workup.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "high",
+    "recommended_action": "Apply the 10-point package for non-suppressed viral load, including multidisciplinary review to rule out treatment failure.",
+    "citations": [
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c5",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 33,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s25_c13",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_004",
+     "title": "Viral load failure algorithm not applied",
+     "message": "Guidelines state that for a patient with a non-suppressed viral load after six months on ART, a 10-point package should be applied, including engaging a multidisciplinary switch team. The patient's viral load is now detectable at 1,240 copies/mL. The clinician's plan only expresses uncertainty without initiating the guideline-mandated failure workup.",
+     "issue_type": "guideline_deviation",
+     "severity": "high",
+     "recommended_action": "Apply the 10-point package for non-suppressed viral load, including multidisciplinary review to rule out treatment failure.",
+     "citations": [
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c5"
+      },
+      {
+       "page_number": 33,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s25_c13"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX4_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c8"
+  ],
+  "EX4_002": [],
+  "EX4_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3"
+  ],
+  "EX4_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c5",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s25_c13"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does carbamazepine interact with dolutegravir?",
+   "Does valproate interact with dolutegravir?",
+   "Is ALT 68 U/L a sign of liver toxicity?",
+   "Could carbamazepine cause low sodium?",
+   "Is viral load 1240 a treatment failure?",
+   "Is creatinine 84 umol/L normal for TDF?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX4_001\",\n    \"title\": \"Carbamazepine-DTG interaction causing virologic failure\",\n    \"message\": \"Guidelines state carbamazepine decreases dolutegravir (DTG) levels by 30-70%. The patient started carbamazepine two weeks ago and now has a detectable viral load of 1,240 copies/mL despite reported good adherence. This timing suggests the interaction is the likely cause of treatment failure. The clinician's plan does not address this interaction.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Switch from carbamazepine to valproic acid per guidelines, or change ART regimen to one not affected by enzyme inducers.\",\n    \"citations\": [\n      {\"page_number\": 282, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1\"},\n      {\"page_number\": 49, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c8\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX4_002\",\n    \"title\": \"Carbamazepine toxicity with hyponatremia\",\n    \"message\": \"The patient has symptoms (nystagmus, ataxia, tremor) and a carbamazepine level of 14 mcg/mL, above the therapeutic range (4-12). Concurrent hyponatremia (Na 128 mmol/L) is a known complication of carbamazepine and can exacerbate neurotoxicity. The clinician's plan to reduce the dose and repeat the level is appropriate.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Implement planned carbamazepine dose reduction, monitor sodium, and assess for symptom resolution.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"EX4_003\",\n    \"title\": \"Elevated ALT requires monitoring\",\n    \"message\": \"Patient ALT is 68 U/L. Guidelines provide grading for transaminase elevations but do not specify a normal range or action threshold for this value. Both valproate and ART can cause hepatotoxicity. A non-drug cause, such as a concurrent infectious process, should also be considered per guidelines.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor ALT trend, assess for other causes of liver injury, and consider more frequent testing if symptoms develop.\",\n    \"citations\": [\n      {\"page_number\": 265, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1\"},\n      {\"page_number\": 262, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX4_004\",\n    \"title\": \"Viral load failure algorithm not applied\",\n    \"message\": \"Guidelines state that for a patient with a non-suppressed viral load after six months on ART, a 10-point package should be applied, including engaging a multidisciplinary switch team. The patient's viral load is now detectable at 1,240 copies/mL. The clinician's plan only expresses uncertainty without initiating the guideline-mandated failure workup.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Apply the 10-point package for non-suppressed viral load, including multidisciplinary review to rule out treatment failure.\",\n    \"citations\": [\n      {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c5\"},\n      {\"page_number\": 33, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s25_c13\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2",
+    "page_number": 195,
+    "quote": "ome and less side effects (see tables 57 and 58). Table 57: Interactions of hypertension medicine INTERACTIONS OF HYPERTENSION MEDICINE WITH ARVs Hypertension Drug Interaction with ART Action required Dihydropyridines (amlodipine and Nifedipine) Efavirenz and Niverapine could potentially decrease drug levels No dose adjustments are required LPV/r, ATV/r and DRV/r increase drug levels Use Nifedipine with caution Losartan Efavirenz may reduce formation of active form of losarta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c3",
+    "page_number": 262,
+    "quote": "uld be due to a concurrent infectious process or due to a reaction to medications other than ARVs such as Isoniazid–induced hepatitis in a child on treatment for TB or a rash induced by Cotrimoxazole. Drug-related side effects while on ART can occur immediately (soon after a drug has been administered), early (within the first days or weeks of treatment) or late (after months or years of treatment). Adverse reactions may be specific to a particular drug, or they may be generi"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s29_c11",
+    "page_number": 45,
+    "quote": "TB Screening > Figure 48: Lifestyle Modification Counselling for Hypertension > Lifestyle Counselling\nPOTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES\nDrug | Common Side Effects | Management\nAmlodipine/Nifedipine | Lower limb edema (1-10%) | Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic.\nHeadache (7%), Palpitations (1-3%) | Usually self-limiting, observe on treatment.\nMale sexual disorder (1-2%) | Explore for other cause"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s25_c13",
+    "page_number": 33,
+    "quote": "6.14 COMMON DRUG TOXICITIES IN HIV CARE\nHowever, after six months on ART, a viral load test may be required to rule out treatment failure before a drug is substituted in a failing patient. If the viral load is not suppressed, it is possible the patient may be failing on treatment. Follow the viral load algorithm to rule out treatment failure. In a failing patient, the ART regimen should be switched to 2nd line. See Table 78 for side effects of commonly used ARVs and recommend"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 265,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p3_c1",
+    "page_number": 236,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 ## 6.5 FIRST-LINE ART REGIMENS FOR PATIENTS INITIATING ART Principles for selecting the ARV regimens (treatment optimization): The first-line ART regimens for treating HIV infection in Uganda were selected based on the universal principles: * Toxicity: regimens with less toxicity are preferred. * Palatability and pill burden; better palatability and lower pill burden preferred. * Increas"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+    "page_number": 282,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Drug Family ARV Drug Interaction Action Anti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid Drugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole ATV/r Reduced con-centrations of Atazanavir Use alternatives like ranit-idine, cimetidine, etc. Polyvalent"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__s24_c2",
+    "page_number": 36,
+    "quote": "TB Screening > 5.4.7.1 Diabetes Mellitus (DM) > Treatment For DM\n* Weight loss/management * Cessation of smoking * Elimination/reduction of alcohol consumption * Advise on foot care for all diabetics to prevent wounds/ulcers from developing. * Metabolically neutral ARVs should be prescribed for patients at risk of developing DM. These include ABC, TDF and 3TC. * Exclude HIV-associated nephropathy and liver toxicity before initiating metformin because it may lead to Metformin "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s32_c8",
+    "page_number": 49,
+    "quote": "6.17.2 When a patient on second line has suspected resistance to secondline ART > 6.17.3 Recommended third-line regimens for adults, adolescents and children\nDrug Family | ARV Drug | Interaction | Action\nAnti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin | EFV, DTG, Etravirine, | Carbamazepine decreases DTG levels by 30-70% | Use valproic acid\nDrugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole | ATV/r | Reduced con-cent"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c5",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\n- Continue PSS & counseling - If ≤200 copies/mL: (Connects back to \"Maintain preferred ARV drug regimen, Continue routine viral load\") For PLHIV with non-suppressed viral load, the following 10- point package should be applied in all health facilities: 1. Engage multidisciplinary switch team at health facilities to discuss failing patients. 2. Sort viral load results from the laboratory as suppressed vs non-suppressed (NS) for rapid a"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient's symptoms (headaches, dizziness, nystagmus, tremor, unsteady gait) and elevated carbamazepine level point to carbamazepine toxicity, not ART toxicity per the provided guideline excerpts.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Carbamazepine toxicity causing neurological symptoms\",\n      \"action\": \"Reduce carbamazepine dose and repeat drug level.\",\n      \"reason\": \"Patient has symptoms (headaches, dizziness, nystagmus, tremor, unsteady gait) and a carbamazepine level of 14, indicating toxicity.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Agree\",\n        \"explanation\": \"The clinician's plan is to reduce the carbamazepine dose and repeat the level, which directly addresses the toxicity.\"\n      }\n    },\n    {\n      \"problem\": \"Detectable viral load (1240 copies/mL) on current ART regimen\",\n      \"action\": \"Uncertain: Assess adherence barriers and consider drug-drug interaction between carbamazepine and DTG.\",\n      \"reason\": \"Uncertain: The guideline excerpts do not provide specific actions for managing a detectable viral load or address the potential interaction between carbamazepine and DTG.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan notes the detectable viral load but does not specify an action, only stating 'unsure of the cause'.\"\n      }\n    },\n    {\n      \"problem\": \"Elevated ALT (68 U/L) of unclear etiology\",\n      \"action\": \"Uncertain: Monitor ALT and assess for other causes.\",\n      \"reason\": \"Uncertain: The guideline excerpts do not provide specific actions for an isolated, mildly elevated ALT in this context.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention the elevated ALT result.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Repeat carbamazepine level after dose adjustment. Repeat viral load in 3 months. Monitor ALT.\",\n  \"patient_counselling\": [\n    \"Counsel on signs of carbamazepine toxicity.\",\n    \"Reinstrict strict ART adherence.\",\n    \"Advise to report any new or worsening symptoms.\"\n  ]\n}",
+ "plan_issues": []
+}

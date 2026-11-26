@@ -1,0 +1,179 @@
+{
+ "case_id": "P004",
+ "model": "llama-a100-t0-2b",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 19.9,
+ "calls": [
+  {
+   "prompt_tokens": 1558,
+   "total_tokens": 1824,
+   "completion_tokens": 266,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 748,
+   "total_tokens": 784,
+   "completion_tokens": 36,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 3090,
+   "total_tokens": 3386,
+   "completion_tokens": 296,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_001",
+   "title": "Abdominal Pain with TDF",
+   "message": "Guidelines state TDF can cause abdominal pain. Patient reports abdominal pain. TDF is a known cause, but non-drug causes like infection should also be considered. Lab tests like LFTs and RFTs are recommended.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor and consider LFTs and RFTs",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_001",
+     "title": "Abdominal Pain with TDF",
+     "message": "Guidelines state TDF can cause abdominal pain. Patient reports abdominal pain. TDF is a known cause, but non-drug causes like infection should also be considered. Lab tests like LFTs and RFTs are recommended.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor and consider LFTs and RFTs",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P004_002",
+   "title": "Renal Function Monitoring with TDF",
+   "message": "Guidelines recommend monitoring renal function with TDF. Patient's latest creatinine level is 82 umol/L, but it's 78 days old. More recent lab results are needed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Update renal function labs",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_002",
+     "title": "Renal Function Monitoring with TDF",
+     "message": "Guidelines recommend monitoring renal function with TDF. Patient's latest creatinine level is 82 umol/L, but it's 78 days old. More recent lab results are needed.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Update renal function labs",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "P004_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "TDF side effects",
+   "3TC toxicity",
+   "DTG interactions",
+   "Abdominal pain cause",
+   "Creatinine monitoring",
+   "Pregnancy test due"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_001\",\n    \"title\": \"Abdominal Pain with TDF\",\n    \"message\": \"Guidelines state TDF can cause abdominal pain. Patient reports abdominal pain. TDF is a known cause, but non-drug causes like infection should also be considered. Lab tests like LFTs and RFTs are recommended.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor and consider LFTs and RFTs\",\n    \"citations\": [{\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  },\n  {\n    \"alert_id\": \"P004_002\",\n    \"title\": \"Renal Function Monitoring with TDF\",\n    \"message\": \"Guidelines recommend monitoring renal function with TDF. Patient's latest creatinine level is 82 umol/L, but it's 78 days old. More recent lab results are needed.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Update renal function labs\",\n    \"citations\": [{\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+    "page_number": 24,
+    "quote": "257 2 Peripheral neuropathy (numbness, tingling, feeling of pins and needles, burning sensation in hands and/or feet) Younger children: Ask for pain in hands and feet, regression in motor milestones - refusal to crawl, walk or run, reduced playfulness (in addition to the above symptoms) (e.g. H, DTG, LZD) 3 Abdominal symptoms (nausea & vomiting, diarrhea, abdominal pain) (e.g. ETO) 4 Hepatotoxicity (nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes) "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c1",
+    "page_number": 13,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 4. repeat VL every 3 months throughout pregnancy and until cessation of breastfeeding. If not suppressed, follow the algorithm in Figure 58. HIV-positive pregnant and breastfeeding women already on ART at ANC1 or MBCP: If HIV+ woman is already on ART at ANC1 or enrolled at MBCP, conduct a VL test at first ANC or MBCP visit. If VL is supressed repeat VL every 3 months throughout pregnancy"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c3",
+    "page_number": 18,
+    "quote": "medicines or any other medicine related problem. This section recommends heightened pharmacovigilance, re-emphasizes the systems in place for reporting and monitoring drug safety. **IMPORTANT OF PV** Approval of new medicines for use is based on the information from the pre-approval studies. However, these studies cannot identify all the possible adverse outcomes that a drug may cause, and several unexpected side effects manifest during clinical use which must be monitored, a"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p28_c3",
+    "page_number": 28,
+    "quote": "detect changes in renal function. • Routine administration of 40 mEq/day (mixed in 500ml NS over 4 hours) of potassium chloride or 1 tablet of 600mg twice daily while on amphotericin B can decrease the incidence of Amphotericin B-related hypokalemia. • For electrolyte supplementation, two tablets daily of Magnesium Chloride 310 mg or slow Magnesium Chloride 535mg or Magnesium trisilicate 250mg while on amphotericin B • Consider alternate day Amphotericin B if creatinine is >3"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain: not enough information to determine potential drug toxicity\", \"reason\": \"Patient presents with abdominal pain, but no clear link to current ART regimen and guideline excerpts do not provide specific guidance on this scenario\"}, \"problems\": [{\"problem\": \"Abdominal pain\", \"action\": \"Investigate cause of abdominal pain\", \"reason\": \"Patient complaint of abdominal pain with no clear cause identified\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not address the cause of abdominal pain\"}}, {\"problem\": \"Potential drug toxicity\", \"action\": \"Uncertain: need more information on potential toxicity of TDF, 3TC, DTG\", \"reason\": \"Guideline excerpts emphasize pharmacovigilance but do not provide specific guidance on these medications\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Current plan does not mention potential drug toxicity\"}}], \"monitoring_plan\": \"Repeat creatinine and viral load tests in 3-6 months, monitor for abdominal pain resolution\", \"patient_counselling\": [\"Report any changes in abdominal pain\", \"Adhere to current ART regimen\", \"Attend follow-up appointments for monitoring\"]}",
+ "plan_issues": []
+}

@@ -1,0 +1,147 @@
+{
+ "case_id": "P004",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 11.1,
+ "calls": [
+  {
+   "prompt_tokens": 1533,
+   "completion_tokens": 581,
+   "total_tokens": 2114,
+   "cost": 0.003244794,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003244794,
+    "upstream_inference_prompt_cost": 0.001480878,
+    "upstream_inference_completions_cost": 0.001763916
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2260,
+   "completion_tokens": 332,
+   "total_tokens": 2592,
+   "cost": 0.0046248,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0046248,
+    "upstream_inference_prompt_cost": 0.003164,
+    "upstream_inference_completions_cost": 0.0014608
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.007869594,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_ADR_SCREENING",
+   "title": "Abdominal pain — screen as suspected ADR",
+   "message": "Guidelines require screening every patient encounter for suspected adverse drug reactions using the Drug Safety Screening checklist, and all suspected ADRs (mild or severe) must be recorded and reported. Patient P004 presents with abdominal pain on TDF/3TC/DTG. TDF can cause gastrointestinal intolerance and renal-related abdominal symptoms. DTG is also associated with gastrointestinal side effects. Evidence against drug attribution: appetite is preserved and no fever is present, suggesting a non-severe presentation. Non-drug causes such as dietary indiscretion, gastritis, or infection should also be considered. The clinician's plan documents the symptom but does not include ADR screening, an aDSM form, or any diagnostic workup.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_add",
+    "severity": "moderate",
+    "recommended_action": "Complete the Drug Safety Screening checklist for this encounter. If ADR is suspected, record it in the ART card/register and submit an aDSM form to NDA. Evaluate non-drug causes of abdominal pain as well.",
+    "citations": [
+     {
+      "page_number": 21,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 23,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_ADR_SCREENING",
+     "title": "Abdominal pain — screen as suspected ADR",
+     "message": "Guidelines require screening every patient encounter for suspected adverse drug reactions using the Drug Safety Screening checklist, and all suspected ADRs (mild or severe) must be recorded and reported. Patient P004 presents with abdominal pain on TDF/3TC/DTG. TDF can cause gastrointestinal intolerance and renal-related abdominal symptoms. DTG is also associated with gastrointestinal side effects. Evidence against drug attribution: appetite is preserved and no fever is present, suggesting a non-severe presentation. Non-drug causes such as dietary indiscretion, gastritis, or infection should also be considered. The clinician's plan documents the symptom but does not include ADR screening, an aDSM form, or any diagnostic workup.",
+     "issue_type": "plan_add",
+     "severity": "moderate",
+     "recommended_action": "Complete the Drug Safety Screening checklist for this encounter. If ADR is suspected, record it in the ART card/register and submit an aDSM form to NDA. Evaluate non-drug causes of abdominal pain as well.",
+     "citations": [
+      {
+       "page_number": 21,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2"
+      },
+      {
+       "page_number": 23,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_ADR_SCREENING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_ADR_SCREENING\",\n    \"title\": \"Abdominal pain — screen as suspected ADR\",\n    \"message\": \"Guidelines require screening every patient encounter for suspected adverse drug reactions using the Drug Safety Screening checklist, and all suspected ADRs (mild or severe) must be recorded and reported. Patient P004 presents with abdominal pain on TDF/3TC/DTG. TDF can cause gastrointestinal intolerance and renal-related abdominal symptoms. DTG is also associated with gastrointestinal side effects. Evidence against drug attribution: appetite is preserved and no fever is present, suggesting a non-severe presentation. Non-drug causes such as dietary indiscretion, gastritis, or infection should also be considered. The clinician's plan documents the symptom but does not include ADR screening, an aDSM form, or any diagnostic workup.\",\n    \"issue_type\": \"plan_add\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Complete the Drug Safety Screening checklist for this encounter. If ADR is suspected, record it in the ART card/register and submit an aDSM form to NDA. Evaluate non-drug causes of abdominal pain as well.\",\n    \"citations\": [\n      {\"page_number\": 21, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2\"},\n      {\"page_number\": 23, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p23_c2",
+    "page_number": 23,
+    "quote": "Adverse Event and fill the aDSM form which should be submitted to NDA Does the patient have any of the following symptoms or complaints? Month of Visit Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 1 Neuropsychiatric symptoms (bad dreams, convulsions, suicidal thoughts, insomnia, headaches, anxiety, nervousness, memory or mood changes) (e.g. CS, EFV, DTG) Younger children: Ask for irritability (in addition to the above symptoms) Consolidated Guidelines for the Prevention an"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c3",
+    "page_number": 38,
+    "quote": "ere skin and hypersensitivity reactions Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with another therapeutic class (integrase inhibitors or boosted PIs). LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsades de pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdo"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient has viral suppression (VL 25 copies/mL) and normal creatinine (82 umol/L), and abdominal pain without fever may be unrelated to TDF/3TC/DTG but requires evaluation per pharmacovigilance guidelines.\"}, \"problems\": [{\"problem\": \"Abdominal pain on TLD regimen — possible drug toxicity vs unrelated cause\", \"action\": \"Order abdominal exam with focus on tenderness, hepatomegaly, and bowel sounds; order ALT/AST, lipase, and repeat creatinine to evaluate for TDF or DTG-related toxicity.\", \"reason\": \"Guidelines emphasize pharmacovigilance for patients on ART, and abdominal pain could indicate TDF-related hepatotoxicity or pancreatitis or DTG-related GI effects that require lab confirmation.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The clinician documented abdominal pain but did not order any diagnostic tests or specify a toxicity workup to evaluate the symptom.\"}}, {\"problem\": \"No orders or medicine changes documented despite active abdominal pain complaint\", \"action\": \"Document a structured assessment and plan including differential diagnosis, ordered labs, and symptomatic management or referral as indicated.\", \"reason\": \"The clinician's plan only restates the complaint without any clinical action, which does not meet pharmacovigilance expectations per Uganda guidelines.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's note contains no orders, no medicine changes, and no management plan for the abdominal pain.\"}}, {\"problem\": \"Renal function last checked 78 days ago — TDF toxicity monitoring gap\", \"action\": \"Order repeat serum creatinine and urinalysis for proteinuria at today's visit to monitor ongoing TDF renal safety.\", \"reason\": \"Patient is on TDF which requires renal monitoring, and the last creatinine was nearly 3 months ago with a new abdominal pain complaint.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician did not order any renal function tests today despite the patient being on TDF and presenting with new abdominal symptoms.\"}}], \"monitoring_plan\": \"Repeat creatinine and urinalysis today; ALT/AST and lipase to evaluate abdominal pain; viral load remains suppressed at 25 copies/mL from Nov 2025 — next routine VL per schedule; return for review of labs within 1-2 weeks.\", \"patient_counselling\": [\"Report any worsening abdominal pain, nausea, vomiting, or reduced urine output immediately.\", \"Continue taking TLD daily as prescribed while awaiting lab results.\", \"Return to clinic in 1-2 weeks for lab review and symptom reassessment.\"]}",
+ "plan_issues": []
+}

@@ -119,3 +119,11 @@ def test_a_run_folder_always_names_the_temperature_used(temperature, label) -> N
     from artemis.evaluation.runner import run_label
 
     assert run_label("llama-a100", temperature) == label
+
+
+def test_runs_of_different_setups_never_share_a_folder() -> None:
+    # A Phase 2B change (say, Uganda-only guidelines) must not resume into the folder of runs made before it.
+    from artemis.evaluation.runner import run_label
+
+    assert run_label("glm-5.2", 0.0, variant="ug-baseline") == "glm-5.2-t0-ug-baseline"
+    assert run_label("glm-5.2", 0.0) == "glm-5.2-t0"

@@ -1,0 +1,254 @@
+{
+ "case_id": "P006",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 12.1,
+ "calls": [
+  {
+   "prompt_tokens": 1420,
+   "completion_tokens": 637,
+   "total_tokens": 2057,
+   "cost": 0.001969,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.001969,
+    "upstream_inference_prompt_cost": 0.0004402,
+    "upstream_inference_completions_cost": 0.0015288
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2293,
+   "completion_tokens": 953,
+   "total_tokens": 3246,
+   "cost": 0.00332856,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 832,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00332856,
+    "upstream_inference_prompt_cost": 0.0010223,
+    "upstream_inference_completions_cost": 0.00230626
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00529756,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_pasted_only",
+   "title": "Creatinine recorded only as pasted text",
+   "message": "A creatinine result appears only in pasted lab text, so its date is unknown. Check when it was taken and enter it as a dated lab result for a patient on TDF.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "creatinine": "pasted text only"
+   },
+   "query_hint": "TDF creatinine monitoring frequency",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Rising creatinine on TDF in pregnancy",
+   "message": "TDF is associated with renal toxicity including proximal tubular dysfunction and declining eGFR. Patient's creatinine rose from 0.8 to 1.1 mg/dL within 10 weeks of starting TDF, with eGFR now 78 mL/min/1.73m². Pregnancy normally increases creatinine clearance, so a rising creatinine during pregnancy is particularly concerning. Phosphate remains normal at 3.8 mg/dL and urinalysis shows no protein or glucose, which argues against significant proximal tubular damage. However, the upward trend warrants close monitoring. Non-drug causes such as dehydration or pre-eclampsia should also be considered, though BP is normal and no oedema is present.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Repeat creatinine and eGFR within 2-4 weeks. If creatinine continues to rise, consider switching TDF to TAF. Monitor phosphate and urinalysis periodically.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "Rising creatinine on TDF in pregnancy",
+     "message": "TDF is associated with renal toxicity including proximal tubular dysfunction and declining eGFR. Patient's creatinine rose from 0.8 to 1.1 mg/dL within 10 weeks of starting TDF, with eGFR now 78 mL/min/1.73m². Pregnancy normally increases creatinine clearance, so a rising creatinine during pregnancy is particularly concerning. Phosphate remains normal at 3.8 mg/dL and urinalysis shows no protein or glucose, which argues against significant proximal tubular damage. However, the upward trend warrants close monitoring. Non-drug causes such as dehydration or pre-eclampsia should also be considered, though BP is normal and no oedema is present.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Repeat creatinine and eGFR within 2-4 weeks. If creatinine continues to rise, consider switching TDF to TAF. Monitor phosphate and urinalysis periodically.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Viral load monitoring frequency in pregnancy",
+   "message": "Guidelines specify viral load monitoring at 6 months after ART initiation then every 12 months for adults, but every 3 months for pregnant and lactating women. Patient initiated ART 10 weeks ago, so the 6-month VL is not yet due. However, after that initial 6-month test, VL should be repeated every 3 months during pregnancy and breastfeeding rather than annually. Current VL of 89 copies/mL is suppressed and treatment response is excellent. The clinician should document a VL monitoring schedule aligned with pregnancy-specific intervals.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule next viral load at 6 months post-ART initiation, then every 3 months during pregnancy and breastfeeding per pregnancy-specific monitoring guidelines.",
+    "citations": [
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 50,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Viral load monitoring frequency in pregnancy",
+     "message": "Guidelines specify viral load monitoring at 6 months after ART initiation then every 12 months for adults, but every 3 months for pregnant and lactating women. Patient initiated ART 10 weeks ago, so the 6-month VL is not yet due. However, after that initial 6-month test, VL should be repeated every 3 months during pregnancy and breastfeeding rather than annually. Current VL of 89 copies/mL is suppressed and treatment response is excellent. The clinician should document a VL monitoring schedule aligned with pregnancy-specific intervals.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Schedule next viral load at 6 months post-ART initiation, then every 3 months during pregnancy and breastfeeding per pregnancy-specific monitoring guidelines.",
+     "citations": [
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      },
+      {
+       "page_number": 50,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "Missing TPT screening and plan",
+   "message": "Guidelines recommend initiating TB preventive treatment (TPT) after 3 months on ART for newly initiating patients. Patient started ART 10 weeks ago and will reach the 3-month threshold soon. No TB screening or TPT plan is documented. TB screening is especially important in pregnancy given increased vulnerability. No TB symptoms are reported, which would support TPT eligibility once the 3-month mark is reached. The clinician should assess TB status and plan TPT initiation at the next visit.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_add",
+    "severity": "moderate",
+    "recommended_action": "Screen for TB at next visit. If no active TB disease, initiate TPT prophylaxis as patient will have completed 3 months on ART.",
+    "citations": [
+     {
+      "page_number": 19,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "title": "Missing TPT screening and plan",
+     "message": "Guidelines recommend initiating TB preventive treatment (TPT) after 3 months on ART for newly initiating patients. Patient started ART 10 weeks ago and will reach the 3-month threshold soon. No TB screening or TPT plan is documented. TB screening is especially important in pregnancy given increased vulnerability. No TB symptoms are reported, which would support TPT eligibility once the 3-month mark is reached. The clinician should assess TB status and plan TPT initiation at the next visit.",
+     "issue_type": "plan_add",
+     "severity": "moderate",
+     "recommended_action": "Screen for TB at next visit. If no active TB disease, initiate TPT prophylaxis as patient will have completed 3 months on ART.",
+     "citations": [
+      {
+       "page_number": 19,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "No clinician assessment or plan documented",
+   "message": "No assessment or plan was documented for this visit. Given pregnancy on TDF/3TC/DTG with rising creatinine, haemoglobin of 10.8 g/dL, and approaching TPT eligibility, a documented plan addressing renal monitoring, anaemia evaluation, and TB prevention is needed. The patient is also due for routine antenatal care coordination. Hb of 10.8 g/dL may reflect physiological haemodilution of pregnancy or iron deficiency; ferrous sulfate is already prescribed.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "low",
+    "recommended_action": "Document a comprehensive plan addressing renal monitoring, anaemia follow-up, TPT screening at 3 months, and antenatal care coordination.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "title": "No clinician assessment or plan documented",
+     "message": "No assessment or plan was documented for this visit. Given pregnancy on TDF/3TC/DTG with rising creatinine, haemoglobin of 10.8 g/dL, and approaching TPT eligibility, a documented plan addressing renal monitoring, anaemia evaluation, and TB prevention is needed. The patient is also due for routine antenatal care coordination. Hb of 10.8 g/dL may reflect physiological haemodilution of pregnancy or iron deficiency; ferrous sulfate is already prescribed.",
+     "issue_type": "plan_review",
+     "severity": "low",
+     "recommended_action": "Document a comprehensive plan addressing renal monitoring, anaemia follow-up, TPT screening at 3 months, and antenatal care coordination.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_pasted_only": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p15_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p17_c2"
+  ],
+  "ALERT_001": [],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c2"
+  ],
+  "ALERT_004": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"Rising creatinine on TDF in pregnancy\",\n    \"message\": \"TDF is associated with renal toxicity including proximal tubular dysfunction and declining eGFR. Patient's creatinine rose from 0.8 to 1.1 mg/dL within 10 weeks of starting TDF, with eGFR now 78 mL/min/1.73m². Pregnancy normally increases creatinine clearance, so a rising creatinine during pregnancy is particularly concerning. Phosphate remains normal at 3.8 mg/dL and urinalysis shows no protein or glucose, which argues against significant proximal tubular damage. However, the upward trend warrants close monitoring. Non-drug causes such as dehydration or pre-eclampsia should also be considered, though BP is normal and no oedema is present.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Repeat creatinine and eGFR within 2-4 weeks. If creatinine continues to rise, consider switching TDF to TAF. Monitor phosphate and urinalysis periodically.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Viral load monitoring frequency in pregnancy\",\n    \"message\": \"Guidelines specify viral load monitoring at 6 months after ART initiation then every 12 months for adults, but every 3 months for pregnant and lactating women. Patient initiated ART 10 weeks ago, so the 6-month VL is not yet due. However, after that initial 6-month test, VL should be repeated every 3 months during pregnancy and breastfeeding rather than annually. Current VL of 89 copies/mL is suppressed and treatment response is excellent. The clinician should document a VL monitoring schedule aligned with pregnancy-specific intervals.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Schedule next viral load at 6 months post-ART initiation, then every 3 months during pregnancy and breastfeeding per pregnancy-specific monitoring guidelines.\",\n    \"citations\": [\n      {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"},\n      {\"page_number\": 50, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_003\",\n    \"title\": \"Missing TPT screening and plan\",\n    \"message\": \"Guidelines recommend initiating TB preventive treatment (TPT) after 3 months on ART for newly initiating patients. Patient started ART 10 weeks ago and will reach the 3-month threshold soon. No TB screening or TPT plan is documented. TB screening is especially important in pregnancy given increased vulnerability. No TB symptoms are reported, which would support TPT eligibility once the 3-month mark is reached. The clinician should assess TB status and plan TPT initiation at the next visit.\",\n    \"issue_type\": \"plan_add\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Screen for TB at next visit. If no active TB disease, initiate TPT prophylaxis as patient will have completed 3 months on ART.\",\n    \"citations\": [\n      {\"page_number\": 19, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_004\",\n    \"title\": \"No clinician assessment or plan documented\",\n    \"message\": \"No assessment or plan was documented for this visit. Given pregnancy on TDF/3TC/DTG with rising creatinine, haemoglobin of 10.8 g/dL, and approaching TPT eligibility, a documented plan addressing renal monitoring, anaemia evaluation, and TB prevention is needed. The patient is also due for routine antenatal care coordination. Hb of 10.8 g/dL may reflect physiological haemodilution of pregnancy or iron deficiency; ferrous sulfate is already prescribed.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Document a comprehensive plan addressing renal monitoring, anaemia follow-up, TPT screening at 3 months, and antenatal care coordination.\",\n    \"citations\": []\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p1_c1",
+    "page_number": 1,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Screening for and Management of Advanced HIV Disease in Children, Adolescents and Adults : flowchart 1 Screen for ALL red/purple/Yellow signs and symptoms AND Do CD4 if available : flowchart RED SIGNS Temperature >39°C Tachypnoea* Tachycardia >120beats/min New Seizure Unable to walk without assistance / Bed-ridden : flowchart PURPLE SIGNS Bilateral pitting oedema or Weight for length/hei"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p7_c1",
+    "page_number": 7,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 **When to use TDF + 3TC + ATV/r or TAF +FTC+ATV/r** Pregnant or breastfeeding women should only be initiated on TDF+3TC+ATV/r if EFV and DTG are contraindicated (Table 74). **PREGNANT AND BREASTFEEDING WOMEN ALREADY ON FIRST LINE ART** Do viral load test at the 1st ANC/PNC visit: 1. If already on TDF or TAF +3TC+EFV and stable with suppressed VL, maintain on TDF or TAF +3TC+EFV400 until "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p19_c2",
+    "page_number": 19,
+    "quote": "r within 2 weeks of ART initiation if newly identified HIV positive) * **Virally suppressed children currently on NNRTI**: Initiate TPT as soon as possible and complete course before ART optimization. * **Virally suppressed children currently on PI or DTG**: Initiate TPT if the child has been on ART for at least 3 months. * **Newly initiating ART**: Initiate TPT prophylaxis after 3 months on ART. **Co-administration of DTG and TPT** Although studies have found that the co-adm"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient is asymptomatic with no signs of drug toxicity on TDF/3TC/DTG, and the guideline excerpts do not indicate any contraindication or toxicity signal requiring regimen change.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"No documented assessment and plan for routine 3-month ART follow-up in a pregnant patient\",\n      \"action\": \"Document a complete assessment and plan including adherence review, ART toxicity screening, and pregnancy-related monitoring.\",\n      \"reason\": \"The patient is a 22-week pregnant woman on TDF/3TC/DTG with no clinician assessment or plan documented, which is a gap in routine care per Uganda HIV guidelines.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No assessment or plan was documented for this routine follow-up visit.\"\n      }\n    },\n    {\n      \"problem\": \"Absence of baseline and follow-up lab results to screen for TDF/3TC/DTG toxicity\",\n      \"action\": \"Order renal function (creatinine/eGFR), liver function tests, and HIV viral load as part of routine monitoring on TDF/3TC/DTG.\",\n      \"reason\": \"No past or latest lab results are recorded, and TDF toxicity monitoring requires renal function assessment per Uganda HIV guidelines.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No lab orders were documented for this visit.\"\n      }\n    },\n    {\n      \"problem\": \"Weight gain of 6kg since pre-pregnancy on DTG-based regimen\",\n      \"action\": \"Monitor weight trend at subsequent visits and assess for excessive gestational weight gain versus possible DTG-associated weight gain.\",\n      \"reason\": \"The patient has gained 6kg from pre-pregnancy weight while on DTG, which could reflect normal pregnancy weight gain or DTG-associated weight gain, and the guideline excerpt mentions DTG contraindications requiring screening.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"No plan was documented to evaluate the weight gain in context of DTG use and pregnancy.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Order and review renal function (creatinine/eGFR) and liver function tests at this visit; repeat HIV viral load per national schedule; monitor weight and blood pressure at each antenatal visit; reassess for any emerging toxicity symptoms at next follow-up.\",\n  \"patient_counselling\": [\n    \"Continue taking TDF, 3TC, and DTG daily as prescribed; do not miss doses.\",\n    \"Report any new symptoms such as nausea, vomiting, abdominal pain, yellowing of eyes, or reduced urine output promptly.\",\n    \"Continue ferrous sulfate and folic acid as prescribed and attend all scheduled antenatal and HIV follow-up visits.\"\n  ]\n}",
+ "plan_issues": []
+}

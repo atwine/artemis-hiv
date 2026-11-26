@@ -1,0 +1,211 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 12.3,
+ "calls": [
+  {
+   "prompt_tokens": 1535,
+   "completion_tokens": 494,
+   "total_tokens": 2029,
+   "cost": 0.0011635448,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1350,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0011635448,
+    "upstream_inference_prompt_cost": 0.00025498,
+    "upstream_inference_completions_cost": 0.0009085648
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2240,
+   "completion_tokens": 602,
+   "total_tokens": 2842,
+   "cost": 0.00177044,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2240,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00177044,
+    "upstream_inference_prompt_cost": 0.0003136,
+    "upstream_inference_completions_cost": 0.00145684
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0029339848,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_001",
+   "title": "No FBS/RBS monitoring on DTG",
+   "message": "Guidelines list FBS/RBS as a required laboratory test, especially for adults at risk on DTG. The patient is on DTG but has no blood glucose monitoring recorded. The clinician's plan does not include any glucose testing. While the patient has no reported symptoms of hyperglycemia, routine screening is recommended per guidelines to detect asymptomatic drug-related metabolic effects.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order FBS/RBS as part of routine monitoring for this patient on DTG, per guideline laboratory schedule.",
+    "citations": [
+     {
+      "page_number": 17,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_001",
+     "title": "No FBS/RBS monitoring on DTG",
+     "message": "Guidelines list FBS/RBS as a required laboratory test, especially for adults at risk on DTG. The patient is on DTG but has no blood glucose monitoring recorded. The clinician's plan does not include any glucose testing. While the patient has no reported symptoms of hyperglycemia, routine screening is recommended per guidelines to detect asymptomatic drug-related metabolic effects.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order FBS/RBS as part of routine monitoring for this patient on DTG, per guideline laboratory schedule.",
+     "citations": [
+      {
+       "page_number": 17,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_002",
+   "title": "No LFTs monitoring recorded",
+   "message": "Guidelines include LFTs in the scheduled laboratory tests for patients on ART. No liver function tests are recorded for this patient on TDF/3TC/DTG since 2022. The clinician's plan does not address LFT monitoring. TDF and DTG can both affect hepatic function, and routine LFT screening helps detect early drug-related hepatotoxicity before symptomatic disease develops.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order baseline and periodic LFTs as part of routine laboratory monitoring per guideline schedule.",
+    "citations": [
+     {
+      "page_number": 17,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_002",
+     "title": "No LFTs monitoring recorded",
+     "message": "Guidelines include LFTs in the scheduled laboratory tests for patients on ART. No liver function tests are recorded for this patient on TDF/3TC/DTG since 2022. The clinician's plan does not address LFT monitoring. TDF and DTG can both affect hepatic function, and routine LFT screening helps detect early drug-related hepatotoxicity before symptomatic disease develops.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order baseline and periodic LFTs as part of routine laboratory monitoring per guideline schedule.",
+     "citations": [
+      {
+       "page_number": 17,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_003",
+   "title": "No HBsAg screening recorded",
+   "message": "Guidelines list HBsAg as a required laboratory test for patients on ART. No HBsAg result is recorded for this patient on TDF/3TC since 2022. TDF and 3TC are active against hepatitis B virus; knowing HBsAg status is important because discontinuation of TDF/3TC in co-infected patients risks HBV flare. The clinician's plan does not address HBV screening.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order HBsAg test if not previously done, to identify HBV co-infection requiring continued TDF/3TC.",
+    "citations": [
+     {
+      "page_number": 17,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_003",
+     "title": "No HBsAg screening recorded",
+     "message": "Guidelines list HBsAg as a required laboratory test for patients on ART. No HBsAg result is recorded for this patient on TDF/3TC since 2022. TDF and 3TC are active against hepatitis B virus; knowing HBsAg status is important because discontinuation of TDF/3TC in co-infected patients risks HBV flare. The clinician's plan does not address HBV screening.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order HBsAg test if not previously done, to identify HBV co-infection requiring continued TDF/3TC.",
+     "citations": [
+      {
+       "page_number": 17,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+  ],
+  "P002_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+  ],
+  "P002_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_001\",\n    \"title\": \"No FBS/RBS monitoring on DTG\",\n    \"message\": \"Guidelines list FBS/RBS as a required laboratory test, especially for adults at risk on DTG. The patient is on DTG but has no blood glucose monitoring recorded. The clinician's plan does not include any glucose testing. While the patient has no reported symptoms of hyperglycemia, routine screening is recommended per guidelines to detect asymptomatic drug-related metabolic effects.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order FBS/RBS as part of routine monitoring for this patient on DTG, per guideline laboratory schedule.\",\n    \"citations\": [{\"page_number\": 17, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1\"}]\n  },\n  {\n    \"alert_id\": \"P002_002\",\n    \"title\": \"No LFTs monitoring recorded\",\n    \"message\": \"Guidelines include LFTs in the scheduled laboratory tests for patients on ART. No liver function tests are recorded for this patient on TDF/3TC/DTG since 2022. The clinician's plan does not address LFT monitoring. TDF and DTG can both affect hepatic function, and routine LFT screening helps detect early drug-related hepatotoxicity before symptomatic disease develops.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order baseline and periodic LFTs as part of routine laboratory monitoring per guideline schedule.\",\n    \"citations\": [{\"page_number\": 17, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1\"}]\n  },\n  {\n    \"alert_id\": \"P002_003\",\n    \"title\": \"No HBsAg screening recorded\",\n    \"message\": \"Guidelines list HBsAg as a required laboratory test for patients on ART. No HBsAg result is recorded for this patient on TDF/3TC since 2022. TDF and 3TC are active against hepatitis B virus; knowing HBsAg status is important because discontinuation of TDF/3TC in co-infected patients risks HBV flare. The clinician's plan does not address HBV screening.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order HBsAg test if not previously done, to identify HBV co-infection requiring continued TDF/3TC.\",\n    \"citations\": [{\"page_number\": 17, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+    "page_number": 22,
+    "quote": "ta for the previous month (collected from HMIS 105 and HMIS 108) should be entered into the HMIS database. NB: --- Use a separate form for each event. **Alternative methods of reporting may include:** 1. Telephone/WhatsApp line; a reporter can call the National Drug Authority or Regional Pharmacovigilance Centre or send a WhatsApp message. The essential information is captured or transcribed on to the suspected ADR reporting form for follow-up. 2. Toll free line: 0800101999 3"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c3",
+    "page_number": 21,
+    "quote": "ces. The flow indicates a progression from Responsibility to What to Report, then to When to Report, then to How to Report, and finally loops back to Responsibility, suggesting a continuous process. > As soon as an ADR is suspected/detected, health worker should: * Immediately and adequately assess the patient for adverse drug events/ reactions * Record the diagnosis in the client care card, OPD/IPD register and eMRS. * Fill the aDSM report form, collect all the filled forms,"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p21_c2",
+    "page_number": 21,
+    "quote": "process of adverse drug reaction flowchart This flowchart illustrates the reporting process of adverse drug reactions, moving through four main stages in a cyclical manner. **Stage 1: Responsibility** * For each encounter, ALL HWs should screen for suspected ADRs using the Drug Safety Screening checklist. **Stage 2: What to Report** * All suspected ADRs (whether mild or severe) should be recorded into the various HMIS tools; ART Cards, Registers, eMRS, reviewed and reported. "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p17_c1",
+    "page_number": 17,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 FP refill X X x X X x X X X TB Screening X X X X Follow up review: If the patient is clinically well: Give ONE month refill and appointment X X x Give THREEmonths refill and appointment X X x X Laboratory tests Viral Load X* X* X** X CD 4 X HBsAg, X CrAg if CD4 <200, X TB LAM if CD4 <200, X FBS/RBS (especially adults at risk on DTG) X X X X X X LFTs X Do other lab tests if clinically ind"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is stable on TDF/3TC/DTG with suppressed viral load (20 copies/mL) and normal creatinine (76 umol/L), with no symptoms or signs of drug toxicity.\"},\"problems\":[{\"problem\":\"No evidence of drug toxicity on current regimen\",\"action\":\"Continue TDF/3TC/DTG and maintain routine monitoring per standard schedule.\",\"reason\":\"Patient has no complaints, normal examination, suppressed viral load, and normal creatinine, indicating no current toxicity from TDF, 3TC, or DTG.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan to continue routine follow-up is appropriate given the absence of any toxicity signs.\"}},{\"problem\":\"Pharmacovigilance monitoring for TDF-related renal toxicity\",\"action\":\"Continue periodic creatinine monitoring at routine intervals as part of ongoing TDF safety surveillance.\",\"reason\":\"Guidelines emphasize pharmacovigilance for ART-related adverse events, and TDF requires renal monitoring though current creatinine is normal.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan does not explicitly mention scheduling the next creatinine check for ongoing TDF toxicity surveillance.\"}},{\"problem\":\"DSD eligibility assessment\",\"action\":\"Confirm DSD enrollment criteria are met (stable, suppressed viral load, good adherence) and complete DSD transition if eligible.\",\"reason\":\"Patient has been stable on ART since 2022 with good adherence and two consecutive suppressed viral loads, meeting criteria for differentiated service delivery discussions.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician already discussed DSD eligibility, which aligns with the patient's stable status and suppressed viral load.\"}}],\"monitoring_plan\":\"- Viral load: next routine VL per schedule (approximately 12 months from last, due ~Sept 2026)\\n- Creatinine: routine monitoring at next scheduled visit to continue TDF renal safety surveillance\\n- Routine clinical review for any new symptoms suggestive of DTG or TDF toxicity\",\"patient_counselling\":[\"Reassure patient that current labs and examination show no signs of drug toxicity and the regimen is working well.\",\"Encourage patient to report any new symptoms such as unusual fatigue, increased urination, or bone pain promptly.\",\"Explain DSD model options and confirm patient interest and eligibility for enrollment.\"]}",
+ "plan_issues": []
+}

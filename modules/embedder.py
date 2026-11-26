@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 import hashlib
 import math
+import os
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -28,14 +29,23 @@ class Embedder:
         # Rationale: try to load the transformer; if it fails (e.g., offline), fall back to a light hashing embedder.
         try:
             if SentenceTransformer is not None:
+                # Safe weights only (safetensors): a pickled model file can run code when loaded.
+                # ARTEMIS_MODEL_DIR (set in .env) keeps the weights in the owner's folder on drive D.
                 self._model = SentenceTransformer(
                     self._config.model_name,
                     device=self._config.device,
+                    model_kwargs={"use_safetensors": True},
+                    cache_folder=os.environ.get("ARTEMIS_MODEL_DIR") or None,
                 )
         except Exception:
             self._model = None
         # Fallback vector size (kept modest for laptop-friendly performance)
         self._fallback_dim = 256
+
+    @property
+    def loaded(self) -> bool:
+        """False when the search model did not load and searches fall back to word hashing (G33)."""
+        return self._model is not None
 
     @property
     def model_name(self) -> str:

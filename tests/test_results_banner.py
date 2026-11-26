@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from ui.results_banner import status_banners
+from artemis.screen_text import status_banners
 
 
 def _kinds(banners) -> list:

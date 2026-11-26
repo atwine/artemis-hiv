@@ -1,0 +1,292 @@
+{
+ "case_id": "EX3",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 145.8,
+ "calls": [
+  {
+   "prompt_tokens": 2043,
+   "completion_tokens": 1000,
+   "total_tokens": 3043,
+   "cost": 0.00368666,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00368666,
+    "upstream_inference_prompt_cost": 0.00126666,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2072,
+   "completion_tokens": 709,
+   "total_tokens": 2781,
+   "cost": 0.002734698,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002734698,
+    "upstream_inference_prompt_cost": 0.001332296,
+    "upstream_inference_completions_cost": 0.001402402
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1359,
+   "completion_tokens": 110,
+   "total_tokens": 1469,
+   "cost": 0.00113821,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00113821,
+    "upstream_inference_prompt_cost": 0.00025821,
+    "upstream_inference_completions_cost": 0.00088
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3535,
+   "completion_tokens": 819,
+   "total_tokens": 4354,
+   "cost": 0.0085526,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0085526,
+    "upstream_inference_prompt_cost": 0.004949,
+    "upstream_inference_completions_cost": 0.0036036
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.016112168,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_001",
+   "title": "Uncontrolled hypothyroidism mimics DTG weight gain",
+   "message": "Patient has TSH 12.4 mIU/L (target <4.5) with low Free T4, confirming inadequately treated hypothyroidism. Her symptoms—9 kg weight gain, tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes—are classic hypothyroidism manifestations. She reports often forgetting her levothyroxine. The clinician attributes weight gain to DTG and plans to switch, but uncontrolled hypothyroidism is the more likely cause. Switching from DTG would not address the underlying thyroid dysfunction and may compromise viral suppression.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Optimize levothyroxine adherence and dose before attributing weight gain to DTG. Recheck TSH after 6–8 weeks of consistent dosing. Do not switch DTG solely for weight gain without first correcting hypothyroidism.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_001",
+     "title": "Uncontrolled hypothyroidism mimics DTG weight gain",
+     "message": "Patient has TSH 12.4 mIU/L (target <4.5) with low Free T4, confirming inadequately treated hypothyroidism. Her symptoms—9 kg weight gain, tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes—are classic hypothyroidism manifestations. She reports often forgetting her levothyroxine. The clinician attributes weight gain to DTG and plans to switch, but uncontrolled hypothyroidism is the more likely cause. Switching from DTG would not address the underlying thyroid dysfunction and may compromise viral suppression.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Optimize levothyroxine adherence and dose before attributing weight gain to DTG. Recheck TSH after 6–8 weeks of consistent dosing. Do not switch DTG solely for weight gain without first correcting hypothyroidism.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_002",
+   "title": "Dyslipidemia and hyperglycemia risk on DTG with obesity",
+   "message": "Guidelines note DTG is associated with hyperglycemia in previously non-diabetic adults. Patient has multiple hyperglycemia risk factors: BMI 33, fasting glucose 5.6 mmol/L (borderline), and dyslipidemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L). Guidelines state clients with 2 or more hyperglycemia risk factors need RBS/FBS monitoring every 3 months for 6 months after DTG initiation. No glucose monitoring has occurred since starting TLD in January 2023. The dyslipidemia itself also warrants assessment and management.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Monitor fasting glucose regularly given obesity and DTG. Evaluate dyslipidemia with repeat lipid panel and consider dietary intervention or lipid-lowering therapy per standard guidelines.",
+    "citations": [
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_002",
+     "title": "Dyslipidemia and hyperglycemia risk on DTG with obesity",
+     "message": "Guidelines note DTG is associated with hyperglycemia in previously non-diabetic adults. Patient has multiple hyperglycemia risk factors: BMI 33, fasting glucose 5.6 mmol/L (borderline), and dyslipidemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L). Guidelines state clients with 2 or more hyperglycemia risk factors need RBS/FBS monitoring every 3 months for 6 months after DTG initiation. No glucose monitoring has occurred since starting TLD in January 2023. The dyslipidemia itself also warrants assessment and management.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Monitor fasting glucose regularly given obesity and DTG. Evaluate dyslipidemia with repeat lipid panel and consider dietary intervention or lipid-lowering therapy per standard guidelines.",
+     "citations": [
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+      },
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_003",
+   "title": "Overdue creatinine monitoring on TDF",
+   "message": "Guidelines require serum creatinine and eGFR every 12 months for patients on TDF. The last creatinine was 72 umol/L on 2025-08-12, 196 days before this visit. While this is within 12 months, no creatinine has been ordered at today's visit and none is due until August 2026. However, no eGFR was reported alongside the last creatinine. The plan does not include renal monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Ensure eGFR is calculated with the next creatinine due around August 2026. If any renal risk factors develop, monitor sooner.",
+    "citations": [
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_003",
+     "title": "Overdue creatinine monitoring on TDF",
+     "message": "Guidelines require serum creatinine and eGFR every 12 months for patients on TDF. The last creatinine was 72 umol/L on 2025-08-12, 196 days before this visit. While this is within 12 months, no creatinine has been ordered at today's visit and none is due until August 2026. However, no eGFR was reported alongside the last creatinine. The plan does not include renal monitoring.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Ensure eGFR is calculated with the next creatinine due around August 2026. If any renal risk factors develop, monitor sooner.",
+     "citations": [
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      },
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_001": [],
+  "EX3_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3"
+  ],
+  "EX3_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does DTG cause significant weight gain requiring regimen switch?",
+   "Does TDF require routine creatinine monitoring more often than every 6 months?",
+   "Does DTG require lipid monitoring given elevated cholesterol and triglycerides?",
+   "Does levothyroxine interact with TDF or DTG affecting absorption or efficacy?",
+   "Does amitriptyline interact with DTG or TDF requiring dose adjustment?",
+   "What is the target TSH for hypothyroid patients on ART and levothyroxine?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_001\",\n    \"title\": \"Uncontrolled hypothyroidism mimics DTG weight gain\",\n    \"message\": \"Patient has TSH 12.4 mIU/L (target <4.5) with low Free T4, confirming inadequately treated hypothyroidism. Her symptoms—9 kg weight gain, tiredness, feeling cold, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes—are classic hypothyroidism manifestations. She reports often forgetting her levothyroxine. The clinician attributes weight gain to DTG and plans to switch, but uncontrolled hypothyroidism is the more likely cause. Switching from DTG would not address the underlying thyroid dysfunction and may compromise viral suppression.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Optimize levothyroxine adherence and dose before attributing weight gain to DTG. Recheck TSH after 6–8 weeks of consistent dosing. Do not switch DTG solely for weight gain without first correcting hypothyroidism.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"EX3_002\",\n    \"title\": \"Dyslipidemia and hyperglycemia risk on DTG with obesity\",\n    \"message\": \"Guidelines note DTG is associated with hyperglycemia in previously non-diabetic adults. Patient has multiple hyperglycemia risk factors: BMI 33, fasting glucose 5.6 mmol/L (borderline), and dyslipidemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L). Guidelines state clients with 2 or more hyperglycemia risk factors need RBS/FBS monitoring every 3 months for 6 months after DTG initiation. No glucose monitoring has occurred since starting TLD in January 2023. The dyslipidemia itself also warrants assessment and management.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor fasting glucose regularly given obesity and DTG. Evaluate dyslipidemia with repeat lipid panel and consider dietary intervention or lipid-lowering therapy per standard guidelines.\",\n    \"citations\": [\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2\"},\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX3_003\",\n    \"title\": \"Overdue creatinine monitoring on TDF\",\n    \"message\": \"Guidelines require serum creatinine and eGFR every 12 months for patients on TDF. The last creatinine was 72 umol/L on 2025-08-12, 196 days before this visit. While this is within 12 months, no creatinine has been ordered at today's visit and none is due until August 2026. However, no eGFR was reported alongside the last creatinine. The plan does not include renal monitoring.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Ensure eGFR is calculated with the next creatinine due around August 2026. If any renal risk factors develop, monitor sooner.\",\n    \"citations\": [\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"},\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia assoc"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+    "page_number": 49,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Drug Family ARV Drug Interaction Action Anti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid Drugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole ATV/r Reduced con-centrations of Atazanavir Use alternatives like ranit-idine, cimetidine, etc. Polyvalent"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c3",
+    "page_number": 4,
+    "quote": "00 or an ATV/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia and a high baseline RBS or FBS should not be initiated/transitioned to DTG. Give an EFV400 or ATZ/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia with normal baseline RBS or FBS: Initiate or transition to DTG and monitor RBS or FBS every 3 months for 6 months. 237"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p40_c1",
+    "page_number": 40,
+    "quote": "MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT LPV/r Electrocardiographic abnormalities (PR and QRS interval prolongation, torsadesde pointes) Hepatotoxicity Pancreatitis Dyslipidemia Diarrhoea Unable to tolerate taste Dizziness, fainting Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Upper abdominal pain that feels worse after eating, fever, rapid pulse, nausea and vomiting. Refer to Blood Lipid levels in Table 66."
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c1",
+    "page_number": 20,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 these drugs. Since there is potential for hepatotoxicity, the following are recommendations for co-administration. a. **New Patient**: For newly identified patients, start on TLD with active symptomatic monitoring for adverse events (Chapter 14). Initiate TPT after 3 months to allow time for potential unmasking of TB and to monitor any toxicities that may arise from DTG, prior to initiat"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p18_c2",
+    "page_number": 18,
+    "quote": "her dose of EFV, i.e. 600mg is recommended if Isoniazid/ Rifapentin-based regimen is used Table 42: TPT regimen for children < 15 years on ART ARV Regimen TPT regimen options Rationale for TPT regimen ABC or AZT +3TC+LPV/r ABC or AZT+3TC +ATV/r Isoniazid (6H) Co-administration of rifamycins (such as rifampicin) with protease inhibitors has been associated with reduction in plasma levels of protease inhibitors. 169"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Uncertain\",\"reason\":\"Uncertain: the provided excerpts do not contain guidance on switching DTG for weight gain, so a switch cannot be justified from the given text.\"},\"problems\":[{\"problem\":\"Symptoms and signs of inadequately treated hypothyroidism (weight gain, tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, delayed ankle reflexes) with frequent missed levothyroxine doses\",\"action\":\"Order TSH (and free T4) today and reinforce daily adherence to levothyroxine 50 mcg; adjust dose per TSH result.\",\"reason\":\"The patient's classic hypothyroid features plus reported missed thyroid tablets suggest under-replacement, which can itself cause weight gain and confound attribution of weight gain to DTG.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The plan continues levothyroxine but does not check TSH or address the missed doses that likely explain the hypothyroid symptoms.\"}},{\"problem\":\"Attribution of 9 kg weight gain to TLD/DTG versus hypothyroidism is unresolved\",\"action\":\"Do not switch DTG yet; first confirm TSH and review adherence, then reassess weight trajectory before any regimen change.\",\"reason\":\"Weight gain is documented with DTG use, but this patient also has poorly controlled hypothyroidism with missed doses, making the cause uncertain and the excerpts give no switch indication for weight gain.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Disagree\",\"explanation\":\"The clinician is considering switching DTG for weight gain without first excluding hypothyroidism as the cause.\"}},{\"problem\":\"Obesity with BMI 33 and dyslipidaemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L)\",\"action\":\"Start lifestyle counselling (diet, physical activity) and manage dyslipidaemia per local guidelines; recheck fasting lipids and glucose in 3-6 months.\",\"reason\":\"BMI 33 with elevated LDL and total cholesterol increases cardiovascular risk and warrants non-pharmacologic and lipid-lowering management.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Today's plan does not address the dyslipidaemia or obesity management.\"}},{\"problem\":\"Possible TDF renal and bone toxicity not excluded\",\"action\":\"Repeat creatinine and calculate eGFR today given TDF use, as last creatinine is over 6 months old.\",\"reason\":\"TDF is associated with kidney disease and decreased bone mineral density per the guideline toxicity table, and renal function has not been checked since August 2025.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The plan does not include repeat renal monitoring despite ongoing TDF and an outdated creatinine.\"}}],\"monitoring_plan\":\"TSH/free T4 now; creatinine/eGFR now; fasting lipids and glucose in 3-6 months; viral load per routine schedule; reassess weight and symptoms after thyroid correction.\",\"patient_counselling\":[\"Take levothyroxine every morning on an empty stomach; set a daily reminder to avoid missed doses.\",\"Weight gain may be partly due to low thyroid levels; correcting this may help before changing HIV medicines.\",\"Eat a balanced diet and do regular physical activity to help with weight and cholesterol.\",\"Do not stop or change any medicine without discussing with your clinician.\"]}",
+ "plan_issues": []
+}

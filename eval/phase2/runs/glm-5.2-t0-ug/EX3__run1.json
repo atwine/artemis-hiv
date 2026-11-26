@@ -1,0 +1,242 @@
+{
+ "case_id": "EX3",
+ "model": "glm-5.2-t0-ug",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 206.1,
+ "calls": [
+  {
+   "prompt_tokens": 2038,
+   "completion_tokens": 1000,
+   "total_tokens": 3038,
+   "cost": 0.00368356,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00368356,
+    "upstream_inference_prompt_cost": 0.00126356,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2067,
+   "completion_tokens": 756,
+   "total_tokens": 2823,
+   "cost": 0.00245517,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00245517,
+    "upstream_inference_prompt_cost": 0.00064077,
+    "upstream_inference_completions_cost": 0.0018144
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2948,
+   "completion_tokens": 753,
+   "total_tokens": 3701,
+   "cost": 0.00272108,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00272108,
+    "upstream_inference_prompt_cost": 0.00091388,
+    "upstream_inference_completions_cost": 0.0018072
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2987,
+   "completion_tokens": 908,
+   "total_tokens": 3895,
+   "cost": 0.006195309,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.006195309,
+    "upstream_inference_prompt_cost": 2.0909e-05,
+    "upstream_inference_completions_cost": 0.0061744
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.015055118999999999,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_HYPOTHYROIDISM_UNCONTROLLED",
+   "title": "Uncontrolled hypothyroidism despite levothyroxine",
+   "message": "Patient has TSH 12.4 mIU/L (target <4.5) with low free T4, tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes — consistent with inadequately treated hypothyroidism. She reports often forgetting her levothyroxine. The plan to simply continue levothyroxine 50 mcg without addressing adherence or dose escalation will not correct this. Much of the weight gain (9 kg/year), low mood, and metabolic disturbance may be driven by hypothyroidism rather than DTG. Non-adherence to levothyroxine is the most likely cause of the current presentation.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Counsel on levothyroxine adherence, increase dose (e.g., to 75 mcg), and recheck TSH/free T4 in 6–8 weeks before attributing weight gain to DTG.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_HYPOTHYROIDISM_UNCONTROLLED",
+     "citations": [],
+     "issue_type": "plan_review",
+     "message": "Patient has TSH 12.4 mIU/L (target <4.5) with low free T4, tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes — consistent with inadequately treated hypothyroidism. She reports often forgetting her levothyroxine. The plan to simply continue levothyroxine 50 mcg without addressing adherence or dose escalation will not correct this. Much of the weight gain (9 kg/year), low mood, and metabolic disturbance may be driven by hypothyroidism rather than DTG. Non-adherence to levothyroxine is the most likely cause of the current presentation.",
+     "recommended_action": "Counsel on levothyroxine adherence, increase dose (e.g., to 75 mcg), and recheck TSH/free T4 in 6–8 weeks before attributing weight gain to DTG.",
+     "severity": "high",
+     "title": "Uncontrolled hypothyroidism despite levothyroxine"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_DTG_SWITCH_PREMATURE",
+   "title": "DTG switch for weight gain may be premature",
+   "message": "The clinician plans to switch from DTG due to weight gain. However, the patient's symptoms (tiredness, cold intolerance, constipation, dry skin, delayed reflexes) and elevated TSH strongly suggest hypothyroidism as the primary driver of weight gain and metabolic changes. Switching from DTG prematurely risks compromising a virologically suppressive regimen (viral load <50) without addressing the underlying thyroid dysfunction. Guidelines list abnormal weight gain as a DTG side effect, but attribution here is confounded by uncontrolled hypothyroidism and poor levothyroxine adherence.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "Optimise hypothyroidism management first; reassess weight and symptoms before considering a DTG switch. Viral load is suppressed — avoid unnecessary regimen change.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_DTG_SWITCH_PREMATURE",
+     "citations": [],
+     "issue_type": "plan_review",
+     "message": "The clinician plans to switch from DTG due to weight gain. However, the patient's symptoms (tiredness, cold intolerance, constipation, dry skin, delayed reflexes) and elevated TSH strongly suggest hypothyroidism as the primary driver of weight gain and metabolic changes. Switching from DTG prematurely risks compromising a virologically suppressive regimen (viral load <50) without addressing the underlying thyroid dysfunction. Guidelines list abnormal weight gain as a DTG side effect, but attribution here is confounded by uncontrolled hypothyroidism and poor levothyroxine adherence.",
+     "recommended_action": "Optimise hypothyroidism management first; reassess weight and symptoms before considering a DTG switch. Viral load is suppressed — avoid unnecessary regimen change.",
+     "severity": "moderate",
+     "title": "DTG switch for weight gain may be premature"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_AMITRIPTYLINE_CONSTIPATION_RISK",
+   "title": "Amitriptyline may worsen constipation and weight gain",
+   "message": "Patient takes amitriptyline 50 mg and reports constipation. Amitriptyline has anticholinergic properties that commonly cause or worsen constipation. Concurrent uncontrolled hypothyroidism also causes constipation, creating a compounding risk for bowel dysfunction. Additionally, amitriptyline is associated with weight gain, which may further confound attribution of weight gain to DTG. The combination of hypothyroidism, amitriptyline, and possible DTG-related weight gain creates multiple overlapping contributors to the patient's presentation.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "compounding_risk",
+    "severity": "moderate",
+    "recommended_action": "Assess whether amitriptyline contributes to constipation and weight gain; consider alternative antidepressants with lower metabolic burden if clinically appropriate.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_AMITRIPTYLINE_CONSTIPATION_RISK",
+     "citations": [],
+     "issue_type": "compounding_risk",
+     "message": "Patient takes amitriptyline 50 mg and reports constipation. Amitriptyline has anticholinergic properties that commonly cause or worsen constipation. Concurrent uncontrolled hypothyroidism also causes constipation, creating a compounding risk for bowel dysfunction. Additionally, amitriptyline is associated with weight gain, which may further confound attribution of weight gain to DTG. The combination of hypothyroidism, amitriptyline, and possible DTG-related weight gain creates multiple overlapping contributors to the patient's presentation.",
+     "recommended_action": "Assess whether amitriptyline contributes to constipation and weight gain; consider alternative antidepressants with lower metabolic burden if clinically appropriate.",
+     "severity": "moderate",
+     "title": "Amitriptyline may worsen constipation and weight gain"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_LIPID_MONITORING_GAP",
+   "title": "Elevated lipids with obesity warrant monitoring plan",
+   "message": "Patient has elevated LDL cholesterol 4.2 mmol/L and total cholesterol 6.4 mmol/L, with BMI 33. TDF-based regimens are less dyslipidaemic than alternatives, but if DTG is switched to an EFV-based or protease inhibitor-based regimen, lipid profiles may worsen. Current lipid elevations in the context of obesity and hypothyroidism warrant baseline documentation and monitoring. No lipid follow-up plan is documented. Hypothyroidism itself can elevate lipids, and correcting TSH may improve the lipid profile.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Document baseline lipids, optimise thyroid function, and plan repeat lipid panel after thyroid correction before any ART switch.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_LIPID_MONITORING_GAP",
+     "citations": [],
+     "issue_type": "monitoring_gap",
+     "message": "Patient has elevated LDL cholesterol 4.2 mmol/L and total cholesterol 6.4 mmol/L, with BMI 33. TDF-based regimens are less dyslipidaemic than alternatives, but if DTG is switched to an EFV-based or protease inhibitor-based regimen, lipid profiles may worsen. Current lipid elevations in the context of obesity and hypothyroidism warrant baseline documentation and monitoring. No lipid follow-up plan is documented. Hypothyroidism itself can elevate lipids, and correcting TSH may improve the lipid profile.",
+     "recommended_action": "Document baseline lipids, optimise thyroid function, and plan repeat lipid panel after thyroid correction before any ART switch.",
+     "severity": "low",
+     "title": "Elevated lipids with obesity warrant monitoring plan"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_HYPOTHYROIDISM_UNCONTROLLED": [],
+  "EX3_DTG_SWITCH_PREMATURE": [],
+  "EX3_AMITRIPTYLINE_CONSTIPATION_RISK": [],
+  "EX3_LIPID_MONITORING_GAP": []
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_HYPOTHYROIDISM_UNCONTROLLED\",\n    \"citations\": [],\n    \"issue_type\": \"plan_review\",\n    \"message\": \"Patient has TSH 12.4 mIU/L (target <4.5) with low free T4, tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes — consistent with inadequately treated hypothyroidism. She reports often forgetting her levothyroxine. The plan to simply continue levothyroxine 50 mcg without addressing adherence or dose escalation will not correct this. Much of the weight gain (9 kg/year), low mood, and metabolic disturbance may be driven by hypothyroidism rather than DTG. Non-adherence to levothyroxine is the most likely cause of the current presentation.\",\n    \"recommended_action\": \"Counsel on levothyroxine adherence, increase dose (e.g., to 75 mcg), and recheck TSH/free T4 in 6–8 weeks before attributing weight gain to DTG.\",\n    \"severity\": \"high\",\n    \"title\": \"Uncontrolled hypothyroidism despite levothyroxine\"\n  },\n  {\n    \"alert_id\": \"EX3_DTG_SWITCH_PREMATURE\",\n    \"citations\": [],\n    \"issue_type\": \"plan_review\",\n    \"message\": \"The clinician plans to switch from DTG due to weight gain. However, the patient's symptoms (tiredness, cold intolerance, constipation, dry skin, delayed reflexes) and elevated TSH strongly suggest hypothyroidism as the primary driver of weight gain and metabolic changes. Switching from DTG prematurely risks compromising a virologically suppressive regimen (viral load <50) without addressing the underlying thyroid dysfunction. Guidelines list abnormal weight gain as a DTG side effect, but attribution here is confounded by uncontrolled hypothyroidism and poor levothyroxine adherence.\",\n    \"recommended_action\": \"Optimise hypothyroidism management first; reassess weight and symptoms before considering a DTG switch. Viral load is suppressed — avoid unnecessary regimen change.\",\n    \"severity\": \"moderate\",\n    \"title\": \"DTG switch for weight gain may be premature\"\n  },\n  {\n    \"alert_id\": \"EX3_AMITRIPTYLINE_CONSTIPATION_RISK\",\n    \"citations\": [],\n    \"issue_type\": \"compounding_risk\",\n    \"message\": \"Patient takes amitriptyline 50 mg and reports constipation. Amitriptyline has anticholinergic properties that commonly cause or worsen constipation. Concurrent uncontrolled hypothyroidism also causes constipation, creating a compounding risk for bowel dysfunction. Additionally, amitriptyline is associated with weight gain, which may further confound attribution of weight gain to DTG. The combination of hypothyroidism, amitriptyline, and possible DTG-related weight gain creates multiple overlapping contributors to the patient's presentation.\",\n    \"recommended_action\": \"Assess whether amitriptyline contributes to constipation and weight gain; consider alternative antidepressants with lower metabolic burden if clinically appropriate.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Amitriptyline may worsen constipation and weight gain\"\n  },\n  {\n    \"alert_id\": \"EX3_LIPID_MONITORING_GAP\",\n    \"citations\": [],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Patient has elevated LDL cholesterol 4.2 mmol/L and total cholesterol 6.4 mmol/L, with BMI 33. TDF-based regimens are less dyslipidaemic than alternatives, but if DTG is switched to an EFV-based or protease inhibitor-based regimen, lipid profiles may worsen. Current lipid elevations in the context of obesity and hypothyroidism warrant baseline documentation and monitoring. No lipid follow-up plan is documented. Hypothyroidism itself can elevate lipids, and correcting TSH may improve the lipid profile.\",\n    \"recommended_action\": \"Document baseline lipids, optimise thyroid function, and plan repeat lipid panel after thyroid correction before any ART switch.\",\n    \"severity\": \"low\",\n    \"title\": \"Elevated lipids with obesity warrant monitoring plan\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "te: All patients receiving INH prophylaxis and DTG+INH should be closely monitored for signs and symptoms of liver toxicity as specified in the pharmacovigilance guidelines. Table 43: TPT dosing table Medicine frequency & duration Formulation Dose of TPT medicine (mgs) Dose/ weight Recommended number of tablets per body weight in kilograms 3HP (once weekly rifapentine plus isoniazid for 3 months) Fixed Doze Combination (FDC) Tablet Rifapentine 300mg/ Isoniazid 300mg (light gr"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p26_c1",
+    "page_number": 26,
+    "quote": "14 Hyperglycemia or diabetes. (Increased appetite, increased thirst, and excessive urination). (e.g. DTG). Younger children: Ask for irritability (in addition to the above symptoms) 15 Fever (e.g. LZD) 16 Abnormal weight gain (e.g. DTG) 17 Sexual dysfunction (increased or low libido) indicate type in remarks (e.g. ETO, DTG) 18 Congenital Anomaly/Birth Defect 19 Other SEs. Specify; ____________ Sign (initials) 259 Key to the abbreviation: AMK: Amikacin CF: Clofazimine BDQ: Bed"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "ision: High glucose**? Flowchart: Footnote: **High blood glucose: Fasting>6.95 mmol, Non-fasting >8.89mmol High urine glucose: Any + Flowchart: If YES, proceed to: DO NOT INITIATE OR TRANSITION TO DTG Flowchart: If NO, proceed to: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG Flowchart: Action: DO NOT INITIATE OR TRANSITION TO DTG Give ATV/r or maintain on EFV Monitor blood glucose per diabet"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Guideline excerpts do not provide criteria for switching DTG due to weight gain, and the patient's viral load is suppressed on TLD.\"},\"problems\":[{\"problem\":\"Inadequately treated hypothyroidism with poor levothyroxine adherence causing weight gain, tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes\",\"action\":\"Check TSH and free T4 to assess current thyroid status and counsel patient on consistent daily levothyroxine adherence before attributing symptoms to DTG.\",\"reason\":\"Patient reports often forgetting levothyroxine and has classic hypothyroid features including delayed ankle reflexes and periorbital puffiness, which may explain the weight gain and tiredness rather than DTG.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician plans to continue levothyroxine but does not address poor adherence or order thyroid function tests to confirm whether symptoms are from inadequate thyroid treatment.\"}},{\"problem\":\"Significant weight gain (9 kg in 1 year, BMI 33) possibly related to DTG\",\"action\":\"Uncertain: guideline excerpts do not provide specific thresholds or criteria for switching DTG due to weight gain.\",\"reason\":\"Patient has gained 9 kg over the past year on TLD with BMI now 33, but the provided excerpts do not contain guidance on managing DTG-associated weight gain.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"Clinician is considering switching from DTG but has not ordered tests or documented a definitive plan, and the guideline excerpts do not confirm whether switching is indicated.\"}},{\"problem\":\"Dyslipidemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L)\",\"action\":\"Uncertain: guideline excerpts do not provide specific management thresholds for dyslipidemia in patients on ART.\",\"reason\":\"Patient has elevated LDL, total cholesterol, and triglycerides which may be related to DTG or hypothyroidism, but the provided excerpts do not contain lipid management guidance.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Clinician's plan does not mention the abnormal lipid results or any follow-up for dyslipidemia.\"}},{\"problem\":\"Potential contribution of amitriptyline to weight gain, tiredness, and low mood\",\"action\":\"Uncertain: guideline excerpts do not provide specific guidance on amitriptyline interactions with ART medications.\",\"reason\":\"Patient is on amitriptyline 50 mg and reports low mood with weight gain and tiredness, but the provided excerpts do not address co-medication interactions.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"Clinician's plan does not address potential contribution of amitriptyline to the patient's symptoms.\"}}],\"monitoring_plan\":[\"Check TSH and free T4 to evaluate thyroid function given symptoms and poor adherence\",\"Repeat fasting lipid panel in 3 months to monitor dyslipidemia trend\",\"Continue routine viral load monitoring per national schedule (next due ~May 2026 based on last VL Nov 2025)\",\"Monitor weight and BMI at each visit\"],\"patient_counselling\":[\"Emphasize the importance of taking levothyroxine consistently every morning as missed doses may be causing your symptoms\",\"Explain that weight gain and tiredness may be related to poorly controlled hypothyroidism rather than the HIV medication\",\"Discuss lifestyle modifications including diet and physical activity given BMI 33 and abnormal lipids\",\"Inform patient that switching DTG is being considered but further evaluation is needed first\"]}",
+ "plan_issues": []
+}

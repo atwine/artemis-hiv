@@ -1,0 +1,238 @@
+{
+ "case_id": "EX4",
+ "model": "llama-a100-t0-ug",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 34.3,
+ "calls": [
+  {
+   "prompt_tokens": 1803,
+   "total_tokens": 2195,
+   "completion_tokens": 392,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2642,
+   "total_tokens": 3341,
+   "completion_tokens": 699,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX4_001",
+   "title": "Carbamazepine and DTG Interaction",
+   "message": "Guidelines state that carbamazepine decreases DTG levels by 30-70%. Patient is on DTG and recently started carbamazepine, with a detectable viral load of 1240 copies/mL. This interaction may be contributing to the viral load increase.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "high",
+    "recommended_action": "Monitor viral load and consider alternative antiepileptic or ART regimen",
+    "citations": [
+     {
+      "page_number": 49,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_001",
+     "title": "Carbamazepine and DTG Interaction",
+     "message": "Guidelines state that carbamazepine decreases DTG levels by 30-70%. Patient is on DTG and recently started carbamazepine, with a detectable viral load of 1240 copies/mL. This interaction may be contributing to the viral load increase.",
+     "issue_type": "drug_interaction",
+     "severity": "high",
+     "recommended_action": "Monitor viral load and consider alternative antiepileptic or ART regimen",
+     "citations": [
+      {
+       "page_number": 49,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_002",
+   "title": "Carbamazepine Toxicity",
+   "message": "Patient shows symptoms of carbamazepine toxicity, with a level of 14 mcg/mL, above the therapeutic range of 4-12. This may be causing headaches, dizziness, and unsteady walking.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Reduce carbamazepine dose and repeat level",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX4_002",
+     "title": "Carbamazepine Toxicity",
+     "message": "Patient shows symptoms of carbamazepine toxicity, with a level of 14 mcg/mL, above the therapeutic range of 4-12. This may be causing headaches, dizziness, and unsteady walking.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Reduce carbamazepine dose and repeat level",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_003",
+   "title": "Viral Load Increase",
+   "message": "Patient's viral load has increased to 1240 copies/mL, despite reported good adherence. This may indicate treatment failure or drug interaction, such as with carbamazepine.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Investigate cause of viral load increase and consider regimen change",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_003",
+     "title": "Viral Load Increase",
+     "message": "Patient's viral load has increased to 1240 copies/mL, despite reported good adherence. This may indicate treatment failure or drug interaction, such as with carbamazepine.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Investigate cause of viral load increase and consider regimen change",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_004",
+   "title": "Renal Function Monitoring",
+   "message": "Patient is on TDF, which requires renal function monitoring. Current creatinine level is 84 umol/L, but no prior levels are available for comparison.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Monitor renal function regularly",
+    "citations": [
+     {
+      "page_number": 10,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_004",
+     "title": "Renal Function Monitoring",
+     "message": "Patient is on TDF, which requires renal function monitoring. Current creatinine level is 84 umol/L, but no prior levels are available for comparison.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Monitor renal function regularly",
+     "citations": [
+      {
+       "page_number": 10,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX4_005",
+   "title": "Contraindication for DTG",
+   "message": "Guidelines state that DTG is contraindicated in patients on anticonvulsants like carbamazepine. Patient is on both DTG and carbamazepine.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "contraindication",
+    "severity": "critical",
+    "recommended_action": "Reconsider DTG use due to contraindication",
+    "citations": [
+     {
+      "page_number": 10,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX4_005",
+     "title": "Contraindication for DTG",
+     "message": "Guidelines state that DTG is contraindicated in patients on anticonvulsants like carbamazepine. Patient is on both DTG and carbamazepine.",
+     "issue_type": "contraindication",
+     "severity": "critical",
+     "recommended_action": "Reconsider DTG use due to contraindication",
+     "citations": [
+      {
+       "page_number": 10,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX4_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1"
+  ],
+  "EX4_002": [],
+  "EX4_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1"
+  ],
+  "EX4_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+  ],
+  "EX4_005": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX4_001\",\n    \"title\": \"Carbamazepine and DTG Interaction\",\n    \"message\": \"Guidelines state that carbamazepine decreases DTG levels by 30-70%. Patient is on DTG and recently started carbamazepine, with a detectable viral load of 1240 copies/mL. This interaction may be contributing to the viral load increase.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Monitor viral load and consider alternative antiepileptic or ART regimen\",\n    \"citations\": [{\"page_number\": 49, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_002\",\n    \"title\": \"Carbamazepine Toxicity\",\n    \"message\": \"Patient shows symptoms of carbamazepine toxicity, with a level of 14 mcg/mL, above the therapeutic range of 4-12. This may be causing headaches, dizziness, and unsteady walking.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Reduce carbamazepine dose and repeat level\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"EX4_003\",\n    \"title\": \"Viral Load Increase\",\n    \"message\": \"Patient's viral load has increased to 1240 copies/mL, despite reported good adherence. This may indicate treatment failure or drug interaction, such as with carbamazepine.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Investigate cause of viral load increase and consider regimen change\",\n    \"citations\": [{\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_004\",\n    \"title\": \"Renal Function Monitoring\",\n    \"message\": \"Patient is on TDF, which requires renal function monitoring. Current creatinine level is 84 umol/L, but no prior levels are available for comparison.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Monitor renal function regularly\",\n    \"citations\": [{\"page_number\": 10, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX4_005\",\n    \"title\": \"Contraindication for DTG\",\n    \"message\": \"Guidelines state that DTG is contraindicated in patients on anticonvulsants like carbamazepine. Patient is on both DTG and carbamazepine.\",\n    \"issue_type\": \"contraindication\",\n    \"severity\": \"critical\",\n    \"recommended_action\": \"Reconsider DTG use due to contraindication\",\n    \"citations\": [{\"page_number\": 10, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p49_c1",
+    "page_number": 49,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Drug Family ARV Drug Interaction Action Anti-epileptics, e.g. carbamaz-epine, pheno-barbital, and phenytoin EFV, DTG, Etravirine, Carbamazepine decreases DTG levels by 30-70% Use valproic acid Drugs for acid reflux or ulcers, e.g. omeprazole, esomeprazole, lansoprazole, pantoprazole ATV/r Reduced con-centrations of Atazanavir Use alternatives like ranit-idine, cimetidine, etc. Polyvalent"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p10_c1",
+    "page_number": 10,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 1. Contraindications for DTG (use DTG screening tool prior to DTG initiation) including: known diabetics, patients on anticonvulsants (carbamazepine, phenytoin, phenobarbital) 2. Contraindications for TDF: Renal disease and/or GFR <60ml/min, weight <30Kg 3. TAF is preferred to TDF 4. Children will be assessed individually for ability to correctly take the different formulations of LPV/r "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+    "page_number": 12,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 virological monitoring provides an early and more accurate indication of treatment failure and indicates the need to switch from first line to second-line drugs, and from second- line to third-line drugs, toward reducing accumulation of drug-resistance mutations and improved clinical outcomes. Dolutegravir (DTG)-based regimens (e.g., tenofovir/lamivudine/dolutegravir [TLD]) have increase"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: the provided guideline excerpts and patient data are not sufficient to determine if the current ART regimen is causing toxicity or if a change is needed\"}, \n\"problems\": [{\"problem\": \"Viral load increase\", \"action\": \"Investigate cause of viral load increase\", \"reason\": \"The patient's viral load is now detectable at 1,240 copies/mL despite reported good adherence\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan mentions the viral load increase but is unsure of the cause\"}}, \n{\"problem\": \"Potential drug interaction between carbamazepine and current ART regimen\", \"action\": \"Monitor for signs of toxicity and adjust medications as needed\", \"reason\": \"The patient is experiencing symptoms of carbamazepine toxicity and is also taking TDF, 3TC, and DTG\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan includes reducing the carbamazepine dose due to suspected toxicity\"}}, \n{\"problem\": \"Neurological symptoms\", \"action\": \"Continue monitoring neurological symptoms\", \"reason\": \"The patient is experiencing headaches, dizziness, unsteady walking, and shaky hands\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan addresses the symptoms of carbamazepine toxicity\"}}], \n\"monitoring_plan\": \"Repeat viral load, liver function tests (e.g., ALT), and creatinine levels in 3-6 months, or sooner if symptoms worsen\", \n\"patient_counselling\": [\"Adhere to the adjusted carbamazepine dose\", \"Report any changes in neurological symptoms\", \"Importance of continued ART adherence despite viral load increase\"]}",
+ "plan_issues": []
+}

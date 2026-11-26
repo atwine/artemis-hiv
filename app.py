@@ -35,19 +35,19 @@ from artemis.ai.client import (
 from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
-from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store
+from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
+from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store, index_collection_name
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
 from artemis.ai.screening import NO_SEVERITY
-from ui.references import alert_references
 from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
-from ui.results_banner import status_banners
+from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED, alert_heading, alert_references, status_banners
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
 from artemis.visit import (
     AnalysisOptions,
@@ -65,27 +65,23 @@ from dotenv import load_dotenv  # noqa: E402
 
 load_dotenv(PROJECT_ROOT / ".env", override=False)
 
-CONSOLIDATED_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Consolidated-HIV-and-AIDS-Guidelines-20230516.pdf"
-LEGACY_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Uganda Clinical Guidelines 2023.pdf"
-NCD_GUIDELINE_PDF_PATH = (
-    PROJECT_ROOT
-    / "Data"
-    / "Uganda+Integrated+Guidelines+for+the+management+of+NCDs-+Uganda+with+cover-FIN+14October2019.V4.pdf"
-)
-
 # Rationale: Markdown conversions of the guideline PDFs preserve table structures
 # that pypdf extraction drops. We now embed from the Markdown files instead of PDFs.
 GUIDELINE_MD_DIR = PROJECT_ROOT / "Data" / "MarkDown Files"
-GUIDELINE_PATHS: list[Path] = sorted(
-    p for p in GUIDELINE_MD_DIR.glob("*.md") if p.is_file()
-) if GUIDELINE_MD_DIR.is_dir() else []
+# Only the registered guidelines of the practice country: Ugandan guidance only (owner, 2026-11-25).
+GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY)
 
 # Rationale: persistent Chroma collections keep old indexed chunks; bump this
 # when the ingestion/cleaning/chunking logic changes to force a fresh collection.
 # Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
-GUIDELINE_INDEX_VERSION = 2
-# Backward-compatible alias used by downstream code.
-GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
+# Version 3 (G36): page numbers are the guideline's printed pages.
+GUIDELINE_INDEX_VERSION = 3
+# The search model that turns guideline text and queries into meanings (one setting the app and
+# the scripts share). Phase 2B fix 5d tried BAAI/bge-small-en-v1.5 (512 word-pieces) and dropped it
+# by its keep rule; fix 5f tried Qwen/Qwen3-Embedding-0.6B and dropped it the same way (it found
+# more passages but the AI caught fewer problems). The index is per model, so changing it builds
+# a fresh one.
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
 CUSTOM_PATIENTS_PATH = Path(
     os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json"
@@ -142,32 +138,11 @@ def _get_rag_engine(
 ) -> RagEngine:
     # Rationale: keep a single vector store + embedder + engine per session.
     embedder = _get_embedder(embedding_model_name, version=2)
-    # Rationale: keep a separate Chroma collection per embedding model to avoid
-    # mixing incompatible vector spaces across runs.
-    model_key = (
-        (embedding_model_name or "")
-        .strip()
-        .lower()
-        .replace("/", "_")
-        .replace(":", "_")
-        .replace(" ", "_")
-    )
-
-    # Rationale: persistent Chroma collections keep old indexed chunks. Include the
-    # active guideline sources in the collection name to prevent mixing chunks from
-    # previous documents and to force a clean re-index when the source files change.
-    guideline_key = "no_guideline"
-    if GUIDELINE_PATHS:
-        # Rationale: hash all file stems so the collection auto-resets when any
-        # source file is added, removed or renamed.
-        guideline_key = "_".join(
-            p.stem.strip().lower().replace(" ", "_").replace("+", "_")[:20]
-            for p in GUIDELINE_PATHS
-        )[:80]  # keep the collection name within Chroma's limits
+    # One stored index per search model and guideline text: an edited file gets a fresh one (G37).
     vector_store = create_vector_store(
         project_root=PROJECT_ROOT,
         prefer_chroma=prefer_chroma,
-        collection_name=f"uganda_hiv_guidelines__{model_key}__{guideline_key}__v{GUIDELINE_INDEX_VERSION}",
+        collection_name=index_collection_name(embedding_model_name, GUIDELINE_PATHS, GUIDELINE_INDEX_VERSION),
     )
     return RagEngine(
         project_root=PROJECT_ROOT,
@@ -205,7 +180,7 @@ def _run_analysis(
         # Rationale: cache-bust to refresh vector_store Chroma filter fix and related changes.
         engine_version=5,
     )
-    if GUIDELINE_PDF_PATHS:
+    if GUIDELINE_PATHS:
         rag.ensure_indexed()
 
     llm_client = None
@@ -299,9 +274,7 @@ def main() -> None:
         st.success(_flash)
 
     st.title("ARTEMIS-HIV")
-    st.caption(
-        "Decision support only. Clinician retains final authority. Synthetic data only."
-    )
+    st.caption(DISCLAIMER)
 
     if not MOCK_PATIENTS_PATH.exists():
         st.error("Mock patients file not found: `Data/mock_patients.json`")
@@ -742,7 +715,7 @@ def main() -> None:
         prefer_chroma = st.checkbox("Prefer Chroma (persistent)", value=True)
         embedding_model_name = st.text_input(
             "Embedding model (SentenceTransformers)",
-            value="all-MiniLM-L6-v2",
+            value=EMBEDDING_MODEL,
         )
         top_k = st.slider("Top-K guideline chunks", min_value=1, max_value=10, value=5)
         
@@ -816,7 +789,7 @@ def main() -> None:
             )
         st.session_state["llm_num_ctx"] = int(num_ctx)
 
-    save_disabled = not bool(GUIDELINE_PDF_PATHS)
+    save_disabled = not bool(GUIDELINE_PATHS)
     if st.button("Save encounter (run checks)", disabled=save_disabled):
         _run_analysis(
             patient=patient,
@@ -937,8 +910,7 @@ def main() -> None:
             retrieved: List[VectorSearchResult] = item["retrieved"]
             explanation: ExplanationResult = item["explanation"]
 
-            _source = "AI review" if getattr(alert, "source", "rule") == "ai" else "Rule check"
-            with st.expander(f"Alert ({_source}): {alert.title}", expanded=True):
+            with st.expander(alert_heading(alert), expanded=True):
                 # Rationale: present clinician-facing text without inline citation fragments
                 # and keep numbered references in one place for readability.
                 _finding_text = str(alert.message or "")
@@ -1142,10 +1114,7 @@ def main() -> None:
     if st.session_state.get("finalized"):
         st.success(f"Visit finalized and saved ({when(st.session_state.get('analysis_finalized_at'))}).")
     elif st.session_state.get("analysis_ran") and alerts and not can_finalize:
-        st.info(
-            "Finalize is disabled until all alerts are acknowledged or overridden with a reason "
-            "(the reason 'Other' needs a comment)."
-        )
+        st.info(FINALIZE_BLOCKED)
 
     st.markdown("""
         <div style='background-color: #E8F4F8; padding: 15px; border-radius: 8px; border-left: 4px solid #2E86AB; margin: 20px 0;'>

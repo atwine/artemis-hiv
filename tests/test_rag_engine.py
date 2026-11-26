@@ -9,6 +9,7 @@ from artemis.guidelines.vector_store import InMemoryVectorStore
 
 @dataclass
 class _DummyEmbedder:
+    loaded = True
     # Rationale: avoid downloading external embedding models during tests.
     def encode(self, texts: List[str]) -> List[List[float]]:
         # Deterministic, low-dimensional embedding based on simple string features.

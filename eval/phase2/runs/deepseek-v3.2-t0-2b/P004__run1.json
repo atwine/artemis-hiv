@@ -1,0 +1,250 @@
+{
+ "case_id": "P004",
+ "model": "deepseek-v3.2-t0-2b",
+ "model_id": "deepseek/deepseek-v3.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 54.9,
+ "calls": [
+  {
+   "prompt_tokens": 1618,
+   "completion_tokens": 341,
+   "total_tokens": 1959,
+   "cost": 0.00050034,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 384,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00050034,
+    "upstream_inference_prompt_cost": 0.00037076,
+    "upstream_inference_completions_cost": 0.00012958
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 732,
+   "completion_tokens": 83,
+   "total_tokens": 815,
+   "cost": 0.00022186,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00022186,
+    "upstream_inference_prompt_cost": 0.00019032,
+    "upstream_inference_completions_cost": 3.154e-05
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3010,
+   "completion_tokens": 496,
+   "total_tokens": 3506,
+   "cost": 0.00117639,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00117639,
+    "upstream_inference_prompt_cost": 0.00077959,
+    "upstream_inference_completions_cost": 0.0003968
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0018985900000000001,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_ALERT_001",
+   "title": "Abdominal Pain as Possible ART Toxicity",
+   "message": "Guidelines list abdominal pain as a symptom for TDF toxicity (chronic kidney disease, acute kidney injury, Fanconi syndrome) and for DTG toxicity (hepatotoxicity, hypersensitivity). The patient presents with abdominal pain but has a normal appetite and no fever. Non-drug causes, such as gastrointestinal infection or other conditions, should also be considered in the differential diagnosis.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Screen for developing signs/symptoms using the pharmacovigilance tool and investigate based on clinical suspicion.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "page_number": 270,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+      "page_number": 269,
+      "shown_to_ai": true
+     },
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c5",
+      "page_number": 24,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_ALERT_001",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+       "page_number": 270
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+       "page_number": 269
+      },
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c5",
+       "page_number": 24
+      }
+     ],
+     "issue_type": "toxicity",
+     "message": "Guidelines list abdominal pain as a symptom for TDF toxicity (chronic kidney disease, acute kidney injury, Fanconi syndrome) and for DTG toxicity (hepatotoxicity, hypersensitivity). The patient presents with abdominal pain but has a normal appetite and no fever. Non-drug causes, such as gastrointestinal infection or other conditions, should also be considered in the differential diagnosis.",
+     "recommended_action": "Screen for developing signs/symptoms using the pharmacovigilance tool and investigate based on clinical suspicion.",
+     "severity": "moderate",
+     "title": "Abdominal Pain as Possible ART Toxicity"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P004_ALERT_002",
+   "title": "Annual Renal Monitoring for TDF Due",
+   "message": "Guidelines state that for experienced patients on TDF, serum creatinine and eGFR should be done every 12 months. The patient's latest creatinine result is from 78 days ago (Nov 2025). While this value is normal (82 umol/L), there is no documented annual schedule, creating a potential monitoring gap for renal function.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Schedule annual serum creatinine and eGFR monitoring for this patient on TDF.",
+    "citations": [
+     {
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+      "page_number": 29,
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_ALERT_002",
+     "citations": [
+      {
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+       "page_number": 29
+      }
+     ],
+     "issue_type": "monitoring_gap",
+     "message": "Guidelines state that for experienced patients on TDF, serum creatinine and eGFR should be done every 12 months. The patient's latest creatinine result is from 78 days ago (Nov 2025). While this value is normal (82 umol/L), there is no documented annual schedule, creating a potential monitoring gap for renal function.",
+     "recommended_action": "Schedule annual serum creatinine and eGFR monitoring for this patient on TDF.",
+     "severity": "low",
+     "title": "Annual Renal Monitoring for TDF Due"
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c5"
+  ],
+  "P004_ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Is abdominal pain a side effect of TDF, 3TC, or DTG?",
+   "When is the next creatinine test due for TDF?",
+   "Is pregnancy testing needed for abdominal pain on ART?",
+   "Should viral load be repeated for abdominal pain?",
+   "Does DTG cause abdominal pain?",
+   "Is there drug interaction causing abdominal pain?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_ALERT_001\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\",\n        \"page_number\": 270\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1\",\n        \"page_number\": 269\n      },\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c5\",\n        \"page_number\": 24\n      }\n    ],\n    \"issue_type\": \"toxicity\",\n    \"message\": \"Guidelines list abdominal pain as a symptom for TDF toxicity (chronic kidney disease, acute kidney injury, Fanconi syndrome) and for DTG toxicity (hepatotoxicity, hypersensitivity). The patient presents with abdominal pain but has a normal appetite and no fever. Non-drug causes, such as gastrointestinal infection or other conditions, should also be considered in the differential diagnosis.\",\n    \"recommended_action\": \"Screen for developing signs/symptoms using the pharmacovigilance tool and investigate based on clinical suspicion.\",\n    \"severity\": \"moderate\",\n    \"title\": \"Abdominal Pain as Possible ART Toxicity\"\n  },\n  {\n    \"alert_id\": \"P004_ALERT_002\",\n    \"citations\": [\n      {\n        \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19\",\n        \"page_number\": 29\n      }\n    ],\n    \"issue_type\": \"monitoring_gap\",\n    \"message\": \"Guidelines state that for experienced patients on TDF, serum creatinine and eGFR should be done every 12 months. The patient's latest creatinine result is from 78 days ago (Nov 2025). While this value is normal (82 umol/L), there is no documented annual schedule, creating a potential monitoring gap for renal function.\",\n    \"recommended_action\": \"Schedule annual serum creatinine and eGFR monitoring for this patient on TDF.\",\n    \"severity\": \"low\",\n    \"title\": \"Annual Renal Monitoring for TDF Due\"\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c19",
+    "page_number": 29,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nTDF | 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months\nPatients on any other regimens and not on this table | Any ART | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiological investigations based on clini"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s4_c2",
+    "page_number": 2,
+    "quote": "6.4 THE PROCESS OF STARTING ART\n* For patients without TB or cryptococcal meningitis, offer ART on the same day through an opt-out approach. In this approach, patients should be prepared for ART on the same day according to the guidelines in Section 7.5.2 and assessed for readiness to start ART using the readiness checklist (Table 64). * If a client is ready, ART should be initiated on the same day. If a client is not ready or opts out of same-day initiation, a timely ART pre"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s30_c1",
+    "page_number": 46,
+    "quote": "6.17 THIRD-LINE ART REGIMENS > 6.17.1 Eligibility for Third-Line ART\nPatients on second-line ART who meet the following criteria are eligible for third line ARVs: * If they have a detectable viral load test result >1000 copies/ml at the repeat viral load test following intensified adherence counseling. * The patient should have had three intensified adherence counseling sessions one month apart after the initial detectable viral load. * The patient has three consecutive score"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 269,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c5",
+    "page_number": 24,
+    "quote": "Screening tool for Active Pharmacovigilance\n2 | Peripheral neuropathy (numbness, tingling, feeling of pins and needles, burning sensation in hands and/or feet) Younger children: Ask for pain in hands and feet, regression in motor milestones - refusal to crawl, walk or run, reduced playfulness (in addition to the above symptoms) (e.g. H, DTG, LZD)\n3 | Abdominal symptoms (nausea & vomiting, diarrhea, abdominal pain) (e.g. ETO)\n4 | Hepatotoxicity (nausea, vomiting, right upper q"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 270,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s24_c12",
+    "page_number": 27,
+    "quote": "Screening tool for Active Pharmacovigilance\nCategory of Patient | Drugs | Screening procedures\nDTG | 1. Screen using screening tool to identify any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests.\nIsoniazid/ 3HP Prophylaxis | 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests ba"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p28_c2",
+    "page_number": 261,
+    "quote": "1. Screen using screening tool to identify any developing signs and symptoms. 3. Routine RBS every 3 months in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Routine Liver Function Tests at 3 months after initiating INH/3HP 261"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__s19_c3",
+    "page_number": 13,
+    "quote": "6.12.3 Frequency of viral load monitoring\nFigure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Maintain"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\n  \"art_regimen_decision\": {\n    \"decision\": \"Continue\",\n    \"reason\": \"Patient has abdominal pain but no fever, and guidelines emphasize pharmacovigilance but do not specify abdominal pain as a toxicity requiring regimen change.\"\n  },\n  \"problems\": [\n    {\n      \"problem\": \"Abdominal pain of unclear etiology\",\n      \"action\": \"Uncertain: The guideline excerpts provided do not specify diagnostic tests or management steps for abdominal pain in this context.\",\n      \"reason\": \"Uncertain: The provided guideline excerpts only emphasize pharmacovigilance importance but do not detail evaluation for abdominal pain.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan only notes the symptom but does not include any diagnostic or management actions.\"\n      }\n    },\n    {\n      \"problem\": \"Need for routine ART monitoring\",\n      \"action\": \"Check creatinine and viral load as per routine schedule.\",\n      \"reason\": \"Guidelines emphasize pharmacovigilance, and the patient's last creatinine and viral load are from 78 days ago.\",\n      \"clinician_plan_for_this_problem\": {\n        \"decision\": \"Not Addressed\",\n        \"explanation\": \"The clinician's plan does not mention any laboratory monitoring.\"\n      }\n    }\n  ],\n  \"monitoring_plan\": \"Check creatinine and viral load now; follow routine monitoring schedule.\",\n  \"patient_counselling\": [\n    \"Report any worsening abdominal pain or new symptoms.\",\n    \"Adherence to ART regimen.\",\n    \"Importance of routine lab monitoring.\"\n  ]\n}",
+ "plan_issues": []
+}

@@ -1,0 +1,410 @@
+{
+ "case_id": "MR-KS",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 196.2,
+ "calls": [
+  {
+   "prompt_tokens": 2190,
+   "completion_tokens": 1000,
+   "total_tokens": 3190,
+   "cost": 0.00273332,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2176,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00273332,
+    "upstream_inference_prompt_cost": 0.00031332,
+    "upstream_inference_completions_cost": 0.00242
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2219,
+   "completion_tokens": 708,
+   "total_tokens": 2927,
+   "cost": 0.0028741,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0028741,
+    "upstream_inference_prompt_cost": 0.00116074,
+    "upstream_inference_completions_cost": 0.00171336
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1356,
+   "completion_tokens": 110,
+   "total_tokens": 1466,
+   "cost": 0.0010762,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 64,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0010762,
+    "upstream_inference_prompt_cost": 0.00081,
+    "upstream_inference_completions_cost": 0.0002662
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3948,
+   "completion_tokens": 1164,
+   "total_tokens": 5112,
+   "cost": 0.00415872,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2304,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00415872,
+    "upstream_inference_prompt_cost": 0.00134184,
+    "upstream_inference_completions_cost": 0.00281688
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.01084234,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "TDF toxicity: low phosphate and bone pain",
+   "message": "Guidelines list TDF as causing Fanconi syndrome, decreased bone mineral density, and lower back pain with bone aches; management is LFTs and RFTs, substituting TDF with ABC if GFR <60 or deranged. Patient on TDF for 6 years presents with lower back pain and heavy thighs worsening over 4 months, plus low serum phosphate 0.78 mmol/L and trace proteinuria. These findings are consistent with proximal tubulopathy (Fanconi syndrome) and bone mineral density loss from TDF. Creatinine is 112 umol/L, which may appear normal but does not exclude tubular dysfunction. Occupational strain from truck driving is an alternative explanation for back pain, but the concurrent hypophosphataemia and proteinuria strengthen drug attribution. eGFR has not been calculated.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Calculate eGFR and perform urinalysis for phosphate and glucose. If deranged, substitute TDF with ABC per guidelines. Evaluate bone mineral density.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 24,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "TDF toxicity: low phosphate and bone pain",
+     "message": "Guidelines list TDF as causing Fanconi syndrome, decreased bone mineral density, and lower back pain with bone aches; management is LFTs and RFTs, substituting TDF with ABC if GFR <60 or deranged. Patient on TDF for 6 years presents with lower back pain and heavy thighs worsening over 4 months, plus low serum phosphate 0.78 mmol/L and trace proteinuria. These findings are consistent with proximal tubulopathy (Fanconi syndrome) and bone mineral density loss from TDF. Creatinine is 112 umol/L, which may appear normal but does not exclude tubular dysfunction. Occupational strain from truck driving is an alternative explanation for back pain, but the concurrent hypophosphataemia and proteinuria strengthen drug attribution. eGFR has not been calculated.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Calculate eGFR and perform urinalysis for phosphate and glucose. If deranged, substitute TDF with ABC per guidelines. Evaluate bone mineral density.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 24,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "TDF monitoring gap: annual creatinine and eGFR",
+   "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. Patient has been on TDF for 6 years, but no eGFR is documented. Today's creatinine of 112 umol/L is at the upper end of normal and trace proteinuria is present. Without eGFR calculation, renal function cannot be adequately assessed, especially given concurrent hypophosphataemia suggesting possible tubular dysfunction. The clinician's plan does not include renal monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Calculate eGFR from today's creatinine. Schedule annual serum creatinine and eGFR monitoring as per TDF monitoring guidelines.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "TDF monitoring gap: annual creatinine and eGFR",
+     "message": "Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. Patient has been on TDF for 6 years, but no eGFR is documented. Today's creatinine of 112 umol/L is at the upper end of normal and trace proteinuria is present. Without eGFR calculation, renal function cannot be adequately assessed, especially given concurrent hypophosphataemia suggesting possible tubular dysfunction. The clinician's plan does not include renal monitoring.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Calculate eGFR from today's creatinine. Schedule annual serum creatinine and eGFR monitoring as per TDF monitoring guidelines.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_003",
+   "title": "Uncontrolled BP and NSAID risk with TDF",
+   "message": "Guidelines define persistently high resting BP as >140/90 mmHg requiring management. Patient's BP is 146/94, attributed partly to missed amlodipine doses. The plan only refills amlodipine without intensifying antihypertensive therapy. Additionally, the clinician recommends PRN ibuprofen, an NSAID that can worsen hypertension and cause renal injury. Combined with TDF, which is nephrotoxic, and existing trace proteinuria with low phosphate, NSAID use compounds renal risk. The plan lacks renal-sparing analgesic alternatives.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "compounding_risk",
+    "severity": "high",
+    "recommended_action": "Confirm BP >140/90 with repeat measurement after 5 minutes seated. Intensify antihypertensive management. Consider acetaminophen instead of ibuprofen for back pain to reduce renal risk.",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_003",
+     "title": "Uncontrolled BP and NSAID risk with TDF",
+     "message": "Guidelines define persistently high resting BP as >140/90 mmHg requiring management. Patient's BP is 146/94, attributed partly to missed amlodipine doses. The plan only refills amlodipine without intensifying antihypertensive therapy. Additionally, the clinician recommends PRN ibuprofen, an NSAID that can worsen hypertension and cause renal injury. Combined with TDF, which is nephrotoxic, and existing trace proteinuria with low phosphate, NSAID use compounds renal risk. The plan lacks renal-sparing analgesic alternatives.",
+     "issue_type": "compounding_risk",
+     "severity": "high",
+     "recommended_action": "Confirm BP >140/90 with repeat measurement after 5 minutes seated. Intensify antihypertensive management. Consider acetaminophen instead of ibuprofen for back pain to reduce renal risk.",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_004",
+   "title": "EFV regimen not guideline-preferred first-line",
+   "message": "Guidelines recommend DTG-based regimens (TDF+3TC+DTG) as preferred first-line for adults, with EFV400 as an alternative when DTG is contraindicated. Patient remains on EFV-based ART for 6 years. EFV is associated with CNS toxicity, hepatotoxicity, and gynecomastia. While the patient is virologically suppressed, no contraindication to DTG is documented, and no reason for continuing EFV over DTG is noted. The plan does not address potential regimen optimization.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "low",
+    "recommended_action": "Assess for any contraindication to DTG. If none, consider transitioning to TDF+3TC+DTG per preferred first-line guidelines.",
+    "citations": [
+     {
+      "page_number": 5,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 39,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_004",
+     "title": "EFV regimen not guideline-preferred first-line",
+     "message": "Guidelines recommend DTG-based regimens (TDF+3TC+DTG) as preferred first-line for adults, with EFV400 as an alternative when DTG is contraindicated. Patient remains on EFV-based ART for 6 years. EFV is associated with CNS toxicity, hepatotoxicity, and gynecomastia. While the patient is virologically suppressed, no contraindication to DTG is documented, and no reason for continuing EFV over DTG is noted. The plan does not address potential regimen optimization.",
+     "issue_type": "guideline_deviation",
+     "severity": "low",
+     "recommended_action": "Assess for any contraindication to DTG. If none, consider transitioning to TDF+3TC+DTG per preferred first-line guidelines.",
+     "citations": [
+      {
+       "page_number": 5,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3"
+      },
+      {
+       "page_number": 39,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "ALERT_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "ALERT_004": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does TDF cause proximal tubulopathy with proteinuria and low phosphate?",
+   "Does long-term TDF require more frequent creatinine monitoring than every 6 months?",
+   "Does EFV cause musculoskeletal or neuromuscular side effects like thigh heaviness?",
+   "Does ibuprofen interact with TDF to increase kidney toxicity risk?",
+   "Should trace proteinuria on TDF prompt further renal investigation or regimen change?",
+   "Does uncontrolled hypertension with proteinuria require closer monitoring on TDF?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"TDF toxicity: low phosphate and bone pain\",\n    \"message\": \"Guidelines list TDF as causing Fanconi syndrome, decreased bone mineral density, and lower back pain with bone aches; management is LFTs and RFTs, substituting TDF with ABC if GFR <60 or deranged. Patient on TDF for 6 years presents with lower back pain and heavy thighs worsening over 4 months, plus low serum phosphate 0.78 mmol/L and trace proteinuria. These findings are consistent with proximal tubulopathy (Fanconi syndrome) and bone mineral density loss from TDF. Creatinine is 112 umol/L, which may appear normal but does not exclude tubular dysfunction. Occupational strain from truck driving is an alternative explanation for back pain, but the concurrent hypophosphataemia and proteinuria strengthen drug attribution. eGFR has not been calculated.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Calculate eGFR and perform urinalysis for phosphate and glucose. If deranged, substitute TDF with ABC per guidelines. Evaluate bone mineral density.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 24, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"TDF monitoring gap: annual creatinine and eGFR\",\n    \"message\": \"Guidelines require serum creatinine and eGFR monitoring every 12 months for experienced patients on TDF. Patient has been on TDF for 6 years, but no eGFR is documented. Today's creatinine of 112 umol/L is at the upper end of normal and trace proteinuria is present. Without eGFR calculation, renal function cannot be adequately assessed, especially given concurrent hypophosphataemia suggesting possible tubular dysfunction. The clinician's plan does not include renal monitoring.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Calculate eGFR from today's creatinine. Schedule annual serum creatinine and eGFR monitoring as per TDF monitoring guidelines.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_003\",\n    \"title\": \"Uncontrolled BP and NSAID risk with TDF\",\n    \"message\": \"Guidelines define persistently high resting BP as >140/90 mmHg requiring management. Patient's BP is 146/94, attributed partly to missed amlodipine doses. The plan only refills amlodipine without intensifying antihypertensive therapy. Additionally, the clinician recommends PRN ibuprofen, an NSAID that can worsen hypertension and cause renal injury. Combined with TDF, which is nephrotoxic, and existing trace proteinuria with low phosphate, NSAID use compounds renal risk. The plan lacks renal-sparing analgesic alternatives.\",\n    \"issue_type\": \"compounding_risk\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Confirm BP >140/90 with repeat measurement after 5 minutes seated. Intensify antihypertensive management. Consider acetaminophen instead of ibuprofen for back pain to reduce renal risk.\",\n    \"citations\": [\n      {\"page_number\": 40, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_004\",\n    \"title\": \"EFV regimen not guideline-preferred first-line\",\n    \"message\": \"Guidelines recommend DTG-based regimens (TDF+3TC+DTG) as preferred first-line for adults, with EFV400 as an alternative when DTG is contraindicated. Patient remains on EFV-based ART for 6 years. EFV is associated with CNS toxicity, hepatotoxicity, and gynecomastia. While the patient is virologically suppressed, no contraindication to DTG is documented, and no reason for continuing EFV over DTG is noted. The plan does not address potential regimen optimization.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Assess for any contraindication to DTG. If none, consider transitioning to TDF+3TC+DTG per preferred first-line guidelines.\",\n    \"citations\": [\n      {\"page_number\": 5, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3\"},\n      {\"page_number\": 39, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes and/or GFR is < 60mls/min) then substitute with ABC If ABC is contraindicated: substitute with AZT ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months 260"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 39,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomastia Dizziness, insomnia, abnormal dreams, or mental symptoms (anxiety, depression, mental confusion, suicidality) New-onset seizures Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes New-onset skin rash Breast enlargement Reassure, If symptoms persist, substitute EFV with DTG or LPV/r (if appropriate DTG formulation is not available)"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+    "page_number": 40,
+    "quote": "physical activity to equivalent of 30 minutes of aerobic exercise a day, at least 5 days every week * Consistency and discipline are Key ## 5.4.7.2 Screening, Diagnosis and Management of Hypertension All PLHIV should be screened for risk factors of hypertension such as tobacco smoking, being overweight or obese, physical inactivity, dyslipidemia, history of adverse cardiovascular event like stroke and heart attack and unhealthy diet at every visit. They should also have their blood pressure (BP) measurement at every clinic visit. Note that protease inhibitors can also contribute to increased cardiovascular disease risk. Persistently high resting BP defined as >140/90mmHg on at least two measurements five minutes apart with the patient seated should be managed as guided by the algorithm (Figure 47). People with any risk factor identified should be advised to modify lifestyle as described below. 191"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+    "page_number": 24,
+    "quote": "257 2 Peripheral neuropathy (numbness, tingling, feeling of pins and needles, burning sensation in hands and/or feet) Younger children: Ask for pain in hands and feet, regression in motor milestones - refusal to crawl, walk or run, reduced playfulness (in addition to the above symptoms) (e.g. H, DTG, LZD) 3 Abdominal symptoms (nausea & vomiting, diarrhea, abdominal pain) (e.g. ETO) 4 Hepatotoxicity (nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes) (e.g H, PZA, ETO, BDQ, CFZ, Rifabutine, FLQ, Z, DTG) 5 Musculoskeletal symptoms (muscle cramps, joint pains, tiredness, weakness, inability to move limb/s) (e.g LZD, Z, LFX, ETO, TDF) 6 Eye symptoms (blurred vision, double vision, redness, tearing) (LZD, E) 7 Kidney symptoms (lower limb swelling, facial puffiness, reduced urine output) (e.g. AMK,TDF) Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can be co-administered with Rifampicin-containing anti-TB treatment, with co-administration well tolerated and plasma concentrations maintained above the levels considered to be effective. EFV400 is recommended for use as an alternative first line anchor ARV when DTG is contraindicated. RECOMMENDED FIRSTLINE REGIMEN FOR INITIATING ART IN ADULTS AND ADOLESCENTS WEIGHING >=30kg All eligible HIV-infected adults and adolescents weighing ≥ 30kg should be initiated on Tenofovir or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort decrease in appetite. Persistent vomiting resulting in severe dehydration Do Hb (if < 8mg/dl): Substitute with TDF If TDF is contraindicated: substitute with ABC NVP Acute symptomatic hepatitis Hypersensitivity reaction, Stevens-Johnson Syndrome (severe or life-threatening rash, mucosal involvement) Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Severe or life-threatening rash with mucosal involvement (ulcers in the mouth or eyes) Substitute or switch to appropriate regimen NOTE: NVP is not recommended in ART regimens. NVP should be substituted even in absence of ARs/ toxicity OR regimen switched if client is failing"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient is virologically suppressed (VL <50) and immunologically stable (CD4 540) with no definitive ART toxicity signs in the provided guideline excerpts.\"},\"problems\":[{\"problem\":\"TDF nephrotoxicity risk with elevated creatinine and trace proteinuria\",\"action\":\"Uncertain: provided guideline excerpts only cover hypertension medicine side effects (Table 58) and do not include TDF toxicity monitoring or substitution criteria.\",\"reason\":\"Uncertain: the excerpts do not contain TDF toxicity information, though creatinine 112 umol/L and trace proteinuria warrant renal monitoring per standard practice.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician continues TDF and attributes proteinuria to hypertension but does not mention TDF nephrotoxicity monitoring or renal function trend review.\"}},{\"problem\":\"Uncontrolled hypertension (BP 146/94) with missed amlodipine doses\",\"action\":\"Uncertain: provided excerpts reference Table 58 on hypertension medicine side effects but the full content is not available to confirm dose adjustment or escalation steps.\",\"reason\":\"Uncertain: the guideline excerpt mentions potential side effects of hypertension medicines but the actual side effects and management recommendations are not included in the provided text.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician refills amlodipine 5 mg and counsels adherence but does not escalate therapy or document target BP despite BP remaining above target.\"}},{\"problem\":\"Chronic NSAID (ibuprofen) use with hypertension and possible renal concern\",\"action\":\"Uncertain: provided guideline excerpts do not address NSAID use in HIV patients on ART with hypertension or renal impairment.\",\"reason\":\"Uncertain: the excerpts only partially reference hypertension medicine side effects and do not cover NSAID-related renal risk or drug interactions with ART.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician prescribes PRN ibuprofen without addressing potential renal risk in a patient with elevated creatinine, trace proteinuria, and uncontrolled hypertension.\"}},{\"problem\":\"EFV-related neuropsychiatric or musculoskeletal toxicity assessment\",\"action\":\"Uncertain: provided guideline excerpts do not include EFV side effect profiles or toxicity monitoring guidance.\",\"reason\":\"Uncertain: the excerpts do not contain EFV toxicity information, though the patient's thigh heaviness and gait stiffness could warrant consideration of EFV neuromuscular effects.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician attributes all musculoskeletal symptoms to occupational causes without considering or documenting EFV-related toxicity as a differential.\"}}],\"monitoring_plan\":[\"Repeat creatinine and urine protein in 3 months to assess renal trend given TDF use and trace proteinuria\",\"Monitor blood pressure at next visit or sooner if symptoms arise; consider 24-hour BP assessment\",\"Repeat CD4 and viral load at next scheduled visit per national guidelines\",\"Assess musculoskeletal symptoms for progression or new neurological signs at next visit\"],\"patient_counselling\":[\"Emphasize strict adherence to amlodipine even while travelling; do not skip doses\",\"Limit ibuprofen use and report any swelling, decreased urine output, or persistent back pain\",\"Maintain lifestyle modifications: reduce salt intake, maintain healthy weight, and exercise regularly\",\"Report any new neurological symptoms such as numbness, weakness, or gait changes that could relate to medication side effects\"]}",
+ "plan_issues": []
+}

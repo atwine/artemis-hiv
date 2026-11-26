@@ -1,0 +1,339 @@
+{
+ "case_id": "EX2",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 31.8,
+ "calls": [
+  {
+   "prompt_tokens": 1680,
+   "completion_tokens": 737,
+   "total_tokens": 2417,
+   "cost": 0.00164243068,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1461,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00164243068,
+    "upstream_inference_prompt_cost": 0.00028694028,
+    "upstream_inference_completions_cost": 0.0013554904
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 942,
+   "completion_tokens": 110,
+   "total_tokens": 1052,
+   "cost": 0.0003723544,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 800,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0003723544,
+    "upstream_inference_prompt_cost": 0.0001700424,
+    "upstream_inference_completions_cost": 0.000202312
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 3151,
+   "completion_tokens": 1156,
+   "total_tokens": 4307,
+   "cost": 0.003876437,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1024,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003876437,
+    "upstream_inference_prompt_cost": 0.001589869,
+    "upstream_inference_completions_cost": 0.002286568
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0058912220799999995,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX2_TDF_AKI_ATTRIBUTION",
+   "title": "AKI likely from dehydration, not TDF",
+   "message": "Guidelines list TDF as a cause of acute kidney injury, and the clinician is considering permanent TDF discontinuation. However, the patient's presentation strongly suggests a non-drug cause: 5 days of severe watery diarrhoea and vomiting with two affected family members, hypotension (90/60), tachycardia, and clinical dehydration. The high urea-to-creatinine ratio (24:1) indicates prerenal AKI from volume depletion, and urinalysis shows no proteinuria or glycosuria, arguing against TDF-induced tubular injury (Fanconi syndrome). Creatinine was normal (0.9) a year ago. TDF nephrotoxicity typically develops insidiously with tubular dysfunction; an abrupt rise with clear volume depletion and a prerenal picture makes gastroenteritis the more likely cause.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Rehydrate with IV fluids and recheck creatinine after volume restoration before deciding on permanent TDF discontinuation. If creatinine normalises, continue TDF with ongoing renal monitoring.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_TDF_AKI_ATTRIBUTION",
+     "title": "AKI likely from dehydration, not TDF",
+     "message": "Guidelines list TDF as a cause of acute kidney injury, and the clinician is considering permanent TDF discontinuation. However, the patient's presentation strongly suggests a non-drug cause: 5 days of severe watery diarrhoea and vomiting with two affected family members, hypotension (90/60), tachycardia, and clinical dehydration. The high urea-to-creatinine ratio (24:1) indicates prerenal AKI from volume depletion, and urinalysis shows no proteinuria or glycosuria, arguing against TDF-induced tubular injury (Fanconi syndrome). Creatinine was normal (0.9) a year ago. TDF nephrotoxicity typically develops insidiously with tubular dysfunction; an abrupt rise with clear volume depletion and a prerenal picture makes gastroenteritis the more likely cause.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Rehydrate with IV fluids and recheck creatinine after volume restoration before deciding on permanent TDF discontinuation. If creatinine normalises, continue TDF with ongoing renal monitoring.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_TDF_SUBSTITUTION_GUIDANCE",
+   "title": "If TDF stopped, substitute per guideline",
+   "message": "Guidelines specify that for moderate and severe adverse reactions, the responsible ARV should be substituted following specific substitution guidance. For TDF toxicity, the guideline substitution is AZT if TDF is contraindicated. If the clinician proceeds with permanent TDF discontinuation, the plan should include a specific substitute ARV rather than simply stopping TDF, to maintain viral suppression. The patient is currently virally suppressed (<50 copies/mL), and an unstructured regimen change risks treatment interruption or resistance.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "moderate",
+    "recommended_action": "If TDF is permanently discontinued, substitute with AZT per guideline substitution guidance and document the rationale; avoid unstructured regimen interruption.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 34,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_TDF_SUBSTITUTION_GUIDANCE",
+     "title": "If TDF stopped, substitute per guideline",
+     "message": "Guidelines specify that for moderate and severe adverse reactions, the responsible ARV should be substituted following specific substitution guidance. For TDF toxicity, the guideline substitution is AZT if TDF is contraindicated. If the clinician proceeds with permanent TDF discontinuation, the plan should include a specific substitute ARV rather than simply stopping TDF, to maintain viral suppression. The patient is currently virally suppressed (<50 copies/mL), and an unstructured regimen change risks treatment interruption or resistance.",
+     "issue_type": "plan_review",
+     "severity": "moderate",
+     "recommended_action": "If TDF is permanently discontinued, substitute with AZT per guideline substitution guidance and document the rationale; avoid unstructured regimen interruption.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+      },
+      {
+       "page_number": 34,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_AKI_SEVERITY_MONITORING",
+   "title": "Severe creatinine rise requires close monitoring",
+   "message": "Guideline toxicity grading defines severe renal dysfunction as eGFR 30 to <60 mL/min or a 30 to <50% decrease from baseline. This patient's creatinine rose from 0.9 to 2.4 mg/dL, a substantial acute decline in renal function meeting severe toxicity criteria. Guidelines recommend renal function tests (RFTs) when TDF-related toxicity is suspected, and serum creatinine monitoring is part of routine TDF safety monitoring. The plan includes fluid resuscitation but does not document repeat creatinine/eGFR monitoring or a defined threshold for ART adjustment.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "high",
+    "recommended_action": "Perform repeat serum creatinine and eGFR after rehydration and monitor closely until renal function recovers; document severity grading and a clear ART decision threshold.",
+    "citations": [
+     {
+      "page_number": 32,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_AKI_SEVERITY_MONITORING",
+     "title": "Severe creatinine rise requires close monitoring",
+     "message": "Guideline toxicity grading defines severe renal dysfunction as eGFR 30 to <60 mL/min or a 30 to <50% decrease from baseline. This patient's creatinine rose from 0.9 to 2.4 mg/dL, a substantial acute decline in renal function meeting severe toxicity criteria. Guidelines recommend renal function tests (RFTs) when TDF-related toxicity is suspected, and serum creatinine monitoring is part of routine TDF safety monitoring. The plan includes fluid resuscitation but does not document repeat creatinine/eGFR monitoring or a defined threshold for ART adjustment.",
+     "issue_type": "monitoring_gap",
+     "severity": "high",
+     "recommended_action": "Perform repeat serum creatinine and eGFR after rehydration and monitor closely until renal function recovers; document severity grading and a clear ART decision threshold.",
+     "citations": [
+      {
+       "page_number": 32,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+      },
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_ART_CONTINUITY_ADMISSION",
+   "title": "Continue ART during admission",
+   "message": "Guidelines state that for admitted patients recently on ART, ART should be continued at admission, with regimen decisions made according to patient history, ART guidelines, viral load, and resistance testing where relevant. This patient is severely ill with dehydration and AKI; the plan does not state whether TLD will be continued during admission. Abrupt ART interruption during acute illness should be avoided unless specifically indicated.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_add",
+    "severity": "moderate",
+    "recommended_action": "Continue ART during admission per guideline; make any regimen change deliberately using ART guidelines, viral load history, and resistance testing if needed.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_ART_CONTINUITY_ADMISSION",
+     "title": "Continue ART during admission",
+     "message": "Guidelines state that for admitted patients recently on ART, ART should be continued at admission, with regimen decisions made according to patient history, ART guidelines, viral load, and resistance testing where relevant. This patient is severely ill with dehydration and AKI; the plan does not state whether TLD will be continued during admission. Abrupt ART interruption during acute illness should be avoided unless specifically indicated.",
+     "issue_type": "plan_add",
+     "severity": "moderate",
+     "recommended_action": "Continue ART during admission per guideline; make any regimen change deliberately using ART guidelines, viral load history, and resistance testing if needed.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_TDF_AKI_ATTRIBUTION": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2"
+  ],
+  "EX2_TDF_SUBSTITUTION_GUIDANCE": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2"
+  ],
+  "EX2_AKI_SEVERITY_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "EX2_ART_CONTINUITY_ADMISSION": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Should TDF be stopped or substituted when creatinine rises to 2.4 from acute kidney injury?",
+   "What alternative ART regimen is recommended when TDF causes or worsens kidney injury?",
+   "Does acute gastroenteritis with dehydration require temporary holding of TDF or other ART drugs?",
+   "What renal monitoring schedule is recommended for patients on TDF-containing regimens?",
+   "Is DTG safe to continue in a patient with acute kidney injury and severe dehydration?",
+   "What criteria guide restarting ART after acute illness with dehydration and kidney injury resolves?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_TDF_AKI_ATTRIBUTION\",\n    \"title\": \"AKI likely from dehydration, not TDF\",\n    \"message\": \"Guidelines list TDF as a cause of acute kidney injury, and the clinician is considering permanent TDF discontinuation. However, the patient's presentation strongly suggests a non-drug cause: 5 days of severe watery diarrhoea and vomiting with two affected family members, hypotension (90/60), tachycardia, and clinical dehydration. The high urea-to-creatinine ratio (24:1) indicates prerenal AKI from volume depletion, and urinalysis shows no proteinuria or glycosuria, arguing against TDF-induced tubular injury (Fanconi syndrome). Creatinine was normal (0.9) a year ago. TDF nephrotoxicity typically develops insidiously with tubular dysfunction; an abrupt rise with clear volume depletion and a prerenal picture makes gastroenteritis the more likely cause.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Rehydrate with IV fluids and recheck creatinine after volume restoration before deciding on permanent TDF discontinuation. If creatinine normalises, continue TDF with ongoing renal monitoring.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_TDF_SUBSTITUTION_GUIDANCE\",\n    \"title\": \"If TDF stopped, substitute per guideline\",\n    \"message\": \"Guidelines specify that for moderate and severe adverse reactions, the responsible ARV should be substituted following specific substitution guidance. For TDF toxicity, the guideline substitution is AZT if TDF is contraindicated. If the clinician proceeds with permanent TDF discontinuation, the plan should include a specific substitute ARV rather than simply stopping TDF, to maintain viral suppression. The patient is currently virally suppressed (<50 copies/mL), and an unstructured regimen change risks treatment interruption or resistance.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"If TDF is permanently discontinued, substitute with AZT per guideline substitution guidance and document the rationale; avoid unstructured regimen interruption.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2\"},\n      {\"page_number\": 34, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_AKI_SEVERITY_MONITORING\",\n    \"title\": \"Severe creatinine rise requires close monitoring\",\n    \"message\": \"Guideline toxicity grading defines severe renal dysfunction as eGFR 30 to <60 mL/min or a 30 to <50% decrease from baseline. This patient's creatinine rose from 0.9 to 2.4 mg/dL, a substantial acute decline in renal function meeting severe toxicity criteria. Guidelines recommend renal function tests (RFTs) when TDF-related toxicity is suspected, and serum creatinine monitoring is part of routine TDF safety monitoring. The plan includes fluid resuscitation but does not document repeat creatinine/eGFR monitoring or a defined threshold for ART adjustment.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Perform repeat serum creatinine and eGFR after rehydration and monitor closely until renal function recovers; document severity grading and a clear ART decision threshold.\",\n    \"citations\": [\n      {\"page_number\": 32, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1\"},\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX2_ART_CONTINUITY_ADMISSION\",\n    \"title\": \"Continue ART during admission\",\n    \"message\": \"Guidelines state that for admitted patients recently on ART, ART should be continued at admission, with regimen decisions made according to patient history, ART guidelines, viral load, and resistance testing where relevant. This patient is severely ill with dehydration and AKI; the plan does not state whether TLD will be continued during admission. Abrupt ART interruption during acute illness should be avoided unless specifically indicated.\",\n    \"issue_type\": \"plan_add\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Continue ART during admission per guideline; make any regimen change deliberately using ART guidelines, viral load history, and resistance testing if needed.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 37,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4",
+    "page_number": 27,
+    "quote": "RT regimen* | | ART experienced reportedly adherent on ART < 14 days- 6 months Recent ART introduction or re-introduction | Continue ART at Admission** | | Continue 1st, 2nd or 3rd line ART regimen* | *Decision on which ART regimen to restart should be made according to patient's history, ART guidelines, HIV viral load and genotypic resistance testing if possible. If it is considered likely that the patient has developed resistance to 1st line ARVs, then restart with 2nd line"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c2",
+    "page_number": 34,
+    "quote": "S tools; ART Cards, Registers, eMRS, reviewed and reported. * Reports from active PV should be submitted to the National Drug Authority through the Regional Referral Hospital and NDA Regional Offices. * Side effects and toxicities of ARVs and TB medicines should be managed according to severity. For moderate and severe reactions, the responsible ARV or TB medicine should be substituted following the specific substitution guidance. For life-threatening reactions, ART and/or TB"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p1_c2",
+    "page_number": 1,
+    "quote": "RT ART should be initiated at the earliest opportunity in all people with confirmed HIV infection, regardless of clinical stage or CD4 cell count. **Rationale for treating all people living with HIV** Since 2013, evidence and programmatic experience have continued to favour early initiation of ART because it results in reduced mortality, morbidity, and HIV transmission outcomes. ## 6.4 THE PROCESS OF STARTING ART Although the program recommends starting all PLHIV on ART, heal"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Hold temporarily\",\"reason\":\"Patient has severe dehydration with AKI (creatinine 2.4 from 0.9) and TDF is nephrotoxic; holding TDF temporarily while resuscitating and rechecking renal function is prudent, but permanent discontinuation is premature since the AKI is likely prerenal from gastroenteritis.\"},\"problems\":[{\"problem\":\"Acute kidney injury (creatinine 2.4, up from 0.9) on TDF-containing regimen\",\"action\":\"Hold TDF temporarily; continue 3TC and DTG; give IV fluid resuscitation; recheck serum creatinine and eGFR daily; resume TDF only when renal function returns to baseline.\",\"reason\":\"TDF is nephrotoxic and the patient has AKI with creatinine 2.4, but the injury is likely prerenal from severe gastroenteritis and dehydration, so permanent discontinuation is premature without confirming persistent renal dysfunction.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician plans IV fluids and is considering stopping TDF permanently, but does not distinguish between temporary holding during acute illness versus permanent switch, and does not plan to recheck creatinine before deciding.\"}},{\"problem\":\"Severe gastroenteritis with dehydration (BP 90/60, pulse 112, dry mucous membranes, sunken eyes, reduced skin turgor)\",\"action\":\"Continue IV fluid resuscitation with isotonic saline; monitor urine output, vital signs, and electrolytes; send stool for microscopy and culture; give empiric antibiotics as planned.\",\"reason\":\"Patient has severe dehydration with hypotension and tachycardia from gastroenteritis, and two family members are ill suggesting an infectious cause rather than drug toxicity.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Agree\",\"explanation\":\"The clinician's plan of IV fluid resuscitation, empiric antibiotics, and stool microscopy appropriately addresses the gastroenteritis and dehydration.\"}},{\"problem\":\"Differentiating prerenal AKI from TDF nephrotoxicity\",\"action\":\"Check fractional excretion of sodium (FENa), urine electrolytes, and serial creatinine after fluid resuscitation to determine if AKI is prerenal or intrinsic.\",\"reason\":\"The guideline excerpt requires serum creatinine and eGFR monitoring for TDF, and distinguishing prerenal AKI from TDF nephrotoxicity determines whether TDF can be safely resumed.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician does not mention urine electrolytes, FENa, or serial creatinine monitoring to differentiate prerenal AKI from TDF nephrotoxicity.\"}}],\"monitoring_plan\":\"Recheck serum creatinine and eGFR daily during admission; monitor urine output, BP, and pulse response to fluids; check serum electrolytes (K+, Na+, HCO3-); repeat creatinine at 1-2 weeks post-discharge before deciding on TDF resumption; viral load was suppressed (<50) in August 2025, repeat in 3-6 months.\",\"patient_counselling\":[\"Explain that the kidney injury is likely from dehydration due to gastroenteritis and TDF will be held temporarily, not necessarily stopped permanently\",\"Encourage oral rehydration and report any persistent vomiting or reduced urine output\",\"Advise that renal function will be rechecked before deciding whether to resume TDF or switch to an alternative\",\"Reassure that viral load is suppressed and HIV remains controlled during this acute illness\"]}",
+ "plan_issues": []
+}

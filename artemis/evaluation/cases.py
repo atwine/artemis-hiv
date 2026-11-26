@@ -18,7 +18,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 KINDS = ("drug_harm", "clash", "monitoring", "plan")
 # A negation shortly before a phrase, in the same sentence, means it wasn't said.
@@ -60,7 +60,9 @@ class Expected:
     kind: str
     summary: str
     rule: MatchRule
-    guideline: Optional[Dict[str, Any]] = None
+    # The passage(s) behind it: {document, page, quote}, a list of them, [] when the guidelines
+    # don't cover it, or None when not written yet. Read by the Phase 2B search check.
+    guideline: Any = None
 
 
 @dataclass(frozen=True)

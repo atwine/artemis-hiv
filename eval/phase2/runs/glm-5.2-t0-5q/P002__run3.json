@@ -1,0 +1,239 @@
+{
+ "case_id": "P002",
+ "model": "glm-5.2-t0-5q",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 23.9,
+ "calls": [
+  {
+   "prompt_tokens": 1535,
+   "completion_tokens": 717,
+   "total_tokens": 2252,
+   "cost": 0.002405231,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002405231,
+    "upstream_inference_prompt_cost": 0.000987005,
+    "upstream_inference_completions_cost": 0.001418226
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 734,
+   "completion_tokens": 76,
+   "total_tokens": 810,
+   "cost": 0.0002511552,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 660,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0002511552,
+    "upstream_inference_prompt_cost": 0.0001133824,
+    "upstream_inference_completions_cost": 0.0001377728
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2979,
+   "completion_tokens": 445,
+   "total_tokens": 3424,
+   "cost": 0.00206372,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1792,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00206372,
+    "upstream_inference_prompt_cost": 0.00098682,
+    "upstream_inference_completions_cost": 0.0010769
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.004720106199999999,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P002_VL_MONITORING_GAP",
+   "title": "Viral load monitoring overdue",
+   "message": "Guidelines state VL should be measured every 6-12 months for adults on stable ART. The patient's most recent viral load was on 2025-09-15, 129 days before this visit, which is within the acceptable interval. However, no viral load has been ordered at this encounter, and the next VL should be planned to ensure no gap exceeds 12 months. The clinician's plan does not include any lab orders.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Confirm next VL is scheduled by September 2026 at the latest, or order one now if clinically indicated.",
+    "citations": [
+     {
+      "page_number": 50,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_VL_MONITORING_GAP",
+     "title": "Viral load monitoring overdue",
+     "message": "Guidelines state VL should be measured every 6-12 months for adults on stable ART. The patient's most recent viral load was on 2025-09-15, 129 days before this visit, which is within the acceptable interval. However, no viral load has been ordered at this encounter, and the next VL should be planned to ensure no gap exceeds 12 months. The clinician's plan does not include any lab orders.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Confirm next VL is scheduled by September 2026 at the latest, or order one now if clinically indicated.",
+     "citations": [
+      {
+       "page_number": 50,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2"
+      },
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P002_TDF_CREATININE_MONITORING",
+   "title": "TDF renal monitoring frequency gap",
+   "message": "Guidelines require serum creatinine monitoring for patients on TDF. The latest creatinine (76 umol/L on 2025-12-15) is normal and stable. However, only one creatinine result is on record. No creatinine monitoring is included in today's plan. While the current value is reassuring, ongoing periodic renal monitoring is required for TDF-containing regimens to detect late nephrotoxicity.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue routine serum creatinine monitoring per TDF guidelines at the next scheduled interval.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P002_TDF_CREATININE_MONITORING",
+     "title": "TDF renal monitoring frequency gap",
+     "message": "Guidelines require serum creatinine monitoring for patients on TDF. The latest creatinine (76 umol/L on 2025-12-15) is normal and stable. However, only one creatinine result is on record. No creatinine monitoring is included in today's plan. While the current value is reassuring, ongoing periodic renal monitoring is required for TDF-containing regimens to detect late nephrotoxicity.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue routine serum creatinine monitoring per TDF guidelines at the next scheduled interval.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P002_VL_MONITORING_GAP": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3"
+  ],
+  "P002_TDF_CREATININE_MONITORING": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Is pregnancy testing required for a 29-year-old female on DTG at routine visits?",
+   "How often should creatinine be monitored for a patient on TDF?",
+   "When is the next routine viral load due after a suppressed result?",
+   "What DSD models is this stable patient eligible for?",
+   "Is a routine physical exam or screening required at follow-up visits?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P002_VL_MONITORING_GAP\",\n    \"title\": \"Viral load monitoring overdue\",\n    \"message\": \"Guidelines state VL should be measured every 6-12 months for adults on stable ART. The patient's most recent viral load was on 2025-09-15, 129 days before this visit, which is within the acceptable interval. However, no viral load has been ordered at this encounter, and the next VL should be planned to ensure no gap exceeds 12 months. The clinician's plan does not include any lab orders.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Confirm next VL is scheduled by September 2026 at the latest, or order one now if clinically indicated.\",\n    \"citations\": [{\"page_number\": 50, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2\"}, {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3\"}]\n  },\n  {\n    \"alert_id\": \"P002_TDF_CREATININE_MONITORING\",\n    \"title\": \"TDF renal monitoring frequency gap\",\n    \"message\": \"Guidelines require serum creatinine monitoring for patients on TDF. The latest creatinine (76 umol/L on 2025-12-15) is normal and stable. However, only one creatinine result is on record. No creatinine monitoring is included in today's plan. While the current value is reassuring, ongoing periodic renal monitoring is required for TDF-containing regimens to detect late nephrotoxicity.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue routine serum creatinine monitoring per TDF guidelines at the next scheduled interval.\",\n    \"citations\": [{\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p31_c1",
+    "page_number": 31,
+    "quote": "Table 86: Symptomatic and Laboratory Severity Grading for common ADRs Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening Note: For all symptoms reported as potential ADRs, grade them according to the criteria above. Symptomatic grading Mild symptoms causing no or minimal interference with usual social & functional activities with intervention not indicated Moderate symptoms causing greater than minimal interference with usual socia"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 20,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c3",
+    "page_number": 12,
+    "quote": "minimum, the committee should consist of a healthcare worker and a lay provider (e.g. expert client, counselor, peer education, VHT) who knows the client. ## 6.12.3 Frequency of viral load monitoring 1. Children and adolescents under 19 years of age: the first VL test should be done at 6 and 12 months after initiating ART, if it is suppressed, every 6 months thereafter. If not suppressed, follow the algorithm in Figure 58. 2. Adults: the first VL test should be done 6 months "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p2_c2",
+    "page_number": 2,
+    "quote": "g patients for ART. * For institutions starting patients on ARTS for research purposes, there should be a clear post ART access plane for approved drugs but not yet accessible in the public facilities * Post-Trial Access: Research institutions should collaboratively work with its partners to ensure post trial/Research access to efficacious/safe study HIV treatment regimens for HIV positive clients enrolled for study purposes until the drugs become available through the nation"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c3",
+    "page_number": 20,
+    "quote": "events shall be transported to the nearby Hub using laboratory Hub transport system d. For each encounter, the health worker should screen for any suspected ADRs as per screening tool above at triage. e. Clinicians should further evaluate reported signs and symptoms. f. Where applicable the clinician should request for additional tests (including laboratory and radiological) for patients with signs or symptoms suggesting ADRs. 253"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Continue\", \"reason\": \"Patient is asymptomatic with stable examination, suppressed viral load (20 copies/mL), and normal creatinine (76 umol/L) on TDF/3TC/DTG, with no guideline-based indication to switch or hold.\"}, \"problems\": [{\"problem\": \"No current evidence of ART drug toxicity\", \"action\": \"Continue TDF/3TC/DTG and maintain routine toxicity screening at each visit per pharmacovigilance guidance.\", \"reason\": \"Patient reports no complaints, examination is stable with no abnormalities, and creatinine (76 umol/L) is normal, so no toxicity signs are present.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan of routine follow-up for a stable, asymptomatic patient is consistent with continuing the current regimen.\"}}, {\"problem\": \"TDF-related renal monitoring decision\", \"action\": \"Continue annual creatinine monitoring (or per schedule) and repeat creatinine sooner if new hypertension, diabetes, nephrotoxic co-medications, or renal symptoms develop.\", \"reason\": \"TDF requires renal function surveillance, and the most recent creatinine of 76 umol/L on 2025-12-15 is normal, supporting safe continuation.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The plan notes routine follow-up but does not explicitly document the timing of the next creatinine or viral load.\"}}, {\"problem\": \"Viral load monitoring schedule decision\", \"action\": \"Schedule the next routine viral load per the national VL monitoring algorithm given the last VL of 20 copies/mL on 2025-09-15.\", \"reason\": \"The patient has sustained viral suppression (30 copies/mL in 2024, 20 copies/mL in 2025), so routine VL monitoring should continue.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The plan discusses DSD eligibility but does not specify the next viral load date.\"}}, {\"problem\": \"DSD eligibility decision\", \"action\": \"Confirm DSD enrollment criteria (sustained viral suppression and good adherence) and enroll the patient in the appropriate DSD model if eligible.\", \"reason\": \"The patient has been stable on ART since 2022 with good adherence and a suppressed viral load, meeting typical stability criteria for DSD.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician already discussed DSD eligibility, which aligns with the patient's documented viral suppression and adherence.\"}}], \"monitoring_plan\": \"Repeat viral load per national schedule (last VL 20 copies/mL on 2025-09-15); repeat creatinine annually or sooner if renal risk factors emerge; screen for toxicity symptoms (CNS, renal, hepatic) at each visit; assess DTG contraindications (e.g., diabetes) if clinical status changes.\", \"patient_counselling\": [\"Continue taking TDF/3TC/DTG daily with good adherence as you have been doing.\", \"Report any new symptoms such as yellowing of eyes, reduced urine output, swelling, numbness, or mood/sleep changes promptly.\", \"Maintain a healthy lifestyle and attend all scheduled clinic and lab appointments.\", \"If enrolled in DSD, understand your appointment spacing and when to return early if unwell.\"]}",
+ "plan_issues": []
+}

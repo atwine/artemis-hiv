@@ -123,24 +123,109 @@ on GLM 5.2 (the lead) and Llama 3.3 70B on the A100 (the free in-house compariso
 V3.2 (the runner-up) joins at checkpoints and when a change may affect false alarms. Only
 made-up patients go to the hosted models.
 
+How it runs (approved by the owner, 2026-11-25): (1) a search test set: a gold guideline quote for
+each expected problem, plus about 20 standalone questions; (2) a search checker that runs the
+app's own searches with no AI call; (3) baselines before any change; (4) a checkpoint with the
+owner on whether Phase 2's misses came from the search or from the AI's reasoning; (5) fixes one
+at a time, simplest first, each kept only if the search score improves, with the keep rule written
+before the run and a Llama end-to-end check for each kept fix; (6) the owner's decisions on the
+numbers; (7) a final check on GLM, Llama and DeepSeek, then the write-up. Results go in
+`eval/phase2b/`.
+
 Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owner, 2026-11-25).
 They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
 
-- [ ] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
+Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and `eval/phase2b/`):
+- Done: the search test set (a gold quote for 17 of the 22 problems, 5 not in any guideline,
+  plus 20 standalone questions); the search checker with its self-check; the diagnosis (the
+  right passage reached the AI for 3 of 17 problems; caught 98% when shown, 72% when not).
+- Done, owner's rule (G32): Ugandan guidance only. Only registered Ugandan files are searched,
+  the South African and WHO files are in `Data/Not searched - other countries/`, and the search
+  database was rebuilt (`scripts/check_index_sources.py` passes). Questions in the top 5 went
+  from 3/20 to 13/20; 10 of 22 problems now have no Ugandan passage.
+- Baselines, Uganda only (3 runs per case, temperature 0): the AI's own catches are 59% for
+  Llama (69% before, with all four guidelines) and 80% for GLM (84% before).
+- Tried and dropped by their own rules: 5a, one search per drug and problem (cases 3/12 against
+  4/12); 5c, keyword search beside meaning search (every gold passage now found from its own
+  words, but cases 3/12 and questions 10/20).
+- Premise check (2026-11-26): searching each problem with its own short description, as if the
+  app knew what to look for, finds 6/12 (meaning search) or 7/12 (with keyword search) against
+  4/12 for the app's real search. The biggest lever is what the app searches for; 5 problems
+  stay missing even then, which the index fixes target. Fix 5c is out of the app again.
+- The owner picked the search wording first. Fix 5q (the AI writes the patient's guideline
+  questions, each searched for its best 2 passages, up to 10): with Llama writing them, 4/12,
+  the same as today (generic questions); with GLM, 6/12, one short of the bar of 7 but equal to
+  the best this index allows even with perfect wording. Kept by the owner's decision
+  (2026-11-26). Second check running: GLM end to end, 3 runs per case, must keep its own catches
+  at or above 80%.
+- Fix 5b (pieces cut along the guideline's own sections, labelled with the section path, tables
+  by whole rows) tried and dropped by its rule: self-check 30/34 and ideal searches 7/12 rose,
+  but standalone questions fell to 11/20 and cases to 5/12. The converted files miss some
+  headings, so some tables carry the wrong section label. The checker now also measures each
+  problem searched with its own description (the ideal-description track).
+- Fix 5q's second check passed: GLM end to end with the question step keeps its own catches at
+  80% (no gain yet; the passages it finds still mostly miss the rule).
+- With the owner's small download pair (2026-11-26), both tried and dropped by their rules,
+  measured with GLM's saved questions replayed (the replay reproduced earlier numbers exactly):
+  5d, search model bge-small-en-v1.5 (self-check 32/34, cases 7/12, ideal 7/12, but standalone
+  questions 11/20); 5e, re-ranker ms-marco-MiniLM-L6-v2 (self-check 34/34, cases 7/12, ideal
+  7/12, but questions 10/20). Three fixes in a row helped the patient tracks and hurt the
+  standalone questions; read by hand, the lost questions' passages are really wrong (the
+  web-trained models lack the medical knowledge the clinician-worded questions need).
+- Fix 5a2 (the AI reads whole passages, not their first 480 characters; G35) tried and dropped
+  by its rule: GLM's own catches stayed at 80% (85% needed) and healthy patients left clear fell
+  from 3/6 to 1/6.
+- With the owner's bigger download pair: fix 5f, search model Qwen3-Embedding-0.6B, passed its
+  search check (questions 15/20, ideal 9/12, self-check 32/34, cases 6/12) but failed end to end:
+  GLM's own catches fell to 74% (80% needed), healthy left clear 1/6. Dropped. Second time a
+  better search score did not bring better catches (5q, 5f), so the end-to-end check decides.
+- Laptop setup (2026-11-26): the search model weights live in `D:\Model Weights\huggingface\hub`
+  (`ARTEMIS_MODEL_DIR` in `.env`), and the project's PyTorch is the graphics-card build
+  (2.15.0+cu132, RTX 3050): the search index builds in 0.6 s instead of 4.3 s (MiniLM), 9.5 s
+  instead of about 16 minutes (Qwen3), with the same search results (all 42 searches identical).
+  `requirements.txt` keeps the processor build for CI.
+- Wrapped up (owner, 2026-11-26) with what is kept: Ugandan guidance only, the AI question step,
+  the measuring tools. Fix 5g and 2B.3 not tried: three search changes in a row did not raise
+  catches. The owner then decided G33 (a search model that fails to load switches the AI review
+  and the plan step off, with a red banner), G36 (citations show the printed page), 2B.7, 2B.6 and
+  2B.5 (below). The reviews added G37 (an edited guideline file gets a fresh stored index).
+- Final check (3 runs per case, temperature 0): GLM own catches 80%, Llama 55% (59% Uganda-only
+  baseline; passes by 1 point), DeepSeek 61% (67% in Phase 2 with all four guidelines at 0.2;
+  real alerts 91%, healthy left clear 5/6). Write-up: `eval/phase2b/README.md`; screenshots of
+  the banner and the citations in `eval/phase2b/`. Spent $2.00 of the $5 cap in all.
+- Open, carried to item 8.5 (records per recommendation): G34 (pieces longer than the search
+  model reads) and the rest of G31 (rule-alert searches use the fixed query builder).
+
+- [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
-- [ ] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
-      a re-ranking step), one at a time, keeping each only if the scores improve.
+      Done 2026-11-25: `scripts/check_retrieval.py`, `scripts/diagnose_search.py`.
+- [x] 2B.2 Try the simplest fixes first (guideline-structure chunks, keyword plus meaning search,
+      a re-ranking step), one at a time, keeping each only if the scores improve. Done: 5a, 5b, 5c,
+      5d, 5e, 5a2, 5f tried and dropped by their rules; 5q (AI-written questions) kept.
 - [ ] 2B.3 Try an agentic loop like PolicyLens: plan the questions, search, judge whether the
-      results are good enough, search again if not.
-- [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
-- [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
+      results are good enough, search again if not. Not tried: the owner wrapped up 2B first
+      (2026-11-26); better search did not raise catches twice.
+- [x] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
+      Done: `eval/phase2b/README.md`.
+- [x] 2B.5 Decided 2026-11-26 (owner, option B): keep Chroma and keep skipping its four advisories,
+      with the reason in `.github/workflows/security-scans.yml`; 1.5.9 is still the newest release and
+      the app never starts Chroma's HTTP server. Recheck on every chromadb upgrade. Replacing Chroma
+      with the simple saved search (about 27 fewer libraries) stays an option for Phase 4.3.
+      The item was: revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
       their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
-- [ ] 2B.7 How the guideline knowledge is stored, decided on the 2B.1 numbers: plain Markdown as
+- [x] 2B.7 Decided 2026-11-26 (owner, option A): plain text cut into pieces stays, the best setup
+      measured end to end; sections (fix 5b) measured worse on questions and patients; one record
+      per recommendation becomes Phase 8 item 8.5. Meaning search stays (keyword search, 5c, dropped).
+      The question was: how the guideline knowledge is stored, decided on the 2B.1 numbers: plain Markdown as
       today, Markdown split along the guideline's own sections, or structured records (JSON, one per
       recommendation, with drug, condition, action, country and edition). Also which search fits
       each: meaning search, keyword search, or both together, and filters by country and edition.
-- [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
-      is extracted. Today the app searches 4 Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
+- [x] 2B.6 Decided 2026-11-26 (owner, option A): the repository keeps only what the app uses, the 2
+      Ugandan extracts, with a sources list in `Data/MarkDown Files/README.md`; the 3 PDFs and the
+      South African and WHO extracts stay on the owner's computer (`.gitignore`). They remain in the
+      repository's history; rewriting it would be a separate decision. The question was: where the guideline files live, once 2B has picked the documents and how their text
+      is extracted. The documents are picked: Uganda's only (owner, 2026-11-25); `artemis/guidelines/sources.py`
+      is the start of the sources list. Today the app searches the 2 Ugandan Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
       `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup
       script that downloads them from the official sources. Either way, add a sources list (document,
       edition, official link) for citations. Whether the public repo may hold the guideline text is the
@@ -187,6 +272,11 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
       place (today in ui/state.py, app.py and visit_record.restore); share one JSON bracket
       scanner (screening and plan_json); drop unused fields (deterministic_alerts, used_llm).
 
+- [ ] 4.7 (owner, 2026-11-26) The API follows `docs/screen-checklist.md`: its AI-review result and
+      status types are built from `AI_REVIEW_OUTCOMES` and `STATUSES` in `artemis/visit.py` (which
+      adds `search_unavailable`), and it sends the wording from `artemis/screen_text.py` (banners,
+      alert headings, citation lines) so the website only displays it.
+
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 
 ## Phase 5: Frontend (Next.js + shadcn)
@@ -197,7 +287,8 @@ Check: the evaluation script runs through the API and matches Phase 2's numbers.
 - [ ] 5.4 Plan and audit record views.
 - [ ] 5.5 Showcase mode: the same screens read saved outputs instead of calling the API.
 
-Check: a full visit works in Chrome; before/after screenshots against the Streamlit app.
+Check: a full visit works in Chrome; before/after screenshots against the Streamlit app; every
+item of `docs/screen-checklist.md` shown and screenshotted.
 
 ## Phase 6: Showcase on GitHub Pages
 
@@ -241,6 +332,9 @@ reproduces it.
       synthetic HIV patients.
 - [ ] 8.3 (suggested) Rules-only mode that works with no model connection (winners of the challenge were offline-first).
 - [ ] 8.4 (suggested) "Left in red" view: how often critical alerts are left unresolved (Penda's main lever).
+- [ ] 8.5 One record per guideline recommendation (medicine, condition, action, printed page),
+      drafted by an AI from the Ugandan extracts and checked by the doctor (Phase 7), so the app finds
+      rules by medicine name and simple code can check some without the AI (from 2B.7, 2026-11-26).
 
 ## Ideas borrowed
 

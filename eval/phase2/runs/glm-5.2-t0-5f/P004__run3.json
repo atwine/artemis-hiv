@@ -1,0 +1,245 @@
+{
+ "case_id": "P004",
+ "model": "glm-5.2-t0-5f",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 106.6,
+ "calls": [
+  {
+   "prompt_tokens": 1558,
+   "completion_tokens": 583,
+   "total_tokens": 2141,
+   "cost": 0.00163954,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 1536,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00163954,
+    "upstream_inference_prompt_cost": 0.00022868,
+    "upstream_inference_completions_cost": 0.00141086
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 722,
+   "completion_tokens": 109,
+   "total_tokens": 831,
+   "cost": 0.0003735,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 704,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0003735,
+    "upstream_inference_prompt_cost": 0.00010972,
+    "upstream_inference_completions_cost": 0.00026378
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2807,
+   "completion_tokens": 577,
+   "total_tokens": 3384,
+   "cost": 0.00181572,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 2752,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00181572,
+    "upstream_inference_prompt_cost": 0.00041938,
+    "upstream_inference_completions_cost": 0.00139634
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0038287600000000005,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "P004_TDF_ABDOMINAL_PAIN",
+   "title": "Abdominal pain may signal TDF toxicity",
+   "message": "Guidelines list abdominal pain or discomfort and decreased appetite as presenting signs of TDF toxicity including lactic acidosis, Fanconi syndrome, and acute kidney injury, warranting LFTs and RFTs when these symptoms occur. Patient is on TDF and reports abdominal pain today. Appetite is preserved and no fever is noted, which makes infection less likely but does not exclude drug toxicity. No LFTs or repeat RFTs have been ordered in the clinician's plan. Serum creatinine 78 days ago was normal at 82 umol/L, arguing against established nephrotoxicity, but no renal or hepatic assessment has been done since the symptom began.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Order LFTs and serum creatinine/eGFR to evaluate for TDF toxicity. If deranged, consider substituting TDF per guideline algorithm.",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 29,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_TDF_ABDOMINAL_PAIN",
+     "title": "Abdominal pain may signal TDF toxicity",
+     "message": "Guidelines list abdominal pain or discomfort and decreased appetite as presenting signs of TDF toxicity including lactic acidosis, Fanconi syndrome, and acute kidney injury, warranting LFTs and RFTs when these symptoms occur. Patient is on TDF and reports abdominal pain today. Appetite is preserved and no fever is noted, which makes infection less likely but does not exclude drug toxicity. No LFTs or repeat RFTs have been ordered in the clinician's plan. Serum creatinine 78 days ago was normal at 82 umol/L, arguing against established nephrotoxicity, but no renal or hepatic assessment has been done since the symptom began.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Order LFTs and serum creatinine/eGFR to evaluate for TDF toxicity. If deranged, consider substituting TDF per guideline algorithm.",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 29,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "P004_VIRAL_LOAD_LOW_LEVEL_VIREMIA",
+   "title": "Low-level viremia at 25 copies/mL",
+   "message": "Guidelines note that viral load above suppression threshold is associated with risk of transmission and subsequent virologic non-suppression, and WHO guidance addresses monitoring of low-level viremia. Patient's latest viral load is 25 copies/mL (2025-11-05), which is detectable though below the 200 copies/mL plasma suppression cutoff. This is not treatment failure but indicates low-level viremia that warrants enhanced monitoring. No repeat viral load or adherence assessment appears in the clinician's plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Assess adherence and repeat viral load at next scheduled visit per routine monitoring algorithm to confirm suppression.",
+    "citations": [
+     {
+      "page_number": 12,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 13,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "P004_VIRAL_LOAD_LOW_LEVEL_VIREMIA",
+     "title": "Low-level viremia at 25 copies/mL",
+     "message": "Guidelines note that viral load above suppression threshold is associated with risk of transmission and subsequent virologic non-suppression, and WHO guidance addresses monitoring of low-level viremia. Patient's latest viral load is 25 copies/mL (2025-11-05), which is detectable though below the 200 copies/mL plasma suppression cutoff. This is not treatment failure but indicates low-level viremia that warrants enhanced monitoring. No repeat viral load or adherence assessment appears in the clinician's plan.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Assess adherence and repeat viral load at next scheduled visit per routine monitoring algorithm to confirm suppression.",
+     "citations": [
+      {
+       "page_number": 12,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      },
+      {
+       "page_number": 13,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "P004_TDF_ABDOMINAL_PAIN": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1"
+  ],
+  "P004_VIRAL_LOAD_LOW_LEVEL_VIREMIA": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Can TDF, 3TC, or DTG cause abdominal pain as a side effect?",
+   "How often should creatinine be monitored for patients on TDF?",
+   "What abdominal symptoms or lab tests suggest TDF kidney toxicity?",
+   "Is a viral load of 25 copies/mL considered low-level viremia requiring action?",
+   "What monitoring tests are due for a stable patient on TLD since 2023?",
+   "Should this 37-year-old female be screened for pregnancy given abdominal pain?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"P004_TDF_ABDOMINAL_PAIN\",\n    \"title\": \"Abdominal pain may signal TDF toxicity\",\n    \"message\": \"Guidelines list abdominal pain or discomfort and decreased appetite as presenting signs of TDF toxicity including lactic acidosis, Fanconi syndrome, and acute kidney injury, warranting LFTs and RFTs when these symptoms occur. Patient is on TDF and reports abdominal pain today. Appetite is preserved and no fever is noted, which makes infection less likely but does not exclude drug toxicity. No LFTs or repeat RFTs have been ordered in the clinician's plan. Serum creatinine 78 days ago was normal at 82 umol/L, arguing against established nephrotoxicity, but no renal or hepatic assessment has been done since the symptom began.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Order LFTs and serum creatinine/eGFR to evaluate for TDF toxicity. If deranged, consider substituting TDF per guideline algorithm.\",\n    \"citations\": [\n      {\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"},\n      {\"page_number\": 29, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1\"}\n    ]\n  },\n  {\n    \"alert_id\": \"P004_VIRAL_LOAD_LOW_LEVEL_VIREMIA\",\n    \"title\": \"Low-level viremia at 25 copies/mL\",\n    \"message\": \"Guidelines note that viral load above suppression threshold is associated with risk of transmission and subsequent virologic non-suppression, and WHO guidance addresses monitoring of low-level viremia. Patient's latest viral load is 25 copies/mL (2025-11-05), which is detectable though below the 200 copies/mL plasma suppression cutoff. This is not treatment failure but indicates low-level viremia that warrants enhanced monitoring. No repeat viral load or adherence assessment appears in the clinician's plan.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Assess adherence and repeat viral load at next scheduled visit per routine monitoring algorithm to confirm suppression.\",\n    \"citations\": [\n      {\"page_number\": 12, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"},\n      {\"page_number\": 13, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p29_c1",
+    "page_number": 29,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Category of Patient Drugs Screening procedures TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months Patients on any other regimens and not on this table Any ART 1. Screen using screening tool to identify any developing signs and symptoms. 2. Perform laboratory and radiol"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 12,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p5_c2",
+    "page_number": 5,
+    "quote": "creen for adolescents and adults. If available, CXR should also be used for TB screening. Note: Computer-aided detection (CAD) software programs are recommended for individuals aged 15 years and older If the symptom screen is positive and/or CRP cutoff is more than 5mg/L, or CXR is abnormal, the client has presumptive TB and should be tested using a molecular WHO recommended rapid diagnostic test (mWRD) e.g., nucleic acid amplification test (NAAT) such as GeneXpert, TRUENAT a"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 6,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p13_c2",
+    "page_number": 13,
+    "quote": "ssed, then genotype testing is recommended. Figure 58: VL testing algorithm for children, adolescents and adults for health facilities using plasma and DBS samples chart Routine viral load monitoring: 6 months after ART initiation then 12 months after ART initiation and thereafter every one (1) year for adults; 6 months for children & adolescents 0-19 years; and 3 months for pregnant and lactating women - Suppressed - Plasma: ≤200 copies/mL - DBS: Target Not Detected - Mainta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p50_c2",
+    "page_number": 50,
+    "quote": "-9 months postpartum when they should be transitioned to TLD if the VL within the past 6 months is suppressed. - Women becoming pregnant while on DTG-based regimens shall be maintained on the regimen. - Treatment should be monitored by measuring viral load 6 months after initiation of ART and every 6-12 months or when clinically indicated. - A repeat viral load of >1000cells/mm3 suggests treatment failure and is indication for HIV DR and appropriate switch after ruling out ad"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p28_c2",
+    "page_number": 28,
+    "quote": "1. Screen using screening tool to identify any developing signs and symptoms. 3. Routine RBS every 3 months in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Routine Liver Function Tests at 3 months after initiating INH/3HP 261"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient has been stable on TLD since March 2023 with suppressed viral load (25 copies/mL) and normal creatinine (82 umol/L), and abdominal pain without fever does not warrant regimen change based on available guideline excerpts.\"},\"problems\":[{\"problem\":\"Abdominal pain on TDF/3TC/DTG regimen — possible drug-related toxicity vs unrelated cause\",\"action\":\"Uncertain: provided guideline excerpts only mention DTG contraindications (diabetes, etc.) and do not detail TDF/3TC/DTG toxicity symptoms or workup for abdominal pain; clinical evaluation for other causes (GI infection, gastritis, pancreatitis) is needed.\",\"reason\":\"Patient reports abdominal pain without fever on TLD, but the guideline excerpts provided do not describe abdominal pain as a recognized toxicity of TDF, 3TC, or DTG.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"The clinician's plan only restates the complaint without any diagnostic workup, symptom assessment, toxicity evaluation, or management action.\"}},{\"problem\":\"Need to rule out TDF nephrotoxicity given abdominal pain and TDF use\",\"action\":\"Uncertain: guideline excerpts do not specify TDF toxicity monitoring parameters or creatinine thresholds for action; however, checking renal function is clinically reasonable.\",\"reason\":\"Patient's last creatinine (82 umol/L, Nov 2025) was normal but no current creatinine has been ordered despite new abdominal symptoms on TDF.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Not Addressed\",\"explanation\":\"No renal function tests or TDF toxicity monitoring was ordered at today's visit despite new abdominal complaints.\"}},{\"problem\":\"Viral load suppression status and regimen efficacy\",\"action\":\"Continue current TLD regimen and maintain routine viral load monitoring per national schedule.\",\"reason\":\"Viral load is suppressed at 25 copies/mL as of November 2025, confirming regimen efficacy.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan does not document acknowledgment of viral suppression status or schedule the next viral load test.\"}}],\"monitoring_plan\":[\"Repeat creatinine and urinalysis to assess TDF renal safety given new abdominal symptoms\",\"Schedule next viral load per national guidelines (typically 12 months from last, ~Nov 2026)\",\"Return if abdominal pain worsens, fever develops, or new symptoms arise\",\"Monitor for DTG-related side effects per screening tool if symptoms evolve\"],\"patient_counselling\":[\"Reassure patient that viral load is suppressed and regimen is working effectively\",\"Advise to return immediately if abdominal pain worsens, fever develops, or appetite decreases\",\"Counsel on importance of adherence to TLD despite current symptoms\",\"Inform that additional tests may be needed to identify the cause of abdominal pain\"]}",
+ "plan_issues": []
+}

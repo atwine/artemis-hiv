@@ -1,0 +1,245 @@
+{
+ "case_id": "MR-KS",
+ "model": "llama-a100-t0-ug",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 28.5,
+ "calls": [
+  {
+   "prompt_tokens": 2215,
+   "total_tokens": 2606,
+   "completion_tokens": 391,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2997,
+   "total_tokens": 3469,
+   "completion_tokens": 472,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "YELLOW",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MRKS_001",
+   "title": "Hypertension Management",
+   "message": "Guidelines recommend screening for hypertension risk factors and managing hypertension. Patient has sub-optimally controlled BP (146/94) and admits to occasionally missing amlodipine doses. Trace proteinuria is noted, likely secondary to hypertension.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Adhere to amlodipine regimen and lifestyle modifications",
+    "citations": [
+     {
+      "page_number": 40,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_001",
+     "title": "Hypertension Management",
+     "message": "Guidelines recommend screening for hypertension risk factors and managing hypertension. Patient has sub-optimally controlled BP (146/94) and admits to occasionally missing amlodipine doses. Trace proteinuria is noted, likely secondary to hypertension.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Adhere to amlodipine regimen and lifestyle modifications",
+     "citations": [
+      {
+       "page_number": 40,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_002",
+   "title": "TDF Potential Side Effects",
+   "message": "TDF is associated with potential side effects like chronic kidney disease, acute kidney injury, and Fanconi syndrome. Patient has trace proteinuria and normal creatinine levels. Monitoring of renal function is recommended.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Monitor renal function and adjust TDF if necessary",
+    "citations": [
+     {
+      "page_number": 37,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_002",
+     "title": "TDF Potential Side Effects",
+     "message": "TDF is associated with potential side effects like chronic kidney disease, acute kidney injury, and Fanconi syndrome. Patient has trace proteinuria and normal creatinine levels. Monitoring of renal function is recommended.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Monitor renal function and adjust TDF if necessary",
+     "citations": [
+      {
+       "page_number": 37,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_003",
+   "title": "Amlodipine Side Effects",
+   "message": "Amlodipine can cause lower limb edema, headache, and palpitations. Patient complains of chronic musculoskeletal back pain, which may be related to amlodipine or occupational factors.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "low",
+    "recommended_action": "Monitor for amlodipine side effects and consider alternative medication if necessary",
+    "citations": [
+     {
+      "page_number": 45,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_003",
+     "title": "Amlodipine Side Effects",
+     "message": "Amlodipine can cause lower limb edema, headache, and palpitations. Patient complains of chronic musculoskeletal back pain, which may be related to amlodipine or occupational factors.",
+     "issue_type": "toxicity",
+     "severity": "low",
+     "recommended_action": "Monitor for amlodipine side effects and consider alternative medication if necessary",
+     "citations": [
+      {
+       "page_number": 45,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+  ],
+  "MRKS_001": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2"
+  ],
+  "MRKS_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "MRKS_003": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1"
+  ]
+ },
+ "screening": {
+  "raw_output": "[\n  {\n    \"alert_id\": \"MRKS_001\",\n    \"title\": \"Hypertension Management\",\n    \"message\": \"Guidelines recommend screening for hypertension risk factors and managing hypertension. Patient has sub-optimally controlled BP (146/94) and admits to occasionally missing amlodipine doses. Trace proteinuria is noted, likely secondary to hypertension.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Adhere to amlodipine regimen and lifestyle modifications\",\n    \"citations\": [{\"page_number\": 40, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_002\",\n    \"title\": \"TDF Potential Side Effects\",\n    \"message\": \"TDF is associated with potential side effects like chronic kidney disease, acute kidney injury, and Fanconi syndrome. Patient has trace proteinuria and normal creatinine levels. Monitoring of renal function is recommended.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor renal function and adjust TDF if necessary\",\n    \"citations\": [{\"page_number\": 37, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_003\",\n    \"title\": \"Amlodipine Side Effects\",\n    \"message\": \"Amlodipine can cause lower limb edema, headache, and palpitations. Patient complains of chronic musculoskeletal back pain, which may be related to amlodipine or occupational factors.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Monitor for amlodipine side effects and consider alternative medication if necessary\",\n    \"citations\": [{\"page_number\": 45, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 45,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 32,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c3",
+    "page_number": 5,
+    "quote": "or transition to DTG Flowchart: Action: Initiate on DTG, glucose monitoring every 3 months for the 1st year see monitoring algorithm for PLHIV transitioned to DTG ### 6.6.1 Rationale for Using EFV400 Studies have shown that efavirenz at a dose of 400 mg is not only virologically non-inferior to Efavirenz 600mg but also has fewer adverse events which is the major limiting factor of efavirenz use. Fewer adverse events lower the risk of treatment discontinuation. EFV 400 mg can "
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+    "page_number": 40,
+    "quote": "physical activity to equivalent of 30 minutes of aerobic exercise a day, at least 5 days every week * Consistency and discipline are Key ## 5.4.7.2 Screening, Diagnosis and Management of Hypertension All PLHIV should be screened for risk factors of hypertension such as tobacco smoking, being overweight or obese, physical inactivity, dyslipidemia, history of adverse cardiovascular event like stroke and heart attack and unhealthy diet at every visit. They should also have their"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: the provided guideline excerpts do not mention potential side effects of TDF, 3TC, or EFV that could be causing the patient's symptoms, and the patient's symptoms could be related to other factors such as occupational back pain or hypertension\"}, \n\"problems\": [{\"problem\": \"Chronic musculoskeletal back pain\", \"action\": \"Continue current management with PRN ibuprofen\", \"reason\": \"The patient's back pain is likely occupational and the current management plan is reasonable\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan already addresses this issue\"}}, \n{\"problem\": \"Sub-optimally controlled hypertension\", \"action\": \"Adhere to amlodipine and lifestyle modifications\", \"reason\": \"The patient's BP is 146/94 and they admit to occasionally missing amlodipine doses\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan already encourages lifestyle modifications and adherence to antihypertensives\"}}, \n{\"problem\": \"Potential TDF toxicity\", \"action\": \"Uncertain: monitor renal function\", \"reason\": \"Uncertain: TDF can cause renal toxicity, but the patient's creatinine is within normal limits\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention monitoring for TDF toxicity\"}}], \n\"monitoring_plan\": \"Monitor renal function, BP, and viral load in 6 months\", \n\"patient_counselling\": [\"Adhere to amlodipine and lifestyle modifications to control hypertension\", \"Continue PRN ibuprofen for back pain\", \"Return for review in 6 months\"]}",
+ "plan_issues": []
+}

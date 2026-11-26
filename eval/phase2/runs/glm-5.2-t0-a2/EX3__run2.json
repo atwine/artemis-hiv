@@ -1,0 +1,264 @@
+{
+ "case_id": "EX3",
+ "model": "glm-5.2-t0-a2",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 144.3,
+ "calls": [
+  {
+   "prompt_tokens": 2038,
+   "completion_tokens": 924,
+   "total_tokens": 2962,
+   "cost": 0.0042143625,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0042143625,
+    "upstream_inference_prompt_cost": 0.0017195625,
+    "upstream_inference_completions_cost": 0.0024948
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1359,
+   "completion_tokens": 87,
+   "total_tokens": 1446,
+   "cost": 0.00105312,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00105312,
+    "upstream_inference_prompt_cost": 0.00084258,
+    "upstream_inference_completions_cost": 0.00021054
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 4454,
+   "completion_tokens": 802,
+   "total_tokens": 5256,
+   "cost": 0.0097644,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0097644,
+    "upstream_inference_prompt_cost": 0.0062356,
+    "upstream_inference_completions_cost": 0.0035288
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.0150318825,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "llm_error": null,
+ "alerts": [
+  {
+   "alert_id": "EX3_001",
+   "title": "Uncontrolled hypothyroidism likely driving weight gain",
+   "message": "Patient has TSH 12.4 mIU/L (target <4.5) with low Free T4, dry skin, periorbital puffiness, delayed ankle reflexes, constipation, and cold intolerance — classic hypothyroidism. She reports often forgetting her levothyroxine. The clinician attributes 9 kg weight gain to DTG and plans to switch, but poorly controlled hypothyroidism is a more likely cause. DTG-associated weight gain is well recognised, but this patient's profound hypothyroid symptoms predate any DTG switch consideration and strongly suggest inadequate thyroid replacement. Switching off DTG without first correcting hypothyroidism risks unnecessary ART change with no resolution of the underlying problem.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "plan_review",
+    "severity": "high",
+    "recommended_action": "Address levothyroxine adherence and up-titrate dose to normalise TSH before attributing weight gain to DTG. Reassess weight and symptoms after thyroid optimisation before considering ART switch.",
+    "citations": [],
+    "raw_issue": {
+     "alert_id": "EX3_001",
+     "title": "Uncontrolled hypothyroidism likely driving weight gain",
+     "message": "Patient has TSH 12.4 mIU/L (target <4.5) with low Free T4, dry skin, periorbital puffiness, delayed ankle reflexes, constipation, and cold intolerance — classic hypothyroidism. She reports often forgetting her levothyroxine. The clinician attributes 9 kg weight gain to DTG and plans to switch, but poorly controlled hypothyroidism is a more likely cause. DTG-associated weight gain is well recognised, but this patient's profound hypothyroid symptoms predate any DTG switch consideration and strongly suggest inadequate thyroid replacement. Switching off DTG without first correcting hypothyroidism risks unnecessary ART change with no resolution of the underlying problem.",
+     "issue_type": "plan_review",
+     "severity": "high",
+     "recommended_action": "Address levothyroxine adherence and up-titrate dose to normalise TSH before attributing weight gain to DTG. Reassess weight and symptoms after thyroid optimisation before considering ART switch.",
+     "citations": []
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_002",
+   "title": "DTG hyperglycaemia risk factors require glucose monitoring",
+   "message": "Guidelines require screening for hyperglycaemia risk factors before DTG use: age ≥40, BMI ≥25, hypertension history, or family history of DM. This patient has multiple risk factors — age 45, BMI 33 — warranting glucose monitoring every 3 months for the first 12 months. Fasting glucose today is 5.6 mmol/L (below the >6.95 threshold for contraindication). However, no 3-monthly glucose monitoring is documented since DTG initiation in January 2023, representing a monitoring gap. The elevated lipids (LDL 4.2, total cholesterol 6.4, triglycerides 2.3) further compound metabolic risk alongside obesity and hypothyroidism.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Continue DTG but implement 3-monthly glucose monitoring for the first 12 months. Address metabolic risk through weight management, thyroid optimisation, and lipid monitoring.",
+    "citations": [
+     {
+      "page_number": 4,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 38,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_002",
+     "title": "DTG hyperglycaemia risk factors require glucose monitoring",
+     "message": "Guidelines require screening for hyperglycaemia risk factors before DTG use: age ≥40, BMI ≥25, hypertension history, or family history of DM. This patient has multiple risk factors — age 45, BMI 33 — warranting glucose monitoring every 3 months for the first 12 months. Fasting glucose today is 5.6 mmol/L (below the >6.95 threshold for contraindication). However, no 3-monthly glucose monitoring is documented since DTG initiation in January 2023, representing a monitoring gap. The elevated lipids (LDL 4.2, total cholesterol 6.4, triglycerides 2.3) further compound metabolic risk alongside obesity and hypothyroidism.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Continue DTG but implement 3-monthly glucose monitoring for the first 12 months. Address metabolic risk through weight management, thyroid optimisation, and lipid monitoring.",
+     "citations": [
+      {
+       "page_number": 4,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2"
+      },
+      {
+       "page_number": 38,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX3_003",
+   "title": "TDF renal monitoring overdue by >12 months",
+   "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The last creatinine was 72 umol/L on 2025-08-12, 196 days before today's visit — over 6 months ago. No renal function test has been ordered today, and the clinician's plan does not include creatinine or eGFR monitoring. This is a guideline-mandated annual monitoring gap.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order serum creatinine and eGFR now to fulfil the annual TDF renal monitoring requirement.",
+    "citations": [
+     {
+      "page_number": 27,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX3_003",
+     "title": "TDF renal monitoring overdue by >12 months",
+     "message": "Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The last creatinine was 72 umol/L on 2025-08-12, 196 days before today's visit — over 6 months ago. No renal function test has been ordered today, and the clinician's plan does not include creatinine or eGFR monitoring. This is a guideline-mandated annual monitoring gap.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order serum creatinine and eGFR now to fulfil the annual TDF renal monitoring requirement.",
+     "citations": [
+      {
+       "page_number": 27,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX3_001": [],
+  "EX3_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "EX3_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "Does DTG cause weight gain and when should it be switched?",
+   "Should TDF monitoring include creatinine every six months?",
+   "Does amitriptyline interact with TDF, 3TC, or DTG?",
+   "What ART monitoring tests are due for a stable patient?",
+   "Does uncontrolled hypothyroidism affect ART drug levels or choices?",
+   "Does elevated cholesterol require switching from DTG to another drug?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX3_001\",\n    \"title\": \"Uncontrolled hypothyroidism likely driving weight gain\",\n    \"message\": \"Patient has TSH 12.4 mIU/L (target <4.5) with low Free T4, dry skin, periorbital puffiness, delayed ankle reflexes, constipation, and cold intolerance — classic hypothyroidism. She reports often forgetting her levothyroxine. The clinician attributes 9 kg weight gain to DTG and plans to switch, but poorly controlled hypothyroidism is a more likely cause. DTG-associated weight gain is well recognised, but this patient's profound hypothyroid symptoms predate any DTG switch consideration and strongly suggest inadequate thyroid replacement. Switching off DTG without first correcting hypothyroidism risks unnecessary ART change with no resolution of the underlying problem.\",\n    \"issue_type\": \"plan_review\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Address levothyroxine adherence and up-titrate dose to normalise TSH before attributing weight gain to DTG. Reassess weight and symptoms after thyroid optimisation before considering ART switch.\",\n    \"citations\": []\n  },\n  {\n    \"alert_id\": \"EX3_002\",\n    \"title\": \"DTG hyperglycaemia risk factors require glucose monitoring\",\n    \"message\": \"Guidelines require screening for hyperglycaemia risk factors before DTG use: age ≥40, BMI ≥25, hypertension history, or family history of DM. This patient has multiple risk factors — age 45, BMI 33 — warranting glucose monitoring every 3 months for the first 12 months. Fasting glucose today is 5.6 mmol/L (below the >6.95 threshold for contraindication). However, no 3-monthly glucose monitoring is documented since DTG initiation in January 2023, representing a monitoring gap. The elevated lipids (LDL 4.2, total cholesterol 6.4, triglycerides 2.3) further compound metabolic risk alongside obesity and hypothyroidism.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Continue DTG but implement 3-monthly glucose monitoring for the first 12 months. Address metabolic risk through weight management, thyroid optimisation, and lipid monitoring.\",\n    \"citations\": [\n      {\"page_number\": 4, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2\"},\n      {\"page_number\": 38, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"EX3_003\",\n    \"title\": \"TDF renal monitoring overdue by >12 months\",\n    \"message\": \"Guidelines require serum creatinine and eGFR every 12 months for experienced patients on TDF. The last creatinine was 72 umol/L on 2025-08-12, 196 days before today's visit — over 6 months ago. No renal function test has been ordered today, and the clinician's plan does not include creatinine or eGFR monitoring. This is a guideline-mandated annual monitoring gap.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order serum creatinine and eGFR now to fulfil the annual TDF renal monitoring requirement.\",\n    \"citations\": [\n      {\"page_number\": 27, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 38,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Initiate or transition to DTG\" 3. Check glucose* * Blood glucose or urine dipstick 4. Decision: High glucose**? **High blood glucose: Fasting>6.95, Non-fasting>8.89 High urine glucose: Any + - If YES, proceed to \"DO NOT INITIATE OR TRANSITION TO DTG\" - If NO, proceed to \"Initiate on DTG, glucose monitoring every 3 months for the 1st year\" **Outcomes:** - **DO NOT INITIATE OR TRANSITION TO DTG** Give ATV/r or maintain on EFV Monitor blood glucose per diabetes management guidelines. - **Initiate on DTG, glucose monitoring every 3 months for the 1st year** see monitoring algorithm for PLHIV transitioned to DTG - **Initiate or transition to DTG** **Screening and management of complications of Diabetes Mellitus**"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 27,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine & eGFR for experienced patient on TDF every 12 months 260"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c4",
+    "page_number": 5,
+    "quote": "r or tenofovir alefenamide, Lamivudine and Dolutegravir (TDF + 3TC +DTG or TAF+FTC+DTG) (Table 74). ## 6.7 WHEN TO USE ALTERNATIVE FIRST LINE REGIMENS ### When to use TDF+ 3TC+EFV400 or TAF+FTC+EFV400 Adults and adolescents should only be initiated on TDF+3TC+EFV400 if they are ineligible for DTG i.e. Table 74. 238"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p2_c2",
+    "page_number": 2,
+    "quote": "g patients for ART. * For institutions starting patients on ARTS for research purposes, there should be a clear post ART access plane for approved drugs but not yet accessible in the public facilities * Post-Trial Access: Research institutions should collaboratively work with its partners to ensure post trial/Research access to efficacious/safe study HIV treatment regimens for HIV positive clients enrolled for study purposes until the drugs become available through the national supply chain. If the patients can afford prescribed ART regimens but are not available on the essential drugs list and not accessible through the national supply chain system, facilitate access to options of these new generation drugs Figure 56: How to evaluate patients for ART initiation flowchart All HIV-positive ART naïve | v Screen for Advanced Disease conditions (Refer to the Symptom Screening algorithm for Advanced HIV Disease) Screen for Psychosocial Concerns | v Is the patient's condition indicating signs/symptoms of Advanced disease? - If Yes: Investigate for Advanced HIV disease conditions. (Refer to Advanced disease screening algorithms) | v"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p33_c2",
+    "page_number": 33,
+    "quote": "T regimen should be switched to 2nd line. See Table 78 for side effects of commonly used ARVs and recommended substitutions. **HEPATOTOXICITY FOLLOWING CO-ADMINISTRATION OF ART AND TPT /TB MEDICINES** Co-administration of ART and TPT/TB medicines increases the likelihood of toxicities especially hepatotoxicity. Health workers should therefore take care to adequately screen patients for TPT eligibility prior to initiation of TPT. Once toxicity occurs, it should be managed appropriately according to the grading (refer to Table 86 for grading). **Contraindication for TPT:** * Presence of acute liver disease * History of alcohol abuse * Known hypersentivity to INH * Presence of mental illness * Presence of seizures * Presence of severe neuropathy * Newly initiated on DTG (within the last 3 months) Co-administration with Nevirapine. Note, for patients transitioning from NVP, ensure to wait for at least 2 weeks before starting TPT. 266"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p4_c2",
+    "page_number": 4,
+    "quote": "gher genetic barrier of DTG means patients are less likely to develop resistance and therefore postponing the need for superior line treatment ## 6.6 SCREENING FOR RISK FACTORS PRIOR TO INITIATING DGT DTG is a very well-tolerated drug, with lower overall adverse effects when compared to other drugs like EFV. Hyperglycemia among previously non-diabetic adults and worsening of hyperglycemia among diabetics has been reported among clients on DTG. Although the hyperglycemia associated with DTG has been reported among clients newly initiated on ART as well as among those already on ART and transitioned to DTG-based regimens, the hyperglycemia appears to occur more commonly among the latter group. Adults being initiated on DTG should be screened for risk factors for hyperglycemia: * Age ≥ 40 years * BMI≥ 24 kg/m2 * History of hypertension * Known diabetics should not be initiated or transitioned to DTG. Give an EFV400 or an ATV/r-based regimen. * Clients with 2 or more risk factors for hyperglycemia and a high baseline RBS or FBS should not be initiated/transitioned to DTG. Give an EFV400 or ATZ/r-based regimen."
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 37,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes and/or GFR is < 60mls/min) then substitute with ABC If ABC is contraindicated: substitute with AZT ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c2",
+    "page_number": 6,
+    "quote": "C+3TC+EFV400: * If TDF is contraindicated and they are ineligible for DTG (Table 78). * If the client requires concurrent TB treatment and doubling the dose of DTG is not an option (Tables 30 and 31). ## 6.8 PREGNANT AND BREASTFEEDING WOMEN NEWLY INITIATING ON ART Newly diagnosed HIV-infected pregnant and breastfeeding women will be initiated on Tenofovir tenofovir alefenamide, Lamivudine and Dolutegravir (TDF+ 3TC + DTG or TAF + FTC + DTG). ### 6.8.1 When to use Alternative Firstline Regimens When to use TDF +3TC + EFV400 or TAF +FTC+EFV400 Pregnant and breastfeeding women will only be initiated if DTG is contraindicated (Table 74). When to use **ABC+3TC +EFV400 or TAF+FTC+EFV400** Pregnant or breastfeeding women should only be initiated on ABC+3TC+EFV if TDF and DTG are contraindicated (Table 74). 239"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c4",
+    "page_number": 27,
+    "quote": "RT regimen* | | ART experienced reportedly adherent on ART < 14 days- 6 months Recent ART introduction or re-introduction | Continue ART at Admission** | | Continue 1st, 2nd or 3rd line ART regimen* | *Decision on which ART regimen to restart should be made according to patient's history, ART guidelines, HIV viral load and genotypic resistance testing if possible. If it is considered likely that the patient has developed resistance to 1st line ARVs, then restart with 2nd line containing boosted PI or DTG is possible. ** Unless documented to have a suppressed viral load at time of admission or within the month prior to admission, in which case continue ART 178"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p34_c3",
+    "page_number": 34,
+    "quote": "ons (OIs) and immune reconstitution inflammatory syndrome (IRIS) may develop, as well as early adverse drug reactions, such as drug hypersensitivity, especially in the first three months of treatment. * ART significantly decreases mortality overall, but death rates are also highest in the first three months of ART. These complications are most common when the people starting ART already have advanced HIV 267"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: the provided guideline excerpts do not contain specific guidance on switching DTG for weight gain, and the patient's symptoms of tiredness, cold intolerance, constipation, dry skin, periorbital puffiness, and delayed ankle reflexes are more consistent with inadequately treated hypothyroidism than DTG toxicity.\"}, \"problems\": [{\"problem\": \"Symptoms and examination findings consistent with inadequately treated hypothyroidism (tiredness, feeling cold, constipation, dry skin, periorbital puffiness, delayed ankle reflexes, 9 kg weight gain) with reported poor levothyroxine adherence\", \"action\": \"Check TSH and free T4 to confirm current thyroid status; reinforce adherence counseling for levothyroxine and consider dose adjustment based on TSH results.\", \"reason\": \"The patient reports often forgetting levothyroxine and has classic hypothyroidism signs on examination, which could explain the weight gain and symptoms rather than DTG toxicity.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The clinician's plan continues levothyroxine 50 mcg but does not address poor adherence, does not order TSH/free T4 to assess current thyroid status, and does not consider dose adjustment.\"}}, {\"problem\": \"Significant weight gain (12 kg over 3 years on TLD, BMI now 33) attributed to DTG\", \"action\": \"Uncertain: the provided guideline excerpts do not contain specific guidance on managing DTG-associated weight gain or criteria for switching ART because of weight gain.\", \"reason\": \"Uncertain: the excerpts only mention DTG contraindications including known diabetics but do not address weight gain as a toxicity or switching indication.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The clinician is considering switching from DTG but has not ordered any confirmatory tests, documented a switching plan, or addressed alternative causes of weight gain such as hypothyroidism.\"}}, {\"problem\": \"Dyslipidemia (LDL 4.2, total cholesterol 6.4, triglycerides 2.3 mmol/L) in a patient with BMI 33\", \"action\": \"Uncertain: the provided guideline excerpts do not contain specific guidance on managing dyslipidemia in patients on ART.\", \"reason\": \"Uncertain: the excerpts do not address lipid monitoring or management in the context of ART or DTG use.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention the abnormal lipid results or any cardiovascular risk management despite BMI 33.\"}}, {\"problem\": \"Potential drug interaction between amitriptyline 50 mg and weight gain/low mood\", \"action\": \"Uncertain: the provided guideline excerpts do not contain specific guidance on managing amitriptyline in the context of ART or weight gain.\", \"reason\": \"Uncertain: the excerpts do not address co-medication interactions with amitriptyline or their contribution to weight gain and metabolic abnormalities.\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not mention amitriptyline as a potential contributor to weight gain or metabolic issues.\"}}], \"monitoring_plan\": [\"Check TSH and free T4 now to assess thyroid status given symptoms and poor adherence\", \"Repeat creatinine (last was 196 days ago) for routine TDF monitoring\", \"Repeat viral load in 6 months per routine monitoring (last <50 copies/mL on 2025-11-10)\", \"Recheck fasting lipid panel in 3-6 months given dyslipidemia and BMI 33\", \"Monitor fasting glucose given BMI 33 and DTG use\"], \"patient_counselling\": [\"Emphasize importance of taking levothyroxine daily as prescribed; symptoms of tiredness, cold intolerance, and constipation may be from under-treated hypothyroidism\", \"Discuss dietary modifications and physical activity given BMI 33 and abnormal lipid profile\", \"Reinforce ART adherence; current viral load is suppressed at <50 copies/mL\", \"Inform patient that weight gain may be multifactorial including hypothyroidism, DTG, and other medications; further evaluation is needed before switching ART\"]}",
+ "plan_issues": []
+}
