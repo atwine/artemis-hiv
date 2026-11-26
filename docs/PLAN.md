@@ -13,7 +13,8 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
 | 4 Backend (FastAPI) | 4.0-4.2, 4.4, 4.5, 4.7 on `development`; step 2 on branch `claude/phase4-step2` | 4.3, the rest of 4.6, and the Phase 4 check left |
-| 5 to 8 | not started | |
+| 5 Frontend (Next.js) | 5.1 and 5.2 on `development` (merged 0628908; owner approved each screen) | the clinic-day board, Finalize, the saved record, adding a case and the plan view use step 2's routes (branch `claude/phase4-step2`) |
+| 6 to 8 | not started | |
 
 `docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
 
@@ -322,10 +323,17 @@ decision 5: the plan wording when the guideline search is down.
 
 ## Phase 5: Frontend (Next.js + shadcn)
 
-- [ ] 5.1 Set up the app with the design tokens.
-- [ ] 5.2 Visit review screen.
-- [ ] 5.3 Patient list and record.
-- [ ] 5.4 Plan and audit record views.
+- [x] 5.1 Set up the app with the design tokens.
+      2026-11-26: `web/` (Next.js 16, TypeScript, Tailwind, shadcn/ui on Radix, TanStack Query); the d7b
+      tokens are the theme; types generated from the API's OpenAPI schema (`npm run api:check` fails on
+      drift); unit tests and a browser test against the real API and a throwaway Postgres, no AI spend.
+- [x] 5.2 Visit review screen.
+      2026-11-26, each approved by the owner from screenshots (`docs/design/exports/phase5/`): the visit
+      before the checks with the record (S2), checks running kept honest (S3), the results screen first,
+      one alert per screen with one-tap override (S4c, S4d), the AI-review problem states (S7), GREEN
+      (S7b). Waiting on the backend: each alert's patient values and guideline line (owner, 2026-11-26).
+- [ ] 5.3 Patient list and record. (The record panel is in 5.2; the clinic-day board waits on its route.)
+- [ ] 5.4 Plan and audit record views. (Finalize with its confirm step, owner's decision 6, waits on the finalize route.)
 - [ ] 5.5 Showcase mode: the same screens read saved outputs instead of calling the API.
 
 Check: a full visit works in Chrome; before/after screenshots against the Streamlit app; every
