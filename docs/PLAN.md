@@ -12,7 +12,7 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 2 Preliminary evaluation | done, on `development` | |
 | 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
-| 4 Backend (FastAPI) | 4.0-4.2, 4.4, 4.5, 4.7 on `development`; step 2 on branch `claude/phase4-step2` | 4.3, the rest of 4.6, and the Phase 4 check left |
+| 4 Backend (FastAPI) | done: 4.0-4.7 and the Phase 4 check (step 2 on `development`; the leftovers on branch `claude/phase4-leftovers`) | the plan wording when the guideline search is down waits on design decision 5 |
 | 5 Frontend (Next.js) | 5.1 and 5.2 on `development` (merged 0628908; owner approved each screen) | the clinic-day board, Finalize, the saved record, adding a case and the plan view use step 2's routes (branch `claude/phase4-step2`) |
 | 6 to 8 | not started | |
 
@@ -281,10 +281,10 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
 - [x] 4.1 Typed models for patient, alert and plan. Alerts take the CDS Hooks card shape
       (summary, severity, source, suggested actions, override reasons).
 - [x] 4.2 Endpoints: list patients, run a visit check, record acknowledge/override.
-- [ ] 4.3 Build the guideline index once and keep it, instead of rebuilding on every start.
+- [x] 4.3 Build the guideline index once and keep it, instead of rebuilding on every start.
 - [x] 4.4 Tests that call the endpoints the way the frontend will.
 - [x] 4.5 Move the visit records from fix 9's local files into Postgres.
-- [ ] 4.6 (suggested) Phase 1 code review follow-ups, best done as the API replaces the Streamlit
+- [x] 4.6 (suggested) Phase 1 code review follow-ups, best done as the API replaces the Streamlit
       shell: move the add-case record building out of app.py into a typed endpoint; validate a
       patient record once when it is loaded (4.1); have the model client return the reply with
       its finish reason instead of setting attributes; keep the screen's session keys in one
@@ -296,7 +296,9 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
       adds `search_unavailable`), and it sends the wording from `artemis/screen_text.py` (banners,
       alert headings, citation lines) so the website only displays it.
 
-Check: the evaluation script runs through the API and matches Phase 2's numbers.
+Check: the evaluation script runs through the API and matches Phase 2's numbers. Passed 2026-11-26:
+GLM's final 2B run replayed through the backend gave the same alerts in all 33 runs and identical
+scores (`eval/phase4/api-replay-check.txt`).
 
 Where it stands (2026-11-26): 4.0, 4.1, 4.2, 4.4, 4.5 and 4.7 done on branch
 `claude/phase4-backend-1abc8a`, with `development` (Phase 2B) merged in; not pushed. The backend
@@ -320,6 +322,17 @@ doctor), adding a case (one builder shared with the Streamlit form: 4.6's add-ca
 plain-text explanations, each alert's value box and key guideline sentence (by code, nothing
 spent), and a saved snapshot of the API's shape (`docs/api/openapi.json`). Waiting on design
 decision 5: the plan wording when the guideline search is down.
+
+Where it stands (2026-11-26, last): the leftovers are done on branch `claude/phase4-leftovers`, not
+pushed. A limit of 6 visit checks a minute (owner). 4.3: the index is built once and kept; this
+found that Chroma had never been in use (its name was too long, and the app quietly fell back to an
+in-memory store), so Chroma now works and was proven to give the same top 5 passages as the store
+2B measured for all 211 of 2B's searches. 4.6's tidy-ups: the unused fields dropped, one bracket
+scanner, the model client returns one reply with its finish reason, and the screen's remembered
+values named in one place. The Phase 4 check: GLM's final 2B run replayed through the backend
+matched 2B exactly (33/33 runs, own catches 80%, real alerts 88%), and on the way found that a plan
+with problems made the visit check fail; fixed. Follow-up worth doing: the backend loads the whole
+Streamlit app (about 50 s of each start) just to reach its search engine.
 
 ## Phase 5: Frontend (Next.js + shadcn)
 
