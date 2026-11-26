@@ -576,9 +576,7 @@ export interface components {
              * Issues
              * @default []
              */
-            issues: {
-                [key: string]: unknown;
-            }[];
+            issues: string[];
             /** Management Plan */
             management_plan?: string | null;
         };
@@ -940,6 +938,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+            /** @description Too many visit checks this minute; wait the Retry-After seconds. */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

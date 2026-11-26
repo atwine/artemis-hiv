@@ -188,3 +188,19 @@ test("the source tags are the words of the API's alert headings", () => {
   const headings = JSON.parse(execFileSync(process.env.PYTHON || "python", ["-c", script, repo], { encoding: "utf8" }));
   for (const kind of ["ai", "rule"] as const) expect(headings[kind]).toBe(`Alert (${SOURCE_LABEL[kind]}): T`);
 });
+
+// Too many checks in a minute (the backend's limit, 429): the screen shows the API's own words and
+// keeps the note, so "Run checks" can simply be pressed again.
+test("too many checks: the API's message, and the note kept", async ({ page }) => {
+  const TOO_MANY = "Too many visit checks: wait a moment and try again."; // backend/main.py's detail
+  await page.route("**/api/patients/*/visits", async (route) =>
+    route.request().method() === "POST" ? route.fulfill({ status: 429, json: { detail: TOO_MANY }, headers: { "Retry-After": "30" } }) : route.continue(),
+  );
+  await page.goto("/patients/P001");
+  const notes = page.getByRole("textbox", { name: "Clinical notes" });
+  await notes.fill("Note written before the limit was hit.");
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toHaveText(TOO_MANY);
+  await expect(notes).toHaveValue("Note written before the limit was hit.");
+  await expect(page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" })).toBeEnabled();
+});
