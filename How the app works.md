@@ -109,13 +109,14 @@ For each alert, choose an action:
   - You must select an **Override reason** (required).
   - You may add an **Override comment** (optional) to document your thinking.
 
-Examples of override reasons include:
+The override reasons are:
 
-- Already addressed
-- Not applicable
-- Will address later
+- Already done, not documented
+- Test not available here
+- Not right for this patient
 - Patient declined
-- Other
+- Will address at next visit
+- Other (say why), which needs a comment
 
 ### Step 7: Finalize / Close visit
 

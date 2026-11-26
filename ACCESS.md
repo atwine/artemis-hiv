@@ -95,9 +95,9 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
   Act, 2019 is the likely one), whether consent must be recorded, how long visit records are
   kept, and whether notes may go to a third-party model API outside Uganda (OpenRouter does
   today, with synthetic notes). Owner to decide, with legal advice. Until then: synthetic only.
-- Override reasons are today's list ("Already addressed", "Not applicable", "Will address
-  later", "Patient declined", "Other"). The plan's "Ideas borrowed" suggests adding "done, not
-  documented" and "test unavailable"; a clinical call for Phase 7 with the doctor.
+- Override reasons: decided 2026-11-26 (the design's list, `artemis/review.py`
+  `OVERRIDE_REASONS`). New decisions must use it; saved ones keep the reason they were saved
+  with. The doctor may still revise the list in Phase 7.
 
 ## 7. What this file does not cover
 

@@ -1090,7 +1090,7 @@ def main() -> None:
             if st.session_state.get(f"alert_action_{alert.alert_id}") == "Override":
                 st.selectbox(
                     "Override reason (required)",
-                    reason_options(st.session_state.get(f"alert_override_reason_{alert.alert_id}") or ""),
+                    reason_options(st.session_state.get(f"alert_saved_reason_{alert.alert_id}") or ""),
                     key=f"alert_override_reason_{alert.alert_id}",
                 )
                 st.text_area(

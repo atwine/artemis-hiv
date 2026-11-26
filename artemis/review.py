@@ -22,11 +22,12 @@ OTHER_REASON = "Other (say why)"
 _NEEDS_A_COMMENT = {OTHER_REASON, "Other"}
 
 
-def reason_options(current: str) -> List[str]:
+def reason_options(saved: str) -> List[str]:
     """The reasons the picker offers: the list, plus an older reason a reopened visit was saved
-    with, so it still shows instead of breaking the picker."""
+    with, so it still shows instead of breaking the picker. `saved` is the reason the visit was
+    saved with, not the picker's current value, so the options stay the same while it changes."""
     options = ["", *OVERRIDE_REASONS]
-    return options + [current] if current and current not in options else options
+    return options + [saved] if saved and saved not in options else options
 
 
 def alert_resolution_ok(state: Mapping[str, Any], alert_id: str) -> bool:

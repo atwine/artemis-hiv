@@ -123,3 +123,21 @@ def test_an_older_record_that_says_yellow_reopens_as_amber() -> None:
 
     old = {"event": "checks_run", "patient_id": "P001", "visit_id": "v", "status": "YELLOW", "alerts": [], "results": []}
     assert vr.restore(old)["analysis_status"] == "AMBER"
+
+
+def test_a_reopened_visit_remembers_the_reason_it_was_saved_with() -> None:
+    """The picker offers the saved reason from its own key, so switching away from an older
+    reason doesn't change the picker's options mid-choice (which blanks it in Streamlit)."""
+    from artemis import visit_record as vr
+    from ui.state import clear_analysis
+
+    alert = {"alert_id": "A1", "title": "t", "message": "m", "evidence": {}, "query_hint": "", "source": "rule"}
+    checks = {"event": "checks_run", "patient_id": "P001", "visit_id": "v", "status": "AMBER",
+              "alerts": [alert], "results": [{"retrieved": [], "explanation": {"text": "", "used_llm": False}}]}
+    finalized = {"event": "finalized", "visit_id": "v", "patient_id": "P001", "saved_at": "2026-11-20T08:00:00+00:00",
+                 "decisions": [{"alert_id": "A1", "action": "Override", "reason": "Already addressed", "comment": ""}]}
+    values = vr.restore(checks, finalized)
+    assert values["alert_saved_reason_A1"] == "Already addressed"
+    assert values["alert_override_reason_A1"] == "Already addressed"
+    clear_analysis(values)  # forgotten with the rest of the visit
+    assert "alert_saved_reason_A1" not in values
