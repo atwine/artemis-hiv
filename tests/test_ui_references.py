@@ -27,7 +27,7 @@ def test_an_ai_alert_lists_its_cited_passages_and_marks_unseen_ones() -> None:
     )
     assert "shown and cited" in heading
     # The page comes from the passage itself, not from the AI's claim.
-    assert lines == ["Guidelines, p.7", "Guidelines, p.99: not among the passages the AI was given"]
+    assert lines == ["Guidelines · p. 7", "Guidelines · p. 99: not among the passages the AI was given"]
 
 
 def test_an_ai_alert_that_cited_nothing_says_so() -> None:
@@ -38,4 +38,4 @@ def test_a_rule_alerts_passages_are_labelled_as_search_results() -> None:
     rule = Alert("R1", "t", "m", {}, "q")
     heading, lines = alert_references(rule, [_chunk("a", 3), _chunk("b", 3), _chunk("c", 5)])
     assert heading.startswith("Related passages")
-    assert lines == ["Guidelines, p.3", "Guidelines, p.5"]
+    assert lines == ["Guidelines · p. 3", "Guidelines · p. 5"]

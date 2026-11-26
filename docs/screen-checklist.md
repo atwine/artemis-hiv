@@ -47,7 +47,9 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
   passage it cites but was not shown is marked "not among the passages the AI was given". A rule
   alert lists the passages a search found for it, headed "Related passages".
 - **A citation** names the guideline and its printed page (G36): `citation_line`, e.g. "Uganda HIV
-  guidelines 2022, p.255". Never the page's position in our extract file.
+  Guidelines 2022 · p. 255" (the design's look, owner 2026-11-26: capital G, a middle dot with
+  spaces, "p." and a space; no table or section number until plan item 8.5). Never the page's
+  position in our extract file.
 - **Guidance is Ugandan only** (G32): every passage comes from the register in
   `artemis/guidelines/sources.py`.
 

@@ -73,6 +73,23 @@ class PatientSummary(BaseModel):
     visit_date: str
 
 
+class LabResult(BaseModel):
+    """One lab result in the unit it was recorded in, never converted (owner, 2026-11-26)."""
+
+    date: str  # YYYY-MM-DD
+    value: str  # as typed, for example "<50"
+    unit: str  # for example "umol/L" or "mg/dL"
+    source: str  # "today", "previous" or "record" (older records say neither)
+
+
+class LabNote(BaseModel):
+    """Lab results typed as free text into the old add-case boxes; shown as text, never read as numbers."""
+
+    date: Optional[str]
+    source: str
+    text: str
+
+
 class PatientDetail(BaseModel):
     """A patient's record for the screen. Only these fields go out: the demo answer key
     (expected_demo_outcome) and anything else in the file stay behind."""
@@ -86,7 +103,10 @@ class PatientDetail(BaseModel):
     regimen_history: List[Dict[str, Any]]
     intake: Dict[str, Any]
     visits: List[Dict[str, Any]]
-    labs: Dict[str, List[Dict[str, Any]]]
+    # Each test's results, oldest first, read by artemis.patient.labs.read_lab_entries: the one
+    # place stored results are read, older value_umol_per_l-style keys included.
+    labs: Dict[str, List[LabResult]]
+    lab_notes: List[LabNote]
     today_encounter: Dict[str, Any]
 
 
@@ -125,7 +145,7 @@ class Passage(_CdsOut):
     text: str
     source_path: Optional[str] = None
     page_number: Optional[int] = None  # the guideline's printed page (G36)
-    # The screen's citation, e.g. "Uganda HIV guidelines 2022, p.255" (screen_text.citation_line).
+    # The screen's citation, e.g. "Uganda HIV Guidelines 2022 · p. 255" (screen_text.citation_line).
     citation: Optional[str] = None
     metadata: Dict[str, Any] = {}
 

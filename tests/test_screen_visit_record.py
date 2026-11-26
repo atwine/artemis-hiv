@@ -64,7 +64,7 @@ def test_finalize_saves_each_decision_and_other_needs_a_comment(records: Path) -
     at.run()
     at.radio(key="alert_action_tdf_creatinine_overdue").set_value("Acknowledge").run()
     at.radio(key="alert_action_P001_001").set_value("Override").run()
-    at.selectbox(key="alert_override_reason_P001_001").set_value("Other").run()
+    at.selectbox(key="alert_override_reason_P001_001").set_value("Other (say why)").run()
     assert _finalize(at).disabled
     assert any("comment" in i.value for i in at.info)
 
@@ -77,7 +77,7 @@ def test_finalize_saves_each_decision_and_other_needs_a_comment(records: Path) -
     assert (saved["event"], saved["visit_id"], saved["patient_id"]) == ("finalized", "visit-1", "P001")
     assert [(d["alert_id"], d["source"], d["action"], d["reason"], d["comment"]) for d in saved["decisions"]] == [
         ("tdf_creatinine_overdue", "rule", "Acknowledge", "", ""),
-        ("P001_001", "ai", "Override", "Other", "Viral load done at another clinic."),
+        ("P001_001", "ai", "Override", "Other (say why)", "Viral load done at another clinic."),
     ]
 
 

@@ -42,7 +42,16 @@ def test_the_uganda_art_extract_cites_its_printed_pages() -> None:
 def test_a_citation_names_the_guideline_and_its_printed_page() -> None:
     passage = VectorSearchResult("x__p22_c1", "text", {"page_number": 255, "source_path": str(ART)}, 0.1)
     _, lines = alert_references(Alert("R1", "t", "m", {}, "q"), [passage])
-    assert lines == ["Uganda HIV guidelines 2022, p.255"]
+    assert lines == ["Uganda HIV Guidelines 2022 · p. 255"]
+
+
+def test_a_citation_reads_the_way_the_design_shows_it() -> None:
+    """Owner, 2026-11-26 ("A, design's look"): capital G, a middle dot with spaces, "p." then a
+    space and the printed page; no table or section number (plan item 8.5)."""
+    from artemis.screen_text import citation_line
+
+    assert citation_line(str(ART), 270) == "Uganda HIV Guidelines 2022 · p. 270"
+    assert citation_line("somewhere/else.md", 4) == "Guidelines · p. 4"
 
 
 def test_every_registered_guideline_has_printed_pages_that_run_in_order() -> None:

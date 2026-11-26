@@ -16,7 +16,10 @@ from tests.api_fakes import FakeModel, fake_search, read_patients, replies_for
 
 LOCAL = {"Origin": "http://localhost:3000"}
 P001_NOTE = "Routine follow-up. No issues."
-OVERRIDE_REASONS = ["Already addressed", "Not applicable", "Will address later", "Patient declined", "Other"]
+OVERRIDE_REASONS = [
+    "Already done, not documented", "Test not available here", "Not right for this patient",
+    "Patient declined", "Will address at next visit", "Other (say why)",
+]
 
 
 def _check(api, patient_id="P001", **body):
@@ -53,7 +56,8 @@ def test_patient_record(api):
     assert r.status_code == 200
     body = r.json()
     assert body["patient_id"] == "P001"
-    assert body["labs"]["creatinine"] == [{"date": "2024-10-01", "value_umol_per_l": 88}]
+    # Stored as value_umol_per_l in the demo file; sent as value + unit (owner, 2026-11-26).
+    assert body["labs"]["creatinine"] == [{"date": "2024-10-01", "value": "88", "unit": "umol/L", "source": "record"}]
     assert body["today_encounter"]["note"] == P001_NOTE
     # The answer key stays out of what the screen gets.
     assert "expected_demo_outcome" not in body
@@ -295,7 +299,7 @@ def test_acknowledge_one_alert(api):
 def test_resolve_every_alert(api):
     visit = _check(api).json()
     ids = [c["extension"]["alert_id"] for c in visit["cards"]]
-    decisions = [{"alert_id": ids[0], "action": "Override", "reason": "Already addressed"}]
+    decisions = [{"alert_id": ids[0], "action": "Override", "reason": "Already done, not documented"}]
     decisions += [{"alert_id": i, "action": "Acknowledge"} for i in ids[1:]]
     body = _decide(api, visit["visit_id"], *decisions).json()
     assert body["all_resolved"] is True
@@ -305,11 +309,11 @@ def test_resolve_every_alert(api):
 
 def test_override_other_needs_a_comment(api):
     visit_id = _check(api).json()["visit_id"]
-    r = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Other"})
+    r = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Other (say why)"})
     assert r.status_code == 422
-    r = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Other", "comment": "  "})
+    r = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Other (say why)", "comment": "  "})
     assert r.status_code == 422
-    r = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Other", "comment": "Seen at the renal clinic"})
+    r = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Other (say why)", "comment": "Seen at the renal clinic"})
     assert r.status_code == 200
     assert r.json()["decisions"][0]["comment"] == "Seen at the renal clinic"
 
@@ -319,6 +323,7 @@ def test_override_other_needs_a_comment(api):
     [
         {"alert_id": "tdf_creatinine_overdue", "action": "Override"},
         {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Because I said so"},
+        {"alert_id": "tdf_creatinine_overdue", "action": "Override", "reason": "Already addressed"},  # an older reason
         {"alert_id": "tdf_creatinine_overdue", "action": "Unreviewed"},
         {"alert_id": "tdf_creatinine_overdue", "action": "Acknowledge", "comment": "x" * 2001},
         {"alert_id": "not_in_this_visit", "action": "Acknowledge"},
@@ -342,7 +347,7 @@ def test_empty_decision_list_is_422(api):
 
 def test_reason_and_comment_dropped_on_acknowledge(api):
     visit_id = _check(api).json()["visit_id"]
-    body = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Acknowledge", "reason": "Not applicable", "comment": "hm"}).json()
+    body = _decide(api, visit_id, {"alert_id": "tdf_creatinine_overdue", "action": "Acknowledge", "reason": "Not right for this patient", "comment": "hm"}).json()
     assert body["decisions"][0]["reason"] == ""
     assert body["decisions"][0]["comment"] == ""
 
@@ -427,7 +432,7 @@ def test_ai_card_reference_names_the_guideline_and_printed_page(api):
     card = next(c for c in _check(api).json()["cards"] if c["extension"]["alert_id"] == "P001_001")
     assert card["extension"]["heading"] == "Alert (AI review): Missing Viral Load Monitoring"
     assert card["extension"]["references"]
-    assert all(", p." in line for line in card["extension"]["references"])
+    assert all(" · p. " in line for line in card["extension"]["references"])
 
 
 def test_search_model_not_loaded_turns_the_ai_off_and_says_so(api):
@@ -479,3 +484,45 @@ def test_no_alerts_means_nothing_to_finalize(api):
     if body["cards"]:
         pytest.skip("this patient still raises a rule alert")
     assert body["finalize_note"] is None
+
+
+def test_a_decision_saved_with_an_older_reason_still_reads(api):
+    """Saved decisions keep the reason they were saved with (owner, 2026-11-26); only new ones are checked."""
+    from backend import records
+
+    visit_id = _check(api).json()["visit_id"]
+    old = [{"alert_id": "tdf_creatinine_overdue", "source": "rule", "title": "T", "severity": None,
+            "action": "Override", "reason": "Already addressed", "comment": ""}]
+    with Session(api.engine) as s:
+        records.add_decisions(s, visit_id, old, saved_at="2026-11-20T08:00:00+00:00")
+    body = _decide(api, visit_id, {"alert_id": "P001_001", "action": "Acknowledge"}).json()
+    assert {d["alert_id"]: d["reason"] for d in body["decisions"]}["tdf_creatinine_overdue"] == "Already addressed"
+
+
+def test_every_lab_result_the_api_returns_has_its_unit(api):
+    """Owner, 2026-11-26 ("A, as recorded"): each result in the unit it was recorded in, with the
+    value, unit and date as separate fields, so the website never guesses a unit. No conversion."""
+    seen = 0
+    for p in api.client.get("/api/patients", headers=LOCAL).json():
+        body = api.client.get(f"/api/patients/{p['patient_id']}", headers=LOCAL).json()
+        assert "labs_narrative" not in body["labs"]
+        for test, results in body["labs"].items():
+            for r in results:
+                assert set(r) == {"date", "value", "unit", "source"}, (p["patient_id"], test, r)
+                assert r["unit"] and r["value"] and r["date"], (p["patient_id"], test, r)
+                seen += 1
+    assert seen >= 8  # P001 to P004 have structured results
+
+
+def test_lab_results_keep_the_unit_they_were_recorded_in(api):
+    record = {**next(p for p in read_patients() if p["patient_id"] == "P001"),
+              "labs": {"creatinine": [{"date": "2026-01-01", "value": "1.1", "unit": "mg/dL", "source": "today"}]}}
+    api.services.patients = lambda: [record]
+    body = api.client.get("/api/patients/P001", headers=LOCAL).json()
+    assert body["labs"]["creatinine"] == [{"date": "2026-01-01", "value": "1.1", "unit": "mg/dL", "source": "today"}]
+
+
+def test_lab_notes_typed_as_text_come_back_as_text(api):
+    body = api.client.get("/api/patients/P005", headers=LOCAL).json()
+    assert body["labs"] == {}
+    assert body["lab_notes"] and all(set(n) == {"date", "source", "text"} and n["text"] for n in body["lab_notes"])

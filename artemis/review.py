@@ -6,8 +6,27 @@ from typing import Any, Dict, List, Mapping
 
 from artemis.rules.checks import Alert
 
-# The reasons a clinician can give for overriding an alert (the Streamlit screen and the backend).
-OVERRIDE_REASONS = ["Already addressed", "Not applicable", "Will address later", "Patient declined", "Other"]
+# The reasons a clinician can give for overriding an alert (the Streamlit screen and the backend):
+# the design's list (docs/design/brief.md), owner's decision 2026-11-26 ("A, design's list").
+OVERRIDE_REASONS = [
+    "Already done, not documented",
+    "Test not available here",
+    "Not right for this patient",
+    "Patient declined",
+    "Will address at next visit",
+    "Other (say why)",
+]
+OTHER_REASON = "Other (say why)"
+# Decisions saved before 2026-11-26 keep the reason they were saved with. Of those, "Other"
+# still needs its comment.
+_NEEDS_A_COMMENT = {OTHER_REASON, "Other"}
+
+
+def reason_options(current: str) -> List[str]:
+    """The reasons the picker offers: the list, plus an older reason a reopened visit was saved
+    with, so it still shows instead of breaking the picker."""
+    options = ["", *OVERRIDE_REASONS]
+    return options + [current] if current and current not in options else options
 
 
 def alert_resolution_ok(state: Mapping[str, Any], alert_id: str) -> bool:
@@ -17,7 +36,7 @@ def alert_resolution_ok(state: Mapping[str, Any], alert_id: str) -> bool:
 
     if action == "Override":
         reason = (state.get(f"alert_override_reason_{alert_id}") or "").strip()
-        if reason == "Other":
+        if reason in _NEEDS_A_COMMENT:
             # An override that says only "Other" can't be reviewed later (fix 9, D11).
             return bool((state.get(f"alert_override_comment_{alert_id}") or "").strip())
         return bool(reason)
