@@ -50,8 +50,8 @@ class PatientRecord(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     patient_id: str = Field(min_length=1, max_length=200)
-    name: str = ""
-    sex: str = ""
+    name: Optional[str] = ""
+    sex: Optional[str] = ""  # the Streamlit form saves null when it is left blank
     age_years: Optional[int] = None
     art_regimen_current: List[str] = []
     other_medications: List[str] = []
@@ -60,6 +60,34 @@ class PatientRecord(BaseModel):
     visits: List[Dict[str, Any]] = []
     labs: Dict[str, List[Dict[str, Any]]] = {}
     today_encounter: TodayEncounter
+
+
+class NewLabRow(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    test: str = Field(max_length=40)  # from artemis.patient.labs.TEST_UNITS, e.g. "creatinine"
+    date: str = Field(max_length=10)  # YYYY-MM-DD
+    value: str = Field(max_length=40)  # as written, e.g. "<50"; must hold a number
+    unit: str = Field(default="", max_length=20)  # one of the test's units; blank means its usual one
+    when: Literal["today", "previous"]
+
+
+class NewCase(BaseModel):
+    """A new made-up patient case (owner, 2026-11-26: the Streamlit form's fields and rules, plus
+    an optional name). Checked again by artemis.patient.new_case, the builder both forms share."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    patient_id: str = Field(max_length=40)
+    name: Optional[str] = Field(default=None, max_length=5000)
+    age_years: Optional[int] = None
+    sex: Optional[Literal["M", "F"]] = None
+    art_regimen: List[str] = Field(default=[], max_length=20)  # picks from the app's list, e.g. "TLD"
+    other_medications: List[str] = Field(default=[], max_length=50)  # one medicine per item
+    complaints: str = Field(default="", max_length=5000)
+    examination_findings: str = Field(default="", max_length=5000)
+    prior_history: str = Field(default="", max_length=5000)
+    labs: List[NewLabRow] = Field(default=[], max_length=50)
 
 
 class PatientSummary(BaseModel):

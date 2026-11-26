@@ -9,6 +9,7 @@ Who may call what: ACCESS.md (enforced in backend/access.py).
 from __future__ import annotations
 
 import copy
+import datetime
 import logging
 import uuid
 from dataclasses import dataclass
@@ -22,6 +23,7 @@ from sqlmodel import Session
 
 from artemis import visit_record
 from artemis.patient.labs import read_lab_entries, read_lab_notes
+from artemis.patient.new_case import CaseForm, build_case_record
 from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import records
@@ -41,6 +43,7 @@ from backend.models import (
     FinalizeResponse,
     LabNote,
     LabResult,
+    NewCase,
     PatientDetail,
     PatientRecord,
     PatientSummary,
@@ -92,7 +95,7 @@ def _find(services: Services, patient_id: str) -> Loaded:
 
 def _summary(record: PatientRecord) -> PatientSummary:
     return PatientSummary(
-        patient_id=record.patient_id, name=record.name, sex=record.sex, age_years=record.age_years,
+        patient_id=record.patient_id, name=record.name or "", sex=record.sex or "", age_years=record.age_years,
         art_regimen_current=record.art_regimen_current, visit_date=record.today_encounter.date,
     )
 
@@ -103,7 +106,8 @@ def _detail(p: Loaded) -> PatientDetail:
     for e in read_lab_entries(p.stored):
         labs.setdefault(e.test, []).append(LabResult(date=e.date.isoformat(), value=e.value, unit=e.unit, source=e.source))
     notes = [LabNote(date=n.date.isoformat() if n.date else None, source=n.source, text=n.text) for n in read_lab_notes(p.stored)]
-    return PatientDetail(**{**p.record.model_dump(), "labs": labs, "lab_notes": notes})
+    fields = {**p.record.model_dump(), "name": p.record.name or "", "sex": p.record.sex or ""}
+    return PatientDetail(**{**fields, "labs": labs, "lab_notes": notes})
 
 
 def _visit_reply(entry: Dict[str, Any], *, record_saved: bool) -> Dict[str, Any]:
@@ -131,7 +135,7 @@ def board_row(booking: Any, record: PatientRecord, latest: Optional[records.Visi
     state = "waiting" if latest is None else ("done" if finalized else "needs_you")
     return Appointment(
         time=booking.time, patient_id=record.patient_id, name=record.name or booking.name or record.patient_id,
-        age_years=record.age_years, sex=record.sex, regimen="/".join(record.art_regimen_current), state=state,
+        age_years=record.age_years, sex=record.sex or "", regimen="/".join(record.art_regimen_current), state=state,
         visit_id=latest.visit_id if latest else None, status=latest.status if latest else None,
         ai_review=latest.ai_review if latest else None, alert_count=len(latest.alerts) if latest else 0,
         reviewed_count=reviewed, finalized_at=finalized,
@@ -347,5 +351,29 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             clinic=schedule.clinic, room=schedule.room, clinician=schedule.clinician,
             date=schedule.date.isoformat(), appointments=rows, counts=day_counts(rows),
         )
+
+    @app.post("/api/patients", response_model=PatientDetail, status_code=201, dependencies=[
+        Depends(require("patients", "create")),
+    ])
+    def add_case(body: NewCase) -> PatientDetail:
+        """Add a new made-up case where the Streamlit app keeps its added cases. Add only: an ID
+        already in use is refused (owner, 2026-11-26)."""
+        form = CaseForm(
+            patient_id=body.patient_id, name=body.name or "", age_years=body.age_years, sex=body.sex or "",
+            art_regimen=body.art_regimen, other_medications=body.other_medications, complaints=body.complaints,
+            examination_findings=body.examination_findings, prior_history=body.prior_history,
+            lab_rows=[(r.model_dump(exclude={"when"}), r.when) for r in body.labs],
+        )
+        record, errors = build_case_record(form, today=datetime.date.today())
+        if errors:
+            raise HTTPException(status_code=422, detail=errors)
+        if any(p.record.patient_id == record["patient_id"] for p in load_patients(services)):
+            raise HTTPException(status_code=409, detail="That patient ID is already in use.")
+        try:
+            services.add_case(record)
+        except (UnreadableFile, OSError) as exc:
+            logger.warning("Case not added: %s", type(exc).__name__)
+            raise HTTPException(status_code=500, detail="The case could not be saved.")
+        return _detail(_find(services, record["patient_id"]))
 
     return app

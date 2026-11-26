@@ -16,7 +16,7 @@ from sqlalchemy.engine import Engine
 from sqlmodel import create_engine
 
 from artemis import visit_record
-from artemis.patient.store import read_json_list
+from artemis.patient.store import read_json_list, write_json_list
 from backend.settings import PROJECT_ROOT, Settings
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,8 @@ class Services:
     top_k: int = TOP_K
     # The demo day's schedule as stored (Data/demo_clinic_day.json), checked by the route.
     clinic_day: Callable[[], Dict[str, Any]] = field(default_factory=lambda: clinic_day_file(Settings()))
+    # Adds a new case where the Streamlit app keeps its added cases (ARTEMIS_CUSTOM_PATIENTS_PATH).
+    add_case: Callable[[Dict[str, Any]], None] = field(default_factory=lambda: custom_case_writer(Settings()))
 
 
 def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:
@@ -47,6 +49,16 @@ def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:
         )
 
     return read
+
+
+def custom_case_writer(settings: Settings) -> Callable[[Dict[str, Any]], None]:
+    """Adds one case to the added-cases file in one step (a temporary file, then a rename). A file
+    that can't be read raises UnreadableFile and is never overwritten (fix 10, G16)."""
+
+    def add(record: Dict[str, Any]) -> None:
+        write_json_list(settings.custom_patients_path, read_json_list(settings.custom_patients_path) + [record])
+
+    return add
 
 
 def clinic_day_file(settings: Settings) -> Callable[[], Dict[str, Any]]:
@@ -94,4 +106,5 @@ def default_services(settings: Settings) -> Services:
         engine=engine,
         app_version=visit_record.app_version(PROJECT_ROOT),
         clinic_day=clinic_day_file(settings),
+        add_case=custom_case_writer(settings),
     )

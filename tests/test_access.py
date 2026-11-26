@@ -72,6 +72,7 @@ def _all_patient_ids() -> List[str]:
 
 
 DECISION = {"decisions": [{"alert_id": "tdf_creatinine_overdue", "action": "Acknowledge"}]}
+NEW_CASE = {"patient_id": "P100", "art_regimen": ["TLD"]}
 
 CASES: List[Case] = [
     Case("GET", "/api/patients", "local", "/api/patients", ALLOW, "local: patients = view(all)", only_ids=_all_patient_ids()),
@@ -105,6 +106,10 @@ CASES: List[Case] = [
     Case("GET", "/api/clinic-day", "local", "/api/clinic-day", ALLOW, "local: clinic_day = view(all)"),
     Case("GET", "/api/clinic-day", "website", "/api/clinic-day", DENY, "website: clinic_day = -"),
     Case("GET", "/api/clinic-day", "rebinding", "/api/clinic-day", DENY, "rebinding is refused by the Host check"),
+    Case("POST", "/api/patients", "local", "/api/patients", ALLOW, "local: patients = create(all)", body=NEW_CASE),
+    Case("POST", "/api/patients", "local", "/api/patients", DENY, "an ID already in use is refused", body={**NEW_CASE, "patient_id": "P001"}),
+    Case("POST", "/api/patients", "website", "/api/patients", DENY, "website: patients = -", body=NEW_CASE),
+    Case("POST", "/api/patients", "rebinding", "/api/patients", DENY, "rebinding is refused by the Host check", body=NEW_CASE),
 ]
 
 
@@ -138,7 +143,7 @@ def _run_and_decide_a_visit(api) -> str:
 
 
 def _denied(response) -> bool:
-    return response.status_code in (401, 403, 404)
+    return response.status_code in (401, 403, 404, 409)
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda c: c.id)
@@ -159,6 +164,7 @@ def test_access_rule(api, case: Case):
         # A refused request leaves nothing behind and spends nothing.
         assert _rows(api) == before
         assert len(api.model.calls) == calls_before
+        assert api.added_cases == []
         return
     assert response.status_code < 400, (
         f"{case.role} was refused ({response.status_code}) on {case.method} {url} "
