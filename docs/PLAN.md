@@ -349,6 +349,7 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
 | Patients (records, labs, medicines, ART history, notes) | `Data/mock_patients.json`, `Data/demo_day_patients.json`, `Data/custom_patients.json` (adding a case appends here) | backend, Streamlit, evaluation |
 | The clinic day (clinic, clinician, date, appointment times) | `Data/demo_clinic_day.json`, edited by hand | backend |
 | Streamlit's own visit records | `Data/visit_records/*.jsonl` (the backend's are already in Postgres) | Streamlit only |
+| Streamlit's "save as a candidate rule" button | `Data/candidate_rules.json` (nothing else reads it) | Streamlit only |
 | The guideline search index | `storage/chroma` on disk (Chroma, owner's pick in 2B.5) | backend, evaluation |
 | The check limit (6 a minute) | in the backend's memory; a restart resets it | backend |
 | The app's setup (search model, index, model client) | `app.py`, the Streamlit file: the backend and the evaluation load it, about 50 s of each start | backend, evaluation |
@@ -369,7 +370,8 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       app does. Check: the Phase 4 check still matches 2B's numbers.
 - [ ] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
       (`artemis/visit_record.py`, `Data/visit_records`), the screen's remembered values
-      (`artemis/session_keys.py`), the Streamlit screen tests, `streamlit` in the requirements, and
+      (`artemis/session_keys.py`), the candidate-rules file and button, the Ollama client settings only the
+      Streamlit screen uses, the Streamlit screen tests, `streamlit` in the requirements, and
       the Streamlit fields added to its add-case form; README and "How the app works.md" rewritten
       for the website.
 - [ ] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
