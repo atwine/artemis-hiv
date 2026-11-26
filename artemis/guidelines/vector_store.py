@@ -8,6 +8,8 @@ Local-first design:
 from __future__ import annotations
 
 import hashlib
+import logging
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -16,6 +18,8 @@ import numpy as np
 
 from modules.embedder import Embedder
 from artemis.guidelines.processor import GuidelineChunk
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -29,13 +33,14 @@ class VectorSearchResult:
 def index_collection_name(model_name: str, guideline_paths: List[Path], version: int) -> str:
     """The stored index's name: the search model, the guideline files and a fingerprint of their
     text, so an edited, added or removed file gets a fresh index instead of old passages (G37)."""
-    model_key = (model_name or "").strip().lower().replace("/", "_").replace(":", "_").replace(" ", "_")
-    files_key = "_".join(p.stem.strip().lower().replace(" ", "_").replace("+", "_")[:20]
-                         for p in guideline_paths)[:60] or "no_guideline"
-    fingerprint = hashlib.sha256()
+    # Short enough for Chroma (3-63 letters, digits, "_" or "-"): the old name was 98 characters,
+    # Chroma refused it, and the app quietly fell back to rebuilding in memory (found 2026-11-26).
+    # The fingerprint covers the model, every file's name and text, and the version.
+    fingerprint = hashlib.sha256(f"{model_name}\0v{version}".encode("utf-8"))
     for p in guideline_paths:
-        fingerprint.update(p.name.encode("utf-8") + b"\0" + p.read_bytes())
-    return f"uganda_hiv_guidelines__{model_key}__{files_key}__{fingerprint.hexdigest()[:10]}__v{version}"
+        fingerprint.update(b"\0" + p.name.encode("utf-8") + b"\0" + p.read_bytes())
+    model_key = re.sub(r"[^a-z0-9]+", "-", (model_name or "model").lower()).strip("-")[:24] or "model"
+    return f"guidelines_{model_key}_{fingerprint.hexdigest()[:12]}_v{version}"
 
 
 class VectorStore:
@@ -74,10 +79,25 @@ class ChromaVectorStore(VectorStore):
         # https://docs.trychroma.com/docs/collections/create-get-delete
         self._collection = self._client.get_or_create_collection(
             name=self._collection_name,
-            metadata={"description": "Uganda HIV guideline chunks"},
+            # Rank by angle (cosine), like the in-memory store Phase 2B was measured with.
+            metadata={"description": "Uganda HIV guideline chunks", "hnsw:space": "cosine"},
         )
 
+    def _stored_ids(self, ids: List[str]) -> set:
+        """Which of these passages the collection already holds, asked in batches."""
+        stored: set = set()
+        for i in range(0, len(ids), 500):
+            stored.update(self._collection.get(ids=ids[i:i + 500], include=[])["ids"])
+        return stored
+
     def index_guidelines(self, chunks: List[GuidelineChunk], embedder: Embedder) -> int:
+        """Embed and store only the passages the collection doesn't already hold, and return how
+        many that was (plan item 4.3: built once and kept). The collection's name carries a
+        fingerprint of the guideline text, so an edited guideline gets a fresh, full build (G37)."""
+        if not chunks:
+            return 0
+        stored = self._stored_ids([c.chunk_id for c in chunks])
+        chunks = [c for c in chunks if c.chunk_id not in stored]
         if not chunks:
             return 0
 
@@ -223,8 +243,10 @@ def create_vector_store(
                 persist_path=project_root / "storage" / "chroma",
                 collection_name=collection_name,
             )
-        except Exception:
-            # Rationale: fallback keeps the demo runnable even if Chroma fails to initialize.
+        except Exception as exc:
+            # Keeps the app running, but said out loud: a silent fallback hid for weeks that the
+            # index was never kept (Chroma refused the name; found 2026-11-26).
+            logger.warning("Chroma could not start (%s); searching an in-memory index rebuilt each start", type(exc).__name__)
             return InMemoryVectorStore()
 
     return InMemoryVectorStore()

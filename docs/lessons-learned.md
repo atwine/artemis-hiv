@@ -113,6 +113,17 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
   replaces only the slow engine builder; the setup reads app's settings with no fallback
   defaults, so a rename fails there, loudly.
 
+**32. A quiet fallback can hide that the main path never ran.**
+- Example: the guideline index was meant to be kept in Chroma, but its name was 98 characters and
+  Chroma allows 63. Chroma refused it, the code fell back to an in-memory store without a word,
+  and every start re-embedded everything. Phase 2B's numbers were all measured on that fallback.
+- Caught by: plan item 4.3's timing run, which showed "236 passages embedded" on every start
+  after the "embed only what's missing" change had passed its tests. The tests used Chroma
+  directly, with short names, so they never met the real name.
+- Fix: a short name Chroma accepts, Chroma ranking by angle like the in-memory store, a warning in
+  the log whenever the fallback is used, and a check that the two stores give the same top 5
+  passages for all 211 searches 2B ran (211/211, `eval/phase4/index-store-check.txt`).
+
 ## Habits that caught these
 
 - Save a baseline before fixing anything, including the model's raw replies and the rule alerts,

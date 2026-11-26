@@ -64,6 +64,10 @@ class RagEngine:
 
         if self._indexed:
             return 0
+        if not self.search_ready:
+            # The stand-in a failed search model falls back to makes near-random vectors (G33).
+            # Stored passages are kept for good now (4.3), so nothing is written until it loads.
+            return 0
 
         total = 0
         for gpath in self._guideline_paths:
