@@ -356,9 +356,15 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
 | Evaluation cases, answer keys and run results | `eval/` files in git | evaluation scripts |
 | The guideline text | `Data/MarkDown Files/` | index build |
 
-- [ ] 4C.1 Move the app's setup (search model, guideline index, model client, constants) out of
+- [x] 4C.1 Move the app's setup (search model, guideline index, model client, constants) out of
       `app.py` into `artemis/`, so the backend and the evaluation no longer load Streamlit.
       Check: the backend starts without importing streamlit; the Phase 4 check replays the same.
+      Done 2026-11-27: `artemis/config.py` (guideline files, search model, index version, the
+      search) and `artemis/evaluation/scrub.py`; the backend already built its model client from
+      `artemis/ai/client.py`. Measured: a fresh process starts the backend and imports the
+      evaluation scripts with no streamlit loaded (`tests/test_no_streamlit_in_backend.py`); the
+      kept index keeps its name; the Phase 4 check MET, report unchanged. `scripts/run_baseline.py`
+      (the Streamlit screen's own runner) still loads Streamlit and goes in 4C.6.
 - [ ] 4C.2 Patients in Postgres: tables for a patient and their labs, medicines, ART history and
       notes; the made-up patients imported once (safe to rerun); the API reads and adds patients
       only through the database; adding a case is one database save.
