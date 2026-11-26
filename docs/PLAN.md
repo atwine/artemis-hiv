@@ -198,7 +198,10 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
 - [ ] 2B.4 Pick the winner on the numbers and write up what was learned (a good demo piece too).
 - [ ] 2B.5 Revisit the four accepted chromadb advisories: replace or upgrade Chroma, then remove
       their `--ignore-vuln` lines from `.github/workflows/security-scans.yml`.
-- [ ] 2B.7 How the guideline knowledge is stored, decided on the 2B.1 numbers: plain Markdown as
+- [x] 2B.7 Decided 2026-11-26 (owner, option A): plain text cut into pieces stays, the best setup
+      measured end to end; sections (fix 5b) measured worse on questions and patients; one record
+      per recommendation becomes Phase 8 item 8.5. Meaning search stays (keyword search, 5c, dropped).
+      The question was: how the guideline knowledge is stored, decided on the 2B.1 numbers: plain Markdown as
       today, Markdown split along the guideline's own sections, or structured records (JSON, one per
       recommendation, with drug, condition, action, country and edition). Also which search fits
       each: meaning search, keyword search, or both together, and filters by country and edition.
@@ -295,6 +298,9 @@ reproduces it.
       synthetic HIV patients.
 - [ ] 8.3 (suggested) Rules-only mode that works with no model connection (winners of the challenge were offline-first).
 - [ ] 8.4 (suggested) "Left in red" view: how often critical alerts are left unresolved (Penda's main lever).
+- [ ] 8.5 One record per guideline recommendation (medicine, condition, action, printed page),
+      drafted by an AI from the Ugandan extracts and checked by the doctor (Phase 7), so the app finds
+      rules by medicine name and simple code can check some without the AI (from 2B.7, 2026-11-26).
 
 ## Ideas borrowed
 
