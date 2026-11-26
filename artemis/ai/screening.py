@@ -6,7 +6,7 @@ import logging
 
 from artemis.rules.checks import Alert
 from artemis.ai.client import ChatMessage, OllamaClient
-from artemis.plan.plan_json import strip_code_fences
+from artemis.plan.plan_json import closing_index, strip_code_fences
 from artemis.patient.record import PatientContext
 from artemis.guidelines.vector_store import VectorSearchResult
 
@@ -34,28 +34,6 @@ def _is_alert(item: Any) -> bool:
     return isinstance(item, dict) and any(k in item for k in ("alert_id", "title", "message"))
 
 
-def _closes(raw: str, pos: int) -> bool:
-    """True when the JSON value starting at pos closes before the text ends (strings respected)."""
-    depth, in_str, esc = 0, False, False
-    for ch in raw[pos:]:
-        if in_str:
-            if esc:
-                esc = False
-            elif ch == "\\":
-                esc = True
-            elif ch == '"':
-                in_str = False
-        elif ch == '"':
-            in_str = True
-        elif ch in "[{":
-            depth += 1
-        elif ch in "]}":
-            depth -= 1
-            if depth <= 0:
-                return True
-    return False
-
-
 def _read_list(raw: str, pos: int) -> Tuple[List[Any], str]:
     """Read list items one at a time from just after a "[".
 
@@ -74,7 +52,7 @@ def _read_list(raw: str, pos: int) -> Tuple[List[Any], str]:
         try:
             value, pos = decoder.raw_decode(raw, pos)
         except json.JSONDecodeError:
-            return items, ("broken" if _closes(raw, pos) else "cut")
+            return items, ("broken" if closing_index(raw, pos) is not None else "cut")
         items.append(value)
 
 

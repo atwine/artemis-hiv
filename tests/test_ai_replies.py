@@ -235,3 +235,15 @@ def test_the_prompt_says_to_leave_citations_empty_rather_than_invent_one() -> No
     assert "information_gap\" with empty citations" not in system
     assert "leave citations as an empty list" in system
     assert '"page_number": 0' not in system
+
+
+def test_one_bracket_reader_for_every_ai_reply() -> None:
+    """Plan item 4.6: the alert reader and the plan reader share one bracket scanner."""
+    from artemis.plan.plan_json import closing_index, first_json_object
+
+    text = 'Here: {"a": [1, {"b": "x}]"}], "c": "say \\"}\\" here"} and more'
+    start = text.index("{")
+    assert text[closing_index(text, start)] == "}" and text[start:closing_index(text, start) + 1].endswith('here"}')
+    assert first_json_object(text) == text[start:closing_index(text, start) + 1]
+    assert closing_index('{"a": [1, 2', 0) is None  # the text ends first
+    assert closing_index('"x", 3]', 0) == 6  # from inside a list: where the list closes
