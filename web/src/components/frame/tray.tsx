@@ -28,6 +28,8 @@ export type TrayProps = {
   secondary?: TrayButton;
   /** Shown in place of the buttons, e.g. while the checks run. */
   status?: React.ReactNode;
+  /** Steps that can be opened from the tray (to go back to the notes, the results or an alert). */
+  go?: { notes?: () => void; checks?: () => void; alert?: (i: number) => void };
 };
 
 export function Tray(props: TrayProps) {
@@ -39,13 +41,13 @@ export function Tray(props: TrayProps) {
     >
       <div className="flex items-center gap-4.5">
         <ol className="flex shrink-0 items-center gap-3" aria-label="Where you are">
-          <MainStep label="Clinical notes" step={props.notes} />
-          <MainStep label="Checks" step={props.checks} />
+          <MainStep label="Clinical notes" step={props.notes} onOpen={props.go?.notes} />
+          <MainStep label="Checks" step={props.checks} onOpen={props.go?.checks} />
           {props.alerts.length > 0 && (
             <li className="flex items-center gap-[5px] rounded-[20px] bg-white/8 px-1.5 py-1">
               <ol className="contents" aria-label="Alerts">
                 {props.alerts.map((step, i) => (
-                  <AlertDot key={i} n={i + 1} step={step} />
+                  <AlertDot key={i} n={i + 1} step={step} onOpen={props.go?.alert && (() => props.go!.alert!(i))} />
                 ))}
               </ol>
             </li>
@@ -71,9 +73,20 @@ export function Tray(props: TrayProps) {
 
 const STEP_WORD: Record<Step, string> = { todo: "to do", current: "current step", done: "done" };
 
-function MainStep({ label, step }: { label: string; step: Step }) {
+/** A step's content, as a button when the step can be opened. */
+function Opens({ onOpen, className, children }: { onOpen?: () => void; className?: string; children: React.ReactNode }) {
+  if (!onOpen) return <span className={className}>{children}</span>;
   return (
-    <li className="flex items-center gap-1.5" aria-current={step === "current" ? "step" : undefined}>
+    <button type="button" onClick={onOpen} className={cn("cursor-pointer rounded-full", className)}>
+      {children}
+    </button>
+  );
+}
+
+function MainStep({ label, step, onOpen }: { label: string; step: Step; onOpen?: () => void }) {
+  return (
+    <li aria-current={step === "current" ? "step" : undefined}>
+     <Opens onOpen={onOpen} className="flex items-center gap-1.5">
       <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden className="shrink-0">
         {step === "done" ? (
           <>
@@ -95,6 +108,7 @@ function MainStep({ label, step }: { label: string; step: Step }) {
         {label}
         <span className="sr-only">, {STEP_WORD[step]}</span>
       </span>
+     </Opens>
     </li>
   );
 }
@@ -116,27 +130,29 @@ function TextStep({ label, step }: { label: string; step: Step }) {
   );
 }
 
-function AlertDot({ n, step }: { n: number; step: Step }) {
+function AlertDot({ n, step, onOpen }: { n: number; step: Step; onOpen?: () => void }) {
   return (
-    <li
-      aria-current={step === "current" ? "step" : undefined}
-      className={cn(
-        "flex size-6.5 shrink-0 items-center justify-center rounded-full text-13",
-        step === "todo" && "border-[1.5px] border-muted-foreground text-tray-number",
-        step === "current" && "bg-white font-bold text-ink",
-        step === "done" && "bg-tray-done-wash",
-      )}
-    >
-      {step === "done" ? (
-        <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden className="shrink-0">
-          <path d="M3 7.2l2.6 2.6 5.4-5.8" fill="none" stroke="var(--color-green)" strokeWidth="2" />
-        </svg>
-      ) : (
-        <span aria-hidden>{n}</span>
-      )}
-      <span className="sr-only">
-        Alert {n}, {STEP_WORD[step]}
-      </span>
+    <li aria-current={step === "current" ? "step" : undefined}>
+      <Opens
+        onOpen={onOpen}
+        className={cn(
+          "flex size-6.5 shrink-0 items-center justify-center rounded-full text-13",
+          step === "todo" && "border-[1.5px] border-muted-foreground text-tray-number",
+          step === "current" && "bg-white font-bold text-ink",
+          step === "done" && "bg-tray-done-wash",
+        )}
+      >
+        {step === "done" ? (
+          <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden className="shrink-0">
+            <path d="M3 7.2l2.6 2.6 5.4-5.8" fill="none" stroke="var(--color-green)" strokeWidth="2" />
+          </svg>
+        ) : (
+          <span aria-hidden>{n}</span>
+        )}
+        <span className="sr-only">
+          Alert {n}, {STEP_WORD[step]}
+        </span>
+      </Opens>
     </li>
   );
 }

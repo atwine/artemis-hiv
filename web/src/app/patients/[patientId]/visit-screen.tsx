@@ -1,17 +1,21 @@
 "use client";
 
 import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
-import { use, useId, useState } from "react";
+import { use, useState } from "react";
 
 import { AppFrame, PaneContent, PaneHeader } from "@/components/frame/app-frame";
 import { DayRail } from "@/components/frame/day-rail";
-import { StatusChip, StatusShape, type VisitState } from "@/components/frame/status";
-import { Tray, type TrayButton, type TrayProps } from "@/components/frame/tray";
-import { api, errorText, unwrap, type Card, type DecisionOut, type Decisions, type PatientDetail, type VisitCheck } from "@/lib/api/client";
-import { cn } from "@/lib/utils";
-import { decisionsToSave, type Draft, type Reason } from "@/lib/decisions";
+import { StatusChip, type VisitState } from "@/components/frame/status";
+import { Tray, type Step, type TrayButton, type TrayProps } from "@/components/frame/tray";
+import { firstName, nextToReview } from "@/lib/alerts";
+import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type PatientDetail, type VisitCheck } from "@/lib/api/client";
+import { acceptDecision, NEEDS_COMMENT, overrideDecision, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
 import { useRailEntries } from "@/lib/queries";
+
+import { AlertView } from "./alert-view";
+import { OverrideView } from "./override-view";
+import { decisionWords, ResultsView } from "./results-view";
 
 const NOTES_FORM = "clinical-notes";
 
@@ -75,30 +79,45 @@ function Visit({ patient }: { patient: PatientDetail }) {
     </form>
   );
 
-  // A new check starts the alert review afresh.
+  // A new check starts the review afresh.
   return <VisitView key={check.data?.visit_id ?? "before"} patient={patient} check={check} notesForm={notesForm} />;
 }
 
+/** Which screen the pane shows. The results screen comes first after the checks (owner, 2026-11-26). */
+type View = { name: "notes" } | { name: "results" } | { name: "alert"; i: number } | { name: "override"; i: number; other: boolean };
+
 function VisitView({ patient, check, notesForm }: { patient: PatientDetail; check: CheckMutation; notesForm: React.ReactNode }) {
   const result = check.data;
-  const [drafts, setDrafts] = useState<Record<string, Draft>>({});
-  const [saved, setSaved] = useState<Decisions | null>(null);
-  const toSave = decisionsToSave(drafts);
+  const [view, setView] = useState<View>(result ? { name: "results" } : { name: "notes" });
+  const [saved, setSaved] = useState<DecisionOut[]>([]);
+  const [finalizeNote, setFinalizeNote] = useState<string | null>(result?.finalize_note ?? null);
+  const [comment, setComment] = useState("");
   const save = useMutation({
-    mutationFn: async () =>
+    mutationFn: async (decision: DecisionIn) =>
       unwrap(
         await api.POST("/api/visits/{visit_id}/decisions", {
           params: { path: { visit_id: result!.visit_id } },
-          body: { decisions: toSave ?? [] },
+          body: { decisions: [decision] },
         }),
       ),
-    onSuccess: (reply) => {
-      setSaved(reply);
-      setDrafts({});
+    onSuccess: (reply, decision) => {
+      setSaved(reply.decisions);
+      setFinalizeNote(reply.finalize_note);
+      setComment("");
+      // On to the next alert still to review, or back to the results when none is left.
+      const ids = result!.cards.map((c) => c.extension.alert_id);
+      const decided = new Set(reply.decisions.map((d) => d.alert_id));
+      const next = nextToReview(ids, decided, ids.indexOf(decision.alert_id));
+      setView(next === null ? { name: "results" } : { name: "alert", i: next });
     },
   });
-  const savedByAlert = new Map((saved?.decisions ?? []).map((d) => [d.alert_id, d]));
+  const savedByAlert = new Map(saved.map((d) => [d.alert_id, d]));
   const state: VisitState = check.isPending ? "checking" : (result?.status ?? "not_checked");
+  const card = (view.name === "alert" || view.name === "override") && result ? result.cards[view.i] : undefined;
+
+  const decide = (decision: DecisionIn | null) => {
+    if (decision && !save.isPending) save.mutate(decision);
+  };
 
   return (
     <Frame
@@ -108,33 +127,65 @@ function VisitView({ patient, check, notesForm }: { patient: PatientDetail; chec
       tray={
         <Tray
           {...trayFor({
+            view,
             pending: check.isPending,
             result,
-            savedIds: savedByAlert,
-            canSave: Boolean(toSave) && !save.isPending && Boolean(result?.record_saved),
-            onSave: () => save.mutate(),
-            onRetryAi: () => check.mutate({ useAi: true }),
+            savedByAlert,
+            saving: save.isPending,
+            patientName: patient.name,
+            comment,
+            go: (v) => {
+              setComment("");
+              setView(v);
+            },
+            accept: () => card && decide(acceptDecision(card.extension.alert_id)),
+            saveOther: () => card && decide(overrideDecision(card.extension.alert_id, NEEDS_COMMENT, comment)),
+            retryAi: () => check.mutate({ useAi: true }),
           })}
         />
       }
     >
       <PaneHeader title={patient.name} meta={patientMeta(patient)} aside={<StatusChip state={state} />} />
       <PaneContent>
-        {notesForm}
-        {check.isError && (
-          <p role="alert" className="mt-4 text-red">
-            {errorText(check.error)}
-          </p>
+        {(view.name === "notes" || !result) && (
+          <>
+            {notesForm}
+            {check.isError && (
+              <p role="alert" className="mt-4 text-red">
+                {errorText(check.error)}
+              </p>
+            )}
+          </>
         )}
-        {result && (
-          <Results
+        {result && view.name === "results" && (
+          <ResultsView
             check={result}
-            drafts={drafts}
             savedByAlert={savedByAlert}
-            finalizeNote={saved ? saved.finalize_note : result.finalize_note}
+            finalizeNote={finalizeNote}
             saveError={save.isError ? errorText(save.error) : null}
-            onDraft={(alertId, d) => setDrafts((all) => ({ ...all, [alertId]: d }))}
+            onOpen={(i) => setView({ name: "alert", i })}
           />
+        )}
+        {card && view.name === "alert" && <AlertView card={card} n={view.i + 1} />}
+        {card && view.name === "override" && (
+          <OverrideView
+            card={card}
+            n={view.i + 1}
+            other={view.other}
+            comment={comment}
+            busy={save.isPending}
+            onReason={(reason: Reason) =>
+              reason === NEEDS_COMMENT
+                ? setView({ ...view, other: true })
+                : decide(overrideDecision(card.extension.alert_id, reason, ""))
+            }
+            onComment={setComment}
+          />
+        )}
+        {card && save.isError && (
+          <p role="alert" className="mt-4 text-red">
+            {errorText(save.error)}
+          </p>
         )}
       </PaneContent>
     </Frame>
@@ -167,238 +218,112 @@ function patientMeta(p: PatientDetail): string {
 }
 
 /**
- * The tray for where the visit is. The prompts before and during the checks are the design's
- * (S2, S3); the alert-review prompt is a stand-in until the one-alert-at-a-time screens (step 4).
+ * The tray for where the visit is. The prompts are the design's (S2, S3, S4, S4d, S7a); the
+ * results-screen prompts are new with that screen (owner, 2026-11-26).
  */
 function trayFor({
+  view,
   pending,
   result,
-  savedIds,
-  canSave,
-  onSave,
-  onRetryAi,
+  savedByAlert,
+  saving,
+  patientName,
+  comment,
+  go,
+  accept,
+  saveOther,
+  retryAi,
 }: {
+  view: View;
   pending: boolean;
   result: VisitCheck | undefined;
-  savedIds: Map<string, DecisionOut>;
-  canSave: boolean;
-  onSave: () => void;
-  onRetryAi: () => void;
+  savedByAlert: Map<string, DecisionOut>;
+  saving: boolean;
+  patientName: string;
+  comment: string;
+  go: (v: View) => void;
+  accept: () => void;
+  saveOther: () => void;
+  retryAi: () => void;
 }): TrayProps {
   const later = { plan: "todo", finalize: "todo" } as const;
   if (pending) {
     return { notes: "done", checks: "current", alerts: [], ...later, lead: "Checks running.", rest: "Results open by themselves.", status: <span /> };
   }
+  const runChecks: TrayButton = { label: "Run checks", form: NOTES_FORM };
   if (!result) {
+    return { notes: "current", checks: "todo", alerts: [], ...later, lead: "Clinical notes.", rest: "Write your plan, then run checks.", primary: runChecks };
+  }
+
+  const ids = result.cards.map((c) => c.extension.alert_id);
+  const decided = new Set(savedByAlert.keys());
+  const current = view.name === "alert" || view.name === "override" ? view.i : null;
+  const steps = {
+    notes: (view.name === "notes" ? "current" : "done") as Step,
+    checks: (view.name === "results" ? "current" : "done") as Step,
+    alerts: ids.map((id, i): Step => (i === current ? "current" : decided.has(id) ? "done" : "todo")),
+    ...later,
+    go: { notes: () => go({ name: "notes" }), checks: () => go({ name: "results" }), alert: (i: number) => go({ name: "alert", i }) },
+  };
+  const retry: TrayButton = { label: "Run the AI review again", onClick: retryAi };
+  const of = (i: number) => `Alert ${i + 1} of ${ids.length}.`;
+
+  if (view.name === "notes") {
+    return { ...steps, lead: "Clinical notes.", rest: "Change the note, then run checks again.", primary: runChecks };
+  }
+  if (view.name === "alert") {
+    const d = savedByAlert.get(ids[view.i]);
     return {
-      notes: "current",
-      checks: "todo",
-      alerts: [],
-      ...later,
-      lead: "Clinical notes.",
-      rest: "Write your plan, then run checks.",
-      primary: { label: "Run checks", form: NOTES_FORM },
+      ...steps,
+      lead: of(view.i),
+      rest: d
+        ? d.action === "Acknowledge"
+          ? "You accepted it."
+          : `You overrode it: ${d.reason}.`
+        : `Does it apply to ${firstName(patientName)} today?`,
+      primary: { label: "Accept alert", onClick: accept, disabled: saving || !result.record_saved },
+      secondary: { label: "Override", onClick: () => go({ name: "override", i: view.i, other: false }), disabled: saving || !result.record_saved },
     };
   }
-  const hasAlerts = result.cards.length > 0;
-  const saveButton: TrayButton = { label: "Save decisions", onClick: onSave, disabled: !canSave };
-  const retry: TrayButton = { label: "Run the AI review again", onClick: onRetryAi };
-  const done = {
-    notes: "done",
-    checks: "done",
-    alerts: result.cards.map((c) => (savedIds.has(c.extension.alert_id) ? "done" : "todo")),
-    ...later,
-  } as const;
+  if (view.name === "override") {
+    return {
+      ...steps,
+      lead: of(view.i),
+      rest: view.other ? "Say why, then save the override." : "Tap a reason to save the override.",
+      primary: view.other ? { label: "Save override", onClick: saveOther, disabled: saving || !comment.trim() } : undefined,
+      secondary: { label: "Back to the alert", onClick: () => go({ name: "alert", i: view.i }) },
+    };
+  }
+
+  // The results screen.
+  const firstOpen = ids.findIndex((id) => !decided.has(id));
+  const review: TrayButton | undefined = firstOpen >= 0 ? { label: `Review alert ${firstOpen + 1}`, onClick: () => go({ name: "alert", i: firstOpen }) } : undefined;
+  const reviewed = ids.length > 0 && firstOpen < 0;
   switch (result.ai_review) {
-    // The design's S7a wording; running the review again can help when the model server failed.
     case "failed":
     case "unreadable":
-      return {
-        ...done,
-        lead: "AI review failed.",
-        rest: "Try again, or use rule checks only.",
-        ...(hasAlerts ? { primary: saveButton, secondary: retry } : { primary: retry }),
-      };
+      return { ...steps, lead: "AI review failed.", rest: "Try again, or use rule checks only.", ...(review ? { primary: review, secondary: retry } : { primary: retry }) };
     case "cut_off":
     case "partly_read":
       return {
-        ...done,
+        ...steps,
         lead: "AI review incomplete.",
-        rest: hasAlerts ? "Review the alerts it read." : "Try again, or use rule checks only.",
-        ...(hasAlerts ? { primary: saveButton, secondary: retry } : { primary: retry }),
+        rest: ids.length ? "Review the alerts it read." : "Try again, or use rule checks only.",
+        ...(review ? { primary: review, secondary: retry } : { primary: retry }),
       };
-    // Running again won't help until the search model setting is fixed.
     case "search_unavailable":
-      return {
-        ...done,
-        lead: "Guideline search unavailable.",
-        rest: "Rule checks only.",
-        primary: hasAlerts ? saveButton : undefined,
-      };
+      return { ...steps, lead: "Guideline search unavailable.", rest: "Rule checks only.", primary: review };
     default:
-      return {
-        ...done,
-        lead: hasAlerts ? "Alerts." : "Checks done.",
-        rest: hasAlerts ? "Accept or override each one, then save." : undefined,
-        primary: hasAlerts ? saveButton : undefined,
-      };
+      if (!ids.length) return { ...steps, lead: "Checks done.", rest: "No alerts to review." };
+      return reviewed
+        ? { ...steps, lead: "Every alert has your answer.", rest: savedSummary(savedByAlert) }
+        : { ...steps, lead: `${ids.length} ${ids.length === 1 ? "alert" : "alerts"} to review.`, rest: "Accept or override each one.", primary: review };
   }
 }
 
-function Results({
-  check,
-  drafts,
-  savedByAlert,
-  finalizeNote,
-  saveError,
-  onDraft,
-}: {
-  check: VisitCheck;
-  drafts: Record<string, Draft>;
-  savedByAlert: Map<string, DecisionOut>;
-  finalizeNote: string | null;
-  saveError: string | null;
-  onDraft: (alertId: string, d: Draft) => void;
-}) {
-  return (
-    <section aria-label="Check results" className="mt-8 flex max-w-3xl flex-col gap-4">
-      <h2 className="text-20 font-semibold tracking-[-0.015em]">Check results</h2>
-      <Banners check={check} />
-      {!check.record_saved && <p role="alert">This check could not be saved, so its alerts cannot be decided here.</p>}
-      {check.cards.map((card) => (
-        <AlertCard
-          key={card.uuid}
-          card={card}
-          draft={drafts[card.extension.alert_id]}
-          saved={savedByAlert.get(card.extension.alert_id)}
-          onChange={(d) => onDraft(card.extension.alert_id, d)}
-        />
-      ))}
-      {saveError && <p role="alert">{saveError}</p>}
-      {finalizeNote && <p className="text-ink-2">{finalizeNote}</p>}
-    </section>
-  );
-}
-
-function AlertCard({
-  card,
-  draft,
-  saved,
-  onChange,
-}: {
-  card: Card;
-  draft: Draft | undefined;
-  saved: DecisionOut | undefined;
-  onChange: (d: Draft) => void;
-}) {
-  const id = useId();
-  const ext = card.extension;
-  const current: Draft = draft ?? { action: "Acknowledge", reason: null, comment: "" };
-
-  return (
-    <article aria-labelledby={`${id}-heading`} className="flex flex-col gap-2 border-t border-line pt-4">
-      <h3 id={`${id}-heading`} className="text-15 font-semibold">
-        {ext.heading}
-      </h3>
-      <p>{card.detail}</p>
-      {card.suggestions.map((s) => (
-        <p key={s.uuid}>{s.label}</p>
-      ))}
-      {/* ext.explanation is left off: today it carries raw data and passage dumps, which the
-          brief keeps off the main view (design question 9, for the backend). */}
-
-      <h4 className="text-13 font-semibold text-ink-2">{ext.references_heading}</h4>
-      <ul className="text-13 text-ink-2">
-        {ext.references.map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
-
-      <fieldset className="flex flex-wrap items-center gap-3">
-        <legend className="sr-only">Decision</legend>
-        {(["Acknowledge", "Override"] as const).map((action) => (
-          <label key={action} className="flex items-center gap-1.5">
-            <input
-              type="radio"
-              name={`${id}-action`}
-              value={action}
-              checked={draft?.action === action}
-              onChange={() => onChange({ ...current, action })}
-            />
-            {action}
-          </label>
-        ))}
-        {draft?.action === "Override" && (
-          <>
-            <label className="flex items-center gap-1.5">
-              Override reason
-              <select
-                value={draft.reason ?? ""}
-                onChange={(e) => onChange({ ...draft, reason: (e.target.value || null) as Reason | null })}
-                className="rounded-chip border border-line-strong px-2 py-1"
-              >
-                <option value="">Choose a reason</option>
-                {(card.overrideReasons ?? []).map((r) => (
-                  <option key={r.code} value={r.display}>
-                    {r.display}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex items-center gap-1.5">
-              Comment
-              <textarea
-                value={draft.comment}
-                onChange={(e) => onChange({ ...draft, comment: e.target.value })}
-                maxLength={2000}
-                rows={1}
-                className="rounded-chip border border-line-strong px-2 py-1"
-              />
-            </label>
-          </>
-        )}
-      </fieldset>
-      {saved && (
-        <p className="text-13 text-green">
-          Saved: {saved.action}
-          {saved.reason ? ` (${saved.reason})` : ""}
-          {saved.comment ? `: ${saved.comment}` : ""}
-        </p>
-      )}
-    </article>
-  );
-}
-
-/**
- * The API's banners. When the AI review didn't end cleanly, its banner comes first
- * (screen_text.status_banners) and is shown in the Incomplete screen's (S7a) box, red or amber;
- * the overall result follows in S7a's result row. Owner's decision 5, 2026-11-26.
- */
-function Banners({ check }: { check: VisitCheck }) {
-  const aiProblem = !["ok", "not_run"].includes(check.ai_review);
-  const [first, ...rest] = check.banners;
-  const boxed = aiProblem && first && (first.level === "error" || first.level === "warning") ? first : null;
-  const rows = boxed ? rest : check.banners;
-  return (
-    <>
-      {boxed && (
-        <div
-          role="status"
-          data-level={boxed.level}
-          className={cn(
-            "flex max-w-240 items-center gap-4.5 rounded-[14px] border-2 px-6 py-5.5",
-            boxed.level === "error" ? "border-red bg-red-wash" : "border-amber bg-amber-wash",
-          )}
-        >
-          <StatusShape state={boxed.level === "error" ? "RED" : "AMBER"} size={30} />
-          <p className="text-16 font-medium text-ink">{boxed.text}</p>
-        </div>
-      )}
-      {rows.map((b, i) => (
-        <p key={i} role="status" data-level={b.level} className="flex h-15 max-w-240 items-center border-y border-line text-16 text-black">
-          {b.text}
-        </p>
-      ))}
-    </>
-  );
+function savedSummary(saved: Map<string, DecisionOut>): string {
+  const words = [...saved.values()].map(decisionWords);
+  const accepted = words.filter((w) => w === "Accepted").length;
+  const overridden = words.length - accepted;
+  return [accepted && `${accepted} accepted`, overridden && `${overridden} overridden`].filter(Boolean).join(", ") + ".";
 }

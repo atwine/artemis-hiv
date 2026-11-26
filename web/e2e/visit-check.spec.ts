@@ -1,14 +1,18 @@
 // One visit, start to end, in a real browser against the real backend and database:
-// open a patient, run the rule checks (no AI review, so nothing is spent), decide every alert.
-// P001 (John Doe) is on TDF with an old creatinine result, so the rule check raises an alert.
+// open a patient, run the rule checks (no AI review, so nothing is spent), review the alert on its
+// own screen, override it, then change the decision to accept.
+// P001 (John Doe) is on TDF with an old creatinine result, so the rule check raises one alert.
 import { expect, test } from "@playwright/test";
+
+import type { VisitCheck } from "../src/lib/api/client";
+import { SOURCE_LABEL } from "../src/lib/alerts";
 
 const DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only.";
 const FINALIZE_BLOCKED =
   "Finalize is disabled until all alerts are acknowledged or overridden with a reason (the reason 'Other (say why)' needs a comment).";
-const CREATININE_ALERT = "Alert (Rule check): Creatinine monitoring overdue while on TDF";
+const CREATININE = "Creatinine monitoring overdue while on TDF";
 
-test("a clinician runs the rule checks on a patient and decides every alert", async ({ page }) => {
+test("a clinician runs the checks, reviews the alert on its own screen and decides it", async ({ page }) => {
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
   await expect(footer).toContainText(DISCLAIMER);
@@ -20,49 +24,62 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
   await notes.fill("Routine follow-up. No complaints. Continue TLD, 3-month refill.");
   await expect(page.getByRole("checkbox", { name: "AI review" })).not.toBeChecked();
   const tray = page.getByRole("region", { name: "Visit steps" });
-  const reply = page.waitForResponse((r) => r.url().endsWith("/api/patients/P001/visits") && r.request().method() === "POST");
+  const replyPromise = page.waitForResponse((r) => r.url().endsWith("/api/patients/P001/visits") && r.request().method() === "POST");
   await tray.getByRole("button", { name: "Run checks" }).click();
 
-  // The banners, card headings, disclaimer and finalize note are the API's own words.
+  // The results screen first (owner, 2026-11-26): the API's banners and one row per alert.
   const results = page.getByRole("region", { name: "Check results" });
   // The first check of a run loads the search model (and builds the index if it isn't built).
   await expect(results.or(page.getByRole("main").getByRole("alert"))).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
+  const reply = (await (await replyPromise).json()) as VisitCheck;
   await expect(results.getByRole("status").filter({ hasText: /^AMBER: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
-  // The footer's disclaimer, shown before any check, is the one the API sends.
-  expect((await (await reply).json()).disclaimer).toBe(DISCLAIMER);
-  await expect(footer).toContainText(DISCLAIMER);
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeVisible();
+  expect(reply.disclaimer).toBe(DISCLAIMER); // the footer's copy is the API's
+  await expect(footer).toContainText(DISCLAIMER);
 
-  const cards = results.getByRole("article");
-  const count = await cards.count();
-  expect(count).toBeGreaterThan(0);
-  const creatinine = cards.filter({ has: page.getByRole("heading", { name: CREATININE_ALERT }) });
-  await expect(creatinine).toHaveCount(1);
-  await expect(creatinine.getByText("Related passages (found by a search for this alert)")).toBeVisible();
-
-  const save = tray.getByRole("button", { name: "Save decisions" });
-  await expect(save).toBeDisabled(); // nothing decided yet
-
-  // Override the creatinine alert. "Other (say why)" needs a comment before it can be saved.
-  await creatinine.getByRole("radio", { name: "Override" }).check();
-  await creatinine.getByRole("combobox", { name: "Override reason" }).selectOption("Other (say why)");
-  for (let i = 0; i < count; i++) {
-    const card = cards.nth(i);
-    if (!(await card.getByRole("radio", { name: "Override" }).isChecked())) {
-      await card.getByRole("radio", { name: "Acknowledge" }).check();
-    }
+  // The source tag's words are the API heading's own (the design's split, owner 2026-11-26).
+  for (const card of reply.cards) {
+    expect(card.extension.heading).toBe(`Alert (${SOURCE_LABEL[card.extension.kind]}): ${card.summary}`);
   }
-  await expect(save).toBeDisabled();
-  await creatinine.getByRole("textbox", { name: "Comment" }).fill("Result from a private lab, not in the file.");
-  await expect(save).toBeEnabled();
-  await save.click();
 
-  // The backend saved them: each card shows the decision it recorded, and its reply says every
-  // alert is decided, so the finalize note goes.
-  await expect(creatinine.getByText(/^Saved: Override \(Other \(say why\)\)/)).toBeVisible();
-  for (let i = 0; i < count; i++) await expect(cards.nth(i).getByText(/^Saved: /)).toBeVisible();
+  const rows = results.getByRole("list", { name: "Alerts" }).getByRole("listitem");
+  await expect(rows).toHaveCount(reply.cards.length);
+  const row = rows.filter({ hasText: CREATININE });
+  await expect(row).toContainText("To review");
+
+  // One alert per screen.
+  await tray.getByRole("button", { name: "Review alert 1" }).click();
+  const alert = page.getByRole("region", { name: "Alert 1" });
+  await expect(alert.getByRole("heading", { level: 2 })).toContainText(CREATININE);
+  await expect(alert.getByText("Rule check", { exact: true })).toBeVisible();
+  await expect(alert.getByText("Related passages (found by a search for this alert)")).toBeVisible();
+  await expect(alert.getByText(/^Uganda HIV Guidelines 2022 · p\. \d+$/).first()).toBeVisible();
+  const whole = alert.getByRole("button", { name: "Show the whole passage" });
+  await expect(whole).toHaveAttribute("aria-expanded", "false");
+  await whole.click();
+  await expect(alert.getByRole("button", { name: "Show less" })).toHaveAttribute("aria-expanded", "true");
+  await expect(tray).toContainText("Alert 1 of 1. Does it apply to John today?");
+
+  // Override: one tap per reason, from the card's own list; "Other (say why)" asks for a comment.
+  await tray.getByRole("button", { name: "Override" }).click();
+  await expect(page.getByRole("heading", { level: 2 })).toContainText("Why does it not apply?");
+  const reasons = page.getByRole("list", { name: "Override reasons" }).getByRole("button");
+  await expect(reasons).toHaveCount(reply.cards[0].overrideReasons?.length ?? 0);
+  await reasons.filter({ hasText: "Other (say why)" }).click();
+  const saveOverride = tray.getByRole("button", { name: "Save override" });
+  await expect(saveOverride).toBeDisabled();
+  await page.getByRole("textbox", { name: "Why does it not apply?" }).fill("Result from a private lab, not in the file.");
+  await saveOverride.click();
+
+  // Saved by the backend: back on the results screen, the row says so and the finalize note goes.
+  await expect(row).toContainText("Overridden: Other (say why)");
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeHidden();
-  await expect(tray.getByRole("list", { name: "Alerts" }).getByRole("listitem")).toHaveCount(count);
   await expect(tray.getByText(/^Alert \d+, to do$/)).toHaveCount(0); // every dot is done
+
+  // A decision can be changed: the latest one counts.
+  await row.getByRole("button").click();
+  await expect(tray).toContainText("You overrode it: Other (say why).");
+  await tray.getByRole("button", { name: "Accept alert" }).click();
+  await expect(row).toContainText("Accepted");
 });

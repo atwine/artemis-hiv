@@ -26,6 +26,16 @@ test("the shared frame, before and after the checks", async ({ page }) => {
   const results = page.getByRole("region", { name: "Check results" });
   await expect(results).toBeVisible({ timeout: 5 * 60 * 1000 });
   await page.screenshot({ path: path.join(OUT, "web-S4-results.png") });
+
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  await tray.getByRole("button", { name: "Review alert 1" }).click();
+  await expect(page.getByRole("region", { name: "Alert 1" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S4c-alert.png") });
+  await tray.getByRole("button", { name: "Override" }).click();
+  await expect(page.getByRole("list", { name: "Override reasons" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S4d-override.png") });
+  await page.getByRole("button", { name: /Other \(say why\)/ }).click();
+  await page.screenshot({ path: path.join(OUT, "web-S4d-override-other.png") });
 });
 
 // The AI-review states the design doesn't draw (owner's decision 5). Each is a real reply to a
