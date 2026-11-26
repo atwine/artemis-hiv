@@ -19,6 +19,15 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await page.getByRole("main").getByRole("link", { name: "John Doe" }).click();
 
   await expect(page.getByRole("heading", { name: "John Doe", level: 1 })).toBeVisible();
+
+  // Before the checks (S2): the record as recorded, units never converted (owner, 2026-11-26).
+  const record = page.getByRole("region", { name: "From his record" });
+  await expect(record.getByRole("definition").filter({ hasText: "88 umol/L, 1 Oct 2024" })).toBeVisible();
+  await expect(record.getByRole("definition").filter({ hasText: "40 copies/mL, 1 Oct 2025" })).toBeVisible();
+  await expect(record.getByRole("definition").filter({ hasText: "No new complaints. Appears well." })).toBeVisible();
+  await record.getByRole("button", { name: "Full record, 2 lab results" }).click();
+  await expect(record.getByRole("table", { name: "Lab results" }).getByRole("row")).toHaveCount(3); // header + 2
+  await record.getByRole("button", { name: "Back to the summary" }).click();
   const notes = page.getByRole("textbox", { name: "Clinical notes" });
   await expect(notes).toHaveValue("Routine follow-up. No issues."); // today's note from the record
   await notes.fill("Routine follow-up. No complaints. Continue TLD, 3-month refill.");

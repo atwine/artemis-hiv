@@ -17,6 +17,12 @@ test("the shared frame, before and after the checks", async ({ page }) => {
   await expect(page.getByRole("main").getByRole("link", { name: "John Doe" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-0-patients.png") });
 
+  // Rose (P005), the design's own patient: her labs are typed-in text only.
+  await page.goto("/patients/P005");
+  await expect(page.getByRole("textbox", { name: "Clinical notes" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S2-P005.png") });
+  await page.goto("/");
+
   await page.getByRole("main").getByRole("link", { name: "John Doe" }).click();
   await expect(page.getByRole("textbox", { name: "Clinical notes" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S2-before-checks.png") });

@@ -12,9 +12,11 @@ import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type Patient
 import { acceptDecision, NEEDS_COMMENT, overrideDecision, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
 import { useRailEntries } from "@/lib/queries";
+import { possessive } from "@/lib/record";
 
 import { AlertView } from "./alert-view";
 import { OverrideView } from "./override-view";
+import { RecordPanel } from "./record-panel";
 import { decisionWords, ResultsView } from "./results-view";
 
 const NOTES_FORM = "clinical-notes";
@@ -54,29 +56,36 @@ function Visit({ patient }: { patient: PatientDetail }) {
       ),
   });
 
+  // Before the checks (Paper FINAL S2): the record on the left, the notes box on the right.
   const notesForm = (
-    <form
-      id={NOTES_FORM}
-      className="flex max-w-3xl flex-col gap-3"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!check.isPending) check.mutate();
-      }}
-    >
-      <label className="flex flex-col gap-2">
-        <span className="text-20 font-semibold tracking-[-0.015em]">Clinical notes</span>
+    <div className="flex min-h-full gap-10">
+      <RecordPanel patient={patient} />
+      <form
+        id={NOTES_FORM}
+        className="flex min-w-0 flex-1 flex-col gap-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!check.isPending) check.mutate();
+        }}
+      >
+        <label htmlFor={`${NOTES_FORM}-text`} className="text-22 font-semibold tracking-[-0.015em] text-black">
+          Clinical notes
+        </label>
         <textarea
+          id={`${NOTES_FORM}-text`}
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          rows={6}
           maxLength={20000}
-          className="rounded-btn border border-line-strong p-3 text-15 leading-[26px]"
+          className="min-h-40 flex-1 resize-none rounded-[12px] border-2 border-line-strong bg-white px-5.5 py-5 text-16 leading-[26px] text-black focus:border-blue focus:shadow-[0_0_0_5px_var(--color-blue-wash)] focus:outline-none"
         />
-      </label>
-      <label className="flex items-center gap-2 text-14 text-ink-2">
-        <input type="checkbox" checked={useAi} onChange={(e) => setUseAi(e.target.checked)} /> AI review
-      </label>
-    </form>
+        <p className="text-14 text-ink-2">
+          The checks read this box against {possessive(patient.sex)} record. Write it as you normally would.
+        </p>
+        <label className="flex items-center gap-2 text-14 text-ink-2">
+          <input type="checkbox" checked={useAi} onChange={(e) => setUseAi(e.target.checked)} /> AI review
+        </label>
+      </form>
+    </div>
   );
 
   // A new check starts the review afresh.

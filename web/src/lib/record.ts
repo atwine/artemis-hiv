@@ -1,0 +1,99 @@
+// Plain functions for the record panel of the visit screen (Paper FINAL S2, "From her record").
+// Values and units are shown as recorded, never converted (owner, 2026-11-26).
+import type { PatientDetail } from "./api/client";
+
+type Labs = PatientDetail["labs"];
+type LabResult = Labs[string][number];
+
+/** Lab names as clinicians write them; anything else is the key in plain words. */
+const LAB_NAMES: Record<string, string> = {
+  egfr: "eGFR",
+  cd4: "CD4",
+  hb: "Haemoglobin",
+  vl: "Viral load",
+  alt: "ALT",
+  ast: "AST",
+  hba1c: "HbA1c",
+  rbs: "RBS",
+  fbs: "FBS",
+  tb_lam: "TB LAM",
+  crag: "CrAg",
+};
+
+export function labName(key: string): string {
+  const k = key.trim().toLowerCase();
+  if (LAB_NAMES[k]) return LAB_NAMES[k];
+  const words = k.replace(/[_-]+/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "2026-05-12" -> "12 May 2026"; anything else as it came. */
+export function longDate(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!m) return iso;
+  return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
+}
+
+function withUnit(r: LabResult): string {
+  return r.unit.trim() ? `${r.value} ${r.unit.trim()}` : r.value;
+}
+
+/**
+ * One row per test: its latest result ("today" when it is from today's visit), and its earliest
+ * result for comparison when there is more than one, as the design shows "1.4 mg/dL today · 0.9 in 2020".
+ */
+export function labRows(labs: Labs, today: string): { label: string; text: string }[] {
+  return Object.entries(labs)
+    .filter(([, results]) => results.length > 0)
+    .map(([key, results]) => {
+      const byDate = [...results].sort((a, b) => a.date.localeCompare(b.date));
+      const latest = byDate[byDate.length - 1];
+      const earliest = byDate[0];
+      const when = latest.date === today ? " today" : `, ${longDate(latest.date)}`;
+      const before = byDate.length > 1 ? ` · ${earliest.value} in ${earliest.date.slice(0, 4)}` : "";
+      return { label: labName(key), text: `${withUnit(latest)}${when}${before}` };
+    });
+}
+
+export function labCount(labs: Labs): number {
+  return Object.values(labs).reduce((n, results) => n + results.length, 0);
+}
+
+/** Regimens that ended, as "AZT/3TC/NVP, 2018–2020"; null when there are none. */
+export function previousArt(history: PatientDetail["regimen_history"]): string | null {
+  const ended = history
+    .filter((h) => typeof h.end_date === "string" && h.end_date && Array.isArray(h.regimen))
+    .map((h) => {
+      const from = String(h.start_date ?? "").slice(0, 4);
+      const to = String(h.end_date).slice(0, 4);
+      return `${(h.regimen as unknown[]).map(String).join("/")}, ${from ? `${from}–${to}` : `until ${to}`}`;
+    });
+  return ended.length ? ended.join("; ") : null;
+}
+
+export function otherMedicines(meds: string[]): string | null {
+  const list = meds.map((m) => m.trim()).filter(Boolean);
+  return list.length ? list.join("; ") : null;
+}
+
+/** Whose record: "her", "his", or "the" when the sex isn't recorded as F or M. */
+export function possessive(sex: string): string {
+  const s = sex.trim().toUpperCase();
+  return s === "F" ? "her" : s === "M" ? "his" : "the";
+}
+
+/** A sentence: a full stop added only when the text has no end mark. Punctuation only. */
+export function asSentence(text: string): string {
+  const t = text.trim();
+  return /[.!?]$/.test(t) ? t : `${t}.`;
+}
+
+/** Today's complaints and examination as the clinician wrote them; null when there are none. */
+export function todaySummary(intake: PatientDetail["intake"]): string | null {
+  const parts = [intake.complaints_symptoms, intake.examination_findings]
+    .filter((v): v is string => typeof v === "string" && v.trim() !== "")
+    .map(asSentence);
+  return parts.length ? parts.join(" ") : null;
+}

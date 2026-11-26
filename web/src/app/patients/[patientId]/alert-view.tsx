@@ -7,6 +7,7 @@ import { useId, useState } from "react";
 import { StatusShape } from "@/components/frame/status";
 import type { Card } from "@/lib/api/client";
 import { SOURCE_LABEL, quotedPassage, severityWord } from "@/lib/alerts";
+import { asSentence } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
 export function AlertView({ card, n }: { card: Card; n: number }) {
@@ -28,7 +29,7 @@ export function AlertView({ card, n }: { card: Card; n: number }) {
           </span>
         </div>
         <h2 className="max-w-[980px] text-30 font-semibold tracking-[-0.025em] text-black">
-          {sentence(card.summary)} <span className="text-muted-foreground">{card.detail}</span>
+          {asSentence(card.summary)} <span className="text-muted-foreground">{card.detail}</span>
         </h2>
         {suggestion && (
           <p className="flex items-baseline gap-2.5">
@@ -51,12 +52,6 @@ export function AlertView({ card, n }: { card: Card; n: number }) {
       )}
     </section>
   );
-}
-
-/** The title as a sentence before the finding: a full stop only when it has no end mark. */
-function sentence(title: string): string {
-  const t = title.trim();
-  return /[.!?]$/.test(t) ? t : `${t}.`;
 }
 
 function SeverityTag({ severity }: { severity: string | null | undefined }) {

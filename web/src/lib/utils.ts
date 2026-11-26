@@ -8,7 +8,7 @@ import { createCn } from "cn/config";
 export const cn = createCn({
   extend: {
     classGroups: {
-      "font-size": [{ text: ["11", "12", "13", "14", "15", "16", "19", "20", "30"] }],
+      "font-size": [{ text: ["11", "12", "13", "14", "15", "16", "19", "20", "22", "30"] }],
       rounded: [{ rounded: ["logo", "chip", "btn", "window"] }],
       shadow: [{ shadow: ["window", "tray"] }],
     },
