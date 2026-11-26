@@ -60,3 +60,17 @@ Round 3: one builder reworks 05 and finishes 08; another replaces 07 and 09 with
 directions that keep what the owner liked in 08 (patient cards in clear columns, the visit
 opening as a sheet over the board, soft bands, one step at a time) but use different
 Design Library systems.
+
+## Owner feedback on round 3 (spoken walkthrough, 2026-11-27)
+
+Ranking: 1 = 09 Checklist Tray, 2 = 07 Day Rail, 3 = 08 Clinic Board (its first page only).
+- 09 Checklist Tray: easy to follow from the clinic day through each step; the bottom tray
+  shows where you are; the typography (serif for the guideline, S4c) is right. But step 2's
+  "Your assessment and plan" isn't what doctors normally see: rename it.
+- 07 Day Rail: simple; good typography on S1 and step 2 (writing box, Run checks).
+- 08 Clinic Board: only S1 is wanted: the day as a board plus a list, with "Add patient",
+  so someone in a hurry knows where things are. The rest of its flow is not.
+- 01 Triage Board and 05 Note Co-pilot: dropped.
+
+Next: combinations. Put Clinic Board's S1 (board + list + add patient) into 09 and 07, each in
+its own style, then drop the Clinic Board page. Work continues with 07 and 09 only.
