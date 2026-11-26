@@ -27,7 +27,7 @@ from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
 from artemis.patient.new_case import VISIT_TYPES, CaseForm, PreviousArt, build_case_record
 from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
-from backend import records
+from backend import patients_db, records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
 from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS, DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
@@ -71,11 +71,14 @@ class Loaded:
 
 
 def load_patients(services: Services) -> List[Loaded]:
-    """Every patient, checked once here. A file or record that can't be read is reported (500),
-    never skipped: skipping hid saved cases before (fix 10, G16)."""
+    """Every patient, checked once here. Patients live in the database (plan 4C.2): with none set
+    up it's a 503. A record that can't be read is reported (500), never skipped: skipping hid saved
+    cases before (fix 10, G16)."""
+    if services.engine is None:
+        raise _no_database()
     try:
         raw = services.patients()
-    except (UnreadableFile, OSError) as exc:
+    except (UnreadableFile, OSError, SQLAlchemyError) as exc:
         logger.warning("Patient list not read: %s", type(exc).__name__)
         raise HTTPException(status_code=500, detail="The patient list could not be read.")
     out: List[Loaded] = []
@@ -163,7 +166,7 @@ def day_counts(rows: List[Appointment]) -> DayCounts:
 
 
 def _no_database() -> HTTPException:
-    return HTTPException(status_code=503, detail="The visit-record database is not set up.")
+    return HTTPException(status_code=503, detail="The database is not set up.")
 
 
 def create_app(*, settings: Optional[Settings] = None, services: Optional[Services] = None) -> FastAPI:
@@ -358,16 +361,13 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         except (OSError, ValueError) as exc:  # pydantic's ValidationError is a ValueError
             logger.warning("Clinic day not read: %s", type(exc).__name__)
             raise HTTPException(status_code=500, detail="The clinic day could not be read.")
-        if services.engine is None:  # nothing can have been checked
-            rows = [board_row(b, patients[b.patient_id], None, 0, None) for b in schedule.appointments]
-        else:
-            rows = []
-            with Session(services.engine) as session:
-                for b in schedule.appointments:
-                    latest = next(iter(records.checks_for(session, b.patient_id)), None)
-                    reviewed = len(records.latest_decisions(session, latest.visit_id)) if latest else 0
-                    finalized = records.finalized_at(session, latest.visit_id) if latest else None
-                    rows.append(board_row(b, patients[b.patient_id], latest, reviewed, finalized))
+        rows = []
+        with Session(services.engine) as session:  # load_patients refused (503) when there is none
+            for b in schedule.appointments:
+                latest = next(iter(records.checks_for(session, b.patient_id)), None)
+                reviewed = len(records.latest_decisions(session, latest.visit_id)) if latest else 0
+                finalized = records.finalized_at(session, latest.visit_id) if latest else None
+                rows.append(board_row(b, patients[b.patient_id], latest, reviewed, finalized))
         return ClinicDay(
             clinic=schedule.clinic, room=schedule.room, clinician=schedule.clinician,
             date=schedule.date.isoformat(), appointments=rows, counts=day_counts(rows),
@@ -403,7 +403,9 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             raise HTTPException(status_code=409, detail="That patient ID is already in use.")
         try:
             services.add_case(record)
-        except (UnreadableFile, OSError) as exc:
+        except patients_db.PatientExists:  # a second add of the same new id, racing this one
+            raise HTTPException(status_code=409, detail="That patient ID is already in use.")
+        except (SQLAlchemyError, OSError) as exc:
             logger.warning("Case not added: %s", type(exc).__name__)
             raise HTTPException(status_code=500, detail="The case could not be saved.")
         return _detail(_find(services, record["patient_id"]))

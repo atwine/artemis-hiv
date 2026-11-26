@@ -109,7 +109,9 @@ def test_a_malformed_schedule_is_reported(api):
     assert api.client.get("/api/clinic-day", headers=LOCAL).status_code == 500
 
 
-def test_the_board_works_without_a_database(api):
+def test_the_board_needs_the_database(api):
+    """Patients live in the database since plan 4C.2, so without one the board can't be drawn."""
     api.services.engine = None
-    day = _day(api)
-    assert {a["state"] for a in day["appointments"]} == {"waiting"}
+    r = api.client.get("/api/clinic-day", headers={"Origin": "http://localhost:3000"})
+    assert r.status_code == 503
+    assert r.json() == {"detail": "The database is not set up."}

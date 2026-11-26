@@ -212,6 +212,16 @@ backend/main.py	create_app.record_decisions	Route: saves acknowledge/override de
 backend/main.py	create_app.run_visit_check	Route: runs the visit check, saves it and returns the alerts as cards.	stays	stays
 backend/main.py	load_patients	Reads every patient and checks each record once; a bad one is reported, not skipped.	stays	stays
 backend/models.py	TodayEncounter._iso_date	Refuses a visit date that isn't YYYY-MM-DD.	stays	stays
+backend/patients_db.py	_date	Reads an optional YYYY-MM-DD text as a date.	backend/patients_db.py	moved
+backend/patients_db.py	_check_placed	Refuses a record holding anything the patient tables have no place for (the demo answer key aside).	backend/patients_db.py	moved
+backend/patients_db.py	rows_for	The rows of the seven patient tables that hold one patient record.	backend/patients_db.py	moved
+backend/patients_db.py	_save	Saves a patient's own row first, then the rows that point to it.	backend/patients_db.py	moved
+backend/patients_db.py	_lab_entries_in_record_order	Each structured lab result once, in the record's order, read the one way results are read.	backend/patients_db.py	moved
+backend/patients_db.py	_record	One patient's rows rebuilt as the record shape the rules, the search and the AI read.	backend/patients_db.py	moved
+backend/patients_db.py	load_all	Every patient from the database, in the order they were loaded or added.	backend/patients_db.py	moved
+backend/patients_db.py	_next_position	The list position the next patient gets.	backend/patients_db.py	moved
+backend/patients_db.py	import_records	Loads the records whose id the database doesn't have yet, in one save; safe to run again.	backend/patients_db.py	moved
+backend/patients_db.py	add	Adds one new case, all its rows in one save; an id in use raises PatientExists.	backend/patients_db.py	moved
 backend/records.py	_decision_rows	Builds decision rows for the database.	stays	stays
 backend/records.py	_read_file	Reads one visit-record file, counting lines it can't read.	stays	stays
 backend/records.py	_same_decision	Tells whether a decision is already in the database, so an import can be rerun.	stays	stays
@@ -228,8 +238,10 @@ backend/records.py	save_check	Saves one visit check.	stays	stays
 backend/services.py	_model_client	Makes a client for the model server in .env, or none.	stays	stays
 backend/services.py	_search	Builds the guideline search the way the Streamlit app does, once (until plan item 4.3).	stays	stays
 backend/services.py	default_services	Builds the real patients, search, model and database the routes use.	stays	stays
-backend/services.py	demo_patients	Gives a reader for the demo patient files, the demo day's P007-P009 included.	stays	stays
-backend/services.py	demo_patients.read	Reads the demo patient files.	stays	stays
+backend/services.py	database_patients	Reads every patient from the database for the routes (plan 4C.2).	stays	stays
+backend/services.py	database_patients.read	Opens a database session and loads every patient.	stays	stays
+backend/services.py	database_case_writer	Adds one new case to the database in one save; an id in use raises PatientExists.	stays	stays
+backend/services.py	database_case_writer.add	Adds the case through patients_db.add.	stays	stays
 backend/settings.py	_list	Reads a comma-separated setting.	stays	stays
 backend/settings.py	settings_from_env	Reads the backend's settings from the environment.	stays	stays
 artemis/config.py	guideline_search	The guideline search, one per process: the search model and the kept Chroma index named after the model and the guideline text.	artemis/config.py	moved
@@ -297,8 +309,6 @@ artemis/patient/new_case.py	_labs	Reads the form's today and previous lab rows i
 artemis/patient/new_case.py	build_case_record	Builds the record for a new case from the add-case form, for the Streamlit form and the API.	stays	stays
 backend/main.py	create_app.add_case	Route: adds a new made-up case; an ID already in use is refused.	stays	stays
 backend/main.py	create_app.form_choices	Route: the add-case form's pick lists (ART combinations and drugs, lab tests with names and units).	stays	stays
-backend/services.py	custom_case_writer	Gives the function that adds a case to the added-cases file.	stays	stays
-backend/services.py	custom_case_writer.add	Adds one case to the added-cases file in one step, never over an unreadable file.	stays	stays
 artemis/screen_text.py	alert_values	Gives the patient values an alert is about, each as recorded, for the value box.	stays	stays
 artemis/screen_text.py	_words	Gives a text's longer words, reading VL as viral load, for matching.	stays	stays
 artemis/screen_text.py	key_sentence	Picks the guideline sentence closest to an alert from its passages.	stays	stays

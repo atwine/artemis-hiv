@@ -12,6 +12,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List
 
+from sqlalchemy import event
 from sqlalchemy.pool import StaticPool
 from sqlmodel import SQLModel, create_engine
 
@@ -112,8 +113,12 @@ def read_clinic_day() -> Dict[str, Any]:
 
 def memory_engine():
     """A throwaway SQLite database in memory, with the tables made from the models."""
-    import backend.records  # noqa: F401  (registers the tables)
+    import backend.patients_db  # noqa: F401  (registers the tables)
+    import backend.records  # noqa: F401
 
     engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    # Check the links between tables as Postgres does (SQLite skips them unless told), so a row
+    # saved before the row it points to fails here too, not only on the real database.
+    event.listen(engine, "connect", lambda conn, _: conn.execute("PRAGMA foreign_keys=ON"))
     SQLModel.metadata.create_all(engine)
     return engine

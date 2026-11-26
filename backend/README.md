@@ -11,8 +11,9 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 | Method | Route | What it does |
 |---|---|---|
 | GET | /api/health | `{"status": "ok"}` |
-| GET | /api/patients | the patient list (from `Data/mock_patients.json`, `Data/custom_patients.json` and `Data/demo_day_patients.json`, read only) |
-| POST | /api/patients | add a new made-up case (201), written where the Streamlit app keeps added cases; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
+| GET | /api/patients | the patient list, from the database (plan 4C.2) |
+| POST | /api/patients | add a new made-up case (201) to the database in one save; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
+| GET | /api/form-choices | the add-case form's pick lists: ART combinations and drugs, lab tests with units, visit types |
 | GET | /api/patients/{patient_id} | one patient's record; `labs` maps each test to its results, each with `date`, `value`, `unit` and `source` in the unit it was recorded in (never converted); typed-in lab text comes apart as `lab_notes` |
 | POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
 | POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other (say why)", "comment": "..."}]}`; reasons are `artemis/review.py` `OVERRIDE_REASONS`; the reply says `finalized_at` (null while open) |
@@ -45,7 +46,7 @@ allow only the frontend's address (ACCESS.md).
 
 | Setting | Default | Meaning |
 |---|---|---|
-| `ARTEMIS_DATABASE_URL` | none | the visit-record database, e.g. `postgresql+psycopg://artemis:<password>@127.0.0.1:5434/artemis` |
+| `ARTEMIS_DATABASE_URL` | none | the database (patients and visit records), e.g. `postgresql+psycopg://artemis:<password>@127.0.0.1:5434/artemis`; without it the patient and visit routes answer 503 |
 | `ARTEMIS_API_HOST` | `127.0.0.1` | where it listens; `0.0.0.0` would open it to the Wi-Fi (ACCESS.md says no) |
 | `ARTEMIS_API_PORT` | `8000` | |
 | `ARTEMIS_API_ORIGINS` | `http://localhost:3000,http://127.0.0.1:3000` | the frontend's address; every other web page is refused |
@@ -55,6 +56,7 @@ allow only the frontend's address (ACCESS.md).
 
 ```
 python -m alembic -c backend/alembic.ini upgrade head     # create or update the tables
+python scripts/load_patients.py                          # load the made-up patients from Data/ (safe to rerun)
 python scripts/import_visit_records.py                   # copy the Phase 1 visit-record files in (safe to rerun)
 python -m backend                                        # serve on 127.0.0.1:8000
 ```

@@ -124,29 +124,6 @@ def test_a_case_saved_without_a_sex_still_loads(api):
     assert api.client.get("/api/patients", headers=LOCAL).status_code == 200
 
 
-def test_the_real_writer_adds_to_the_file_and_keeps_the_rest(tmp_path):
-    from backend.services import custom_case_writer
-    from backend.settings import Settings
-
-    path = tmp_path / "custom_patients.json"
-    path.write_text(json.dumps([{"patient_id": "OLD"}]), encoding="utf-8")
-    write = custom_case_writer(Settings(custom_patients_path=path))
-    write({"patient_id": "NEW"})
-    assert [p["patient_id"] for p in json.loads(path.read_text(encoding="utf-8"))] == ["OLD", "NEW"]
-
-
-def test_the_real_writer_never_overwrites_an_unreadable_file(tmp_path):
-    from artemis.patient.store import UnreadableFile
-    from backend.services import custom_case_writer
-    from backend.settings import Settings
-
-    path = tmp_path / "custom_patients.json"
-    path.write_text("{not json", encoding="utf-8")
-    with pytest.raises(UnreadableFile):
-        custom_case_writer(Settings(custom_patients_path=path))({"patient_id": "NEW"})
-    assert path.read_text(encoding="utf-8") == "{not json"
-
-
 def test_each_medicine_line_has_a_length_limit(api):
     assert api.client.post("/api/patients", json=_body(other_medications=["a" * 201]), headers=LOCAL).status_code == 422
     record, errors = build_case_record(_form(other_medications=["a" * 201]), today=TODAY)
@@ -154,7 +131,7 @@ def test_each_medicine_line_has_a_length_limit(api):
 
 
 def test_services_built_without_a_writer_never_write_the_real_file():
-    """Only default_services wires the real file; any other Services refuses to add a case."""
+    """Only default_services wires the real database; any other Services refuses to add a case."""
     from backend.services import Services
 
     services = Services(patients=list, search=lambda: None, model_client=lambda: None, engine=None, app_version="x")

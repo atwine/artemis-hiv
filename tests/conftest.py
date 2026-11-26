@@ -21,23 +21,33 @@ class Api:
     def __init__(self) -> None:
         from fastapi.testclient import TestClient
 
+        from sqlmodel import Session
+
+        from backend import patients_db
         from backend.main import create_app
-        from backend.services import Services
+        from backend.services import Services, database_patients
         from backend.settings import Settings
         from tests.api_fakes import FakeModel, fake_search, memory_engine, read_clinic_day, read_patients, replies_for
 
         self.model: Optional[Any] = FakeModel(replies_for("P001"))
-        self.added_cases: list = []  # cases added through the API, kept in memory (never Data/)
+        self.added_cases: list = []  # cases added through the API (to the in-memory database, never Data/)
         self.engine = memory_engine()
+        with Session(self.engine) as session:  # the seed patients, as scripts/load_patients.py loads them
+            patients_db.import_records(session, read_patients(), origin="seed")
         search = fake_search()
+
+        def add_case(record):
+            patients_db.add(self.engine, record)
+            self.added_cases.append(record)
+
         self.services = Services(
-            patients=lambda: read_patients() + self.added_cases,
+            patients=database_patients(self.engine),
             search=lambda: search,
             model_client=lambda: self.model,
             engine=self.engine,
             app_version="test",
             clinic_day=read_clinic_day,
-            add_case=self.added_cases.append,
+            add_case=add_case,
         )
         self.app = create_app(settings=Settings(), services=self.services)
         self.client = TestClient(self.app, base_url="http://localhost")

@@ -14,7 +14,7 @@ off this laptop (for example to Railway): "this laptop only" means nothing on a 
 
 | Data | What it holds | Sensitivity |
 |---|---|---|
-| patients | the synthetic test patients: notes, lab results, medicines (`Data/mock_patients.json`, `Data/custom_patients.json`) | sensitive: health (synthetic only) |
+| patients | the synthetic test patients: notes, lab results, medicines, past ART, visits. In the database since plan 4C.2 (tables `patient`, `patient_medicine`, `art_history`, `lab_result`, `lab_note`, `clinical_note`, `encounter`), loaded from the seed files in `Data/` by `scripts/load_patients.py` on this laptop. The demo answer keys stay with the evaluation, not in these tables | sensitive: health (synthetic only) |
 | visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome) and each acknowledge/override decision | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
 | clinic_day | the demo day's schedule: made-up clinic, clinician, date, appointment times and patient ids, kept as a data file in the repo | internal (synthetic only) |
@@ -56,6 +56,10 @@ Nobody can edit or delete patients, visit records or the schedule through the ba
 (owner, 2026-11-26). Visit records are written once and never changed: a new decision is a new
 row, and the latest one counts. Adding a patient adds a new case only: an id already in use is
 refused, and each case has size limits. The schedule changes only by editing its file.
+
+Patients moved into the database on 2026-11-27 with the same rules (owner: "A, keep the rules"):
+the backend reads and adds them only there, adding a case is one database save, and nothing in
+the backend edits or deletes a patient row.
 
 ## 4. Route map
 
@@ -108,6 +112,13 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
   (409); cases are only ever added.
 - A stuck page sends a huge case (thousands of lab rows, megabytes of text). Covered by: the
   case's size limits (422).
+- Two adds with the same new id arrive at once. Covered by: the database refuses the second
+  (the id is the table's key), answered as 409; nothing of the second case is saved.
+- The seed is loaded twice, or loaded into a database that already has added cases. Covered by:
+  `scripts/load_patients.py` adds only ids the database doesn't have; it is a command on this
+  laptop, never a route.
+- Someone on the Wi-Fi connects to the database directly. Covered by: Docker publishes Postgres
+  on 127.0.0.1 only (`backend/docker-compose.yml`).
 - Finalize is sent twice, or before every alert is decided. Covered by: a second Finalize
   returns the first one's result without saving again; an unfinished visit is refused (422).
 - Someone reopens a visit by guessing its id. Covered by: visit ids are random (uuid4), and an
