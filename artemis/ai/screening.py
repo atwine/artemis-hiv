@@ -20,7 +20,8 @@ def _build_screening_bundle(chunks: List[VectorSearchResult]) -> List[Dict[str, 
             {
                 "chunk_id": r.chunk_id,
                 "page_number": r.metadata.get("page_number"),
-                "quote": (r.document or "")[:480],
+                # The whole passage: a 480-character cut left out rules that sat further in (G35, Phase 2B fix 5a2).
+                "quote": r.document or "",
             }
         )
     return bundle
