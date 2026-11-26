@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 import { StatusShape, type VisitState } from "./status";
 
-export type RailEntry = { id: string; label: string; name: string; state: VisitState };
+export type RailEntry = { id: string; label: string; name: string; href: string; state: VisitState };
 
 export function DayRail({ entries, currentId, dimmed }: { entries: RailEntry[]; currentId?: string; dimmed?: boolean }) {
   return (
@@ -16,7 +16,7 @@ export function DayRail({ entries, currentId, dimmed }: { entries: RailEntry[]; 
         return (
           <Link
             key={e.id}
-            href={`/patients/${encodeURIComponent(e.id)}`}
+            href={e.href}
             aria-current={current ? "page" : undefined}
             aria-label={`${e.label}, ${e.name}`}
             className={cn(

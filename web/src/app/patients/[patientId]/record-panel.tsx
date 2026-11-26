@@ -1,9 +1,14 @@
 // "From her record" (Paper FINAL S2): the record as recorded, one fact per row, and a way to see
 // every lab result. Values and units are never converted (owner, 2026-11-26).
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useState } from "react";
 
-import type { PatientDetail } from "@/lib/api/client";
-import { labCount, labName, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "@/lib/record";
+import { StatusShape } from "@/components/frame/status";
+import { api, errorText, unwrap, type PatientDetail } from "@/lib/api/client";
+import { clock, localDate, longDate } from "@/lib/dates";
+import { visitHref } from "@/lib/queries";
+import { labCount, labName, labRows, otherMedicines, possessive, previousArt, todaySummary } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
 const NONE = "None recorded";
@@ -41,6 +46,7 @@ export function RecordPanel({ patient }: { patient: PatientDetail }) {
           </>
         )}
       </button>
+      <PastChecks patientId={patient.patient_id} />
     </section>
   );
 }
@@ -109,6 +115,43 @@ function FullRecord({ patient }: { patient: PatientDetail }) {
           </p>
         ) : null;
       })}
+    </div>
+  );
+}
+
+/**
+ * The patient's earlier checks, newest first (GET /api/patients/{id}/visits), each opening as saved.
+ * In the record column, where the clinician already looks for history (owner, 2026-11-26).
+ */
+function PastChecks({ patientId }: { patientId: string }) {
+  const past = useQuery({
+    queryKey: ["past-checks", patientId],
+    queryFn: async () => unwrap(await api.GET("/api/patients/{patient_id}/visits", { params: { path: { patient_id: patientId } } })),
+    staleTime: 0,
+  });
+  return (
+    <div className="mt-4 flex flex-col gap-2">
+      <h3 className="text-13 font-semibold tracking-[0.06em] text-muted-foreground uppercase">Past checks</h3>
+      {past.isError && <p className="text-14 text-ink-2">{errorText(past.error)}</p>}
+      {past.data && past.data.length === 0 && <p className="text-14 text-ink-2">No earlier checks.</p>}
+      {past.data && past.data.length > 0 && (
+        <ul aria-label="Past checks" className="flex flex-col">
+          {past.data.map((v) => (
+            <li key={v.visit_id} className="border-b border-line">
+              <Link href={visitHref(patientId, v.visit_id)} className="flex items-center gap-3 py-[9px] text-14 leading-5 hover:bg-surface">
+                <span className="w-40 shrink-0 whitespace-nowrap text-muted-foreground">
+                  {localDate(v.saved_at)}, {clock(v.saved_at)}
+                </span>
+                <span className="flex flex-1 items-center gap-1.5 text-black">
+                  <StatusShape state={v.status} size={12} />
+                  {v.status}
+                </span>
+                <span className="text-ink-2">{v.finalized_at ? "Finalized" : "Open"}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

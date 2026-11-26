@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { asSentence, checkReads, checkedCounts, firstSentence, labCount, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
+import { longDate } from "./dates.ts";
+import { asSentence, checkReads, checkedCounts, firstSentence, labCount, labRows, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
 
 test("a lab row: the latest result with its unit as recorded, and the earliest for comparison", () => {
   const rows = labRows(

@@ -28,7 +28,6 @@ export function ResultsView({
     <section aria-label="Check results" className="flex max-w-240 flex-col gap-6">
       <h2 className="text-20 font-semibold tracking-[-0.015em]">Check results</h2>
       <Banners check={check} />
-      {!check.record_saved && <p role="alert">This check could not be saved, so its alerts cannot be decided here.</p>}
       {/* The list sits on the result row's bottom line, so the two lines don't double up. */}
       {check.cards.length > 0 && (
         <ul aria-label="Alerts" className="-mt-6">

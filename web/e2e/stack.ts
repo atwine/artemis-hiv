@@ -84,6 +84,9 @@ async function start(password: string, databaseUrl: string): Promise<ChildProces
     OPENROUTER_API_KEY: "",
     // The search model must already be on disk; never download weights during a test.
     HF_HUB_OFFLINE: "1",
+    // The suite runs more checks a minute than the clinic's limit of 6; the limit itself is the
+    // backend's to test (tests/test_check_limit.py), and the 429 screen is checked with a stub.
+    ARTEMIS_VISIT_CHECKS_PER_MINUTE: "1000",
     // The guideline index (Chroma) would otherwise try to send usage data.
     ANONYMIZED_TELEMETRY: "False",
     PYTHONUNBUFFERED: "1",

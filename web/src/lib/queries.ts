@@ -7,21 +7,32 @@ import type { VisitState } from "@/components/frame/status";
 
 import { api, unwrap } from "./api/client";
 
-export function usePatients() {
-  return useQuery({ queryKey: ["patients"], queryFn: async () => unwrap(await api.GET("/api/patients")) });
+/** Today's appointments and each one's state. Always fresh: a check or a decision changes it. */
+export function useClinicDay() {
+  return useQuery({
+    queryKey: ["clinic-day"],
+    queryFn: async () => unwrap(await api.GET("/api/clinic-day")),
+    staleTime: 0,
+  });
+}
+
+/** Where a day's visit opens: the saved visit when its checks have run, else the patient. */
+export function visitHref(patientId: string, visitId: string | null): string {
+  const base = `/patients/${encodeURIComponent(patientId)}`;
+  return visitId ? `${base}?visit=${encodeURIComponent(visitId)}` : base;
 }
 
 /**
- * The day rail's entries. Until the backend serves the clinic day (times and each visit's state),
- * the rail lists the patients by id and shows every visit as not checked, except the one on
- * screen, whose state the caller passes.
+ * The day rail: today's appointments by time, each with its status shape. The visit on screen
+ * shows the state the caller passes (it may be checking right now).
  */
 export function useRailEntries(current?: { id: string; state: VisitState }): RailEntry[] {
-  const patients = usePatients();
-  return (patients.data ?? []).map((p) => ({
-    id: p.patient_id,
-    label: p.patient_id,
-    name: p.name,
-    state: p.patient_id === current?.id ? current.state : "not_checked",
+  const day = useClinicDay();
+  return (day.data?.appointments ?? []).map((a) => ({
+    id: a.patient_id,
+    label: a.time,
+    name: a.name,
+    href: visitHref(a.patient_id, a.visit_id),
+    state: a.patient_id === current?.id ? current.state : (a.status ?? "not_checked"),
   }));
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, type QueryClient, type UseMutationResult } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 import { use, useState } from "react";
 
 import { AppFrame, PaneContent, PaneHeader } from "@/components/frame/app-frame";
@@ -8,13 +9,16 @@ import { DayRail } from "@/components/frame/day-rail";
 import { StatusChip, type VisitState } from "@/components/frame/status";
 import { Tray, type Step, type TrayButton, type TrayProps } from "@/components/frame/tray";
 import { firstName, nextToReview } from "@/lib/alerts";
-import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type PatientDetail, type VisitCheck } from "@/lib/api/client";
+import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type PatientDetail, type SavedVisit, type VisitCheck } from "@/lib/api/client";
 import { acceptDecision, NEEDS_COMMENT, overrideDecision, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
-import { useRailEntries } from "@/lib/queries";
+import type { DayAppointment } from "@/lib/day";
+import { useClinicDay, useRailEntries, visitHref } from "@/lib/queries";
+import { nextPatient } from "@/lib/visit";
 import { patientLine, possessive } from "@/lib/record";
 
 import { AlertView } from "./alert-view";
+import { FinalizeView, RecordView } from "./finalize-view";
 import { OverrideView } from "./override-view";
 import { RecordPanel } from "./record-panel";
 import { Running, RunningTrayStatus } from "./running-view";
@@ -24,18 +28,31 @@ const NOTES_FORM = "clinical-notes";
 
 export function VisitScreen({ params }: { params: Promise<{ patientId: string }> }) {
   const { patientId } = use(params);
+  // A saved visit to reopen (from the clinic day): shown as saved, with no new check (S1 -> S4).
+  const visitId = useSearchParams().get("visit");
+  // A visit this screen just created: the address then names it, but the screen carries on as it is.
+  const [created, setCreated] = useState<string | null>(null);
   const patient = useQuery({
     queryKey: ["patient", patientId],
     queryFn: async () =>
       unwrap(await api.GET("/api/patients/{patient_id}", { params: { path: { patient_id: patientId } } })),
   });
+  const reopened = useQuery({
+    queryKey: ["visit", visitId],
+    queryFn: async () => unwrap(await api.GET("/api/visits/{visit_id}", { params: { path: { visit_id: visitId! } } })),
+    enabled: Boolean(visitId),
+  });
 
-  if (patient.data) return <Visit key={patient.data.patient_id} patient={patient.data} />;
+  if (patient.data && (!visitId || reopened.data)) {
+    const opened = visitId && visitId !== created ? visitId : "";
+    return <Visit key={`${patient.data.patient_id}:${opened}`} patient={patient.data} reopened={opened ? reopened.data : undefined} onCreated={setCreated} />;
+  }
   return (
     <Frame patientId={patientId} state="not_checked">
       <PaneContent>
-        {patient.isPending && <p className="text-muted-foreground">Loading the record…</p>}
+        {(patient.isPending || reopened.isLoading) && <p className="text-muted-foreground">Loading the record…</p>}
         {patient.isError && <p role="alert">{errorText(patient.error)}</p>}
+        {reopened.isError && <p role="alert">{errorText(reopened.error)}</p>}
       </PaneContent>
     </Frame>
   );
@@ -46,9 +63,11 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
 type CheckRequest = { note: string; useAi: boolean };
 type CheckMutation = UseMutationResult<VisitCheck, Error, CheckRequest>;
 
-function Visit({ patient }: { patient: PatientDetail }) {
-  const [note, setNote] = useState(String(patient.today_encounter.note ?? ""));
+function Visit({ patient, reopened, onCreated }: { patient: PatientDetail; reopened?: SavedVisit; onCreated: (visitId: string) => void }) {
+  const [note, setNote] = useState(reopened?.note ?? String(patient.today_encounter.note ?? ""));
   const [useAi, setUseAi] = useState(false);
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const check: CheckMutation = useMutation({
     mutationFn: async (req: CheckRequest) =>
       unwrap(
@@ -57,6 +76,22 @@ function Visit({ patient }: { patient: PatientDetail }) {
           body: { note: req.note, use_ai: req.useAi, include_plan: false },
         }),
       ),
+    onSuccess: (done, req) => {
+      // The saved visit as GET /api/visits/{id} would send it, so reopening it needs no fetch.
+      const asSaved: SavedVisit = {
+        ...done,
+        note: req.note,
+        decisions: [],
+        all_resolved: done.cards.length === 0,
+        unresolved: done.cards.map((c) => c.extension.alert_id),
+        finalized_at: null,
+      };
+      queryClient.setQueryData(["visit", done.visit_id], asSaved);
+      refreshDay(queryClient, patient.patient_id);
+      // The address names the saved visit, so Back or a reload reopens it, never a blank form.
+      onCreated(done.visit_id);
+      router.replace(visitHref(patient.patient_id, done.visit_id));
+    },
   });
 
   // Before the checks (Paper FINAL S2): the record on the left, the notes box on the right.
@@ -91,12 +126,15 @@ function Visit({ patient }: { patient: PatientDetail }) {
     </div>
   );
 
-  // A new check starts the review afresh.
+  // The visit on screen: a new check's result, else the saved visit reopened (until a new check runs).
+  const result: VisitCheck | undefined = check.data ?? (check.isIdle ? reopened : undefined);
   // The AI review this run: the box, unless "Run the AI review again" asked for it.
   const aiThisRun = check.variables?.useAi ?? useAi;
   return (
     <VisitView
-      key={check.data?.visit_id ?? "before"}
+      key={result?.visit_id ?? "before"}
+      result={result}
+      reopened={result === reopened ? reopened : undefined}
       patient={patient}
       check={check}
       notesForm={notesForm}
@@ -107,25 +145,40 @@ function Visit({ patient }: { patient: PatientDetail }) {
 }
 
 /** Which screen the pane shows. The results screen comes first after the checks (owner, 2026-11-26). */
-type View = { name: "notes" } | { name: "results" } | { name: "alert"; i: number } | { name: "override"; i: number; other: boolean };
+type View =
+  | { name: "notes" }
+  | { name: "results" }
+  | { name: "alert"; i: number }
+  | { name: "override"; i: number; other: boolean }
+  | { name: "finalize"; confirming: boolean };
 
 function VisitView({
   patient,
   check,
+  result,
+  reopened,
   notesForm,
   aiThisRun,
   retryAi,
 }: {
   patient: PatientDetail;
   check: CheckMutation;
+  /** The visit on screen: a new check's result, or the saved visit reopened. */
+  result: VisitCheck | undefined;
+  /** Set when the visit on screen is a saved one reopened: its decisions so far. */
+  reopened: SavedVisit | undefined;
   notesForm: React.ReactNode;
   aiThisRun: boolean;
   retryAi: () => void;
 }) {
-  const result = check.data;
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const day = useClinicDay().data;
+  const visitId = result?.visit_id;
   const [view, setView] = useState<View>(result ? { name: "results" } : { name: "notes" });
-  const [saved, setSaved] = useState<DecisionOut[]>([]);
-  const [finalizeNote, setFinalizeNote] = useState<string | null>(result?.finalize_note ?? null);
+  const [saved, setSaved] = useState<DecisionOut[]>(reopened?.decisions ?? []);
+  const [finalizeNote, setFinalizeNote] = useState<string | null>(reopened ? reopened.finalize_note : (result?.finalize_note ?? null));
+  const [finalizedAt, setFinalizedAt] = useState<string | null>(reopened?.finalized_at ?? null);
   const [comment, setComment] = useState("");
   const save = useMutation({
     mutationFn: async (decision: DecisionIn) =>
@@ -139,6 +192,8 @@ function VisitView({
       setSaved(reply.decisions);
       setFinalizeNote(reply.finalize_note);
       setComment("");
+      keepSaved(queryClient, visitId, { decisions: reply.decisions, finalize_note: reply.finalize_note, all_resolved: reply.all_resolved, unresolved: reply.unresolved });
+      refreshDay(queryClient, patient.patient_id);
       // On to the next alert still to review, or back to the results when none is left.
       const ids = result!.cards.map((c) => c.extension.alert_id);
       const decided = new Set(reply.decisions.map((d) => d.alert_id));
@@ -146,9 +201,20 @@ function VisitView({
       setView(next === null ? { name: "results" } : { name: "alert", i: next });
     },
   });
+  const finalize = useMutation({
+    mutationFn: async () =>
+      unwrap(await api.POST("/api/visits/{visit_id}/finalize", { params: { path: { visit_id: result!.visit_id } } })),
+    onSuccess: (reply) => {
+      setSaved(reply.decisions);
+      setFinalizedAt(reply.finalized_at);
+      keepSaved(queryClient, visitId, { decisions: reply.decisions, finalized_at: reply.finalized_at });
+      refreshDay(queryClient, patient.patient_id);
+    },
+  });
   const savedByAlert = new Map(saved.map((d) => [d.alert_id, d]));
   const state: VisitState = check.isPending ? "checking" : (result?.status ?? "not_checked");
   const card = (view.name === "alert" || view.name === "override") && result ? result.cards[view.i] : undefined;
+  const next = day ? nextPatient(day.appointments, patient.patient_id) : null;
 
   const decide = (decision: DecisionIn | null) => {
     if (decision && !save.isPending) save.mutate(decision);
@@ -167,9 +233,11 @@ function VisitView({
             runningStatus: <RunningTrayStatus aiReview={aiThisRun} startedAt={check.submittedAt} />,
             result,
             savedByAlert,
-            saving: save.isPending,
+            saving: save.isPending || finalize.isPending,
             patientName: patient.name,
             comment,
+            finalizedAt,
+            next,
             go: (v) => {
               setComment("");
               setView(v);
@@ -177,54 +245,77 @@ function VisitView({
             accept: () => card && decide(acceptDecision(card.extension.alert_id)),
             saveOther: () => card && decide(overrideDecision(card.extension.alert_id, NEEDS_COMMENT, comment)),
             retryAi,
+            askToFinalize: () => setView({ name: "finalize", confirming: true }),
+            cancelFinalize: () => setView({ name: "finalize", confirming: false }),
+            finalize: () => {
+              if (!finalize.isPending) finalize.mutate();
+            },
+            open: (href) => router.push(href),
           })}
         />
       }
     >
-      <PaneHeader title={patient.name} meta={patientLine(patient)} aside={<StatusChip state={state} />} />
+      <PaneHeader title={patient.name} meta={patientLine(patient)} aside={<StatusChip state={state} finalized={Boolean(finalizedAt)} />} />
       <PaneContent>
-        {check.isPending && <Running patient={patient} aiReview={aiThisRun} startedAt={check.submittedAt} />}
-        {!check.isPending && (view.name === "notes" || !result) && (
+        {result && finalizedAt ? (
+          <RecordView check={result} savedByAlert={savedByAlert} finalizedAt={finalizedAt} />
+        ) : (
           <>
-            {notesForm}
-            {check.isError && (
+            {check.isPending && <Running patient={patient} aiReview={aiThisRun} startedAt={check.submittedAt} />}
+            {!check.isPending && (view.name === "notes" || !result) && (
+              <>
+                {notesForm}
+                {check.isError && (
+                  <p role="alert" className="mt-4 text-red">
+                    {errorText(check.error)}
+                  </p>
+                )}
+              </>
+            )}
+            {result && view.name === "results" && (
+              <ResultsView
+                check={result}
+                patient={patient}
+                noteSent={check.variables?.note ?? reopened?.note ?? ""}
+                savedByAlert={savedByAlert}
+                finalizeNote={finalizeNote}
+                saveError={save.isError ? errorText(save.error) : null}
+                onOpen={(i) => setView({ name: "alert", i })}
+              />
+            )}
+            {card && view.name === "alert" && (
+              <AlertView card={card} n={view.i + 1} patientName={patient.name} visitDate={result?.visit_date ?? ""} />
+            )}
+            {card && view.name === "override" && (
+              <OverrideView
+                card={card}
+                n={view.i + 1}
+                other={view.other}
+                comment={comment}
+                busy={save.isPending}
+                onReason={(reason: Reason) =>
+                  reason === NEEDS_COMMENT
+                    ? setView({ ...view, other: true })
+                    : decide(overrideDecision(card.extension.alert_id, reason, ""))
+                }
+                onComment={setComment}
+              />
+            )}
+            {result && view.name === "finalize" && (
+              <FinalizeView
+                check={result}
+                patientName={patient.name}
+                savedByAlert={savedByAlert}
+                finalizeNote={finalizeNote}
+                onReview={(i) => setView({ name: "alert", i })}
+              />
+            )}
+            {(save.isError || finalize.isError) && view.name !== "results" && (
               <p role="alert" className="mt-4 text-red">
-                {errorText(check.error)}
+                {errorText(finalize.isError ? finalize.error : save.error)}
               </p>
             )}
           </>
-        )}
-        {result && view.name === "results" && (
-          <ResultsView
-            check={result}
-            patient={patient}
-            noteSent={check.variables?.note ?? ""}
-            savedByAlert={savedByAlert}
-            finalizeNote={finalizeNote}
-            saveError={save.isError ? errorText(save.error) : null}
-            onOpen={(i) => setView({ name: "alert", i })}
-          />
-        )}
-        {card && view.name === "alert" && <AlertView card={card} n={view.i + 1} />}
-        {card && view.name === "override" && (
-          <OverrideView
-            card={card}
-            n={view.i + 1}
-            other={view.other}
-            comment={comment}
-            busy={save.isPending}
-            onReason={(reason: Reason) =>
-              reason === NEEDS_COMMENT
-                ? setView({ ...view, other: true })
-                : decide(overrideDecision(card.extension.alert_id, reason, ""))
-            }
-            onComment={setComment}
-          />
-        )}
-        {card && save.isError && (
-          <p role="alert" className="mt-4 text-red">
-            {errorText(save.error)}
-          </p>
         )}
       </PaneContent>
     </Frame>
@@ -254,23 +345,11 @@ function Frame({
 
 
 /**
- * The tray for where the visit is. The prompts are the design's (S2, S3, S4, S4d, S7a); the
- * results-screen prompts are new with that screen (owner, 2026-11-26).
+ * The tray for where the visit is. The prompts are the design's (S2, S3, S4, S4d, S6a, S6b, S7a);
+ * the results-screen prompts are new with that screen (owner, 2026-11-26), and the confirm before
+ * finalizing is the owner's decision 6.
  */
-function trayFor({
-  view,
-  pending,
-  runningStatus,
-  result,
-  savedByAlert,
-  saving,
-  patientName,
-  comment,
-  go,
-  accept,
-  saveOther,
-  retryAi,
-}: {
+function trayFor(t: {
   view: View;
   pending: boolean;
   runningStatus: React.ReactNode;
@@ -279,14 +358,21 @@ function trayFor({
   saving: boolean;
   patientName: string;
   comment: string;
+  finalizedAt: string | null;
+  next: DayAppointment | null;
   go: (v: View) => void;
   accept: () => void;
   saveOther: () => void;
   retryAi: () => void;
+  askToFinalize: () => void;
+  cancelFinalize: () => void;
+  finalize: () => void;
+  open: (href: string) => void;
 }): TrayProps {
+  const { view, result, savedByAlert, saving, go } = t;
   const later = { plan: "todo", finalize: "todo" } as const;
-  if (pending) {
-    return { notes: "done", checks: "current", alerts: [], ...later, lead: "Checks running.", rest: "Results open by themselves.", status: runningStatus };
+  if (t.pending) {
+    return { notes: "done", checks: "current", alerts: [], ...later, lead: "Checks running.", rest: "Results open by themselves.", status: t.runningStatus };
   }
   const runChecks: TrayButton = { label: "Run checks", form: NOTES_FORM };
   if (!result) {
@@ -295,17 +381,60 @@ function trayFor({
 
   const ids = result.cards.map((c) => c.extension.alert_id);
   const decided = new Set(savedByAlert.keys());
+  const first = firstName(t.patientName);
+
+  // Finalized: the record, read only, and on to the next patient (S6b).
+  if (t.finalizedAt) {
+    const next = t.next;
+    return {
+      notes: "done",
+      checks: "done",
+      alerts: ids.map((): Step => "done"),
+      plan: "todo",
+      finalize: "done",
+      lead: "Saved.",
+      rest: next ? `Next: ${next.name}, ${next.time}.` : "Every visit today is finalized.",
+      primary: next
+        ? { label: `Next patient: ${firstName(next.name)}`, onClick: () => t.open(visitHref(next.patient_id, next.visit_id)) }
+        : { label: "Back to day", onClick: () => t.open("/") },
+    };
+  }
+
   const current = view.name === "alert" || view.name === "override" ? view.i : null;
   const steps = {
     notes: (view.name === "notes" ? "current" : "done") as Step,
     checks: (view.name === "results" ? "current" : "done") as Step,
     alerts: ids.map((id, i): Step => (i === current ? "current" : decided.has(id) ? "done" : "todo")),
-    ...later,
-    go: { notes: () => go({ name: "notes" }), checks: () => go({ name: "results" }), alert: (i: number) => go({ name: "alert", i }) },
+    plan: "todo" as Step,
+    finalize: (view.name === "finalize" ? "current" : "todo") as Step,
+    go: {
+      notes: () => go({ name: "notes" }),
+      checks: () => go({ name: "results" }),
+      alert: (i: number) => go({ name: "alert", i }),
+      finalize: () => go({ name: "finalize", confirming: false }),
+    },
   };
-  const retry: TrayButton = { label: "Run the AI review again", onClick: retryAi };
+  const retry: TrayButton = { label: "Run the AI review again", onClick: t.retryAi };
   const of = (i: number) => `Alert ${i + 1} of ${ids.length}.`;
+  const left = ids.filter((id) => !decided.has(id)).length;
+  const finalizeButton: TrayButton = left
+    ? { label: "Finalize visit", locked: true }
+    : { label: "Finalize visit", onClick: t.askToFinalize, disabled: saving || !result.record_saved };
 
+  if (view.name === "finalize") {
+    if (view.confirming && !left) {
+      return {
+        ...steps,
+        lead: `Finalize ${first}'s visit?`,
+        rest: "Decisions can't be changed after this.",
+        primary: { label: "Finalize", onClick: t.finalize, disabled: saving },
+        secondary: { label: "Go back", onClick: t.cancelFinalize },
+      };
+    }
+    return left
+      ? { ...steps, lead: "Finalize is locked.", rest: `${left} ${left === 1 ? "alert" : "alerts"} left to review.`, primary: finalizeButton }
+      : { ...steps, lead: "Finalize.", rest: "Every alert has your answer.", primary: finalizeButton };
+  }
   if (view.name === "notes") {
     return { ...steps, lead: "Clinical notes.", rest: "Change the note, then run checks again.", primary: runChecks };
   }
@@ -318,8 +447,8 @@ function trayFor({
         ? d.action === "Acknowledge"
           ? "You accepted it."
           : `You overrode it: ${d.reason}.`
-        : `Does it apply to ${firstName(patientName)} today?`,
-      primary: { label: "Accept alert", onClick: accept, disabled: saving || !result.record_saved },
+        : `Does it apply to ${first} today?`,
+      primary: { label: "Accept alert", onClick: t.accept, disabled: saving || !result.record_saved },
       secondary: { label: "Override", onClick: () => go({ name: "override", i: view.i, other: false }), disabled: saving || !result.record_saved },
     };
   }
@@ -328,34 +457,35 @@ function trayFor({
       ...steps,
       lead: of(view.i),
       rest: view.other ? "Say why, then save the override." : "Tap a reason to save the override.",
-      primary: view.other ? { label: "Save override", onClick: saveOther, disabled: saving || !comment.trim() } : undefined,
+      primary: view.other ? { label: "Save override", onClick: t.saveOther, disabled: saving || !t.comment.trim() } : undefined,
       secondary: { label: "Back to the alert", onClick: () => go({ name: "alert", i: view.i }) },
     };
   }
 
-  // The results screen.
+  // The results screen. With every alert answered (or none raised), the next step is Finalize.
   const firstOpen = ids.findIndex((id) => !decided.has(id));
   const review: TrayButton | undefined = firstOpen >= 0 ? { label: `Review alert ${firstOpen + 1}`, onClick: () => go({ name: "alert", i: firstOpen }) } : undefined;
-  const reviewed = ids.length > 0 && firstOpen < 0;
+  const main = review ?? finalizeButton;
   switch (result.ai_review) {
     case "failed":
     case "unreadable":
-      return { ...steps, lead: "AI review failed.", rest: "Try again, or use rule checks only.", ...(review ? { primary: review, secondary: retry } : { primary: retry }) };
+      return { ...steps, lead: "AI review failed.", rest: "Try again, or use rule checks only.", primary: main, secondary: retry };
     case "cut_off":
     case "partly_read":
       return {
         ...steps,
         lead: "AI review incomplete.",
         rest: ids.length ? "Review the alerts it read." : "Try again, or use rule checks only.",
-        ...(review ? { primary: review, secondary: retry } : { primary: retry }),
+        primary: main,
+        secondary: retry,
       };
     case "search_unavailable":
-      return { ...steps, lead: "Guideline search unavailable.", rest: "Rule checks only.", primary: review };
+      return { ...steps, lead: "Guideline search unavailable.", rest: "Rule checks only.", primary: main };
     default:
-      if (!ids.length) return { ...steps, lead: "Checks done.", rest: "No alerts to review." };
-      return reviewed
-        ? { ...steps, lead: "Every alert has your answer.", rest: savedSummary(savedByAlert) }
-        : { ...steps, lead: `${ids.length} ${ids.length === 1 ? "alert" : "alerts"} to review.`, rest: "Accept or override each one.", primary: review };
+      if (!ids.length) return { ...steps, lead: "Checks done.", rest: "No alerts to review.", primary: main };
+      return review
+        ? { ...steps, lead: `${ids.length} ${ids.length === 1 ? "alert" : "alerts"} to review.`, rest: "Accept or override each one.", primary: review }
+        : { ...steps, lead: "Every alert has your answer.", rest: savedSummary(savedByAlert), primary: main };
   }
 }
 
@@ -364,4 +494,16 @@ function savedSummary(saved: Map<string, DecisionOut>): string {
   const accepted = words.filter((w) => w === "Accepted").length;
   const overridden = words.length - accepted;
   return [accepted && `${accepted} accepted`, overridden && `${overridden} overridden`].filter(Boolean).join(", ") + ".";
+}
+
+/** After a check, a decision or a finalize: the day, its rail and the past checks show it. */
+function refreshDay(queryClient: QueryClient, patientId: string) {
+  void queryClient.invalidateQueries({ queryKey: ["clinic-day"] });
+  void queryClient.invalidateQueries({ queryKey: ["past-checks", patientId] });
+}
+
+/** Keep the cached saved visit in step, so reopening it (board, rail, past checks) is never stale. */
+function keepSaved(queryClient: QueryClient, visitId: string | undefined, change: Partial<SavedVisit>) {
+  if (!visitId) return;
+  queryClient.setQueryData<SavedVisit>(["visit", visitId], (old) => (old ? { ...old, ...change } : old));
 }

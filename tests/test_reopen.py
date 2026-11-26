@@ -67,7 +67,8 @@ def test_a_patients_past_checks_newest_first(api):
     rows = r.json()
     assert [v["visit_id"] for v in rows] == [second["visit_id"], first["visit_id"]]
     top = rows[0]
-    assert set(top) == {"visit_id", "visit_date", "saved_at", "status", "ai_review", "model", "alert_count", "decided_count", "finalized_at"}
+    assert set(top) == {"visit_id", "visit_date", "saved_at", "status", "ai_review", "ai_review_label", "ai_review_card_label",
+                        "model", "alert_count", "decided_count", "finalized_at"}
     assert top["alert_count"] == len(second["cards"])
     assert top["decided_count"] == 0
     assert top["finalized_at"] is None

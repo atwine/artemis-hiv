@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 /** Before a check has run, while it runs, or the API's overall status once it has. */
 export type VisitState = "not_checked" | "checking" | VisitCheck["status"];
 
-export function StatusShape({ state, size }: { state: VisitState; size: 12 | 14 | 30 | 44 }) {
+export function StatusShape({ state, size }: { state: VisitState; size: 12 | 14 | 20 | 30 | 44 }) {
   const common = { width: size, height: size, viewBox: "0 0 14 14", "aria-hidden": true, className: "shrink-0" } as const;
   switch (state) {
     case "RED":
@@ -60,12 +60,13 @@ const CHIP: Record<VisitState, { label: string; className: string }> = {
   INCOMPLETE: { label: "INCOMPLETE", className: "bg-fill text-grey" },
 };
 
-export function StatusChip({ state }: { state: VisitState }) {
+/** The visit's status word and shape; "· FINALIZED" once the visit is finalized (S6b). */
+export function StatusChip({ state, finalized }: { state: VisitState; finalized?: boolean }) {
   const chip = CHIP[state];
   return (
     <span className={cn("flex h-7 items-center gap-[7px] rounded-chip px-2.5", chip.className)}>
       <StatusShape state={state} size={14} />
-      <span className="text-13 font-semibold tracking-[0.02em]">{chip.label}</span>
+      <span className="text-13 font-semibold tracking-[0.02em]">{finalized ? `${chip.label} · FINALIZED` : chip.label}</span>
     </span>
   );
 }

@@ -19,7 +19,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
   await expect(footer).toContainText(DISCLAIMER);
-  await page.getByRole("main").getByRole("link", { name: "John Doe" }).click();
+  await page.goto("/patients/P001"); // John Doe isn't on the demo day; opened directly
 
   await expect(page.getByRole("heading", { name: "John Doe", level: 1 })).toBeVisible();
 
@@ -39,6 +39,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   // Hold the check for 1.5 s before it goes to the real backend, so the running screen is always
   // there to see, however fast the backend answers.
   await page.route("**/api/patients/*/visits", async (route) => {
+    if (route.request().method() !== "POST") return route.continue(); // only the check
     await new Promise((r) => setTimeout(r, 1500));
     await route.continue();
   });
@@ -54,6 +55,8 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(results.or(page.getByRole("main").getByRole("alert"))).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
   const reply = (await (await replyPromise).json()) as VisitCheck;
+  // The address now names the saved visit, so Back or a reload reopens it instead of a blank form.
+  await expect(page).toHaveURL((url) => url.pathname === "/patients/P001" && url.searchParams.get("visit") === reply.visit_id);
   await expect(results.getByRole("status").filter({ hasText: /^AMBER: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeVisible();
   expect(reply.disclaimer).toBe(DISCLAIMER); // the footer's copy is the API's
@@ -75,6 +78,11 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(alert.getByRole("heading", { level: 2 })).toContainText(CREATININE);
   await expect(alert.getByText("Rule check", { exact: true })).toBeVisible();
   await expect(alert.getByText("Related passages (found by a search for this alert)")).toBeVisible();
+  // The patient's value the alert is about, as recorded (the design's "52 eGFR" box).
+  const values = alert.getByRole("list", { name: "Patient values" });
+  await expect(values).toContainText("John, 1 Oct 2024");
+  await expect(values).toContainText("88");
+  await expect(values).toContainText("umol/L");
   await expect(alert.getByText(/^Uganda HIV Guidelines 2022 · p\. \d+$/).first()).toBeVisible();
   const whole = alert.getByRole("button", { name: "Show the whole passage" });
   await expect(whole).toHaveAttribute("aria-expanded", "false");
@@ -103,6 +111,49 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(tray).toContainText("You overrode it: Other (say why).");
   await tray.getByRole("button", { name: "Accept alert" }).click();
   await expect(row).toContainText("Accepted");
+
+  // Finalize asks first (owner's decision 6): a one-line confirm in the tray; "Go back" changes nothing.
+  await tray.getByRole("button", { name: "Finalize visit" }).click();
+  await expect(tray).toContainText("Finalize John's visit? Decisions can't be changed after this.");
+  await tray.getByRole("button", { name: "Go back" }).click();
+  await expect(tray).not.toContainText("Decisions can't be changed after this.");
+  await tray.getByRole("button", { name: "Finalize visit" }).click();
+  await tray.getByRole("button", { name: "Finalize", exact: true }).click();
+
+  // The saved visit record (S6b): what was checked and what was decided, read only.
+  const visitRecord = page.getByRole("region", { name: "Visit record" });
+  await expect(visitRecord.getByRole("heading", { level: 2 })).toContainText(/^Visit finalized \d\d:\d\d\./);
+  await expect(visitRecord.getByRole("list", { name: "Decisions" })).toContainText(/Accepted \d\d:\d\d/);
+  await expect(page.getByText(/^AMBER · FINALIZED$/)).toBeVisible();
+  await expect(tray.getByRole("button", { name: "Accept alert" })).toHaveCount(0);
+  await page.reload(); // a reload shows the record, never a new check
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
+  await expect(tray.getByRole("button", { name: "Run checks" })).toHaveCount(0);
+
+  // Reopening a finalized visit shows its record, with no new check and no way to change it.
+  await page.goto(`/patients/P001?visit=${reply.visit_id}`);
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Checks running" })).toHaveCount(0);
+
+  // Past checks sit in the record column before the next check (owner, 2026-11-26), newest first.
+  await page.goto("/patients/P001");
+  const past = page.getByRole("list", { name: "Past checks" });
+  const finalized = past.getByRole("listitem").filter({ hasText: "Finalized" }).first();
+  await expect(finalized).toContainText("AMBER");
+  await finalized.getByRole("link").click();
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
+});
+
+test("finalize stays locked until every alert has an answer", async ({ page }) => {
+  await page.goto("/patients/P001");
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  await tray.getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await tray.getByRole("button", { name: /^Finalize, / }).click(); // the tray's Finalize step ("Finalize, to do")
+  const finalize = page.getByRole("region", { name: "Finalize" });
+  await expect(finalize).toContainText(FINALIZE_BLOCKED); // the API's own words
+  await expect(tray.getByRole("button", { name: "Finalize visit" })).toBeDisabled();
+  await expect(tray).toContainText(/Finalize is locked\. 1 alert left to review\./);
 });
 
 // A visit with no alerts (S7b): the API's banner as the headline, and what was checked, so a quiet
@@ -136,4 +187,20 @@ test("the source tags are the words of the API's alert headings", () => {
   const repo = path.resolve(__dirname, "..", "..");
   const headings = JSON.parse(execFileSync(process.env.PYTHON || "python", ["-c", script, repo], { encoding: "utf8" }));
   for (const kind of ["ai", "rule"] as const) expect(headings[kind]).toBe(`Alert (${SOURCE_LABEL[kind]}): T`);
+});
+
+// Too many checks in a minute (the backend's limit, 429): the screen shows the API's own words and
+// keeps the note, so "Run checks" can simply be pressed again.
+test("too many checks: the API's message, and the note kept", async ({ page }) => {
+  const TOO_MANY = "Too many visit checks: wait a moment and try again."; // backend/main.py's detail
+  await page.route("**/api/patients/*/visits", async (route) =>
+    route.request().method() === "POST" ? route.fulfill({ status: 429, json: { detail: TOO_MANY }, headers: { "Retry-After": "30" } }) : route.continue(),
+  );
+  await page.goto("/patients/P001");
+  const notes = page.getByRole("textbox", { name: "Clinical notes" });
+  await notes.fill("Note written before the limit was hit.");
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toHaveText(TOO_MANY);
+  await expect(notes).toHaveValue("Note written before the limit was hit.");
+  await expect(page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" })).toBeEnabled();
 });

@@ -13,6 +13,7 @@ type Schemas = components["schemas"];
 export type PatientSummary = Schemas["PatientSummary"];
 export type PatientDetail = Schemas["PatientDetail"];
 export type VisitCheck = Schemas["VisitCheckResponse"];
+export type SavedVisit = Schemas["SavedVisit"];
 export type Card = Schemas["Card"];
 export type Banner = Schemas["Banner"];
 export type DecisionIn = Schemas["DecisionIn"];

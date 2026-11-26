@@ -29,7 +29,7 @@ from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
-from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED
+from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS, DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
 from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
 from backend.limits import SlidingWindow
@@ -123,6 +123,7 @@ def _visit_reply(entry: Dict[str, Any], *, record_saved: bool, labs: Optional[Li
     return dict(
         visit_id=entry["visit_id"], patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
         saved_at=entry["saved_at"], status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
+        ai_review_label=AI_REVIEW_LABELS[entry["ai_review"]], ai_review_card_label=AI_REVIEW_CARD_LABELS[entry["ai_review"]],
         cards=cards, plan=plan_from_entry(entry), record_saved=record_saved,
         banners=banners_for(entry, record_saved=record_saved), disclaimer=DISCLAIMER,
         finalize_note=FINALIZE_BLOCKED if cards else None,
@@ -146,6 +147,8 @@ def board_row(booking: Booking, record: PatientRecord, latest: Optional[records.
         age_years=record.age_years, sex=record.sex or "", regimen="/".join(record.art_regimen_current), state=state,
         visit_id=latest.visit_id if latest else None, status=latest.status if latest else None,
         ai_review=latest.ai_review if latest else None, alert_count=len(latest.alerts) if latest else 0,
+        ai_review_label=AI_REVIEW_LABELS[latest.ai_review] if latest else None,
+        ai_review_card_label=AI_REVIEW_CARD_LABELS[latest.ai_review] if latest else None,
         reviewed_count=reviewed, finalized_at=finalized,
     )
 
@@ -332,6 +335,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 VisitSummary(
                     visit_id=row.visit_id, visit_date=row.visit_date, saved_at=records.iso(row.saved_at),
                     status=row.status, ai_review=row.ai_review, model=row.model, alert_count=len(row.alerts),
+                    ai_review_label=AI_REVIEW_LABELS[row.ai_review], ai_review_card_label=AI_REVIEW_CARD_LABELS[row.ai_review],
                     decided_count=len(records.latest_decisions(session, row.visit_id)),
                     finalized_at=records.finalized_at(session, row.visit_id),
                 )

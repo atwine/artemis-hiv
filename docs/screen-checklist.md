@@ -18,15 +18,19 @@ How it stays true:
 
 ## 1. How the AI review ended (`AI_REVIEW_OUTCOMES`)
 
-| Result | When | The screen must show |
-|---|---|---|
-| `ok` | The AI replied and its alerts were read | Its alerts beside the rule alerts; no extra banner |
-| `not_run` | The AI review was switched off | Rule alerts only; if none, a blue note that the AI review was off |
-| `failed` | The model server did not answer | Amber banner: AI review failed, only rule checks shown, issues may be missing |
-| `unreadable` | The reply could not be read as a list of alerts | Amber banner, same as `failed`, with its own reason |
-| `cut_off` | The reply stopped before it finished | Amber banner: AI review incomplete; the alerts read are shown, others may be missing |
-| `partly_read` | Part of the reply could not be read | Amber banner, same as `cut_off`, with its own reason |
-| `search_unavailable` | The guideline search model did not load (G33) | Red banner: guideline search unavailable, AI review off, check the search model setting. The plan step does not run either; rule alerts show no guideline references |
+| Result | When | The screen must show | Record label | Day card label |
+|---|---|---|---|---|
+| `ok` | The AI replied and its alerts were read | Its alerts beside the rule alerts; no extra banner | Complete | (its alerts) |
+| `not_run` | The AI review was switched off | Rule alerts only; if none, a blue note that the AI review was off | Switched off for this check | (its alerts) |
+| `failed` | The model server did not answer | Amber banner: AI review failed, only rule checks shown, issues may be missing | Failed: the model server did not answer | AI review failed |
+| `unreadable` | The reply could not be read as a list of alerts | Amber banner, same as `failed`, with its own reason | Failed: the reply could not be read | AI review failed |
+| `cut_off` | The reply stopped before it finished | Amber banner: AI review incomplete; the alerts read are shown, others may be missing | Incomplete: the reply was cut off | AI review incomplete |
+| `partly_read` | Part of the reply could not be read | Amber banner, same as `cut_off`, with its own reason | Incomplete: part of the reply could not be read | AI review incomplete |
+| `search_unavailable` | The guideline search model did not load (G33) | Red banner: guideline search unavailable, AI review off, check the search model setting. The plan step does not run either; rule alerts show no guideline references | Not run: guideline search unavailable | Guideline search unavailable |
+
+The two labels are `AI_REVIEW_LABELS` and `AI_REVIEW_CARD_LABELS` in `artemis/screen_text.py` (owner,
+2026-11-26: the backend sends them, in `ai_review_label` and `ai_review_card_label`, on the visit
+check, the saved visit, a patient's past checks and the day board).
 
 ## 2. The overall result (`STATUSES`)
 
