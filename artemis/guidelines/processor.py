@@ -279,16 +279,12 @@ def extract_markdown_page_texts(
 ) -> List[str]:
     """Split a Markdown file into page-equivalent segments using ``<!-- PAGE BREAK -->``."""
 
-    segments = _markdown_segments(md_path)
+    return _clean_pages(_markdown_segments(md_path), max_pages)
 
+
+def _clean_pages(segments: List[str], max_pages: Optional[int]) -> List[str]:
     # The content before the first PAGE BREAK is page 1.
-    page_texts: List[str] = []
-    limit = len(segments) if max_pages is None else min(max_pages, len(segments))
-    for seg in segments[:limit]:
-        cleaned = _strip_markdown_noise(seg).strip()
-        page_texts.append(cleaned)
-
-    return page_texts
+    return [_strip_markdown_noise(seg).strip() for seg in segments[:max_pages]]
 
 
 def process_markdown_guidelines(
@@ -307,8 +303,9 @@ def process_markdown_guidelines(
     if not md_path.exists():
         raise FileNotFoundError(f"Guideline Markdown file not found: {md_path}")
 
-    page_texts = extract_markdown_page_texts(md_path, max_pages=max_pages)
-    printed = printed_page_numbers(_markdown_segments(md_path))
+    segments = _markdown_segments(md_path)
+    page_texts = _clean_pages(segments, max_pages)
+    printed = printed_page_numbers(segments)
 
     # Rationale: derive a stable file-level prefix from the stem so chunk IDs
     # are unique across multiple Markdown source files.

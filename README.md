@@ -23,7 +23,7 @@ Important: This is **decision support only**. Clinicians retain final authority.
 - **Synthetic demo patients**: `Data/mock_patients.json`; cases you add go to `Data/custom_patients.json`
 - **Saved visits**: `Data/visit_records/`, one file per patient (created when you run checks; git ignores it)
 - **Guideline Markdown files**: the Ugandan guidelines in `Data/MarkDown Files/` (only the files registered in `artemis/guidelines/sources.py` are searched)
-- **Local guideline PDFs (optional / legacy)**: `Data/*.pdf`
+- **Guideline sources**: `Data/MarkDown Files/README.md` names each document, its edition and where to get the PDF (the PDFs are not in the repository)
 - **Persistent local vector DB (Chroma)**: `storage/chroma/` (created at runtime)
 - **Candidate rules output**: `Data/candidate_rules.json` (created when you click “Mark as candidate deterministic rule”)
 
@@ -185,11 +185,13 @@ pip install -r requirements.txt
 The app expects the Ugandan guideline **Markdown files** under `Data/MarkDown Files/`
 (`GUIDELINE_MD_DIR` in `app.py`). It searches only the files registered for Uganda in
 `artemis/guidelines/sources.py`: a Ugandan clinic gets Ugandan guidance only, so another file in
-the folder is ignored. The South African and WHO guidelines sit in
-`Data/Not searched - other countries/` for reference. `python scripts/check_index_sources.py`
-checks that the search database holds Ugandan guidance only.
+the folder is ignored. The South African and WHO guidelines are not in the repository (they
+stay on the owner's computer). `python scripts/check_index_sources.py` checks that the search
+database holds Ugandan guidance only.
 
-If you add or change guideline files, restart Streamlit.
+If you add or change guideline files, restart Streamlit: a changed file gets a fresh search
+index. If the search model cannot load, the screen says so in red and the AI review is off for
+the visit; only the rule checks run.
 
 ### First run is slow
 

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import List, Optional, Tuple
 
+from artemis.visit import SEARCH_UNAVAILABLE
+
 # (Streamlit call name, text): "success" is green, "info" blue, "warning" amber, "error" red.
 Banner = Tuple[str, str]
 
@@ -24,8 +26,7 @@ def status_banners(status: Optional[str], screening_outcome: str, alert_count: i
         banners.append(
             (
                 "error",
-                "Guideline search is unavailable (the search model did not load), so the AI review is off "
-                "for this visit: only rule checks are shown. Check the search model setting.",
+                f"{SEARCH_UNAVAILABLE}: only rule checks are shown. Check the search model setting.",
             )
         )
     elif screening_outcome in _FAILED_REASON:

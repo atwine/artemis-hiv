@@ -80,3 +80,23 @@ def test_the_embedder_reports_a_model_that_did_not_load(monkeypatch: pytest.Monk
 
     monkeypatch.setattr(embedder_module, "SentenceTransformer", boom)
     assert embedder_module.Embedder(embedder_module.EmbedderConfig(model_name="all-MiniLM-L6v2")).loaded is False
+
+
+def test_with_the_search_down_the_plan_step_does_not_run_either() -> None:
+    rag = RagEngine(project_root=ROOT, guideline_paths=[], embedder=_BrokenSearchModel(),
+                    vector_store=h.FakeStore(json.loads((h.GOLDEN_DIR / "corpus.json").read_text(encoding="utf-8"))))
+    p = next(p for p in h.patients() if p["patient_id"] == "P001")
+    model = _CountingModel()
+    result = run_visit_analysis(patient=p, today_note=p["today_encounter"]["note"], rag=rag, llm_client=model,
+                                options=AnalysisOptions(use_llm=True, agentic=True))
+    assert model.calls == 0 and result.agentic_result is None
+
+
+def test_with_the_ai_switched_off_a_broken_search_is_still_reported() -> None:
+    rag = RagEngine(project_root=ROOT, guideline_paths=[], embedder=_BrokenSearchModel(),
+                    vector_store=h.FakeStore(json.loads((h.GOLDEN_DIR / "corpus.json").read_text(encoding="utf-8"))))
+    p = next(p for p in h.patients() if p["patient_id"] == "P001")
+    result = run_visit_analysis(patient=p, today_note=p["today_encounter"]["note"], rag=rag, llm_client=None,
+                                options=AnalysisOptions(use_llm=False, agentic=False))
+    assert result.screening_outcome == "search_unavailable"
+

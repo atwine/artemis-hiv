@@ -118,7 +118,7 @@ def main(argv: Optional[list] = None) -> int:
 
     out.mkdir(parents=True, exist_ok=True)
     rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
-    if rb.app.GUIDELINE_PDF_PATHS:
+    if rb.app.GUIDELINE_PATHS:
         rag.ensure_indexed()
     client = OpenAICompatClient(config)
     secrets = rb._server_strings()

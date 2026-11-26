@@ -47,6 +47,8 @@ def _words(text: str) -> set:
 
 
 class FakeEmbedder:
+    loaded = True
+
     def encode(self, texts: List[str]) -> List[List[float]]:
         return [[0.0] for _ in texts]
 

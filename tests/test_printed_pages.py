@@ -43,3 +43,13 @@ def test_a_citation_names_the_guideline_and_its_printed_page() -> None:
     passage = VectorSearchResult("x__p22_c1", "text", {"page_number": 255, "source_path": str(ART)}, 0.1)
     _, lines = alert_references(Alert("R1", "t", "m", {}, "q"), [passage])
     assert lines == ["Uganda HIV guidelines 2022, p.255"]
+
+
+def test_every_registered_guideline_has_printed_pages_that_run_in_order() -> None:
+    from artemis.guidelines.processor import _markdown_segments
+    from artemis.guidelines.sources import SOURCES
+
+    for name in SOURCES:
+        path = ROOT / "Data" / "MarkDown Files" / name
+        if path.exists():
+            printed_page_numbers(_markdown_segments(path))  # refuses a file it would cite wrongly

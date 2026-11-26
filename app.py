@@ -36,7 +36,7 @@ from artemis.patient.store import UnreadableFile, read_json_list, write_json_lis
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
 from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
-from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store
+from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store, index_collection_name
 from artemis.patient.labs import TEST_UNITS, lab_rows_to_entries, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES, other_medicines, regimen_codes
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
@@ -83,8 +83,6 @@ GUIDELINE_INDEX_VERSION = 3
 # more passages but the AI caught fewer problems). The index is per model, so changing it builds
 # a fresh one.
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-# Backward-compatible alias used by downstream code.
-GUIDELINE_PDF_PATHS = GUIDELINE_PATHS
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
 CUSTOM_PATIENTS_PATH = Path(
     os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json"
@@ -141,32 +139,11 @@ def _get_rag_engine(
 ) -> RagEngine:
     # Rationale: keep a single vector store + embedder + engine per session.
     embedder = _get_embedder(embedding_model_name, version=2)
-    # Rationale: keep a separate Chroma collection per embedding model to avoid
-    # mixing incompatible vector spaces across runs.
-    model_key = (
-        (embedding_model_name or "")
-        .strip()
-        .lower()
-        .replace("/", "_")
-        .replace(":", "_")
-        .replace(" ", "_")
-    )
-
-    # Rationale: persistent Chroma collections keep old indexed chunks. Include the
-    # active guideline sources in the collection name to prevent mixing chunks from
-    # previous documents and to force a clean re-index when the source files change.
-    guideline_key = "no_guideline"
-    if GUIDELINE_PATHS:
-        # Rationale: hash all file stems so the collection auto-resets when any
-        # source file is added, removed or renamed.
-        guideline_key = "_".join(
-            p.stem.strip().lower().replace(" ", "_").replace("+", "_")[:20]
-            for p in GUIDELINE_PATHS
-        )[:80]  # keep the collection name within Chroma's limits
+    # One stored index per search model and guideline text: an edited file gets a fresh one (G37).
     vector_store = create_vector_store(
         project_root=PROJECT_ROOT,
         prefer_chroma=prefer_chroma,
-        collection_name=f"uganda_hiv_guidelines__{model_key}__{guideline_key}__v{GUIDELINE_INDEX_VERSION}",
+        collection_name=index_collection_name(embedding_model_name, GUIDELINE_PATHS, GUIDELINE_INDEX_VERSION),
     )
     return RagEngine(
         project_root=PROJECT_ROOT,
@@ -204,7 +181,7 @@ def _run_analysis(
         # Rationale: cache-bust to refresh vector_store Chroma filter fix and related changes.
         engine_version=5,
     )
-    if GUIDELINE_PDF_PATHS:
+    if GUIDELINE_PATHS:
         rag.ensure_indexed()
 
     llm_client = None
@@ -815,7 +792,7 @@ def main() -> None:
             )
         st.session_state["llm_num_ctx"] = int(num_ctx)
 
-    save_disabled = not bool(GUIDELINE_PDF_PATHS)
+    save_disabled = not bool(GUIDELINE_PATHS)
     if st.button("Save encounter (run checks)", disabled=save_disabled):
         _run_analysis(
             patient=patient,

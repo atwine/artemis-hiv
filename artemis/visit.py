@@ -113,6 +113,9 @@ def patient_summary_for(patient: Dict[str, Any], today_note: str) -> Dict[str, A
     return build_stage1_summary(patient=patient_copy, context=build_patient_context(patient_copy))
 
 
+# Shown when the search model did not load and the AI review is off (G33).
+SEARCH_UNAVAILABLE = ("Guideline search is unavailable (the search model did not load), "
+                      "so the AI review is off for this visit")
 QUESTION_PASSAGES = 2  # passages taken for each of the AI's questions
 SCREENING_MAX = 10  # passages the AI screening reads at most
 
@@ -129,9 +132,14 @@ def merge_by_turns(result_lists: List[List[Any]], limit: int) -> List[Any]:
     return merged[:limit]
 
 
+@dataclass
+class ScreeningSearch:
+    passages: List[VectorSearchResult]  # what the AI screening reads
+    questions: List[str]  # the AI's own guideline questions; empty when the generic search ran
+
+
 def screening_search(rag: RagEngine, context: Any, top_k: int, *, llm_client: Any = None,
-                     summary: Optional[Dict[str, Any]] = None,
-                     debug: Optional[Dict[str, Any]] = None) -> List[VectorSearchResult]:
+                     summary: Optional[Dict[str, Any]] = None) -> ScreeningSearch:
     """The guideline passages the AI screening reads. With an AI, it first writes the patient's own
     guideline questions and each is searched (best 2 passages each, up to 10; Phase 2B fix 5q).
     Without one, or when its reply is unusable, one fixed query plus the patient's notes (G31).
@@ -139,10 +147,9 @@ def screening_search(rag: RagEngine, context: Any, top_k: int, *, llm_client: An
     templated search per drug, medicine, rule alert and symptom, was tried and dropped.)"""
     questions = (ask_search_questions(llm_client, patient_facts(context, summary))
                  if llm_client is not None and summary is not None else [])
-    if debug is not None:
-        debug["search_questions"] = questions
     if questions:
-        return merge_by_turns([rag.search(q, top_k=QUESTION_PASSAGES) for q in questions], SCREENING_MAX)
+        return ScreeningSearch(
+            merge_by_turns([rag.search(q, top_k=QUESTION_PASSAGES) for q in questions], SCREENING_MAX), questions)
     checklist_seed = Alert(
         alert_id="llm_checklist_seed",
         title="Guideline audit checklist",
@@ -150,7 +157,7 @@ def screening_search(rag: RagEngine, context: Any, top_k: int, *, llm_client: An
         evidence={"type": "llm_audit_checklist_seed"},
         query_hint="visit audit checklist labs monitoring regimen",
     )
-    return _retrieve(rag, context=context, alert=checklist_seed, top_k=top_k)
+    return ScreeningSearch(_retrieve(rag, context=context, alert=checklist_seed, top_k=top_k), [])
 
 
 def _cited_passages(alert: Alert, shown: List[VectorSearchResult]) -> List[VectorSearchResult]:
@@ -194,7 +201,8 @@ def run_visit_analysis(
 
     # Optional: agentic planner + per-subtask retrieval.
     agentic_result = None
-    if options.agentic:
+    search_ready = rag.search_ready  # the plan step and the AI review both stop without it (G33)
+    if options.agentic and search_ready:
         try:
             agentic_context = QueryContext(
                 question_text=AGENTIC_QUESTION,
@@ -217,17 +225,15 @@ def run_visit_analysis(
     # With the search model not loaded, the AI review is switched off and the rule checks still
     # run (G33, owner's decision 2026-11-26): an alert built on near-random passages looks as sure
     # as a good one.
-    search_ready = rag.search_ready
+    ai_on = use_llm and llm_client is not None
     if not search_ready:
         logger.warning("Guideline search model did not load; AI review off for this visit")
-        status("Guideline search is unavailable (the search model did not load), so the AI review is off "
-               "for this visit. The rule checks still ran.", "error")
-    search_debug: Dict[str, Any] = {}
-    use_ai_search = use_llm and llm_client is not None and search_ready
-    if use_ai_search:
+        status(f"{SEARCH_UNAVAILABLE}. The rule checks still ran.", "error")
+    elif ai_on:
         status(f"{llm_name}: listing guideline questions for this patient…", "running")
-    checklist_retrieved = (screening_search(rag, context, top_k, llm_client=llm_client if use_ai_search else None,
-                                            summary=stage1_summary, debug=search_debug) if search_ready else [])
+    found = (screening_search(rag, context, top_k, llm_client=llm_client if ai_on else None, summary=stage1_summary)
+             if search_ready else ScreeningSearch([], []))
+    checklist_retrieved = found.passages
 
     # Optional: LLM-first screening mode — generate alerts directly from Stage 1 summary
     # and checklist evidence. Deterministic alerts remain the fallback when
@@ -235,12 +241,12 @@ def run_visit_analysis(
     screening_ran = False
     screening_outcome = "not_run"
     screening_debug: Optional[Dict[str, Any]] = None
-    if not search_ready and use_llm and llm_client is not None:
+    if not search_ready:
         screening_outcome = "search_unavailable"
-    elif use_llm and llm_client is not None:
+    elif ai_on:
         screening_ran = True
         status(f"{llm_name}: screening for safety issues…", "running")
-        screening_debug = dict(search_debug)
+        screening_debug = {"search_questions": found.questions}
         screening_alerts = generate_llm_screening_alerts(
             patient_context=context,
             stage1_summary=stage1_summary,

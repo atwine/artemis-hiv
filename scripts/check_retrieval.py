@@ -65,10 +65,10 @@ def main(argv: Optional[list] = None) -> int:
     args = ap.parse_args(argv)
 
     rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
-    if getattr(rag._embedder, "_model", None) is None:
+    if not rag.search_ready:
         # The app falls back to word hashing when the model can't load (G33); a measurement must not.
         raise SystemExit(f"the search model {rb.app.EMBEDDING_MODEL} did not load; nothing measured")
-    if rb.app.GUIDELINE_PDF_PATHS:
+    if rb.app.GUIDELINE_PATHS:
         rag.ensure_indexed()
     cases = load_cases(args.cases)
     questions = load_search_questions(args.questions)
@@ -83,16 +83,15 @@ def main(argv: Optional[list] = None) -> int:
     def case_search(c):
         context = patient_context_for(c.patient, _note(c))
         if ai is None:
-            return screening_search(rag, context, DEPTH)
-        debug: dict = {}
+            return screening_search(rag, context, DEPTH).passages
         found = screening_search(rag, context, AnalysisOptions().top_k, llm_client=ai,
-                                 summary=patient_summary_for(c.patient, _note(c)), debug=debug)
-        asked[c.case_id] = debug.get("search_questions")
+                                 summary=patient_summary_for(c.patient, _note(c)))
+        asked[c.case_id] = found.questions
         if ai.last_error:
             # The app may fall back to the generic search, but a check of the AI's questions must not:
             # a fallback would measure the old search under the new label.
             raise SystemExit(f"stopped at {c.case_id}: the AI call failed ({ai.last_error}); nothing written")
-        return found
+        return found.passages
 
     rows = check_search(
         cases, questions,

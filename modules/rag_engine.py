@@ -52,7 +52,7 @@ class RagEngine:
     def search_ready(self) -> bool:
         """False when the search model did not load: its word-hashing fallback finds near-random
         passages, so nothing should rest on it (G33, owner's decision 2026-11-26)."""
-        return bool(getattr(self._embedder, "loaded", True))
+        return bool(self._embedder.loaded)
 
     def ensure_indexed(self, *, max_pages: Optional[int] = None) -> int:
         """Index guideline chunks into the vector store.
@@ -109,9 +109,7 @@ class RagEngine:
     ) -> List[VectorSearchResult]:
         """Retrieve guideline chunks relevant to a given alert."""
 
-        query = self._build_query(patient_context=patient_context, alert=alert)
-        k = self._config.top_k if top_k is None else top_k
-        return self._vector_store.query(query, self._embedder, top_k=k)
+        return self.search(self._build_query(patient_context=patient_context, alert=alert), top_k=top_k)
 
     def search(self, text: str, top_k: Optional[int] = None) -> List[VectorSearchResult]:
         """Search the guidelines with plain text, as written (the Phase 2B search check)."""

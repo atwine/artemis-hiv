@@ -85,8 +85,9 @@ def test_the_screening_searches_each_question_and_gets_two_passages_each_up_to_t
 
     rag = _Rag()
     questions = ["Can iron be taken with dolutegravir?", "When to check creatinine on TDF?", "Q3?", "Q4?", "Q5?", "Q6?"]
-    found = screening_search(rag, context=CONTEXT, top_k=5, llm_client=_Client(json.dumps(questions)), summary=SUMMARY)
-    assert rag.searched == questions
+    result = screening_search(rag, context=CONTEXT, top_k=5, llm_client=_Client(json.dumps(questions)), summary=SUMMARY)
+    found = result.passages
+    assert rag.searched == questions and result.questions == questions
     assert len(found) == 10 and found[0].chunk_id.startswith("Can iron") and found[1].chunk_id.startswith("When to ")
 
 
@@ -95,5 +96,5 @@ def test_without_an_ai_or_its_questions_the_generic_search_stays() -> None:
 
     for client in (None, _Client("not json")):
         rag = _Rag()
-        found = screening_search(rag, context=CONTEXT, top_k=5, llm_client=client, summary=SUMMARY)
-        assert rag.searched == ["GENERIC"] and len(found) == 5
+        result = screening_search(rag, context=CONTEXT, top_k=5, llm_client=client, summary=SUMMARY)
+        assert rag.searched == ["GENERIC"] and len(result.passages) == 5 and result.questions == []

@@ -7,6 +7,7 @@ Local-first design:
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -23,6 +24,18 @@ class VectorSearchResult:
     document: str
     metadata: Dict[str, Any]
     distance: float
+
+
+def index_collection_name(model_name: str, guideline_paths: List[Path], version: int) -> str:
+    """The stored index's name: the search model, the guideline files and a fingerprint of their
+    text, so an edited, added or removed file gets a fresh index instead of old passages (G37)."""
+    model_key = (model_name or "").strip().lower().replace("/", "_").replace(":", "_").replace(" ", "_")
+    files_key = "_".join(p.stem.strip().lower().replace(" ", "_").replace("+", "_")[:20]
+                         for p in guideline_paths)[:60] or "no_guideline"
+    fingerprint = hashlib.sha256()
+    for p in guideline_paths:
+        fingerprint.update(p.name.encode("utf-8") + b"\0" + p.read_bytes())
+    return f"uganda_hiv_guidelines__{model_key}__{files_key}__{fingerprint.hexdigest()[:10]}__v{version}"
 
 
 class VectorStore:
