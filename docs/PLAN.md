@@ -3,6 +3,20 @@
 Snapshot taken 2026-11-18. Tick a box when its check passes, not when the code is written.
 Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/decisions.tsv`.
 
+## Where things stand (updated 2026-11-26)
+
+| Phase | State | Open items |
+|---|---|---|
+| 0 Foundations | done | |
+| 1 Audit fixes | done, on `development` | |
+| 2 Preliminary evaluation | done, on `development` | |
+| 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
+| 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
+| 4 Backend (FastAPI) | in progress on branch `claude/phase4-backend-1abc8a` | 4.0-4.2, 4.4, 4.5 done there, not merged; 4.3, 4.6, 4.7 and the Phase 4 check left |
+| 5 to 8 | not started | |
+
+`docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
+
 ## What "done" means
 
 Version 1 of the revival is done when all four are true:
@@ -13,6 +27,8 @@ Version 1 of the revival is done when all four are true:
    command (`python scripts/evaluate.py`) reproduces it (Phase 7; Phase 2 gives a preliminary one).
 3. Tests pass in GitHub's automatic checks on `development`.
 4. Every alert on screen quotes the guideline passage it rests on, with the document and edition.
+   (2026-11-26: citations name the guideline and its printed page, e.g. "Uganda HIV guidelines
+   2022, p.255"; showing the passage's own text on screen is still to do in Phase 5.)
 
 ## Ground rules
 
@@ -136,12 +152,14 @@ Retrieval faults found in the Phase 1 audit are fixed here, not in Phase 1 (owne
 They are listed in `docs/audit/phase1-findings.tsv` with the target phase `2B`.
 
 Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and `eval/phase2b/`):
+- **Phase 2B is done and merged into `development` (2026-11-26).** The summary is
+  `eval/phase2b/README.md`; the notes below are the history.
 - Done: the search test set (a gold quote for 17 of the 22 problems, 5 not in any guideline,
   plus 20 standalone questions); the search checker with its self-check; the diagnosis (the
   right passage reached the AI for 3 of 17 problems; caught 98% when shown, 72% when not).
 - Done, owner's rule (G32): Ugandan guidance only. Only registered Ugandan files are searched,
-  the South African and WHO files are in `Data/Not searched - other countries/`, and the search
-  database was rebuilt (`scripts/check_index_sources.py` passes). Questions in the top 5 went
+  the South African and WHO files moved out (since 2B.6 they are on the owner's computer only), and
+  the search database was rebuilt (`scripts/check_index_sources.py` passes). Questions in the top 5 went
   from 3/20 to 13/20; 10 of 22 problems now have no Ugandan passage.
 - Baselines, Uganda only (3 runs per case, temperature 0): the AI's own catches are 59% for
   Llama (69% before, with all four guidelines) and 80% for GLM (84% before).
@@ -156,8 +174,7 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   questions, each searched for its best 2 passages, up to 10): with Llama writing them, 4/12,
   the same as today (generic questions); with GLM, 6/12, one short of the bar of 7 but equal to
   the best this index allows even with perfect wording. Kept by the owner's decision
-  (2026-11-26). Second check running: GLM end to end, 3 runs per case, must keep its own catches
-  at or above 80%.
+  (2026-11-26); its second check passed (below).
 - Fix 5b (pieces cut along the guideline's own sections, labelled with the section path, tables
   by whole rows) tried and dropped by its rule: self-check 30/34 and ideal searches 7/12 rose,
   but standalone questions fell to 11/20 and cases to 5/12. The converted files miss some
@@ -232,6 +249,7 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
       owner's call.
 
 Check: the retrieval and answer scores before and after each change are in the decision log.
+Passed 2026-11-26: every fix has its keep rule, its result and its run in `docs/decisions.tsv`.
 
 ## Phase 3: Designs in Paper
 
@@ -276,6 +294,12 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
       status types are built from `AI_REVIEW_OUTCOMES` and `STATUSES` in `artemis/visit.py` (which
       adds `search_unavailable`), and it sends the wording from `artemis/screen_text.py` (banners,
       alert headings, citation lines) so the website only displays it.
+
+Where it stands (2026-11-26): 4.0, 4.1, 4.2, 4.4 and 4.5 are done on branch
+`claude/phase4-backend-1abc8a` (92 backend tests pass there) and are ticked on that branch, not
+here yet. Before it merges, the branch takes in `development` (Phase 2B) and does 4.7, since its
+list of AI-review results lacks `search_unavailable`. 4.3 is no longer blocked by 2B; replacing
+Chroma with the simple saved search is an option there (2B.5).
 
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
 
@@ -349,7 +373,7 @@ reproduces it.
 
 ## Decisions waiting on you
 
-1. The design direction (after the Phase 3 mockups).
+1. The design direction: decided 2026-11-27, "Day Rail with floating tray" (Phase 3).
 2. Database: Postgres (owner, 2026-11-25), hosted somewhere like Railway or Cloudflare; the host
    is still open. Until then the visit record is a local file (fix 9).
 3. Which OpenRouter models, and a spending cap: decided 2026-11-25 (DeepSeek V3.2, GLM 5.2, Claude
