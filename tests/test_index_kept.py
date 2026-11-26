@@ -118,7 +118,9 @@ def test_a_store_that_cannot_start_is_reported_not_silent(tmp_path: Path, caplog
     with caplog.at_level(logging.WARNING):
         store = create_vector_store(project_root=tmp_path, prefer_chroma=True, collection_name="x")  # too short
     assert isinstance(store, InMemoryVectorStore)
-    assert any("Chroma" in r.getMessage() and "ValueError" in r.getMessage() for r in caplog.records)
+    # The error's class name differs between chromadb versions (ValueError on 0.6, InvalidArgumentError
+    # on the locked 1.5), so only the warning itself is checked.
+    assert any("Chroma could not start" in r.getMessage() for r in caplog.records)
 
 
 def test_changing_how_passages_are_split_needs_a_new_index_version():
