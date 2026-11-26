@@ -48,6 +48,12 @@ class RagEngine:
 
         self._indexed = False
 
+    @property
+    def search_ready(self) -> bool:
+        """False when the search model did not load: its word-hashing fallback finds near-random
+        passages, so nothing should rest on it (G33, owner's decision 2026-11-26)."""
+        return bool(getattr(self._embedder, "loaded", True))
+
     def ensure_indexed(self, *, max_pages: Optional[int] = None) -> int:
         """Index guideline chunks into the vector store.
 

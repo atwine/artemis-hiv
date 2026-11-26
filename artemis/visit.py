@@ -54,8 +54,9 @@ class AnalysisResult:
     results: List[Dict[str, Any]]
     status: str
     deterministic_alerts: List[Alert]
-    # What happened to the AI review: "not_run" (switched off), "ok", "failed" (no reply)
-    # or "unreadable" (a reply that could not be read as a list of alerts).
+    # What happened to the AI review: "not_run" (switched off), "ok", "failed" (no reply),
+    # "unreadable" (a reply that could not be read as a list of alerts), the partial "cut_off" and
+    # "partly_read", or "search_unavailable" (the search model did not load, so it did not run; G33).
     screening_outcome: str
     screening_ran: bool
     screening_debug: Optional[Dict[str, Any]]
@@ -213,12 +214,20 @@ def run_visit_analysis(
 
     llm_error: Optional[str] = None
 
+    # With the search model not loaded, the AI review is switched off and the rule checks still
+    # run (G33, owner's decision 2026-11-26): an alert built on near-random passages looks as sure
+    # as a good one.
+    search_ready = rag.search_ready
+    if not search_ready:
+        logger.warning("Guideline search model did not load; AI review off for this visit")
+        status("Guideline search is unavailable (the search model did not load), so the AI review is off "
+               "for this visit. The rule checks still ran.", "error")
     search_debug: Dict[str, Any] = {}
-    use_ai_search = use_llm and llm_client is not None
+    use_ai_search = use_llm and llm_client is not None and search_ready
     if use_ai_search:
         status(f"{llm_name}: listing guideline questions for this patient…", "running")
-    checklist_retrieved = screening_search(rag, context, top_k, llm_client=llm_client if use_ai_search else None,
-                                           summary=stage1_summary, debug=search_debug)
+    checklist_retrieved = (screening_search(rag, context, top_k, llm_client=llm_client if use_ai_search else None,
+                                            summary=stage1_summary, debug=search_debug) if search_ready else [])
 
     # Optional: LLM-first screening mode — generate alerts directly from Stage 1 summary
     # and checklist evidence. Deterministic alerts remain the fallback when
@@ -226,7 +235,9 @@ def run_visit_analysis(
     screening_ran = False
     screening_outcome = "not_run"
     screening_debug: Optional[Dict[str, Any]] = None
-    if use_llm and llm_client is not None:
+    if not search_ready and use_llm and llm_client is not None:
+        screening_outcome = "search_unavailable"
+    elif use_llm and llm_client is not None:
         screening_ran = True
         status(f"{llm_name}: screening for safety issues…", "running")
         screening_debug = dict(search_debug)
@@ -273,6 +284,8 @@ def run_visit_analysis(
         # alert's are found by a search for it (fix 8).
         if alert.source == "ai":
             retrieved = _cited_passages(alert, checklist_retrieved)
+        elif not search_ready:
+            retrieved = []
         else:
             retrieved = _retrieve(rag, context=context, alert=alert, top_k=top_k)
         explanation = generate_explanation(patient_context=context, alert=alert, retrieved_chunks=retrieved)

@@ -43,6 +43,11 @@ class Embedder:
         self._fallback_dim = 256
 
     @property
+    def loaded(self) -> bool:
+        """False when the search model did not load and searches fall back to word hashing (G33)."""
+        return self._model is not None
+
+    @property
     def model_name(self) -> str:
         return self._config.model_name
 

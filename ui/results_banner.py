@@ -20,7 +20,15 @@ _PARTIAL_REASON = {
 
 def status_banners(status: Optional[str], screening_outcome: str, alert_count: int) -> List[Banner]:
     banners: List[Banner] = []
-    if screening_outcome in _FAILED_REASON:
+    if screening_outcome == "search_unavailable":
+        banners.append(
+            (
+                "error",
+                "Guideline search is unavailable (the search model did not load), so the AI review is off "
+                "for this visit: only rule checks are shown. Check the search model setting.",
+            )
+        )
+    elif screening_outcome in _FAILED_REASON:
         banners.append(
             (
                 "warning",
