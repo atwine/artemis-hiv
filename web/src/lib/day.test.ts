@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { appointmentNote, clock, dayHeadline, initials, nextForYou, type DayAppointment } from "./day.ts";
+import { appointmentNote, clock, dayHeadline, initials, localDate, nextForYou, type DayAppointment } from "./day.ts";
 
 const appt = (over: Partial<DayAppointment>): DayAppointment => ({
   time: "09:30",
@@ -44,4 +44,9 @@ test("clock time and initials", () => {
   assert.match(clock("2026-11-26T06:52:12.123456Z"), /^\d\d:\d\d$/);
   assert.equal(initials("Dr. A. Okello"), "AO");
   assert.equal(initials("Harriet Namubiru"), "HN");
+});
+
+test("a saved time's date, on this computer's calendar", () => {
+  const iso = new Date(2026, 10, 26, 23, 30).toISOString(); // 23:30 local, maybe the next day in UTC
+  assert.equal(localDate(iso), "26 Nov 2026");
 });

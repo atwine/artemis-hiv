@@ -63,3 +63,9 @@ export function initials(name: string): string {
     .join("")
     .slice(0, 2);
 }
+
+/** "26 Nov 2026": a saved time's date in this computer's time zone (the same as clock()). */
+export function localDate(iso: string): string {
+  const t = new Date(iso);
+  return `${t.getDate()} ${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
+}

@@ -128,6 +128,14 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await page.goto(`/patients/P001?visit=${reply.visit_id}`);
   await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
   await expect(page.getByRole("region", { name: "Checks running" })).toHaveCount(0);
+
+  // Past checks sit in the record column before the next check (owner, 2026-11-26), newest first.
+  await page.goto("/patients/P001");
+  const past = page.getByRole("list", { name: "Past checks" });
+  const finalized = past.getByRole("listitem").filter({ hasText: "Finalized" }).first();
+  await expect(finalized).toContainText("AMBER");
+  await finalized.getByRole("link").click();
+  await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
 });
 
 test("finalize stays locked until every alert has an answer", async ({ page }) => {

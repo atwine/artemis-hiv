@@ -148,4 +148,9 @@ test("finalize, the confirm and the record", async ({ page }) => {
   await tray.getByRole("button", { name: "Finalize", exact: true }).click();
   await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S6b-record.png") });
+
+  // His next visit, before the checks: the finalized one is listed under Past checks.
+  await page.goto("/patients/P001");
+  await expect(page.getByRole("list", { name: "Past checks" })).toContainText("Finalized");
+  await page.screenshot({ path: path.join(OUT, "web-S2-past-checks.png") });
 });
