@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { PatientDetail } from "@/lib/api/client";
 import { firstName } from "@/lib/alerts";
 import { checkReads } from "@/lib/record";
+import { cn } from "@/lib/utils";
 
 /** The AI review's usual length (GLM 5.2 averaged 14 s in Phase 2; the design says about 15). */
 export const AI_USUAL_SECONDS = 15;
@@ -29,7 +30,7 @@ export function RunningView({ patient, aiReview, seconds }: { patient: PatientDe
   return (
     <section aria-label="Checks running" className="flex flex-col gap-6">
       <h2 className="max-w-225 text-30 font-semibold tracking-[-0.025em] text-black">
-        Checking {firstName(patient.name || "the patient")}&apos;s visit.{" "}
+        Checking {firstName(patient.name)}&apos;s visit.{" "}
         <span className="text-muted-foreground">
           {aiReview ? `The AI review takes about ${AI_USUAL_SECONDS} seconds.` : "Rule checks only."}
         </span>
@@ -60,9 +61,7 @@ function Row({ title, state, seconds }: { title: string; state: string; seconds?
           )}
         </p>
         {seconds !== undefined && (
-          <div className="h-1.5 w-full rounded-[3px] bg-blue-wash">
-            <div className="h-1.5 rounded-[3px] bg-blue transition-[width] duration-1000 ease-linear" style={{ width: `${barShare(seconds) * 100}%` }} />
-          </div>
+          <TimeBar seconds={seconds} className="h-1.5 w-full bg-blue-wash" fill="bg-blue" />
         )}
       </div>
     </li>
@@ -84,10 +83,17 @@ export function RunningTrayStatus({ aiReview, startedAt }: { aiReview: boolean; 
         {aiReview ? ` · AI review about ${AI_USUAL_SECONDS} s` : " · rule checks"}
       </p>
       {aiReview && (
-        <div className="h-[5px] w-60 rounded-[3px] bg-white/15">
-          <div className="h-[5px] rounded-[3px] bg-white transition-[width] duration-1000 ease-linear" style={{ width: `${barShare(seconds) * 100}%` }} />
-        </div>
+        <TimeBar seconds={seconds} className="h-[5px] w-60 bg-white/15" fill="bg-white" />
       )}
+    </div>
+  );
+}
+
+/** The time bar: elapsed time against the usual length (barShare), never reported progress. */
+function TimeBar({ seconds, className, fill }: { seconds: number; className: string; fill: string }) {
+  return (
+    <div className={cn("flex rounded-[3px]", className)}>
+      <div className={cn("rounded-[3px] transition-[width] duration-1000 ease-linear", fill)} style={{ width: `${barShare(seconds) * 100}%` }} />
     </div>
   );
 }

@@ -7,8 +7,6 @@ import type { Reason } from "@/lib/decisions";
 import { NEEDS_COMMENT } from "@/lib/decisions";
 import { cn } from "@/lib/utils";
 
-export const OVERRIDE_COMMENT = "override-comment";
-
 export function OverrideView({
   card,
   n,
@@ -46,6 +44,7 @@ export function OverrideView({
                 type="button"
                 disabled={busy}
                 aria-pressed={needsComment ? chosen : undefined}
+                // The reasons are the API's own list for this card; the backend checks the one sent.
                 onClick={() => onReason(r.display as Reason)}
                 className={cn(
                   "flex h-14.5 w-105 cursor-pointer items-center justify-between rounded-[12px] border border-line-strong px-5 text-left text-16 font-medium text-black hover:bg-surface disabled:cursor-wait",
@@ -64,7 +63,6 @@ export function OverrideView({
         <label className="flex max-w-[852px] flex-col gap-2">
           <span className="text-15 font-semibold text-black">Why does it not apply?</span>
           <textarea
-            id={OVERRIDE_COMMENT}
             value={comment}
             onChange={(e) => onComment(e.target.value)}
             maxLength={2000}

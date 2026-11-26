@@ -3,12 +3,13 @@
 import { StatusShape } from "@/components/frame/status";
 import type { Card, DecisionOut, PatientDetail, VisitCheck } from "@/lib/api/client";
 import { checkedCounts, firstSentence } from "@/lib/record";
-import { SOURCE_LABEL, severityWord } from "@/lib/alerts";
+import { isSevere, SOURCE_LABEL, severityWord } from "@/lib/alerts";
 import { cn } from "@/lib/utils";
 
 export function ResultsView({
   check,
   patient,
+  noteSent,
   savedByAlert,
   finalizeNote,
   saveError,
@@ -16,12 +17,13 @@ export function ResultsView({
 }: {
   check: VisitCheck;
   patient: PatientDetail;
+  noteSent: string;
   savedByAlert: Map<string, DecisionOut>;
   finalizeNote: string | null;
   saveError: string | null;
   onOpen: (i: number) => void;
 }) {
-  if (check.status === "GREEN" && check.cards.length === 0) return <GreenView check={check} patient={patient} />;
+  if (check.status === "GREEN" && check.cards.length === 0) return <GreenView check={check} patient={patient} noteSent={noteSent} />;
   return (
     <section aria-label="Check results" className="flex max-w-240 flex-col gap-6">
       <h2 className="text-20 font-semibold tracking-[-0.015em]">Check results</h2>
@@ -50,7 +52,7 @@ export function decisionWords(d: DecisionOut): string {
 
 function AlertRow({ card, n, saved, onOpen }: { card: Card; n: number; saved?: DecisionOut; onOpen: () => void }) {
   const ext = card.extension;
-  const severe = ["high", "critical"].includes((ext.severity ?? "").toLowerCase());
+  const severe = isSevere(ext.severity);
   return (
     <button type="button" onClick={onOpen} className="flex min-h-15 w-full cursor-pointer items-center gap-4 py-2 text-left hover:bg-surface">
       <span className="w-5 shrink-0 text-13 text-muted-foreground">{n}</span>
@@ -106,18 +108,13 @@ function Banners({ check }: { check: VisitCheck }) {
  * quiet screen never looks like a skipped one. The design's guideline-passage count is left off:
  * the API doesn't say how many passages the AI was shown.
  */
-function GreenView({ check, patient }: { check: VisitCheck; patient: PatientDetail }) {
+function GreenView({ check, patient, noteSent }: { check: VisitCheck; patient: PatientDetail; noteSent: string }) {
   const banner = check.banners[0];
   const [lead, rest] = firstSentence(banner?.text ?? "");
   return (
     <section aria-label="Check results" className="flex flex-col gap-6">
       <div role="status" data-level={banner?.level} className="flex items-center gap-4.5">
-        {banner?.level === "success" && (
-          <svg width="44" height="44" viewBox="0 0 14 14" aria-hidden className="shrink-0">
-            <circle cx="7" cy="7" r="7" fill="var(--color-green)" />
-            <path d="M4 7.2l2 2 4-4.4" fill="none" stroke="#fff" strokeWidth="1.4" />
-          </svg>
-        )}
+        {banner?.level === "success" && <StatusShape state="GREEN" size={44} />}
         <h2 className="text-30 font-semibold tracking-[-0.025em] text-black">
           {lead} {rest && <span className="text-muted-foreground">{rest}</span>}
         </h2>
@@ -132,7 +129,7 @@ function GreenView({ check, patient }: { check: VisitCheck; patient: PatientDeta
           What was checked, so a quiet screen is not a skipped one
         </p>
         <ul aria-label="What was checked" className="flex overflow-clip rounded-[14px] border border-line">
-          {checkedCounts(patient).map((c) => (
+          {checkedCounts(patient, noteSent).map((c) => (
             <li key={c.label} className="flex flex-1 flex-col gap-1 border-r border-line px-5.5 py-5 last:border-r-0">
               <span className="text-36 font-semibold tracking-[-0.02em] text-black">{c.n}</span>
               <span className="text-15 text-ink-2">{c.label}</span>

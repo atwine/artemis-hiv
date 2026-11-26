@@ -10,6 +10,11 @@ type Passage = Extension["passages"][number];
  */
 export const SOURCE_LABEL: Record<Extension["kind"], string> = { ai: "AI review", rule: "Rule check" };
 
+/** High and critical alerts are the red ones (backend/cards.py: both are "critical"). */
+export function isSevere(severity: string | null | undefined): boolean {
+  return ["high", "critical"].includes((severity ?? "").trim().toLowerCase());
+}
+
 /** The API's severity, capitalised ("high" -> "High"); null when it sends none. */
 export function severityWord(severity: string | null | undefined): string | null {
   const s = (severity ?? "").trim();

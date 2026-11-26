@@ -52,7 +52,9 @@ type AiProblem = "ok" | "search_unavailable" | "failed" | "unreadable" | "cut_of
 const STATES: { outcome: AiProblem; patient: string; file: string }[] = [
   { outcome: "search_unavailable", patient: "John Doe", file: "web-S7-search-unavailable.png" },
   { outcome: "failed", patient: "Jane Roe", file: "web-S7-ai-failed.png" },
+  { outcome: "unreadable", patient: "Jane Roe", file: "web-S7-ai-unreadable.png" },
   { outcome: "cut_off", patient: "John Doe", file: "web-S7-ai-cut-off.png" },
+  { outcome: "partly_read", patient: "John Doe", file: "web-S7-ai-partly-read.png" },
   // GREEN (S7b): no alerts, and the AI review finished cleanly.
   { outcome: "ok", patient: "Jane Roe", file: "web-S7b-green.png" },
 ];

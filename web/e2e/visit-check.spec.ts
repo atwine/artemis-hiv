@@ -2,6 +2,9 @@
 // open a patient, run the rule checks (no AI review, so nothing is spent), review the alert on its
 // own screen, override it, then change the decision to accept.
 // P001 (John Doe) is on TDF with an old creatinine result, so the rule check raises one alert.
+import { execFileSync } from "node:child_process";
+import path from "node:path";
+
 import { expect, test } from "@playwright/test";
 
 import type { VisitCheck } from "../src/lib/api/client";
@@ -118,4 +121,19 @@ test("a quiet visit says what was checked", async ({ page }) => {
   await expect(checked).toContainText("3lab results");
   await expect(checked).toContainText("2notes");
   await expect(page.getByText("GREEN", { exact: true })).toBeVisible(); // the status chip
+});
+
+// Both source tags, not only the rule one a no-AI run can show: the words are the API heading's own
+// (artemis/screen_text.alert_heading), so the design's split shows the same words.
+test("the source tags are the words of the API's alert headings", () => {
+  const script = [
+    "import sys, json",
+    "sys.path.insert(0, sys.argv[1])",
+    "from artemis.rules.checks import Alert",
+    "from artemis.screen_text import alert_heading",
+    "print(json.dumps({k: alert_heading(Alert('a', 'T', '', {}, '', source=k)) for k in ('ai', 'rule')}))",
+  ].join("\n");
+  const repo = path.resolve(__dirname, "..", "..");
+  const headings = JSON.parse(execFileSync(process.env.PYTHON || "python", ["-c", script, repo], { encoding: "utf8" }));
+  for (const kind of ["ai", "rule"] as const) expect(headings[kind]).toBe(`Alert (${SOURCE_LABEL[kind]}): T`);
 });

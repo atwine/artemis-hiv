@@ -7,6 +7,7 @@ import { DayRail } from "@/components/frame/day-rail";
 import { errorText } from "@/lib/api/client";
 import { DISCLAIMER } from "@/lib/demo";
 import { usePatients, useRailEntries } from "@/lib/queries";
+import { patientLine } from "@/lib/record";
 
 // Today's patients. The clinic-day board (design S1) comes with the screens, once the backend
 // serves the day's times and states; for now a plain list.
@@ -28,7 +29,7 @@ export default function PatientsPage() {
                   {p.name}
                 </Link>
                 <span className="text-muted-foreground">
-                  {p.patient_id} · {p.age_years ?? "?"} {p.sex} · {p.art_regimen_current.join("/")}
+                  {patientLine(p)}
                 </span>
               </li>
             ))}

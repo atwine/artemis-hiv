@@ -12,7 +12,7 @@ import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type Patient
 import { acceptDecision, NEEDS_COMMENT, overrideDecision, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
 import { useRailEntries } from "@/lib/queries";
-import { possessive } from "@/lib/record";
+import { patientLine, possessive } from "@/lib/record";
 
 import { AlertView } from "./alert-view";
 import { OverrideView } from "./override-view";
@@ -41,18 +41,20 @@ export function VisitScreen({ params }: { params: Promise<{ patientId: string }>
   );
 }
 
-// Variables: run the AI review this time whatever the box says ("Run the AI review again").
-type CheckMutation = UseMutationResult<VisitCheck, Error, { useAi?: boolean } | void>;
+// What one check sends: the note as written and whether the AI review runs ("Run the AI review
+// again" sends it on whatever the box says).
+type CheckRequest = { note: string; useAi: boolean };
+type CheckMutation = UseMutationResult<VisitCheck, Error, CheckRequest>;
 
 function Visit({ patient }: { patient: PatientDetail }) {
   const [note, setNote] = useState(String(patient.today_encounter.note ?? ""));
   const [useAi, setUseAi] = useState(false);
   const check: CheckMutation = useMutation({
-    mutationFn: async (vars) =>
+    mutationFn: async (req: CheckRequest) =>
       unwrap(
         await api.POST("/api/patients/{patient_id}/visits", {
           params: { path: { patient_id: patient.patient_id } },
-          body: { note, use_ai: vars?.useAi ?? useAi, include_plan: false },
+          body: { note: req.note, use_ai: req.useAi, include_plan: false },
         }),
       ),
   });
@@ -66,7 +68,7 @@ function Visit({ patient }: { patient: PatientDetail }) {
         className="flex min-w-0 flex-1 flex-col gap-3"
         onSubmit={(e) => {
           e.preventDefault();
-          if (!check.isPending) check.mutate();
+          if (!check.isPending) check.mutate({ note, useAi });
         }}
       >
         <label htmlFor={`${NOTES_FORM}-text`} className="text-22 font-semibold tracking-[-0.015em] text-black">
@@ -92,7 +94,16 @@ function Visit({ patient }: { patient: PatientDetail }) {
   // A new check starts the review afresh.
   // The AI review this run: the box, unless "Run the AI review again" asked for it.
   const aiThisRun = check.variables?.useAi ?? useAi;
-  return <VisitView key={check.data?.visit_id ?? "before"} patient={patient} check={check} notesForm={notesForm} aiThisRun={aiThisRun} />;
+  return (
+    <VisitView
+      key={check.data?.visit_id ?? "before"}
+      patient={patient}
+      check={check}
+      notesForm={notesForm}
+      aiThisRun={aiThisRun}
+      retryAi={() => check.mutate({ note, useAi: true })}
+    />
+  );
 }
 
 /** Which screen the pane shows. The results screen comes first after the checks (owner, 2026-11-26). */
@@ -103,11 +114,13 @@ function VisitView({
   check,
   notesForm,
   aiThisRun,
+  retryAi,
 }: {
   patient: PatientDetail;
   check: CheckMutation;
   notesForm: React.ReactNode;
   aiThisRun: boolean;
+  retryAi: () => void;
 }) {
   const result = check.data;
   const [view, setView] = useState<View>(result ? { name: "results" } : { name: "notes" });
@@ -163,12 +176,12 @@ function VisitView({
             },
             accept: () => card && decide(acceptDecision(card.extension.alert_id)),
             saveOther: () => card && decide(overrideDecision(card.extension.alert_id, NEEDS_COMMENT, comment)),
-            retryAi: () => check.mutate({ useAi: true }),
+            retryAi,
           })}
         />
       }
     >
-      <PaneHeader title={patient.name} meta={patientMeta(patient)} aside={<StatusChip state={state} />} />
+      <PaneHeader title={patient.name} meta={patientLine(patient)} aside={<StatusChip state={state} />} />
       <PaneContent>
         {check.isPending && <Running patient={patient} aiReview={aiThisRun} startedAt={check.submittedAt} />}
         {!check.isPending && (view.name === "notes" || !result) && (
@@ -185,6 +198,7 @@ function VisitView({
           <ResultsView
             check={result}
             patient={patient}
+            noteSent={check.variables?.note ?? ""}
             savedByAlert={savedByAlert}
             finalizeNote={finalizeNote}
             saveError={save.isError ? errorText(save.error) : null}
@@ -238,9 +252,6 @@ function Frame({
   );
 }
 
-function patientMeta(p: PatientDetail): string {
-  return [p.patient_id, `${p.age_years ?? "?"} ${p.sex}`.trim(), p.art_regimen_current.join("/")].filter(Boolean).join(" · ");
-}
 
 /**
  * The tray for where the visit is. The prompts are the design's (S2, S3, S4, S4d, S7a); the

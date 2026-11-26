@@ -52,7 +52,7 @@ export function labRows(labs: Labs, today: string): { label: string; text: strin
       const latest = byDate[byDate.length - 1];
       const earliest = byDate[0];
       const when = latest.date === today ? " today" : `, ${longDate(latest.date)}`;
-      const before = byDate.length > 1 ? ` · ${earliest.value} in ${earliest.date.slice(0, 4)}` : "";
+      const before = byDate.length > 1 ? ` · ${withUnit(earliest)} in ${earliest.date.slice(0, 4)}` : "";
       return { label: labName(key), text: `${withUnit(latest)}${when}${before}` };
     });
 }
@@ -78,6 +78,11 @@ export function otherMedicines(meds: string[]): string | null {
   return list.length ? list.join("; ") : null;
 }
 
+/** The patient line under a name: "P001 · 34 M · TDF/3TC/DTG". */
+export function patientLine(p: Pick<PatientDetail, "patient_id" | "age_years" | "sex" | "art_regimen_current">): string {
+  return [p.patient_id, `${p.age_years ?? "?"} ${p.sex}`.trim(), p.art_regimen_current.join("/")].filter(Boolean).join(" · ");
+}
+
 /** Whose record: "her", "his", or "the" when the sex isn't recorded as F or M. */
 export function possessive(sex: string): string {
   const s = sex.trim().toUpperCase();
@@ -87,7 +92,7 @@ export function possessive(sex: string): string {
 /** A sentence: a full stop added only when the text has no end mark. Punctuation only. */
 export function asSentence(text: string): string {
   const t = text.trim();
-  return /[.!?]$/.test(t) ? t : `${t}.`;
+  return /[.!?…]$/.test(t) ? t : `${t}.`;
 }
 
 /** Today's complaints and examination as the clinician wrote them; null when there are none. */
@@ -125,19 +130,18 @@ export function checkReads(
  * results, lab notes when there are any, and notes (earlier visits plus today's).
  */
 export function checkedCounts(
-  p: Pick<PatientDetail, "art_regimen_current" | "other_medications" | "labs" | "lab_notes" | "visits" | "today_encounter">,
+  p: Pick<PatientDetail, "art_regimen_current" | "other_medications" | "labs" | "lab_notes" | "visits">,
+  noteSent: string,
 ): { n: number; label: string }[] {
   const meds = p.art_regimen_current.length + p.other_medications.filter((m) => m.trim()).length;
-  const labs = labCount(p.labs);
-  const todayNote = typeof p.today_encounter.note === "string" && p.today_encounter.note.trim() ? 1 : 0;
-  const notes = p.visits.length + todayNote;
-  const plural = (n: number, one: string, many: string) => ({ n, label: n === 1 ? one : many });
+  const notes = p.visits.length + (noteSent.trim() ? 1 : 0);
+  const count = (n: number, one: string, many: string) => ({ n, label: n === 1 ? one : many });
   return [
-    { n: 1, label: "regimen" },
-    plural(meds, "medicine", "medicines"),
-    plural(labs, "lab result", "lab results"),
-    ...(p.lab_notes.length ? [plural(p.lab_notes.length, "lab note", "lab notes")] : []),
-    plural(notes, "note", "notes"),
+    count(p.art_regimen_current.length ? 1 : 0, "regimen", "regimens"),
+    count(meds, "medicine", "medicines"),
+    count(labCount(p.labs), "lab result", "lab results"),
+    ...(p.lab_notes.length ? [count(p.lab_notes.length, "lab note", "lab notes")] : []),
+    count(notes, "note", "notes"),
   ];
 }
 

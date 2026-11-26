@@ -17,7 +17,7 @@ test("a lab row: the latest result with its unit as recorded, and the earliest f
     "2026-02-24",
   );
   assert.deepEqual(rows, [
-    { label: "Creatinine", text: "1.4 mg/dL today · 0.9 in 2020" },
+    { label: "Creatinine", text: "1.4 mg/dL today · 0.9 mg/dL in 2020" },
     { label: "Viral load", text: "<50 copies/mL, 12 May 2026" },
     { label: "eGFR", text: "52 mL/min/1.73 m² today" },
   ]);
@@ -27,6 +27,19 @@ test("a lab with no unit recorded shows the value alone, never a made-up unit", 
   assert.deepEqual(labRows({ urine_protein: [{ date: "2026-02-24", value: "1+", unit: "", source: "record" }] }, "2026-02-24"), [
     { label: "Urine protein", text: "1+ today" },
   ]);
+});
+
+test("the earlier result keeps its own unit, even when it differs (never converted)", () => {
+  const rows = labRows(
+    {
+      creatinine: [
+        { date: "2020-03-10", value: "80", unit: "umol/L", source: "record" },
+        { date: "2026-02-24", value: "1.4", unit: "mg/dL", source: "record" },
+      ],
+    },
+    "2026-02-24",
+  );
+  assert.equal(rows[0].text, "1.4 mg/dL today · 80 umol/L in 2020");
 });
 
 test("counting lab results", () => {
@@ -78,8 +91,7 @@ test("what was checked (S7b): counts from the record", () => {
       labs: { vl: [{ date: "2025-01-01", value: "40", unit: "", source: "" }] },
       lab_notes: [{ date: null, source: "", text: "x" }],
       visits: [{}, {}],
-      today_encounter: { note: "Stable." },
-    }),
+    }, "Stable."),
     [
       { n: 1, label: "regimen" },
       { n: 4, label: "medicines" },
@@ -96,4 +108,14 @@ test("a banner's first sentence, for the headline's bold part", () => {
     "The rule checks and the AI review found nothing.",
   ]);
   assert.deepEqual(firstSentence("One sentence only."), ["One sentence only.", ""]);
+});
+
+test("what was checked: no regimen recorded counts none; the note counted is the one sent", () => {
+  const counts = checkedCounts({ art_regimen_current: [], other_medications: [], labs: {}, lab_notes: [], visits: [] }, "  ");
+  assert.deepEqual(counts.find((c) => c.label.startsWith("regimen")), { n: 0, label: "regimens" });
+  assert.deepEqual(counts.find((c) => c.label.startsWith("note")), { n: 0, label: "notes" });
+});
+
+test("an ellipsis already ends a sentence", () => {
+  assert.equal(asSentence("A title cut short…"), "A title cut short…");
 });

@@ -6,7 +6,7 @@ import { useId, useState } from "react";
 
 import { StatusShape } from "@/components/frame/status";
 import type { Card } from "@/lib/api/client";
-import { SOURCE_LABEL, quotedPassage, severityWord } from "@/lib/alerts";
+import { isSevere, SOURCE_LABEL, quotedPassage, severityWord } from "@/lib/alerts";
 import { asSentence } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
@@ -57,7 +57,7 @@ export function AlertView({ card, n }: { card: Card; n: number }) {
 function SeverityTag({ severity }: { severity: string | null | undefined }) {
   const word = severityWord(severity);
   if (!word) return null;
-  const severe = ["High", "Critical"].includes(word);
+  const severe = isSevere(severity);
   return (
     <span
       className={cn(
