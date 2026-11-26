@@ -205,7 +205,10 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
       today, Markdown split along the guideline's own sections, or structured records (JSON, one per
       recommendation, with drug, condition, action, country and edition). Also which search fits
       each: meaning search, keyword search, or both together, and filters by country and edition.
-- [ ] 2B.6 Decide where the guideline files live, once 2B has picked the documents and how their text
+- [x] 2B.6 Decided 2026-11-26 (owner, option A): the repository keeps only what the app uses, the 2
+      Ugandan extracts, with a sources list in `Data/MarkDown Files/README.md`; the 3 PDFs and the
+      South African and WHO extracts stay on the owner's computer (`.gitignore`). They remain in the
+      repository's history; rewriting it would be a separate decision. The question was: where the guideline files live, once 2B has picked the documents and how their text
       is extracted. The documents are picked: Uganda's only (owner, 2026-11-25); `artemis/guidelines/sources.py`
       is the start of the sources list. Today the app searches the 2 Ugandan Markdown files in `Data/MarkDown Files/`; the 3 PDFs in
       `Data/` (28 MB) are unused apart from one PDF-reader test. Options: keep them in the repo, or a setup

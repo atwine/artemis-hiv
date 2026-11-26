@@ -66,14 +66,6 @@ from dotenv import load_dotenv  # noqa: E402
 
 load_dotenv(PROJECT_ROOT / ".env", override=False)
 
-CONSOLIDATED_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Consolidated-HIV-and-AIDS-Guidelines-20230516.pdf"
-LEGACY_GUIDELINE_PDF_PATH = PROJECT_ROOT / "Data" / "Uganda Clinical Guidelines 2023.pdf"
-NCD_GUIDELINE_PDF_PATH = (
-    PROJECT_ROOT
-    / "Data"
-    / "Uganda+Integrated+Guidelines+for+the+management+of+NCDs-+Uganda+with+cover-FIN+14October2019.V4.pdf"
-)
-
 # Rationale: Markdown conversions of the guideline PDFs preserve table structures
 # that pypdf extraction drops. We now embed from the Markdown files instead of PDFs.
 GUIDELINE_MD_DIR = PROJECT_ROOT / "Data" / "MarkDown Files"
