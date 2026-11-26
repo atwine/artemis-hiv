@@ -28,7 +28,7 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
   // The first check of a run loads the search model (and builds the index if it isn't built).
   await expect(results.or(page.getByRole("main").getByRole("alert"))).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
-  await expect(results.getByRole("status").filter({ hasText: /^YELLOW: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
+  await expect(results.getByRole("status").filter({ hasText: /^AMBER: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
   // The footer's disclaimer, shown before any check, is the one the API sends.
   expect((await (await reply).json()).disclaimer).toBe(DISCLAIMER);
   await expect(footer).toContainText(DISCLAIMER);

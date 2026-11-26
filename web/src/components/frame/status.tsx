@@ -17,7 +17,7 @@ export function StatusShape({ state, size }: { state: VisitState; size: 12 | 14 
           <rect x="6" y="9.5" width="2" height="2" fill="#fff" />
         </svg>
       );
-    case "YELLOW":
+    case "AMBER":
       return (
         <svg {...common}>
           <path d="M7 1L13.5 12.5H0.5Z" fill="var(--color-amber)" />
@@ -55,9 +55,7 @@ const CHIP: Record<VisitState, { label: string; className: string }> = {
   not_checked: { label: "NOT CHECKED", className: "bg-fill text-ink-2" },
   checking: { label: "CHECKING", className: "bg-blue-wash text-checking" },
   RED: { label: "RED", className: "bg-red-wash text-red" },
-  // The design says AMBER; the API's status is YELLOW. The owner decides which word shows
-  // (open question 1); until then the screen shows the API's word.
-  YELLOW: { label: "YELLOW", className: "bg-amber-wash text-amber" },
+  AMBER: { label: "AMBER", className: "bg-amber-wash text-amber" },
   GREEN: { label: "GREEN", className: "bg-mint text-green" },
   INCOMPLETE: { label: "INCOMPLETE", className: "bg-fill text-grey" },
 };

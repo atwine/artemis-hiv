@@ -401,7 +401,7 @@ export interface components {
              * Status
              * @enum {string}
              */
-            status: "GREEN" | "YELLOW" | "RED" | "INCOMPLETE";
+            status: "GREEN" | "AMBER" | "RED" | "INCOMPLETE";
             /** Visit Date */
             visit_date: string;
             /** Visit Id */
