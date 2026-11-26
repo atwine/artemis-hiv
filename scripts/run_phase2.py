@@ -105,7 +105,7 @@ def main(argv: Optional[list] = None) -> int:
         raise SystemExit("every case needs its answer key before a run")
     todo = list(pending_runs(out, cases, args.repeats))
 
-    config, price_in, price_out = model_config(args.model, temperature)
+    settings, price_in, price_out = model_config(args.model, temperature)
     per_check = (WORST_IN * price_in + WORST_OUT * price_out) * MARGIN
     spent = spent_in(args.root)
     print(f"{label}: {len(todo)} checks to run; worst case ${per_check:.4f} each, "
@@ -122,7 +122,7 @@ def main(argv: Optional[list] = None) -> int:
     rag = config.guideline_search()
     if config.GUIDELINE_PATHS:
         rag.ensure_indexed()
-    client = OpenAICompatClient(config)
+    client = OpenAICompatClient(settings)
     secrets = server_strings()
     for case, k in todo:
         try:

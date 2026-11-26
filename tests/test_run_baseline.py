@@ -43,7 +43,9 @@ def test_plan_items_reports_unreadable_plan_and_empty_when_absent() -> None:
 def test_scrub_removes_server_address_and_local_paths() -> None:
     local = str(ROOT) + os.sep + "Data" + os.sep + "x.md"
     data = {"err": "Connection to http://10.0.0.9:8000/v1 refused", "path": local, "n": 3}
-    out = rb._scrub(data, ["http://10.0.0.9:8000/v1", "10.0.0.9:8000", "10.0.0.9"])
+    from artemis.evaluation.scrub import scrub
+
+    out = scrub(data, ["http://10.0.0.9:8000/v1", "10.0.0.9:8000", "10.0.0.9"])
     assert "10.0.0.9" not in json.dumps(out)
     assert out["path"] == "Data" + os.sep + "x.md"
     assert out["n"] == 3

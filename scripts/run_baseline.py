@@ -105,11 +105,6 @@ def _to_jsonable(obj: Any) -> Any:
     return str(obj)
 
 
-# Moved to artemis/evaluation/scrub.py (plan 4C.1); kept under the old names here.
-_scrub = scrub
-_server_strings = server_strings
-
-
 def _plan_items(agentic: Any) -> List[Dict[str, Any]]:
     """The plan's problems with the model's own verdict on each, as returned.
 
@@ -268,7 +263,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     # Baseline runs are not clinic visits: keep them out of the visit record (fix 9).
     os.environ["ARTEMIS_VISIT_RECORDS_DIR"] = tempfile.mkdtemp(prefix="artemis_baseline_records_")
-    secrets = _server_strings()
+    secrets = server_strings()
 
     patients = _load_patients()
     if args.patients:
@@ -302,7 +297,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                 print(f"skip {path.name} (exists)")
                 continue
             print(f"run  {pid} #{k} ...", flush=True)
-            data = _scrub(run_one(p), secrets)
+            data = scrub(run_one(p), secrets)
             data["repeat"] = k
             _write_json(path, data)
             print(f"     {data['overall_status']}, {len(data['alerts'])} alerts, {data['seconds']} s", flush=True)

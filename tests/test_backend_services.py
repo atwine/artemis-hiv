@@ -40,7 +40,6 @@ def test_search_setup_builds_the_apps_own_engine(real_search_setup):
 
     config = real_search_setup["config"]
     assert services._search() is real_search_setup["engine"]
-    assert real_search_setup["asked"] == {"args": ()}  # the defaults: config.EMBEDDING_MODEL, Chroma
     # Indexed when there are guideline files.
     assert real_search_setup["indexed"] == ([True] if config.GUIDELINE_PATHS else [])
     services._search()

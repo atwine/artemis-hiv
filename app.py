@@ -33,7 +33,7 @@ from artemis.ai.client import (
 from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
-from artemis.config import EMBEDDING_MODEL, GUIDELINE_INDEX_VERSION, GUIDELINE_MD_DIR, GUIDELINE_PATHS, guideline_search  # noqa: F401
+from artemis.config import EMBEDDING_MODEL, GUIDELINE_PATHS, guideline_search
 from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.patient.labs import TEST_UNITS, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES
@@ -115,12 +115,7 @@ def _save_cases(cases_file_ok: bool, items: List[Dict[str, Any]], what: str) -> 
         return False
 
 
-def _get_rag_engine(
-    *,
-    prefer_chroma: bool,
-    embedding_model_name: str,
-    engine_version: int = 3,
-) -> RagEngine:
+def _get_rag_engine(*, prefer_chroma: bool, embedding_model_name: str) -> RagEngine:
     """The guideline search the backend uses too (artemis/config.py); one per process."""
     return guideline_search(embedding_model_name, prefer_chroma=prefer_chroma)
 
@@ -150,8 +145,6 @@ def _run_analysis(
     rag = _get_rag_engine(
         prefer_chroma=prefer_chroma,
         embedding_model_name=embedding_model_name,
-        # Rationale: cache-bust to refresh vector_store Chroma filter fix and related changes.
-        engine_version=5,
     )
     if GUIDELINE_PATHS:
         rag.ensure_indexed()
@@ -427,11 +420,11 @@ def main() -> None:
                     cols = list(table or {})
                     return [dict(zip(cols, vals)) for vals in zip(*(table[c] for c in cols))] if cols else []
 
-                previous_art, case_errors = previous_art_from_rows(
+                previous_art, art_errors = previous_art_from_rows(
                     editor_rows(_records(new_previous_art_rows), PREVIOUS_ART_COLUMNS)
                 )
                 # One builder for this form and the API (artemis/patient/new_case.py), same rules.
-                patient_record, build_errors = build_case_record(
+                patient_record, case_errors = build_case_record(
                     CaseForm(
                         patient_id=pid,
                         name=new_name or "",
@@ -455,7 +448,7 @@ def main() -> None:
                     ),
                     today=datetime.date.today(),
                 )
-                case_errors = case_errors + build_errors
+                case_errors = art_errors + case_errors
                 if case_errors:
                     for _e in case_errors:
                         st.error(_e)

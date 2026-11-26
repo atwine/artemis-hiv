@@ -13,7 +13,7 @@ from typing import Annotated, Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from artemis.patient.new_case import VISIT_TYPES
+from artemis.patient.new_case import MAX_NOTE, MAX_PREVIOUS_ART, VISIT_TYPES
 from artemis.review import OVERRIDE_REASONS
 from artemis.statuses import AI_REVIEW_OUTCOMES, STATUSES
 
@@ -79,7 +79,7 @@ class PreviousArtIn(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    regimen: List[str] = Field(max_length=20)  # picks from the app's list, e.g. "TLE"
+    regimen: List[Annotated[str, Field(max_length=20)]] = Field(max_length=20)  # picks from the app's list, e.g. "TLE"
     start_date: datetime.date  # YYYY-MM-DD
     end_date: datetime.date  # YYYY-MM-DD, by the visit date
 
@@ -94,7 +94,7 @@ class NewCase(BaseModel):
     name: Optional[str] = Field(default=None, max_length=5000)
     age_years: Optional[int] = None
     sex: Optional[Literal["M", "F"]] = None
-    art_regimen: List[str] = Field(default=[], max_length=20)  # picks from the app's list, e.g. "TLD"
+    art_regimen: List[Annotated[str, Field(max_length=20)]] = Field(default=[], max_length=20)  # picks from the app's list, e.g. "TLD"
     other_medications: List[Annotated[str, Field(max_length=200)]] = Field(default=[], max_length=50)  # one per item
     complaints: str = Field(default="", max_length=5000)
     examination_findings: str = Field(default="", max_length=5000)
@@ -103,8 +103,8 @@ class NewCase(BaseModel):
     # Today's visit (owner, 2026-11-26): its date (today when left out), its type, and the note.
     visit_date: Optional[datetime.date] = None
     visit_type: Optional[VisitType] = None
-    todays_note: str = Field(default="", max_length=20000)
-    previous_art: List[PreviousArtIn] = Field(default=[], max_length=20)
+    todays_note: str = Field(default="", max_length=MAX_NOTE)
+    previous_art: List[PreviousArtIn] = Field(default=[], max_length=MAX_PREVIOUS_ART)
 
 
 class PatientSummary(BaseModel):

@@ -73,7 +73,8 @@ def previous_art_from_rows(rows: Sequence[Dict[str, str]]) -> Tuple[List[Previou
     """The Streamlit form's previous-ART table (text cells) as PreviousArt rows, or what's wrong.
 
     Drugs are picks from the list separated by commas ("TLE", or "AZT, 3TC, NVP"), matched
-    whatever their case; a name not on the list is kept, for build_case_record to explain.
+    whatever their case; a name not on the list, or no drug at all, is kept for build_case_record
+    to explain.
     A row left fully blank is skipped (the table's empty last row)."""
     art: List[PreviousArt] = []
     errors: List[str] = []
@@ -83,8 +84,6 @@ def previous_art_from_rows(rows: Sequence[Dict[str, str]]) -> Tuple[List[Previou
             continue
         where = f"Previous ART, row {n}"
         drugs = [d.strip() for d in cells["drugs"].split(",") if d.strip()]
-        if not drugs:
-            errors.append(f"{where}: pick at least one drug.")
         if not (cells["start_date"] and cells["end_date"]):
             errors.append(f"{where}: give a start and an end date.")
             continue
@@ -93,8 +92,7 @@ def previous_art_from_rows(rows: Sequence[Dict[str, str]]) -> Tuple[List[Previou
         except ValueError:
             errors.append(f"{where}: dates must be YYYY-MM-DD.")
             continue
-        if drugs:
-            art.append(PreviousArt(regimen=[_CHOICE_BY_LOWER.get(d.lower(), d) for d in drugs], start_date=start, end_date=end))
+        art.append(PreviousArt(regimen=[_CHOICE_BY_LOWER.get(d.lower(), d) for d in drugs], start_date=start, end_date=end))
     return ([], errors) if errors else (art, [])
 
 
@@ -138,10 +136,10 @@ def _form_errors(form: CaseForm, visit_date: datetime.date) -> List[str]:
         errors.append(f"Other medications: each at most {MAX_MEDICINE} characters.")
     if len(form.lab_rows) > MAX_LAB_ROWS:
         errors.append(f"At most {MAX_LAB_ROWS} lab results per case.")
-    if (form.visit_type or "") not in {"", *VISIT_TYPES}:
+    if form.visit_type not in {"", *VISIT_TYPES}:
         errors.append(f"Visit type: pick from the list ({', '.join(VISIT_TYPES)}).")
-    if len(form.todays_note or "") > MAX_NOTE:
-        errors.append("Today's clinical note: at most 20,000 characters.")
+    if len(form.todays_note) > MAX_NOTE:
+        errors.append(f"Today's clinical note: at most {MAX_NOTE:,} characters.")
     return errors + _previous_art_errors(form, visit_date)
 
 
@@ -176,7 +174,7 @@ def build_case_record(form: CaseForm, *, today: datetime.date) -> Tuple[Optional
         "other_medications": other_medicines(list(form.other_medications)),
         "visits": [],
         "labs": labs,
-        "today_encounter": {"date": encounter, "note": form.todays_note or "", "orders": [], "med_changes": []},
+        "today_encounter": {"date": encounter, "note": form.todays_note, "orders": [], "med_changes": []},
         "intake": {
             "complaints_symptoms": form.complaints or "",
             "examination_findings": form.examination_findings or "",

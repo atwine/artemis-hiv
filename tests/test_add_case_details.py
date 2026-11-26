@@ -116,6 +116,8 @@ def test_add_a_case_with_its_visit_details_through_the_api(api):
     {"visit_date": "20/11/2026"},
     {"previous_art": [{"regimen": ["TLE"], "start_date": "2018-03-01"}]},  # previous ART needs its end date
     {"previous_art": [{"regimen": ["TLE"], "start_date": "2018-03-01", "end_date": "2021-06-30", "dose": "x"}]},
+    {"previous_art": [{"regimen": ["x" * 21], "start_date": "2018-03-01", "end_date": "2021-06-30"}]},
+    {"art_regimen": ["x" * 21]},  # a drug name is a pick from the list, never a long text
 ])
 def test_bad_visit_details_are_refused_by_the_api(api, change):
     assert api.client.post("/api/patients", json=_body(**change), headers=LOCAL).status_code == 422
@@ -148,7 +150,6 @@ def test_the_streamlit_tables_rows_become_previous_art():
 @pytest.mark.parametrize("row, message", [
     ({"drugs": "TLE", "start_date": "2018-03-01", "end_date": ""}, "start and an end date"),
     ({"drugs": "TLE", "start_date": "01/03/2018", "end_date": "2021-06-30"}, "YYYY-MM-DD"),
-    ({"drugs": "", "start_date": "2018-03-01", "end_date": "2021-06-30"}, "pick at least one drug"),
 ])
 def test_a_bad_streamlit_row_is_explained(row, message):
     from artemis.patient.new_case import previous_art_from_rows
@@ -165,3 +166,12 @@ def test_a_drug_not_on_the_list_is_kept_for_the_builder_to_explain():
     assert errors == []
     _, build_errors = build_case_record(_form(previous_art=art), today=TODAY)
     assert any("not on it" in e for e in build_errors)
+
+
+def test_a_row_with_no_drugs_is_explained_by_the_builder():
+    from artemis.patient.new_case import previous_art_from_rows
+
+    art, errors = previous_art_from_rows([{"drugs": "", "start_date": "2018-03-01", "end_date": "2021-06-30"}])
+    assert errors == []
+    _, build_errors = build_case_record(_form(previous_art=art), today=TODAY)
+    assert any("pick at least one drug" in e and "row 1" in e for e in build_errors), build_errors

@@ -18,7 +18,7 @@ off this laptop (for example to Railway): "this laptop only" means nothing on a 
 | visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome) and each acknowledge/override decision | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
 | clinic_day | the demo day's schedule: made-up clinic, clinician, date, appointment times and patient ids, kept as a data file in the repo | internal (synthetic only) |
-| form_choices | the add-case form's pick lists: ART combinations and drugs, lab tests with their names and units (from the code) | public |
+| form_choices | the add-case form's pick lists: ART combinations and drugs, lab tests with their names and units, visit types (from the code) | public |
 
 ## 2. Roles
 

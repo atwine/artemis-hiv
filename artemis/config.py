@@ -33,12 +33,17 @@ GUIDELINE_INDEX_VERSION = 3
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 
-@functools.lru_cache(maxsize=None)
 def guideline_search(embedding_model_name: str = EMBEDDING_MODEL, *, prefer_chroma: bool = True) -> "RagEngine":
     """The guideline search, one per process: the search model, and the kept index (storage/chroma)
     named after the model and the guideline text, so an edited guideline gets a fresh index (G37).
     The first call loads the search model (slow); `ensure_indexed()` then embeds only what the
     kept index lacks. The search libraries are imported here, so importing this file stays quick."""
+    return _guideline_search(embedding_model_name, prefer_chroma)
+
+
+@functools.lru_cache(maxsize=None)
+def _guideline_search(embedding_model_name: str, prefer_chroma: bool) -> "RagEngine":
+    # One cache key however the caller spells the arguments (defaults, keywords or positions).
     from artemis.guidelines.vector_store import create_vector_store, index_collection_name
     from modules.embedder import Embedder, EmbedderConfig
     from modules.rag_engine import RagEngine
