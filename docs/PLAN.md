@@ -173,13 +173,13 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
 
 ## Phase 4: Backend (FastAPI)
 
-- [ ] 4.0 Write down who may see and do what (`ACCESS.md`), even for a synthetic-data demo.
-- [ ] 4.1 Typed models for patient, alert and plan. Alerts take the CDS Hooks card shape
+- [x] 4.0 Write down who may see and do what (`ACCESS.md`), even for a synthetic-data demo.
+- [x] 4.1 Typed models for patient, alert and plan. Alerts take the CDS Hooks card shape
       (summary, severity, source, suggested actions, override reasons).
-- [ ] 4.2 Endpoints: list patients, run a visit check, record acknowledge/override.
+- [x] 4.2 Endpoints: list patients, run a visit check, record acknowledge/override.
 - [ ] 4.3 Build the guideline index once and keep it, instead of rebuilding on every start.
-- [ ] 4.4 Tests that call the endpoints the way the frontend will.
-- [ ] 4.5 Move the visit records from fix 9's local files into Postgres.
+- [x] 4.4 Tests that call the endpoints the way the frontend will.
+- [x] 4.5 Move the visit records from fix 9's local files into Postgres.
 - [ ] 4.6 (suggested) Phase 1 code review follow-ups, best done as the API replaces the Streamlit
       shell: move the add-case record building out of app.py into a typed endpoint; validate a
       patient record once when it is loaded (4.1); have the model client return the reply with
@@ -188,6 +188,18 @@ is called "Clinical notes"; no note signing. Brief, content kit, audits and feed
       scanner (screening and plan_json); drop unused fields (deterministic_alerts, used_llm).
 
 Check: the evaluation script runs through the API and matches Phase 2's numbers.
+
+Where it stands (2026-11-26): 4.0, 4.1, 4.2, 4.4 and 4.5 done on branch
+`claude/phase4-backend-1abc8a` (not pushed). The backend is in `backend/` (owner's pick; how to
+run it: `backend/README.md`). `ACCESS.md` holds the owner's rules: no logins yet, only the app's
+own pages on this laptop may call it, nothing is edited or deleted; `tests/test_access.py`
+proves them. Alerts go out as CDS Hooks cards with the cited passages under `extension`. The
+visit check calls `artemis.visit.run_visit_analysis` unchanged. Visit records go into Postgres
+17 in Docker (`backend/docker-compose.yml`, owner's pick) through SQLModel, with Alembic
+migrations; `scripts/import_visit_records.py` copies the Phase 1 files in (none existed yet).
+The Streamlit app still writes its own files. Waiting on Phase 2B: 4.3, the parts of 4.6 in the
+AI and plan code, and this phase's check. Open: a limit on repeated visit checks, before anyone
+else uses the app (ACCESS.md section 6).
 
 ## Phase 5: Frontend (Next.js + shadcn)
 

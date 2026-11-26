@@ -44,7 +44,7 @@ from artemis.plan.view import plan_html, read_plan
 from artemis.ai.screening import NO_SEVERITY
 from ui.references import alert_references
 from artemis import visit_record
-from artemis.review import can_finalize as review_can_finalize
+from artemis.review import OVERRIDE_REASONS, can_finalize as review_can_finalize
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
 from ui.results_banner import status_banners
@@ -1118,14 +1118,7 @@ def main() -> None:
             if st.session_state.get(f"alert_action_{alert.alert_id}") == "Override":
                 st.selectbox(
                     "Override reason (required)",
-                    [
-                        "",
-                        "Already addressed",
-                        "Not applicable",
-                        "Will address later",
-                        "Patient declined",
-                        "Other",
-                    ],
+                    ["", *OVERRIDE_REASONS],
                     key=f"alert_override_reason_{alert.alert_id}",
                 )
                 st.text_area(
