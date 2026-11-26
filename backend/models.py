@@ -295,7 +295,8 @@ class VisitCheckRequest(BaseModel):
 
 class Plan(BaseModel):
     management_plan: Optional[str] = None
-    issues: List[Dict[str, Any]] = []
+    # What was wrong with the AI's plan, as the plan step's short codes (e.g. "invalid_json", "cut_off").
+    issues: List[str] = []
     # Set when the plan step failed; generic, the details go to the server log.
     error: Optional[str] = None
 

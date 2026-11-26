@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.visit import AnalysisOptions, compute_overall_status, run_visit_analysis
 from modules.rag_engine import RagEngine
 from tests import pipeline_harness as h
@@ -22,16 +23,13 @@ class _BrokenSearchModel(h.FakeEmbedder):
 
 class _CountingModel:
     model = "stub"
-    last_error = None
-    last_note = None
-    last_finish_reason = "stop"
 
     def __init__(self) -> None:
         self.calls = 0
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.calls += 1
-        return "[]"
+        return ChatReply("[]", finish_reason="stop")
 
 
 def _run(embedder, model):
@@ -55,7 +53,7 @@ def test_a_search_model_that_did_not_load_switches_the_ai_review_off() -> None:
     result, messages = _run(_BrokenSearchModel(), model)
     assert model.calls == 0
     assert result.screening_outcome == "search_unavailable"
-    assert result.alerts == result.deterministic_alerts
+    assert result.alerts and all(a.source == "rule" for a in result.alerts)  # rule alerts only
     assert all(r["retrieved"] == [] for r in result.results)  # no references from a broken search
     assert any("search model did not load" in m for m in messages)
 
@@ -63,7 +61,8 @@ def test_a_search_model_that_did_not_load_switches_the_ai_review_off() -> None:
 def test_the_rule_checks_still_run_when_the_search_model_did_not_load() -> None:
     working, _ = _run(h.FakeEmbedder(), _CountingModel())
     broken, _ = _run(_BrokenSearchModel(), _CountingModel())
-    assert [a.alert_id for a in broken.deterministic_alerts] == [a.alert_id for a in working.deterministic_alerts]
+    rules = lambda r: [a.alert_id for a in r.alerts if a.source == "rule"]  # noqa: E731
+    assert rules(broken) == rules(working)
 
 
 def test_nothing_found_with_the_search_down_is_not_an_all_clear() -> None:

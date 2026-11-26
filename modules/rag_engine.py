@@ -22,6 +22,8 @@ from artemis.guidelines.vector_store import VectorSearchResult, VectorStore
 
 @dataclass(frozen=True)
 class RagConfig:
+    # Changing how passages are split needs GUIDELINE_INDEX_VERSION bumped in app.py: the kept index
+    # (plan item 4.3) skips passage ids it already holds (tests/test_index_kept.py checks this).
     chunk_size: int = 1200
     overlap: int = 200
     top_k: int = 5
@@ -63,6 +65,10 @@ class RagEngine:
         """
 
         if self._indexed:
+            return 0
+        if not self.search_ready:
+            # The stand-in a failed search model falls back to makes near-random vectors (G33).
+            # Stored passages are kept for good now (4.3), so nothing is written until it loads.
             return 0
 
         total = 0

@@ -19,7 +19,6 @@ from artemis.guidelines.vector_store import VectorSearchResult
 class ExplanationResult:
     text: str
     used_chunks: List[VectorSearchResult]
-    used_llm: bool
 
 
 def generate_explanation(
@@ -34,7 +33,6 @@ def generate_explanation(
     return ExplanationResult(
         text=_fallback_explanation(patient_context, alert, used_chunks),
         used_chunks=used_chunks,
-        used_llm=False,
     )
 
 

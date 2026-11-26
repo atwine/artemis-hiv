@@ -329,7 +329,7 @@ def _reason_updated_management_plan(
             messages,
             format="json",
             options_override=_PLAN_CHAT_OPTIONS,
-        )
+        ).text
         if repaired is None:
             return None
         repaired = _strip_code_fences(repaired)
@@ -446,23 +446,24 @@ def _reason_updated_management_plan(
             },
         ]
 
-    def _cut(issues: List[str]) -> List[str]:
+    def _cut(issues: List[str], reply: Any) -> List[str]:
         # The server stopped the reply at the length limit (fix 8's finish_reason); say so (G18).
-        if getattr(llm_client, "last_finish_reason", None) == "length" and "cut_off" not in issues:
+        if reply.finish_reason == "length" and "cut_off" not in issues:
             return ["cut_off"] + issues
         return issues
 
     try:
         messages = _build_plan_messages()
-        plan_answer = llm_client.chat(
+        answer = llm_client.chat(
             messages,
             format="json",
             options_override=_PLAN_CHAT_OPTIONS,
         )
+        plan_answer = answer.text
         if plan_answer is None:
             return None, ["no_reply"]
 
-        issues = _cut(_validate_plan_json(plan_answer))
+        issues = _cut(_validate_plan_json(plan_answer), answer)
         if not issues:
             # Rationale: return only the JSON object (ignore any extra words around it).
             return _extract_first_json_object(plan_answer) or _strip_code_fences(plan_answer), []
@@ -470,15 +471,16 @@ def _reason_updated_management_plan(
         # One retry with explicit format feedback (non-blocking if it still fails).
         feedback = "Previous output failed validation: " + ", ".join(issues)
         retry_messages = _build_plan_messages(retry_feedback=feedback)
-        plan_retry = llm_client.chat(
+        retry = llm_client.chat(
             retry_messages,
             format="json",
             options_override=_PLAN_CHAT_OPTIONS,
         )
+        plan_retry = retry.text
         if plan_retry is None:
             return plan_answer, issues
 
-        retry_issues = _cut(_validate_plan_json(plan_retry))
+        retry_issues = _cut(_validate_plan_json(plan_retry), retry)
         if not retry_issues:
             # Rationale: return only the JSON object (ignore any extra words around it).
             return _extract_first_json_object(plan_retry) or _strip_code_fences(plan_retry), []

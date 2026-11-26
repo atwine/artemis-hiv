@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import List
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.evaluation.cases import load_cases
 from tests import pipeline_harness as h
 
@@ -20,16 +21,10 @@ class _Stub:
     """A model that answers like a server: a reply, then usage with a cost."""
 
     model = "stub-model"
-    last_error = None
-    last_note = None
-    last_finish_reason = "stop"
-
-    def __init__(self) -> None:
-        self.last_usage: Dict[str, Any] = {}
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
-        self.last_usage = {"prompt_tokens": 100, "completion_tokens": 10, "cost": 0.001}
-        return json.dumps([ALERT]) if isinstance(format, dict) else "{}"
+        usage = {"prompt_tokens": 100, "completion_tokens": 10, "cost": 0.001}
+        return ChatReply(json.dumps([ALERT]) if isinstance(format, dict) else "{}", finish_reason="stop", usage=usage)
 
 
 def _case(case_id: str):

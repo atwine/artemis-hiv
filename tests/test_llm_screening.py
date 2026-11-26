@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from artemis.rules.checks import Alert
-from artemis.ai.client import ChatMessage, OllamaClient
+from artemis.ai.client import ChatMessage, ChatReply, OllamaClient
 from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import PatientContext
 from artemis.guidelines.vector_store import VectorSearchResult
@@ -15,13 +15,12 @@ class _FakeOllamaClient(OllamaClient):  # type: ignore[misc]
         # Bypass base class network init; we only need chat() behaviour.
         self._model = "fake"
         self._host = "http://localhost"
-        self._last_error: Optional[str] = None
         self._num_ctx = None
         self._payload = payload
 
-    def chat(self, messages: List[ChatMessage], format=None, options_override=None) -> Optional[str]:  # noqa: A002
+    def chat(self, messages: List[ChatMessage], format=None, options_override=None) -> ChatReply:  # noqa: A002
         # Return the preconfigured payload regardless of messages.
-        return self._payload
+        return ChatReply(self._payload)
 
 
 def _build_dummy_context() -> PatientContext:

@@ -11,6 +11,7 @@ from typing import List, Optional
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from modules.rag_engine import RagEngine
 from tests import pipeline_harness as h
@@ -31,10 +32,10 @@ class StubModel:
     model = "stub"
 
     def __init__(self, reply: Optional[str], error: Optional[str] = None) -> None:
-        self._reply, self.last_error = reply, error
+        self._reply, self._error = reply, error
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
-        return self._reply
+        return ChatReply(self._reply, error=self._error)
 
 
 def _patient(pid: str) -> dict:

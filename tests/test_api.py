@@ -558,3 +558,13 @@ def test_cards_carry_the_values_box_and_the_key_sentence(api):
     reopened = api.client.get(f"/api/visits/{visit['visit_id']}", headers=LOCAL).json()
     assert [c["extension"]["values"] for c in reopened["cards"]] == [c["extension"]["values"] for c in visit["cards"]]
     assert [c["extension"]["key_sentence"] for c in reopened["cards"]] == [c["extension"]["key_sentence"] for c in visit["cards"]]
+
+
+def test_a_plan_with_problems_comes_back_with_its_issue_codes(api):
+    """The plan step reports problems as short codes ("invalid_json", "cut_off"); found by the Phase 4
+    replay: the API's Plan type expected objects, so such a visit check failed with a 500."""
+    api.model = FakeModel({**replies_for("P001"), "plan": "not json at all"})
+    r = _check(api, include_plan=True)
+    assert r.status_code == 200, r.text
+    plan = r.json()["plan"]
+    assert plan["issues"] and all(isinstance(i, str) for i in plan["issues"])

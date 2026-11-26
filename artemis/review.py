@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Mapping
 
 from artemis.rules.checks import Alert
+from artemis.session_keys import action_key, comment_key, reason_key
 
 # The reasons a clinician can give for overriding an alert (the Streamlit screen and the backend):
 # the design's list (docs/design/brief.md), owner's decision 2026-11-26 ("A, design's list").
@@ -31,15 +32,15 @@ def reason_options(saved: str) -> List[str]:
 
 
 def alert_resolution_ok(state: Mapping[str, Any], alert_id: str) -> bool:
-    action = state.get(f"alert_action_{alert_id}")
+    action = state.get(action_key(alert_id))
     if action == "Acknowledge":
         return True
 
     if action == "Override":
-        reason = (state.get(f"alert_override_reason_{alert_id}") or "").strip()
+        reason = (state.get(reason_key(alert_id)) or "").strip()
         if reason in _NEEDS_A_COMMENT:
             # An override that says only "Other" can't be reviewed later (fix 9, D11).
-            return bool((state.get(f"alert_override_comment_{alert_id}") or "").strip())
+            return bool((state.get(comment_key(alert_id)) or "").strip())
         return bool(reason)
 
     return False
@@ -59,7 +60,7 @@ def decisions_from_state(state: Mapping[str, Any], alerts: List[Alert]) -> List[
     """The clinician's decision on each alert, as saved in the visit record at Finalize (fix 9)."""
     out: List[Dict[str, Any]] = []
     for a in alerts:
-        action = state.get(f"alert_action_{a.alert_id}") or "Unreviewed"
+        action = state.get(action_key(a.alert_id)) or "Unreviewed"
         override = action == "Override"
         out.append(
             {
@@ -68,8 +69,8 @@ def decisions_from_state(state: Mapping[str, Any], alerts: List[Alert]) -> List[
                 "title": a.title,
                 "severity": (a.evidence or {}).get("severity"),
                 "action": action,
-                "reason": (state.get(f"alert_override_reason_{a.alert_id}") or "").strip() if override else "",
-                "comment": (state.get(f"alert_override_comment_{a.alert_id}") or "").strip() if override else "",
+                "reason": (state.get(reason_key(a.alert_id)) or "").strip() if override else "",
+                "comment": (state.get(comment_key(a.alert_id)) or "").strip() if override else "",
             }
         )
     return out

@@ -50,7 +50,7 @@ def _pretend_analysed(at: AppTest, patient_id: str) -> None:
     at.session_state["analysis_status"] = "AMBER"
     at.session_state["analysis_alerts"] = [alert]
     at.session_state["analysis_results"] = [
-        {"alert": alert, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[], used_llm=False)}
+        {"alert": alert, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[])}
     ]
     at.run()
 

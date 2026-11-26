@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
 from artemis.review import alert_resolution_ok, can_finalize, decisions_from_state
 from artemis.rules.checks import Alert
+from artemis.session_keys import action_key, comment_key, reason_key
 from backend.models import DecisionIn, DecisionOut
 
 
@@ -27,9 +28,9 @@ def decision_rows(alerts: Sequence[Alert], decisions: Sequence[DecisionIn]) -> L
         if d.alert_id not in by_id:
             raise BadDecision("An alert in the request isn't in this visit.")
         # The same keys the Streamlit screen uses, so the rules in artemis/review.py read them.
-        state[f"alert_action_{d.alert_id}"] = d.action
-        state[f"alert_override_reason_{d.alert_id}"] = d.reason or ""
-        state[f"alert_override_comment_{d.alert_id}"] = d.comment
+        state[action_key(d.alert_id)] = d.action
+        state[reason_key(d.alert_id)] = d.reason or ""
+        state[comment_key(d.alert_id)] = d.comment
         if not alert_resolution_ok(state, d.alert_id):
             raise BadDecision("An override needs a reason, and 'Other (say why)' needs a comment.")
     chosen = [by_id[i] for i in dict.fromkeys(d.alert_id for d in decisions)]
@@ -40,9 +41,9 @@ def ready_to_finalize(alerts: Sequence[Alert], latest: Mapping[str, DecisionOut]
     """Today's Finalize rule (artemis.review.can_finalize) on the latest saved decisions."""
     state: Dict[str, Any] = {"analysis_ran": True}
     for alert_id, d in latest.items():
-        state[f"alert_action_{alert_id}"] = d.action
-        state[f"alert_override_reason_{alert_id}"] = d.reason
-        state[f"alert_override_comment_{alert_id}"] = d.comment
+        state[action_key(alert_id)] = d.action
+        state[reason_key(alert_id)] = d.reason
+        state[comment_key(alert_id)] = d.comment
     return can_finalize(state, list(alerts))
 
 

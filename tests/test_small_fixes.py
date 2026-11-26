@@ -10,6 +10,7 @@ from typing import Any, Dict, List
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.guidelines.processor import GuidelineChunk, _strip_markdown_noise as clean
 from artemis.guidelines.vector_store import InMemoryVectorStore
 from tests import pipeline_harness as h
@@ -69,16 +70,13 @@ def test_the_backup_store_keeps_every_guideline_file() -> None:
 
 class _Capture:
     model = "capture"
-    last_error = None
-    last_finish_reason = "stop"
-    last_note = None
 
     def __init__(self) -> None:
         self.calls: List[List[Dict[str, Any]]] = []
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.calls.append(messages)
-        return "[]" if isinstance(format, dict) else "{}"
+        return ChatReply("[]" if isinstance(format, dict) else "{}", finish_reason="stop")
 
 
 def test_the_plan_step_reads_dated_lab_values_without_trend_labels() -> None:
@@ -110,8 +108,9 @@ def test_error_text_does_not_show_the_model_servers_address() -> None:
     from artemis.ai.client import OpenAICompatClient, OpenAICompatConfig
 
     client = OpenAICompatClient(OpenAICompatConfig(base_url="http://127.0.0.1:9/v1", model="m", timeout_s=3))
-    assert client.chat([{"role": "user", "content": "hi"}]) is None
-    assert client.last_error and "127.0.0.1" not in client.last_error
+    reply = client.chat([{"role": "user", "content": "hi"}])
+    assert reply.text is None
+    assert reply.error and "127.0.0.1" not in reply.error
 
 
 # G28: the Ollama fallback matches what the screen says

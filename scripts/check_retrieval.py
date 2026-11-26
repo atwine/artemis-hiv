@@ -26,17 +26,28 @@ import run_baseline as rb  # noqa: E402  (builds the app's own guideline index)
 from artemis.evaluation.cases import load_cases  # noqa: E402
 from artemis.evaluation.retrieval import (case_items, check_search, load_search_questions, self_check,  # noqa: E402
                                           summarize_check)
-from artemis.ai.client import OpenAICompatClient  # noqa: E402
+from artemis.ai.client import ChatReply, OpenAICompatClient  # noqa: E402
 from artemis.visit import AnalysisOptions, patient_context_for, patient_summary_for, screening_search  # noqa: E402
 from run_phase2 import PRESETS, model_config  # noqa: E402
 
 DEPTH = 10  # passages checked; the app shows the AI AnalysisOptions().top_k of them
 
 
+class _Recorder:
+    """Keeps the error of the last reply it passed on, so a failed AI call stops the check."""
+
+    def __init__(self, client) -> None:
+        self._client, self.last_error, self.model = client, None, getattr(client, "model", "?")
+
+    def chat(self, *args, **kwargs):
+        reply = self._client.chat(*args, **kwargs)
+        self.last_error = reply.error
+        return reply
+
+
 class _Replay:
     """Answers the question step with the questions saved for each case, in the app's own format."""
 
-    last_error = None
     model = "replay"
 
     def __init__(self, saved: dict) -> None:
@@ -45,7 +56,7 @@ class _Replay:
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         facts = str(messages[-1]["content"])
         case_id = next(cid for cid in self._saved if f"Patient ID: {cid}\n" in facts)
-        return json.dumps(self._saved[case_id] or [])
+        return ChatReply(json.dumps(self._saved[case_id] or []), finish_reason="stop")
 
 
 def _note(case) -> str:
@@ -75,9 +86,9 @@ def main(argv: Optional[list] = None) -> int:
     allowed = {p.stem for p in rb.app.GUIDELINE_PATHS}  # what the app searches: Ugandan guidance only
     if args.replay_questions:
         # The questions an AI wrote in an earlier check, replayed, so only the index changes.
-        ai = _Replay(json.loads(args.replay_questions.read_text(encoding="utf-8"))["search_questions"])
+        ai = _Recorder(_Replay(json.loads(args.replay_questions.read_text(encoding="utf-8"))["search_questions"]))
     else:
-        ai = OpenAICompatClient(model_config(args.ai, None)[0]) if args.ai else None
+        ai = _Recorder(OpenAICompatClient(model_config(args.ai, None)[0])) if args.ai else None
     asked = {}
 
     def case_search(c):

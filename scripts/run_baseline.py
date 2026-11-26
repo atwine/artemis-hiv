@@ -186,7 +186,6 @@ def run_one(patient: Dict[str, Any]) -> Dict[str, Any]:
             {
                 "alert_id": r["alert"].alert_id,
                 "explanation": getattr(expl, "text", None),
-                "explanation_used_llm": getattr(expl, "used_llm", None),
                 "retrieved": [
                     {
                         "chunk_id": c.chunk_id,

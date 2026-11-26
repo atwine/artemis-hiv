@@ -6,6 +6,7 @@ import json
 from datetime import date
 from typing import Any, List, Optional
 
+from artemis.ai.client import ChatReply
 from artemis.patient.record import PatientContext
 
 SUMMARY = {"art_regimen": "TDF/3TC/DTG", "pregnant": True}
@@ -20,9 +21,6 @@ class _Client:
     """A model that answers with a fixed reply and records what it was asked."""
 
     model = "fake"
-    last_error: Optional[str] = None
-    last_note = None
-    last_finish_reason = "stop"
 
     def __init__(self, reply: Optional[str]) -> None:
         self.reply = reply
@@ -30,7 +28,7 @@ class _Client:
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.asked.append((messages, format))
-        return self.reply
+        return ChatReply(self.reply, finish_reason="stop")
 
 
 def test_the_ai_is_shown_the_patient_and_asked_for_short_questions() -> None:

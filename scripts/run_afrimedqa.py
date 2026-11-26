@@ -77,11 +77,11 @@ def main(argv: Optional[list] = None) -> int:
             print(f"stopped before question {q.sample_id}: one more could pass the ${args.cap:.2f} cap")
             return 1
         reply = client.chat(messages(q), format=answer_format(q), options_override={"num_predict": MAX_TOKENS})
-        if reply is None and client.last_error:
+        if reply.text is None and reply.error:
             # Not saved: a server outage is not an answer, and a saved one would be skipped on resume.
-            print(f"stopped at question {q.sample_id}: {client.last_error}; nothing saved for it")
+            print(f"stopped at question {q.sample_id}: {reply.error}; nothing saved for it")
             return 2
-        row = result_row(q, reply, cost_of([client.last_usage], price_in, price_out))
+        row = result_row(q, reply.text, cost_of([reply.usage], price_in, price_out))
         with out.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(row) + "\n")
         spent += row["cost_usd"]

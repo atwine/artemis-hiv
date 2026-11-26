@@ -50,7 +50,7 @@ def test_a_cut_off_review_with_an_odd_alert_shows_every_warning(at: AppTest) -> 
     at.session_state["analysis_screening_outcome"] = "cut_off"
     at.session_state["analysis_alerts"] = [alert]
     at.session_state["analysis_results"] = [
-        {"alert": alert, "retrieved": [chunk], "explanation": ExplanationResult(text="x", used_chunks=[], used_llm=False)}
+        {"alert": alert, "retrieved": [chunk], "explanation": ExplanationResult(text="x", used_chunks=[])}
     ]
     at.run()
 

@@ -7,6 +7,7 @@ from typing import List
 
 import pytest
 
+from artemis.ai.client import ChatReply
 from artemis.patient.record import build_patient_context, days_since_lab
 from artemis.patient.summary import build_stage1_summary
 from artemis.ai.screening import generate_llm_screening_alerts
@@ -15,14 +16,13 @@ from tests import pipeline_harness as h
 
 class RecordingModel:
     model = "stub"
-    last_error = None
 
     def __init__(self) -> None:
         self.messages: List[dict] = []
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.messages = messages
-        return "[]"
+        return ChatReply("[]")
 
 
 def _patient(pid: str) -> dict:

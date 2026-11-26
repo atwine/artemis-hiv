@@ -9,6 +9,7 @@ from __future__ import annotations
 import functools
 import json
 import logging
+import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
@@ -41,6 +42,7 @@ class Services:
     # Adds a new case. Only default_services gives it the real file (ARTEMIS_CUSTOM_PATIENTS_PATH);
     # any other Services refuses, so a test or script can never write the real patient file.
     add_case: Callable[[Dict[str, Any]], None] = field(default=_no_case_writer)
+    clock: Callable[[], float] = time.monotonic  # seconds, for the visit-check limit
 
 
 def demo_patients(settings: Settings) -> Callable[[], List[Dict[str, Any]]]:

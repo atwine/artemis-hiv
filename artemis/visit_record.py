@@ -25,6 +25,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from artemis.plan.flow import AgenticResult
 from artemis.rules.checks import Alert
 from artemis.statuses import status_name
+from artemis.session_keys import action_key, comment_key, reason_key, saved_reason_key
 from modules.explanation_generator import ExplanationResult
 from artemis.guidelines.vector_store import VectorSearchResult
 
@@ -92,7 +93,7 @@ def checks_entry(result: Any, *, note: str, visit_date: str, model: Optional[str
                     {"chunk_id": c.chunk_id, "document": c.document, "metadata": c.metadata, "distance": c.distance}
                     for c in r.get("retrieved") or []
                 ],
-                "explanation": {"text": r["explanation"].text, "used_llm": r["explanation"].used_llm},
+                "explanation": {"text": r["explanation"].text},
             }
             for r in result.results
         ],
@@ -184,8 +185,7 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
             "retrieved": [VectorSearchResult(**c) for c in r.get("retrieved") or []],
             "explanation": ExplanationResult(
                 text=(r.get("explanation") or {}).get("text") or "",
-                used_chunks=[],
-                used_llm=bool((r.get("explanation") or {}).get("used_llm")),
+                used_chunks=[],  # older records also carry "used_llm", always false; it isn't read
             ),
         }
         for alert, r in zip(alerts, checks.get("results") or [])
@@ -217,10 +217,10 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
     decided = {d.get("alert_id"): d for d in (finalized or {}).get("decisions") or []}
     for alert in alerts:
         d = decided.get(alert.alert_id) or {}
-        values[f"alert_action_{alert.alert_id}"] = d.get("action") or "Unreviewed"
-        values[f"alert_override_reason_{alert.alert_id}"] = d.get("reason") or ""
+        values[action_key(alert.alert_id)] = d.get("action") or "Unreviewed"
+        values[reason_key(alert.alert_id)] = d.get("reason") or ""
         # The reason it was saved with, kept apart so the picker keeps offering an older one
         # while the clinician changes their mind (artemis.review.reason_options).
-        values[f"alert_saved_reason_{alert.alert_id}"] = d.get("reason") or ""
-        values[f"alert_override_comment_{alert.alert_id}"] = d.get("comment") or ""
+        values[saved_reason_key(alert.alert_id)] = d.get("reason") or ""
+        values[comment_key(alert.alert_id)] = d.get("comment") or ""
     return values

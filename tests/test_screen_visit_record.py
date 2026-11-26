@@ -59,7 +59,7 @@ def test_finalize_saves_each_decision_and_other_needs_a_comment(records: Path) -
     at.session_state["analysis_screening_outcome"] = "ok"
     at.session_state["analysis_alerts"] = alerts
     at.session_state["analysis_results"] = [
-        {"alert": a, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[], used_llm=False)} for a in alerts
+        {"alert": a, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[])} for a in alerts
     ]
     at.run()
     at.radio(key="alert_action_tdf_creatinine_overdue").set_value("Acknowledge").run()
