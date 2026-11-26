@@ -58,7 +58,6 @@ class AnalysisResult:
     alerts: List[Alert]
     results: List[Dict[str, Any]]
     status: str
-    deterministic_alerts: List[Alert]
     # What happened to the AI review: "not_run" (switched off), "ok", "failed" (no reply),
     # "unreadable" (a reply that could not be read as a list of alerts), the partial "cut_off" and
     # "partly_read", or "search_unavailable" (the search model did not load, so it did not run; G33).
@@ -327,7 +326,6 @@ def run_visit_analysis(
         alerts=alerts,
         results=results,
         status=overall,
-        deterministic_alerts=deterministic_alerts,
         screening_outcome=screening_outcome,
         screening_ran=screening_ran,
         screening_debug=screening_debug,

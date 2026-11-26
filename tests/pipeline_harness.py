@@ -183,7 +183,6 @@ def _run_patient(patient: Dict[str, Any]) -> Dict[str, Any]:
                     "alert_id": r["alert"].alert_id,
                     "retrieved": [c.chunk_id for c in r.get("retrieved") or []],
                     "explanation": getattr(r.get("explanation"), "text", None),
-                    "explanation_used_llm": getattr(r.get("explanation"), "used_llm", None),
                 }
                 for r in ss.get("analysis_results") or []
             ],

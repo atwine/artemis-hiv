@@ -92,7 +92,7 @@ def checks_entry(result: Any, *, note: str, visit_date: str, model: Optional[str
                     {"chunk_id": c.chunk_id, "document": c.document, "metadata": c.metadata, "distance": c.distance}
                     for c in r.get("retrieved") or []
                 ],
-                "explanation": {"text": r["explanation"].text, "used_llm": r["explanation"].used_llm},
+                "explanation": {"text": r["explanation"].text},
             }
             for r in result.results
         ],
@@ -184,8 +184,7 @@ def restore(checks: Entry, finalized: Optional[Entry] = None) -> Dict[str, Any]:
             "retrieved": [VectorSearchResult(**c) for c in r.get("retrieved") or []],
             "explanation": ExplanationResult(
                 text=(r.get("explanation") or {}).get("text") or "",
-                used_chunks=[],
-                used_llm=bool((r.get("explanation") or {}).get("used_llm")),
+                used_chunks=[],  # older records also carry "used_llm", always false; it isn't read
             ),
         }
         for alert, r in zip(alerts, checks.get("results") or [])
