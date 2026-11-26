@@ -13,6 +13,7 @@ from typing import Annotated, Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from artemis.patient.new_case import VISIT_TYPES
 from artemis.review import OVERRIDE_REASONS
 from artemis.statuses import AI_REVIEW_OUTCOMES, STATUSES
 
@@ -22,6 +23,7 @@ OverrideReason = Literal[tuple(OVERRIDE_REASONS)]  # type: ignore[valid-type]
 # Built from artemis/visit.py's lists, which docs/screen-checklist.md covers one by one (plan 4.7).
 Status = Literal[STATUSES]  # type: ignore[valid-type]
 AiReview = Literal[AI_REVIEW_OUTCOMES]  # type: ignore[valid-type]  # how the AI review ended
+VisitType = Literal[VISIT_TYPES]  # type: ignore[valid-type]  # owner, 2026-11-26
 AlertKind = Literal["rule", "ai"]
 Action = Literal["Acknowledge", "Override"]
 
@@ -72,6 +74,16 @@ class NewLabRow(BaseModel):
     when: Literal["today", "previous"]
 
 
+class PreviousArtIn(BaseModel):
+    """One regimen the patient took before, with when it started and ended."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    regimen: List[str] = Field(max_length=20)  # picks from the app's list, e.g. "TLE"
+    start_date: datetime.date  # YYYY-MM-DD
+    end_date: datetime.date  # YYYY-MM-DD, by the visit date
+
+
 class NewCase(BaseModel):
     """A new made-up patient case (owner, 2026-11-26: the Streamlit form's fields and rules, plus
     an optional name). Checked again by artemis.patient.new_case, the builder both forms share."""
@@ -88,6 +100,11 @@ class NewCase(BaseModel):
     examination_findings: str = Field(default="", max_length=5000)
     prior_history: str = Field(default="", max_length=5000)
     labs: List[NewLabRow] = Field(default=[], max_length=50)
+    # Today's visit (owner, 2026-11-26): its date (today when left out), its type, and the note.
+    visit_date: Optional[datetime.date] = None
+    visit_type: Optional[VisitType] = None
+    todays_note: str = Field(default="", max_length=20000)
+    previous_art: List[PreviousArtIn] = Field(default=[], max_length=20)
 
 
 class PatientSummary(BaseModel):
@@ -217,6 +234,7 @@ class FormChoices(BaseModel):
 
     art_regimens: List[RegimenChoice]  # combinations first, then single drugs
     lab_tests: List[LabTestChoice]
+    visit_types: List[str]
 
 
 # --- Cards (CDS Hooks) ------------------------------------------------------------------

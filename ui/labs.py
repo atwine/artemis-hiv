@@ -22,9 +22,10 @@ def _cell(value: Any) -> str:
     return "" if text.lower() in {"nan", "nat", "none"} else text
 
 
-def editor_rows(records: List[Dict[str, Any]]) -> List[Dict[str, str]]:
-    """The add-case table's rows as plain text, ready for artemis.patient.labs.lab_rows_to_entries."""
-    return [{col: _cell(r.get(col)) for col in LAB_COLUMNS} for r in records or []]
+def editor_rows(records: List[Dict[str, Any]], columns: List[str] = LAB_COLUMNS) -> List[Dict[str, str]]:
+    """An add-case table's rows as plain text: the lab tables' for artemis.patient.labs.lab_rows_to_entries,
+    or another table's `columns` (the previous-ART table's)."""
+    return [{col: _cell(r.get(col)) for col in columns} for r in records or []]
 
 
 def lab_rows_for_display(patient: Dict[str, Any], visit_date: _dt.date, *, today: bool) -> List[Dict[str, str]]:

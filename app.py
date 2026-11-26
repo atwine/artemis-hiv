@@ -38,7 +38,7 @@ from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
 from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store, index_collection_name
 from artemis.patient.labs import TEST_UNITS, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES
-from artemis.patient.new_case import CaseForm, build_case_record
+from artemis.patient.new_case import PREVIOUS_ART_COLUMNS, VISIT_TYPES, CaseForm, build_case_record, previous_art_from_rows
 from ui.labs import LAB_COLUMNS, editor_rows, lab_rows_for_display
 from artemis.plan.plan_json import parse_plan
 from artemis.plan.view import plan_html, read_plan
@@ -326,6 +326,12 @@ def main() -> None:
         new_patient_id = st.text_input("Patient Identifier", key="new_case_patient_id")
         new_name = st.text_input("Name (made up, optional)", key="new_case_name")
 
+        _visit_col1, _visit_col2 = st.columns(2)
+        with _visit_col1:
+            new_visit_date = st.date_input("Visit date", value=datetime.date.today(), key="new_case_visit_date")
+        with _visit_col2:
+            new_visit_type = st.selectbox("Visit type", options=["", *VISIT_TYPES], key="new_case_visit_type")
+
         col1, col2 = st.columns(2)
         with col1:
             new_age = st.number_input(
@@ -349,6 +355,29 @@ def main() -> None:
             REGIMEN_CHOICES,
             key="new_case_art_regimen",
             help="Pick a combination (TLD = TDF + 3TC + DTG) or the single drugs.",
+        )
+
+        st.caption(
+            "Optional: previous ART, one row per regimen. Drugs from the list above, separated by "
+            "commas (e.g. TLE, or AZT, 3TC, NVP), with the dates it started and ended."
+        )
+        new_previous_art_rows = st.data_editor(
+            pd.DataFrame(
+                {
+                    "drugs": pd.Series(dtype="object"),
+                    "start_date": pd.Series(dtype="datetime64[ns]"),
+                    "end_date": pd.Series(dtype="datetime64[ns]"),
+                }
+            )[PREVIOUS_ART_COLUMNS],
+            key="new_case_previous_art",
+            num_rows="dynamic",
+            hide_index=True,
+            width="stretch",
+            column_config={
+                "drugs": st.column_config.TextColumn("Drugs", help="e.g. TLE, or AZT, 3TC, NVP"),
+                "start_date": st.column_config.DateColumn("Started", format="YYYY-MM-DD"),
+                "end_date": st.column_config.DateColumn("Ended", format="YYYY-MM-DD"),
+            },
         )
 
         new_other_meds = st.text_area(
@@ -409,6 +438,13 @@ def main() -> None:
                 },
             )
 
+        new_todays_note = st.text_area(
+            "Today's clinical note",
+            key="new_case_todays_note",
+            height=80,
+            help="The note for today's visit; the visit checks read it.",
+        )
+
         st.markdown("**Today's laboratory results**")
         new_todays_lab_rows = _lab_table("new_case_today_labs", datetime.date.today())
         st.markdown("**Previous laboratory results**")
@@ -427,8 +463,11 @@ def main() -> None:
                     cols = list(table or {})
                     return [dict(zip(cols, vals)) for vals in zip(*(table[c] for c in cols))] if cols else []
 
+                previous_art, case_errors = previous_art_from_rows(
+                    editor_rows(_records(new_previous_art_rows), PREVIOUS_ART_COLUMNS)
+                )
                 # One builder for this form and the API (artemis/patient/new_case.py), same rules.
-                patient_record, case_errors = build_case_record(
+                patient_record, build_errors = build_case_record(
                     CaseForm(
                         patient_id=pid,
                         name=new_name or "",
@@ -445,9 +484,14 @@ def main() -> None:
                             for table, source in ((new_todays_lab_rows, "today"), (new_previous_lab_rows, "previous"))
                             for row in editor_rows(_records(table))
                         ],
+                        visit_date=new_visit_date,
+                        visit_type=new_visit_type or "",
+                        previous_art=previous_art,
+                        todays_note=new_todays_note or "",
                     ),
                     today=datetime.date.today(),
                 )
+                case_errors = case_errors + build_errors
                 if case_errors:
                     for _e in case_errors:
                         st.error(_e)

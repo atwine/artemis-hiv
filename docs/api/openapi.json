@@ -661,11 +661,19 @@
       },
       "title": "Lab Tests",
       "type": "array"
+     },
+     "visit_types": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Visit Types",
+      "type": "array"
      }
     },
     "required": [
      "art_regimens",
-     "lab_tests"
+     "lab_tests",
+     "visit_types"
     ],
     "title": "FormChoices",
     "type": "object"
@@ -841,6 +849,15 @@
       "title": "Patient Id",
       "type": "string"
      },
+     "previous_art": {
+      "default": [],
+      "items": {
+       "$ref": "#/components/schemas/PreviousArtIn"
+      },
+      "maxItems": 20,
+      "title": "Previous Art",
+      "type": "array"
+     },
      "prior_history": {
       "default": "",
       "maxLength": 5000,
@@ -861,6 +878,41 @@
        }
       ],
       "title": "Sex"
+     },
+     "todays_note": {
+      "default": "",
+      "maxLength": 20000,
+      "title": "Todays Note",
+      "type": "string"
+     },
+     "visit_date": {
+      "anyOf": [
+       {
+        "format": "date",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Visit Date"
+     },
+     "visit_type": {
+      "anyOf": [
+       {
+        "enum": [
+         "Routine review",
+         "First visit",
+         "Unscheduled visit",
+         "Results review"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Visit Type"
      }
     },
     "required": [
@@ -1153,6 +1205,37 @@
      }
     },
     "title": "Plan",
+    "type": "object"
+   },
+   "PreviousArtIn": {
+    "additionalProperties": false,
+    "description": "One regimen the patient took before, with when it started and ended.",
+    "properties": {
+     "end_date": {
+      "format": "date",
+      "title": "End Date",
+      "type": "string"
+     },
+     "regimen": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Regimen",
+      "type": "array"
+     },
+     "start_date": {
+      "format": "date",
+      "title": "Start Date",
+      "type": "string"
+     }
+    },
+    "required": [
+     "regimen",
+     "start_date",
+     "end_date"
+    ],
+    "title": "PreviousArtIn",
     "type": "object"
    },
    "RegimenChoice": {
