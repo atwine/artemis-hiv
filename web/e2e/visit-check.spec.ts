@@ -56,7 +56,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await expect(page.getByRole("main").getByRole("alert")).toHaveCount(0);
   const reply = (await (await replyPromise).json()) as VisitCheck;
   // The address now names the saved visit, so Back or a reload reopens it instead of a blank form.
-  await expect(page).toHaveURL(new RegExp(`/patients/P001\\?visit=${reply.visit_id}$`));
+  await expect(page).toHaveURL((url) => url.pathname === "/patients/P001" && url.searchParams.get("visit") === reply.visit_id);
   await expect(results.getByRole("status").filter({ hasText: /^AMBER: \d+ alert\(s\) to consider\.$/ })).toBeVisible();
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeVisible();
   expect(reply.disclaimer).toBe(DISCLAIMER); // the footer's copy is the API's
