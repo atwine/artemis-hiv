@@ -1,0 +1,82 @@
+# Round 2: owner feedback and five new directions (2026-11-26)
+
+## Owner feedback on round 1 (Paper comments)
+
+- 02 Guided Review: "drop and replace with a new design, not after this pattern."
+- 03 Evidence Desk: "I do not like, drop it ... replace it with a new design that doesn't
+  follow this pattern."
+- 04 Patient Timeline: "Replace!"
+- 05 Note Co-pilot: "I like this one, I find it easiest to follow." But: "I don't think I need
+  today's note to be signed" (not agreed). The visit is finalized, the note is not signed.
+- 01 Triage Board: no comment; kept for now.
+- Overall: the designs feel monotonous; they follow the same pattern. Add five new designs
+  drawn from the Design Library.
+
+## The pattern to break
+
+All round-1 designs shared one skeleton and one look:
+- a white top bar, a patient strip, then tabs;
+- the alert as a white card with a two-column box "In Rose's record | What the guideline
+  says", and Accept / Override buttons underneath;
+- light grey-white ground, one quiet accent, a neutral sans (Inter, Geist, Hanken), small
+  grey labels everywhere.
+
+Round-2 designs must not use that skeleton. Each one takes a different layout metaphor AND
+a clearly different visual personality taken from a Design Library system (its real colours,
+fonts and shapes), so the owner sees five genuinely different products. What stays the same:
+the brief (avatar Harriet, the screen budget, Ugandan guidance only, status = word + shape),
+the content kit, and why the owner liked Note Co-pilot: one thing at a time, in the order a
+clinician already works, easy to follow.
+
+## The five new directions
+
+| # | Name | Layout metaphor | Library personality |
+|---|---|---|---|
+| 06 | Ward Round Deck | One alert per full-screen card, a deck she moves through; big type, big numbers | Snowflake (night blue, bold caps, pill buttons) |
+| 07 | Colleague Chat | ARTEMIS talks like a colleague in a message thread; she answers with reply chips | Intercom messenger + Wispr Flow (cream, serif, lavender) |
+| 08 | Clinic Board | The day as columns of patient cards (Waiting, Needs you, Done); a visit opens as a sheet that slides up | folk (one list, many views, coloured bands) + Plane (states) |
+| 09 | Paper Care Card | The screen looks like the familiar paper HIV care card and visit form; alerts are stamps and margin ticks on it | Nomad Tanzania (Fraunces, teal ink, one red, spaced caps) + Murchison hand-lettering for her marks |
+| 10 | Tablet Bedside | A landscape tablet (1180 x 820) used beside the patient: thumb-size targets, big pills, one column | Murchison River Lodge (sand, olive, burnt-orange pills, Playfair) |
+
+Each builds the same workflow stages (clinic list, visit before checks, checks running, alert
+review with override reason, plan comparison, finalize, saved record, INCOMPLETE, GREEN, add
+patient case), split into as many small screens as the budget needs, plus a cover with a flow
+map. No note signing anywhere: the final step is "Finalize visit".
+
+## Owner feedback on round 2 (Paper comments, 2026-11-27)
+
+- 08 Clinic Board: "I like this one, it's a good signal of design to follow ... make some
+  changes here and there." It becomes the lead direction.
+- 05 Note Co-pilot: kept, but "I can't tell where the clinician inputs their thoughts ... I
+  have a tough time following through: make it more obvious and remove the parts I don't
+  think will be necessary."
+- 07 Colleague Chat: "should be changed to something else: I don't like the design."
+- 09 Paper Care Card: "not this: please redo it with other signals in the design library."
+- 06 Ward Round Deck: "No! Not this one." Dropped.
+- 10 Tablet Bedside: "remove it completely." Its screens are deleted.
+- Working rule: at most two builder agents at a time, to save credits.
+
+Round 3: one builder reworks 05 and finishes 08; another replaces 07 and 09 with two new
+directions that keep what the owner liked in 08 (patient cards in clear columns, the visit
+opening as a sheet over the board, soft bands, one step at a time) but use different
+Design Library systems.
+
+## Owner feedback on round 3 (spoken walkthrough, 2026-11-27)
+
+Ranking: 1 = 09 Checklist Tray, 2 = 07 Day Rail, 3 = 08 Clinic Board (its first page only).
+- 09 Checklist Tray: easy to follow from the clinic day through each step; the bottom tray
+  shows where you are; the typography (serif for the guideline, S4c) is right. But step 2's
+  "Your assessment and plan" isn't what doctors normally see: rename it.
+- 07 Day Rail: simple; good typography on S1 and step 2 (writing box, Run checks).
+- 08 Clinic Board: only S1 is wanted: the day as a board plus a list, with "Add patient",
+  so someone in a hurry knows where things are. The rest of its flow is not.
+- 01 Triage Board and 05 Note Co-pilot: dropped.
+
+Next: combinations. Put Clinic Board's S1 (board + list + add patient) into 09 and 07, each in
+its own style, then drop the Clinic Board page. Work continues with 07 and 09 only.
+
+Done (2026-11-27): the board-and-list first screen is in both 09 Checklist Tray and 07 Day Rail, each in its own style, with a Board | List switch; the writing box is now called "Clinical notes" (owner's pick). The Clinic Board page is dropped.
+
+Round 5 (2026-11-27): the owner likes Day Rail's look but Checklist Tray's bottom navigation bar. Three Day Rail variations with that bar, nothing else changed: 2A floating dark tray, 2B full-width step bar, 2C bar joined to the visit pane. Owner to pick one.
+
+Final (2026-11-27): owner picked 2A. The board and list screens, GREEN and the two add-case screens were added to the 2A page with the same floating tray; the page is renamed "★ FINAL".
