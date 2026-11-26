@@ -49,12 +49,10 @@ def _search() -> Any:
     # without loading the model. engine_version=5 is the value app._run_analysis passes.
     import app
 
-    rag = app._get_rag_engine(
-        prefer_chroma=True,
-        embedding_model_name=getattr(app, "EMBEDDING_MODEL", "all-MiniLM-L6-v2"),
-        engine_version=5,
-    )
-    if app.GUIDELINE_PDF_PATHS:
+    # Read straight from app, no defaults, so a renamed setting fails here, loudly
+    # (tests/test_backend_services.py goes through this path).
+    rag = app._get_rag_engine(prefer_chroma=True, embedding_model_name=app.EMBEDDING_MODEL, engine_version=5)
+    if app.GUIDELINE_PATHS:
         rag.ensure_indexed()
     return rag
 

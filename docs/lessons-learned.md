@@ -99,6 +99,15 @@ entries are added at the end of each fix (see `docs/refactor/README.md`).
 - Caught by: timing a Save on the code before and after a fix, to rule out the fix as the cause.
 - Fix: plan item 4.3 (keep the index), and how the index is built in the retrieval revamp.
 
+**31. A stand-in in every test can hide broken wiring to the real thing.**
+- Example: the backend read `app.GUIDELINE_PDF_PATHS`, which Phase 2B renamed to
+  `GUIDELINE_PATHS`. Every real visit check through the API crashed (500), yet all 92 backend
+  tests passed, because each one replaced the guideline search with a stand-in.
+- Caught by: the Phase 5 website session's browser test, which failed at the check step.
+- Fix: `tests/test_backend_services.py` goes through the real search and model-client setup and
+  replaces only the slow engine builder; the setup reads app's settings with no fallback
+  defaults, so a rename fails there, loudly.
+
 ## Habits that caught these
 
 - Save a baseline before fixing anything, including the model's raw replies and the rule alerts,
