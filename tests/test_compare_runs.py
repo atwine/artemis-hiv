@@ -77,3 +77,11 @@ def test_empty_folder_is_refused(tmp_path: Path) -> None:
     b = _folder(tmp_path, "b", [_run()])
     (tmp_path / "empty").mkdir()
     assert cr.main([str(b), str(tmp_path / "empty")]) == 2
+
+
+def test_an_older_run_that_says_yellow_matches_amber(tmp_path: Path) -> None:
+    """Saved runs keep the old name; YELLOW and AMBER are the same result (owner, 2026-11-26)."""
+    new = _run()
+    new["overall_status"] = "AMBER"
+    report, changed = cr.compare(cr.load(_folder(tmp_path, "b", [_run()])), cr.load(_folder(tmp_path, "a", [new])))
+    assert changed == 0

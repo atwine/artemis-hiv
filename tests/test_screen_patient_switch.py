@@ -47,7 +47,7 @@ def _pretend_analysed(at: AppTest, patient_id: str) -> None:
     )
     at.session_state["analysis_ran"] = True
     at.session_state["analysis_patient_id"] = patient_id
-    at.session_state["analysis_status"] = "YELLOW"
+    at.session_state["analysis_status"] = "AMBER"
     at.session_state["analysis_alerts"] = [alert]
     at.session_state["analysis_results"] = [
         {"alert": alert, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[], used_llm=False)}
@@ -67,7 +67,7 @@ def test_results_stay_with_the_patient_they_were_run_for(at: AppTest) -> None:
     _select(at, "P002")
     assert _alert_titles_on_screen(at) == []
     assert any("Save encounter" in i.value for i in at.info)
-    assert not any(w.value.startswith("YELLOW") for w in at.warning)
+    assert not any(w.value.startswith("AMBER") for w in at.warning)
 
     # Coming back doesn't bring the old results back (that waits for the saved record, fix 9b).
     _select(at, "P001")

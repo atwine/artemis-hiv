@@ -46,7 +46,7 @@ def test_a_cut_off_review_with_an_odd_alert_shows_every_warning(at: AppTest) -> 
     chunk = VectorSearchResult(chunk_id="c1", document="text", metadata={"page_number": 7}, distance=0.1)
     at.session_state["analysis_ran"] = True
     at.session_state["analysis_patient_id"] = patient_id
-    at.session_state["analysis_status"] = "YELLOW"
+    at.session_state["analysis_status"] = "AMBER"
     at.session_state["analysis_screening_outcome"] = "cut_off"
     at.session_state["analysis_alerts"] = [alert]
     at.session_state["analysis_results"] = [

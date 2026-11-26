@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from artemis.review import OVERRIDE_REASONS
-from artemis.visit import AI_REVIEW_OUTCOMES, STATUSES
+from artemis.statuses import AI_REVIEW_OUTCOMES, STATUSES
 
 # Built from the one list the Streamlit screen uses too, so the two can't drift apart.
 OverrideReason = Literal[tuple(OVERRIDE_REASONS)]  # type: ignore[valid-type]

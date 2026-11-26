@@ -853,7 +853,7 @@ def main() -> None:
                 "- It compared them with the patient summary above, the dated notes and the lab table.\n"
                 f"- LLM output status: `{_dbg.get('parse_status') or 'unknown'}`."
             )
-    # Rationale: show raw LLM output for all cases (GREEN, YELLOW, RED) to debug parsing issues
+    # Rationale: show raw LLM output for all cases (GREEN, AMBER, RED) to debug parsing issues
     _dbg = st.session_state.get("analysis_screening_debug") or {}
     if _dbg.get("raw_output"):
         with st.expander("Debug: Raw LLM screening output", expanded=False):

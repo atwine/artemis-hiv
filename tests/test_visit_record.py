@@ -88,3 +88,12 @@ def test_patients_whose_ids_look_alike_never_share_records(tmp_path: Path) -> No
         vr.append_entry(tmp_path, {"event": "checks_run", "visit_id": pid, "patient_id": pid})
     assert [e["patient_id"] for e in vr.read_entries(tmp_path, "a b")[0]] == ["a b"]
     assert len(list(tmp_path.glob("*.jsonl"))) == 3
+
+
+def test_an_older_record_that_says_yellow_reopens_as_amber() -> None:
+    """The owner renamed YELLOW to AMBER (2026-11-26). Saved lines are never rewritten, so an
+    older one is read as AMBER where records are read."""
+    from artemis import visit_record as vr
+
+    old = {"event": "checks_run", "patient_id": "P001", "visit_id": "v", "status": "YELLOW", "alerts": [], "results": []}
+    assert vr.restore(old)["analysis_status"] == "AMBER"
