@@ -32,16 +32,16 @@ def main() -> int:
     from dotenv import load_dotenv
 
     load_dotenv(ROOT / ".env")
-    import app
+    from artemis import config
     from artemis.guidelines.vector_store import ChromaVectorStore, InMemoryVectorStore
     from modules.rag_engine import RagEngine
 
-    kept = app._get_rag_engine(prefer_chroma=True, embedding_model_name=app.EMBEDDING_MODEL, engine_version=5)
+    kept = config.guideline_search()
     if not isinstance(kept._vector_store, ChromaVectorStore) or not kept.search_ready:
         print("Chroma or the search model did not start; nothing compared.")
         return 1
     kept.ensure_indexed()
-    measured = RagEngine(project_root=ROOT, guideline_paths=app.GUIDELINE_PATHS, embedder=kept._embedder,
+    measured = RagEngine(project_root=ROOT, guideline_paths=config.GUIDELINE_PATHS, embedder=kept._embedder,
                          vector_store=InMemoryVectorStore())
     measured.ensure_indexed()
 
@@ -56,7 +56,7 @@ def main() -> int:
         if a != b:
             differing.append((q, a, b))
     lines = [
-        f"Kept Chroma index vs the in-memory store Phase 2B measured ({app.EMBEDDING_MODEL}, top {TOP_K}).",
+        f"Kept Chroma index vs the in-memory store Phase 2B measured ({config.EMBEDDING_MODEL}, top {TOP_K}).",
         f"Searches: {len(qs)} (20 Phase 2B questions + {len(qs) - 20} AI-written questions from GLM's final run).",
         f"Same passages in the same order: {same_order}/{len(qs)}",
         f"Same passages, any order: {same_set}/{len(qs)}",

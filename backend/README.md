@@ -65,8 +65,10 @@ environment and `uvicorn backend.main:create_app --factory --host 127.0.0.1`.
 The database itself: `docker compose -f backend/docker-compose.yml --env-file .env up -d`
 (needs `ARTEMIS_DB_PASSWORD` in `.env`; Docker Desktop must be open).
 
-The first visit check builds the guideline search the way the Streamlit app does, which loads
-the embedding model and, if the index isn't built yet, builds it. Plan item 4.3 replaces this.
+The first visit check sets up the guideline search (`artemis/config.py`): it loads the search
+model and opens the kept index in `storage/chroma`, embedding only passages it doesn't hold yet
+(normally none; `python scripts/build_index.py` builds it ahead of time). The backend doesn't load
+the Streamlit app (plan 4C.1).
 
 ## Tests
 

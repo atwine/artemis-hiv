@@ -37,6 +37,7 @@ import streamlit as _streamlit  # noqa: E402
 
 import app  # noqa: E402  (loads .env and the app's settings)
 from artemis.ai.client import openai_compat_config_from_env  # noqa: E402
+from artemis.evaluation.scrub import scrub, server_strings  # noqa: E402
 from artemis.patient.record import build_patient_context  # noqa: E402
 from artemis.rules.checks import run_alerts  # noqa: E402
 
@@ -104,33 +105,9 @@ def _to_jsonable(obj: Any) -> Any:
     return str(obj)
 
 
-_ROOT_PREFIXES = sorted(
-    {str(PROJECT_ROOT) + os.sep, PROJECT_ROOT.as_posix() + "/"}, key=len, reverse=True
-)
-
-
-def _scrub(obj: Any, secrets: List[str]) -> Any:
-    """Keep the model server's address and local folder paths out of saved files (the repo is public)."""
-    if isinstance(obj, str):
-        for s in secrets:
-            obj = obj.replace(s, "<model-server>")
-        for prefix in _ROOT_PREFIXES:
-            obj = obj.replace(prefix, "")
-        return obj
-    if isinstance(obj, dict):
-        return {k: _scrub(v, secrets) for k, v in obj.items()}
-    if isinstance(obj, list):
-        return [_scrub(v, secrets) for v in obj]
-    return obj
-
-
-def _server_strings() -> List[str]:
-    cfg = openai_compat_config_from_env()
-    if cfg is None:
-        return []
-    base = cfg.base_url.rstrip("/")
-    host = re.sub(r"^https?://", "", base).split("/")[0]
-    return sorted({base, host, host.split(":")[0]}, key=len, reverse=True)
+# Moved to artemis/evaluation/scrub.py (plan 4C.1); kept under the old names here.
+_scrub = scrub
+_server_strings = server_strings
 
 
 def _plan_items(agentic: Any) -> List[Dict[str, Any]]:

@@ -79,15 +79,12 @@ def clinic_day_file(settings: Settings) -> Callable[[], Dict[str, Any]]:
 
 @functools.lru_cache(maxsize=1)
 def _search() -> Any:
-    # Stopgap until plan item 4.3 (build the index once and keep it): the Streamlit app's own
-    # engine and settings, so both search the same index. Imported here so the server starts
-    # without loading the model. engine_version=5 is the value app._run_analysis passes.
-    import app
+    # The kept guideline index (artemis/config.py, plan 4C.1). Imported here so the server starts
+    # without loading the search model.
+    from artemis import config
 
-    # Read straight from app, no defaults, so a renamed setting fails here, loudly
-    # (tests/test_backend_services.py goes through this path).
-    rag = app._get_rag_engine(prefer_chroma=True, embedding_model_name=app.EMBEDDING_MODEL, engine_version=5)
-    if app.GUIDELINE_PATHS:
+    rag = config.guideline_search()
+    if config.GUIDELINE_PATHS:
         rag.ensure_indexed()
     return rag
 

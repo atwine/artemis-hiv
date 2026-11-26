@@ -21,7 +21,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import run_baseline as rb  # noqa: E402  (builds the app's own guideline index)
+from dotenv import load_dotenv  # noqa: E402
+
+from artemis import config  # noqa: E402  (the app's own guideline index)
 
 from artemis.evaluation.cases import load_cases  # noqa: E402
 from artemis.evaluation.retrieval import (case_items, check_search, load_search_questions, self_check,  # noqa: E402
@@ -75,15 +77,16 @@ def main(argv: Optional[list] = None) -> int:
                     help="let this model write the patient's guideline questions first, as the app does")
     args = ap.parse_args(argv)
 
-    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
+    load_dotenv(ROOT / ".env", override=False)  # the search model's folder (ARTEMIS_MODEL_DIR)
+    rag = config.guideline_search()
     if not rag.search_ready:
         # The app falls back to word hashing when the model can't load (G33); a measurement must not.
-        raise SystemExit(f"the search model {rb.app.EMBEDDING_MODEL} did not load; nothing measured")
-    if rb.app.GUIDELINE_PATHS:
+        raise SystemExit(f"the search model {config.EMBEDDING_MODEL} did not load; nothing measured")
+    if config.GUIDELINE_PATHS:
         rag.ensure_indexed()
     cases = load_cases(args.cases)
     questions = load_search_questions(args.questions)
-    allowed = {p.stem for p in rb.app.GUIDELINE_PATHS}  # what the app searches: Ugandan guidance only
+    allowed = {p.stem for p in config.GUIDELINE_PATHS}  # what the app searches: Ugandan guidance only
     if args.replay_questions:
         # The questions an AI wrote in an earlier check, replayed, so only the index changes.
         ai = _Recorder(_Replay(json.loads(args.replay_questions.read_text(encoding="utf-8"))["search_questions"]))

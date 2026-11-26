@@ -83,11 +83,11 @@ def test_the_index_name_is_one_chroma_accepts(tmp_path: Path):
     store that rebuilt everything each start (found 2026-11-26)."""
     import re
 
-    import app
+    from artemis import config
     from artemis.guidelines.vector_store import index_collection_name
 
-    for model in (app.EMBEDDING_MODEL, "Qwen/Qwen3-Embedding-0.6B", "BAAI/bge-small-en-v1.5"):
-        name = index_collection_name(model, app.GUIDELINE_PATHS, app.GUIDELINE_INDEX_VERSION)
+    for model in (config.EMBEDDING_MODEL, "Qwen/Qwen3-Embedding-0.6B", "BAAI/bge-small-en-v1.5"):
+        name = index_collection_name(model, config.GUIDELINE_PATHS, config.GUIDELINE_INDEX_VERSION)
         assert 3 <= len(name) <= 63 and re.match(r"^[A-Za-z0-9][A-Za-z0-9_-]*[A-Za-z0-9]$", name), name
         ChromaVectorStore(persist_path=tmp_path, collection_name=name)  # accepted
 
@@ -126,9 +126,9 @@ def test_a_store_that_cannot_start_is_reported_not_silent(tmp_path: Path, caplog
 def test_changing_how_passages_are_split_needs_a_new_index_version():
     """The kept index skips passage ids it already holds, so a change to how the text is split
     would keep stale passages unless the index version is bumped (same quiet failure as lesson 32)."""
-    import app
+    from artemis import config
     from modules.rag_engine import RagConfig
 
-    assert (RagConfig.chunk_size, RagConfig.overlap, app.GUIDELINE_INDEX_VERSION) == (1200, 200, 3), (
-        "Splitting changed: bump GUIDELINE_INDEX_VERSION in app.py, then update this test."
+    assert (RagConfig.chunk_size, RagConfig.overlap, config.GUIDELINE_INDEX_VERSION) == (1200, 200, 3), (
+        "Splitting changed: bump GUIDELINE_INDEX_VERSION in artemis/config.py, then update this test."
     )

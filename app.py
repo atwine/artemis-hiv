@@ -20,7 +20,6 @@ import pandas as pd
 import streamlit as st
 
 from artemis.rules.checks import Alert
-from modules.embedder import Embedder, EmbedderConfig
 from modules.explanation_generator import ExplanationResult
 
 
@@ -34,8 +33,8 @@ from artemis.ai.client import (
 from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
 from artemis.patient.record import load_mock_patients
 from modules.rag_engine import RagEngine
-from artemis.guidelines.sources import PRACTICE_COUNTRY, guideline_paths
-from artemis.guidelines.vector_store import VectorSearchResult, create_vector_store, index_collection_name
+from artemis.config import EMBEDDING_MODEL, GUIDELINE_INDEX_VERSION, GUIDELINE_MD_DIR, GUIDELINE_PATHS, guideline_search  # noqa: F401
+from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.patient.labs import TEST_UNITS, read_lab_notes
 from artemis.patient.medicines import REGIMEN_CHOICES
 from artemis.patient.new_case import PREVIOUS_ART_COLUMNS, VISIT_TYPES, CaseForm, build_case_record, previous_art_from_rows
@@ -74,23 +73,7 @@ from dotenv import load_dotenv  # noqa: E402
 
 load_dotenv(PROJECT_ROOT / ".env", override=False)
 
-# Rationale: Markdown conversions of the guideline PDFs preserve table structures
-# that pypdf extraction drops. We now embed from the Markdown files instead of PDFs.
-GUIDELINE_MD_DIR = PROJECT_ROOT / "Data" / "MarkDown Files"
-# Only the registered guidelines of the practice country: Ugandan guidance only (owner, 2026-11-25).
-GUIDELINE_PATHS: list[Path] = guideline_paths(GUIDELINE_MD_DIR, PRACTICE_COUNTRY)
-
-# Rationale: persistent Chroma collections keep old indexed chunks; bump this
-# when the ingestion/cleaning/chunking logic changes to force a fresh collection.
-# Version 2 (fix 10): the cleaner keeps '<50'-style thresholds and the text of figure blocks.
-# Version 3 (G36): page numbers are the guideline's printed pages.
-GUIDELINE_INDEX_VERSION = 3
-# The search model that turns guideline text and queries into meanings (one setting the app and
-# the scripts share). Phase 2B fix 5d tried BAAI/bge-small-en-v1.5 (512 word-pieces) and dropped it
-# by its keep rule; fix 5f tried Qwen/Qwen3-Embedding-0.6B and dropped it the same way (it found
-# more passages but the AI caught fewer problems). The index is per model, so changing it builds
-# a fresh one.
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+# The guideline files, search model and index now live in artemis/config.py (plan 4C.1).
 MOCK_PATIENTS_PATH = PROJECT_ROOT / "Data" / "mock_patients.json"
 CUSTOM_PATIENTS_PATH = Path(
     os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json"
@@ -132,33 +115,14 @@ def _save_cases(cases_file_ok: bool, items: List[Dict[str, Any]], what: str) -> 
         return False
 
 
-@st.cache_resource
-def _get_embedder(model_name: str, *, version: int = 2) -> Embedder:
-    # Rationale: embedding model load is expensive; cache the instance.
-    return Embedder(EmbedderConfig(model_name=model_name))
-
-
-@st.cache_resource
 def _get_rag_engine(
     *,
     prefer_chroma: bool,
     embedding_model_name: str,
     engine_version: int = 3,
 ) -> RagEngine:
-    # Rationale: keep a single vector store + embedder + engine per session.
-    embedder = _get_embedder(embedding_model_name, version=2)
-    # One stored index per search model and guideline text: an edited file gets a fresh one (G37).
-    vector_store = create_vector_store(
-        project_root=PROJECT_ROOT,
-        prefer_chroma=prefer_chroma,
-        collection_name=index_collection_name(embedding_model_name, GUIDELINE_PATHS, GUIDELINE_INDEX_VERSION),
-    )
-    return RagEngine(
-        project_root=PROJECT_ROOT,
-        guideline_paths=GUIDELINE_PATHS,
-        embedder=embedder,
-        vector_store=vector_store,
-    )
+    """The guideline search the backend uses too (artemis/config.py); one per process."""
+    return guideline_search(embedding_model_name, prefer_chroma=prefer_chroma)
 
 
 def _init_session_state() -> None:

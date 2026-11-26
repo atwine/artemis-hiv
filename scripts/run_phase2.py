@@ -28,12 +28,13 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import requests  # noqa: E402
-from dotenv import dotenv_values  # noqa: E402
+from dotenv import dotenv_values, load_dotenv  # noqa: E402
 
-import run_baseline as rb  # noqa: E402  (imports the app; reused for removing the server address)
 from artemis.ai.client import (DEFAULT_TEMPERATURE, OpenAICompatClient, OpenAICompatConfig,  # noqa: E402
                                openai_compat_config_from_env)
+from artemis import config  # noqa: E402
 from artemis.evaluation.cases import NO_KEY, load_cases  # noqa: E402
+from artemis.evaluation.scrub import scrub, server_strings  # noqa: E402
 from artemis.evaluation.runner import (BudgetExceeded, check_budget, effective_temperature, pending_runs,  # noqa: E402
                                        run_case, run_file_name, run_label, spent_in)
 
@@ -117,18 +118,19 @@ def main(argv: Optional[list] = None) -> int:
         return 0
 
     out.mkdir(parents=True, exist_ok=True)
-    rag = rb.app._get_rag_engine(prefer_chroma=True, embedding_model_name=rb.app.EMBEDDING_MODEL, engine_version=5)
-    if rb.app.GUIDELINE_PATHS:
+    load_dotenv(ROOT / ".env", override=False)  # the search model's folder (ARTEMIS_MODEL_DIR)
+    rag = config.guideline_search()
+    if config.GUIDELINE_PATHS:
         rag.ensure_indexed()
     client = OpenAICompatClient(config)
-    secrets = rb._server_strings()
+    secrets = server_strings()
     for case, k in todo:
         try:
             check_budget(spent=spent, checks=1, per_check=per_check, cap=args.cap)
         except BudgetExceeded:
             print(f"stopped before {case.case_id} #{k}: one more check could pass the ${args.cap:.2f} cap")
             return 1
-        record = rb._scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
+        record = scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
                                     price_out=price_out, temperature=temperature), secrets)
         if record["llm_error"]:
             # Not saved: a server outage is not a result, and a saved run would be skipped on resume.
