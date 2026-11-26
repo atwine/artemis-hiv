@@ -172,9 +172,21 @@ Where it stands (updated 2026-11-26; every number is in `docs/decisions.tsv` and
   7/12, but questions 10/20). Three fixes in a row helped the patient tracks and hurt the
   standalone questions; read by hand, the lost questions' passages are really wrong (the
   web-trained models lack the medical knowledge the clinician-worded questions need).
-- Next (owner's call): the bigger, stronger download pair; or the other half of (a), the AI
-  reading whole passages instead of their first 480 characters (G35), with no download; or wrap
-  up 2B with what is kept.
+- Fix 5a2 (the AI reads whole passages, not their first 480 characters; G35) tried and dropped
+  by its rule: GLM's own catches stayed at 80% (85% needed) and healthy patients left clear fell
+  from 3/6 to 1/6.
+- With the owner's bigger download pair: fix 5f, search model Qwen3-Embedding-0.6B, passed its
+  search check (questions 15/20, ideal 9/12, self-check 32/34, cases 6/12) but failed end to end:
+  GLM's own catches fell to 74% (80% needed), healthy left clear 1/6. Dropped. Second time a
+  better search score did not bring better catches (5q, 5f), so the end-to-end check decides.
+- Laptop setup (2026-11-26): the search model weights live in `D:\Model Weights\huggingface\hub`
+  (`ARTEMIS_MODEL_DIR` in `.env`), and the project's PyTorch is the graphics-card build
+  (2.15.0+cu132, RTX 3050): the search index builds in 0.6 s instead of 4.3 s (MiniLM), 9.5 s
+  instead of about 16 minutes (Qwen3), with the same search results (all 42 searches identical).
+  `requirements.txt` keeps the processor build for CI.
+- Next (owner's call): fix 5g, the re-ranker bge-reranker-v2-m3 (2.3 GB, not yet downloaded); or
+  2B.3, the agentic search loop; or wrap up 2B with what is kept (Ugandan guidance only, the AI
+  question step, the checker).
 
 - [x] 2B.1 Retrieval check on its own: for each case, does the right guideline passage come back?
       This separates "looked in the wrong place" from "read the right page and reasoned badly".
