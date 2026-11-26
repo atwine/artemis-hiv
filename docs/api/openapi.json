@@ -621,6 +621,31 @@
     "title": "FinalizeResponse",
     "type": "object"
    },
+   "FormChoices": {
+    "description": "The add-case form's lists, the same ones the Streamlit form uses (owner, 2026-11-26).",
+    "properties": {
+     "art_regimens": {
+      "items": {
+       "$ref": "#/components/schemas/RegimenChoice"
+      },
+      "title": "Art Regimens",
+      "type": "array"
+     },
+     "lab_tests": {
+      "items": {
+       "$ref": "#/components/schemas/LabTestChoice"
+      },
+      "title": "Lab Tests",
+      "type": "array"
+     }
+    },
+    "required": [
+     "art_regimens",
+     "lab_tests"
+    ],
+    "title": "FormChoices",
+    "type": "object"
+   },
    "HTTPValidationError": {
     "properties": {
      "detail": {
@@ -692,6 +717,32 @@
      "source"
     ],
     "title": "LabResult",
+    "type": "object"
+   },
+   "LabTestChoice": {
+    "properties": {
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "test": {
+      "title": "Test",
+      "type": "string"
+     },
+     "units": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Units",
+      "type": "array"
+     }
+    },
+    "required": [
+     "test",
+     "name",
+     "units"
+    ],
+    "title": "LabTestChoice",
     "type": "object"
    },
    "NewCase": {
@@ -1078,6 +1129,27 @@
      }
     },
     "title": "Plan",
+    "type": "object"
+   },
+   "RegimenChoice": {
+    "properties": {
+     "choice": {
+      "title": "Choice",
+      "type": "string"
+     },
+     "drugs": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Drugs",
+      "type": "array"
+     }
+    },
+    "required": [
+     "choice",
+     "drugs"
+    ],
+    "title": "RegimenChoice",
     "type": "object"
    },
    "SavedVisit": {
@@ -1575,6 +1647,25 @@
      }
     },
     "summary": "Clinic Day"
+   }
+  },
+  "/api/form-choices": {
+   "get": {
+    "description": "The add-case form's pick lists, so the website offers only what add-case accepts.",
+    "operationId": "form_choices_api_form_choices_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/FormChoices"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Form Choices"
    }
   },
   "/api/health": {

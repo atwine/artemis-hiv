@@ -22,7 +22,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session
 
 from artemis import visit_record
-from artemis.patient.labs import read_lab_entries, read_lab_notes
+from artemis.patient.labs import TEST_NAMES, TEST_UNITS, read_lab_entries, read_lab_notes
+from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
 from artemis.patient.new_case import CaseForm, build_case_record
 from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
@@ -43,12 +44,15 @@ from backend.models import (
     DecisionsResponse,
     FinalizeRequest,
     FinalizeResponse,
+    FormChoices,
+    LabTestChoice,
     LabNote,
     LabResult,
     NewCase,
     PatientDetail,
     PatientRecord,
     PatientSummary,
+    RegimenChoice,
     SavedVisit,
     VisitCheckRequest,
     VisitCheckResponse,
@@ -363,6 +367,14 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         return ClinicDay(
             clinic=schedule.clinic, room=schedule.room, clinician=schedule.clinician,
             date=schedule.date.isoformat(), appointments=rows, counts=day_counts(rows),
+        )
+
+    @app.get("/api/form-choices", response_model=FormChoices, dependencies=[Depends(require("form_choices", "view"))])
+    def form_choices() -> FormChoices:
+        """The add-case form's pick lists, so the website offers only what add-case accepts."""
+        return FormChoices(
+            art_regimens=[RegimenChoice(choice=c, drugs=COMBINATIONS.get(c, [c])) for c in REGIMEN_CHOICES],
+            lab_tests=[LabTestChoice(test=t, name=TEST_NAMES[t], units=units) for t, units in TEST_UNITS.items()],
         )
 
     @app.post("/api/patients", response_model=PatientDetail, status_code=201, dependencies=[

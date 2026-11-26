@@ -196,6 +196,27 @@ class ClinicDay(BaseModel):
     counts: DayCounts
 
 
+# --- The add-case form's pick lists ------------------------------------------------------
+
+
+class RegimenChoice(BaseModel):
+    choice: str  # what the form shows and sends back, e.g. "TLD" or "DTG"
+    drugs: List[str]  # what it is saved as, e.g. ["TDF", "3TC", "DTG"]
+
+
+class LabTestChoice(BaseModel):
+    test: str  # what the form sends back, e.g. "creatinine"
+    name: str  # what the form shows, e.g. "eGFR"
+    units: List[str]  # the usual unit first
+
+
+class FormChoices(BaseModel):
+    """The add-case form's lists, the same ones the Streamlit form uses (owner, 2026-11-26)."""
+
+    art_regimens: List[RegimenChoice]  # combinations first, then single drugs
+    lab_tests: List[LabTestChoice]
+
+
 # --- Cards (CDS Hooks) ------------------------------------------------------------------
 
 
