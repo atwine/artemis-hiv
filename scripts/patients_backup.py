@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT))
 from dotenv import load_dotenv  # noqa: E402
 from sqlmodel import Session, create_engine, func, select  # noqa: E402
 
-from backend import seed  # noqa: E402
+from backend import patients_backup as seed  # noqa: E402
 from backend.patients_db import Patient  # noqa: E402
 from backend.settings import settings_from_env  # noqa: E402
 

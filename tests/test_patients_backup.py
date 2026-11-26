@@ -13,7 +13,8 @@ import pytest
 from sqlmodel import Session
 
 from artemis.patient.record import build_patient_context
-from backend import patients_db, seed
+from backend import patients_db
+from backend import patients_backup as seed
 from tests.api_fakes import memory_engine, read_patients
 
 ROOT = Path(__file__).resolve().parents[1]
