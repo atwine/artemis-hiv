@@ -31,11 +31,12 @@ def test_temperature_extra_fields_and_usage(monkeypatch: pytest.MonkeyPatch) -> 
         base_url="http://example.invalid/v1", model="m", temperature=0.0,
         extra_body={"reasoning": {"enabled": False}, "usage": {"include": True}, "model": "not-this"},
     ))
-    assert client.chat([{"role": "user", "content": "hi"}], options_override={"num_predict": 50}) == "[]"
+    reply = client.chat([{"role": "user", "content": "hi"}], options_override={"num_predict": 50})
+    assert reply.text == "[]"
     assert sent["temperature"] == 0.0 and sent["max_tokens"] == 50
     assert sent["reasoning"] == {"enabled": False} and sent["usage"] == {"include": True}
     assert sent["model"] == "m"  # extra fields never replace the model or the messages
-    assert client.last_usage == {"prompt_tokens": 10, "completion_tokens": 2, "cost": 0.0001}
+    assert reply.usage == {"prompt_tokens": 10, "completion_tokens": 2, "cost": 0.0001}
 
 
 def test_the_server_client_runs_at_temperature_0_by_default(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -64,5 +65,5 @@ def test_the_ollama_backup_runs_at_temperature_0_by_default(monkeypatch: pytest.
             return {"message": {"content": "[]"}, "done_reason": "stop"}
 
     monkeypatch.setattr(ollama, "Client", FakeOllama)
-    assert OllamaClient(OllamaConfig(model="m")).chat([{"role": "user", "content": "hi"}]) == "[]"
+    assert OllamaClient(OllamaConfig(model="m")).chat([{"role": "user", "content": "hi"}]).text == "[]"
     assert sent["temperature"] == 0

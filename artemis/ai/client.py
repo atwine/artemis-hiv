@@ -1,7 +1,7 @@
 """LLM clients.
 
-Two backends share one interface (`.model`, `.last_error`, `.last_finish_reason`,
-`.last_note`, `.chat(...)`):
+Two backends share one interface (`.model`, and `.chat(...)`, which returns a `ChatReply`: the
+text with why it ended, any error, a note and the usage, all for that one call; plan item 4.6):
 - OllamaClient: a local Ollama server (the original setup).
 - OpenAICompatClient: any OpenAI-compatible server, such as vLLM on a remote GPU.
   Selected by setting LLM_BASE_URL (see `openai_compat_config_from_env`).
@@ -26,24 +26,23 @@ class ChatMessage(TypedDict):
     content: str
 
 
-class _ReplyState:
-    """Why the last reply ended and anything worth noting about it (fix 8).
+@dataclass(frozen=True)
+class ChatReply:
+    """One call's reply, and everything about it (plan item 4.6: no state left on the client).
 
-    last_finish_reason is the server's own word: "stop" (the model finished) or
-    "length" (the server cut the reply at the token limit). None when the server
-    did not say.
+    text: the reply, or None when there is no usable one (then `error` says why).
+    finish_reason: the server's own word (fix 8): "stop" (the model finished) or "length" (cut
+    at the token limit); None when the server didn't say.
+    error: why there is no reply, without the server's address (fix 10, G26).
+    note: anything worth knowing, such as a retry without the answer format.
+    usage: what the server reported (tokens, and the cost when it sends one).
     """
 
-    _last_finish_reason: Optional[str] = None
-    _last_note: Optional[str] = None
-
-    @property
-    def last_finish_reason(self) -> Optional[str]:
-        return self._last_finish_reason
-
-    @property
-    def last_note(self) -> Optional[str]:
-        return self._last_note
+    text: Optional[str]
+    finish_reason: Optional[str] = None
+    error: Optional[str] = None
+    note: Optional[str] = None
+    usage: Optional[Dict[str, Any]] = None
 
 
 def _hide_address(text: str, url: str) -> str:
@@ -104,7 +103,7 @@ class OllamaConfig:
     num_ctx: Optional[int] = 8192
 
 
-class OllamaClient(_ReplyState):
+class OllamaClient:
     def __init__(self, config: OllamaConfig | None = None) -> None:
         cfg = config or OllamaConfig()
 
@@ -114,8 +113,6 @@ class OllamaClient(_ReplyState):
 
         self._host = ollama_host()
 
-        # Rationale: surface the last failure reason to the UI for debugging.
-        self._last_error: Optional[str] = None
         # Rationale: store num_ctx to pass via options when set.
         self._num_ctx: Optional[int] = cfg.num_ctx
 
@@ -123,17 +120,13 @@ class OllamaClient(_ReplyState):
     def model(self) -> str:
         return self._model
 
-    @property
-    def last_error(self) -> Optional[str]:
-        return self._last_error
-
     def chat(
         self,
         messages: List[ChatMessage],
         *,
         format: Optional[Any] = None,
         options_override: Optional[Dict[str, Any]] = None,
-    ) -> Optional[str]:
+    ) -> ChatReply:
         """Call the local Ollama chat API.
 
         Uses the Ollama Python library interface documented on Ollama model pages.
@@ -146,13 +139,9 @@ class OllamaClient(_ReplyState):
         except Exception:
             # Rationale: if the Python client isn't installed, the app should still run
             # with deterministic fallback explanations.
-            self._last_error = "Python package 'ollama' is not available in this environment"
-            return None
+            return ChatReply(None, error="Python package 'ollama' is not available in this environment")
 
         try:
-            self._last_error = None
-            self._last_finish_reason = None
-            self._last_note = None
             # Rationale: use an explicit client so we can control the host used for
             # connectivity debugging. Allow up to 10 minutes for long-running
             # local model calls before treating them as timeouts.
@@ -198,51 +187,32 @@ class OllamaClient(_ReplyState):
             # access for responses. [src]
             # - https://raw.githubusercontent.com/ollama/ollama-python/main/README.md
             if response is None:
-                self._last_error = "Ollama returned no response"
-                return None
+                return ChatReply(None, error="Ollama returned no response")
             done_reason = (
                 response.get("done_reason") if isinstance(response, dict) else getattr(response, "done_reason", None)
             )
-            self._last_finish_reason = str(done_reason) if done_reason else None
+            finish = str(done_reason) if done_reason else None
 
             if hasattr(response, "message") and getattr(response, "message") is not None:
                 content = getattr(response, "message").content
-                if not content:
-                    self._last_error = "Ollama returned an empty message content"
-                    return None
-                # Rationale: with structured outputs (`format`), `content` may already be
-                # a Python list/dict. Downstream callers (e.g. LLM screening) expect a
-                # JSON string, so we serialize non‑string content here instead of using
-                # str(content), which would not be valid JSON. [src]
-                if not isinstance(content, str):
-                    try:
-                        return json.dumps(content, ensure_ascii=False)
-                    except TypeError:
-                        return str(content)
-                return content
-
-            if isinstance(response, dict):
-                msg = response.get("message")
-                if isinstance(msg, dict):
-                    content = msg.get("content")
-                    if not content:
-                        self._last_error = "Ollama returned an empty message content"
-                        return None
-                    # See rationale above: ensure non‑string structured content is
-                    # serialized as proper JSON so parsers can consume it safely.
-                    if not isinstance(content, str):
-                        try:
-                            return json.dumps(content, ensure_ascii=False)
-                        except TypeError:
-                            return str(content)
-                    return content
-
-            self._last_error = f"Unrecognized ollama response type: {type(response)}"
-            return None
+            elif isinstance(response, dict) and isinstance(response.get("message"), dict):
+                content = response["message"].get("content")
+            else:
+                return ChatReply(None, finish_reason=finish, error=f"Unrecognized ollama response type: {type(response)}")
+            if not content:
+                return ChatReply(None, finish_reason=finish, error="Ollama returned an empty message content")
+            # Rationale: with structured outputs (`format`), `content` may already be a Python
+            # list/dict. Downstream callers (e.g. LLM screening) expect a JSON string, so non-string
+            # content is serialized here instead of using str(content), which would not be valid JSON.
+            if not isinstance(content, str):
+                try:
+                    content = json.dumps(content, ensure_ascii=False)
+                except TypeError:
+                    content = str(content)
+            return ChatReply(content, finish_reason=finish)
         except Exception as e:
             # Rationale: local model may not be pulled/served yet; we degrade gracefully.
-            self._last_error = f"Ollama call failed: {type(e).__name__}: {_hide_address(str(e), self._host)}"
-            return None
+            return ChatReply(None, error=f"Ollama call failed: {type(e).__name__}: {_hide_address(str(e), self._host)}")
 
 
 @dataclass(frozen=True)
@@ -279,7 +249,7 @@ def _text_of(content: Any) -> Optional[str]:
     return content
 
 
-class OpenAICompatClient(_ReplyState):
+class OpenAICompatClient:
     """Chat client for OpenAI-compatible servers (vLLM, llama.cpp server, LM Studio).
 
     Accepts the same Ollama-style options the pipeline already passes and maps the
@@ -304,21 +274,10 @@ class OpenAICompatClient(_ReplyState):
         self._timeout_s = config.timeout_s
         self._temperature = config.temperature
         self._extra_body = dict(config.extra_body or {})
-        self._last_error: Optional[str] = None
-        self._last_usage: Optional[Dict[str, Any]] = None
 
     @property
     def model(self) -> str:
         return self._resolved_model or self._configured_model or "(server default)"
-
-    @property
-    def last_error(self) -> Optional[str]:
-        return self._last_error
-
-    @property
-    def last_usage(self) -> Optional[Dict[str, Any]]:
-        """The usage the server reported for the last reply (tokens, and cost when it sends one)."""
-        return self._last_usage
 
     def _headers(self) -> Dict[str, str]:
         headers = {"Content-Type": "application/json"}
@@ -358,18 +317,14 @@ class OpenAICompatClient(_ReplyState):
         *,
         format: Optional[Any] = None,
         options_override: Optional[Dict[str, Any]] = None,
-    ) -> Optional[str]:
+    ) -> ChatReply:
         try:
             import requests
         except Exception:
-            self._last_error = "Python package 'requests' is not available in this environment"
-            return None
+            return ChatReply(None, error="Python package 'requests' is not available in this environment")
 
+        note: Optional[str] = None
         try:
-            self._last_error = None
-            self._last_finish_reason = None
-            self._last_note = None
-            self._last_usage = None
             options: Dict[str, Any] = {
                 "temperature": DEFAULT_TEMPERATURE if self._temperature is None else self._temperature,
                 "num_predict": 128,
@@ -391,7 +346,7 @@ class OpenAICompatClient(_ReplyState):
                 # Some servers reject schema-constrained output (vLLM: 400; OpenRouter:
                 # 404 "no endpoints found" for models without it); the pipeline's JSON
                 # parsers already cope with free-text JSON, so retry without it.
-                self._last_note = (
+                note = (
                     f"The server refused the answer format (HTTP {resp.status_code}), "
                     "so the model was asked again without it."
                 )
@@ -400,15 +355,15 @@ class OpenAICompatClient(_ReplyState):
             resp.raise_for_status()
 
             reply = resp.json()
-            self._last_usage = reply.get("usage")
+            usage = reply.get("usage")
             choices = reply.get("choices") or []
             choice = choices[0] if choices else {}
-            self._last_finish_reason = choice.get("finish_reason")
+            finish = choice.get("finish_reason")
             content = _text_of((choice.get("message") or {}).get("content"))
             if not content:
-                self._last_error = "Model server returned an empty message content"
-                return None
-            return content
+                return ChatReply(None, finish_reason=finish, error="Model server returned an empty message content",
+                                 note=note, usage=usage)
+            return ChatReply(content, finish_reason=finish, note=note, usage=usage)
         except Exception as e:
-            self._last_error = f"Model server call failed: {type(e).__name__}: {_hide_address(str(e), self._base_url)}"
-            return None
+            return ChatReply(None, note=note,
+                             error=f"Model server call failed: {type(e).__name__}: {_hide_address(str(e), self._base_url)}")

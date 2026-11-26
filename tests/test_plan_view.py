@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import List
 
+from artemis.ai.client import ChatReply
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -75,7 +77,6 @@ class PlanModel:
     """Stand-in model: answers every plan request with the same reply and records the calls."""
 
     model = "stub"
-    last_error = None
 
     def __init__(self, reply: str) -> None:
         self.reply = reply
@@ -83,7 +84,7 @@ class PlanModel:
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         self.calls.append({"messages": messages, "format": format, "options": options_override})
-        return self.reply
+        return ChatReply(self.reply)
 
 
 def _run_flow(pid: str, reply: str):

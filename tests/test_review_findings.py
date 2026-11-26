@@ -11,6 +11,7 @@ from typing import Any, Dict, List
 
 from streamlit.testing.v1 import AppTest
 
+from artemis.ai.client import ChatReply
 from tests import pipeline_harness as h
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,18 +60,12 @@ def test_a_gap_verdict_reads_as_partly_in_the_plan() -> None:
 
 class _CutPlanModel:
     model = "stub"
-    last_error = None
-    last_note = None
-
-    def __init__(self) -> None:
-        self.last_finish_reason = "stop"
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         if isinstance(format, dict):  # the screening call
-            self.last_finish_reason = "stop"
-            return "[]"
-        self.last_finish_reason = "length"  # every plan reply hits the length limit
-        return '{"problems": [{"problem": "Renal", "action": "Repeat creat'
+            return ChatReply("[]", finish_reason="stop")
+        # every plan reply hits the length limit
+        return ChatReply('{"problems": [{"problem": "Renal", "action": "Repeat creat', finish_reason="length")
 
 
 def test_a_cut_off_plan_is_reported_as_cut_off() -> None:
@@ -86,14 +81,11 @@ def test_a_cut_off_plan_is_reported_as_cut_off() -> None:
 
 class _ClashModel:
     model = "stub"
-    last_error = None
-    last_note = None
-    last_finish_reason = "stop"
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
         alert = {"alert_id": "tdf_creatinine_overdue", "title": "AI creatinine", "message": "m", "issue_type": "monitoring_gap",
                  "severity": "moderate", "recommended_action": "a", "citations": []}
-        return json.dumps([alert]) if isinstance(format, dict) else "{}"
+        return ChatReply(json.dumps([alert]) if isinstance(format, dict) else "{}", finish_reason="stop")
 
 
 def test_ai_and_rule_alerts_never_share_an_id() -> None:

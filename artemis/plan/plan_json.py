@@ -26,14 +26,13 @@ def strip_code_fences(text: str) -> str:
     return "\n".join(lines).strip()
 
 
-def first_json_object(text: str) -> str:
-    """The first complete {...} block in the text, ignoring any words around it."""
-    raw = strip_code_fences(text)
-    start = raw.find("{")
-    if start == -1:
-        return ""
+def closing_index(raw: str, pos: int) -> Optional[int]:
+    """Where the bracketed JSON value at pos closes, or None when the text ends first. Brackets
+    inside strings don't count. From inside a list or object, it's where that one closes. The
+    one bracket scanner for the AI's replies: the alert list (artemis/ai/screening.py) and the
+    plan (plan item 4.6)."""
     depth, in_str, esc = 0, False, False
-    for i in range(start, len(raw)):
+    for i in range(pos, len(raw)):
         ch = raw[i]
         if in_str:
             if esc:
@@ -44,13 +43,23 @@ def first_json_object(text: str) -> str:
                 in_str = False
         elif ch == '"':
             in_str = True
-        elif ch == "{":
+        elif ch in "[{":
             depth += 1
-        elif ch == "}":
+        elif ch in "]}":
             depth -= 1
-            if depth == 0:
-                return raw[start : i + 1]
-    return raw[start:]
+            if depth <= 0:
+                return i
+    return None
+
+
+def first_json_object(text: str) -> str:
+    """The first complete {...} block in the text, ignoring any words around it."""
+    raw = strip_code_fences(text)
+    start = raw.find("{")
+    if start == -1:
+        return ""
+    end = closing_index(raw, start)
+    return raw[start : end + 1] if end is not None else raw[start:]
 
 
 def loads_relaxed(text: str) -> Any:

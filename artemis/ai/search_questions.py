@@ -32,7 +32,7 @@ def ask_search_questions(llm_client: Any, facts: str) -> List[str]:
         {"role": "system", "content": _INSTRUCTIONS},
         {"role": "user", "content": facts},
     ]
-    reply: Optional[str] = llm_client.chat(messages, format=_FORMAT, options_override={"num_predict": 300})
+    reply = llm_client.chat(messages, format=_FORMAT, options_override={"num_predict": 300}).text
     try:
         items = json.loads(reply or "")
     except ValueError:

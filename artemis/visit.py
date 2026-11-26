@@ -58,7 +58,6 @@ class AnalysisResult:
     alerts: List[Alert]
     results: List[Dict[str, Any]]
     status: str
-    deterministic_alerts: List[Alert]
     # What happened to the AI review: "not_run" (switched off), "ok", "failed" (no reply),
     # "unreadable" (a reply that could not be read as a list of alerts), the partial "cut_off" and
     # "partly_read", or "search_unavailable" (the search model did not load, so it did not run; G33).
@@ -268,7 +267,9 @@ def run_visit_analysis(
         )
 
         parse_status = (screening_debug.get("parse_status") or "").strip().lower()
-        last_err = llm_client.last_error
+        # The screening call's own reply says (plan item 4.6). Taken out of the debug record, which is
+        # saved: error text can carry part of the model server's address (G26); it goes to the log.
+        last_err = screening_debug.pop("error", None)
         if last_err is not None:
             screening_outcome = "failed"
         elif parse_status in {"parsed_empty", "parsed_nonempty"}:
@@ -327,7 +328,6 @@ def run_visit_analysis(
         alerts=alerts,
         results=results,
         status=overall,
-        deterministic_alerts=deterministic_alerts,
         screening_outcome=screening_outcome,
         screening_ran=screening_ran,
         screening_debug=screening_debug,

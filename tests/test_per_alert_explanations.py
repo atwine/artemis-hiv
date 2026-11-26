@@ -39,7 +39,6 @@ def test_explanation_quotes_the_retrieved_passages_with_page_and_no_chunk_id() -
     ]
     result = generate_explanation(patient_context=_ctx(), alert=_alert(), retrieved_chunks=retrieved)
 
-    assert result.used_llm is False
     assert "Creatinine last recorded 500 days ago" in result.text
     assert "check creatinine at least annually" in result.text
     assert "(page=105)" in result.text

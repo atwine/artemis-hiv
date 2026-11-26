@@ -141,3 +141,26 @@ def test_a_reopened_visit_remembers_the_reason_it_was_saved_with() -> None:
     assert values["alert_override_reason_A1"] == "Already addressed"
     clear_analysis(values)  # forgotten with the rest of the visit
     assert "alert_saved_reason_A1" not in values
+
+
+def test_a_saved_visit_record_keeps_no_model_error_text() -> None:
+    """The model connection's error text stays in the log, never in saved records (G26): it can
+    carry part of the model server's address."""
+    import copy
+
+    from artemis.visit import AnalysisOptions, run_visit_analysis
+    from artemis.ai.client import ChatReply
+
+    class Down:
+        model = "down"
+
+        def chat(self, messages, format=None, options_override=None):  # noqa: A002
+            return ChatReply(None, error="Model server call failed: port=8000 url: /v1/chat/completions")
+
+    from modules.rag_engine import RagEngine
+
+    search = RagEngine(project_root=h.ROOT, guideline_paths=[], embedder=h.FakeEmbedder(), vector_store=h.FakeStore([]))
+    result = run_visit_analysis(patient=copy.deepcopy(_patient("P001")), today_note="x", rag=search,
+                                llm_client=Down(), options=AnalysisOptions())
+    assert result.screening_outcome == "failed"
+    assert "error" not in (result.screening_debug or {})

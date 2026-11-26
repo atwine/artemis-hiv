@@ -78,7 +78,7 @@ def test_labels_say_what_happened(cases: Path) -> None:
     at.session_state["analysis_screening_outcome"] = "ok"
     at.session_state["analysis_alerts"] = [ai]
     at.session_state["analysis_results"] = [
-        {"alert": ai, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[], used_llm=False)}
+        {"alert": ai, "retrieved": [], "explanation": ExplanationResult(text="x", used_chunks=[])}
     ]
     at.run()
     captions = [c.value for c in at.caption]

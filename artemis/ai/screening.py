@@ -6,7 +6,7 @@ import logging
 
 from artemis.rules.checks import Alert
 from artemis.ai.client import ChatMessage, OllamaClient
-from artemis.plan.plan_json import strip_code_fences
+from artemis.plan.plan_json import closing_index, strip_code_fences
 from artemis.patient.record import PatientContext
 from artemis.guidelines.vector_store import VectorSearchResult
 
@@ -34,28 +34,6 @@ def _is_alert(item: Any) -> bool:
     return isinstance(item, dict) and any(k in item for k in ("alert_id", "title", "message"))
 
 
-def _closes(raw: str, pos: int) -> bool:
-    """True when the JSON value starting at pos closes before the text ends (strings respected)."""
-    depth, in_str, esc = 0, False, False
-    for ch in raw[pos:]:
-        if in_str:
-            if esc:
-                esc = False
-            elif ch == "\\":
-                esc = True
-            elif ch == '"':
-                in_str = False
-        elif ch == '"':
-            in_str = True
-        elif ch in "[{":
-            depth += 1
-        elif ch in "]}":
-            depth -= 1
-            if depth <= 0:
-                return True
-    return False
-
-
 def _read_list(raw: str, pos: int) -> Tuple[List[Any], str]:
     """Read list items one at a time from just after a "[".
 
@@ -74,7 +52,7 @@ def _read_list(raw: str, pos: int) -> Tuple[List[Any], str]:
         try:
             value, pos = decoder.raw_decode(raw, pos)
         except json.JSONDecodeError:
-            return items, ("broken" if _closes(raw, pos) else "cut")
+            return items, ("broken" if closing_index(raw, pos) is not None else "cut")
         items.append(value)
 
 
@@ -321,7 +299,7 @@ HARD LIMITS — FOLLOW STRICTLY:
     #   (~50 words), which is too short to catch phrase-level loops. 256 tokens (~200
     #   words) covers the full length of a typical alert message.
     #   [src] https://docs.ollama.com/modelfile — repeat_last_n controls the window.
-    llm_text = llm_client.chat(
+    reply = llm_client.chat(
         [system, user],
         format=output_schema,
         options_override={
@@ -330,7 +308,7 @@ HARD LIMITS — FOLLOW STRICTLY:
             "repeat_last_n": 256,
         },
     )
-    finish_reason = getattr(llm_client, "last_finish_reason", None)
+    llm_text, finish_reason = reply.text, reply.finish_reason
     issues, parse_status = read_alert_list(llm_text or "", finish_reason=finish_reason)
     if debug is not None:
         # Rationale: persist the exact inputs/outputs used for screening so GREEN results
@@ -339,7 +317,8 @@ HARD LIMITS — FOLLOW STRICTLY:
         debug["screening_bundle"] = bundle
         debug["parse_status"] = parse_status
         debug["finish_reason"] = finish_reason
-        debug["client_note"] = getattr(llm_client, "last_note", None)
+        debug["client_note"] = reply.note
+        debug["error"] = reply.error  # why there was no reply, if there wasn't one (artemis.visit reads it)
 
     shown_ids = {str(c.get("chunk_id")) for c in bundle}
     alerts: List[Alert] = []

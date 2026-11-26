@@ -31,6 +31,7 @@ from backend.access import AccessMiddleware, require, role_of, visible_patients
 from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
 from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
+from backend.limits import SlidingWindow
 from backend.models import (
     Booking,
     Appointment,
@@ -163,6 +164,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
     services = services or default_services(settings)
     app = FastAPI(title="ARTEMIS-HIV backend", version="0.1.0")
     app.state.services = services
+    check_limit = SlidingWindow(settings.visit_checks_per_minute, 60.0, services.clock)
     # Last added runs first: the access check refuses before CORS, routing or body parsing.
     app.add_middleware(
         CORSMiddleware, allow_origins=list(settings.allowed_origins), allow_methods=["GET", "POST"],
@@ -185,6 +187,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
     @app.post(
         "/api/patients/{patient_id}/visits",
         response_model=VisitCheckResponse,
+        responses={429: {"description": "Too many visit checks this minute; wait the Retry-After seconds."}},
         dependencies=[
             Depends(require("patients", "view")),
             Depends(require("visit_records", "create")),
@@ -198,6 +201,11 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         client = services.model_client() if body.use_ai else None
         if body.use_ai and client is None:
             raise HTTPException(status_code=503, detail="No AI model server is set up.")
+        # Counted only once the request could run: a refused one doesn't use up the limit.
+        wait = check_limit.take()
+        if wait is not None:
+            raise HTTPException(status_code=429, detail="Too many visit checks: wait a moment and try again.",
+                                headers={"Retry-After": str(wait)})
         result = run_visit_analysis(
             patient=copy.deepcopy(patient),
             today_note=body.note,

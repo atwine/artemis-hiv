@@ -10,11 +10,12 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from sqlalchemy.pool import StaticPool
 from sqlmodel import SQLModel, create_engine
 
+from artemis.ai.client import ChatReply
 from artemis.guidelines.vector_store import VectorSearchResult, VectorStore
 from modules.rag_engine import RagEngine
 
@@ -67,7 +68,7 @@ def fake_search(*, ready: bool = True) -> RagEngine:
 class FakeModel:
     """Answers each kind of call with the baseline's real reply for one patient.
 
-    `fail=True` behaves like a model server that didn't answer: no text, and last_error set.
+    `fail=True` behaves like a model server that didn't answer: no text, and an error.
     """
 
     model = "fake-model"
@@ -75,8 +76,6 @@ class FakeModel:
     def __init__(self, replies: Dict[str, str], *, fail: bool = False) -> None:
         self._replies = replies
         self._fail = fail
-        self.last_error: Optional[str] = None
-        self.last_finish_reason: Optional[str] = None
         self.calls: List[str] = []
 
     def chat(self, messages, format=None, options_override=None):  # noqa: A002
@@ -89,10 +88,8 @@ class FakeModel:
             kind = "agentic_answer"
         self.calls.append(kind)
         if self._fail:
-            self.last_error = "connection refused (fake)"
-            return ""
-        self.last_finish_reason = "stop"
-        return self._replies.get(kind, "")
+            return ChatReply("", error="connection refused (fake)")
+        return ChatReply(self._replies.get(kind, ""), finish_reason="stop")
 
 
 def replies_for(patient_id: str) -> Dict[str, str]:
