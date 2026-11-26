@@ -33,8 +33,17 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await notes.fill("Routine follow-up. No complaints. Continue TLD, 3-month refill.");
   await expect(page.getByRole("checkbox", { name: "AI review" })).not.toBeChecked();
   const tray = page.getByRole("region", { name: "Visit steps" });
+  // Hold the check for 1.5 s before it goes to the real backend, so the running screen is always
+  // there to see, however fast the backend answers.
+  await page.route("**/api/patients/*/visits", async (route) => {
+    await new Promise((r) => setTimeout(r, 1500));
+    await route.continue();
+  });
   const replyPromise = page.waitForResponse((r) => r.url().endsWith("/api/patients/P001/visits") && r.request().method() === "POST");
   await tray.getByRole("button", { name: "Run checks" }).click();
+  // While they run (S3): the first check of a run loads the search model, so this shows for a while.
+  await expect(page.getByRole("heading", { name: "Checking John's visit. Rule checks only." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Checks running" })).toContainText("His regimen, 2 lab results, today's notes.");
 
   // The results screen first (owner, 2026-11-26): the API's banners and one row per alert.
   const results = page.getByRole("region", { name: "Check results" });

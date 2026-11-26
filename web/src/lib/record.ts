@@ -97,3 +97,25 @@ export function todaySummary(intake: PatientDetail["intake"]): string | null {
     .map(asSentence);
   return parts.length ? parts.join(" ") : null;
 }
+
+/**
+ * What the checks read, from the record (S3): "Her regimen, 1 other medicine, 12 lab results,
+ * today's notes, Ugandan guideline passages." The passages are the AI review's, when it runs.
+ */
+export function checkReads(
+  p: Pick<PatientDetail, "sex" | "other_medications" | "labs" | "lab_notes">,
+  aiReview: boolean,
+): string {
+  const meds = p.other_medications.filter((m) => m.trim()).length;
+  const labs = labCount(p.labs);
+  const parts = [
+    `${possessive(p.sex)} regimen`,
+    meds ? `${meds} other ${meds === 1 ? "medicine" : "medicines"}` : null,
+    labs ? `${labs} lab ${labs === 1 ? "result" : "results"}` : null,
+    p.lab_notes.length ? "lab notes" : null,
+    "today's notes",
+    aiReview ? "Ugandan guideline passages" : null,
+  ].filter(Boolean) as string[];
+  const text = parts.join(", ");
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
+}

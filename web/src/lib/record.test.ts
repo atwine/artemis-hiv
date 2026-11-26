@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { asSentence, labCount, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
+import { asSentence, checkReads, labCount, labRows, longDate, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
 
 test("a lab row: the latest result with its unit as recorded, and the earliest for comparison", () => {
   const rows = labRows(
@@ -60,4 +60,12 @@ test("today's summary: the complaints and examination as written, each ending as
   assert.equal(todaySummary({ complaints_symptoms: "No new complaints", examination_findings: "Appears well" }), "No new complaints. Appears well.");
   assert.equal(todaySummary({ complaints_symptoms: "  ", examination_findings: 3 }), null);
   assert.equal(asSentence("Done!"), "Done!");
+});
+
+test("what the checks read, from the record (S3)", () => {
+  assert.equal(
+    checkReads({ sex: "F", other_medications: ["Ibuprofen 400 mg"], labs: { cr: [{ date: "2026-01-01", value: "1", unit: "", source: "" }, { date: "2025-01-01", value: "1", unit: "", source: "" }] }, lab_notes: [] }, true),
+    "Her regimen, 1 other medicine, 2 lab results, today's notes, Ugandan guideline passages.",
+  );
+  assert.equal(checkReads({ sex: "M", other_medications: [], labs: {}, lab_notes: [{ date: null, source: "", text: "x" }] }, false), "His regimen, lab notes, today's notes.");
 });

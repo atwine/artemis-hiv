@@ -83,3 +83,18 @@ for (const { outcome, patient, file } of STATES) {
     await page.screenshot({ path: path.join(OUT, file) });
   });
 }
+
+// Checks running with the AI review ticked (S3). The request is held and then cancelled, so no
+// model is called; the screenshot shows the screen 6 seconds in.
+test("checks running, with the AI review", async ({ page }) => {
+  await page.route("**/api/patients/*/visits", async (route) => {
+    await new Promise((r) => setTimeout(r, 9000));
+    await route.abort();
+  });
+  await page.goto("/");
+  await page.getByRole("main").getByRole("link", { name: "John Doe" }).click();
+  await page.getByRole("checkbox", { name: "AI review" }).check();
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("region", { name: "Checks running" })).toContainText("6 s of about 15 s", { timeout: 10_000 });
+  await page.screenshot({ path: path.join(OUT, "web-S3-checks-running-ai.png") });
+});

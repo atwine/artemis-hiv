@@ -17,6 +17,7 @@ import { possessive } from "@/lib/record";
 import { AlertView } from "./alert-view";
 import { OverrideView } from "./override-view";
 import { RecordPanel } from "./record-panel";
+import { Running, RunningTrayStatus } from "./running-view";
 import { decisionWords, ResultsView } from "./results-view";
 
 const NOTES_FORM = "clinical-notes";
@@ -89,13 +90,25 @@ function Visit({ patient }: { patient: PatientDetail }) {
   );
 
   // A new check starts the review afresh.
-  return <VisitView key={check.data?.visit_id ?? "before"} patient={patient} check={check} notesForm={notesForm} />;
+  // The AI review this run: the box, unless "Run the AI review again" asked for it.
+  const aiThisRun = check.variables?.useAi ?? useAi;
+  return <VisitView key={check.data?.visit_id ?? "before"} patient={patient} check={check} notesForm={notesForm} aiThisRun={aiThisRun} />;
 }
 
 /** Which screen the pane shows. The results screen comes first after the checks (owner, 2026-11-26). */
 type View = { name: "notes" } | { name: "results" } | { name: "alert"; i: number } | { name: "override"; i: number; other: boolean };
 
-function VisitView({ patient, check, notesForm }: { patient: PatientDetail; check: CheckMutation; notesForm: React.ReactNode }) {
+function VisitView({
+  patient,
+  check,
+  notesForm,
+  aiThisRun,
+}: {
+  patient: PatientDetail;
+  check: CheckMutation;
+  notesForm: React.ReactNode;
+  aiThisRun: boolean;
+}) {
   const result = check.data;
   const [view, setView] = useState<View>(result ? { name: "results" } : { name: "notes" });
   const [saved, setSaved] = useState<DecisionOut[]>([]);
@@ -138,6 +151,7 @@ function VisitView({ patient, check, notesForm }: { patient: PatientDetail; chec
           {...trayFor({
             view,
             pending: check.isPending,
+            runningStatus: <RunningTrayStatus aiReview={aiThisRun} startedAt={check.submittedAt} />,
             result,
             savedByAlert,
             saving: save.isPending,
@@ -156,7 +170,8 @@ function VisitView({ patient, check, notesForm }: { patient: PatientDetail; chec
     >
       <PaneHeader title={patient.name} meta={patientMeta(patient)} aside={<StatusChip state={state} />} />
       <PaneContent>
-        {(view.name === "notes" || !result) && (
+        {check.isPending && <Running patient={patient} aiReview={aiThisRun} startedAt={check.submittedAt} />}
+        {!check.isPending && (view.name === "notes" || !result) && (
           <>
             {notesForm}
             {check.isError && (
@@ -233,6 +248,7 @@ function patientMeta(p: PatientDetail): string {
 function trayFor({
   view,
   pending,
+  runningStatus,
   result,
   savedByAlert,
   saving,
@@ -245,6 +261,7 @@ function trayFor({
 }: {
   view: View;
   pending: boolean;
+  runningStatus: React.ReactNode;
   result: VisitCheck | undefined;
   savedByAlert: Map<string, DecisionOut>;
   saving: boolean;
@@ -257,7 +274,7 @@ function trayFor({
 }): TrayProps {
   const later = { plan: "todo", finalize: "todo" } as const;
   if (pending) {
-    return { notes: "done", checks: "current", alerts: [], ...later, lead: "Checks running.", rest: "Results open by themselves.", status: <span /> };
+    return { notes: "done", checks: "current", alerts: [], ...later, lead: "Checks running.", rest: "Results open by themselves.", status: runningStatus };
   }
   const runChecks: TrayButton = { label: "Run checks", form: NOTES_FORM };
   if (!result) {
