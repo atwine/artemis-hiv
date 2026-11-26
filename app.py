@@ -10,7 +10,6 @@ from __future__ import annotations
 import html
 import logging
 import os
-import re
 import uuid
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
@@ -47,7 +46,15 @@ from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize, reason_options
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
-from artemis.screen_text import DISCLAIMER, FINALIZE_BLOCKED, alert_heading, alert_references, status_banners
+from artemis.screen_text import (
+    DISCLAIMER,
+    FINALIZE_BLOCKED,
+    alert_heading,
+    alert_references,
+    plain_explanation,
+    plain_text,
+    status_banners,
+)
 from ui.state import analysis_belongs_to, clear_analysis, init_analysis_state, note_changed
 from artemis.visit import (
     AnalysisOptions,
@@ -913,41 +920,9 @@ def main() -> None:
             with st.expander(alert_heading(alert), expanded=True):
                 # Rationale: present clinician-facing text without inline citation fragments
                 # and keep numbered references in one place for readability.
-                _finding_text = str(alert.message or "")
-                _finding_text = re.sub(
-                    r"\[\s*chunk_id\s*:\s*[^\],]+\s*,\s*page_number\s*:\s*(\d+)\s*\]",
-                    "",
-                    _finding_text,
-                    flags=re.IGNORECASE,
-                )
-                _finding_text = re.sub(r"\(page\s*=\s*\d+\)", "", _finding_text, flags=re.IGNORECASE)
-                _finding_text = re.sub(
-                    r"chunk[_\s]*id\s*[:=]\s*[^\s,\)\]]+",
-                    "",
-                    _finding_text,
-                    flags=re.IGNORECASE,
-                )
-
-                _why_text = str(explanation.text or "")
-                _why_text = re.sub(
-                    r"\[\s*chunk_id\s*:\s*[^\],]+\s*,\s*page_number\s*:\s*(\d+)\s*\]",
-                    "",
-                    _why_text,
-                    flags=re.IGNORECASE,
-                )
-                _why_text = re.sub(r"\(page\s*=\s*\d+\)", "", _why_text, flags=re.IGNORECASE)
-                _why_text = re.sub(
-                    r"chunk[_\s]*id\s*[:=]\s*[^\s,\)\]]+",
-                    "",
-                    _why_text,
-                    flags=re.IGNORECASE,
-                )
-
-                # Rationale: some explanations include duplicated headings and large raw
-                # dictionaries; strip them so the main UI reads like a normal note.
-                _why_text = re.sub(r"^\s*why this alert\s*:\s*", "", _why_text, flags=re.IGNORECASE)
-                _why_text = re.split(r"\bpatient evidence\s*:\s*", _why_text, maxsplit=1, flags=re.IGNORECASE)[0]
-                _why_text = re.split(r"\bguideline excerpts\s*:\s*", _why_text, maxsplit=1, flags=re.IGNORECASE)[0]
+                _finding_text = plain_text(alert.message)
+                # The reason alone, without the raw evidence or excerpts (shared with the API).
+                _why_text = plain_explanation(explanation.text)
 
 
                 if alert.source == "ai":

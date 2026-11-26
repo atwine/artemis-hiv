@@ -526,3 +526,14 @@ def test_lab_notes_typed_as_text_come_back_as_text(api):
     body = api.client.get("/api/patients/P005", headers=LOCAL).json()
     assert body["labs"] == {}
     assert body["lab_notes"] and all(set(n) == {"date", "source", "text"} and n["text"] for n in body["lab_notes"])
+
+
+def test_card_explanations_are_plain_text_only(api):
+    """No raw patient dicts, passage dumps or internal ids in what the website shows (owner, 2026-11-26)."""
+    for card in _check(api).json()["cards"]:
+        text = card["extension"]["explanation"]
+        assert text, card["uuid"]
+        for raw in ("Patient evidence", "Guideline excerpts", "chunk_id", "raw_issue", "{", "page="):
+            assert raw not in text, (card["uuid"], raw, text)
+    ai = next(c for c in _check(api).json()["cards"] if c["extension"]["alert_id"] == "P001_001")
+    assert ai["extension"]["explanation"] == ai["detail"]

@@ -45,3 +45,17 @@ def test_an_incomplete_ai_review_says_alerts_may_be_missing(outcome: str, reason
     assert b[0][0] == "warning"
     assert reason in b[0][1] and "may be missing" in b[0][1]
     assert "AI review failed" not in _text(b)
+
+
+def test_an_explanation_is_cut_back_to_its_plain_reason() -> None:
+    """The screen shows only the reason, never the raw evidence or excerpts (owner, 2026-11-26:
+    the API sends the same text, from this one function)."""
+    from artemis.screen_text import plain_explanation
+
+    raw = (
+        "Why this alert: Creatinine last recorded 478 days ago. [chunk_id: x__p3_c1, page_number: 3]\n"
+        "Patient evidence: {'regimen': ['TDF'], 'raw_issue': {'title': 'T'}}\n\n"
+        "Guideline excerpts:\n- (page=255) Monitor creatinine every 12 months."
+    )
+    assert plain_explanation(raw) == "Creatinine last recorded 478 days ago."
+    assert plain_explanation("") == ""

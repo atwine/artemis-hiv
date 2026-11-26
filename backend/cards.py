@@ -16,7 +16,7 @@ from artemis import visit_record
 from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.review import OVERRIDE_REASONS
 from artemis.rules.checks import Alert
-from artemis.screen_text import alert_heading, alert_references, citation_line, status_banners
+from artemis.screen_text import alert_heading, alert_references, citation_line, plain_explanation, status_banners
 from backend.models import Banner, Card, CardExtension, Coding, Passage, Plan, Source, Suggestion
 
 SYSTEM = "https://github.com/atwine/artemis-hiv"
@@ -90,7 +90,7 @@ def cards_from_entry(entry: Dict[str, Any]) -> List[Card]:
     restored = visit_record.restore(entry)
     severities = [a.get("severity") for a in entry.get("alerts") or []]
     return [
-        card_from_saved(r["alert"], r["retrieved"], r["explanation"].text, severity=sev, visit_id=entry["visit_id"])
+        card_from_saved(r["alert"], r["retrieved"], plain_explanation(r["explanation"].text), severity=sev, visit_id=entry["visit_id"])
         for r, sev in zip(restored["analysis_results"], severities)
     ]
 

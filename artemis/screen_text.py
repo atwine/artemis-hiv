@@ -7,6 +7,7 @@ state a visit can end in and what the screen must show for it.
 
 from __future__ import annotations
 
+import re
 from typing import Any, List, Optional, Tuple
 
 from artemis.guidelines.sources import citation_name
@@ -31,6 +32,32 @@ NOT_SHOWN = "not among the passages the AI was given"
 DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only."
 FINALIZE_BLOCKED = ("Finalize is disabled until all alerts are acknowledged or overridden with a reason "
                     "(the reason 'Other (say why)' needs a comment).")
+
+
+# Citation fragments some texts carry inline: "[chunk_id: x, page_number: 3]", "(page=3)", "chunk_id: x".
+_INLINE_CITATIONS = (
+    re.compile(r"\[\s*chunk_id\s*:\s*[^\],]+\s*,\s*page_number\s*:\s*(\d+)\s*\]", re.IGNORECASE),
+    re.compile(r"\(page\s*=\s*\d+\)", re.IGNORECASE),
+    re.compile(r"chunk[_\s]*id\s*[:=]\s*[^\s,\)\]]+", re.IGNORECASE),
+)
+
+
+def plain_text(text: Any) -> str:
+    """A text without inline citation fragments; the references are listed apart."""
+    out = str(text or "")
+    for pattern in _INLINE_CITATIONS:
+        out = pattern.sub("", out)
+    return out.strip()
+
+
+def plain_explanation(text: Any) -> str:
+    """An alert's explanation as the screen shows it: the reason alone, without the "Patient
+    evidence" dump or the "Guideline excerpts" that follow it (moved here from app.py so the API
+    sends the same text, owner 2026-11-26)."""
+    out = re.sub(r"^\s*why this alert\s*:\s*", "", plain_text(text), flags=re.IGNORECASE)
+    out = re.split(r"\bpatient evidence\s*:\s*", out, maxsplit=1, flags=re.IGNORECASE)[0]
+    out = re.split(r"\bguideline excerpts\s*:\s*", out, maxsplit=1, flags=re.IGNORECASE)[0]
+    return out.strip()
 
 
 def alert_heading(alert: Alert) -> str:
