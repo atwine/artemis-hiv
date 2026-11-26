@@ -187,7 +187,7 @@ export interface components {
              */
             comment: string;
             /** Reason */
-            reason?: ("Already addressed" | "Not applicable" | "Will address later" | "Patient declined" | "Other") | null;
+            reason?: ("Already done, not documented" | "Test not available here" | "Not right for this patient" | "Patient declined" | "Will address at next visit" | "Other (say why)") | null;
         };
         /** DecisionOut */
         DecisionOut: {
@@ -229,6 +229,32 @@ export interface components {
             detail?: components["schemas"]["ValidationError"][];
         };
         /**
+         * LabNote
+         * @description Lab results typed as free text into the old add-case boxes; shown as text, never read as numbers.
+         */
+        LabNote: {
+            /** Date */
+            date: string | null;
+            /** Source */
+            source: string;
+            /** Text */
+            text: string;
+        };
+        /**
+         * LabResult
+         * @description One lab result in the unit it was recorded in, never converted (owner, 2026-11-26).
+         */
+        LabResult: {
+            /** Date */
+            date: string;
+            /** Source */
+            source: string;
+            /** Unit */
+            unit: string;
+            /** Value */
+            value: string;
+        };
+        /**
          * Passage
          * @description A guideline passage an alert rests on (plan done-criterion 4).
          */
@@ -265,11 +291,11 @@ export interface components {
             intake: {
                 [key: string]: unknown;
             };
+            /** Lab Notes */
+            lab_notes: components["schemas"]["LabNote"][];
             /** Labs */
             labs: {
-                [key: string]: {
-                    [key: string]: unknown;
-                }[];
+                [key: string]: components["schemas"]["LabResult"][];
             };
             /** Name */
             name: string;

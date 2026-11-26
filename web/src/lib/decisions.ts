@@ -9,7 +9,7 @@ export type Reason = NonNullable<DecisionIn["reason"]>;
 export type Draft = { action: Action; reason: Reason | null; comment: string };
 
 /** The reason that needs a comment (artemis/review.py, alert_resolution_ok). */
-const NEEDS_COMMENT: Reason = "Other";
+const NEEDS_COMMENT: Reason = "Other (say why)";
 
 export function draftReady(d: Draft): boolean {
   if (d.action === "Acknowledge") return true;

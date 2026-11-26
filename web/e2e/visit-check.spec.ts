@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 
 const DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only.";
 const FINALIZE_BLOCKED =
-  "Finalize is disabled until all alerts are acknowledged or overridden with a reason (the reason 'Other' needs a comment).";
+  "Finalize is disabled until all alerts are acknowledged or overridden with a reason (the reason 'Other (say why)' needs a comment).";
 const CREATININE_ALERT = "Alert (Rule check): Creatinine monitoring overdue while on TDF";
 
 test("a clinician runs the rule checks on a patient and decides every alert", async ({ page }) => {
@@ -44,9 +44,9 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
   const save = tray.getByRole("button", { name: "Save decisions" });
   await expect(save).toBeDisabled(); // nothing decided yet
 
-  // Override the creatinine alert. "Other" needs a comment before it can be saved.
+  // Override the creatinine alert. "Other (say why)" needs a comment before it can be saved.
   await creatinine.getByRole("radio", { name: "Override" }).check();
-  await creatinine.getByRole("combobox", { name: "Override reason" }).selectOption("Other");
+  await creatinine.getByRole("combobox", { name: "Override reason" }).selectOption("Other (say why)");
   for (let i = 0; i < count; i++) {
     const card = cards.nth(i);
     if (!(await card.getByRole("radio", { name: "Override" }).isChecked())) {
@@ -60,7 +60,7 @@ test("a clinician runs the rule checks on a patient and decides every alert", as
 
   // The backend saved them: each card shows the decision it recorded, and its reply says every
   // alert is decided, so the finalize note goes.
-  await expect(creatinine.getByText(/^Saved: Override \(Other\)/)).toBeVisible();
+  await expect(creatinine.getByText(/^Saved: Override \(Other \(say why\)\)/)).toBeVisible();
   for (let i = 0; i < count; i++) await expect(cards.nth(i).getByText(/^Saved: /)).toBeVisible();
   await expect(results.getByText(FINALIZE_BLOCKED)).toBeHidden();
   await expect(tray.getByRole("list", { name: "Alerts" }).getByRole("listitem")).toHaveCount(count);

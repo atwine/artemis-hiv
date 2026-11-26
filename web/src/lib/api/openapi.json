@@ -206,11 +206,12 @@
             "anyOf": [
               {
                 "enum": [
-                  "Already addressed",
-                  "Not applicable",
-                  "Will address later",
+                  "Already done, not documented",
+                  "Test not available here",
+                  "Not right for this patient",
                   "Patient declined",
-                  "Other"
+                  "Will address at next visit",
+                  "Other (say why)"
                 ],
                 "type": "string"
               },
@@ -343,6 +344,66 @@
         "title": "HTTPValidationError",
         "type": "object"
       },
+      "LabNote": {
+        "description": "Lab results typed as free text into the old add-case boxes; shown as text, never read as numbers.",
+        "properties": {
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "source",
+          "text"
+        ],
+        "title": "LabNote",
+        "type": "object"
+      },
+      "LabResult": {
+        "description": "One lab result in the unit it was recorded in, never converted (owner, 2026-11-26).",
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "value",
+          "unit",
+          "source"
+        ],
+        "title": "LabResult",
+        "type": "object"
+      },
       "Passage": {
         "description": "A guideline passage an alert rests on (plan done-criterion 4).",
         "properties": {
@@ -427,11 +488,17 @@
             "title": "Intake",
             "type": "object"
           },
+          "lab_notes": {
+            "items": {
+              "$ref": "#/components/schemas/LabNote"
+            },
+            "title": "Lab Notes",
+            "type": "array"
+          },
           "labs": {
             "additionalProperties": {
               "items": {
-                "additionalProperties": true,
-                "type": "object"
+                "$ref": "#/components/schemas/LabResult"
               },
               "type": "array"
             },
@@ -490,6 +557,7 @@
           "intake",
           "visits",
           "labs",
+          "lab_notes",
           "today_encounter"
         ],
         "title": "PatientDetail",
