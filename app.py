@@ -45,6 +45,7 @@ from artemis.plan.view import plan_html, read_plan
 from artemis.ai.screening import NO_SEVERITY
 from artemis import visit_record
 from artemis.review import can_finalize as review_can_finalize, reason_options
+from artemis.session_keys import action_key, comment_key, reason_key, saved_reason_key
 from ui.review import finalize_visit, offer_last_saved_results, when
 from ui.patient_picker import patient_label
 from artemis.screen_text import (
@@ -231,9 +232,9 @@ def _run_analysis(
     st.session_state["analysis_patient_summary"] = result.patient_summary
 
     for alert in result.alerts:
-        st.session_state[f"alert_action_{alert.alert_id}"] = "Unreviewed"
-        st.session_state[f"alert_override_reason_{alert.alert_id}"] = ""
-        st.session_state[f"alert_override_comment_{alert.alert_id}"] = ""
+        st.session_state[action_key(alert.alert_id)] = "Unreviewed"
+        st.session_state[reason_key(alert.alert_id)] = ""
+        st.session_state[comment_key(alert.alert_id)] = ""
 
     st.session_state["analysis_ran"] = True
     st.session_state["finalized"] = False
@@ -1017,19 +1018,19 @@ def main() -> None:
             st.radio(
                 "Action",
                 ["Unreviewed", "Acknowledge", "Override"],
-                key=f"alert_action_{alert.alert_id}",
+                key=action_key(alert.alert_id),
                 horizontal=True,
             )
 
-            if st.session_state.get(f"alert_action_{alert.alert_id}") == "Override":
+            if st.session_state.get(action_key(alert.alert_id)) == "Override":
                 st.selectbox(
                     "Override reason (required)",
-                    reason_options(st.session_state.get(f"alert_saved_reason_{alert.alert_id}") or ""),
-                    key=f"alert_override_reason_{alert.alert_id}",
+                    reason_options(st.session_state.get(saved_reason_key(alert.alert_id)) or ""),
+                    key=reason_key(alert.alert_id),
                 )
                 st.text_area(
                     "Override comment (required for 'Other (say why)')",
-                    key=f"alert_override_comment_{alert.alert_id}",
+                    key=comment_key(alert.alert_id),
                     height=80,
                 )
             st.markdown("---")
