@@ -73,6 +73,21 @@ streamlit run app.py
 
 Then open the local URL Streamlit prints (usually `http://localhost:8501`).
 
+### The new website (in progress)
+
+The Streamlit app is being rebuilt as a FastAPI backend (`backend/`) and a Next.js website
+(`web/`), in the chosen design. With the backend running (`python -m backend`, see
+`backend/README.md`):
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Then open `http://127.0.0.1:3000`. Running it, its tests and its generated API types:
+`web/README.md`.
+
 ### How to use the workflow
 
 1. Select a patient. **Patient Details/History** shows the record, including dated lab results.
