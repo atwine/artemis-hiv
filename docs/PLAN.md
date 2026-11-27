@@ -14,7 +14,7 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
 | 4 Backend (FastAPI) | done: 4.0-4.7 and the Phase 4 check (step 2 on `development`; the leftovers on branch `claude/phase4-leftovers`) | the plan wording when the guideline search is down waits on design decision 5 |
 | 5 Frontend (Next.js) | 5.1 and 5.2 ticked; adding a case, the board's day links and Compare plans (S5) built on 4C's routes (2026-11-27) | 5.3-5.5 to tick against `docs/screen-checklist.md` |
-| 4C Full stack (owner, 2026-11-27) | 4C.1-4C.7 done: every app process on Postgres, Streamlit removed (checkpoint 3, 2026-11-27) | 4C.8 the owner's four decisions |
+| 4C Full stack (owner, 2026-11-27) | done: 4C.1-4C.8; patients, clinic days, visits and plans on Postgres, Streamlit removed (checkpoint 3), the owner's 4C.8 decisions taken (2026-11-27) | the guideline index and the check-limit count move to Postgres later (Later list) |
 | R Ready for doctors (owner, 2026-11-27) | not started; comes after 4C and the website's remaining screens | end-to-end audit in Chrome; the right information first |
 | 7 Clinical check with doctors | not started; after R, in rounds | |
 | 6 Showcase | not started; after Phase 7 (owner: doctors test it before it is shown) | |
@@ -426,11 +426,16 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       tests/test_access.py: every table in the code belongs to a data kind with a grid row (a
       planted table fails it), only GET and POST routes exist, and the backend never deletes or
       updates a row. 66 access tests pass.
-- [ ] 4C.8 Owner decisions, asked one at a time: whether the evaluation's cases and results stay as
+- [x] 4C.8 Owner decisions, asked one at a time: whether the evaluation's cases and results stay as
       files in git (research records) or go into the database; whether the guideline index stays in
       Chroma or moves into Postgres (pgvector); whether the check limit's count goes into Postgres;
       what happens to the patient JSON files after the import (kept as the seed for a fresh
       database, or deleted).
+      Done 2026-11-27 (owner, for the first version): the evaluation stays as files in git ("A,
+      files in git"); the guideline index stays in Chroma and the check-limit count stays in the
+      backend's memory, both moved to the Later list with their plans ("leave things in chroma for
+      now and do these changes later", "Yes, later too"); the patient JSON files were deleted in
+      4C.6 ("B, delete them").
 
 Check: a full visit in Chrome (add a case, see it on the day, check, decide, finalize, compare
 plans, reopen the record) with every write landing in Postgres; `streamlit` appears nowhere in the
@@ -539,6 +544,39 @@ results they will value. These were raised and set aside, not dropped.
   today; the doctor uses the browser's Back (raised in the add-case review, 2026-11-27).
 - Compare plans: the AI quotes the doctor's note word for word for each problem; today the
   "About your plan" column shows the AI's own one-sentence note instead (owner, 2026-11-27).
+- Move the guideline index from Chroma into Postgres with pgvector (owner chose it in 4C.8, then
+  kept Chroma for the first version, 2026-11-27). The plan as agreed so far:
+  - a table of the 236 guideline passages with their meaning vectors (384 numbers each), made
+    by a migration that also switches on pgvector; searched exactly, by the same cosine distance
+    Chroma uses; a passage already stored is never embedded again; no silent fallback;
+  - the proof rule, written before the run: for every search in the 4.3 comparison set (2B's 20
+    questions and every search question in GLM's final run) Postgres returns the same top 5
+    passages in the same order as Chroma and the in-memory store; the no-AI 2B retrieval check
+    gives its saved table; the Phase 4 check is MET; the full suite passes on a real database;
+  - then remove Chroma: its code, storage/chroma, chromadb and the 42 packages only it needs
+    (by hand from the lock's notes), and the four accepted chromadb advisories in
+    .github/workflows/security-scans.yml;
+  - the new table belongs to the "guidelines" data kind (ACCESS.md); GitHub's tests get a
+    pgvector database so the real-database tests run there; backend/docker-compose.yml and the
+    website's web/e2e/stack.ts switch to the same image; the scripts that search need the
+    database running;
+  - downloads, each needing the owner's yes: the image pgvector/pgvector:0.8.7-pg17, digest
+    sha256:b513c48566e4777cd3370451400000c78eda6a08131d68f4c31d4a76f27bd8fd (164 MB, published
+    2026-11-12; check for a newer one then); the column type is still open: the pgvector Python
+    package 0.5.1 (MIT, 31 KB; my pick) or about 15 lines written by hand.
+- Move the check-limit count (6 visit checks and plans a minute) from the backend's memory into
+  Postgres, so a restart doesn't reset it (owner chose it in 4C.8, then kept it in memory for the
+  first version, 2026-11-27). The plan as agreed so far:
+  - a table with one row per counted press: when, and whether it was a visit check or a plan;
+    nothing about patients;
+  - each press, one at a time under a database lock: count the last 60 seconds' rows; at 6,
+    refuse (429, with the wait from the oldest); otherwise add its row and run; a saved good plan
+    shown again adds no row;
+  - if the database can't be reached, the press is refused and nothing runs or is spent;
+  - access-guard: a new data kind ("check uses"), written only by the visit-check and plan routes,
+    read, changed or deleted by none; its ACCESS.md row needs the owner's yes;
+  - open: what happens to old counts: keep every row (fits "rows are only ever added"; my pick)
+    or delete rows older than a minute (needs an exception to that test).
 - Raised by the checkpoint 3 reviews (2026-11-27), small and not needed for the first version:
   an "Other (say why)" comment made only of invisible characters (a zero-width space) counts as a
   comment, as it always has; the `visit_check` table's `plan` and `agentic_enabled` columns are
