@@ -13,9 +13,16 @@ Each item is about one sitting (1 to 2 hours). Decisions are logged in `docs/dec
 | 2B Guideline search | done, on `development` (merged 2026-11-26) | 2B.3 not tried (owner wrapped up first) |
 | 3 Designs in Paper | direction picked, on `development` | 3.3 sign off the final screens and tidy the tokens |
 | 4 Backend (FastAPI) | done: 4.0-4.7 and the Phase 4 check (step 2 on `development`; the leftovers on branch `claude/phase4-leftovers`) | the plan wording when the guideline search is down waits on design decision 5 |
-| 5 Frontend (Next.js) | 5.1 and 5.2 on `development` (merged 0628908; owner approved each screen) | the clinic-day board, Finalize, the saved record, adding a case and the plan view use step 2's routes (branch `claude/phase4-step2`) |
-| 4C Full stack (owner, 2026-11-27) | not started | every app process on Postgres; Streamlit removed |
-| 6 to 8 | not started | |
+| 5 Frontend (Next.js) | 5.1 and 5.2 ticked; adding a case, the board's day links and Compare plans (S5) built on 4C's routes (2026-11-27) | 5.3-5.5 to tick against `docs/screen-checklist.md` |
+| 4C Full stack (owner, 2026-11-27) | 4C.1-4C.7 done: every app process on Postgres, Streamlit removed (checkpoint 3, 2026-11-27) | 4C.8 the owner's four decisions |
+| R Ready for doctors (owner, 2026-11-27) | not started; comes after 4C and the website's remaining screens | end-to-end audit in Chrome; the right information first |
+| 7 Clinical check with doctors | not started; after R, in rounds | |
+| 6 Showcase | not started; after Phase 7 (owner: doctors test it before it is shown) | |
+| 8 Stretch | later (FHIR kept for an interoperability demo) | |
+
+Order (owner, 2026-11-27): 4C and the website, then R, then Phase 7 with a couple of doctors
+(repeated as needed), then Phase 6 to show the work publicly, then Phase 8 when there is a reason.
+Showing it is about demonstrating in-house capacity; adoption in Uganda comes later.
 
 `docs/screen-checklist.md` lists what every screen must show; Phases 4 and 5 check against it.
 
@@ -447,7 +454,34 @@ code or requirements; tests pass on GitHub.
 Check: a full visit works in Chrome; screenshots against the Paper design (owner, 2026-11-27: no Streamlit); every
 item of `docs/screen-checklist.md` shown and screenshotted.
 
+## Phase R: Ready for doctors, an end-to-end audit (owner, 2026-11-27)
+
+The owner's direction (2026-11-27): before any doctor sees it, prove the full-stack app gives the
+right clinical information, with nothing lost from the Streamlit version. "The biggest part mostly
+that people care about is if it returns the right information"; the rest is secondary.
+
+- [ ] R.1 Nothing lost from Streamlit: every item of `docs/screen-checklist.md` works in the
+      website; anything missing is built or dropped with the owner's yes.
+- [ ] R.2 A full visit in the owner's Chrome, with the owner told first and watching: add a case,
+      see it on the board, run the checks on the A100, read the alerts with their guideline
+      citations, decide each, compare plans, finalize, reopen.
+- [ ] R.3 The guideline search finds the right passages: rerun the Phase 2B retrieval check on the
+      backend's path and compare with its earlier numbers.
+- [ ] R.4 The alerts and plans are right: rerun the evaluation through the backend on the A100 (no
+      spend), compare with Phase 2's numbers, and explain every miss.
+- [ ] R.5 Fix what R.1-R.4 turn up, rerun, and tidy.
+- [ ] R.6 Owner decision when R.5 is done: how doctors reach it (hosted, for example on Railway, with
+      logins and the data questions that brings, or on the owner's laptop or by screen share).
+
+Check: every screen-checklist item works in Chrome; search and alert scores no worse than before,
+with every miss explained; one full visit runs cleanly on the A100.
+
 ## Phase 6: Showcase on GitHub Pages
+
+After Phase 7 (owner, 2026-11-27: doctors test it before it is shown). Its purpose is to show the
+work and the in-house capacity behind it. 6.1 was written for the Streamlit demo: a static Pages
+site can't run the backend, so whether the showcase is a recorded read-only walkthrough or a hosted
+live demo is decided when Phase 6 starts.
 
 - [ ] 6.1 Publish showcase mode as a static site with A100 outputs for at least 10 cases.
 - [ ] 6.2 Two or three short explainer videos: the problem, a walkthrough, the evaluation.
@@ -512,6 +546,9 @@ results they will value. These were raised and set aside, not dropped.
   `clinic_db.import_schedule` is now used only by the tests to load the demo day.
 
 ## Phase 8: Stretch, as time allows
+
+For later, mostly for adoption (owner, 2026-11-27). FHIR (8.2) is not built now; it stays as a
+way to demonstrate interoperability once there is a reason to.
 
 - [ ] 8.1 CDS Hooks endpoint (patient-view hook, cards, feedback), so record systems such as
       OpenMRS-based UgandaEMR could call it.
