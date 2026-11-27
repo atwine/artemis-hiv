@@ -26,17 +26,15 @@ from artemis.patient.labs import TEST_NAMES, TEST_UNITS, read_lab_entries, read_
 from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
 from artemis.patient.new_case import VISIT_TYPES, CaseForm, PreviousArt, build_case_record
 from artemis.visit import AnalysisOptions, run_visit_analysis
-from backend import patients_db, records
+from backend import clinic_db, patients_db, records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
 from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS, DISCLAIMER, FINALIZE_BLOCKED
 from backend.cards import banners_for, cards_from_entry, plan_from_entry
 from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
 from backend.limits import SlidingWindow
 from backend.models import (
-    Booking,
     Appointment,
     ClinicDay,
-    ClinicDaySchedule,
     DayCounts,
     DecisionOut,
     DecisionsRequest,
@@ -140,7 +138,7 @@ def _latest(session: Session, visit_id: str) -> Dict[str, DecisionOut]:
     }
 
 
-def board_row(booking: Booking, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
+def board_row(booking: clinic_db.Appointment, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
               finalized: Optional[str]) -> Appointment:
     """One row of the day board, from the booking, the patient and their latest saved check."""
     state = "waiting" if latest is None else ("done" if finalized else "needs_you")
@@ -343,29 +341,27 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
     @app.get("/api/clinic-day", response_model=ClinicDay, dependencies=[
         Depends(require("clinic_day", "view")), Depends(require("patients", "view")),
         Depends(require("visit_records", "view")),
-    ])
-    def clinic_day() -> ClinicDay:
-        """The demo day's board: each booking with the state of the patient's latest saved check,
-        whenever it ran (owner, 2026-11-26)."""
-        patients = {p.record.patient_id: p.record for p in load_patients(services)}
-        try:
-            schedule = ClinicDaySchedule.model_validate(services.clinic_day())
-            missing = [b.patient_id for b in schedule.appointments if b.patient_id not in patients]
-            if missing:
-                raise ValueError(f"{len(missing)} booking(s) for patients with no record")
-        except (OSError, ValueError) as exc:  # pydantic's ValidationError is a ValueError
-            logger.warning("Clinic day not read: %s", type(exc).__name__)
-            raise HTTPException(status_code=500, detail="The clinic day could not be read.")
-        rows = []
-        with Session(services.engine) as session:  # load_patients refused (503) when there is none
-            for b in schedule.appointments:
-                latest = next(iter(records.checks_for(session, b.patient_id)), None)
+    ], responses={404: {"description": "There is no clinic day on that date."}})
+    def clinic_day(date: Optional[datetime.date] = None) -> ClinicDay:
+        """A clinic day's board: each appointment, in time order, with the state of the patient's
+        latest saved check, whenever it ran (owner, 2026-11-26). Without `date`: today's clinic
+        day, else the most recent earlier one (owner, 2026-11-27)."""
+        patients = {p.record.patient_id: p.record for p in load_patients(services)}  # 503 first with no database
+        with Session(services.engine) as session:
+            when = date or clinic_db.board_date(session, services.today())
+            found = clinic_db.day_on(session, when) if when else None
+            if found is None:
+                raise HTTPException(status_code=404, detail="There is no clinic day on that date.")
+            day, appointments = found
+            rows = []
+            for a in appointments:
+                latest = next(iter(records.checks_for(session, a.patient_id)), None)
                 reviewed = len(records.latest_decisions(session, latest.visit_id)) if latest else 0
                 finalized = records.finalized_at(session, latest.visit_id) if latest else None
-                rows.append(board_row(b, patients[b.patient_id], latest, reviewed, finalized))
+                rows.append(board_row(a, patients[a.patient_id], latest, reviewed, finalized))
         return ClinicDay(
-            clinic=schedule.clinic, room=schedule.room, clinician=schedule.clinician,
-            date=schedule.date.isoformat(), appointments=rows, counts=day_counts(rows),
+            clinic=day.clinic, room=day.room, clinician=day.clinician,
+            date=day.date.isoformat(), appointments=rows, counts=day_counts(rows),
         )
 
     @app.get("/api/form-choices", response_model=FormChoices, dependencies=[Depends(require("form_choices", "view"))])
@@ -379,10 +375,11 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
 
     @app.post("/api/patients", response_model=PatientDetail, status_code=201, dependencies=[
         Depends(require("patients", "create")),
+        Depends(require("clinic_day", "create")),  # the case's appointment, in the same save
     ])
     def add_case(body: NewCase) -> PatientDetail:
-        """Add a new made-up case to the database in one save. Add only: an ID already in use is
-        refused (owner, 2026-11-26)."""
+        """Add a new made-up case to the database, booked at `appointment_time` on its visit date,
+        in one save (owner, 2026-11-27). Add only: an ID already in use is refused (2026-11-26)."""
         form = CaseForm(
             patient_id=body.patient_id, name=body.name or "", age_years=body.age_years, sex=body.sex or "",
             art_regimen=body.art_regimen, other_medications=body.other_medications, complaints=body.complaints,
@@ -391,15 +388,17 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             visit_date=body.visit_date, visit_type=body.visit_type or "", todays_note=body.todays_note,
             previous_art=[PreviousArt(regimen=a.regimen, start_date=a.start_date, end_date=a.end_date) for a in body.previous_art],
         )
-        record, errors = build_case_record(form, today=datetime.date.today())
+        record, errors = build_case_record(form, today=services.today())
         if errors:
             raise HTTPException(status_code=422, detail=errors)
         if any(p.record.patient_id == record["patient_id"] for p in load_patients(services)):
             raise HTTPException(status_code=409, detail="That patient ID is already in use.")
         try:
-            services.add_case(record)
+            services.add_case(record, datetime.date.fromisoformat(record["today_encounter"]["date"]), body.appointment_time)
         except patients_db.PatientExists:  # a second add of the same new id, racing this one
             raise HTTPException(status_code=409, detail="That patient ID is already in use.")
+        except clinic_db.NoClinic:
+            raise HTTPException(status_code=422, detail="There is no clinic to book this case into.")
         except SQLAlchemyError as exc:
             logger.warning("Case not added: %s", type(exc).__name__)
             raise HTTPException(status_code=500, detail="The case could not be saved.")

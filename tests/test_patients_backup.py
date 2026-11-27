@@ -6,6 +6,7 @@ database with them, safely twice; and it is read as data, so an edited file can'
 
 from __future__ import annotations
 
+import datetime
 import os
 import re
 from pathlib import Path
@@ -14,9 +15,9 @@ import pytest
 from sqlmodel import Session
 
 from artemis.patient.record import build_patient_context
-from backend import patients_db
+from backend import clinic_db, patients_db
 from backend import patients_backup as seed
-from tests.api_fakes import memory_engine, read_patients
+from tests.api_fakes import memory_engine, read_clinic_day, read_patients
 
 ROOT = Path(__file__).resolve().parents[1]
 PG_URL = os.getenv("ARTEMIS_TEST_DATABASE_URL")
@@ -28,6 +29,7 @@ def _fixture_dump() -> str:
     engine = memory_engine()
     with Session(engine) as s:
         patients_db.import_records(s, read_patients(), origin="seed")
+        clinic_db.import_schedule(s, read_clinic_day(), origin="seed")
         return seed.dump(s)
 
 
@@ -54,7 +56,12 @@ def test_the_backup_holds_the_tests_patients():
         expected = patients_db.load_all(s)
     with Session(engine) as s:
         backed_up = patients_db.load_all(s)
+        demo = clinic_db.day_on(s, datetime.date(2026, 11, 26))
     assert backed_up[:len(expected)] == expected
+    schedule = read_clinic_day()
+    assert demo is not None and demo[0].clinician == schedule["clinician"]
+    assert [(a.time, a.patient_id, a.name) for a in demo[1]] == [
+        (b["time"], b["patient_id"], b.get("name")) for b in schedule["appointments"]]
 
 
 def test_dump_then_load_gives_the_same_backup():

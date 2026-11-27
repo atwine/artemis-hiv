@@ -19,7 +19,7 @@ from sqlmodel import Session, select
 from artemis.patient.labs import read_lab_entries, read_lab_notes
 from artemis.patient.record import build_patient_context
 from backend import patients_db
-from tests.api_fakes import FakeModel, fake_search, memory_engine, read_clinic_day, read_patients, replies_for
+from tests.api_fakes import FakeModel, fake_search, memory_engine, read_patients, replies_for
 
 LOCAL = {"Origin": "http://localhost:3000"}
 SEED = read_patients()
@@ -67,7 +67,7 @@ def _client(patients, engine, added=None):
     search = fake_search()
     box = {}
     services = Services(patients=patients, search=lambda: search, model_client=lambda: box["model"], engine=engine,
-                        app_version="test", clinic_day=read_clinic_day)
+                        app_version="test")
     return TestClient(create_app(settings=Settings(), services=services), base_url="http://localhost"), box
 
 
@@ -141,7 +141,8 @@ def test_adding_a_case_is_one_save_and_a_used_id_is_refused():
 
 
 def test_a_case_added_through_the_api_is_in_the_database(api):
-    r = api.client.post("/api/patients", json={"patient_id": "P100", "art_regimen": ["TLD"], "todays_note": "New."},
+    r = api.client.post("/api/patients", json={"patient_id": "P100", "art_regimen": ["TLD"], "todays_note": "New.",
+                                                    "appointment_time": "11:30"},
                         headers=LOCAL)
     assert r.status_code == 201, r.text
     with Session(api.engine) as s:

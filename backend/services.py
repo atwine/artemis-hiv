@@ -6,8 +6,8 @@ a route first needs it, so starting the server loads no model and builds no inde
 
 from __future__ import annotations
 
+import datetime
 import functools
-import json
 import logging
 import time
 from dataclasses import dataclass, field
@@ -17,7 +17,7 @@ from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
 
 from artemis import visit_record
-from backend import patients_db
+from backend import clinic_db, patients_db
 from backend.settings import PROJECT_ROOT, Settings
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 TOP_K = 5  # the Streamlit screen's default number of guideline passages per alert
 
 
-def _no_case_writer(record: Dict[str, Any]) -> None:
+def _no_case_writer(record: Dict[str, Any], date: datetime.date, time: str) -> None:
     raise RuntimeError("No case writer is set up for these services.")
 
 
@@ -37,12 +37,11 @@ class Services:
     engine: Optional[Engine]  # the visit-record database
     app_version: str
     top_k: int = TOP_K
-    # The demo day's schedule as stored (Data/demo_clinic_day.json), checked by the route.
-    clinic_day: Callable[[], Dict[str, Any]] = field(default_factory=lambda: clinic_day_file(Settings()))
     # Adds a new case. Only default_services gives it the real database; any other Services refuses,
     # so a test or script can never add to the real database by accident.
-    add_case: Callable[[Dict[str, Any]], None] = field(default=_no_case_writer)
+    add_case: Callable[[Dict[str, Any], datetime.date, str], None] = field(default=_no_case_writer)
     clock: Callable[[], float] = time.monotonic  # seconds, for the visit-check limit
+    today: Callable[[], datetime.date] = datetime.date.today  # the board's default day, a new case's visit date
 
 
 def database_patients(engine: Optional[Engine]) -> Callable[[], List[Dict[str, Any]]]:
@@ -55,22 +54,16 @@ def database_patients(engine: Optional[Engine]) -> Callable[[], List[Dict[str, A
     return read
 
 
-def database_case_writer(engine: Optional[Engine]) -> Callable[[Dict[str, Any]], None]:
-    """Adds one new case to the database in one save; an id in use raises patients_db.PatientExists."""
+def database_case_writer(engine: Optional[Engine]) -> Callable[[Dict[str, Any], datetime.date, str], None]:
+    """Adds one new case to the database, booked at `time` on `date`, in one save (plan 4C.3); an id
+    in use raises patients_db.PatientExists."""
 
-    def add(record: Dict[str, Any]) -> None:
-        patients_db.add(engine, record)
+    def add(record: Dict[str, Any], date: datetime.date, time: str) -> None:
+        now = datetime.datetime.now(datetime.timezone.utc)
+        patients_db.add(engine, record, also=lambda session: clinic_db.booking_rows(
+            session, patient_id=str(record["patient_id"]), date=date, time=time, now=now))
 
     return add
-
-
-def clinic_day_file(settings: Settings) -> Callable[[], Dict[str, Any]]:
-    """The demo day's schedule, read (never written); changed only by editing the file (ACCESS.md)."""
-
-    def read() -> Dict[str, Any]:
-        return json.loads(settings.clinic_day_path.read_text(encoding="utf-8"))
-
-    return read
 
 
 @functools.lru_cache(maxsize=1)
@@ -105,6 +98,5 @@ def default_services(settings: Settings) -> Services:
         model_client=_model_client,
         engine=engine,
         app_version=visit_record.app_version(PROJECT_ROOT),
-        clinic_day=clinic_day_file(settings),
         add_case=database_case_writer(engine),
     )

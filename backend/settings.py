@@ -24,8 +24,6 @@ class Settings:
     # SQLAlchemy address of the database (patients and visit records), e.g.
     # postgresql+psycopg://artemis:...@127.0.0.1:5434/artemis
     database_url: Optional[str] = None
-    # The demo day's schedule (moves into the database in plan 4C.3).
-    clinic_day_path: Path = PROJECT_ROOT / "Data" / "demo_clinic_day.json"
     # At most this many visit checks a minute; the next gets 429 (owner, 2026-11-26).
     visit_checks_per_minute: int = 6
 

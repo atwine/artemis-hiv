@@ -23,21 +23,26 @@ class Api:
 
         from sqlmodel import Session
 
-        from backend import patients_db
+        import datetime
+
+        from backend import clinic_db, patients_db
         from backend.main import create_app
-        from backend.services import Services, database_patients
+        from backend.services import Services, database_case_writer, database_patients
         from backend.settings import Settings
         from tests.api_fakes import FakeModel, fake_search, memory_engine, read_clinic_day, read_patients, replies_for
 
         self.model: Optional[Any] = FakeModel(replies_for("P001"))
         self.added_cases: list = []  # cases added through the API (to the in-memory database, never Data/)
         self.engine = memory_engine()
-        with Session(self.engine) as session:  # the seed patients, as scripts/load_patients.py loads them
+        with Session(self.engine) as session:  # the seed patients and the demo day, as the backup holds them
             patients_db.import_records(session, read_patients(), origin="seed")
+            clinic_db.import_schedule(session, read_clinic_day(), origin="seed")
         search = fake_search()
 
-        def add_case(record):
-            patients_db.add(self.engine, record)
+        writer = database_case_writer(self.engine)
+
+        def add_case(record, date, time):
+            writer(record, date, time)
             self.added_cases.append(record)
 
         self.services = Services(
@@ -46,7 +51,7 @@ class Api:
             model_client=lambda: self.model,
             engine=self.engine,
             app_version="test",
-            clinic_day=read_clinic_day,
+            today=lambda: datetime.date(2026, 11, 27),  # the day after the demo day
             add_case=add_case,
         )
         self.app = create_app(settings=Settings(), services=self.services)

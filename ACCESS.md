@@ -17,7 +17,7 @@ off this laptop (for example to Railway): "this laptop only" means nothing on a 
 | patients | the synthetic test patients: notes, lab results, medicines, past ART, visits. In the database since plan 4C.2 (tables `patient`, `patient_medicine`, `art_history`, `lab_result`, `lab_note`, `clinical_note`, `encounter`), loaded from the seed files in `Data/` by `scripts/load_patients.py` on this laptop. The demo answer keys stay with the evaluation, not in these tables | sensitive: health (synthetic only) |
 | visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome) and each acknowledge/override decision | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
-| clinic_day | the demo day's schedule: made-up clinic, clinician, date, appointment times and patient ids, kept as a data file in the repo | internal (synthetic only) |
+| clinic_day | the clinic days and their appointments: made-up clinic, room, clinician, date, appointment times and patient ids. In the database since plan 4C.3 (tables `clinic_day`, `appointment`); the demo day is loaded from the backup with the patients | internal (synthetic only) |
 | form_choices | the add-case form's pick lists: ART combinations and drugs, lab tests with their names and units, visit types (from the code) | public |
 
 ## 2. Roles
@@ -43,7 +43,7 @@ How each is told apart, before any route runs (`backend/access.py`):
 
 | Role | patients | visit_records | guidelines | clinic_day | form_choices |
 |---|---|---|---|---|---|
-| local | view(all), create(all) | view(all), create(all) | view(all) | view(all) | view(all) |
+| local | view(all), create(all) | view(all), create(all) | view(all) | view(all), create(all) | view(all) |
 | network | - | - | - | - | - |
 | website | - | - | - | - | - |
 | anonymous | - | - | - | - | - |
@@ -55,7 +55,13 @@ keep track of.
 Nobody can edit or delete patients, visit records or the schedule through the backend
 (owner, 2026-11-26). Visit records are written once and never changed: a new decision is a new
 row, and the latest one counts. Adding a patient adds a new case only: an id already in use is
-refused, and each case has size limits. The schedule changes only by editing its file.
+refused, and each case has size limits.
+
+The clinic day moved into the database on 2026-11-27 (owner: "A, yes as written"): an appointment
+is made only by adding a case, in the same save, at the time given on its visit date; a date with
+no clinic day gets one then, with the demo day's clinic, room and clinician. That is clinic_day's
+only create. Nobody moves, cancels or deletes an appointment, or changes a day's clinic, room or
+clinician, through the backend (on the Later list).
 
 Patients moved into the database on 2026-11-27 with the same rules (owner: "A, keep the rules"):
 the backend reads and adds them only there, adding a case is one database save, and nothing in
@@ -78,6 +84,7 @@ the backend edits or deletes a patient row.
 | GET | /api/patients/{patient_id}/visits | patients | view |
 | GET | /api/patients/{patient_id}/visits | visit_records | view |
 | POST | /api/patients | patients | create |
+| POST | /api/patients | clinic_day | create |
 | GET | /api/clinic-day | clinic_day | view |
 | GET | /api/clinic-day | patients | view |
 | GET | /api/clinic-day | visit_records | view |
@@ -117,6 +124,11 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
 - The seed is loaded twice, or loaded into a database that already has added cases. Covered by:
   `scripts/load_patients.py` adds only ids the database doesn't have; it is a command on this
   laptop, never a route.
+- A stuck page adds case after case, each opening a clinic day on a new date. Covered by: each
+  add is one case with its size limits; a day is opened only by a case booked on it, and the board
+  shows one day at a time.
+- An appointment is moved or cancelled through the website. Covered by: there is no route that
+  does it; the only booking is the one adding a case makes.
 - Someone on the Wi-Fi connects to the database directly. Covered by: Docker publishes Postgres
   on 127.0.0.1 only (`backend/docker-compose.yml`).
 - Finalize is sent twice, or before every alert is decided. Covered by: a second Finalize

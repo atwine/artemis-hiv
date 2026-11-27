@@ -105,6 +105,8 @@ class NewCase(BaseModel):
     visit_type: Optional[VisitType] = None
     todays_note: str = Field(default="", max_length=MAX_NOTE)
     previous_art: List[PreviousArtIn] = Field(default=[], max_length=MAX_PREVIOUS_ART)
+    # The case's appointment on its visit date, HH:MM in 24-hour time (owner, 2026-11-27).
+    appointment_time: str = Field(pattern=r"^([01]\d|2[0-3]):[0-5]\d$")
 
 
 class PatientSummary(BaseModel):

@@ -12,7 +12,7 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 |---|---|---|
 | GET | /api/health | `{"status": "ok"}` |
 | GET | /api/patients | the patient list, from the database (plan 4C.2) |
-| POST | /api/patients | add a new made-up case (201) to the database in one save; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
+| POST | /api/patients | add a new made-up case (201) to the database, booked at `appointment_time` (HH:MM) on its visit date, in one save; a date with no clinic day gets one; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
 | GET | /api/form-choices | the add-case form's pick lists: ART combinations and drugs, lab tests with units, visit types |
 | GET | /api/patients/{patient_id} | one patient's record; `labs` maps each test to its results, each with `date`, `value`, `unit` and `source` in the unit it was recorded in (never converted); typed-in lab text comes apart as `lab_notes` |
 | POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
@@ -20,7 +20,7 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 | POST | /api/visits/{visit_id}/finalize | finalize once every alert is decided (422 with `FINALIZE_BLOCKED` otherwise); again with nothing changed returns the same; a later decision reopens the visit |
 | GET | /api/visits/{visit_id} | reopen a saved visit as it was shown, with its note, decisions and `finalized_at`; no new AI call |
 | GET | /api/patients/{patient_id}/visits | a patient's saved checks, newest first |
-| GET | /api/clinic-day | the demo day board (`Data/demo_clinic_day.json`): each booking with `state` waiting / needs_you / done from the patient's latest check, and the header counts |
+| GET | /api/clinic-day | a clinic day's board from the database, appointments in time order, each with `state` waiting / needs_you / done from the patient's latest check, and the header counts; `?date=YYYY-MM-DD` picks the day (404 if there's none), otherwise today's or the most recent earlier one |
 
 The API's published shape is saved in `docs/api/openapi.json` (the website builds its types from
 it); `tests/test_openapi_snapshot.py` fails when it changes by accident. After a deliberate change:
@@ -87,7 +87,8 @@ end-to-end tests) can be filled; the app never reads it.
 - Make it again after the patients change: `python scripts/patients_backup.py make`, then commit
   the file. `tests/test_patients_backup.py` checks it holds the same patients as the tests'
   own copy (`tests/fixtures/patients.json`).
-- Until plan 4C.6 deletes the old patient files, `python scripts/load_patients.py` loads them once.
+- Until plan 4C.6 deletes the old patient and schedule files, `python scripts/load_patients.py`
+  loads them once.
 
 ## Tests
 

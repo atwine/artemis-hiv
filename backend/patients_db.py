@@ -19,7 +19,7 @@ which stays with the evaluation (owner, 2026-11-27).
 from __future__ import annotations
 
 import datetime
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Callable, Dict, Iterable, List, Optional
 
 from sqlalchemy import JSON, Column, Date, DateTime, Text
 from sqlalchemy.dialects.postgresql import JSONB
@@ -297,9 +297,12 @@ def import_records(session: Session, records: Iterable[Dict[str, Any]], *, origi
     return added
 
 
-def add(engine: Engine, record: Dict[str, Any]) -> None:
-    """Add one new case, all its rows in one save. An id already in use raises PatientExists and
-    saves nothing; so does a second add of the same new id racing this one (the id is the key)."""
+def add(engine: Engine, record: Dict[str, Any],
+        also: Optional[Callable[[Session], List[SQLModel]]] = None) -> None:
+    """Add one new case, all its rows in one save, with the rows `also` gives (its booking on the
+    clinic day, plan 4C.3). An id already in use raises PatientExists and saves nothing; so does a
+    second add of the same new id racing this one (the id is the key). If anything fails, nothing
+    of the case is saved."""
     pid = str(record["patient_id"])
     for attempt in range(3):
         with Session(engine) as session:
@@ -308,6 +311,9 @@ def add(engine: Engine, record: Dict[str, Any]) -> None:
             try:
                 _save(session, rows_for(record, position=_next_position(session), origin="added",
                                         added_at=datetime.datetime.now(datetime.timezone.utc)))
+                for row in also(session) if also else []:  # a new clinic day comes before its appointment
+                    session.add(row)
+                    session.flush()
                 session.commit()
                 return
             except IntegrityError:
@@ -316,4 +322,5 @@ def add(engine: Engine, record: Dict[str, Any]) -> None:
                     raise PatientExists(pid) from None
                 if attempt == 2:
                     raise
-                # Another new case took the same list position at the same moment: try the next one.
+                # Another new case took the same list position, or opened the same clinic day, at
+                # the same moment: try again.

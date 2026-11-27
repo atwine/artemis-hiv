@@ -23,7 +23,11 @@ from sqlalchemy.dialects import postgresql, sqlite
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, select
 
-from backend.patients_db import TABLES, Patient
+from backend import clinic_db, patients_db
+from backend.patients_db import Patient
+
+# Parents before the rows that point to them: the patient tables, then the clinic days and appointments.
+TABLES = patients_db.TABLES + clinic_db.TABLES
 from backend.settings import PROJECT_ROOT
 
 SEED_SQL = PROJECT_ROOT / "backend" / "seed" / "patients.sql"
@@ -43,7 +47,7 @@ def _literal(value: Any, column: Any) -> sql.Composable:
 
 
 def dump(session: Session) -> str:
-    """Every row of the patient tables as SQL inserts, parents first, each table in key order."""
+    """Every row of the patient and clinic-day tables as SQL inserts, parents first, each table in key order."""
     lines = [HEADER]
     for model in TABLES:
         table = model.__table__

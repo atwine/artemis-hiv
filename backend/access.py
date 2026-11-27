@@ -28,7 +28,7 @@ GRID: Dict[str, Dict[str, FrozenSet[str]]] = {
         "patients": frozenset({"view", "create"}),
         "visit_records": frozenset({"view", "create"}),
         "guidelines": frozenset({"view"}),
-        "clinic_day": frozenset({"view"}),
+        "clinic_day": frozenset({"view", "create"}),  # create: only the booking adding a case makes
         "form_choices": frozenset({"view"}),
     },
 }

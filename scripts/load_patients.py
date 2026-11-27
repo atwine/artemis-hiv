@@ -12,6 +12,7 @@ address is ARTEMIS_DATABASE_URL (in .env); create the tables first with
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -22,11 +23,12 @@ from dotenv import load_dotenv  # noqa: E402
 from sqlmodel import Session, create_engine  # noqa: E402
 
 from artemis.patient.store import read_json_list  # noqa: E402
-from backend import patients_db  # noqa: E402
+from backend import clinic_db, patients_db  # noqa: E402
 from backend.settings import settings_from_env  # noqa: E402
 
 # In the order the app has always listed them.
 SEED_FILES = [ROOT / "Data" / name for name in ("mock_patients.json", "custom_patients.json", "demo_day_patients.json")]
+DEMO_DAY = ROOT / "Data" / "demo_clinic_day.json"  # the demo day's schedule (plan 4C.3)
 
 
 def seed_records() -> list:
@@ -44,9 +46,11 @@ def main() -> int:
     try:
         with Session(engine) as session:
             added = patients_db.import_records(session, records, origin="seed")
+            booked = clinic_db.import_schedule(session, json.loads(DEMO_DAY.read_text(encoding="utf-8")), origin="seed")
     finally:
         engine.dispose()
     print(f"{len(records)} seed patient(s): {added} added, {len(records) - added} already in the database")
+    print(f"the demo day: {booked} appointment(s) added" if booked else "the demo day: already in the database")
     return 0
 
 

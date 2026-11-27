@@ -76,7 +76,8 @@ def test_a_bad_case_is_explained_and_not_built(change, message):
 def _body(**kw):
     body = {"patient_id": "P100", "name": "Grace Auma", "age_years": 40, "sex": "F", "art_regimen": ["TLD"],
             "other_medications": [], "complaints": "", "examination_findings": "", "prior_history": "",
-            "labs": [{"test": "viral_load", "date": "2026-08-01", "value": "<50", "unit": "copies/mL", "when": "previous"}]}
+            "labs": [{"test": "viral_load", "date": "2026-08-01", "value": "<50", "unit": "copies/mL", "when": "previous"}],
+            "appointment_time": "11:30"}
     body.update(kw)
     return body
 
@@ -130,10 +131,10 @@ def test_each_medicine_line_has_a_length_limit(api):
     assert record is None and any("200" in e for e in errors)
 
 
-def test_services_built_without_a_writer_never_write_the_real_file():
+def test_services_built_without_a_writer_never_add_to_the_real_database():
     """Only default_services wires the real database; any other Services refuses to add a case."""
     from backend.services import Services
 
     services = Services(patients=list, search=lambda: None, model_client=lambda: None, engine=None, app_version="x")
     with pytest.raises(RuntimeError):
-        services.add_case({"patient_id": "NEW"})
+        services.add_case({"patient_id": "NEW"}, datetime.date(2026, 11, 27), "11:30")

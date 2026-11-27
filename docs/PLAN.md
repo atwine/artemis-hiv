@@ -450,6 +450,8 @@ results they will value. These were raised and set aside, not dropped.
 
 - Changing a patient's record after it is added, with a history of every change (owner chose
   add-only for now, 4C.2).
+- Moving or cancelling an appointment, and changing a clinic day's clinic, room or clinician
+  (owner chose booking only through adding a case, 4C.3).
 - Making new evaluation cases from patients in the database: `scripts/make_cases.py` built
   `eval/cases/` from the old patient files and went with them (4C.2); the cases are kept.
 - The guideline index fingerprint reads line endings as they are on disk, so a Windows laptop and a

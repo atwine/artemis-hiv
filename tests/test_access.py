@@ -72,7 +72,7 @@ def _all_patient_ids() -> List[str]:
 
 
 DECISION = {"decisions": [{"alert_id": "tdf_creatinine_overdue", "action": "Acknowledge"}]}
-NEW_CASE = {"patient_id": "P100", "art_regimen": ["TLD"]}
+NEW_CASE = {"patient_id": "P100", "art_regimen": ["TLD"], "appointment_time": "11:30"}
 
 CASES: List[Case] = [
     Case("GET", "/api/patients", "local", "/api/patients", ALLOW, "local: patients = view(all)", only_ids=_all_patient_ids()),
