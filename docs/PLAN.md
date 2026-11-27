@@ -467,12 +467,12 @@ that people care about is if it returns the right information"; the rest is seco
 
 - [ ] R.1 Nothing lost from Streamlit: every item of `docs/screen-checklist.md` works in the
       website; anything missing is built or dropped with the owner's yes.
-- [ ] R.2 A full visit in the owner's Chrome, with the owner told first and watching: add a case,
+- [x] R.2 A full visit in the owner's Chrome, with the owner told first and watching: add a case,
       see it on the board, run the checks on the A100, read the alerts with their guideline
       citations, decide each, compare plans, finalize, reopen.
-- [ ] R.3 The guideline search finds the right passages: rerun the Phase 2B retrieval check on the
+- [x] R.3 The guideline search finds the right passages: rerun the Phase 2B retrieval check on the
       backend's path and compare with its earlier numbers.
-- [ ] R.4 The alerts and plans are right: rerun the evaluation through the backend on the A100 (no
+- [x] R.4 The alerts and plans are right: rerun the evaluation through the backend on the A100 (no
       spend), compare with Phase 2's numbers, and explain every miss.
 - [ ] R.5 Fix what R.1-R.4 turn up, rerun, and tidy.
 - [ ] R.6 Owner decision when R.5 is done: how doctors reach it (hosted, for example on Railway, with
@@ -480,6 +480,29 @@ that people care about is if it returns the right information"; the rest is seco
 
 Check: every screen-checklist item works in Chrome; search and alert scores no worse than before,
 with every miss explained; one full visit runs cleanly on the A100.
+
+Where it stands (Friday 2026-11-27, evening), for Monday:
+- Done this week: R.2 twice in the owner's Chrome (A100 on P005 in the morning; GLM on a new case
+  P010 in the evening: add a case, find a patient, board, day links, list view, checks, 5 alerts,
+  accept, override with "Other (say why)", note-changed banner, compare plans and a retry, the
+  confirm step, finalize, reopen; every write landed in Postgres; no backend errors, no browser
+  console errors). R.3 and R.4 rerun (search unchanged; two small search fixes dropped by their
+  pass marks). Fixes landed: names on every record, AI review on by default, the plan reads labs,
+  Uncertain plans flagged, Chroma reporting off, past-check labels, note-changed banner, Find a
+  patient, stricter answer key, rule checks name the action (UCG 2023 cited too), "No guideline
+  passage cited", GLM chosen (thinking off by default; thinking on fails in the app as built).
+- Found in the GLM walk, to fix (R.5): (1) a patient ID with a space ("Kintu-Test 001") opens "No
+  such patient": the website encodes the ID twice (backend fine); (2) a rule alert's related
+  passages can open with a passage that is only the guideline's title (p. 239); (3) the add-case
+  form stays mounted, hidden, after saving, with its live tray text still on the page; (4) a
+  finalized visit's step reads "Plan, to do" though its plan is saved; (5) an Uncertain plan is
+  described as "failed the app's own checks".
+- Owner questions waiting: whether add-case should require a name (today a case saves with none,
+  which brings back the missing-name header); the wording for an Uncertain plan; GLM's speed (about
+  3 minutes per check and 1 per plan this evening, against 21 s in Phase 2B; pinning a fast
+  OpenRouter provider is being priced); raise the $5 cap and check the OpenRouter key's own limit
+  before the doctor rounds (spent about $2.20); R.6, how doctors reach the app.
+- The app's .env now points at GLM (thinking off); the A100 settings are kept as comments.
 
 ## Phase 6: Showcase on GitHub Pages
 
