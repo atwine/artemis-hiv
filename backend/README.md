@@ -52,7 +52,7 @@ allow only the frontend's address (ACCESS.md).
 | `ARTEMIS_API_PORT` | `8000` | |
 | `ARTEMIS_API_ORIGINS` | `http://localhost:3000,http://127.0.0.1:3000` | the frontend's address; every other web page is refused |
 | `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` | none | the model server (`.env.example`); without it, a check with the AI review and Compare plans answer 503 |
-| `LLM_REASONING` | empty | `off` asks the server to skip the model's thinking (set for GLM on OpenRouter); any other value is refused at start |
+| `LLM_REASONING` | empty | `off` asks the server to skip the model's thinking (set for GLM on OpenRouter), `on` asks for it; any other value is refused at start |
 
 ## Run it
 

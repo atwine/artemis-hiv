@@ -101,7 +101,7 @@ Ollama through its `/v1` endpoint). In `.env`:
 - `LLM_MODEL`: the model id (empty means the first model the server lists)
 - `LLM_API_KEY`: only if the server checks a key (OpenRouter does)
 - `LLM_REASONING`: `off` to switch the model's thinking off (set it for GLM on OpenRouter, as it
-  was measured); leave it empty for the A100
+  was measured), `on` to switch it on; leave it empty for the A100
 
 The address stays in `.env`: replies, error messages and saved records never show it.
 
