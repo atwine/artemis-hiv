@@ -16,7 +16,6 @@ artemis/rules/checks.py	_check_suboptimal_bp_with_missed_amlodipine	Alerts when 
 artemis/visit.py	compute_overall_status	Sets the overall colour from the alerts; INCOMPLETE when nothing was found and the AI review did not finish cleanly.	artemis/visit.py	moved
 artemis/visit.py	_retrieve	Finds the guideline passages that relate to one alert.	artemis/visit.py	moved
 artemis/visit.py	run_visit_analysis	Runs the whole visit check: alerts, guideline lookup, AI screening and explanations.	artemis/visit.py	moved
-artemis/visit.py	run_visit_analysis.status	Reports a progress message if someone is listening.	artemis/visit.py	moved
 modules/embedder.py	Embedder.__init__	Loads the text-to-numbers model, or a simple backup if it cannot load.	artemis/guidelines/	to-move
 modules/embedder.py	Embedder.model_name	Gives the name of the text-to-numbers model in use.	artemis/guidelines/	to-move
 modules/embedder.py	Embedder.encode	Turns pieces of text into lists of numbers so similar texts can be matched.	artemis/guidelines/	to-move
@@ -87,7 +86,6 @@ artemis/plan/plan_json.py	regimen_decision_kind	Reads the regimen decision as Sw
 artemis/plan/plan_json.py	strip_code_fences	Removes ``` fences the AI sometimes wraps its reply in.	artemis/plan/plan_json.py	stays
 artemis/plan/plan_json.py	validate_plan	Lists what is wrong with a plan, or nothing if it passes.	artemis/plan/plan_json.py	stays
 artemis/plan/view.py	_texts	Turns a plan field into a list of non-empty lines.	artemis/plan/view.py	stays
-artemis/plan/view.py	plan_html	Draws the plan for the screen, escaping all AI text.	artemis/plan/view.py	stays
 artemis/plan/view.py	read_plan	Decides what the clinician sees for each plan item and the regimen decision.	artemis/plan/view.py	stays
 artemis/ai/client.py	_text_of	Joins a reply sent as a list of parts into one text.	artemis/ai/client.py	moved
 artemis/ai/screening.py	_is_alert	Tells whether a piece of the AI's reply looks like an alert.	artemis/ai/screening.py	moved
@@ -296,3 +294,4 @@ backend/records.py	checks_entry	The saved entry for one visit check, which the r
 backend/records.py	saved_alerts	A saved check's alerts rebuilt with their passages and explanations; refuses a misaligned record.	backend/records.py	moved
 backend/records.py	_saved_alert	One saved alert rebuilt; refuses one with no id, title or message.	backend/records.py	moved
 backend/services.py	app_version	The code version saved with each visit check: the git commit, or unknown.	backend/services.py	moved
+backend/evaluation.py	RunFailed.__init__	A refused run, with what it had already spent on the model.	stays	stays

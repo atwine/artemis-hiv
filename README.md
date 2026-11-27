@@ -81,7 +81,8 @@ and open `http://127.0.0.1:3000`. Both listen on this laptop only (`ACCESS.md`).
 3. **Run checks**. The fixed rule checks always run; the AI review runs when a model server is
    set. Each alert says whether it came from a rule check or the AI review, with the guideline
    passages behind it. A banner says when the AI review failed or was cut short, so a missing
-   AI review never looks like a clean result. Every check is saved.
+   AI review never looks like a clean result. Every check is saved; if saving fails, the visit
+   says so and its alerts can't be decided.
 4. **Acknowledge** or **Override** every alert. An override needs a reason, and "Other (say why)"
    needs a comment.
 5. **Compare plans** makes the AI's management plan for the visit and compares each item with

@@ -53,8 +53,9 @@ except the health check (owner, 2026-11-26: "A, this laptop only"), so there is 
 keep track of.
 
 Nobody can edit or delete patients, visit records or the schedule through the backend
-(owner, 2026-11-26): there are only GET and POST routes, and the backend never deletes or
-updates a row (`tests/test_access.py`, plan 4C.7). Every table belongs to a data kind in
+(owner, 2026-11-26): there are only GET and POST routes, and a whole visit (add a case, check,
+decide, change a decision, finalize, plan, reopen) sends the database no UPDATE or DELETE
+(`tests/test_access.py`, plan 4C.7). Every table belongs to a data kind in
 section 1, so a new table has no rules until it is added there. Visit records are written once and never changed: a new decision is a new
 row, and the latest one counts. Adding a patient adds a new case only: an id already in use is
 refused, and each case has size limits.

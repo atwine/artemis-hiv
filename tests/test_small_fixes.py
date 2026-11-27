@@ -76,13 +76,13 @@ class _Capture:
 
 
 def test_the_plan_step_reads_dated_lab_values_without_trend_labels() -> None:
-    from artemis.visit import AnalysisOptions, run_visit_analysis
+    from artemis.visit import management_plan
     from modules.rag_engine import RagEngine
 
     p = copy.deepcopy(next(x for x in h.patients() if x["patient_id"] == "P002"))
     rag = RagEngine(project_root=h.ROOT, guideline_paths=[], embedder=h.FakeEmbedder(), vector_store=h.FakeStore([]))
     model = _Capture()
-    run_visit_analysis(patient=p, today_note="", rag=rag, llm_client=model, options=AnalysisOptions(agentic=True))
+    management_plan(patient=p, today_note="", rag=rag, llm_client=model)
     # The plan prompts carry the patient (the repair retry only carries the draft plan).
     plan_prompts = [m["content"] for call in model.calls for m in call if m["role"] == "user" and "Patient id: P002" in m["content"]]
     assert plan_prompts

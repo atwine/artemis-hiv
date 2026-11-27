@@ -216,8 +216,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             today_note=body.note,
             rag=services.search(),
             llm_client=client,
-            # No plan here: only "Compare plans" makes one (owner, 2026-11-27).
-            options=AnalysisOptions(top_k=services.top_k, use_llm=body.use_ai, agentic=False),
+            options=AnalysisOptions(top_k=services.top_k, use_llm=body.use_ai),
         )
         visit_id, saved_at = uuid.uuid4().hex, records.now()
         entry = records.json_safe(records.checks_entry(

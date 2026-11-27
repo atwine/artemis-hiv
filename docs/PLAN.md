@@ -501,6 +501,11 @@ results they will value. These were raised and set aside, not dropped.
   skip).
 - The tray's not-reached step names stay just under the contrast standard (owner kept the design's
   grey); the accessibility test skips that one check.
+- Raised by the checkpoint 3 reviews (2026-11-27), small and not needed for the first version:
+  an "Other (say why)" comment made only of invisible characters (a zero-width space) counts as a
+  comment, as it always has; the `visit_check` table's `plan` and `agentic_enabled` columns are
+  no longer written with anything but empty values (dropping them needs a migration);
+  `clinic_db.import_schedule` is now used only by the tests to load the demo day.
 
 ## Phase 8: Stretch, as time allows
 

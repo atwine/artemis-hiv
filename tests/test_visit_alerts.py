@@ -55,7 +55,7 @@ def _run(pid: str, model: StubModel):
         today_note=p["today_encounter"]["note"],
         rag=rag,
         llm_client=model,
-        options=AnalysisOptions(use_llm=True, agentic=False),
+        options=AnalysisOptions(use_llm=True),
     )
 
 

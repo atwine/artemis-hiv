@@ -46,7 +46,7 @@ class TodayEncounter(BaseModel):
 
 
 class PatientRecord(BaseModel):
-    """A patient as stored in Data/*.json, checked once when it's loaded. Unknown fields are kept,
+    """A patient as read from the database (backend/patients_db.py), checked once when it's loaded. Unknown fields are kept,
     so the visit check sees the record exactly as written."""
 
     model_config = ConfigDict(extra="allow")

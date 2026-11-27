@@ -92,7 +92,7 @@ def test_visit_check_is_the_same_analysis_as_the_app(api):
     patient = next(p for p in read_patients() if p["patient_id"] == "P001")
     direct = run_visit_analysis(
         patient=copy.deepcopy(patient), today_note=P001_NOTE, rag=fake_search(),
-        llm_client=FakeModel(replies_for("P001")), options=AnalysisOptions(top_k=5, use_llm=True, agentic=False),
+        llm_client=FakeModel(replies_for("P001")), options=AnalysisOptions(top_k=5, use_llm=True),
     )
     assert body["status"] == direct.status
     assert body["ai_review"] == direct.screening_outcome == "ok"

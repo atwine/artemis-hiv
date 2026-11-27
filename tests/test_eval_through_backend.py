@@ -52,7 +52,7 @@ def test_a_case_gives_what_the_app_gives_for_its_patient():
     note = case.patient["today_encounter"]["note"]
     direct = run_visit_analysis(patient=copy.deepcopy(case.patient), today_note=note, rag=fake_search(),
                                 llm_client=FakeModel(replies_for("P001")),
-                                options=AnalysisOptions(top_k=5, use_llm=True, agentic=False))
+                                options=AnalysisOptions(top_k=5, use_llm=True))
     plan = management_plan(patient=copy.deepcopy(case.patient), today_note=note, rag=fake_search(),
                            llm_client=FakeModel(replies_for("P001")))
     assert rec["alerts"] == json.loads(json.dumps([asdict(a) for a in direct.alerts], default=str))

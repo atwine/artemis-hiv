@@ -55,14 +55,12 @@ class _CutPlanModel:
 
 
 def test_a_cut_off_plan_is_reported_as_cut_off() -> None:
-    from artemis.visit import AnalysisOptions, run_visit_analysis
+    from artemis.visit import management_plan
     from modules.rag_engine import RagEngine
 
     rag = RagEngine(project_root=h.ROOT, guideline_paths=[], embedder=h.FakeEmbedder(), vector_store=h.FakeStore([]))
-    result = run_visit_analysis(
-        patient=_patient("P002"), today_note="", rag=rag, llm_client=_CutPlanModel(), options=AnalysisOptions(agentic=True)
-    )
-    assert "cut_off" in result.agentic_result.plan_issues
+    plan = management_plan(patient=_patient("P002"), today_note="", rag=rag, llm_client=_CutPlanModel())
+    assert "cut_off" in plan.plan_issues
 
 
 class _ClashModel:

@@ -61,3 +61,38 @@ def test_a_model_server_that_does_not_answer_stops_the_run_and_saves_nothing(tmp
 
     assert code == 2
     assert sorted((tmp_path / "runs").rglob("*.json")) == []
+
+
+def test_a_case_the_backend_refuses_stops_the_run_and_says_what_it_cost(tmp_path, monkeypatch, capsys):
+    """Code review, 2026-11-27: a case the backend refuses (here a note over the visit check's limit)
+    stopped the run with a traceback. It stops cleanly now, saves nothing for that case, and says
+    what was spent on it, since a cost that isn't saved isn't counted against the cap."""
+    import shutil
+
+    from artemis import config
+    from artemis.ai.client import OpenAICompatConfig
+    from tests.api_fakes import FakeModel, fake_search, replies_for
+
+    cases = tmp_path / "cases"
+    cases.mkdir()
+    shutil.copy(ROOT / "eval" / "cases" / "P001.json", cases / "P001.json")
+    case = json.loads((cases / "P001.json").read_text(encoding="utf-8"))
+    case["patient"]["today_encounter"]["note"] = "x" * 20001
+    (cases / "P001.json").write_text(json.dumps(case), encoding="utf-8")
+
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    run_phase2 = importlib.import_module("run_phase2")
+    settings = OpenAICompatConfig(base_url="http://model.invalid/v1", model="stand-in")
+    monkeypatch.setattr(run_phase2, "model_config", lambda model, temperature: (settings, 0.0, 0.0))
+    monkeypatch.setattr(run_phase2, "OpenAICompatClient", lambda cfg: FakeModel(replies_for("P001")))
+    monkeypatch.setattr(run_phase2, "load_dotenv", lambda *a, **k: None)
+    monkeypatch.setattr(run_phase2, "server_strings", lambda: [])
+    monkeypatch.setattr(config, "guideline_search", lambda *a, **k: fake_search())
+
+    code = run_phase2.main(["--model", "llama-a100", "--repeats", "1", "--root", str(tmp_path / "out"),
+                            "--cases", str(cases)])
+
+    assert code == 2
+    assert sorted((tmp_path / "out").rglob("*.json")) == []
+    out = capsys.readouterr().out
+    assert "stopped at P001 #1" in out and "422" in out and "$0.0000" in out

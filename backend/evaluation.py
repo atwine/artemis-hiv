@@ -32,7 +32,12 @@ _SEARCH_DOWN = "The guideline search is unavailable, so no plan was made."
 
 
 class RunFailed(RuntimeError):
-    """The backend refused a request, so there is no record to save."""
+    """The backend refused a request, so there is no record to save. `cost_usd` is what the run
+    had already spent on the model, which no saved record counts."""
+
+    def __init__(self, message: str, cost_usd: float = 0.0) -> None:
+        super().__init__(message)
+        self.cost_usd = cost_usd
 
 
 def memory_engine() -> Engine:
@@ -92,7 +97,10 @@ def run_case(case: Case, client: Any, rag: Any, *, label: str, repeat: int, pric
     metered = MeteredClient(client)
     note = (case.patient.get("today_encounter") or {}).get("note") or ""
     t0 = time.perf_counter()
-    check, plan = run_visit(case.patient, note, metered, rag)
+    try:
+        check, plan = run_visit(case.patient, note, metered, rag)
+    except RunFailed as exc:
+        raise RunFailed(str(exc), cost_of(metered.usages, price_in, price_out)) from exc
     seconds = time.perf_counter() - t0
     alerts = [{k: v for k, v in a.items() if k != "severity"} for a in check["alerts"]]  # severity: the API's copy
     return {

@@ -53,22 +53,14 @@ def test_a_continue_decision_stays_green() -> None:
     assert (view.regimen_label, view.regimen_tone) == ("Continue", "green")
 
 
-def test_a_plan_that_failed_its_checks_is_shown_with_a_warning() -> None:
-    from artemis.plan.view import plan_html, read_plan
+def test_a_plan_that_failed_its_checks_keeps_its_issues() -> None:
+    """The issues go with the plan (the reply adds the warning: tests/test_compare_plans.py)."""
+    from artemis.plan.view import read_plan
 
-    view = read_plan(_baseline_plan("P005"), clinician_plan_written=False, issues=["problem_0_missing_key:clinician_plan_for_this_problem"])
-    html = plan_html(view)
-    assert "This plan failed the app's own checks" in html
-    assert "No plan to compare" in html
-    assert "AGREE" not in html and "Matches your plan" not in html
-
-
-def test_model_text_is_escaped_on_screen() -> None:
-    from artemis.plan.view import plan_html, read_plan
-
-    plan = json.loads(_baseline_plan("P001"))
-    plan["problems"][0]["action"] = "<script>x</script>"
-    assert "<script>" not in plan_html(read_plan(json.dumps(plan), clinician_plan_written=True))
+    issues = ["problem_0_missing_key:clinician_plan_for_this_problem"]
+    view = read_plan(_baseline_plan("P005"), clinician_plan_written=False, issues=issues)
+    assert view.issues == issues
+    assert view.items and {i.verdict_label for i in view.items} == {"No plan to compare"}
 
 
 # The AI step that writes the plan.

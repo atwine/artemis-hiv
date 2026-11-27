@@ -423,3 +423,33 @@ def test_the_backend_code_never_deletes_or_updates_rows():
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr in {"delete", "merge"}:
                 found.append(f"{path.name}:{node.lineno}: .{node.func.attr}()")
     assert found == []
+
+
+def test_a_whole_visit_only_ever_adds_rows(api):
+    """Code review, 2026-11-27: reading the code can't catch a field changed and saved, so this
+    watches every statement the database gets through a whole visit (add a case, check, decide,
+    change a decision, finalize, plan twice, reopen, the board) and requires that none is an
+    UPDATE or DELETE."""
+    from sqlalchemy import event
+
+    statements = []
+    event.listen(api.engine, "before_cursor_execute",
+                 lambda conn, cursor, statement, *a: statements.append(statement.lstrip().split(None, 1)[0].upper()))
+    local = headers_for("local")
+    added = api.client.post("/api/patients", json={**NEW_CASE, "patient_id": "P900"}, headers=local)
+    assert added.status_code == 201, added.text
+    visit = api.client.post("/api/patients/P001/visits", json=NOTE, headers=local).json()
+    alerts = [c["extension"]["alert_id"] for c in visit["cards"]]
+    assert alerts
+    first = [{"alert_id": a, "action": "Acknowledge"} for a in alerts]
+    changed = [{"alert_id": alerts[0], "action": "Override", "reason": "Patient declined"}]
+    for decisions in (first, changed):
+        r = api.client.post(f"/api/visits/{visit['visit_id']}/decisions", json={"decisions": decisions}, headers=local)
+        assert r.status_code == 200, r.text
+    assert api.client.post(f"/api/visits/{visit['visit_id']}/finalize", headers=local).status_code == 200
+    for _ in range(2):
+        assert api.client.post(f"/api/visits/{visit['visit_id']}/plan", headers=local).status_code == 200
+    assert api.client.get(f"/api/visits/{visit['visit_id']}", headers=local).status_code == 200
+    assert api.client.get("/api/clinic-day", headers=local).status_code == 200
+    assert statements and "INSERT" in statements
+    assert {s for s in statements if s in {"UPDATE", "DELETE"}} == set()

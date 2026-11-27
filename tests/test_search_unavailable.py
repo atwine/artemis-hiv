@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from artemis.ai.client import ChatReply
-from artemis.visit import AnalysisOptions, compute_overall_status, run_visit_analysis
+from artemis.visit import AnalysisOptions, compute_overall_status, management_plan, run_visit_analysis
 from modules.rag_engine import RagEngine
 from tests import pipeline_harness as h
 from artemis.screen_text import status_banners
@@ -40,27 +40,24 @@ def _run(embedder, model):
         vector_store=h.FakeStore(json.loads((h.GOLDEN_DIR / "corpus.json").read_text(encoding="utf-8"))),
     )
     p = next(p for p in h.patients() if p["patient_id"] == "P001")
-    messages = []
-    result = run_visit_analysis(
+    return run_visit_analysis(
         patient=p, today_note=p["today_encounter"]["note"], rag=rag, llm_client=model,
-        options=AnalysisOptions(use_llm=True, agentic=False), on_status=lambda label, state: messages.append(label),
+        options=AnalysisOptions(use_llm=True),
     )
-    return result, messages
 
 
 def test_a_search_model_that_did_not_load_switches_the_ai_review_off() -> None:
     model = _CountingModel()
-    result, messages = _run(_BrokenSearchModel(), model)
+    result = _run(_BrokenSearchModel(), model)
     assert model.calls == 0
     assert result.screening_outcome == "search_unavailable"
     assert result.alerts and all(a.source == "rule" for a in result.alerts)  # rule alerts only
     assert all(r["retrieved"] == [] for r in result.results)  # no references from a broken search
-    assert any("search model did not load" in m for m in messages)
 
 
 def test_the_rule_checks_still_run_when_the_search_model_did_not_load() -> None:
-    working, _ = _run(h.FakeEmbedder(), _CountingModel())
-    broken, _ = _run(_BrokenSearchModel(), _CountingModel())
+    working = _run(h.FakeEmbedder(), _CountingModel())
+    broken = _run(_BrokenSearchModel(), _CountingModel())
     rules = lambda r: [a.alert_id for a in r.alerts if a.source == "rule"]  # noqa: E731
     assert rules(broken) == rules(working)
 
@@ -86,9 +83,8 @@ def test_with_the_search_down_the_plan_step_does_not_run_either() -> None:
                     vector_store=h.FakeStore(json.loads((h.GOLDEN_DIR / "corpus.json").read_text(encoding="utf-8"))))
     p = next(p for p in h.patients() if p["patient_id"] == "P001")
     model = _CountingModel()
-    result = run_visit_analysis(patient=p, today_note=p["today_encounter"]["note"], rag=rag, llm_client=model,
-                                options=AnalysisOptions(use_llm=True, agentic=True))
-    assert model.calls == 0 and result.agentic_result is None
+    plan = management_plan(patient=p, today_note=p["today_encounter"]["note"], rag=rag, llm_client=model)
+    assert model.calls == 0 and plan is None
 
 
 def test_with_the_ai_switched_off_a_broken_search_is_still_reported() -> None:
@@ -96,6 +92,6 @@ def test_with_the_ai_switched_off_a_broken_search_is_still_reported() -> None:
                     vector_store=h.FakeStore(json.loads((h.GOLDEN_DIR / "corpus.json").read_text(encoding="utf-8"))))
     p = next(p for p in h.patients() if p["patient_id"] == "P001")
     result = run_visit_analysis(patient=p, today_note=p["today_encounter"]["note"], rag=rag, llm_client=None,
-                                options=AnalysisOptions(use_llm=False, agentic=False))
+                                options=AnalysisOptions(use_llm=False))
     assert result.screening_outcome == "search_unavailable"
 

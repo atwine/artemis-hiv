@@ -53,7 +53,8 @@ If the AI review failed or was cut short, a banner says so: a missing AI review 
 a clean result. If the guideline search isn't working, a red banner says the AI review is off
 and only the rule checks ran.
 
-Every check is saved, so you can come back to a visit later without running the AI again.
+Every check is saved, so you can come back to a visit later without running the AI again. If
+saving fails, a banner says so, and that check's alerts can't be decided.
 
 ### 4. Acknowledge or override each alert
 

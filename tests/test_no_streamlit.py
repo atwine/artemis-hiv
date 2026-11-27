@@ -48,7 +48,8 @@ def test_the_requirements_have_no_streamlit():
 def test_the_old_app_files_are_gone():
     for rel in ("app.py", "ui", "agentic_demo.py", "artemis/visit_record.py", "artemis/session_keys.py",
                 "Data/mock_patients.json", "Data/custom_patients.json", "Data/demo_day_patients.json",
-                "Data/demo_clinic_day.json", "scripts/run_baseline.py", "scripts/load_patients.py"):
+                "Data/demo_clinic_day.json", "scripts/run_baseline.py", "scripts/load_patients.py",
+                "artemis/patient/store.py", "scripts/import_visit_records.py"):
         assert not (ROOT / rel).exists(), rel
 
 
