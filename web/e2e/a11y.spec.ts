@@ -8,6 +8,8 @@ import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { runRuleChecks } from "./checks";
+
 import { E2E } from "./ports";
 import { DESIGN_PLAN, standIn, stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
 
@@ -45,7 +47,7 @@ async function audit(page: Page, screen: string) {
 const tray = (page: Page) => page.getByRole("region", { name: "Visit steps" });
 
 async function runChecks(page: Page) {
-  await tray(page).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible(CHECK_WAIT);
 }
 
@@ -118,9 +120,7 @@ test("a visit: notes, checks running, results, alert, override, finalize and the
     await held;
     await route.continue();
   });
-  await page.getByRole("checkbox", { name: "AI review" }).check();
-  await page.getByRole("checkbox", { name: "AI review" }).uncheck(); // no model call
-  await tray(page).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Checks running" })).toBeVisible();
   await audit(page, "checks-running");
   release();
@@ -158,7 +158,7 @@ test("a visit: notes, checks running, results, alert, override, finalize and the
 
 test("a quiet visit with the AI review off (GREEN)", async ({ page }) => {
   await page.goto("/patients/P002");
-  await tray(page).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("list", { name: "What was checked" })).toBeVisible(CHECK_WAIT);
   await audit(page, "green-ai-off");
 });
@@ -170,7 +170,7 @@ test("too many checks: the error message", async ({ page }) => {
       : route.continue(),
   );
   await page.goto("/patients/P001");
-  await tray(page).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
   await audit(page, "error-too-many");
 });

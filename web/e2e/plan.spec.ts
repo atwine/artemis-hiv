@@ -3,6 +3,8 @@
 // real reply is its refusal; a made, flagged or failed plan is a stand-in reply (no model is called).
 import { expect, test, type Page } from "@playwright/test";
 
+import { runRuleChecks } from "./checks";
+
 import { PLAN, standIn } from "./stubs";
 
 const CHECK_WAIT = { timeout: 5 * 60 * 1000 };
@@ -11,7 +13,7 @@ const tray = (page: Page) => page.getByRole("region", { name: "Visit steps" });
 /** Jane Roe's visit (P002, no alerts), checked with the rule checks only. */
 async function checkedVisit(page: Page) {
   await page.goto("/patients/P002");
-  await tray(page).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible(CHECK_WAIT);
 }
 

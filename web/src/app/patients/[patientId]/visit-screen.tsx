@@ -67,7 +67,7 @@ type CheckMutation = UseMutationResult<VisitCheck, Error, CheckRequest>;
 
 function Visit({ patient, reopened, onCreated }: { patient: PatientDetail; reopened?: SavedVisit; onCreated: (visitId: string) => void }) {
   const [note, setNote] = useState(reopened?.note ?? String(patient.today_encounter.note ?? ""));
-  const [useAi, setUseAi] = useState(false);
+  const [useAi, setUseAi] = useState(true); // on by default; the doctor can switch it off (owner, 2026-11-27)
   const router = useRouter();
   const queryClient = useQueryClient();
   const check: CheckMutation = useMutation({

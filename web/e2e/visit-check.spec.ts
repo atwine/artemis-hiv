@@ -7,6 +7,8 @@ import path from "node:path";
 
 import { expect, test } from "@playwright/test";
 
+import { runRuleChecks } from "./checks";
+
 import type { VisitCheck } from "../src/lib/api/client";
 import { SOURCE_LABEL } from "../src/lib/alerts";
 
@@ -34,7 +36,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   const notes = page.getByRole("textbox", { name: "Clinical notes" });
   await expect(notes).toHaveValue("Routine follow-up. No issues."); // today's note from the record
   await notes.fill("Routine follow-up. No complaints. Continue TLD, 3-month refill.");
-  await expect(page.getByRole("checkbox", { name: "AI review" })).not.toBeChecked();
+  await expect(page.getByRole("checkbox", { name: "AI review" })).toBeChecked(); // on by default; switched off below
   const tray = page.getByRole("region", { name: "Visit steps" });
   // Hold the check for 1.5 s before it goes to the real backend, so the running screen is always
   // there to see, however fast the backend answers.
@@ -44,7 +46,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
     await route.continue();
   });
   const replyPromise = page.waitForResponse((r) => r.url().endsWith("/api/patients/P001/visits") && r.request().method() === "POST");
-  await tray.getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   // While they run (S3): the first check of a run loads the search model, so this shows for a while.
   await expect(page.getByRole("heading", { name: "Checking John's visit. Rule checks only." })).toBeVisible();
   await expect(page.getByRole("region", { name: "Checks running" })).toContainText("His regimen, 2 lab results, today's notes.");
@@ -152,7 +154,7 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
 test("finalize stays locked until every alert has an answer", async ({ page }) => {
   await page.goto("/patients/P001");
   const tray = page.getByRole("region", { name: "Visit steps" });
-  await tray.getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
   await tray.getByRole("button", { name: /^Finalize, / }).click(); // the tray's Finalize step ("Finalize, to do")
   const finalize = page.getByRole("region", { name: "Finalize" });
@@ -165,7 +167,7 @@ test("finalize stays locked until every alert has an answer", async ({ page }) =
 // screen never looks like a skipped one. Jane Roe (P002) raises no alert; the AI review is off.
 test("a quiet visit says what was checked", async ({ page }) => {
   await page.goto("/patients/P002");
-  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   const quiet = page.getByRole("region", { name: "Check results" });
   await expect(quiet).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(quiet.getByRole("heading", { level: 2 })).toHaveText(
@@ -204,8 +206,24 @@ test("too many checks: the API's message, and the note kept", async ({ page }) =
   await page.goto("/patients/P001");
   const notes = page.getByRole("textbox", { name: "Clinical notes" });
   await notes.fill("Note written before the limit was hit.");
-  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("main").getByRole("alert")).toHaveText(TOO_MANY);
   await expect(notes).toHaveValue("Note written before the limit was hit.");
   await expect(page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" })).toBeEnabled();
+});
+
+// The AI review starts switched on (owner, 2026-11-27); the doctor can switch it off. The browser
+// tests' backend has no model server, so a check with it on is refused before anything runs or is
+// spent, and the screen shows the backend's reason with the note kept.
+test("the AI review starts on; with no model server the check is refused, nothing is run", async ({ page }) => {
+  await page.goto("/patients/P001");
+  const ai = page.getByRole("checkbox", { name: "AI review" });
+  await expect(ai).toBeChecked();
+  const notes = page.getByRole("textbox", { name: "Clinical notes" });
+  await notes.fill("A note kept through the refusal.");
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toHaveText("No AI model server is set up.");
+  await expect(page.getByRole("region", { name: "Check results" })).toHaveCount(0);
+  await expect(notes).toHaveValue("A note kept through the refusal.");
+  await expect(ai).toBeChecked();
 });

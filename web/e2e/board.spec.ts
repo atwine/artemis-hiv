@@ -3,6 +3,8 @@
 // "Continue review" reopening the saved visit (GET /api/visits/{id}) without a new check.
 import { expect, test } from "@playwright/test";
 
+import { runRuleChecks } from "./checks";
+
 import { E2E } from "./ports";
 
 test("the clinic day shows who is waiting, and a checked visit moves to Needs you", async ({ page }) => {
@@ -20,7 +22,7 @@ test("the clinic day shows who is waiting, and a checked visit moves to Needs yo
   // Run Sam Kato's checks (rules only), then go back to the day.
   await waiting.getByRole("link", { name: /Sam Kato/ }).click();
   await expect(page.getByRole("heading", { name: "Sam Kato", level: 1 })).toBeVisible();
-  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
   await page.getByRole("link", { name: "← Back to day" }).click();
 
