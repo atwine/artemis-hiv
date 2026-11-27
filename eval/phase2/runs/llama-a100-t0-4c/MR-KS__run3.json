@@ -1,0 +1,367 @@
+{
+ "case_id": "MR-KS",
+ "model": "llama-a100-t0-4c",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 3,
+ "temperature": 0.0,
+ "seconds": 48.5,
+ "calls": [
+  {
+   "prompt_tokens": 1381,
+   "total_tokens": 1420,
+   "completion_tokens": 39,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 3799,
+   "total_tokens": 4695,
+   "completion_tokens": 896,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 2215,
+   "total_tokens": 2733,
+   "completion_tokens": 518,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "AMBER",
+ "screening_outcome": "ok",
+ "alerts": [
+  {
+   "alert_id": "tdf_nsaid_use",
+   "title": "NSAID use mentioned while on TDF",
+   "message": "NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "EFV"
+    ],
+    "keyword_hits": [
+     "ibuprofen"
+    ]
+   },
+   "query_hint": "TDF NSAID renal risk monitoring",
+   "source": "rule"
+  },
+  {
+   "alert_id": "possible_proteinuria",
+   "title": "Proteinuria mentioned in notes",
+   "message": "Proteinuria (or trace protein) is mentioned in notes. Consider follow-up assessment and management per local guidance.",
+   "evidence": {
+    "keyword_hits": [
+     "proteinuria",
+     "trace protein",
+     "protein trace"
+    ]
+   },
+   "query_hint": "proteinuria dipstick trace protein evaluation",
+   "source": "rule"
+  },
+  {
+   "alert_id": "suboptimal_bp_missed_amlodipine",
+   "title": "BP control concern with missed amlodipine doses",
+   "message": "Notes suggest suboptimal BP control and missed amlodipine doses. Consider adherence counseling and BP follow-up.",
+   "evidence": {
+    "control_term_hits": [
+     "sub-optimally controlled",
+     "bp is sub"
+    ],
+    "missed_term_hits": [
+     "missing amlodipine"
+    ]
+   },
+   "query_hint": "hypertension suboptimal control missed amlodipine adherence",
+   "source": "rule"
+  },
+  {
+   "alert_id": "MRKS_001",
+   "title": "TDF and Kidney Function",
+   "message": "Guidelines suggest monitoring kidney function for patients on TDF. Patient has a creatinine level of 112 umol/L, which is within normal limits. However, it is essential to continue monitoring kidney function, especially with the patient's history of occasionally missing amlodipine doses, which may affect blood pressure and, in turn, kidney function. Non-drug causes such as dehydration should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Continue monitoring serum creatinine and eGFR",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 260,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_001",
+     "title": "TDF and Kidney Function",
+     "message": "Guidelines suggest monitoring kidney function for patients on TDF. Patient has a creatinine level of 112 umol/L, which is within normal limits. However, it is essential to continue monitoring kidney function, especially with the patient's history of occasionally missing amlodipine doses, which may affect blood pressure and, in turn, kidney function. Non-drug causes such as dehydration should also be considered.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Continue monitoring serum creatinine and eGFR",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      },
+      {
+       "page_number": 260,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_002",
+   "title": "Amlodipine and EFV Interaction",
+   "message": "Guidelines mention potential interactions between EFV and dihydropyridines like amlodipine. Although no dose adjustments are required, it is crucial to monitor blood pressure closely, especially since the patient occasionally misses amlodipine doses. The current blood pressure is 146/94 mmHg, indicating sub-optimal control.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "moderate",
+    "recommended_action": "Monitor blood pressure closely",
+    "citations": [
+     {
+      "page_number": 195,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_002",
+     "title": "Amlodipine and EFV Interaction",
+     "message": "Guidelines mention potential interactions between EFV and dihydropyridines like amlodipine. Although no dose adjustments are required, it is crucial to monitor blood pressure closely, especially since the patient occasionally misses amlodipine doses. The current blood pressure is 146/94 mmHg, indicating sub-optimal control.",
+     "issue_type": "drug_interaction",
+     "severity": "moderate",
+     "recommended_action": "Monitor blood pressure closely",
+     "citations": [
+      {
+       "page_number": 195,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_003",
+   "title": "Back Pain and TDF",
+   "message": "Patient complains of chronic musculoskeletal back pain. TDF is known to cause bone-related issues, including lower back pain and bone aches. However, the patient's occupation as a truck driver could also be a contributing factor. Further evaluation is needed to determine the cause of the back pain.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "moderate",
+    "recommended_action": "Evaluate back pain considering both TDF side effects and occupational factors",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_003",
+     "title": "Back Pain and TDF",
+     "message": "Patient complains of chronic musculoskeletal back pain. TDF is known to cause bone-related issues, including lower back pain and bone aches. However, the patient's occupation as a truck driver could also be a contributing factor. Further evaluation is needed to determine the cause of the back pain.",
+     "issue_type": "toxicity",
+     "severity": "moderate",
+     "recommended_action": "Evaluate back pain considering both TDF side effects and occupational factors",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_004",
+   "title": "Blood Pressure Management",
+   "message": "Guidelines suggest follow-up in 4 weeks if blood pressure is ≥ 140/90 mmHg. The patient's current blood pressure is 146/94 mmHg, indicating the need for closer monitoring and potentially adjusting the hypertension management plan.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Follow-up in 4 weeks to assess blood pressure control",
+    "citations": [
+     {
+      "page_number": 193,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_004",
+     "title": "Blood Pressure Management",
+     "message": "Guidelines suggest follow-up in 4 weeks if blood pressure is ≥ 140/90 mmHg. The patient's current blood pressure is 146/94 mmHg, indicating the need for closer monitoring and potentially adjusting the hypertension management plan.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Follow-up in 4 weeks to assess blood pressure control",
+     "citations": [
+      {
+       "page_number": 193,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "MRKS_005",
+   "title": "Monitoring for TDF Toxicity",
+   "message": "Guidelines recommend monitoring for TDF toxicity, including lactic acidosis, severe hepatomegaly with steatosis, and lower back pain. Although the patient's current labs are within normal limits, ongoing monitoring is essential, especially given the patient's long-term use of TDF.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Continue regular monitoring for signs of TDF toxicity",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "MRKS_005",
+     "title": "Monitoring for TDF Toxicity",
+     "message": "Guidelines recommend monitoring for TDF toxicity, including lactic acidosis, severe hepatomegaly with steatosis, and lower back pain. Although the patient's current labs are within normal limits, ongoing monitoring is essential, especially given the patient's long-term use of TDF.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Continue regular monitoring for signs of TDF toxicity",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_nsaid_use": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1"
+  ],
+  "possible_proteinuria": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p24_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p38_c1"
+  ],
+  "suboptimal_bp_missed_amlodipine": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p40_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p18_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1"
+  ],
+  "MRKS_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "MRKS_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2"
+  ],
+  "MRKS_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "MRKS_004": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1"
+  ],
+  "MRKS_005": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "TDF side effects",
+   "Ibuprofen interactions",
+   "EFV toxicity",
+   "Amlodipine interactions",
+   "TDF renal monitoring",
+   "Pregnancy risk"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"MRKS_001\",\n    \"title\": \"TDF and Kidney Function\",\n    \"message\": \"Guidelines suggest monitoring kidney function for patients on TDF. Patient has a creatinine level of 112 umol/L, which is within normal limits. However, it is essential to continue monitoring kidney function, especially with the patient's history of occasionally missing amlodipine doses, which may affect blood pressure and, in turn, kidney function. Non-drug causes such as dehydration should also be considered.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Continue monitoring serum creatinine and eGFR\",\n    \"citations\": [{\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}, {\"page_number\": 260, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_002\",\n    \"title\": \"Amlodipine and EFV Interaction\",\n    \"message\": \"Guidelines mention potential interactions between EFV and dihydropyridines like amlodipine. Although no dose adjustments are required, it is crucial to monitor blood pressure closely, especially since the patient occasionally misses amlodipine doses. The current blood pressure is 146/94 mmHg, indicating sub-optimal control.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor blood pressure closely\",\n    \"citations\": [{\"page_number\": 195, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_003\",\n    \"title\": \"Back Pain and TDF\",\n    \"message\": \"Patient complains of chronic musculoskeletal back pain. TDF is known to cause bone-related issues, including lower back pain and bone aches. However, the patient's occupation as a truck driver could also be a contributing factor. Further evaluation is needed to determine the cause of the back pain.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Evaluate back pain considering both TDF side effects and occupational factors\",\n    \"citations\": [{\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_004\",\n    \"title\": \"Blood Pressure Management\",\n    \"message\": \"Guidelines suggest follow-up in 4 weeks if blood pressure is ≥ 140/90 mmHg. The patient's current blood pressure is 146/94 mmHg, indicating the need for closer monitoring and potentially adjusting the hypertension management plan.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Follow-up in 4 weeks to assess blood pressure control\",\n    \"citations\": [{\"page_number\": 193, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1\"}]\n  },\n  {\n    \"alert_id\": \"MRKS_005\",\n    \"title\": \"Monitoring for TDF Toxicity\",\n    \"message\": \"Guidelines recommend monitoring for TDF toxicity, including lactic acidosis, severe hepatomegaly with steatosis, and lower back pain. Although the patient's current labs are within normal limits, ongoing monitoring is essential, especially given the patient's long-term use of TDF.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Continue regular monitoring for signs of TDF toxicity\",\n    \"citations\": [{\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p44_c2",
+    "page_number": 195,
+    "quote": "ome and less side effects (see tables 57 and 58). Table 57: Interactions of hypertension medicine INTERACTIONS OF HYPERTENSION MEDICINE WITH ARVs Hypertension Drug Interaction with ART Action required Dihydropyridines (amlodipine and Nifedipine) Efavirenz and Niverapine could potentially decrease drug levels No dose adjustments are required LPV/r, ATV/r and DRV/r increase drug levels Use Nifedipine with caution Losartan Efavirenz may reduce formation of active form of losarta"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 272,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p42_c1",
+    "page_number": 193,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Step 2: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks Amlodipine 5mg Amlodipine 5mg Bendroflu- methiazide 2.5mg once daily HC3 Step 3: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks Amlodipine 5mg + Valsartan 80mg Amlodipine 5mg + Losartan 25mg Bendroflu- methiazide 5mg once daily HC3 Step 4: If BP is ≥ 140/90mmHg, Follow-up in 4 weeks Amlodipine 10mg + Valsartan 80mg Amlodipine 10mg + Losart"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p27_c2",
+    "page_number": 178,
+    "quote": "Nevirapine and some protease inhibitors. Monitor closely for toxicity. * TB medicines and Fluconazole: Rifampicin increases the metabolism of Fluconazole, thus increase the dose of Fluconazole by 50%. * Pregnant and breastfeeding women: Whereas there is no data against the use of Amphotericin B in pregnancy, it is not encouraged. There have been numerous reports of multiple congenital abnormalities associated with long-term use of high dose Fluconazole in the first trimester "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 270,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p37_c2",
+    "page_number": 188,
+    "quote": "r to the next level if; * 1. Unable to meet glycemic target * 2.DM complications have set in (foot ulcers, visual Table 55: Sulfonylurea oral glucose lowering agents with starting and escalating doses Medication Start- ing dose Next dose if glucose target not met Next dose if glucose target not met Next dose if glucose target not met Next dose if glucose target not met Range of daily dosage (mg) Glimepiride Gliclazide controlled release Glipizide 2mg 30 mg 4mg 60 mg 6mg 80 mg"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p36_c1",
+    "page_number": 269,
+    "quote": "Table 78: Toxicities/side effects of commonly used ARVs and recommended substitutions MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR ADULTS AND ADOLESCENTS DTG Hyperglycaemia Insomnia Hepatotoxicity Hypersensitivity reactions Excessive drinking/eating, excessive urination Difficulty falling asleep Nausea, vomiting, right upper quadrant abdominal pain, yellow urine or eyes Skin itching (localized or diffuse), dizziness, faintness, d"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p45_c1",
+    "page_number": 196,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 Table 58: Potential side effects of hypertension medicine POTENTIAL SIDE EFFECTS OF HYPERTENSION MEDICINES Drug Common Side Effects Management Amlodipine/Nifedipine Lower limb edema (1-10%) Observe on treatment. Consider alternative medicine if excessive or persistent after using a diuretic. Headache (7%), Palpitations (1-3%) Usually self-limiting, observe on treatment. Male sexual disor"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 260,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Uncertain\", \"reason\": \"Uncertain: the provided guideline excerpts do not mention the side effects of TDF, 3TC, or EFV, and the patient's symptoms and lab results do not clearly indicate drug toxicity from their current ART medications\"}, \n\"problems\": [{\"problem\": \"Chronic musculoskeletal back pain\", \"action\": \"Continue PRN ibuprofen for back pain\", \"reason\": \"Patient complains of persistent dull aching lower back pain and the clinician attributes it to occupational causes\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan already addresses this issue by recommending PRN ibuprofen for back pain\"}}, \n{\"problem\": \"Sub-optimally controlled hypertension\", \"action\": \"Adhere to amlodipine and lifestyle modifications\", \"reason\": \"Patient's BP is 146/94 and they admit to occasionally missing amlodipine doses\", \"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"The clinician's plan encourages lifestyle modifications and adherence to antihypertensives\"}}, \n{\"problem\": \"Trace proteinuria\", \"action\": \"Monitor proteinuria and adjust antihypertensive treatment as needed\", \"reason\": \"Trace proteinuria was noted on dipstick, likely secondary to hypertension\", \"clinician_plan_for_this_problem\": {\"decision\": \"Gap\", \"explanation\": \"The clinician's plan mentions trace proteinuria but does not specify a plan for monitoring or adjusting treatment\"}}, \n{\"problem\": \"Potential drug toxicity from TDF, 3TC, or EFV\", \"action\": \"Uncertain: monitor patient's symptoms and lab results\", \"reason\": \"Uncertain: the provided guideline excerpts do not mention the side effects of TDF, 3TC, or EFV\", \"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"The clinician's plan does not address potential drug toxicity from the patient's current ART medications\"}}], \n\"monitoring_plan\": \"Monitor BP, proteinuria, and creatinine in 6 months, and adjust treatment as needed\", \n\"patient_counselling\": [\"Adhere to amlodipine and lifestyle modifications to control hypertension\", \"Continue PRN ibuprofen for back pain\", \"Monitor and report any changes in symptoms or lab results to the clinician\"]}",
+ "plan_issues": []
+}

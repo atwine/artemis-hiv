@@ -1,0 +1,210 @@
+{
+ "case_id": "EX2",
+ "model": "llama-a100-t0-4c",
+ "model_id": "ibnzterrell/Meta-Llama-3.3-70B-Instruct-AWQ-INT4",
+ "repeat": 2,
+ "temperature": 0.0,
+ "seconds": 27.1,
+ "calls": [
+  {
+   "prompt_tokens": 968,
+   "total_tokens": 1007,
+   "completion_tokens": 39,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 3080,
+   "total_tokens": 3554,
+   "completion_tokens": 474,
+   "prompt_tokens_details": null
+  },
+  {
+   "prompt_tokens": 1705,
+   "total_tokens": 2027,
+   "completion_tokens": 322,
+   "prompt_tokens_details": null
+  }
+ ],
+ "cost_usd": 0.0,
+ "status": "RED",
+ "screening_outcome": "ok",
+ "alerts": [
+  {
+   "alert_id": "EX2_001",
+   "title": "Acute Kidney Injury",
+   "message": "Guidelines state TDF can cause chronic kidney disease and acute kidney injury. Patient has acute kidney injury with creatinine 2.4 mg/dL, up from 0.9 mg/dL. Dehydration from gastroenteritis may also contribute to kidney injury. TDF may be a contributing factor, but non-drug causes like dehydration should also be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "toxicity",
+    "severity": "high",
+    "recommended_action": "Monitor renal function, consider alternative to TDF",
+    "citations": [
+     {
+      "page_number": 270,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_001",
+     "title": "Acute Kidney Injury",
+     "message": "Guidelines state TDF can cause chronic kidney disease and acute kidney injury. Patient has acute kidney injury with creatinine 2.4 mg/dL, up from 0.9 mg/dL. Dehydration from gastroenteritis may also contribute to kidney injury. TDF may be a contributing factor, but non-drug causes like dehydration should also be considered.",
+     "issue_type": "toxicity",
+     "severity": "high",
+     "recommended_action": "Monitor renal function, consider alternative to TDF",
+     "citations": [
+      {
+       "page_number": 270,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_002",
+   "title": "Severe Gastroenteritis",
+   "message": "Patient has severe gastroenteritis with dehydration, which may be exacerbated by TDF. Guidelines recommend monitoring for gastrointestinal symptoms. Empiric antibiotics are planned, but potential drug interactions with ART should be considered.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "drug_interaction",
+    "severity": "moderate",
+    "recommended_action": "Monitor for drug interactions, adjust treatment as needed",
+    "citations": [
+     {
+      "page_number": 162,
+      "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_002",
+     "title": "Severe Gastroenteritis",
+     "message": "Patient has severe gastroenteritis with dehydration, which may be exacerbated by TDF. Guidelines recommend monitoring for gastrointestinal symptoms. Empiric antibiotics are planned, but potential drug interactions with ART should be considered.",
+     "issue_type": "drug_interaction",
+     "severity": "moderate",
+     "recommended_action": "Monitor for drug interactions, adjust treatment as needed",
+     "citations": [
+      {
+       "page_number": 162,
+       "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "EX2_003",
+   "title": "Monitoring Gap",
+   "message": "Guidelines recommend regular laboratory screening for patients on ART. Patient's viral load and creatinine levels have been monitored, but other laboratory tests (e.g., LFTs) may be necessary to assess treatment efficacy and potential toxicity.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "low",
+    "recommended_action": "Consider additional laboratory tests",
+    "citations": [
+     {
+      "page_number": 253,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "EX2_003",
+     "title": "Monitoring Gap",
+     "message": "Guidelines recommend regular laboratory screening for patients on ART. Patient's viral load and creatinine levels have been monitored, but other laboratory tests (e.g., LFTs) may be necessary to assess treatment efficacy and potential toxicity.",
+     "issue_type": "monitoring_gap",
+     "severity": "low",
+     "recommended_action": "Consider additional laboratory tests",
+     "citations": [
+      {
+       "page_number": 253,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "EX2_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1"
+  ],
+  "EX2_002": [
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2"
+  ],
+  "EX2_003": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "TDF kidney toxicity",
+   "DTG interaction with antibiotics",
+   "TDF monitoring tests",
+   "3TC side effects",
+   "DTG in kidney injury",
+   "TDF in dehydration"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"EX2_001\",\n    \"title\": \"Acute Kidney Injury\",\n    \"message\": \"Guidelines state TDF can cause chronic kidney disease and acute kidney injury. Patient has acute kidney injury with creatinine 2.4 mg/dL, up from 0.9 mg/dL. Dehydration from gastroenteritis may also contribute to kidney injury. TDF may be a contributing factor, but non-drug causes like dehydration should also be considered.\",\n    \"issue_type\": \"toxicity\",\n    \"severity\": \"high\",\n    \"recommended_action\": \"Monitor renal function, consider alternative to TDF\",\n    \"citations\": [{\"page_number\": 270, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1\"}]\n  },\n  {\n    \"alert_id\": \"EX2_002\",\n    \"title\": \"Severe Gastroenteritis\",\n    \"message\": \"Patient has severe gastroenteritis with dehydration, which may be exacerbated by TDF. Guidelines recommend monitoring for gastrointestinal symptoms. Empiric antibiotics are planned, but potential drug interactions with ART should be considered.\",\n    \"issue_type\": \"drug_interaction\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Monitor for drug interactions, adjust treatment as needed\",\n    \"citations\": [{\"page_number\": 162, \"chunk_id\": \"hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2\"}]\n  },\n  {\n    \"alert_id\": \"EX2_003\",\n    \"title\": \"Monitoring Gap\",\n    \"message\": \"Guidelines recommend regular laboratory screening for patients on ART. Patient's viral load and creatinine levels have been monitored, but other laboratory tests (e.g., LFTs) may be necessary to assess treatment efficacy and potential toxicity.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"low\",\n    \"recommended_action\": \"Consider additional laboratory tests\",\n    \"citations\": [{\"page_number\": 253, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2\"}]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+    "page_number": 270,
+    "quote": "270 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT TDF Chronic kidney disease, acute kidney injury and Fanconi syndrome Decreased bone mineral density Lactic acidosis or severe Hepatomegaly with steatosis Lower back pain, change in urine volume Bone aches, spontaneous fractures Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or discomfort, decrease in appetite. Do LFTs and RFTs. If deranged (elevated liver enzymes"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p11_c2",
+    "page_number": 162,
+    "quote": "RAL with DTG or LPV/r after TB Treatment) AZT or ABC → +3TC+LPV/r Substitute Rifampicin with Rifabutin OR Double the am and pm dose of LPV/r AZT or ABC→+3TC+DRV/r Substitute Rifampicin with Rifabutin Note: for patients on rifapentine based regimen, look out for potential drug-drug interactions 162"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 253,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p6_c1",
+    "page_number": 239,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 * If weight does not allow for use of the currently available DTG formulations (containing 50mg). * Diabetic patients. * An EFV based regimen may also be considered if the client needs concurrent TB treatment and doubling the dose of DTG is not an option (See Chapter 6, Table 39 and Table 40). **When to use TDF+3TC + ATV/r or TAF+FTC+ATV/r** Adults and adolescents should only be initiate"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c2",
+    "page_number": 270,
+    "quote": "n Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing, nausea, vomiting, diarrhoea, and abdominal cramping Substitute with TDF If TDF is contraindicated: substitute with AZT AZT Severe anaemia, neutropenia Lactic acidosis or severe hepatomegaly with steatosis Lipoatrophy, lipodystrophy, myopathy Severe vomiting Easy fatigability, breathlessness, recurrent infections Exhaustion or extreme fatigue, muscle cramps or pain, headache. Abdominal pain or di"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p8_c2",
+    "page_number": 241,
+    "quote": "0kg should be initiated on Abacavir + Lamivudine + Dolutegravir (ABC + 3TC + DTG) (Table 74) If DTG is contra-indicated, initiate on Abacavir + Lamivudine+ Ritonavir-boosted Lopinavir (ABC+3TC+LPV/r). LPV/r syrup, pellets or tablets should be prescribed/dispensed on the basis of the individual child's ABILITY to CORRECTLY take the specific formulation. As soon as the child is able to take pellets, these will be prescribed instead of syrup. Likewise, as soon as a child is able"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c3",
+    "page_number": 253,
+    "quote": "events shall be transported to the nearby Hub using laboratory Hub transport system d. For each encounter, the health worker should screen for any suspected ADRs as per screening tool above at triage. e. Clinicians should further evaluate reported signs and symptoms. f. Where applicable the clinician should request for additional tests (including laboratory and radiological) for patients with signs or symptoms suggesting ADRs. 253"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p39_c1",
+    "page_number": 272,
+    "quote": "272 MAJOR ADVERSE/ TOXICITY EVENTS PRESENTING SIGNS/ SYMPTOMS SUGGESTED MANAGEMENT REGIMENS FOR CHILDREN 0-10 YEARS ABC Hypersensitivity reaction Skin itching (localized or diffuse) dizziness, faintness, difficulty breathing. Substitute with AZT. EFV Persistent central nervous system toxicity (such as dizziness, insomnia, abnormal dreams) or mental symptoms (anxiety, depression, mental confusion) Convulsions Hepatotoxicity Severe skin and hypersensitivity reactions Gynecomast"
+   },
+   {
+    "chunk_id": "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2",
+    "page_number": 189,
+    "quote": "r experienced client transitioning to DTG: flowchart **Risk factors for hyperglycaemia** Age \\u2265 30 years Family history of DM Patient's with history of Hypertension BMI \\u2265 25 Kg/m\\u00b2 Start: 1. New client initiating on ART or experienced client transitioning to DTG 2. Decision: Known diabetic? - If YES, proceed to \"Check glucose*\" - If NO, proceed to Decision: \"2 or more risk factors for hyperglycemia?\" - If YES, proceed to \"Check glucose*\" - If NO, proceed to \"Init"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\": {\"decision\": \"Switch\", \"reason\": \"Patient has acute kidney injury with elevated creatinine levels, which may be a sign of TDF toxicity.\"},\n\"problems\": [\n{\"problem\": \"Acute kidney injury\", \"action\": \"Stop TDF permanently and consider alternative regimen\", \"reason\": \"Elevated creatinine levels and acute kidney injury may be related to TDF toxicity.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician is already considering stopping TDF permanently.\"}},\n{\"problem\": \"Severe gastroenteritis with dehydration\", \"action\": \"Continue IV fluid resuscitation and empiric antibiotics\", \"reason\": \"Patient has severe symptoms of gastroenteritis and dehydration.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Agree\", \"explanation\": \"Clinician's plan already includes IV fluid resuscitation and empiric antibiotics.\"}},\n{\"problem\": \"HIV viral load suppression\", \"action\": \"Monitor viral load\", \"reason\": \"Patient's latest viral load is suppressed, but regimen change may affect viral load.\", \n\"clinician_plan_for_this_problem\": {\"decision\": \"Not Addressed\", \"explanation\": \"Clinician's plan does not mention monitoring viral load.\"}}\n],\n\"monitoring_plan\": \"Monitor creatinine levels, viral load, and adjust regimen as needed.\",\n\"patient_counselling\": [\"Adhere to the new regimen if switched\", \"Monitor for signs of kidney injury\", \"Keep hydrated to prevent dehydration\"]}",
+ "plan_issues": []
+}
