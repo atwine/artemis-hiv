@@ -1,8 +1,8 @@
 """The add-case form's pick lists (plan for the add-case request, unit A3).
 
 Owner, 2026-11-26: "A, this laptop only" (the same rule as every other route but health). The
-lists are the ones the Streamlit form already uses, so a choice the website offers is one the
-add-case route accepts.
+lists come from the same code the add-case route checks with, so a choice the website offers is
+one the route accepts.
 """
 
 from __future__ import annotations

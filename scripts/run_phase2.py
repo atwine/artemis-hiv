@@ -36,7 +36,9 @@ from artemis import config  # noqa: E402
 from artemis.evaluation.cases import NO_KEY, load_cases  # noqa: E402
 from artemis.evaluation.scrub import scrub, server_strings  # noqa: E402
 from artemis.evaluation.runner import (BudgetExceeded, check_budget, effective_temperature, pending_runs,  # noqa: E402
-                                       run_case, run_file_name, run_label, spent_in)
+                                       run_file_name, run_label, spent_in)
+from backend.evaluation import RunFailed, run_case  # noqa: E402  (through the backend itself, plan 4C.5)
+from backend.patients_db import UnplacedField  # noqa: E402
 
 OPENROUTER = "https://openrouter.ai/api/v1"
 # Worst case for one visit check, measured over all 330 Phase 2 checks (2026-11-25): 17,344 tokens
@@ -130,11 +132,18 @@ def main(argv: Optional[list] = None) -> int:
         except BudgetExceeded:
             print(f"stopped before {case.case_id} #{k}: one more check could pass the ${args.cap:.2f} cap")
             return 1
-        record = scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
+        try:
+            record = scrub(run_case(case, client, rag, label=label, repeat=k, price_in=price_in,
                                     price_out=price_out, temperature=temperature), secrets)
-        if record["llm_error"]:
+        except (RunFailed, UnplacedField) as exc:
+            # Not saved, so its cost isn't counted against the cap: say what it was.
+            cost = getattr(exc, "cost_usd", 0.0)
+            print(f"stopped at {case.case_id} #{k}: the backend refused it ({scrub(str(exc), secrets)[:300]}); "
+                  f"nothing saved for it; ${cost:.4f} spent on it, not counted in the saved runs")
+            return 2
+        if record["screening_outcome"] == "failed":  # the model server did not answer
             # Not saved: a server outage is not a result, and a saved run would be skipped on resume.
-            print(f"stopped at {case.case_id} #{k}: the model call failed ({record['llm_error']}); nothing saved for it")
+            print(f"stopped at {case.case_id} #{k}: the model server did not answer; nothing saved for it")
             return 2
         _write(out / run_file_name(case.case_id, k), record)
         spent += record["cost_usd"]

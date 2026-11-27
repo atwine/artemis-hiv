@@ -178,3 +178,11 @@ the default at the time. Running them again needs `--temperature 0.2` and writes
 folders; it doesn't overwrite the saved runs. A default Llama run resumes into
 `llama-a100-t0`, which already holds all 55 runs, so it does nothing. Runs resume where they
 stopped and refuse to start if the worst-case cost would pass the $5 cap. The A100 needs eduVPN and `LLM_BASE_URL` in `.env`; OpenRouter needs `OPENROUTER_API_KEY`.
+
+Since 2026-11-27 (plan 4C.5) a new run goes through the backend itself: each case's patient into a
+throwaway database as the app stores it, then "run checks" and "Compare plans" through the
+backend's routes (`backend/evaluation.py`). The saved runs here came from the older all-in-one
+check; `scripts/check_phase4.py` replays GLM's final run through the new path and gets the same
+alerts, passages and scores. New run records have no `llm_error` (the backend never saves the
+model's raw error); a run whose model server didn't answer has `screening_outcome` "failed" and is
+not saved.

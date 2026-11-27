@@ -1,17 +1,10 @@
-"""Safety net for every test: visit records never go to the real Data folder.
-
-Also the `api` fixture: the backend with stand-in model, search and database."""
+"""The `api` fixture: the backend with stand-in model, search and an in-memory database."""
 
 from __future__ import annotations
 
 from typing import Any, Iterator, Optional
 
 import pytest
-
-
-@pytest.fixture(autouse=True)
-def _visit_records_in_a_temporary_folder(tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("ARTEMIS_VISIT_RECORDS_DIR", str(tmp_path_factory.mktemp("visit_records")))
 
 
 class Api:

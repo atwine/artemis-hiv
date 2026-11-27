@@ -387,15 +387,38 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       retried ("A, keep a good plan"); plans and checks share the 6-a-minute limit ("A, one shared
       limit"). Measured: the Phase 4 check MET, with 30 of 33 saved plans the same through the new
       route and the 3 that failed still failed.
-- [ ] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
+- [x] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
       app does. Check: the Phase 4 check still matches 2B's numbers.
-- [ ] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
+      Done 2026-11-27 (owner: "A, through the backend"): `backend/evaluation.py` puts each case's
+      patient into a throwaway database as the app stores it, presses "run checks" and "Compare
+      plans" through the backend's routes, and reads the record from what was saved;
+      `scripts/run_phase2.py` and the Phase 4 check both use it. Run records drop `llm_error`; a
+      run whose model server didn't answer (`screening_outcome` "failed") is still not saved.
+      Measured: the Phase 4 check MET through this path (33 runs, same alerts, passages and
+      scores; 30 plans the same, the 3 that failed their checks never shown clean).
+- [x] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
       (`artemis/visit_record.py`, `Data/visit_records`), the screen's remembered values
       (`artemis/session_keys.py`), the candidate-rules file and button, the Ollama client settings only the
       Streamlit screen uses, the Streamlit screen tests, `streamlit` in the requirements, and
       the Streamlit fields added to its add-case form; README and "How the app works.md" rewritten
       for the website.
-- [ ] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
+      Done 2026-11-27: all of the above, with the candidate-rules code, the native Ollama client
+      (Ollama stays reachable through the OpenAI-style setting), the old patient and demo-day
+      files in Data/, scripts/load_patients.py, run_baseline.py and import_visit_records.py. The
+      backend's last borrowings moved into it first (saving and reopening a visit:
+      backend/records.py; the Finalize rules now read plain decisions: artemis/review.py).
+      streamlit, pandas and ollama came out of the requirements by hand ("A, by hand"), with the
+      7 packages only Streamlit needed. The golden test runs through the backend's path; proven
+      the same first (eval/phase4/golden-switch-4c6.txt). tests/test_no_streamlit.py fails if
+      Streamlit comes back. Measured: 583 passed, 0 failed, with real Postgres; the Phase 4
+      check MET; Semgrep clean.
+- [x] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
+      Done 2026-11-27: each new table's rules were approved when it was added (patients: "A, keep
+      the rules"; clinic days: "A, yes as written"; plans: "Yes, same rules"), so no cell of the
+      grid changed. ACCESS.md section 1 now names every table under its data kind. New tests in
+      tests/test_access.py: every table in the code belongs to a data kind with a grid row (a
+      planted table fails it), only GET and POST routes exist, and the backend never deletes or
+      updates a row. 66 access tests pass.
 - [ ] 4C.8 Owner decisions, asked one at a time: whether the evaluation's cases and results stay as
       files in git (research records) or go into the database; whether the guideline index stays in
       Chroma or moves into Postgres (pgvector); whether the check limit's count goes into Postgres;
@@ -482,6 +505,11 @@ results they will value. These were raised and set aside, not dropped.
   today; the doctor uses the browser's Back (raised in the add-case review, 2026-11-27).
 - Compare plans: the AI quotes the doctor's note word for word for each problem; today the
   "About your plan" column shows the AI's own one-sentence note instead (owner, 2026-11-27).
+- Raised by the checkpoint 3 reviews (2026-11-27), small and not needed for the first version:
+  an "Other (say why)" comment made only of invisible characters (a zero-width space) counts as a
+  comment, as it always has; the `visit_check` table's `plan` and `agentic_enabled` columns are
+  no longer written with anything but empty values (dropping them needs a migration);
+  `clinic_db.import_schedule` is now used only by the tests to load the demo day.
 
 ## Phase 8: Stretch, as time allows
 

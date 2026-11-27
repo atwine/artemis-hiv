@@ -7,16 +7,14 @@ database; it creates the tables there with Alembic and drops them at the end.
 
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 
 import pytest
-from sqlmodel import Session, SQLModel, create_engine, select
+from sqlmodel import Session, SQLModel, create_engine
 
-from artemis import visit_record
 from backend import records
-from backend.records import AlertDecision, VisitCheck
+from backend.records import VisitCheck
 from tests.api_fakes import memory_engine
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,74 +37,6 @@ def _finalized(visit_id="v1", patient_id="P001", saved_at="2026-11-20T08:05:00+0
         "event": "finalized", "visit_id": visit_id, "patient_id": patient_id, "saved_at": saved_at,
         "decisions": [{"alert_id": "a1", "source": "rule", "title": "T", "severity": None, "action": action, "reason": "", "comment": ""}],
     }
-
-
-def _folder(tmp_path, *entries):
-    folder = tmp_path / "visit_records"
-    for e in entries:
-        visit_record.append_entry(folder, e)
-    return folder
-
-
-def _counts(engine):
-    with Session(engine) as s:
-        return len(s.exec(select(VisitCheck)).all()), len(s.exec(select(AlertDecision)).all())
-
-
-def test_import_the_files(tmp_path):
-    engine = memory_engine()
-    folder = _folder(tmp_path, _checks(), _finalized())
-    with Session(engine) as s:
-        report = records.import_folder(s, folder)
-    assert report == {"checks_added": 1, "decisions_added": 1, "finalized_added": 1, "already_there": 0, "unreadable_lines": 0, "skipped": 0}
-    with Session(engine) as s:
-        row = s.get(VisitCheck, "v1")
-        assert row.note == "Routine follow-up."
-        assert row.origin == "file import"
-        assert row.alerts[0]["alert_id"] == "a1"
-        d = s.exec(select(AlertDecision)).one()
-        assert (d.visit_id, d.alert_id, d.action) == ("v1", "a1", "Acknowledge")
-
-
-def test_import_twice_adds_nothing_the_second_time(tmp_path):
-    engine = memory_engine()
-    folder = _folder(tmp_path, _checks(), _finalized(), _finalized(saved_at="2026-11-20T09:00:00+00:00", action="Override"))
-    with Session(engine) as s:
-        records.import_folder(s, folder)
-    with Session(engine) as s:
-        report = records.import_folder(s, folder)
-    assert report["checks_added"] == 0 and report["decisions_added"] == 0
-    assert report["already_there"] == 3
-    assert _counts(engine) == (1, 2)
-
-
-def test_import_counts_what_it_cannot_use(tmp_path):
-    engine = memory_engine()
-    folder = _folder(tmp_path, _checks())
-    path = next(folder.glob("*.jsonl"))
-    with path.open("a", encoding="utf-8") as fh:
-        fh.write("{half a line\n")
-        fh.write(json.dumps(_finalized(visit_id=None)) + "\n")  # an older Finalize with no visit id
-        fh.write(json.dumps(_finalized(visit_id="never-ran")) + "\n")  # a Finalize for a run not in the files
-    with Session(engine) as s:
-        report = records.import_folder(s, folder)
-    assert report["checks_added"] == 1
-    assert report["unreadable_lines"] == 1
-    assert report["skipped"] == 2
-    assert _counts(engine) == (1, 0)
-
-
-def test_import_leaves_the_files_alone(tmp_path):
-    folder = _folder(tmp_path, _checks(), _finalized())
-    before = {p.name: p.read_bytes() for p in folder.iterdir()}
-    with Session(memory_engine()) as s:
-        records.import_folder(s, folder)
-    assert {p.name: p.read_bytes() for p in folder.iterdir()} == before
-
-
-def test_import_of_a_missing_folder_is_empty(tmp_path):
-    with Session(memory_engine()) as s:
-        assert records.import_folder(s, tmp_path / "none")["checks_added"] == 0
 
 
 def test_saved_check_reads_back_the_same(tmp_path):
@@ -184,13 +114,14 @@ def test_on_real_postgres(tmp_path):
     try:
         with engine.connect() as conn:
             assert compare_metadata(MigrationContext.configure(conn), SQLModel.metadata) == []
-        folder = _folder(tmp_path, _checks(), _finalized())
         with Session(engine) as s:
-            records.import_folder(s, folder)
+            records.save_check(s, _checks(), origin="api")
+            records.add_decisions(s, "v1", _finalized()["decisions"], saved_at="2026-11-20T08:05:00+00:00")
+            records.add_finalize(s, "v1", _finalized()["decisions"], finalized_at="2026-11-20T08:06:00+00:00")
         with Session(engine) as s:
-            assert records.import_folder(s, folder)["already_there"] == 2
             assert records.entry_from_check(s.get(VisitCheck, "v1")) == _checks()
             assert records.latest_decisions(s, "v1")["a1"].action == "Acknowledge"
+            assert records.finalized_at(s, "v1") == "2026-11-20T08:06:00+00:00"
         # "Compare plans" (migration 0006): plans are added, the latest one is shown.
         import datetime as _dt
 
@@ -207,16 +138,6 @@ def test_on_real_postgres(tmp_path):
     finally:
         engine.dispose()
         command.downgrade(cfg, "base")
-
-
-def test_an_older_file_that_says_yellow_is_stored_as_amber(tmp_path):
-    engine = memory_engine()
-    old = _checks()
-    old["status"] = "YELLOW"
-    with Session(engine) as s:
-        records.import_folder(s, _folder(tmp_path, old))
-    with Session(engine) as s:
-        assert s.get(VisitCheck, "v1").status == "AMBER"
 
 
 def test_the_amber_migration_renames_saved_rows_and_is_safe_twice(tmp_path):
@@ -247,30 +168,3 @@ def test_the_amber_migration_renames_saved_rows_and_is_safe_twice(tmp_path):
     command.downgrade(cfg, "0001")
     assert statuses() == {"v1": "YELLOW", "v2": "RED", "v3": "YELLOW"}
     engine.dispose()
-
-
-def test_a_finalized_file_visit_is_finalized_in_the_database(tmp_path):
-    from backend.records import VisitFinalize
-
-    engine = memory_engine()
-    folder = _folder(tmp_path, _checks(), _finalized())
-    with Session(engine) as s:
-        records.import_folder(s, folder)
-        records.import_folder(s, folder)  # a second run adds nothing
-    with Session(engine) as s:
-        rows = s.exec(select(VisitFinalize)).all()
-        assert len(rows) == 1
-        assert rows[0].visit_id == "v1"
-        assert records.iso(rows[0].finalized_at) == "2026-11-20T08:05:00+00:00"
-        assert records.finalized_at(s, "v1") == "2026-11-20T08:05:00+00:00"
-
-
-def test_a_later_decision_in_the_files_reopens_the_visit(tmp_path):
-    """Two Finalize lines: the later one counts, and the visit is finalized as of it."""
-    engine = memory_engine()
-    folder = _folder(tmp_path, _checks(), _finalized(), _finalized(saved_at="2026-11-20T09:00:00+00:00", action="Override"))
-    with Session(engine) as s:
-        records.import_folder(s, folder)
-        assert records.finalized_at(s, "v1") == "2026-11-20T09:00:00+00:00"
-        records.add_decisions(s, "v1", _finalized()["decisions"], saved_at="2026-11-20T09:30:00+00:00")
-        assert records.finalized_at(s, "v1") is None

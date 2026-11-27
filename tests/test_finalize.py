@@ -127,23 +127,6 @@ def test_finalize_takes_no_body_fields(api):
     assert r.status_code == 422
 
 
-def test_finalize_again_on_a_visit_imported_from_the_files(api, tmp_path):
-    """A Finalize copied from the Streamlit files reads back like one made through the API."""
-    from artemis import visit_record
-    from backend import records
-    from tests.test_visit_records_db import _checks, _finalized
-
-    folder = tmp_path / "visit_records"
-    for e in (_checks(), _finalized()):
-        visit_record.append_entry(folder, e)
-    with Session(api.engine) as s:
-        records.import_folder(s, folder)
-    r = _finalize(api, "v1")
-    assert r.status_code == 200, r.text
-    assert r.json()["finalized_at"] == "2026-11-20T08:05:00+00:00"
-    assert r.json()["decisions"][0]["saved_at"] == "2026-11-20T08:05:00+00:00"
-
-
 def test_two_finalizes_of_the_same_decisions_save_one_row(api):
     """Even if two Finalize calls race, the database keeps one row per set of decisions."""
     from backend import records

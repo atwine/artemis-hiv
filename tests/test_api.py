@@ -92,7 +92,7 @@ def test_visit_check_is_the_same_analysis_as_the_app(api):
     patient = next(p for p in read_patients() if p["patient_id"] == "P001")
     direct = run_visit_analysis(
         patient=copy.deepcopy(patient), today_note=P001_NOTE, rag=fake_search(),
-        llm_client=FakeModel(replies_for("P001")), options=AnalysisOptions(top_k=5, use_llm=True, agentic=False),
+        llm_client=FakeModel(replies_for("P001")), options=AnalysisOptions(top_k=5, use_llm=True),
     )
     assert body["status"] == direct.status
     assert body["ai_review"] == direct.screening_outcome == "ok"
@@ -411,13 +411,12 @@ def test_card_heading_and_references_are_the_screens_own_words(api):
     from backend.records import VisitCheck
 
     with Session(api.engine) as s:
-        from artemis.visit_record import restore
-        from backend.records import entry_from_check
+        from backend.records import entry_from_check, saved_alerts
 
-        restored = restore(entry_from_check(s.get(VisitCheck, visit["visit_id"])))
-    for card, result in zip(visit["cards"], restored["analysis_results"]):
-        alert = result["alert"]
-        heading, lines = alert_references(alert, result["retrieved"])
+        restored = saved_alerts(entry_from_check(s.get(VisitCheck, visit["visit_id"])))
+    for card, result in zip(visit["cards"], restored):
+        alert = result.alert
+        heading, lines = alert_references(alert, result.retrieved)
         assert card["extension"]["heading"] == alert_heading(alert)
         assert card["extension"]["references_heading"] == heading
         assert card["extension"]["references"] == lines

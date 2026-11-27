@@ -4,22 +4,21 @@ from datetime import date
 from typing import Any, Dict, List
 
 from artemis.rules.checks import Alert
-from artemis.ai.client import ChatMessage, ChatReply, OllamaClient
+from artemis.ai.client import ChatMessage, ChatReply
 from artemis.ai.screening import generate_llm_screening_alerts
 from artemis.patient.record import PatientContext
 from artemis.guidelines.vector_store import VectorSearchResult
 
 
-class _FakeOllamaClient(OllamaClient):  # type: ignore[misc]
-    def __init__(self, payload: str) -> None:  # pragma: no cover - trivial
-        # Bypass base class network init; we only need chat() behaviour.
-        self._model = "fake"
-        self._host = "http://localhost"
-        self._num_ctx = None
+class _FakeClient:
+    """A stand-in model client that gives back one preconfigured reply."""
+
+    model = "fake"
+
+    def __init__(self, payload: str) -> None:
         self._payload = payload
 
     def chat(self, messages: List[ChatMessage], format=None, options_override=None) -> ChatReply:  # noqa: A002
-        # Return the preconfigured payload regardless of messages.
         return ChatReply(self._payload)
 
 
@@ -64,7 +63,7 @@ def test_llm_screening_maps_issues_to_alerts() -> None:
         "\"citations\": [{\"page_number\": 101, \"chunk_id\": \"c_101_1\"}]"
         "}]"
     )
-    client = _FakeOllamaClient(payload)
+    client = _FakeClient(payload)
     ctx = _build_dummy_context()
 
     alerts = generate_llm_screening_alerts(
@@ -84,7 +83,7 @@ def test_llm_screening_maps_issues_to_alerts() -> None:
 
 
 def test_llm_screening_empty_json_returns_no_alerts() -> None:
-    client = _FakeOllamaClient("[]")
+    client = _FakeClient("[]")
     ctx = _build_dummy_context()
 
     alerts = generate_llm_screening_alerts(

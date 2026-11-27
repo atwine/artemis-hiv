@@ -65,7 +65,7 @@ class Patient(SQLModel, table=True):
     complaints_symptoms: str = Field(default="", sa_column=Column(Text, nullable=False))
     examination_findings: str = Field(default="", sa_column=Column(Text, nullable=False))
     prior_history: str = Field(default="", sa_column=Column(Text, nullable=False))
-    origin: str = Field(max_length=16)  # "seed" (loaded from Data/) or "added" (through the API)
+    origin: str = Field(max_length=16)  # "seed" (the made-up patients, from the backup) or "added" (through the API)
     added_at: datetime.datetime = Field(sa_column=Column(DateTime(timezone=True), nullable=False))
 
 

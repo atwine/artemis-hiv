@@ -1,4 +1,5 @@
-"""Phase 2: the runner saves what scoring needs, guards the budget, and resumes without repeating work."""
+"""Phase 2: the runner guards the budget and resumes without repeating work. What a run record
+holds is tests/test_eval_through_backend.py (plan 4C.5)."""
 
 from __future__ import annotations
 
@@ -8,48 +9,11 @@ from typing import List
 
 import pytest
 
-from artemis.ai.client import ChatReply
 from artemis.evaluation.cases import load_cases
-from tests import pipeline_harness as h
 
 ROOT = Path(__file__).resolve().parents[1]
-ALERT = {"alert_id": "A1", "title": "Creatinine overdue on TDF", "message": "Last creatinine 478 days ago.",
-         "issue_type": "monitoring_gap", "severity": "moderate", "recommended_action": "Repeat creatinine.", "citations": []}
-
-
-class _Stub:
-    """A model that answers like a server: a reply, then usage with a cost."""
-
-    model = "stub-model"
-
-    def chat(self, messages, format=None, options_override=None):  # noqa: A002
-        usage = {"prompt_tokens": 100, "completion_tokens": 10, "cost": 0.001}
-        return ChatReply(json.dumps([ALERT]) if isinstance(format, dict) else "{}", finish_reason="stop", usage=usage)
-
-
 def _case(case_id: str):
     return next(c for c in load_cases(ROOT / "eval" / "cases") if c.case_id == case_id)
-
-
-def _rag():
-    from modules.rag_engine import RagEngine
-
-    return RagEngine(project_root=h.ROOT, guideline_paths=[], embedder=h.FakeEmbedder(), vector_store=h.FakeStore([]))
-
-
-def test_a_run_record_holds_what_the_scoring_needs() -> None:
-    from artemis.evaluation.runner import run_case
-    from artemis.evaluation.scoring import score_run
-
-    case = _case("P001")
-    rec = run_case(case, _Stub(), _rag(), label="stub", repeat=1)
-    assert (rec["case_id"], rec["model"], rec["model_id"], rec["repeat"]) == ("P001", "stub", "stub-model", 1)
-    assert rec["screening"]["parse_status"] == "parsed_nonempty"
-    assert len(rec["calls"]) >= 2 and rec["cost_usd"] == pytest.approx(0.001 * len(rec["calls"]))
-    assert "Creatinine overdue on TDF" in [a["title"] for a in rec["alerts"]]
-    assert score_run(case, rec["alerts"]).caught == {"creatinine_overdue"}
-    assert rec["temperature"] == 0  # the value used, never None: None meant 0.2 before the switch
-    json.dumps(rec)  # everything in it can be saved
 
 
 def test_cost_comes_from_the_server_or_else_from_the_price() -> None:

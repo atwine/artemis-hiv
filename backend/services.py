@@ -9,20 +9,21 @@ from __future__ import annotations
 import datetime
 import functools
 import logging
+import subprocess
 import time
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, create_engine
 
-from artemis import visit_record
 from backend import clinic_db, patients_db
 from backend.settings import PROJECT_ROOT, Settings
 
 logger = logging.getLogger(__name__)
 
-TOP_K = 5  # the Streamlit screen's default number of guideline passages per alert
+TOP_K = 5  # guideline passages per alert (the Phase 1 screen's default, kept)
 
 
 def _no_case_writer(record: Dict[str, Any], date: datetime.date, time: str) -> None:
@@ -88,6 +89,19 @@ def _model_client() -> Optional[Any]:
     return OpenAICompatClient(cfg) if cfg is not None else None
 
 
+@functools.lru_cache(maxsize=4)
+def app_version(project_root: Path) -> str:
+    """The code version saved with each visit check: the git commit, or "unknown"."""
+    try:
+        out = subprocess.run(
+            ["git", "describe", "--always", "--dirty"],
+            cwd=project_root, capture_output=True, text=True, timeout=5, check=True,
+        )
+        return out.stdout.strip() or "unknown"
+    except (OSError, subprocess.SubprocessError):
+        return "unknown"
+
+
 def default_services(settings: Settings) -> Services:
     engine = create_engine(settings.database_url, pool_pre_ping=True) if settings.database_url else None
     if engine is None:
@@ -97,6 +111,6 @@ def default_services(settings: Settings) -> Services:
         search=_search,
         model_client=_model_client,
         engine=engine,
-        app_version=visit_record.app_version(PROJECT_ROOT),
+        app_version=app_version(PROJECT_ROOT),
         add_case=database_case_writer(engine),
     )

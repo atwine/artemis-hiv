@@ -1,0 +1,15 @@
+Plan 4C.6, 2026-11-27: the golden pipeline test moved from app.py (Streamlit) to the backend's path
+(backend/evaluation.py run_visit: the patient into a throwaway database, then the check and Compare plans).
+Compared with tests/golden/pipeline.json as saved before the switch:
+
+Kintu-Test 001: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'plan', 'plan', 'screening'], after ['plan', 'screening', 'plan', 'plan', 'plan']
+P001: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'screening'], after ['plan', 'screening', 'plan']
+P002: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'plan', 'plan', 'screening'], after ['plan', 'screening', 'plan', 'plan', 'plan']
+P003: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'plan', 'plan', 'screening'], after ['plan', 'screening', 'plan', 'plan', 'plan']
+P004: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'plan', 'plan', 'screening'], after ['plan', 'screening', 'plan', 'plan', 'plan']
+P005: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'plan', 'plan', 'screening'], after ['plan', 'screening', 'plan', 'plan', 'plan']
+P006: identical 7/7 (status, alerts, results, screening_parse_status, screening_outcome, plan_text, plan_issues); model calls: same calls with the same prompts: True; order before ['plan', 'plan', 'screening'], after ['plan', 'screening', 'plan']
+
+Dropped from the golden file: status_log (the Streamlit screen's progress messages) and llm_error
+(the model's raw error text, which the backend never saves). The plan call now comes after the check,
+as Compare plans is pressed after it; its prompt is unchanged.

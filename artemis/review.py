@@ -1,14 +1,17 @@
-"""Alert review and Finalize rules (moved out of app.py in fix 9)."""
+"""Alert review and Finalize rules (moved out of app.py in fix 9), on plain decisions.
+
+A decision is an alert's action ("Acknowledge" or "Override"), its override reason and its
+comment, as the backend saves them (plan 4C.6: no longer the Streamlit screen's remembered values).
+"""
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping
+from typing import Mapping, Sequence, Tuple
 
 from artemis.rules.checks import Alert
-from artemis.session_keys import action_key, comment_key, reason_key
 
-# The reasons a clinician can give for overriding an alert (the Streamlit screen and the backend):
-# the design's list (docs/design/brief.md), owner's decision 2026-11-26 ("A, design's list").
+# The reasons a clinician can give for overriding an alert: the design's list
+# (docs/design/brief.md), owner's decision 2026-11-26 ("A, design's list").
 OVERRIDE_REASONS = [
     "Already done, not documented",
     "Test not available here",
@@ -22,55 +25,23 @@ OTHER_REASON = "Other (say why)"
 # still needs its comment.
 _NEEDS_A_COMMENT = {OTHER_REASON, "Other"}
 
-
-def reason_options(saved: str) -> List[str]:
-    """The reasons the picker offers: the list, plus an older reason a reopened visit was saved
-    with, so it still shows instead of breaking the picker. `saved` is the reason the visit was
-    saved with, not the picker's current value, so the options stay the same while it changes."""
-    options = ["", *OVERRIDE_REASONS]
-    return options + [saved] if saved and saved not in options else options
+Decision = Tuple[str, str, str]  # (action, reason, comment)
 
 
-def alert_resolution_ok(state: Mapping[str, Any], alert_id: str) -> bool:
-    action = state.get(action_key(alert_id))
+def decision_ok(action: str, reason: str, comment: str) -> bool:
+    """Whether a decision settles its alert: an acknowledgement, or an override with a reason
+    ("Other" also needs a comment: an override that says only "Other" can't be reviewed later,
+    fix 9, D11)."""
     if action == "Acknowledge":
         return True
-
     if action == "Override":
-        reason = (state.get(reason_key(alert_id)) or "").strip()
+        reason = (reason or "").strip()
         if reason in _NEEDS_A_COMMENT:
-            # An override that says only "Other" can't be reviewed later (fix 9, D11).
-            return bool((state.get(comment_key(alert_id)) or "").strip())
+            return bool((comment or "").strip())
         return bool(reason)
-
     return False
 
 
-def can_finalize(state: Mapping[str, Any], alerts: List[Alert]) -> bool:
-    if not state.get("analysis_ran", False):
-        return False
-
-    if not alerts:
-        return True
-
-    return all(alert_resolution_ok(state, a.alert_id) for a in alerts)
-
-
-def decisions_from_state(state: Mapping[str, Any], alerts: List[Alert]) -> List[Dict[str, Any]]:
-    """The clinician's decision on each alert, as saved in the visit record at Finalize (fix 9)."""
-    out: List[Dict[str, Any]] = []
-    for a in alerts:
-        action = state.get(action_key(a.alert_id)) or "Unreviewed"
-        override = action == "Override"
-        out.append(
-            {
-                "alert_id": a.alert_id,
-                "source": a.source,
-                "title": a.title,
-                "severity": (a.evidence or {}).get("severity"),
-                "action": action,
-                "reason": (state.get(reason_key(a.alert_id)) or "").strip() if override else "",
-                "comment": (state.get(comment_key(a.alert_id)) or "").strip() if override else "",
-            }
-        )
-    return out
+def all_decided(alerts: Sequence[Alert], decisions: Mapping[str, Decision]) -> bool:
+    """Finalize's rule: every alert has a decision that settles it (a visit with no alerts is ready)."""
+    return all(a.alert_id in decisions and decision_ok(*decisions[a.alert_id]) for a in alerts)

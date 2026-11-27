@@ -1,8 +1,8 @@
-"""The visit analysis behind the "Save encounter" button, with no Streamlit in it.
+"""The visit analysis behind "run checks", and the plan step behind "Compare plans".
 
 `run_visit_analysis` takes a patient, today's note, a guideline search engine and an LLM
-client, and returns an `AnalysisResult`. app.py builds the engine and the client, calls
-this, and copies the result into the screen's session state. Tests call it directly.
+client, and returns an `AnalysisResult`; `management_plan` makes the AI's plan on its own. The
+backend's routes call them (backend/main.py). Tests call them directly.
 
 Moved out of app.py's `_run_analysis` without changing behaviour (Phase 1, option B), and
 from modules/analysis.py to here in fix 3. tests/test_pipeline_golden.py checks its output;
@@ -14,7 +14,7 @@ from __future__ import annotations
 import copy
 import logging
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from artemis.plan.flow import QueryContext, run_agentic_flow
 from artemis.rules.checks import Alert, run_alerts
@@ -28,7 +28,6 @@ from modules.rag_engine import RagEngine
 from artemis.patient.summary import build_stage1_summary
 from artemis.guidelines.vector_store import VectorSearchResult
 
-StatusCallback = Callable[[str, str], None]  # (label, state)
 
 AGENTIC_QUESTION = (
     "Review this patient's symptoms, examination findings, "
@@ -44,7 +43,6 @@ AGENTIC_QUESTION = (
 class AnalysisOptions:
     top_k: int = 5
     use_llm: bool = True
-    agentic: bool = False
 
 
 # Every way the AI review can end, and every overall status, now in artemis/statuses.py (a file
@@ -66,10 +64,6 @@ class AnalysisResult:
     screening_debug: Optional[Dict[str, Any]]
     # The recorded-facts summary the AI review read (fix 6); shown when nothing was found (fix 10).
     patient_summary: Optional[Dict[str, Any]]
-    agentic_enabled: bool
-    agentic_result: Any
-    agentic_reasoner: Optional[Dict[str, Any]]
-    llm_error: Optional[str]
 
     def __post_init__(self) -> None:
         if self.screening_outcome not in AI_REVIEW_OUTCOMES:
@@ -223,17 +217,11 @@ def run_visit_analysis(
     rag: RagEngine,
     llm_client: Any,
     options: AnalysisOptions,
-    llm_name: str = "LLM",
-    on_status: Optional[StatusCallback] = None,
 ) -> AnalysisResult:
     # Rationale: keep analysis deterministic for alert triggering, and only use the
     # LLM for explanation/citation if available.
     use_llm = options.use_llm
     top_k = options.top_k
-
-    def status(label: str, state: str) -> None:
-        if on_status is not None:
-            on_status(label, state)
 
     patient_copy = _with_note(patient, today_note)
     context = build_patient_context(patient_copy)
@@ -243,23 +231,13 @@ def run_visit_analysis(
     # Build Stage 1 summary once so it can be reused by LLM screening and narrative.
     stage1_summary = build_stage1_summary(patient=patient_copy, context=context)
 
-    # Optional: agentic planner + per-subtask retrieval.
-    agentic_result = None
-    search_ready = rag.search_ready  # the plan step and the AI review both stop without it (G33)
-    if options.agentic and search_ready:
-        agentic_result = _plan(patient_copy, stage1_summary, rag, llm_client, top_k)
-
-    llm_error: Optional[str] = None
-
+    search_ready = rag.search_ready  # the AI review stops without it (G33); so does management_plan
     # With the search model not loaded, the AI review is switched off and the rule checks still
     # run (G33, owner's decision 2026-11-26): an alert built on near-random passages looks as sure
     # as a good one.
     ai_on = use_llm and llm_client is not None
     if not search_ready:
         logger.warning("Guideline search model did not load; AI review off for this visit")
-        status(f"{SEARCH_UNAVAILABLE}. The rule checks still ran.", "error")
-    elif ai_on:
-        status(f"{llm_name}: listing guideline questions for this patient…", "running")
     found = (screening_search(rag, context, top_k, llm_client=llm_client if ai_on else None, summary=stage1_summary)
              if search_ready else ScreeningSearch([], []))
     checklist_retrieved = found.passages
@@ -274,7 +252,6 @@ def run_visit_analysis(
         screening_outcome = "search_unavailable"
     elif ai_on:
         screening_ran = True
-        status(f"{llm_name}: screening for safety issues…", "running")
         screening_debug = {"search_questions": found.questions}
         screening_alerts = generate_llm_screening_alerts(
             patient_context=context,
@@ -309,11 +286,6 @@ def run_visit_analysis(
         if last_err:
             # The details go to the log; the screen stays generic (review finding, 1.Z).
             logger.warning("AI review failed: %s", last_err)
-            status(f"{llm_name}: the AI review failed (details in the app log)", "error")
-        else:
-            status(f"{llm_name} connected (response received)", "complete")
-        if llm_error is None:
-            llm_error = last_err
 
     results: List[Dict[str, Any]] = []
     for alert in alerts:
@@ -330,17 +302,6 @@ def run_visit_analysis(
 
     overall = compute_overall_status(alerts, screening_outcome)
 
-    agentic_reasoner = None
-    if options.agentic:
-        agentic_reasoner = {
-            "final_status": overall,
-            "final_alert_count": len(alerts),
-            "deterministic_alert_ids": [a.alert_id for a in deterministic_alerts],
-            "final_alert_ids": [a.alert_id for a in alerts],
-            "evidence_map_keys": [r["alert"].alert_id for r in results],
-            "agentic_result_present": agentic_result is not None,
-        }
-
     return AnalysisResult(
         patient_id=patient.get("patient_id"),
         alerts=alerts,
@@ -350,8 +311,4 @@ def run_visit_analysis(
         screening_ran=screening_ran,
         screening_debug=screening_debug,
         patient_summary=stage1_summary if screening_ran else None,
-        agentic_enabled=options.agentic,
-        agentic_result=agentic_result,
-        agentic_reasoner=agentic_reasoner,
-        llm_error=llm_error,
     )

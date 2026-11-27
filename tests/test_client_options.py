@@ -48,22 +48,3 @@ def test_the_server_client_runs_at_temperature_0_by_default(monkeypatch: pytest.
     monkeypatch.setattr(requests, "post", lambda url, json=None, headers=None, timeout=None: (sent.update(json), _Resp())[1])
     OpenAICompatClient(OpenAICompatConfig(base_url="http://example.invalid/v1", model="m")).chat([{"role": "user", "content": "hi"}])
     assert sent["temperature"] == 0 and "reasoning" not in sent
-
-
-def test_the_ollama_backup_runs_at_temperature_0_by_default(monkeypatch: pytest.MonkeyPatch) -> None:
-    import ollama
-    from artemis.ai.client import OllamaClient, OllamaConfig
-
-    sent = {}
-
-    class FakeOllama:
-        def __init__(self, host=None, timeout=None) -> None:
-            pass
-
-        def chat(self, model=None, messages=None, options=None, format=None):  # noqa: A002
-            sent.update(options or {})
-            return {"message": {"content": "[]"}, "done_reason": "stop"}
-
-    monkeypatch.setattr(ollama, "Client", FakeOllama)
-    assert OllamaClient(OllamaConfig(model="m")).chat([{"role": "user", "content": "hi"}]).text == "[]"
-    assert sent["temperature"] == 0

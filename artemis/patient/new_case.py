@@ -1,7 +1,7 @@
-"""A new patient case from the add-case form: one builder for the Streamlit form and the API.
+"""A new patient case from the add-case form (POST /api/patients).
 
-Moved out of app.py (plan item 4.6's suggestion, owner 2026-11-26) so both make the same record.
-The rules are the Streamlit form's, with the size limits the owner agreed for the API:
+Moved out of app.py (plan item 4.6's suggestion, owner 2026-11-26). The rules are the old
+Streamlit form's, with the size limits the owner agreed for the API:
 - a patient ID is required: letters, numbers, spaces and dashes, up to 40 characters (an ID
   already in use is the caller's check, since it needs the patient list);
 - age 0-120 and sex M or F are optional, and a made-up name is optional;
@@ -63,37 +63,6 @@ class CaseForm:
     visit_type: str = ""  # one of VISIT_TYPES, or blank
     previous_art: Sequence[PreviousArt] = ()
     todays_note: str = ""
-
-
-PREVIOUS_ART_COLUMNS = ["drugs", "start_date", "end_date"]
-_CHOICE_BY_LOWER = {c.lower(): c for c in REGIMEN_CHOICES}
-
-
-def previous_art_from_rows(rows: Sequence[Dict[str, str]]) -> Tuple[List[PreviousArt], List[str]]:
-    """The Streamlit form's previous-ART table (text cells) as PreviousArt rows, or what's wrong.
-
-    Drugs are picks from the list separated by commas ("TLE", or "AZT, 3TC, NVP"), matched
-    whatever their case; a name not on the list, or no drug at all, is kept for build_case_record
-    to explain.
-    A row left fully blank is skipped (the table's empty last row)."""
-    art: List[PreviousArt] = []
-    errors: List[str] = []
-    for n, row in enumerate(rows, start=1):
-        cells = {c: (row.get(c) or "").strip() for c in PREVIOUS_ART_COLUMNS}
-        if not any(cells.values()):
-            continue
-        where = f"Previous ART, row {n}"
-        drugs = [d.strip() for d in cells["drugs"].split(",") if d.strip()]
-        if not (cells["start_date"] and cells["end_date"]):
-            errors.append(f"{where}: give a start and an end date.")
-            continue
-        try:
-            start, end = (datetime.date.fromisoformat(cells[c]) for c in ("start_date", "end_date"))
-        except ValueError:
-            errors.append(f"{where}: dates must be YYYY-MM-DD.")
-            continue
-        art.append(PreviousArt(regimen=[_CHOICE_BY_LOWER.get(d.lower(), d) for d in drugs], start_date=start, end_date=end))
-    return ([], errors) if errors else (art, [])
 
 
 def _previous_art_errors(form: CaseForm, visit_date: datetime.date) -> List[str]:
@@ -169,7 +138,7 @@ def build_case_record(form: CaseForm, *, today: datetime.date) -> Tuple[Optional
         record["name"] = form.name.strip()
     record.update({
         "age_years": form.age_years,
-        "sex": form.sex or None,  # as the Streamlit form has always saved it
+        "sex": form.sex or None,  # null when left blank, as cases have always been saved
         "art_regimen_current": regimen_codes(list(form.art_regimen)),  # TLD becomes TDF, 3TC, DTG
         "other_medications": other_medicines(list(form.other_medications)),
         "visits": [],

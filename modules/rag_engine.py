@@ -22,7 +22,7 @@ from artemis.guidelines.vector_store import VectorSearchResult, VectorStore
 
 @dataclass(frozen=True)
 class RagConfig:
-    # Changing how passages are split needs GUIDELINE_INDEX_VERSION bumped in app.py: the kept index
+    # Changing how passages are split needs GUIDELINE_INDEX_VERSION bumped in artemis/config.py: the kept index
     # (plan item 4.3) skips passage ids it already holds (tests/test_index_kept.py checks this).
     chunk_size: int = 1200
     overlap: int = 200

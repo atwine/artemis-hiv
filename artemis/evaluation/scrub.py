@@ -1,7 +1,7 @@
 """Keeping the model server's address and this laptop's folder paths out of saved run files.
 
 The repo is public, so every evaluation run is scrubbed before it's written. Moved out of
-scripts/run_baseline.py (plan 4C.1), which goes with Streamlit.
+the old scripts/run_baseline.py (plan 4C.1), removed with Streamlit in 4C.6.
 """
 
 from __future__ import annotations

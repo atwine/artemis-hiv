@@ -1,8 +1,8 @@
 """Adding a patient case (plan step 2, unit 6; plan item 4.6's suggestion).
 
-Owner, 2026-11-26: add only; an ID already in use is refused; the Streamlit form's rules, with
-size limits; an optional name on both forms. One shared builder (artemis/patient/new_case.py)
-makes the case for the Streamlit form and the API. Tests never write Data/custom_patients.json.
+Owner, 2026-11-26: add only; an ID already in use is refused; the old Streamlit form's rules,
+with size limits; an optional name. The builder (artemis/patient/new_case.py) makes the case the
+API saves, into the database only.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ def _form(**kw):
 # The shared builder
 
 
-def test_a_case_is_built_like_the_streamlit_form_builds_it():
+def test_a_case_is_built_from_the_form():
     record, errors = build_case_record(
         _form(lab_rows=[({"test": "creatinine", "date": "2026-11-26", "value": "88", "unit": "umol/L"}, "today")]),
         today=TODAY,

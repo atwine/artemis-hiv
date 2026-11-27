@@ -1,7 +1,7 @@
 """Turn a saved visit check into what the screen gets: CDS Hooks cards, the plan and the
 screen's wording.
 
-Plain functions over the "checks_run" entry that artemis.visit_record.checks_entry builds (the
+Plain functions over the "checks_run" entry that backend/records.py checks_entry builds (the
 same dict that is saved), so a visit reads the same whether it just ran or was saved earlier.
 All wording comes from artemis/screen_text.py (plan item 4.7, docs/screen-checklist.md); the
 website only displays it.
@@ -13,11 +13,11 @@ import datetime
 import re
 from typing import Any, Dict, List, Optional
 
-from artemis import visit_record
 from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.review import OVERRIDE_REASONS
 from artemis.rules.checks import Alert
 from artemis.patient.labs import LabEntry
+from backend.records import saved_alerts
 from artemis.screen_text import (
     alert_heading,
     alert_references,
@@ -98,18 +98,15 @@ def card_from_saved(alert: Alert, retrieved: List[VectorSearchResult], explanati
 
 
 def cards_from_entry(entry: Dict[str, Any], labs: Optional[List[LabEntry]] = None) -> List[Card]:
-    """The saved visit check's alerts as cards. Read back through artemis.visit_record.restore,
-    the check the Streamlit app reopens a visit with: results that don't line up with the alerts
-    raise ValueError rather than show some cards and lose others."""
-    restored = visit_record.restore(entry)
-    severities = [a.get("severity") for a in entry.get("alerts") or []]
+    """The saved visit check's alerts as cards (backend/records.py saved_alerts): results that
+    don't line up with the alerts raise ValueError rather than show some cards and lose others."""
     visit_date = _date(entry.get("visit_date"))
     return [
         card_from_saved(
-            r["alert"], r["retrieved"], plain_explanation(r["explanation"].text), severity=sev, visit_id=entry["visit_id"],
-            values=alert_values(r["alert"], labs, visit_date) if labs and visit_date else [],
+            s.alert, s.retrieved, plain_explanation(s.explanation), severity=s.severity, visit_id=entry["visit_id"],
+            values=alert_values(s.alert, labs, visit_date) if labs and visit_date else [],
         )
-        for r, sev in zip(restored["analysis_results"], severities)
+        for s in saved_alerts(entry)
     ]
 
 

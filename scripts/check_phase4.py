@@ -16,6 +16,10 @@ Since B1/B2 (owner, 2026-11-27) the visit check makes no plan; each run's plan i
 through "Compare plans". Added to the keep rule then, before that run: a run whose saved plan
 passed its checks gets the same plan text, as a plan made; one whose saved plan failed them is
 never shown as a clean plan (it fails, or comes with its issues).
+
+Since 4C.5 (owner, 2026-11-27: "A, through the backend") each run goes through the evaluation's
+own path, backend/evaluation.py run_case: the case's patient into a throwaway database as the app
+stores it, then the check and the plan through the routes. The keep rule is unchanged.
 """
 
 from __future__ import annotations
@@ -68,17 +72,12 @@ def _summary(cases: Dict[str, Any], runs: List[Dict[str, Any]]) -> Dict[str, Any
 
 def main() -> int:
     from dotenv import load_dotenv
-    from fastapi.testclient import TestClient
-    from sqlalchemy.pool import StaticPool
-    from sqlmodel import Session, SQLModel, create_engine
 
     load_dotenv(ROOT / ".env")
     from artemis import config
     from artemis.evaluation.cases import load_cases
-    from backend import records
-    from backend.main import create_app
-    from backend.services import Services
-    from backend.settings import Settings
+    from artemis.plan.view import read_plan
+    from backend.evaluation import RunFailed, run_case
 
     from artemis.guidelines.vector_store import ChromaVectorStore
 
@@ -90,61 +89,41 @@ def main() -> int:
     cases = {c.case_id: c for c in load_cases(ROOT / "eval" / "cases")}
     saved = [json.loads(Path(f).read_text(encoding="utf-8")) for f in sorted(glob.glob(str(RUNS / "*.json")))]
 
-    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
-    SQLModel.metadata.create_all(engine)
-    box: Dict[str, Any] = {}
-    services = Services(patients=lambda: [c.patient for c in cases.values()], search=lambda: rag,
-                        model_client=lambda: box["model"], engine=engine, app_version="phase4-check")
-    client = TestClient(create_app(settings=Settings(visit_checks_per_minute=10_000), services=services),
-                        base_url="http://localhost")
-
     replayed, problems = [], []
     plans_made = plans_failed = 0
     for record in saved:
-        case = cases[record["case_id"]]
-        box["model"] = SavedReplies(record)
-        note = (case.patient.get("today_encounter") or {}).get("note") or ""
-        r = client.post(f"/api/patients/{case.case_id}/visits", json={"note": note},
-                        headers={"Origin": "http://localhost:3000"})
-        if r.status_code != 200:
-            problems.append(f"{record['case_id']} run {record['repeat']}: HTTP {r.status_code} {r.text[:200]}")
+        run = f"{record['case_id']} run {record['repeat']}"
+        try:  # the evaluation's own path (plan 4C.5): the patient through the database, then the routes
+            now = run_case(cases[record["case_id"]], SavedReplies(record), rag, label="phase4-check",
+                           repeat=record["repeat"])
+        except RunFailed as exc:
+            problems.append(f"{run}: {exc}")
             continue
-        with Session(engine) as s:
-            row = records.get_check(s, r.json()["visit_id"])
-            alerts, results, debug = list(row.alerts), list(row.results), dict(row.screening_debug or {})
-        replayed.append({"case_id": record["case_id"], "repeat": record["repeat"], "alerts": alerts})
-        if [_same(a) for a in alerts] != [_same(a) for a in record["alerts"]]:
-            problems.append(f"{record['case_id']} run {record['repeat']}: alerts differ")
-        shown = [b["chunk_id"] for b in debug.get("screening_bundle") or []]
+        replayed.append(now)
+        if [_same(a) for a in now["alerts"]] != [_same(a) for a in record["alerts"]]:
+            problems.append(f"{run}: alerts differ")
+        shown = [b["chunk_id"] for b in (now["screening"] or {}).get("screening_bundle") or []]
         if shown != [b["chunk_id"] for b in (record["screening"] or {}).get("screening_bundle") or []]:
-            problems.append(f"{record['case_id']} run {record['repeat']}: the AI was shown different passages")
-        found = {a["alert_id"]: [c["chunk_id"] for c in res.get("retrieved") or []] for a, res in zip(alerts, results)}
-        if found != record["retrieved"]:
-            problems.append(f"{record['case_id']} run {record['repeat']}: an alert's passages differ")
-        if r.json()["status"] != record["status"].replace("YELLOW", "AMBER"):
-            problems.append(f"{record['case_id']} run {record['repeat']}: status {r.json()['status']} vs saved {record['status']}")
-        plan = client.post(f"/api/visits/{r.json()['visit_id']}/plan", headers={"Origin": "http://localhost:3000"})
-        if plan.status_code != 200:
-            problems.append(f"{record['case_id']} run {record['repeat']}: plan HTTP {plan.status_code} {plan.text[:200]}")
-            continue
-        with Session(engine) as s:
-            made = records.latest_plan(s, r.json()["visit_id"])
-        if made is None:
-            problems.append(f"{record['case_id']} run {record['repeat']}: the plan was not saved")
-        elif record.get("plan_issues"):
+            problems.append(f"{run}: the AI was shown different passages")
+        if now["retrieved"] != record["retrieved"]:
+            problems.append(f"{run}: an alert's passages differ")
+        if now["status"] != record["status"].replace("YELLOW", "AMBER"):
+            problems.append(f"{run}: status {now['status']} vs saved {record['status']}")
+        if record.get("plan_issues"):
             plans_failed += 1
-            if plan.json()["outcome"] == "made" and not plan.json()["issues"]:
-                problems.append(f"{record['case_id']} run {record['repeat']}: a plan that failed its checks came back clean")
+            readable = now["plan_text"] is not None and read_plan(now["plan_text"], clinician_plan_written=True)
+            if readable and not now["plan_issues"]:
+                problems.append(f"{run}: a plan that failed its checks came back clean")
         else:
             plans_made += 1
-            if plan.json()["outcome"] != "made" or made.plan_text != record["plan_text"]:
-                problems.append(f"{record['case_id']} run {record['repeat']}: the plan differs from the saved one")
+            if now["plan_text"] != record["plan_text"] or now["plan_issues"]:
+                problems.append(f"{run}: the plan differs from the saved one")
 
     before = _summary(cases, saved)
     after = _summary(cases, replayed) if len(replayed) == len(saved) else None
     met = not problems and after == before
     lines = [
-        "Phase 4 check: GLM's final 2B run (glm-5.2-t0-5q) replayed through the backend's visit-check and plan routes.",
+        "Phase 4 check: GLM's final 2B run (glm-5.2-t0-5q) replayed through the evaluation's backend path (4C.5).",
         f"Runs: {len(saved)} saved, {len(replayed)} replayed (real kept index, saved replies, nothing spent).",
         f"Scores as saved (2B):  {json.dumps(before, sort_keys=True)}",
         f"Scores through the API: {json.dumps(after, sort_keys=True)}",

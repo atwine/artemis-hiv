@@ -365,3 +365,91 @@ def test_route_map_lists_exactly_what_each_route_checks(api):
                 action, data = name[len("require_"):].split("_", 1)
                 in_app |= {(m, route.path, data, action) for m in route.methods - {"HEAD", "OPTIONS"}}
     assert in_file == in_app
+
+
+# Plan 4C.7: every table belongs to a data kind with rules, and saved rows are only ever added.
+
+
+def _tables_by_data_kind():
+    """ACCESS.md section 1: each data kind's row names its tables in backticks."""
+    import re
+    from pathlib import Path
+
+    text = (Path(__file__).resolve().parents[1] / "ACCESS.md").read_text(encoding="utf-8")
+    text = text[text.index("## 1. Data"):text.index("## 2. Roles")]
+    found = {}
+    for kind, holds in re.findall(r"^\| (\w+) \| (.+?) \|", text, re.MULTILINE):
+        for table in re.findall(r"tables? ((?:`\w+`(?:, )?)+)", holds):
+            found.update({t: kind for t in re.findall(r"`(\w+)`", table)})
+    return found
+
+
+def test_every_table_belongs_to_a_data_kind_with_rules():
+    """A new table fails here until ACCESS.md says which data kind it is (and so who may see it)."""
+    from sqlmodel import SQLModel
+
+    import backend.clinic_db  # noqa: F401  (registers the tables)
+    import backend.patients_db  # noqa: F401
+    import backend.records  # noqa: F401
+    from backend.access import GRID
+
+    tables = set(SQLModel.metadata.tables)
+    named = _tables_by_data_kind()
+    assert tables - set(named) == set(), "tables with no data kind in ACCESS.md section 1"
+    assert set(named) - tables == set(), "ACCESS.md names tables the code doesn't have"
+    assert set(named.values()) <= set(GRID["local"]), "a table's data kind has no row in the grid"
+
+
+def test_no_route_changes_or_deletes_saved_rows(api):
+    """ACCESS.md: nobody edits or deletes patients, visit records or clinic days through the
+    backend; rows are only ever added. Only GET and POST routes exist."""
+    methods = {m for r in api.app.routes if isinstance(r, APIRoute) for m in r.methods}
+    assert methods <= {"GET", "POST"}, methods
+
+
+def test_the_backend_code_never_deletes_or_updates_rows():
+    """No database delete, update or merge anywhere in the backend (its migrations aside)."""
+    import ast
+    from pathlib import Path
+
+    backend = Path(__file__).resolve().parents[1] / "backend"
+    found = []
+    for path in sorted(backend.rglob("*.py")):
+        if "migrations" in path.parts:
+            continue
+        for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+            if isinstance(node, ast.ImportFrom) and node.module and node.module.split(".")[0] in {"sqlalchemy", "sqlmodel"}:
+                found += [f"{path.name}: imports {a.name}" for a in node.names if a.name in {"delete", "update"}]
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr in {"delete", "merge"}:
+                found.append(f"{path.name}:{node.lineno}: .{node.func.attr}()")
+    assert found == []
+
+
+def test_a_whole_visit_only_ever_adds_rows(api):
+    """Code review, 2026-11-27: reading the code can't catch a field changed and saved, so this
+    watches every statement the database gets through a whole visit (add a case, check, decide,
+    change a decision, finalize, plan twice, reopen, the board) and requires that none is an
+    UPDATE or DELETE."""
+    from sqlalchemy import event
+
+    statements = []
+    event.listen(api.engine, "before_cursor_execute",
+                 lambda conn, cursor, statement, *a: statements.append(statement.lstrip().split(None, 1)[0].upper()))
+    local = headers_for("local")
+    added = api.client.post("/api/patients", json={**NEW_CASE, "patient_id": "P900"}, headers=local)
+    assert added.status_code == 201, added.text
+    visit = api.client.post("/api/patients/P001/visits", json=NOTE, headers=local).json()
+    alerts = [c["extension"]["alert_id"] for c in visit["cards"]]
+    assert alerts
+    first = [{"alert_id": a, "action": "Acknowledge"} for a in alerts]
+    changed = [{"alert_id": alerts[0], "action": "Override", "reason": "Patient declined"}]
+    for decisions in (first, changed):
+        r = api.client.post(f"/api/visits/{visit['visit_id']}/decisions", json={"decisions": decisions}, headers=local)
+        assert r.status_code == 200, r.text
+    assert api.client.post(f"/api/visits/{visit['visit_id']}/finalize", headers=local).status_code == 200
+    for _ in range(2):
+        assert api.client.post(f"/api/visits/{visit['visit_id']}/plan", headers=local).status_code == 200
+    assert api.client.get(f"/api/visits/{visit['visit_id']}", headers=local).status_code == 200
+    assert api.client.get("/api/clinic-day", headers=local).status_code == 200
+    assert statements and "INSERT" in statements
+    assert {s for s in statements if s in {"UPDATE", "DELETE"}} == set()

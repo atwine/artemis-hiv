@@ -34,8 +34,7 @@ def test_every_status_has_a_banner() -> None:
 
 def _result(**changes) -> AnalysisResult:
     values = dict(patient_id="P1", alerts=[], results=[], status="GREEN",
-                  screening_outcome="ok", screening_ran=True, screening_debug=None, patient_summary=None,
-                  agentic_enabled=False, agentic_result=None, agentic_reasoner=None, llm_error=None)
+                  screening_outcome="ok", screening_ran=True, screening_debug=None, patient_summary=None)
     values.update(changes)
     return AnalysisResult(**values)
 

@@ -1,184 +1,123 @@
 # How the app works
 
-This document explains how to use **ARTEMIS-HIV** (formerly the HIV Clinical Nudge Engine demo).
-
-It is written for a **non-technical** audience (for example: clinicians, program staff, researchers) who want to interact with the app.
+This explains how to use **ARTEMIS-HIV** for anyone who isn't technical: clinicians, programme
+staff, researchers. How to install and start it is in `README.md`.
 
 ## What this app is for
 
-The app helps you **notice important clinical follow-ups** during an HIV care visit.
+The app helps you **notice important clinical follow-ups** during an HIV care visit. For each
+patient it:
 
-It does this by:
-
-- Checking the patient’s information (history + today’s note) for specific situations that may need attention.
-- Showing you relevant excerpts from the **Uganda Clinical Guidelines 2023** to support the alert.
-- Providing a short explanation of *why* the alert was raised.
+- checks the patient's record and today's note for situations that need attention, with fixed
+  safety rules and an AI review;
+- shows the passages from the **Ugandan HIV guidelines** behind each alert, with their pages;
+- explains in a sentence or two why each alert was raised;
+- on request, writes the AI's management plan and compares it with yours.
 
 Important:
 
-- This is **decision support only**.
-- It does **not** replace clinical judgement or the official guideline.
+- This is **decision support only**. It does not replace clinical judgement or the official
+  guidelines.
+- The patients in this demo are **made up**. You can safely explore.
 
-## What data is in the demo
+## A clinic day, step by step
 
-The patients in this demo are **synthetic (not real)**.
+### 1. The day board
 
-- You can safely explore the workflow.
-- You can edit the “Today’s encounter note” to see how alerts change.
+The app opens on the clinic day: each booked patient in time order, with where their visit
+stands (waiting, needs you, done) and how many patients are still left in red. The arrows step
+to the clinic days before and after.
 
-## The main workflow: “Save” vs “Finalize”
+**Add a case** adds a made-up patient: their details, medicines, lab results, earlier ART and
+today's note, booked at a time on their visit date.
 
-The app intentionally separates the visit into two stages:
+### 2. Open a patient and write today's note
 
-### 1) Save encounter (run checks)
+The patient's record is on the left: medicines, earlier ART, lab results with their dates and
+units, and earlier notes. Write today's note on the right as you normally would, including your
+plan.
 
-When you click **Save encounter (run checks)**, the app will:
+### 3. Run the checks
 
-- Read the selected patient’s information.
-- Include anything you typed in **Today’s encounter note**.
-- Generate **alerts** if anything needs attention.
-- Show supporting information from the guideline.
+**Run checks** reads the record and your note:
 
-You can click Save multiple times (for example, after updating the note).
+- The **rule checks** always run. They catch fixed situations, such as an overdue creatinine on
+  tenofovir.
+- The **AI review** runs when a model server is set up. It may only raise problems the Ugandan
+  guidelines support, and it cites the passages it read.
 
-### 2) Finalize / Close visit
+Each alert says which of the two raised it, how serious it is, the patient values it is about,
+the key guideline sentence, and the passages behind it.
 
-The **Finalize / Close visit** button is a safety step.
+If the AI review failed or was cut short, a banner says so: a missing AI review never looks like
+a clean result. If the guideline search isn't working, a red banner says the AI review is off
+and only the rule checks ran.
 
-It will stay disabled until:
+Every check is saved, so you can come back to a visit later without running the AI again. If
+saving fails, a banner says so, and that check's alerts can't be decided.
 
-- Every alert has been reviewed, and you have either:
-  - **Acknowledged** it, or
-  - **Overridden** it with a required reason
+### 4. Acknowledge or override each alert
 
-This helps make sure alerts are not missed.
+For each alert, choose:
 
-## Step-by-step: using the app
+- **Acknowledge**: you agree it matters and have noted it.
+- **Override**: it doesn't apply to this patient, or you choose not to act on it now. Pick a
+  reason:
+  - Already done, not documented
+  - Test not available here
+  - Not right for this patient
+  - Patient declined
+  - Will address at next visit
+  - Other (say why), which needs a comment
 
-### Step 1: Confirm the guideline file is found
+### 5. Compare plans
 
-Near the top, the app shows the local guideline PDF path.
+**Compare plans** asks the AI for its management plan for this visit: whether to switch, hold or
+continue the ART regimen, each problem with what it suggests, monitoring and counselling. Each
+item says how it compares with the plan in your note ("Matches your plan", "Differs from your
+plan", "Partly in your plan", "Not in your plan"), or "No plan to compare" when your note had
+none. A plan that failed the app's own checks is shown with a warning. Pressing it again shows
+the same plan without asking the AI again, unless the last one failed or was flagged.
 
-- If it says the guideline PDF is found, you can proceed.
-- If it says it is missing, see **Troubleshooting** below.
+(This screen is being built in the website; the rest of the app is ready for it.)
 
-### Step 2: Select a patient
+### 6. Finalize
 
-Use **Select patient** to choose a demo patient.
+**Finalize** stays disabled until every alert is acknowledged or overridden with a reason. It
+then closes the visit. If you change a decision afterwards, the visit opens again until you
+finalize it once more. Nothing is ever deleted: each decision and each Finalize is kept.
 
-### Step 3: Review / edit “Today’s encounter note”
+## What the colours mean
 
-The text box **Today’s encounter note** represents what you would type during a visit.
-
-- You can leave it as-is.
-- Or add new information (e.g., symptoms, adherence concerns, side effects).
-
-### Step 4: Click “Save encounter (run checks)”
-
-This runs the analysis.
-
-After it runs, you will see:
-
-- A status summary (for example: **GREEN** or **AMBER**)
-- A list of alerts (if any)
-
-### Step 5: Review each alert
-
-Each alert opens as a section.
-
-Inside an alert you will usually see:
-
-- **What the alert is**: a clear message describing the issue.
-- **Supporting details**: key patient details the alert is based on.
-- **Guideline retrieval**: short references showing which guideline pages were pulled.
-- **Why this alert?**: a short explanation.
-
-### Step 6: Acknowledge or Override the alert
-
-For each alert, choose an action:
-
-- **Unreviewed**
-  - Default state.
-  - Finalize will remain blocked.
-
-- **Acknowledge**
-  - Use this if you agree the alert is relevant and you have noted it.
-
-- **Override**
-  - Use this if the alert is not applicable to this patient, or you intentionally choose not to follow it now.
-  - You must select an **Override reason** (required).
-  - You may add an **Override comment** (optional) to document your thinking.
-
-The override reasons are:
-
-- Already done, not documented
-- Test not available here
-- Not right for this patient
-- Patient declined
-- Will address at next visit
-- Other (say why), which needs a comment
-
-### Step 7: Finalize / Close visit
-
-Once all alerts are acknowledged or overridden (with a reason), the **Finalize / Close visit** button becomes available.
-
-Clicking Finalize marks the visit as completed in the app.
-
-## What “GREEN” and “AMBER” mean
-
-- **GREEN**
-  - No alerts were detected.
-
-- **AMBER** (called YELLOW before 2026-11-26)
-  - One or more alerts were detected and should be reviewed before finalizing.
-
-## Advanced settings (optional)
-
-There is an **Advanced settings** section for demo convenience.
-
-You generally do not need to change these, but you can:
-
-- Limit how many guideline pages are processed (useful for a faster demo).
-- Turn off the optional local “AI explanation” feature.
-
-## About the optional “AI explanation”
-
-If enabled and available on your computer, the app can generate explanations using a **local Ollama model**.
-
-Key points:
-
-- This is optional.
-- If it is not available, the app will still work and will show a simpler fallback explanation.
+- **Red**: at least one high or critical alert.
+- **Amber**: alerts, none of them high or critical.
+- **Green**: no alerts, and the AI review finished cleanly (or was switched off).
+- **Incomplete**: no alerts, but the AI review didn't finish cleanly, so the visit is never shown
+  as green.
 
 ## Troubleshooting
 
-### The app says the guideline PDF is missing
+### "Guideline search unavailable"
 
-Make sure the file exists at:
+The app couldn't load its guideline search. The rule checks still run; the AI review and Compare
+plans wait until it works again. Ask the technical team (`README.md`, "Troubleshooting").
 
-- `Data/Uganda Clinical Guidelines 2023.pdf`
+### The first check of the day is slow
 
-Then restart the app.
+The first check loads the guideline search, which can take a minute. Later checks are quicker.
 
-### The first run is slow
+### "No AI model server is set up"
 
-The first run may take longer because the app may need to prepare the guideline for searching.
+The AI review and Compare plans need a model server; the technical team sets it up. The rule
+checks still work without it.
 
-For a faster demo:
+### "Too many visit checks"
 
-- In **Advanced settings**, use **Index max pages** to limit how many pages are processed.
-
-### The “AI explanation” is not showing
-
-If the app says it is using a fallback explanation, it usually means the local AI model is not available.
-
-You can:
-
-- Keep using the app normally (it still works).
-- Or ask the technical team to confirm Ollama is installed and the model is available.
+Checks and plans together are limited to 6 a minute, so a stuck page can't run up the model's
+cost. Wait a moment and try again.
 
 ## Privacy and safety notes
 
-- The demo patients are synthetic.
-- Treat all outputs as **supporting information**, not final decisions.
-- Always confirm with the official guideline and clinical judgement.
+- The demo patients are made up, and the app only answers pages on this laptop.
+- Treat every output as **supporting information**, not a final decision.
+- Always confirm with the official guidelines and your clinical judgement.

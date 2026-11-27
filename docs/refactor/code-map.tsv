@@ -1,13 +1,5 @@
 # Where each function lives now and where it is going. Checked by scripts/check_code_map.py.
 file	function	does	target	status
-app.py	_llm_name	Gives the display name of the AI server in use, for status labels.	artemis/ai/	to-move
-app.py	_get_rag_engine	The Streamlit screen's name for the guideline search; calls artemis/config.py guideline_search.	- (goes with Streamlit, 4C.6)	stays
-app.py	_init_session_state	Sets the starting values for everything the screen remembers between clicks.	ui/state.py	to-move
-artemis/review.py	alert_resolution_ok	Says whether an alert has been acknowledged, or overridden with a reason.	artemis/review.py	moved
-artemis/review.py	can_finalize	Says whether the visit can be finalized, meaning every alert has been handled.	artemis/review.py	moved
-app.py	_run_analysis	Runs the visit analysis and stores its results for the screen to show.	ui/ (Save button handler)	to-move
-app.py	_run_analysis._on_status	Passes progress messages from the analysis to the on-screen status box.	ui/ (Save button handler)	to-move
-app.py	main	Draws the whole app screen and reacts to every click and input.	ui/ (split into one file per screen section)	to-move
 artemis/plan/flow.py	_normalize_input	Placeholder step that hands the question and patient data on unchanged.	artemis/plan/flow.py	moved
 artemis/plan/flow.py	_plan_subtasks	Plans the guideline questions to ask, one per current drug plus symptom checks.	artemis/plan/flow.py	moved
 artemis/plan/flow.py	_retrieve_evidence	Looks up guideline passages for each planned question.	artemis/plan/flow.py	moved
@@ -24,7 +16,6 @@ artemis/rules/checks.py	_check_suboptimal_bp_with_missed_amlodipine	Alerts when 
 artemis/visit.py	compute_overall_status	Sets the overall colour from the alerts; INCOMPLETE when nothing was found and the AI review did not finish cleanly.	artemis/visit.py	moved
 artemis/visit.py	_retrieve	Finds the guideline passages that relate to one alert.	artemis/visit.py	moved
 artemis/visit.py	run_visit_analysis	Runs the whole visit check: alerts, guideline lookup, AI screening and explanations.	artemis/visit.py	moved
-artemis/visit.py	run_visit_analysis.status	Reports a progress message if someone is listening.	artemis/visit.py	moved
 modules/embedder.py	Embedder.__init__	Loads the text-to-numbers model, or a simple backup if it cannot load.	artemis/guidelines/	to-move
 modules/embedder.py	Embedder.model_name	Gives the name of the text-to-numbers model in use.	artemis/guidelines/	to-move
 modules/embedder.py	Embedder.encode	Turns pieces of text into lists of numbers so similar texts can be matched.	artemis/guidelines/	to-move
@@ -40,9 +31,6 @@ artemis/guidelines/processor.py	_strip_markdown_noise	Removes link tags and pict
 artemis/guidelines/processor.py	_strip_markdown_noise._special_block_repl	Drops picture and logo placeholder blocks but keeps flowchart and text blocks.	artemis/guidelines/processor.py	moved
 artemis/guidelines/processor.py	extract_markdown_page_texts	Splits a guideline Markdown file into pages at its page-break marks.	artemis/guidelines/processor.py	moved
 artemis/guidelines/processor.py	process_markdown_guidelines	Turns a guideline Markdown file into searchable pieces labelled with page numbers.	artemis/guidelines/processor.py	moved
-artemis/ai/client.py	OllamaClient.__init__	Sets up the connection to the local Ollama AI server from settings.	artemis/ai/client.py	moved
-artemis/ai/client.py	OllamaClient.model	Gives the name of the AI model being used.	artemis/ai/client.py	moved
-artemis/ai/client.py	OllamaClient.chat	Sends a conversation to the local Ollama AI and returns its reply.	artemis/ai/client.py	moved
 artemis/ai/client.py	openai_compat_config_from_env	Reads the AI server address, model and key from settings, if set.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient.__init__	Sets up the connection to an OpenAI-style AI server such as vLLM or OpenRouter.	artemis/ai/client.py	moved
 artemis/ai/client.py	OpenAICompatClient.model	Gives the name of the AI model being used.	artemis/ai/client.py	moved
@@ -54,7 +42,6 @@ artemis/ai/screening.py	_build_screening_bundle	Packs up to ten guideline passag
 artemis/ai/screening.py	generate_llm_screening_alerts	Has the AI screen the patient against guidelines and returns any alerts it finds.	artemis/ai/screening.py	moved
 artemis/patient/record.py	_parse_iso_date	Converts a date written as YYYY-MM-DD into a date.	artemis/patient/record.py	moved
 artemis/patient/record.py	_days_between	Counts the days between two dates.	artemis/patient/record.py	moved
-artemis/patient/record.py	load_mock_patients	Loads the demo patient records from a JSON file.	artemis/patient/record.py	moved
 artemis/patient/record.py	build_patient_context	Builds the patient summary the rules and AI read, including dated notes and labs.	artemis/patient/record.py	moved
 artemis/patient/record.py	days_since_lab	Counts days since a patient's latest result for a lab, or none if never done.	artemis/patient/record.py	moved
 modules/rag_engine.py	RagEngine.__init__	Sets up the guideline search engine with its guideline files and storage.	artemis/guidelines/	to-move
@@ -75,15 +62,7 @@ artemis/guidelines/vector_store.py	InMemoryVectorStore.__init__	Starts an empty 
 artemis/guidelines/vector_store.py	InMemoryVectorStore.index_guidelines	Loads guideline pieces and their number codes into the temporary store.	artemis/guidelines/vector_store.py	moved
 artemis/guidelines/vector_store.py	InMemoryVectorStore.query	Finds the guideline pieces in the temporary store closest in meaning to a question.	artemis/guidelines/vector_store.py	moved
 artemis/guidelines/vector_store.py	create_vector_store	Picks the saved Chroma store when available, otherwise the temporary one.	artemis/guidelines/vector_store.py	moved
-ui/patient_picker.py	patient_label	Makes the picker label, like 'P001 - John Doe', or just the ID.	ui/patient_picker.py	stays
-ui/state.py	init_analysis_state	Sets starting values for the analysis results the screen remembers.	ui/state.py	stays
-ui/state.py	clear_analysis	Forgets the last analysis completely, including each alert's review.	ui/state.py	stays
-ui/state.py	analysis_belongs_to	Says whether the shown results are for this patient or nothing has run.	ui/state.py	stays
-ui/state.py	note_changed	Says whether the shown results came from a different note than the one on screen.	ui/state.py	stays
 artemis/screen_text.py	status_banners	Chooses the coloured banners at the top of a visit's results, for every screen.	artemis/screen_text.py	moved
-app.py	main._lab_table	Draws one add-case lab table: test, date, value and unit per row.	ui/ (part of main)	to-move
-app.py	main._records	Turns a lab table's contents into a list of rows.	ui/ (part of main)	to-move
-app.py	main._show_labs	Shows a patient's lab results in Patient Details, then any pasted lab text.	ui/ (part of main)	to-move
 artemis/patient/labs.py	LabEntry.number	Gives the number inside a lab value, such as 50 from '<50'.	artemis/patient/labs.py	stays
 artemis/patient/labs.py	_parse_date	Reads a YYYY-MM-DD date, or gives nothing if it can't.	artemis/patient/labs.py	stays
 artemis/patient/labs.py	creatinine_umol_per_l	Converts a creatinine value to umol/L from either unit.	artemis/patient/labs.py	stays
@@ -95,9 +74,6 @@ artemis/patient/labs.py	read_lab_entries	Reads every structured lab result in a 
 artemis/patient/labs.py	read_lab_notes	Reads lab results that were pasted as free text.	artemis/patient/labs.py	stays
 artemis/patient/labs.py	to_number	Finds the number in a lab value written as text.	artemis/patient/labs.py	stays
 artemis/patient/summary.py	_lab_item	Writes one lab result for the summary, with unit, age and source.	artemis/patient/summary.py	stays
-ui/labs.py	_cell	Turns one table cell into plain text, dates as YYYY-MM-DD.	ui/labs.py	stays
-ui/labs.py	editor_rows	Turns the add-case lab table into plain-text rows.	ui/labs.py	stays
-ui/labs.py	lab_rows_for_display	Lists a patient's lab results for the Patient Details panel.	ui/labs.py	stays
 artemis/patient/medicines.py	_patterns	Lists every drug name and combination to look for, longest first.	artemis/patient/medicines.py	stays
 artemis/patient/medicines.py	other_medicines	Cleans the medicine list, dropping entries that only say 'None'.	artemis/patient/medicines.py	stays
 artemis/patient/medicines.py	regimen_codes	Finds the HIV drugs in a regimen however it was written, as drug codes.	artemis/patient/medicines.py	stays
@@ -110,7 +86,6 @@ artemis/plan/plan_json.py	regimen_decision_kind	Reads the regimen decision as Sw
 artemis/plan/plan_json.py	strip_code_fences	Removes ``` fences the AI sometimes wraps its reply in.	artemis/plan/plan_json.py	stays
 artemis/plan/plan_json.py	validate_plan	Lists what is wrong with a plan, or nothing if it passes.	artemis/plan/plan_json.py	stays
 artemis/plan/view.py	_texts	Turns a plan field into a list of non-empty lines.	artemis/plan/view.py	stays
-artemis/plan/view.py	plan_html	Draws the plan for the screen, escaping all AI text.	artemis/plan/view.py	stays
 artemis/plan/view.py	read_plan	Decides what the clinician sees for each plan item and the regimen decision.	artemis/plan/view.py	stays
 artemis/ai/client.py	_text_of	Joins a reply sent as a list of parts into one text.	artemis/ai/client.py	moved
 artemis/ai/screening.py	_is_alert	Tells whether a piece of the AI's reply looks like an alert.	artemis/ai/screening.py	moved
@@ -121,31 +96,7 @@ artemis/ai/screening.py	_marked_citations	Marks each passage the AI cited with w
 artemis/visit.py	_cited_passages	Lists the passages an AI alert cited from those the AI was shown.	artemis/visit.py	moved
 artemis/screen_text.py	_unique	Drops repeated lines, keeping the order.	artemis/screen_text.py	moved
 artemis/screen_text.py	alert_references	Builds the References list under an alert: what the AI cited, or what a search found.	artemis/screen_text.py	moved
-artemis/review.py	decisions_from_state	Lists the clinician's decision on each alert, as saved at Finalize.	artemis/review.py	moved
-artemis/visit_record.py	now_utc	Gives the current time in UTC, for the visit record.	artemis/visit_record.py	moved
-artemis/visit_record.py	app_version	Gives the code version (git commit) saved with each visit record.	artemis/visit_record.py	moved
-artemis/visit_record.py	records_dir	Gives the folder that holds the visit records.	artemis/visit_record.py	moved
-artemis/visit_record.py	_file_name	Turns a patient id into a safe, unique file name.	artemis/visit_record.py	moved
-artemis/visit_record.py	_plan	Packs the AI management plan for the visit record.	artemis/visit_record.py	moved
-artemis/visit_record.py	checks_entry	Builds the record line for one run of the checks, with everything the screen showed.	artemis/visit_record.py	moved
-artemis/visit_record.py	finalized_entry	Builds the record line for Finalize, with each decision.	artemis/visit_record.py	moved
-artemis/visit_record.py	append_entry	Adds one line to the patient's record file without changing earlier lines.	artemis/visit_record.py	moved
-artemis/visit_record.py	read_entries	Reads a patient's record lines and counts any that can't be read.	artemis/visit_record.py	moved
-artemis/visit_record.py	last_visit	Finds the last checks run and its Finalize, if any.	artemis/visit_record.py	moved
-artemis/visit_record.py	restore	Rebuilds the screen's values for a saved visit.	artemis/visit_record.py	moved
-ui/review.py	when	Shows a saved time as date, hour and minute in UTC.	ui/review.py	stays
-ui/review.py	_restore_visit	Puts a saved visit back on screen when its button is pressed.	ui/review.py	stays
-ui/review.py	offer_last_saved_results	Shows the button that reopens a patient's last saved results.	ui/review.py	stays
-ui/review.py	finalize_visit	Saves the decisions at Finalize, and finalizes only if the save worked.	ui/review.py	stays
-artemis/visit_record.py	_saved_alert	Rebuilds one saved alert, refusing a line that lacks its id, title or message.	artemis/visit_record.py	moved
-app.py	_read_demo_patients	Reads the demo patients file, cached until the file changes.	ui/	to-move
-app.py	_load_demo_patients	Gives the demo patients, rereading the file when it has changed.	ui/	to-move
-app.py	_save_cases	Writes the saved cases file, and says so on screen when it can't.	ui/	to-move
 artemis/ai/client.py	_hide_address	Removes the model server's address from error text.	artemis/ai/client.py	moved
-artemis/ai/client.py	ollama_host	Works out the local Ollama address from settings, keeping http or https.	artemis/ai/client.py	moved
-artemis/ai/client.py	list_ollama_models	Lists the models on the local Ollama server, or says why it can't be reached.	artemis/ai/client.py	moved
-artemis/patient/store.py	read_json_list	Reads a saved list file; a damaged file is reported, never read as empty.	artemis/patient/store.py	moved
-artemis/patient/store.py	write_json_list	Replaces a saved list file in one step, so a crash can't leave it half-written.	artemis/patient/store.py	moved
 artemis/plan/flow.py	_reason_updated_management_plan._cut	Adds "cut_off" to a plan's failed checks when the server stopped the reply at its length limit.	artemis/plan/flow.py	moved
 artemis/evaluation/cases.py	MatchRule.from_json	Reads a word rule from a case file, refusing an empty or malformed one.	artemis/evaluation/cases.py	moved
 artemis/evaluation/cases.py	MatchRule.matches	Says whether alert text has a word from every group of the rule.	artemis/evaluation/cases.py	moved
@@ -170,7 +121,6 @@ artemis/evaluation/runner.py	cost_of	Dollars for a list of calls: the server's f
 artemis/evaluation/runner.py	check_budget	Refuses a run whose worst-case cost would pass the cap.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	run_file_name	The saved file name for one case and repeat.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	pending_runs	Lists the case runs not saved yet, so a stopped run resumes.	artemis/evaluation/runner.py	moved
-artemis/evaluation/runner.py	run_case	Runs one case through the app's analysis with a model and returns the record to save.	artemis/evaluation/runner.py	moved
 artemis/evaluation/afrimedqa.py	load_questions	Reads the AfriMed-QA multiple-choice questions that are infectious disease or mention HIV.	artemis/evaluation/afrimedqa.py	moved
 artemis/evaluation/afrimedqa.py	messages	Builds the quiz prompt, saying how many options to pick.	artemis/evaluation/afrimedqa.py	moved
 artemis/evaluation/afrimedqa.py	answer_format	The quiz reply format: the right number of the question's own option keys.	artemis/evaluation/afrimedqa.py	moved
@@ -222,14 +172,11 @@ backend/patients_db.py	_next_position	The list position the next patient gets.	b
 backend/patients_db.py	import_records	Loads the records whose id the database doesn't have yet, in one save; safe to run again.	backend/patients_db.py	moved
 backend/patients_db.py	add	Adds one new case, all its rows in one save; an id in use raises PatientExists.	backend/patients_db.py	moved
 backend/records.py	_decision_rows	Builds decision rows for the database.	stays	stays
-backend/records.py	_read_file	Reads one visit-record file, counting lines it can't read.	stays	stays
-backend/records.py	_same_decision	Tells whether a decision is already in the database, so an import can be rerun.	stays	stays
 backend/records.py	_utc	Turns a saved time into a UTC time with its zone.	stays	stays
 backend/records.py	add_decisions	Saves decisions all together, or none.	stays	stays
 backend/records.py	check_from_entry	Turns a saved visit check into a database row.	stays	stays
 backend/records.py	entry_from_check	Turns a database row back into a saved visit check.	stays	stays
 backend/records.py	get_check	Reads one visit check from the database.	stays	stays
-backend/records.py	import_folder	Copies the visit-record files into the database; safe to rerun.	stays	stays
 backend/records.py	iso	Writes a time as ISO text in UTC, with microseconds when the time has them.	stays	stays
 backend/records.py	json_safe	Makes a JSON-safe copy, with dates as text, as the files have.	stays	stays
 backend/records.py	latest_decisions	Gives the latest decision on each alert of a visit.	stays	stays
@@ -291,7 +238,6 @@ artemis/visit.py	AnalysisResult.__post_init__	Refuses an AI review result or sta
 artemis/screen_text.py	alert_heading	Writes an alert's heading, saying whether the AI review or a rule check raised it.	artemis/screen_text.py	moved
 backend/cards.py	banners_for	Gives the coloured banners above a visit's results, in the screen's own words (screen_text).	stays	stays
 artemis/statuses.py	status_name	Reads a saved status in today's name: an older record's YELLOW reads as AMBER.	stays	stays
-artemis/review.py	reason_options	Gives the override reasons the picker offers, keeping the reason a reopened visit was saved with selectable.	stays	stays
 backend/main.py	_detail	Builds a patient for the screen, each lab result with its value, unit and date apart.	stays	stays
 artemis/screen_text.py	plain_text	Removes inline citation fragments from a text; the references are listed apart.	stays	stays
 artemis/screen_text.py	plain_explanation	Cuts an alert explanation back to its reason, as the screen and the API show it.	stays	stays
@@ -310,7 +256,6 @@ backend/records.py	now	Gives this moment to the microsecond, so checks saved in 
 backend/main.py	board_row	Builds one row of the day board from the booking, the patient and their latest saved check.	stays	stays
 backend/main.py	create_app.clinic_day	Route: the demo day's board, each booking with its patient's latest check state.	stays	stays
 backend/main.py	day_counts	Counts the day board's booked, checked, finalized and left-in-red patients.	stays	stays
-artemis/patient/new_case.py	previous_art_from_rows	Reads the Streamlit form's previous-ART table (drugs separated by commas, start and end dates), or explains what's wrong.	stays	stays
 artemis/patient/new_case.py	_previous_art_errors	Lists what's wrong with the form's previous ART rows (drugs from the list, dates in order, ended by the visit).	stays	stays
 artemis/patient/new_case.py	_form_errors	Lists what's wrong with an add-case form, before any lab row is read.	stays	stays
 artemis/patient/new_case.py	_labs	Reads the form's today and previous lab rows into stored results, or explains what's wrong.	stays	stays
@@ -327,10 +272,6 @@ backend/limits.py	SlidingWindow.__init__	Sets up a limit of so many uses in any 
 backend/limits.py	SlidingWindow.take	Uses one if allowed, or says how many seconds to wait.	stays	stays
 artemis/guidelines/vector_store.py	ChromaVectorStore._stored_ids	Says which passages the kept index already holds, asked in batches.	stays	stays
 artemis/plan/plan_json.py	closing_index	Finds where a bracketed JSON value closes, the one scanner for the AI's alert list and plan.	artemis/plan/plan_json.py	moved
-artemis/session_keys.py	action_key	Names the screen value holding the clinician choice on an alert.	stays	stays
-artemis/session_keys.py	comment_key	Names the screen value holding the override comment on an alert.	stays	stays
-artemis/session_keys.py	reason_key	Names the screen value holding the override reason on an alert.	stays	stays
-artemis/session_keys.py	saved_reason_key	Names the screen value holding the reason a reopened visit was saved with.	stays	stays
 backend/settings.py	_at_least_one	Reads a setting that must be a whole number of at least 1, or stops the start with a clear error.	stays	stays
 artemis/visit.py	_plan	Makes the management plan from the patient, the facts summary and the guideline search (up to 3 model calls).	artemis/visit.py	moved
 artemis/visit.py	management_plan	The plan "Compare plans" asks for: a plan for the patient and today's note, or None when the guideline search is not ready.	artemis/visit.py	moved
@@ -340,3 +281,17 @@ backend/plans.py	plan_reply	A saved plan in screen shape (regimen badge, items w
 backend/records.py	save_plan	Saves one plan row.	stays	stays
 backend/records.py	latest_plan	The plan shown for a visit: the latest one made.	stays	stays
 backend/plans.py	is_good	A plan worth keeping: readable and passing the app's own checks, so a second press shows it with nothing run.	stays	stays
+backend/evaluation.py	run_case	Runs one case through the backend itself (patient into a throwaway database, the check and its plan through the routes) and returns the record to save.	stays	stays
+backend/evaluation.py	memory_engine	A throwaway in-memory database with the app's tables, links checked as Postgres does; the tests use it too.	stays	stays
+backend/evaluation.py	_backend	The backend app around a throwaway database, a search and a model client, for one evaluation run.	stays	stays
+backend/evaluation.py	_post	One request to the backend from the app's own page; a refusal stops the run (the search being down is a result).	stays	stays
+artemis/ai/client.py	ChatClient.model	What the analysis needs from a model client: its model name.	stays	stays
+artemis/ai/client.py	ChatClient.chat	What the analysis needs from a model client: one chat call that returns a ChatReply.	stays	stays
+artemis/review.py	decision_ok	Whether a decision settles its alert: an acknowledgement, or an override with a reason (Other needs a comment).	artemis/review.py	moved
+artemis/review.py	all_decided	Finalize's rule: every alert has a decision that settles it.	artemis/review.py	moved
+backend/evaluation.py	run_visit	One visit through the backend: the patient into a throwaway database, the check, then Compare plans; returns what was saved.	stays	stays
+backend/records.py	checks_entry	The saved entry for one visit check, which the reply is built from too.	backend/records.py	moved
+backend/records.py	saved_alerts	A saved check's alerts rebuilt with their passages and explanations; refuses a misaligned record.	backend/records.py	moved
+backend/records.py	_saved_alert	One saved alert rebuilt; refuses one with no id, title or message.	backend/records.py	moved
+backend/services.py	app_version	The code version saved with each visit check: the git commit, or unknown.	backend/services.py	moved
+backend/evaluation.py	RunFailed.__init__	A refused run, with what it had already spent on the model.	stays	stays
