@@ -147,6 +147,8 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   const past = page.getByRole("list", { name: "Past checks" });
   const finalized = past.getByRole("listitem").filter({ hasText: "Finalized" }).first();
   await expect(finalized).toContainText("AMBER");
+  // How its AI review ended, in the API's words (screen checklist, section 1).
+  await expect(finalized).toContainText(`AI review: ${reply.ai_review_label}`);
   await finalized.getByRole("link").click();
   await expect(page.getByRole("region", { name: "Visit record" })).toBeVisible();
 });

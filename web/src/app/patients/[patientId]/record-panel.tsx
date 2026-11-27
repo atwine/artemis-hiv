@@ -138,13 +138,17 @@ function PastChecks({ patientId }: { patientId: string }) {
         <ul aria-label="Past checks" className="flex flex-col">
           {past.data.map((v) => (
             <li key={v.visit_id} className="border-b border-line">
-              <Link href={visitHref(patientId, v.visit_id)} className="flex items-center gap-3 py-[9px] text-14 leading-5 hover:bg-surface">
+              <Link href={visitHref(patientId, v.visit_id)} className="flex items-start gap-3 py-[9px] text-14 leading-5 hover:bg-surface">
                 <span className="w-40 shrink-0 whitespace-nowrap text-muted-foreground">
                   {localDate(v.saved_at)}, {clock(v.saved_at)}
                 </span>
-                <span className="flex flex-1 items-center gap-1.5 text-black">
-                  <StatusShape state={v.status} size={12} />
-                  {v.status}
+                {/* How its AI review ended, in the API's words, as on the saved record. */}
+                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <span className="flex items-center gap-1.5 text-black">
+                    <StatusShape state={v.status} size={12} />
+                    {v.status}
+                  </span>
+                  <span className="text-13 leading-4 text-muted-foreground">AI review: {v.ai_review_label}</span>
                 </span>
                 <span className="text-ink-2">{v.finalized_at ? "Finalized" : "Open"}</span>
               </Link>
