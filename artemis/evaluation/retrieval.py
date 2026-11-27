@@ -113,12 +113,15 @@ def check_search(cases: Sequence[Case], questions: Sequence[Tuple[SearchItem, st
                  case_search: Callable[[Case], Sequence[Any]],
                  question_search: Callable[[str], Sequence[Any]],
                  allowed: Optional[Set[str]] = None,
-                 ideal_search: Optional[Callable[[str], Sequence[Any]]] = None) -> List[Dict[str, Any]]:
+                 ideal_search: Optional[Callable[[str], Sequence[Any]]] = None,
+                 rule_search: Optional[Callable[[Case], Sequence[Sequence[Any]]]] = None) -> List[Dict[str, Any]]:
     """One row per item: where its gold first came back in the passages its search returned.
     A case's items share the search the app runs for that visit; a question is searched as is.
     `allowed` (guideline file stems) is what the app searches; other passages can't count.
     With `ideal_search`, each covered problem is also searched with its own answer-key summary
-    (kind "ideal"): the index measured apart from how the app words its searches."""
+    (kind "ideal"): the index measured apart from how the app words its searches. With
+    `rule_search` (the passages shown under each of a case's fixed-rule alerts), each covered
+    problem of a case that has rule alerts gets a "rule" row: its best rank under any of them."""
     rows: List[Dict[str, Any]] = []
     for case in cases:
         items = case_items(case, allowed)
@@ -128,6 +131,13 @@ def check_search(cases: Sequence[Case], questions: Sequence[Tuple[SearchItem, st
             for item in items:
                 if item.gold:
                     rows += _rows("ideal", [item], ideal_search(summaries[item.item_id.split(":", 1)[1]]))
+        if rule_search is not None:
+            per_alert = [list(found) for found in rule_search(case)]
+            for item in items if per_alert else []:
+                if item.gold:
+                    best = min((r for r in (_rows("rule", [item], found)[0] for found in per_alert) if r["rank"] is not None),
+                               key=lambda r: r["rank"], default=_rows("rule", [item], per_alert[0])[0])
+                    rows.append(best)
     for item, question in questions:
         kept = SearchItem(item.item_id, tuple(g for g in item.gold if allowed is None or g.document in allowed))
         rows += _rows("question", [kept], question_search(question))
@@ -143,7 +153,7 @@ def self_check(gold: Sequence[GoldPassage], search: Callable[[str], Sequence[Any
 
 def summarize_check(rows: Sequence[Dict[str, Any]]) -> Dict[str, Score]:
     return {kind: score([ItemResult(r["item"], r["covered"], r["rank"]) for r in rows if r["kind"] == kind])
-            for kind in ("case", "question", "ideal") if kind != "ideal" or any(r["kind"] == "ideal" for r in rows)}
+            for kind in ("case", "question", "ideal", "rule") if kind in ("case", "question") or any(r["kind"] == kind for r in rows)}
 
 
 def missing_quotes(gold: Sequence[GoldPassage], folder: Path) -> List[GoldPassage]:

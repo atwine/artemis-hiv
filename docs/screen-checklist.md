@@ -48,8 +48,10 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
 - **Heading** says who raised it: `alert_heading`, e.g. "Alert (Rule check): Creatinine monitoring
   overdue while on TDF" or "Alert (AI review): ...".
 - **References** (`alert_references`): an AI alert lists the passages it was shown and cited; a
-  passage it cites but was not shown is marked "not among the passages the AI was given". A rule
-  alert lists the passages a search found for it, headed "Related passages".
+  passage it cites but was not shown is marked "not among the passages the AI was given". An AI
+  alert that cites nothing is headed `NO_PASSAGE_CITED` ("No guideline passage cited"), with no
+  lines (owner, 2026-11-27). A rule alert lists the passages a search found for it, headed
+  "Related passages".
 - **A citation** names the guideline and its printed page (G36): `citation_line`, e.g. "Uganda HIV
   Guidelines 2022 · p. 255" (the design's look, owner 2026-11-26: capital G, a middle dot with
   spaces, "p." and a space; no table or section number until plan item 8.5). Never the page's

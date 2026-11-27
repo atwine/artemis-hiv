@@ -13,7 +13,7 @@ never saves (the short outcome, `screening_outcome`, stays).
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
@@ -68,6 +68,19 @@ def _post(http: Any, path: str, **kw: Any) -> Any:
     if r.status_code != 200 and not (r.status_code == 503 and r.json().get("detail") == _SEARCH_DOWN):
         raise RunFailed(f"{path}: HTTP {r.status_code} {r.text[:200]}")
     return r
+
+
+def as_the_app_reads(patients: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """The patients as the app reads them: saved into a throwaway database and read back
+    (backend/patients_db.py), so a measurement sees each record in the app's own shape."""
+    engine = memory_engine()
+    try:
+        with Session(engine) as session:
+            patients_db.import_records(session, patients, origin="seed")
+        with Session(engine) as session:
+            return patients_db.load_all(session)
+    finally:
+        engine.dispose()
 
 
 def run_visit(patient: Dict[str, Any], note: str, client: Any, rag: Any) -> Tuple[Dict[str, Any], Optional[Dict[str, Any]]]:

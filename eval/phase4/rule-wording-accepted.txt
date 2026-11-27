@@ -1,0 +1,29 @@
+2026-11-27: the Phase 4 check accepts the two reworded fixed rules (owner: "A, accept the wording").
+
+Why: the two fixed rules were reworded on purpose to name the guideline's action (6def3d7). GLM's
+saved 2B run (eval/phase2/runs/glm-5.2-t0-5q) holds their old text, and a rule alert searches the
+guidelines with its own words, so the passages under those two alerts changed too. Making new
+saved replies would need a paid GLM run; the owner chose to accept the new wording instead.
+
+What was compared, before accepting anything: the saved run replayed through the backend
+(scripts/check_phase4.py's path, saved replies, real kept index), every alert of every run,
+field by field (title, message, source, severity, its passages), plus the passages the AI was
+shown, the status and the plan text.
+
+Every difference found (9 runs; the check counted 18 because each run failed on two lines):
+
+  MR-KS  runs 1-3  tdf_nsaid_use          (fixed rule): message, passages
+  P003   runs 1-3  efv_sleep_disturbance  (fixed rule): message, passages
+  P005   runs 1-3  tdf_nsaid_use          (fixed rule): message, passages
+
+Differences anywhere else: none. No AI alert, no passage the AI was shown, no status and no plan
+changed.
+
+What the check does now: it compares each run with the saved run after swapping in the accepted
+text and passages for those two fixed-rule alerts only (eval/phase4/accepted-rule-wording.json).
+It refuses an accepted entry for any alert the saved run doesn't mark as a fixed rule
+(tests/test_phase4_accepted_wording.py). Everything the AI said is compared as saved.
+
+Scores (stricter key): AI catches 52 as saved and 52 now. All catches 53 -> 54 and alerts that are
+real problems 111 -> 120: the stricter key counts the reworded rules, which now name the action.
+Keep rule: MET (eval/phase4/api-replay-check.txt).

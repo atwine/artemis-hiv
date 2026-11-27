@@ -30,6 +30,8 @@ _PARTIAL_REASON = {
     "partly_read": "part of its reply could not be read",
 }
 NOT_SHOWN = "not among the passages the AI was given"
+# An AI alert that cites no guideline passage says so in its heading (owner, 2026-11-27: "A, say so").
+NO_PASSAGE_CITED = "No guideline passage cited"
 DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only."
 # A visit check whose record couldn't be saved: the API can't take decisions on it (owner,
 # 2026-11-26; the website's wording).
@@ -227,5 +229,5 @@ def alert_references(alert: Alert, retrieved: List[VectorSearchResult]) -> Tuple
             page = passage.metadata.get("page_number") if passage is not None else c.get("page_number")
             lines.append(f"Guidelines · p. {page if page is not None else '?'}: {NOT_SHOWN}")
     if not lines:
-        lines = ["The AI cited no guideline passage for this alert."]
+        return NO_PASSAGE_CITED, []
     return "References (the passages the AI was shown and cited)", _unique(lines)

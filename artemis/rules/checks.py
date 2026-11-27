@@ -143,7 +143,10 @@ def _check_efv_sleep_disturbance(context: PatientContext) -> Optional[Alert]:
     return Alert(
         alert_id="efv_sleep_disturbance",
         title="Possible EFV neuropsychiatric side effects",
-        message="Sleep disturbance mentioned in notes for a patient on EFV. Consider assessing EFV tolerance and reviewing guideline management options.",
+        # Owner, 2026-11-27 ("A, name the action"): the Ugandan guideline's own action, as advice.
+        message=("Sleep disturbance mentioned in notes for a patient on EFV. Reassure first. If the symptoms persist, "
+                 "consider substituting EFV with DTG (or LPV/r if a suitable DTG formulation is not available) "
+                 "(Uganda HIV Guidelines 2022, p. 269)."),
         evidence={
             "regimen": context.art_regimen_current,
             "keyword_hits": hits,
@@ -170,7 +173,12 @@ def _check_tdf_nsaid_use(context: PatientContext) -> Optional[Alert]:
     return Alert(
         alert_id="tdf_nsaid_use",
         title="NSAID use mentioned while on TDF",
-        message="NSAID use is mentioned in notes for a patient on TDF. Consider reviewing renal risk and ensuring appropriate monitoring.",
+        # Owner, 2026-11-27 ("A, name the action"; the Uganda HIV guidelines don't cover NSAIDs, so the
+        # Uganda Clinical Guidelines 2023 are cited too, for the doctors to confirm in Phase 7).
+        message=("NSAID use is mentioned in notes for a patient on TDF; NSAIDs add to kidney harm. Consider "
+                 "stopping or avoiding the NSAID, especially if kidney function is falling (Uganda Clinical "
+                 "Guidelines 2023, p. 452 and p. 625), with paracetamol for pain instead. Check kidney function; "
+                 "if the GFR is below 60 ml/min, consider substituting TDF with ABC (Uganda HIV Guidelines 2022, p. 270)."),
         evidence={
             "regimen": context.art_regimen_current,
             "keyword_hits": hits,

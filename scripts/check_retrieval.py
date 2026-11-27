@@ -12,6 +12,7 @@ is searched as written. Writes eval/phase2b/search-<label>.json and prints the t
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 import json
 import sys
 from pathlib import Path
@@ -26,10 +27,12 @@ from dotenv import load_dotenv  # noqa: E402
 from artemis import config  # noqa: E402  (the app's own guideline index)
 
 from artemis.evaluation.cases import load_cases  # noqa: E402
+from backend.evaluation import as_the_app_reads  # noqa: E402
 from artemis.evaluation.retrieval import (case_items, check_search, load_search_questions, self_check,  # noqa: E402
                                           summarize_check)
 from artemis.ai.client import ChatReply, OpenAICompatClient  # noqa: E402
-from artemis.visit import AnalysisOptions, patient_context_for, patient_summary_for, screening_search  # noqa: E402
+from artemis.rules.checks import run_alerts  # noqa: E402
+from artemis.visit import AnalysisOptions, _retrieve, patient_context_for, patient_summary_for, screening_search  # noqa: E402
 from run_phase2 import PRESETS, model_config  # noqa: E402
 
 DEPTH = 10  # passages checked; the app shows the AI AnalysisOptions().top_k of them
@@ -85,6 +88,8 @@ def main(argv: Optional[list] = None) -> int:
     if config.GUIDELINE_PATHS:
         rag.ensure_indexed()
     cases = load_cases(args.cases)
+    # Each patient as the app reads it (plan 4C.5): saved into a throwaway database and read back.
+    cases = [replace(c, patient=p) for c, p in zip(cases, as_the_app_reads([c.patient for c in cases]))]
     questions = load_search_questions(args.questions)
     allowed = {p.stem for p in config.GUIDELINE_PATHS}  # what the app searches: Ugandan guidance only
     if args.replay_questions:
@@ -113,6 +118,9 @@ def main(argv: Optional[list] = None) -> int:
         question_search=lambda text: rag.search(text, top_k=DEPTH),
         allowed=allowed,
         ideal_search=lambda text: rag.search(text, top_k=DEPTH),
+        # The passages the doctor sees under each fixed-rule alert, found by the app's own search (fix 2).
+        rule_search=lambda c: [_retrieve(rag, context=patient_context_for(c.patient, _note(c)), alert=a, top_k=AnalysisOptions().top_k)
+                               for a in run_alerts(patient_context_for(c.patient, _note(c)))],
     )
     shown = AnalysisOptions().top_k
     summary = summarize_check(rows)

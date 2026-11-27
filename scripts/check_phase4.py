@@ -20,6 +20,11 @@ never shown as a clean plan (it fails, or comes with its issues).
 Since 4C.5 (owner, 2026-11-27: "A, through the backend") each run goes through the evaluation's
 own path, backend/evaluation.py run_case: the case's patient into a throwaway database as the app
 stores it, then the check and the plan through the routes. The keep rule is unchanged.
+
+Since the two fixed rules were reworded to name the guideline's action (owner, 2026-11-27: "A,
+accept the wording"), the saved run is compared with the accepted new text of those fixed-rule
+alerts and the passages that text finds (eval/phase4/accepted-rule-wording.json); everything the
+AI said is still compared with the saved run as it is.
 """
 
 from __future__ import annotations
@@ -34,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 RUNS = ROOT / "eval" / "phase2" / "runs" / "glm-5.2-t0-5q"
 OUT = ROOT / "eval" / "phase4" / "api-replay-check.txt"
+ACCEPTED = ROOT / "eval" / "phase4" / "accepted-rule-wording.json"
 SCREENING = "You are ARTEMIS, an HIV medication safety screening system"
 
 
@@ -57,6 +63,23 @@ class SavedReplies:
         if system == self._questions_prompt:
             return ChatReply(json.dumps(screening.get("search_questions") or []), finish_reason="stop")
         return ChatReply(self._record.get("plan_text") or "", finish_reason="stop")
+
+
+def with_accepted_rule_wording(record: Dict[str, Any], accepted: Dict[str, Any]) -> Dict[str, Any]:
+    """The saved run as now expected: the accepted text and passages for reworded fixed-rule alerts.
+
+    Only alerts the saved run marks as fixed-rule ("rule") may be changed; the record itself is
+    left as saved."""
+    rules = {a["alert_id"] for a in record["alerts"] if a.get("source") == "rule"}
+    passages = (accepted.get("passages") or {}).get(record["case_id"], {})
+    in_this_run = {a["alert_id"] for a in record["alerts"]}
+    for alert_id in (set(accepted.get("messages") or {}) & in_this_run) | set(passages):
+        if alert_id not in rules:
+            raise ValueError(f"{record['case_id']} {alert_id} is not a fixed-rule alert; its wording can't be accepted")
+    messages = accepted.get("messages") or {}
+    alerts = [{**a, "message": messages[a["alert_id"]]} if a["alert_id"] in messages else dict(a)
+              for a in record["alerts"]]
+    return {**record, "alerts": alerts, "retrieved": {**record["retrieved"], **passages}}
 
 
 def _same(a: Dict[str, Any]) -> tuple:
@@ -87,7 +110,9 @@ def main() -> int:
         return 1
     rag.ensure_indexed()
     cases = {c.case_id: c for c in load_cases(ROOT / "eval" / "cases")}
-    saved = [json.loads(Path(f).read_text(encoding="utf-8")) for f in sorted(glob.glob(str(RUNS / "*.json")))]
+    as_saved = [json.loads(Path(f).read_text(encoding="utf-8")) for f in sorted(glob.glob(str(RUNS / "*.json")))]
+    accepted = json.loads(ACCEPTED.read_text(encoding="utf-8"))
+    saved = [with_accepted_rule_wording(r, accepted) for r in as_saved]
 
     replayed, problems = [], []
     plans_made = plans_failed = plans_flagged = 0
@@ -129,7 +154,8 @@ def main() -> int:
     lines = [
         "Phase 4 check: GLM's final 2B run (glm-5.2-t0-5q) replayed through the evaluation's backend path (4C.5).",
         f"Runs: {len(saved)} saved, {len(replayed)} replayed (real kept index, saved replies, nothing spent).",
-        f"Scores as saved (2B):  {json.dumps(before, sort_keys=True)}",
+        f"Scores as saved (2B):  {json.dumps(_summary(cases, as_saved), sort_keys=True)}",
+        f"Scores expected (2B with the accepted rule wording, {ACCEPTED.name}): {json.dumps(before, sort_keys=True)}",
         f"Scores through the API: {json.dumps(after, sort_keys=True)}",
         f"Runs with differences: {len(problems)}",
         "Also compared per run: the passages the AI was shown, and each alert's passages (kept Chroma index).",
@@ -141,7 +167,7 @@ def main() -> int:
     ]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("\n".join(lines[:9]))
+    print("\n".join(lines[:10]))
     return 0 if met else 2
 
 

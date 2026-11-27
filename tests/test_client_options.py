@@ -48,3 +48,41 @@ def test_the_server_client_runs_at_temperature_0_by_default(monkeypatch: pytest.
     monkeypatch.setattr(requests, "post", lambda url, json=None, headers=None, timeout=None: (sent.update(json), _Resp())[1])
     OpenAICompatClient(OpenAICompatConfig(base_url="http://example.invalid/v1", model="m")).chat([{"role": "user", "content": "hi"}])
     assert sent["temperature"] == 0 and "reasoning" not in sent
+
+
+# LLM_REASONING (owner, 2026-11-27): GLM on OpenRouter runs with its thinking off, as it was measured.
+
+def _config_from(monkeypatch, **env):
+    from artemis.ai.client import openai_compat_config_from_env
+
+    monkeypatch.setenv("LLM_BASE_URL", "http://example.invalid/v1")
+    monkeypatch.delenv("LLM_REASONING", raising=False)
+    monkeypatch.delenv("LLM_MODEL", raising=False)
+    for name, value in env.items():
+        monkeypatch.setenv(name, value)
+    return openai_compat_config_from_env()
+
+
+def test_reasoning_off_asks_the_server_to_skip_thinking(monkeypatch: pytest.MonkeyPatch) -> None:
+    import requests
+    from artemis.ai.client import OpenAICompatClient
+
+    sent = {}
+    monkeypatch.setattr(requests, "post", lambda url, json=None, headers=None, timeout=None: (sent.update(json), _Resp())[1])
+    OpenAICompatClient(_config_from(monkeypatch, LLM_REASONING="off", LLM_MODEL="m")).chat([{"role": "user", "content": "hi"}])
+    assert sent["reasoning"] == {"enabled": False}
+
+
+def test_without_the_setting_nothing_about_reasoning_is_sent(monkeypatch: pytest.MonkeyPatch) -> None:
+    assert not (_config_from(monkeypatch).extra_body or {}).get("reasoning")
+
+
+@pytest.mark.parametrize("value", ["OFF", " off "])
+def test_off_is_read_whatever_its_case_or_spaces(monkeypatch: pytest.MonkeyPatch, value: str) -> None:
+    assert _config_from(monkeypatch, LLM_REASONING=value).extra_body == {"reasoning": {"enabled": False}}
+
+
+@pytest.mark.parametrize("value", ["on", "false", "yes", "disabled"])
+def test_any_other_value_is_refused_so_a_typo_cant_leave_thinking_on(monkeypatch: pytest.MonkeyPatch, value: str) -> None:
+    with pytest.raises(ValueError, match="LLM_REASONING"):
+        _config_from(monkeypatch, LLM_REASONING=value)

@@ -124,3 +124,15 @@ def test_a_refused_request_stops_the_run():
     case.patient["today_encounter"]["note"] = "x" * 20001  # over the visit check's limit
     with pytest.raises(RunFailed, match="422"):
         _run(case, FakeModel(replies_for("P001")))
+
+
+def test_patients_read_as_the_app_reads_them():
+    """The search check (scripts/check_retrieval.py) reads each case's patient back from a throwaway
+    database, as the app does: a lab in the older shape comes back as value and unit."""
+    from backend.evaluation import as_the_app_reads
+
+    case = _case("P001")
+    back = as_the_app_reads([case.patient])
+    assert [p["patient_id"] for p in back] == ["P001"]
+    assert back[0]["labs"]["creatinine"] == [{"date": "2024-10-01", "value": "88", "unit": "umol/L", "source": "record"}]
+    assert "expected_demo_outcome" not in back[0]  # the answer key stays with the evaluation
