@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { longDate } from "./dates.ts";
-import { asSentence, checkReads, checkedCounts, firstSentence, labCount, labRows, otherMedicines, possessive, previousArt, todaySummary } from "./record.ts";
+import { asSentence, checkReads, checkedCounts, firstSentence, labCount, labRows, otherMedicines, patientLine, possessive, previousArt, todaySummary } from "./record.ts";
 
 test("a lab row: the latest result with its unit as recorded, and the earliest for comparison", () => {
   const rows = labRows(
@@ -119,4 +119,12 @@ test("what was checked: no regimen recorded counts none; the note counted is the
 
 test("an ellipsis already ends a sentence", () => {
   assert.equal(asSentence("A title cut short…"), "A title cut short…");
+});
+
+test("the patient line leaves out an age or sex that isn't recorded (owner, 2026-11-27)", () => {
+  const line = (age_years: number | null, sex: string) => patientLine({ patient_id: "P010", age_years, sex, art_regimen_current: ["TDF", "3TC", "DTG"] });
+  assert.equal(line(41, "F"), "P010 · 41 F · TDF/3TC/DTG");
+  assert.equal(line(null, ""), "P010 · TDF/3TC/DTG");
+  assert.equal(line(41, ""), "P010 · 41 · TDF/3TC/DTG");
+  assert.equal(line(null, "M"), "P010 · M · TDF/3TC/DTG");
 });

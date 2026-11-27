@@ -478,6 +478,10 @@ results they will value. These were raised and set aside, not dropped.
   skip).
 - The tray's not-reached step names stay just under the contrast standard (owner kept the design's
   grey); the accessibility test skips that one check.
+- The board at a `?date=` with no clinic day shows the backend's reason but no link back to
+  today; the doctor uses the browser's Back (raised in the add-case review, 2026-11-27).
+- Compare plans: the AI quotes the doctor's note word for word for each problem; today the
+  "About your plan" column shows the AI's own one-sentence note instead (owner, 2026-11-27).
 
 ## Phase 8: Stretch, as time allows
 

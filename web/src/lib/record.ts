@@ -72,9 +72,13 @@ export function otherMedicines(meds: string[]): string | null {
   return list.length ? list.join("; ") : null;
 }
 
-/** The patient line under a name: "P001 · 34 M · TDF/3TC/DTG". */
+/**
+ * The patient line under a name: "P001 · 34 M · TDF/3TC/DTG". An age or sex that isn't recorded
+ * is left out, never shown as "?" (owner, 2026-11-27).
+ */
 export function patientLine(p: Pick<PatientDetail, "patient_id" | "age_years" | "sex" | "art_regimen_current">): string {
-  return [p.patient_id, `${p.age_years ?? "?"} ${p.sex}`.trim(), p.art_regimen_current.join("/")].filter(Boolean).join(" · ");
+  const ageSex = `${p.age_years ?? ""} ${p.sex}`.trim();
+  return [p.patient_id, ageSex, p.art_regimen_current.join("/")].filter(Boolean).join(" · ");
 }
 
 /** Whose record: "her", "his", or "the" when the sex isn't recorded as F or M. */
