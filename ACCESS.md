@@ -65,8 +65,8 @@ clinician, through the backend (on the Later list).
 
 The AI management plan ("Compare plans", 2026-11-27) is a visit record with the visit check's
 rules: made only for a saved visit, only from this laptop, saved as a new row and never changed.
-A plan that was made is shown again with nothing run; a failed one may be tried again (owner:
-"A, keep a good plan"). Making one counts toward the visit checks' limit (owner: "A, one shared
+A plan that passed the app's checks is shown again with nothing run; a failed or flagged one may
+be tried again (owner: "A, keep a good plan"). Making one counts toward the visit checks' limit (owner: "A, one shared
 limit").
 
 Patients moved into the database on 2026-11-27 with the same rules (owner: "A, keep the rules"):
@@ -149,8 +149,8 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
   anything runs or is spent (owner, 2026-11-26; `tests/test_check_limit.py`).
 - A website presses "Compare plans" in the background, spending model money. Covered by: grid
   row website = `-`; the `Origin` check refuses it (403) before the route runs.
-- A stuck page presses "Compare plans" over and over. Covered by: a plan that was made is shown
-  again with nothing run or spent; making a plan counts toward the same 6 a minute as visit
+- A stuck page presses "Compare plans" over and over. Covered by: a plan that passed its checks is
+  shown again with nothing run or spent; making a plan counts toward the same 6 a minute as visit
   checks (429; `tests/test_compare_plans.py`).
 - A plan is asked for a visit that doesn't exist, or while the guideline search is down. Covered
   by: 404 for an unknown visit, 503 with the search down; nothing runs or is saved.

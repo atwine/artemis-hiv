@@ -124,3 +124,13 @@ def test_a_plan_that_never_passes_its_checks_comes_back_marked() -> None:
     result, _ = _run_flow("P005", _baseline_plan("P005"))  # no verdicts: fails every time
     assert result.updated_management_plan_text
     assert any("clinician_plan_for_this_problem" in i for i in result.plan_issues)
+
+
+def test_a_plan_whose_parts_have_the_wrong_type_is_read_without_crashing() -> None:
+    """Code review, 2026-11-27: "problems": 5 raised TypeError after the model had been paid."""
+    from artemis.plan.view import read_plan
+
+    for odd in ('{"problems": 5}', '{"problems": true}', '{"problems": "none", "art_regimen_decision": "Continue"}',
+                '{"problems": [1, "x", null], "monitoring_plan": 3, "patient_counselling": null}'):
+        view = read_plan(odd, clinician_plan_written=True)
+        assert view is not None and view.items == [], odd

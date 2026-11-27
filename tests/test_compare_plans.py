@@ -151,6 +151,43 @@ def test_after_a_failed_plan_pressing_again_tries_again(api):
     assert api.client.get(f"/api/visits/{visit['visit_id']}", headers=LOCAL).json()["plan"] == retried
 
 
+def test_a_plan_that_failed_the_apps_checks_is_shown_and_pressing_again_tries_again(api):
+    """A readable plan the app's checks flagged is shown with the warning, but it isn't a good plan
+    to keep: pressing again tries again (code review, 2026-11-27: an empty "{}" plan was kept)."""
+    from artemis.screen_text import PLAN_ISSUES_NOTE
+
+    visit = _check(api)
+    api.model = FakeModel({**replies_for("P001"), "plan": "{}"})
+    flagged = _compare(api, visit["visit_id"]).json()
+    assert flagged["outcome"] == "made" and flagged["issues"] and flagged["issues_note"] == PLAN_ISSUES_NOTE
+    api.model = FakeModel(replies_for("P001"))
+    retried = _compare(api, visit["visit_id"]).json()
+    assert "plan" in api.model.calls
+    assert retried["outcome"] == "made" and retried["issues"] == []
+    assert len(_plans(api)) == 2
+
+
+@pytest.mark.parametrize("odd", ['{"problems": 5}', '{"problems": true}'])
+def test_odd_ai_output_never_breaks_the_reply(api, odd):
+    visit = _check(api)
+    api.model = FakeModel({**replies_for("P001"), "plan": odd})
+    r = _compare(api, visit["visit_id"])
+    assert r.status_code == 200, r.text
+    assert len(_plans(api)) == 1
+
+
+def test_a_model_server_that_does_not_answer_is_logged_by_kind_only(api, caplog):
+    import logging
+
+    visit = _check(api)
+    api.model = FakeModel({}, fail=True)
+    with caplog.at_level(logging.WARNING, logger="backend.main"):
+        _compare(api, visit["visit_id"])
+    lines = [r.getMessage() for r in caplog.records if r.name == "backend.main"]
+    assert any(line.startswith("Plan not made:") for line in lines), lines
+    assert not any("connection refused" in line for line in lines)
+
+
 # When no plan can be made
 
 

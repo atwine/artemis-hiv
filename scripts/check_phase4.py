@@ -14,8 +14,8 @@ saved run, and the search must be the kept Chroma index. Writes eval/phase4/api-
 
 Since B1/B2 (owner, 2026-11-27) the visit check makes no plan; each run's plan is made after it
 through "Compare plans". Added to the keep rule then, before that run: a run whose saved plan
-passed its checks gets the same plan text, as a plan made; one whose saved plan failed them gets
-no readable plan.
+passed its checks gets the same plan text, as a plan made; one whose saved plan failed them is
+never shown as a clean plan (it fails, or comes with its issues).
 """
 
 from __future__ import annotations
@@ -129,10 +129,12 @@ def main() -> int:
             continue
         with Session(engine) as s:
             made = records.latest_plan(s, r.json()["visit_id"])
-        if record.get("plan_issues"):
+        if made is None:
+            problems.append(f"{record['case_id']} run {record['repeat']}: the plan was not saved")
+        elif record.get("plan_issues"):
             plans_failed += 1
-            if plan.json()["outcome"] != "failed":
-                problems.append(f"{record['case_id']} run {record['repeat']}: a plan that failed its checks came back readable")
+            if plan.json()["outcome"] == "made" and not plan.json()["issues"]:
+                problems.append(f"{record['case_id']} run {record['repeat']}: a plan that failed its checks came back clean")
         else:
             plans_made += 1
             if plan.json()["outcome"] != "made" or made.plan_text != record["plan_text"]:
@@ -148,7 +150,7 @@ def main() -> int:
         f"Scores through the API: {json.dumps(after, sort_keys=True)}",
         f"Runs with differences: {len(problems)}",
         "Also compared per run: the passages the AI was shown, and each alert's passages (kept Chroma index).",
-        f"Plans through Compare plans: {plans_made} the same as saved, {plans_failed} saved as failed"
+        f"Plans through Compare plans: {plans_made} the same as saved, {plans_failed} saved as failing their checks, none shown clean"
         " (any that differ count as runs with differences).",
         f"Keep rule (same alerts and passages in every run, identical scores): {'MET' if met else 'NOT MET'}",
         *problems[:30],

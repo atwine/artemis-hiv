@@ -29,6 +29,12 @@ def plan_row(result: Any, *, visit_id: str, model: Optional[str], made_at: datet
                      plan_text=text, issues=issues, error_type=error_type)
 
 
+def is_good(row: VisitPlan) -> bool:
+    """A plan worth keeping: readable and passing the app's own checks. Pressing "Compare plans"
+    again shows it with nothing run; any other plan is tried again (owner: "A, keep a good plan")."""
+    return row.outcome == "made" and not row.issues
+
+
 def plan_reply(row: VisitPlan, *, note: str, saved: bool = True) -> ManagementPlan:
     """A saved plan in screen shape. Each item is compared with the note the visit was checked on:
     with no note, every item says there is no plan to compare."""

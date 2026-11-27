@@ -345,9 +345,9 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 raise HTTPException(status_code=404, detail="No such visit.")
             patient_id, note = row.patient_id, row.note
             saved_plan = records.latest_plan(session, visit_id)
-        # A plan that was made stands: shown again with nothing run or spent; a failed one is
-        # tried again (owner, 2026-11-27: "A, keep a good plan").
-        if saved_plan is not None and saved_plan.outcome == "made":
+        # A good plan stands: shown again with nothing run or spent. A failed one, or one the app's
+        # own checks flagged, is tried again (owner, 2026-11-27: "A, keep a good plan").
+        if saved_plan is not None and plans.is_good(saved_plan):
             return plans.plan_reply(saved_plan, note=note)
         patient = _find(services, patient_id).stored
         rag = services.search()
@@ -363,10 +363,10 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                                 headers={"Retry-After": str(wait)})
         result = management_plan(patient=copy.deepcopy(patient), today_note=note, rag=rag, llm_client=client,
                                  top_k=services.top_k)
-        if isinstance(result, dict):
-            logger.warning("Plan step failed: %s", result.get("type"))
         made = plans.plan_row(result, visit_id=visit_id, model=getattr(client, "model", None),
                               made_at=datetime.datetime.now(datetime.timezone.utc))
+        if made.outcome == "failed":  # kinds only: an error's text can hold the model server's address
+            logger.warning("Plan not made: %s", made.error_type or ", ".join(made.issues) or "no readable plan")
         try:
             with Session(services.engine) as session:
                 made = records.save_plan(session, made)

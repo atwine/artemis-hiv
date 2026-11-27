@@ -70,7 +70,8 @@ def read_plan(text: str, *, clinician_plan_written: bool, issues: Optional[List[
     decision = str(ard.get("decision") or "").strip() if isinstance(ard, dict) else ""
     label, tone = _REGIMEN[regimen_decision_kind(decision)]
     items: List[PlanItem] = []
-    for p in obj.get("problems") or []:
+    problems = obj.get("problems")
+    for p in problems if isinstance(problems, list) else []:  # the AI may send any type here
         if not isinstance(p, dict):
             continue
         cp = p.get("clinician_plan_for_this_problem")

@@ -92,6 +92,8 @@ only what the AI actually said.
 - No plan is made when the guideline search is unavailable (503, G33) or no model server is set
   up (503). A plan counts toward the same limit as visit checks (6 a minute, 429).
 - `saved: false`: the plan is shown but could not be saved.
+- Pressing "Compare plans" again: a plan that passed its checks is shown again with no AI call;
+  a failed or flagged one is tried again (owner, 2026-11-27: "A, keep a good plan").
 
 ## 5. Always
 
