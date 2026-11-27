@@ -61,10 +61,13 @@ export type GuidelineQuote = {
  * citation of the passage it came from; otherwise the first passage the references name, quoted
  * from its start (owner, 2026-11-26). Null when no passage is cited.
  */
-export function guidelineQuote(ext: Pick<Extension, "key_sentence" | "references" | "passages">): GuidelineQuote | null {
+export function guidelineQuote(
+  ext: Pick<Extension, "key_sentence" | "references" | "passages"> & { kind?: Extension["kind"] },
+): GuidelineQuote | null {
   const key = ext.key_sentence?.trim();
   if (key) {
-    const from = ext.passages.find((p) => p.text.includes(key));
+    // An AI alert quotes only a passage it cited: a passage it was shown but didn't cite is not its source.
+    const from = ext.passages.find((p) => p.text.includes(key) && (ext.kind !== "ai" || ext.references.includes(p.citation ?? "")));
     if (from) return { text: key, citation: from.citation ?? "", whole: from.text, isKeySentence: true };
   }
   const p = quotedPassage(ext);
@@ -75,3 +78,4 @@ export function guidelineQuote(ext: Pick<Extension, "key_sentence" | "references
 export function valueHeading(name: string, valueDate: string, visitDate: string): string {
   return valueDate === visitDate ? `${firstName(name)} today` : `${firstName(name)}, ${longDate(valueDate)}`;
 }
+

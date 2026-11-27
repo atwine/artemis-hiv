@@ -7,7 +7,7 @@ import { useId, useState } from "react";
 
 import { StatusShape } from "@/components/frame/status";
 import type { Card } from "@/lib/api/client";
-import { guidelineQuote, isSevere, SOURCE_LABEL, severityWord, valueHeading } from "@/lib/alerts";
+import { guidelineQuote, isSevere, severityWord, SOURCE_LABEL, valueHeading } from "@/lib/alerts";
 import { asSentence } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
@@ -66,6 +66,12 @@ export function AlertView({ card, n, patientName, visitDate }: { card: Card; n: 
             others={ext.references.filter((r) => r !== quote.citation)}
             divided={values.length > 0}
           />
+        ) : ext.references.length === 0 ? (
+          // Nothing to list (an AI alert that cited no passage): the API's heading says so, as one
+          // plain line, not a column label over an empty box.
+          <p className={cn("flex flex-1 items-center px-6.5 py-5.5 text-16 font-medium text-ink-2", values.length > 0 && "border-l border-line")}>
+            {ext.references_heading}
+          </p>
         ) : (
           <div className={cn("flex flex-1 flex-col gap-2.5 rounded-btn border-[1.5px] border-dashed border-line-strong px-6.5 py-5.5", values.length > 0 ? "m-3.5" : "m-0 border-0")}>
             <p className="text-13 font-semibold tracking-[0.06em] text-muted-foreground uppercase">{ext.references_heading}</p>

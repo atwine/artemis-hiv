@@ -261,3 +261,29 @@ test("a note changed after the checks: a banner on the results, and Run checks a
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
   await expect(banner).toHaveCount(0);
 });
+
+// An AI alert that cited no guideline passage (owner, 2026-11-27: "A, say so"): the backend sends
+// the heading "No guideline passage cited" with no reference lines, and the alert shows that heading
+// as one plain line: no empty box, and no passage quoted, not even its key sentence from a passage
+// the AI was only shown. A stand-in reply turns the check's rule alert into such an AI alert.
+test("an AI alert that cited no passage says so, and quotes nothing", async ({ page }) => {
+  const NONE_CITED = "No guideline passage cited";
+  await page.route("**/api/patients/*/visits", async (route) => {
+    if (route.request().method() !== "POST") return route.continue();
+    const reply = await route.fetch();
+    const body = (await reply.json()) as VisitCheck;
+    const [card] = body.cards;
+    const passage = card.extension.passages[0];
+    const extension = { ...card.extension, kind: "ai", references_heading: NONE_CITED, references: [], key_sentence: passage?.text.split(".")[0] ?? null };
+    await route.fulfill({ response: reply, json: { ...body, cards: [{ ...card, extension }] } });
+  });
+  await page.goto("/patients/P001");
+  await runRuleChecks(page);
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Review alert 1" }).click();
+  const alert = page.getByRole("region", { name: "Alert 1" });
+  const line = alert.getByText(NONE_CITED, { exact: true });
+  await expect(line).toBeVisible();
+  await expect(line).toHaveCSS("text-transform", "none"); // a sentence, not a column label over nothing
+  await expect(alert.getByRole("button", { name: "Show the whole passage" })).toHaveCount(0);
+});

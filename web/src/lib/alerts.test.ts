@@ -64,3 +64,11 @@ test("a value's heading: the first name and 'today', or the date it was taken", 
   assert.equal(valueHeading("Rose Nabirye", "2026-02-24", "2026-02-24"), "Rose today");
   assert.equal(valueHeading("John Doe", "2024-10-01", "2026-01-22"), "John, 1 Oct 2024");
 });
+
+test("an AI alert that cited nothing quotes nothing, not even a key sentence from a passage it was shown", () => {
+  const shown = passage("Uganda HIV Guidelines 2022 · p. 270", "If GFR is < 60mls/min then substitute with ABC.");
+  const ext = { kind: "ai" as const, key_sentence: "If GFR is < 60mls/min then substitute with ABC.", references: [], passages: [shown] };
+  assert.equal(guidelineQuote(ext), null);
+  // A rule alert's key sentence still comes from the passages the search found.
+  assert.equal(guidelineQuote({ ...ext, kind: "rule" as const })?.citation, "Uganda HIV Guidelines 2022 · p. 270");
+});
