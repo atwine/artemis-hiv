@@ -55,6 +55,10 @@ test("the clinic day: board and list", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("region", { name: "Waiting" })).toBeVisible();
   await audit(page, "board-fresh");
+  await page.getByRole("searchbox", { name: "Find a patient" }).fill("kato");
+  await expect(page.getByRole("list", { name: "Matching patients" })).toBeVisible();
+  await audit(page, "board-find-patient");
+  await page.getByRole("searchbox", { name: "Find a patient" }).fill("");
 
   await stubDesignDay(page); // finalized cards, one needing review, one AI review failed
   await page.goto("/");

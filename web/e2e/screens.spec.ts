@@ -99,6 +99,11 @@ test("the clinic day, in the design's states", async ({ page }) => {
   await page.goto("/?view=list");
   await expect(page.getByRole("list", { name: "Today's visits" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S1b-list.png") });
+  // Find a patient (owner, 2026-11-27: "A, a find box"), with two matches open.
+  await page.goto("/");
+  await page.getByRole("searchbox", { name: "Find a patient" }).fill("kato");
+  await expect(page.getByRole("list", { name: "Matching patients" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S1-find-patient.png") });
 });
 
 // The note changed after the checks ran (owner, 2026-11-27: "A, a banner"), on John Doe's results.
