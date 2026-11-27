@@ -140,3 +140,23 @@ def test_the_ideal_track_searches_each_problem_with_its_own_description(tmp_path
     assert asked == ["Kidney harm from TDF"]
     assert [(r["kind"], r["rank"]) for r in rows] == [("case", None), ("ideal", 1)]
     assert summarize_check(rows)["ideal"].found_in_5 == 1
+
+
+def test_the_rule_track_looks_under_each_fixed_rule_alert(tmp_path: Path) -> None:
+    """Search fix 2 (2026-11-27): is the right passage among the 5 shown under one of the case's
+    fixed-rule alerts? The best rank across that case's rule alerts counts; a case with no rule
+    alert has no rule rows."""
+    from artemis.evaluation.cases import load_case
+    from artemis.evaluation.retrieval import check_search, summarize_check
+
+    for cid in ("S1", "S2"):
+        (tmp_path / f"{cid}.json").write_text(json.dumps({"case_id": cid, "source": "test", "patient": {}, "answer_key": {
+            "status": "draft", "expect_clear": False, "problems": [
+                {"id": "kidney", "kind": "drug_harm", "summary": "x", "match": [["tdf"]],
+                 "guideline": {"document": "D1", "page": 1, "quote": QUOTE}}]}}), encoding="utf-8")
+    per_alert = {"S1": [[_Hit("other", "D1")] * 5, [_Hit("other", "D1"), _Hit(f"{QUOTE}.", "D1")]], "S2": []}
+    rows = check_search([load_case(tmp_path / f"{c}.json") for c in ("S1", "S2")], [], lambda c: [], lambda t: [],
+                        rule_search=lambda case: per_alert[case.case_id])
+    rule = [r for r in rows if r["kind"] == "rule"]
+    assert [(r["item"], r["rank"]) for r in rule] == [("S1:kidney", 2)]
+    assert summarize_check(rows)["rule"].found_in_5 == 1
