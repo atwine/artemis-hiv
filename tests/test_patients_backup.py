@@ -175,9 +175,10 @@ def test_loading_the_backup_fills_a_new_database_safely_twice():
 
 # Every seeded patient has what the screens show for them (owner, 2026-11-27: "A, fill in the
 # names"; P005 and P006 had their names only on their demo-day bookings).
-# Kintu-Test 001 has no name and no booking to take one from: the owner chooses one. This list
-# fails the test once it's no longer needed, so it can't quietly hide a patient.
-WAITING_FOR_A_NAME = {"Kintu-Test 001"}
+# Kintu-Test 001 had no name and no booking to take one from: the owner chose a made-up Ugandan
+# name ("B"; Sarah Nambi, 2026-11-27). A patient waiting for a name goes here, and the test fails
+# once it has one, so the list can't quietly hide a patient.
+WAITING_FOR_A_NAME: set = set()
 
 
 def _seeded_patients():
