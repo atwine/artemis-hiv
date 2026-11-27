@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { clock, localDate } from "./dates.ts";
-import { appointmentNote, dayHeadline, initials, nextForYou, type DayAppointment } from "./day.ts";
+import { clock, localDate, shortDay } from "./dates.ts";
+import { appointmentNote, dayHeadline, dayHref, initials, nextForYou, type DayAppointment } from "./day.ts";
 
 const appt = (over: Partial<DayAppointment>): DayAppointment => ({
   time: "09:30",
@@ -52,4 +52,17 @@ test("clock time and initials", () => {
 test("a saved time's date, on this computer's calendar", () => {
   const iso = new Date(2026, 10, 26, 23, 30).toISOString(); // 23:30 local, maybe the next day in UTC
   assert.equal(localDate(iso), "26 Nov 2026");
+});
+
+test("a day's short name, for the links to the days around it", () => {
+  assert.equal(shortDay("2026-11-24"), "Tue 24 Nov");
+  assert.equal(shortDay("2026-11-27"), "Fri 27 Nov");
+  assert.equal(shortDay("2099-01-05"), "Mon 5 Jan");
+});
+
+test("the board's address keeps the day and the view", () => {
+  assert.equal(dayHref(null, false), "/");
+  assert.equal(dayHref(null, true), "/?view=list");
+  assert.equal(dayHref("2026-11-24", false), "/?date=2026-11-24");
+  assert.equal(dayHref("2026-11-24", true), "/?date=2026-11-24&view=list");
 });

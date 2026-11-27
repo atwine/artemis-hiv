@@ -71,6 +71,20 @@ export function Tray(props: TrayProps) {
   );
 }
 
+/** The tray on a form (S8a, S8b): no visit steps, one line saying where the doctor is, one button. */
+export function FormTray({ label, text, primary }: { label: string; text: string; primary: TrayButton }) {
+  return (
+    <section aria-label={label} className="flex h-17 flex-1 items-center justify-between gap-5 rounded-window bg-button pr-3 pl-5.5 shadow-tray">
+      <p className="text-15 leading-5 text-tray-text" aria-live="polite">
+        {text}
+      </p>
+      <div className="flex shrink-0 items-center">
+        <TrayAction button={primary} kind="primary" />
+      </div>
+    </section>
+  );
+}
+
 const STEP_WORD: Record<Step, string> = { todo: "to do", current: "current step", done: "done" };
 
 /** A step's content, as a button when the step can be opened. */

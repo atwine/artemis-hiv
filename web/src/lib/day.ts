@@ -29,6 +29,14 @@ export function dayHeadline(isoDate: string, booked: number, needYou: number): [
   return [first, `${patients}, ${inWords(needYou)} waiting on you.`];
 }
 
+/** The board's address: the day shown (none means the API's default day) and the view. */
+export function dayHref(date: string | null, list: boolean): string {
+  const query = new URLSearchParams();
+  if (date) query.set("date", date);
+  if (list) query.set("view", "list");
+  const q = query.toString();
+  return q ? `/?${q}` : "/";
+}
 
 /**
  * The line under a card's status: alerts reviewed, the API's short label for an AI review that

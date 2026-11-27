@@ -10,6 +10,14 @@ export function longDate(iso: string): string {
   return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
 }
 
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** "2026-11-24" -> "Tue 24 Nov": a calendar date (no time zone) as a short day name. */
+export function shortDay(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]} ${d} ${MONTHS[m - 1]}`;
+}
+
 /** "08:52", in this computer's time zone. */
 export function clock(iso: string): string {
   const t = new Date(iso);
@@ -20,4 +28,9 @@ export function clock(iso: string): string {
 export function localDate(iso: string): string {
   const t = new Date(iso);
   return `${t.getDate()} ${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
+}
+
+/** Today on this computer's clock, as YYYY-MM-DD. */
+export function todayIso(now: Date = new Date()): string {
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }

@@ -8,6 +8,7 @@ import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { E2E } from "./ports";
 import { stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
 
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
@@ -60,6 +61,35 @@ test("the clinic day: board and list", async ({ page }) => {
   await page.goto("/?view=list");
   await expect(page.getByRole("list", { name: "Today's visits" })).toBeVisible();
   await audit(page, "list");
+});
+
+test("adding a case: both parts, with a problem shown, and the day links it makes", async ({ page }) => {
+  const steps = page.getByRole("region", { name: "New case steps" });
+  await page.goto("/cases/new");
+  await page.getByRole("button", { name: "Add previous ART, with dates" }).click();
+  await page.getByRole("group", { name: "Previous ART 1 drugs" }).getByRole("button", { name: "AZT", exact: true }).click();
+  await steps.getByRole("button", { name: "Next: labs and clinical notes" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
+  await audit(page, "add-case-part1");
+
+  await page.getByLabel("ID", { exact: true }).fill("P192");
+  await page.getByLabel("Time", { exact: true }).fill("10:00");
+  await page.getByLabel("Previous ART 1 from", { exact: true }).fill("2016-03-01");
+  await page.getByLabel("Previous ART 1 to", { exact: true }).fill("2019-08-15");
+  await steps.getByRole("button", { name: "Next: labs and clinical notes" }).click();
+  await page.getByLabel("Result 1 test").selectOption("creatinine");
+  await page.getByRole("button", { name: "Add result" }).click();
+  await expect(page.getByLabel("Complaints", { exact: true })).toBeVisible();
+  await audit(page, "add-case-part2");
+
+  // A case on a later day gives the board a link to it.
+  const added = await page.request.post(`${E2E.apiUrl}/api/patients`, {
+    data: { patient_id: "P193", visit_date: "2099-07-07", appointment_time: "09:00" },
+  });
+  expect(added.ok()).toBe(true);
+  await page.goto("/");
+  await expect(page.getByRole("navigation", { name: "Other clinic days" })).toBeVisible();
+  await audit(page, "board-day-links");
 });
 
 test("a visit: notes, checks running, results, alert, override, finalize and the record", async ({ page }) => {

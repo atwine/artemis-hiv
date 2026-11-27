@@ -2,14 +2,16 @@
 
 // The clinic day (Paper FINAL S1 board, S1b list): today's appointments from GET /api/clinic-day,
 // grouped by where each visit is. One main button: "Continue review" on the first visit that
-// needs you. The view (board or list) lives in the address, so it survives a reload.
+// needs you. The day and the view (board or list) live in the address, so they survive a reload;
+// blue links above the date step to the clinic days around it (owner, 2026-11-27).
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import { AppFrame } from "@/components/frame/app-frame";
 import { StatusChip } from "@/components/frame/status";
 import { errorText } from "@/lib/api/client";
-import { appointmentLine, appointmentNote, dayHeadline, nextForYou, type DayAppointment } from "@/lib/day";
+import { shortDay } from "@/lib/dates";
+import { appointmentLine, appointmentNote, dayHeadline, dayHref, nextForYou, type DayAppointment } from "@/lib/day";
 import { DISCLAIMER } from "@/lib/demo";
 import { useClinicDay, visitHref } from "@/lib/queries";
 import { cn } from "@/lib/utils";
@@ -23,8 +25,10 @@ const COLUMNS: Column[] = [
 ];
 
 export function DayScreen() {
-  const day = useClinicDay();
-  const list = useSearchParams().get("view") === "list";
+  const params = useSearchParams();
+  const date = params.get("date");
+  const list = params.get("view") === "list";
+  const day = useClinicDay(date);
   const appointments = day.data?.appointments ?? [];
   const next = nextForYou(appointments);
   const [first, rest] = day.data
@@ -34,6 +38,7 @@ export function DayScreen() {
   return (
     <AppFrame disclaimer={DISCLAIMER}>
       <div className="flex w-75 shrink-0 flex-col gap-6">
+        {day.data && <DaySteps previous={day.data.previous_date ?? null} next={day.data.next_date ?? null} list={list} />}
         <h1 className="text-34 font-semibold tracking-[-0.025em] text-black">
           {first} <span className="text-muted-foreground">{rest}</span>
         </h1>
@@ -43,24 +48,22 @@ export function DayScreen() {
             : "Where everyone is, at a glance. Switch to List to see your day top to bottom."}
         </p>
         <nav aria-label="View" className="flex w-50 gap-0.5 rounded-btn bg-fill p-[3px]">
-          <ViewLink href="/" on={!list} icon={<BoardIcon on={!list} />}>
+          <ViewLink href={dayHref(date, false)} on={!list} icon={<BoardIcon on={!list} />}>
             Board
           </ViewLink>
-          <ViewLink href="/?view=list" on={list} icon={<ListIcon on={list} />}>
+          <ViewLink href={dayHref(date, true)} on={list} icon={<ListIcon on={list} />}>
             List
           </ViewLink>
         </nav>
-        {/* Adding a case is its own screen (S8), built next; until then the button is shown but off. */}
-        <button
-          type="button"
-          disabled
-          className="flex h-10.5 w-50 items-center justify-center gap-2 rounded-btn border border-line-strong text-15 font-medium text-black disabled:opacity-50"
+        <Link
+          href="/cases/new"
+          className="flex h-10.5 w-50 items-center justify-center gap-2 rounded-btn border border-line-strong text-15 font-medium text-black"
         >
           <span aria-hidden className="text-18">
             +
           </span>
           Add patient case
-        </button>
+        </Link>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -69,6 +72,29 @@ export function DayScreen() {
         {day.data && (list ? <DayList appointments={appointments} next={next} /> : <DayBoard appointments={appointments} next={next} />)}
       </div>
     </AppFrame>
+  );
+}
+
+/** The clinic days just before and after the one shown, as links; a side with no day is empty. */
+function DaySteps({ previous, next, list }: { previous: string | null; next: string | null; list: boolean }) {
+  if (!previous && !next) return null;
+  return (
+    <nav aria-label="Other clinic days" className="flex h-5 justify-between text-15 leading-5 text-blue">
+      {previous ? (
+        <Link href={dayHref(previous, list)} className="hover:underline">
+          <span aria-hidden>← </span>
+          {shortDay(previous)}
+        </Link>
+      ) : (
+        <span />
+      )}
+      {next && (
+        <Link href={dayHref(next, list)} className="hover:underline">
+          {shortDay(next)}
+          <span aria-hidden> →</span>
+        </Link>
+      )}
+    </nav>
   );
 }
 

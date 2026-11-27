@@ -42,6 +42,7 @@ export async function stubDesignDay(page: Page) {
     const reply = await route.fetch();
     const day = await reply.json();
     day.appointments = day.appointments.map((a: { patient_id: string }) => ({ ...a, ...(DESIGN[a.patient_id] ?? {}) }));
+    Object.assign(day, { previous_date: "2026-11-24", next_date: "2026-11-27" }); // the days around it in S1
     await route.fulfill({ response: reply, json: day });
   });
 }

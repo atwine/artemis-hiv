@@ -77,7 +77,18 @@ function Footer({ disclaimer }: { disclaimer: string }) {
 }
 
 /** The visit pane's header row: the patient on the left, the status and the way back on the right. */
-export function PaneHeader({ title, meta, aside }: { title: string; meta: string; aside?: React.ReactNode }) {
+export function PaneHeader({
+  title,
+  meta,
+  aside,
+  back,
+}: {
+  title: string;
+  meta: string;
+  aside?: React.ReactNode;
+  /** The way back; the clinic day unless the screen has its own (a form's Cancel). */
+  back?: React.ReactNode;
+}) {
   return (
     <div className="flex h-17 shrink-0 items-center justify-between border-b border-line px-8">
       <h1 className="text-20 font-semibold tracking-[-0.015em] text-black">
@@ -85,9 +96,11 @@ export function PaneHeader({ title, meta, aside }: { title: string; meta: string
       </h1>
       <div className="flex items-center gap-5">
         {aside}
-        <Link href="/" className="text-14 font-medium text-ink-2">
-          ← Back to day
-        </Link>
+        {back ?? (
+          <Link href="/" className="text-14 font-medium text-ink-2">
+            ← Back to day
+          </Link>
+        )}
       </div>
     </div>
   );

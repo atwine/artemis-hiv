@@ -99,6 +99,35 @@ test("the clinic day, in the design's states", async ({ page }) => {
   await page.screenshot({ path: path.join(OUT, "web-S1b-list.png") });
 });
 
+// Adding a case (S8a, S8b), filled in as the design draws Grace Atim; not saved.
+test("adding a case, both parts", async ({ page }) => {
+  await page.goto("/cases/new");
+  await page.getByLabel("ID", { exact: true }).fill("P010");
+  await page.getByLabel("Name", { exact: true }).fill("Grace Atim");
+  await page.getByLabel("Age", { exact: true }).fill("41");
+  await page.getByLabel("Sex", { exact: true }).selectOption({ label: "Female" });
+  await page.getByLabel("Time", { exact: true }).fill("11:00");
+  await page.getByLabel("Visit type", { exact: true }).selectOption("Routine review");
+  await page.getByRole("button", { name: /^TLD = / }).click();
+  await page.getByRole("textbox", { name: "Other medicine", exact: true }).fill("Ibuprofen 400 mg, three times a day");
+  await page.getByRole("button", { name: "Add medicine" }).click();
+  await page.getByRole("button", { name: "Add previous ART, with dates" }).click();
+  const past = page.getByRole("group", { name: "Previous ART 1 drugs" });
+  for (const drug of ["AZT", "3TC", "NVP"]) await past.getByRole("button", { name: drug, exact: true }).click();
+  await page.getByLabel("Previous ART 1 from", { exact: true }).fill("2016-03-01");
+  await page.getByLabel("Previous ART 1 to", { exact: true }).fill("2019-08-15");
+  await page.screenshot({ path: path.join(OUT, "web-S8a-add-case.png") });
+
+  await page.getByRole("region", { name: "New case steps" }).getByRole("button", { name: "Next: labs and clinical notes" }).click();
+  await page.getByLabel("Result 1 test").selectOption("creatinine");
+  await page.getByLabel("Result 1 date").fill("2026-11-27");
+  await page.getByLabel("Result 1 value").fill("0.8");
+  await page.getByLabel("Complaints", { exact: true }).fill("None today");
+  await page.getByLabel("Exam findings", { exact: true }).fill("Unremarkable");
+  await page.getByLabel("Clinical notes", { exact: true }).click();
+  await page.screenshot({ path: path.join(OUT, "web-S8b-add-case.png") });
+});
+
 // Finalize (S6a), its confirm step (owner's decision 6) and the saved record (S6b), with John Doe.
 test("finalize, the confirm and the record", async ({ page }) => {
   await page.goto("/patients/P001");

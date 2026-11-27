@@ -3,6 +3,8 @@
 // "Continue review" reopening the saved visit (GET /api/visits/{id}) without a new check.
 import { expect, test } from "@playwright/test";
 
+import { E2E } from "./ports";
+
 test("the clinic day shows who is waiting, and a checked visit moves to Needs you", async ({ page }) => {
   await page.goto("/");
 
@@ -41,4 +43,36 @@ test("the clinic day shows who is waiting, and a checked visit moves to Needs yo
   const rows = page.getByRole("list", { name: "Today's visits" }).getByRole("listitem");
   await expect(rows.first()).toContainText("08:40");
   await expect(rows.filter({ hasText: "Sam Kato" })).toContainText(/AMBER|RED|GREEN|INCOMPLETE/);
+});
+
+test("blue links above the date step to the clinic days around it, keeping the view", async ({ page }) => {
+  // A made-up case booked on a day after every other one, so that day has nothing after it.
+  const added = await page.request.post(`${E2E.apiUrl}/api/patients`, {
+    data: { patient_id: "P190", name: "Esther Last", visit_date: "2099-12-31", appointment_time: "09:00" },
+  });
+  expect(added.ok()).toBe(true);
+
+  // The demo day is the first clinic day: a link to the next one only.
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Thursday 26 Nov.");
+  const steps = page.getByRole("navigation", { name: "Other clinic days" });
+  await expect(steps.getByRole("link")).toHaveCount(1);
+  await steps.getByRole("link").click();
+  await expect(page).toHaveURL(/\?date=2099-/);
+  await expect(page.getByRole("heading", { level: 1 })).not.toContainText("26 Nov");
+
+  // The last day, in the list view: a link back only, and stepping keeps the list.
+  await page.goto("/?date=2099-12-31&view=list");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Thursday 31 Dec.");
+  await expect(page.getByRole("list", { name: "Today's visits" })).toContainText("Esther Last");
+  await expect(steps.getByRole("link")).toHaveCount(1);
+  await steps.getByRole("link").click();
+  await expect(page).toHaveURL(/view=list/);
+  await expect(page.getByRole("heading", { level: 1 })).not.toContainText("31 Dec");
+
+  // Switching to the board stays on the day shown.
+  await page.goto("/?date=2099-12-31&view=list");
+  await page.getByRole("link", { name: "Board" }).click();
+  await expect(page).toHaveURL(/\?date=2099-12-31$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Thursday 31 Dec.");
 });
