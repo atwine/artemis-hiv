@@ -5,6 +5,8 @@ import path from "node:path";
 
 import { expect, test } from "@playwright/test";
 
+import { runRuleChecks } from "./checks";
+
 import { DESIGN_PLAN, standIn, stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
 
 const OUT = path.resolve(__dirname, "..", "..", "docs", "design", "exports", "phase5");
@@ -24,7 +26,7 @@ test("the shared frame, before and after the checks", async ({ page }) => {
   await expect(page.getByRole("textbox", { name: "Clinical notes" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S2-before-checks.png") });
 
-  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await page.screenshot({ path: path.join(OUT, "web-S3-checks-running.png") });
   const results = page.getByRole("region", { name: "Check results" });
   await expect(results).toBeVisible({ timeout: 5 * 60 * 1000 });
@@ -56,7 +58,7 @@ for (const { outcome, patient, file } of STATES) {
   test(`the AI review ended "${outcome}"`, async ({ page }) => {
     await stubOutcome(page, outcome);
     await page.goto(`/patients/${patient}`);
-    await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+    await runRuleChecks(page);
     const results = page.getByRole("region", { name: "Check results" });
     await expect(results).toBeVisible({ timeout: 5 * 60 * 1000 });
     await results.scrollIntoViewIfNeeded();
@@ -82,7 +84,7 @@ test("checks running, with the AI review", async ({ page }) => {
 // GREEN with the AI review off (S7b's other banner): a real reply, nothing stubbed.
 test("a quiet visit with the AI review off", async ({ page }) => {
   await page.goto("/patients/P002");
-  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("list", { name: "What was checked" })).toBeVisible({ timeout: 5 * 60 * 1000 });
   await page.screenshot({ path: path.join(OUT, "web-S7b-green-ai-off.png") });
 });
@@ -103,7 +105,7 @@ test("the clinic day, in the design's states", async ({ page }) => {
 // Roe's visit (no alerts); then the same screen scrolled to the monitoring and counselling lists.
 test("compare plans", async ({ page }) => {
   await page.goto("/patients/P002");
-  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
   await standIn(page, { json: DESIGN_PLAN });
   await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Compare plans" }).click();
@@ -146,7 +148,7 @@ test("adding a case, both parts", async ({ page }) => {
 test("finalize, the confirm and the record", async ({ page }) => {
   await page.goto("/patients/P001");
   const tray = page.getByRole("region", { name: "Visit steps" });
-  await tray.getByRole("button", { name: "Run checks" }).click();
+  await runRuleChecks(page);
   await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
   await tray.getByRole("button", { name: /^Finalize, / }).click();
   await expect(page.getByRole("region", { name: "Finalize" })).toBeVisible();
