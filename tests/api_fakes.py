@@ -17,6 +17,7 @@ from sqlalchemy.pool import StaticPool
 from sqlmodel import SQLModel, create_engine
 
 from artemis.ai.client import ChatReply
+from artemis.ai.search_questions import _INSTRUCTIONS as _QUESTIONS_PROMPT
 from artemis.guidelines.vector_store import VectorSearchResult, VectorStore
 from modules.rag_engine import RagEngine
 
@@ -84,6 +85,8 @@ class FakeModel:
         system = next((m["content"] for m in messages if m.get("role") == "system"), "")
         if system.startswith("You are ARTEMIS, an HIV medication safety screening system"):
             kind = "screening"
+        elif system == _QUESTIONS_PROMPT:  # the screening's search questions, not the plan
+            kind = "questions"
         elif format is not None:
             kind = "plan"
         else:

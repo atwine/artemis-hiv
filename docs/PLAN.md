@@ -379,7 +379,14 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       backup; adding a case takes `appointment_time` and books it on its visit date in the same
       save; the board shows today's day, else the most recent earlier one, takes `?date=`, and
       names the days before and after. Measured: the demo day's board equals the file's.
-- [ ] 4C.4 The AI plan made on demand ("Compare plans") is saved in Postgres (already planned).
+- [x] 4C.4 The AI plan made on demand ("Compare plans") is saved in Postgres (already planned).
+      Done 2026-11-27 (B1/B2): POST /api/visits/{visit_id}/plan makes the plan for a saved visit's
+      patient and note, saves it (table visit_plan, migration 0006) and sends it in screen shape;
+      the saved visit carries its latest plan. The visit check makes no plan now (owner: "A, only
+      Compare plans"); a plan that was made is shown again with nothing spent, a failed one is
+      retried ("A, keep a good plan"); plans and checks share the 6-a-minute limit ("A, one shared
+      limit"). Measured: the Phase 4 check MET, with 30 of 33 saved plans the same through the new
+      route and the 3 that failed still failed.
 - [ ] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
       app does. Check: the Phase 4 check still matches 2B's numbers.
 - [ ] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files

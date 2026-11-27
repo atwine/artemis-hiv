@@ -11,6 +11,11 @@ Keep rule, written before the run: every run gives the same alerts as saved, and
 identical. Tightened after review (2026-11-26), since fixed replies alone would pass with a broken
 index: every run must also give the AI the same passages, and each alert the same passages, as the
 saved run, and the search must be the kept Chroma index. Writes eval/phase4/api-replay-check.txt.
+
+Since B1/B2 (owner, 2026-11-27) the visit check makes no plan; each run's plan is made after it
+through "Compare plans". Added to the keep rule then, before that run: a run whose saved plan
+passed its checks gets the same plan text, as a plan made; one whose saved plan failed them gets
+no readable plan.
 """
 
 from __future__ import annotations
@@ -94,11 +99,12 @@ def main() -> int:
                         base_url="http://localhost")
 
     replayed, problems = [], []
+    plans_made = plans_failed = 0
     for record in saved:
         case = cases[record["case_id"]]
         box["model"] = SavedReplies(record)
         note = (case.patient.get("today_encounter") or {}).get("note") or ""
-        r = client.post(f"/api/patients/{case.case_id}/visits", json={"note": note, "include_plan": True},
+        r = client.post(f"/api/patients/{case.case_id}/visits", json={"note": note},
                         headers={"Origin": "http://localhost:3000"})
         if r.status_code != 200:
             problems.append(f"{record['case_id']} run {record['repeat']}: HTTP {r.status_code} {r.text[:200]}")
@@ -117,23 +123,39 @@ def main() -> int:
             problems.append(f"{record['case_id']} run {record['repeat']}: an alert's passages differ")
         if r.json()["status"] != record["status"].replace("YELLOW", "AMBER"):
             problems.append(f"{record['case_id']} run {record['repeat']}: status {r.json()['status']} vs saved {record['status']}")
+        plan = client.post(f"/api/visits/{r.json()['visit_id']}/plan", headers={"Origin": "http://localhost:3000"})
+        if plan.status_code != 200:
+            problems.append(f"{record['case_id']} run {record['repeat']}: plan HTTP {plan.status_code} {plan.text[:200]}")
+            continue
+        with Session(engine) as s:
+            made = records.latest_plan(s, r.json()["visit_id"])
+        if record.get("plan_issues"):
+            plans_failed += 1
+            if plan.json()["outcome"] != "failed":
+                problems.append(f"{record['case_id']} run {record['repeat']}: a plan that failed its checks came back readable")
+        else:
+            plans_made += 1
+            if plan.json()["outcome"] != "made" or made.plan_text != record["plan_text"]:
+                problems.append(f"{record['case_id']} run {record['repeat']}: the plan differs from the saved one")
 
     before = _summary(cases, saved)
     after = _summary(cases, replayed) if len(replayed) == len(saved) else None
     met = not problems and after == before
     lines = [
-        "Phase 4 check: GLM's final 2B run (glm-5.2-t0-5q) replayed through the backend's visit-check route.",
+        "Phase 4 check: GLM's final 2B run (glm-5.2-t0-5q) replayed through the backend's visit-check and plan routes.",
         f"Runs: {len(saved)} saved, {len(replayed)} replayed (real kept index, saved replies, nothing spent).",
         f"Scores as saved (2B):  {json.dumps(before, sort_keys=True)}",
         f"Scores through the API: {json.dumps(after, sort_keys=True)}",
         f"Runs with differences: {len(problems)}",
         "Also compared per run: the passages the AI was shown, and each alert's passages (kept Chroma index).",
+        f"Plans through Compare plans: {plans_made} the same as saved, {plans_failed} saved as failed"
+        " (any that differ count as runs with differences).",
         f"Keep rule (same alerts and passages in every run, identical scores): {'MET' if met else 'NOT MET'}",
         *problems[:30],
     ]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("\n".join(lines[:7]))
+    print("\n".join(lines[:8]))
     return 0 if met else 2
 
 

@@ -15,7 +15,7 @@ off this laptop (for example to Railway): "this laptop only" means nothing on a 
 | Data | What it holds | Sensitivity |
 |---|---|---|
 | patients | the synthetic test patients: notes, lab results, medicines, past ART, visits. In the database since plan 4C.2 (tables `patient`, `patient_medicine`, `art_history`, `lab_result`, `lab_note`, `clinical_note`, `encounter`), loaded from the seed files in `Data/` by `scripts/load_patients.py` on this laptop. The demo answer keys stay with the evaluation, not in these tables | sensitive: health (synthetic only) |
-| visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome) and each acknowledge/override decision | sensitive: health (synthetic only) |
+| visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome), each acknowledge/override decision, each Finalize, and each AI management plan "Compare plans" made | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
 | clinic_day | the clinic days and their appointments: made-up clinic, room, clinician, date, appointment times and patient ids. In the database since plan 4C.3 (tables `clinic_day`, `appointment`); the demo day is loaded from the backup with the patients | internal (synthetic only) |
 | form_choices | the add-case form's pick lists: ART combinations and drugs, lab tests with their names and units, visit types (from the code) | public |
@@ -63,6 +63,12 @@ no clinic day gets one then, with the demo day's clinic, room and clinician. Tha
 only create. Nobody moves, cancels or deletes an appointment, or changes a day's clinic, room or
 clinician, through the backend (on the Later list).
 
+The AI management plan ("Compare plans", 2026-11-27) is a visit record with the visit check's
+rules: made only for a saved visit, only from this laptop, saved as a new row and never changed.
+A plan that was made is shown again with nothing run; a failed one may be tried again (owner:
+"A, keep a good plan"). Making one counts toward the visit checks' limit (owner: "A, one shared
+limit").
+
 Patients moved into the database on 2026-11-27 with the same rules (owner: "A, keep the rules"):
 the backend reads and adds them only there, adding a case is one database save, and nothing in
 the backend edits or deletes a patient row.
@@ -81,6 +87,9 @@ the backend edits or deletes a patient row.
 | POST | /api/visits/{visit_id}/finalize | visit_records | create |
 | GET | /api/visits/{visit_id} | visit_records | view |
 | GET | /api/visits/{visit_id} | guidelines | view |
+| POST | /api/visits/{visit_id}/plan | visit_records | create |
+| POST | /api/visits/{visit_id}/plan | patients | view |
+| POST | /api/visits/{visit_id}/plan | guidelines | view |
 | GET | /api/patients/{patient_id}/visits | patients | view |
 | GET | /api/patients/{patient_id}/visits | visit_records | view |
 | POST | /api/patients | patients | create |
@@ -138,6 +147,15 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
 - The owner's own page gets stuck and runs the visit check over and over. Covered by: at most
   6 visit checks a minute (`ARTEMIS_VISIT_CHECKS_PER_MINUTE`); the next is refused (429) before
   anything runs or is spent (owner, 2026-11-26; `tests/test_check_limit.py`).
+- A website presses "Compare plans" in the background, spending model money. Covered by: grid
+  row website = `-`; the `Origin` check refuses it (403) before the route runs.
+- A stuck page presses "Compare plans" over and over. Covered by: a plan that was made is shown
+  again with nothing run or spent; making a plan counts toward the same 6 a minute as visit
+  checks (429; `tests/test_compare_plans.py`).
+- A plan is asked for a visit that doesn't exist, or while the guideline search is down. Covered
+  by: 404 for an unknown visit, 503 with the search down; nothing runs or is saved.
+- A failed plan's error shows server details (an address, a stack trace). Covered by: the reply
+  says only "The management plan could not be produced."; the row keeps the error's kind only.
 
 ## 6. Open questions for the owner
 

@@ -4,6 +4,7 @@ The same two events as the Phase 1 files (artemis/visit_record.py), as two table
 - visit_check: one row per run of the checks, holding the "checks_run" entry's fields.
 - alert_decision: one row per decision on one alert. Rows are only ever added; a changed mind
   is a new row, and the latest one for an alert counts (owner, 2026-11-26).
+Since then: visit_finalize (each Finalize) and visit_plan (each plan "Compare plans" made).
 
 The tables' history is in backend/migrations (Alembic). `import_folder` copies the old files
 in and can be run again safely: what is already there is skipped.
@@ -99,6 +100,36 @@ class VisitFinalize(SQLModel, table=True):
     last_decision_id: int = 0
     # The decision on each alert as finalized, in alert order, as the files' "finalized" line has.
     decisions: List[Dict[str, Any]] = Field(sa_column=Column(Json, nullable=False))
+
+
+class VisitPlan(SQLModel, table=True):
+    """One AI management plan made for a saved visit by "Compare plans" (owner, 2026-11-27). Rows
+    are only ever added; the latest one for a visit is the one shown."""
+
+    __tablename__ = "visit_plan"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    visit_id: str = Field(foreign_key="visit_check.visit_id", index=True, max_length=64)
+    made_at: datetime.datetime = Field(sa_column=Column(DateTime(timezone=True), nullable=False))
+    model: Optional[str] = Field(default=None, max_length=200)
+    outcome: str = Field(max_length=16)  # "made" (a readable plan) or "failed"
+    plan_text: Optional[str] = Field(default=None, sa_column=Column(Text))  # the AI's plan as it came back
+    issues: List[str] = Field(sa_column=Column(Json, nullable=False))  # the checks it failed, as short codes
+    error_type: Optional[str] = Field(default=None, max_length=200)  # the failure's kind only, never its text
+
+
+def save_plan(session: Session, row: VisitPlan) -> VisitPlan:
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return row
+
+
+def latest_plan(session: Session, visit_id: str) -> Optional[VisitPlan]:
+    """The plan shown for a visit: the latest one made."""
+    return session.exec(
+        select(VisitPlan).where(VisitPlan.visit_id == visit_id).order_by(VisitPlan.made_at.desc(), VisitPlan.id.desc())
+    ).first()
 
 
 # The "checks_run" entry's fields that are stored as they are (saved_at and ai_review are handled apart).

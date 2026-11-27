@@ -46,6 +46,12 @@ TEST_NAMES: Dict[str, str] = {
     "triglycerides": "triglycerides",
 }
 
+# The same names ready for a list or pick list: a leading capital, but an abbreviation keeps its own
+# case ("eGFR", "HbA1c"). TEST_NAMES stays lower case for sentences (owner, 2026-11-27).
+TEST_LABELS: Dict[str, str] = {
+    test: name[0].upper() + name[1:] if name.split()[0].islower() else name for test, name in TEST_NAMES.items()
+}
+
 # Older records keep the unit in the value's key name.
 LEGACY_VALUE_KEYS: Dict[str, str] = {
     "value_umol_per_l": "umol/L",

@@ -22,14 +22,14 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session
 
 from artemis import visit_record
-from artemis.patient.labs import TEST_NAMES, TEST_UNITS, read_lab_entries, read_lab_notes
+from artemis.patient.labs import TEST_LABELS, TEST_NAMES, TEST_UNITS, read_lab_entries, read_lab_notes
 from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
 from artemis.patient.new_case import VISIT_TYPES, CaseForm, PreviousArt, build_case_record
-from artemis.visit import AnalysisOptions, run_visit_analysis
-from backend import clinic_db, patients_db, records
+from artemis.visit import AnalysisOptions, management_plan, run_visit_analysis
+from backend import clinic_db, patients_db, plans, records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
 from artemis.screen_text import AI_REVIEW_CARD_LABELS, AI_REVIEW_LABELS, DISCLAIMER, FINALIZE_BLOCKED
-from backend.cards import banners_for, cards_from_entry, plan_from_entry
+from backend.cards import banners_for, cards_from_entry
 from backend.decisions import BadDecision, decision_rows, ready_to_finalize, summary
 from backend.limits import SlidingWindow
 from backend.models import (
@@ -45,6 +45,7 @@ from backend.models import (
     LabTestChoice,
     LabNote,
     LabResult,
+    ManagementPlan,
     NewCase,
     PatientDetail,
     PatientRecord,
@@ -124,7 +125,7 @@ def _visit_reply(entry: Dict[str, Any], *, record_saved: bool, labs: Optional[Li
         visit_id=entry["visit_id"], patient_id=str(entry["patient_id"]), visit_date=entry["visit_date"],
         saved_at=entry["saved_at"], status=entry["status"], ai_review=entry["ai_review"], model=entry["model"],
         ai_review_label=AI_REVIEW_LABELS[entry["ai_review"]], ai_review_card_label=AI_REVIEW_CARD_LABELS[entry["ai_review"]],
-        cards=cards, plan=plan_from_entry(entry), record_saved=record_saved,
+        cards=cards, record_saved=record_saved,
         banners=banners_for(entry, record_saved=record_saved), disclaimer=DISCLAIMER,
         finalize_note=FINALIZE_BLOCKED if cards else None,
     )
@@ -216,10 +217,9 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             today_note=body.note,
             rag=services.search(),
             llm_client=client,
-            options=AnalysisOptions(top_k=services.top_k, use_llm=body.use_ai, agentic=body.include_plan),
+            # No plan here: only "Compare plans" makes one (owner, 2026-11-27).
+            options=AnalysisOptions(top_k=services.top_k, use_llm=body.use_ai, agentic=False),
         )
-        if isinstance(result.agentic_result, dict) and "error" in result.agentic_result:
-            logger.warning("Plan step failed: %s", result.agentic_result.get("type"))
         visit_id, saved_at = uuid.uuid4().hex, records.now()
         entry = records.json_safe(visit_record.checks_entry(
             result,
@@ -310,6 +310,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             entry = records.entry_from_check(row)
             latest = _latest(session, visit_id)
             finalized = records.finalized_at(session, visit_id)
+            saved_plan = records.latest_plan(session, visit_id)
         found = next((p for p in load_patients(services) if p.record.patient_id == entry["patient_id"]), None)
         labs = read_lab_entries(found.stored) if found else []  # a case no longer listed: no value box
         reply = _visit_reply(entry, record_saved=True, labs=labs)
@@ -318,7 +319,62 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         return SavedVisit(
             **reply, note=entry["note"], decisions=decided, all_resolved=not unresolved,
             unresolved=unresolved, finalized_at=finalized,
+            plan=plans.plan_reply(saved_plan, note=entry["note"]) if saved_plan else None,
         )
+
+    @app.post(
+        "/api/visits/{visit_id}/plan",
+        response_model=ManagementPlan,
+        responses={429: {"description": "Too many visit checks and plans this minute; wait the Retry-After seconds."},
+                   503: {"description": "No database, no AI model server, or the guideline search is unavailable."}},
+        dependencies=[
+            Depends(require("visit_records", "create")),
+            Depends(require("patients", "view")),
+            Depends(require("guidelines", "view")),  # the plan is made from guideline passages
+        ],
+    )
+    def compare_plans(visit_id: str) -> ManagementPlan:
+        """The AI's management plan for a saved visit, compared with the clinician's note the check
+        ran on, and saved (owner, 2026-11-26: "Compare plans"). Making one counts toward the visit
+        checks' limit (owner, 2026-11-27: "A, one shared limit"); showing a saved one doesn't."""
+        if services.engine is None:
+            raise _no_database()
+        with Session(services.engine) as session:
+            row = records.get_check(session, visit_id)
+            if row is None:
+                raise HTTPException(status_code=404, detail="No such visit.")
+            patient_id, note = row.patient_id, row.note
+            saved_plan = records.latest_plan(session, visit_id)
+        # A plan that was made stands: shown again with nothing run or spent; a failed one is
+        # tried again (owner, 2026-11-27: "A, keep a good plan").
+        if saved_plan is not None and saved_plan.outcome == "made":
+            return plans.plan_reply(saved_plan, note=note)
+        patient = _find(services, patient_id).stored
+        rag = services.search()
+        if not rag.search_ready:  # G33: no plan rests on passages a search that didn't load would give
+            raise HTTPException(status_code=503, detail="The guideline search is unavailable, so no plan was made.")
+        client = services.model_client()
+        if client is None:
+            raise HTTPException(status_code=503, detail="No AI model server is set up.")
+        # Counted only once the plan could be made: a refused one doesn't use up the limit.
+        wait = check_limit.take()
+        if wait is not None:
+            raise HTTPException(status_code=429, detail="Too many visit checks: wait a moment and try again.",
+                                headers={"Retry-After": str(wait)})
+        result = management_plan(patient=copy.deepcopy(patient), today_note=note, rag=rag, llm_client=client,
+                                 top_k=services.top_k)
+        if isinstance(result, dict):
+            logger.warning("Plan step failed: %s", result.get("type"))
+        made = plans.plan_row(result, visit_id=visit_id, model=getattr(client, "model", None),
+                              made_at=datetime.datetime.now(datetime.timezone.utc))
+        try:
+            with Session(services.engine) as session:
+                made = records.save_plan(session, made)
+            saved = True
+        except SQLAlchemyError as exc:  # still shown, as a check that couldn't be saved is
+            logger.warning("Plan not saved: %s", type(exc).__name__)
+            saved = False
+        return plans.plan_reply(made, note=note, saved=saved)
 
     @app.get("/api/patients/{patient_id}/visits", response_model=List[VisitSummary], dependencies=[
         Depends(require("patients", "view")), Depends(require("visit_records", "view")),
@@ -371,7 +427,8 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         """The add-case form's pick lists, so the website offers only what add-case accepts."""
         return FormChoices(
             art_regimens=[RegimenChoice(choice=c, drugs=COMBINATIONS.get(c, [c])) for c in REGIMEN_CHOICES],
-            lab_tests=[LabTestChoice(test=t, name=TEST_NAMES[t], units=units) for t, units in TEST_UNITS.items()],
+            lab_tests=[LabTestChoice(test=t, name=TEST_NAMES[t], label=TEST_LABELS[t], units=units)
+                       for t, units in TEST_UNITS.items()],
             visit_types=list(VISIT_TYPES),
         )
 

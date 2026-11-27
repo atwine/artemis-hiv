@@ -198,7 +198,6 @@ backend/cards.py	_summary	Shortens an alert title to the 140 characters a CDS Ho
 backend/cards.py	card_from_saved	Turns one alert, its passages and explanation into a CDS Hooks card with the screen's heading and references.	stays	stays
 backend/cards.py	cards_from_entry	Turns a saved visit check's alerts into cards, refusing results that don't line up.	stays	stays
 backend/cards.py	indicator_for	Maps an alert's severity to a card's info, warning or critical.	stays	stays
-backend/cards.py	plan_from_entry	Gives the management plan from a saved visit check, or a plain message when it failed.	stays	stays
 backend/decisions.py	decision_rows	Checks acknowledge/override decisions against today's Finalize rules and builds the rows to save.	stays	stays
 backend/decisions.py	summary	Lists the latest decision on each alert and the alerts still undecided.	stays	stays
 backend/main.py	_find	Finds one patient by id, or answers 404.	stays	stays
@@ -335,3 +334,8 @@ artemis/session_keys.py	saved_reason_key	Names the screen value holding the reas
 backend/settings.py	_at_least_one	Reads a setting that must be a whole number of at least 1, or stops the start with a clear error.	stays	stays
 artemis/visit.py	_plan	Makes the management plan from the patient, the facts summary and the guideline search (up to 3 model calls).	artemis/visit.py	moved
 artemis/visit.py	management_plan	The plan "Compare plans" asks for: a plan for the patient and today's note, or None when the guideline search is not ready.	artemis/visit.py	moved
+backend/main.py	create_app.compare_plans	Route: makes the AI management plan for a saved visit, compared with its note, saves it and sends it in screen shape.	stays	stays
+backend/plans.py	plan_row	The row to save for one run of the plan step: its text, the checks it failed, or the kind of failure.	stays	stays
+backend/plans.py	plan_reply	A saved plan in screen shape (regimen badge, items with verdict labels, monitoring, counselling), or a generic failure.	stays	stays
+backend/records.py	save_plan	Saves one plan row.	stays	stays
+backend/records.py	latest_plan	The plan shown for a visit: the latest one made.	stays	stays

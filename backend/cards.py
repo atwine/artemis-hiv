@@ -28,7 +28,7 @@ from artemis.screen_text import (
     plain_explanation,
     status_banners,
 )
-from backend.models import AlertValue, Banner, Card, CardExtension, Coding, Passage, Plan, Source, Suggestion
+from backend.models import AlertValue, Banner, Card, CardExtension, Coding, Passage, Source, Suggestion
 
 SYSTEM = "https://github.com/atwine/artemis-hiv"
 
@@ -124,15 +124,3 @@ def banners_for(entry: Dict[str, Any], *, record_saved: bool = True) -> List[Ban
     """The coloured banners above the results (docs/screen-checklist.md sections 1, 2 and 4)."""
     found = status_banners(entry["status"], entry["ai_review"], len(entry.get("alerts") or []))
     return [Banner(level=level, text=text) for level, text in found + record_banners(saved=record_saved)]
-
-
-def plan_from_entry(entry: Dict[str, Any]) -> Optional[Plan]:
-    """The plan step's result. None when it wasn't asked for, or didn't run because the guideline
-    search was unavailable (the red banner says why, as on the Streamlit screen). A step that ran
-    and failed says so, generically."""
-    plan = entry.get("plan")
-    if not entry.get("agentic_enabled") or plan is None:
-        return None
-    if not isinstance(plan, dict) or "updated_management_plan_text" not in plan:
-        return Plan(error="The management plan could not be produced.")
-    return Plan(management_plan=plan.get("updated_management_plan_text"), issues=list(plan.get("plan_issues") or []))

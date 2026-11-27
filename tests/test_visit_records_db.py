@@ -191,6 +191,19 @@ def test_on_real_postgres(tmp_path):
             assert records.import_folder(s, folder)["already_there"] == 2
             assert records.entry_from_check(s.get(VisitCheck, "v1")) == _checks()
             assert records.latest_decisions(s, "v1")["a1"].action == "Acknowledge"
+        # "Compare plans" (migration 0006): plans are added, the latest one is shown.
+        import datetime as _dt
+
+        at = _dt.datetime(2026, 11, 27, 9, tzinfo=_dt.timezone.utc)
+        with Session(engine) as s:
+            records.save_plan(s, records.VisitPlan(visit_id="v1", made_at=at, model="m", outcome="failed",
+                                                   plan_text=None, issues=["no_reply"], error_type="RuntimeError"))
+            records.save_plan(s, records.VisitPlan(visit_id="v1", made_at=at + _dt.timedelta(minutes=1), model="m",
+                                                   outcome="made", plan_text='{"problems": []}', issues=["cut_off"]))
+        with Session(engine) as s:
+            latest = records.latest_plan(s, "v1")
+            assert (latest.outcome, latest.issues, latest.plan_text) == ("made", ["cut_off"], '{"problems": []}')
+            assert records.latest_plan(s, "nope") is None
     finally:
         engine.dispose()
         command.downgrade(cfg, "base")

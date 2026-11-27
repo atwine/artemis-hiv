@@ -181,3 +181,4 @@ date	fix	what	from	to	proof	note
 2026-11-27	4C.3	delete	backend/services.py:clinic_day_file	-	the board reads the clinic day from the database (backend/clinic_db.py day_on); tests/test_clinic_day_db.py proves the demo day's board is the one the file gave	the clinic day in Postgres (owner, 2026-11-27)
 2026-11-27	4C.3	delete	backend/services.py:clinic_day_file.read	-	same as above	same as above
 2026-11-27	B1/B2	rewrite	artemis/visit.py:run_visit_analysis	artemis/visit.py:_plan	tests/test_pipeline_golden.py unchanged (9 passed)	The plan step moved out of run_visit_analysis into _plan, so management_plan can make a plan without re-running the visit check.
+2026-11-27	B1/B2	delete	backend/cards.py:plan_from_entry	-	tests/test_compare_plans.py	The visit check makes no plan now (owner: "A, only Compare plans"); a saved visit's plan comes from the visit_plan table through backend/plans.py plan_reply.

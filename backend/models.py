@@ -230,7 +230,8 @@ class RegimenChoice(BaseModel):
 
 class LabTestChoice(BaseModel):
     test: str  # what the form sends back, e.g. "creatinine"
-    name: str  # what the form shows, e.g. "eGFR"
+    name: str  # the name in a sentence, e.g. "creatinine", "eGFR"
+    label: str  # the name in a list, with a leading capital: "Creatinine", "eGFR" (artemis/patient/labs.py TEST_LABELS)
     units: List[str]  # the usual unit first
 
 
@@ -335,16 +336,51 @@ class VisitCheckRequest(BaseModel):
 
     note: str = Field(max_length=20000)
     use_ai: bool = True
-    # The AI's management plan (the Streamlit "ARTEMIS Review" option); off by default, as there.
-    include_plan: bool = False
+    # No plan here: a plan is made only by "Compare plans" (owner, 2026-11-27: "A, only Compare plans").
 
 
-class Plan(BaseModel):
-    management_plan: Optional[str] = None
-    # What was wrong with the AI's plan, as the plan step's short codes (e.g. "invalid_json", "cut_off").
-    issues: List[str] = []
-    # Set when the plan step failed; generic, the details go to the server log.
-    error: Optional[str] = None
+# --- The management plan ("Compare plans", plan B1/B2) -------------------------------------
+# Sent as artemis/plan/view.py reads the AI's plan: only what the AI actually said.
+
+PlanOutcome = Literal["made", "failed"]  # failed: no readable plan came back
+
+
+class PlanRegimen(BaseModel):
+    """The ART regimen decision: its badge (label and tone) and the AI's own words."""
+
+    label: str  # "Switch", "Hold temporarily", "Continue" or "Needs review"
+    tone: Literal["red", "amber", "green", "grey"]
+    text: str  # the AI's decision as written
+    reason: str
+
+
+class PlanItem(BaseModel):
+    """One problem: what the AI suggests, and how it compares with the clinician's note."""
+
+    problem: str
+    action: str
+    reason: str
+    # "Matches your plan", "Differs from your plan", "Partly in your plan", "Not in your plan",
+    # "Not assessed", or "No plan to compare" when the note had no plan.
+    verdict_label: str
+    explanation: str
+
+
+class ManagementPlan(BaseModel):
+    visit_id: str
+    made_at: str
+    model: Optional[str]
+    outcome: PlanOutcome
+    regimen: Optional[PlanRegimen]  # None when the plan failed
+    items: List[PlanItem]
+    monitoring: List[str]
+    counselling: List[str]
+    # What the plan failed in the app's own checks, as the plan step's short codes ("invalid_json",
+    # "cut_off"), and the screen's warning sentence for them (artemis/screen_text.py).
+    issues: List[str]
+    issues_note: Optional[str]
+    error: Optional[str]  # generic when the plan failed; the details go to the server log only
+    saved: bool  # False when it couldn't be saved; it is still shown
 
 
 class VisitCheckResponse(BaseModel):
@@ -360,7 +396,6 @@ class VisitCheckResponse(BaseModel):
     ai_review_card_label: Optional[str]
     model: Optional[str]
     cards: List[Card]
-    plan: Optional[Plan]
     # False when the visit record couldn't be saved; the results are still shown, as in the app.
     record_saved: bool
     # The screen's own words for this result (artemis/screen_text.py), shown as they are.
@@ -415,6 +450,7 @@ class SavedVisit(VisitCheckResponse):
     all_resolved: bool
     unresolved: List[str]
     finalized_at: Optional[str]  # None while open, including after a later decision reopened it
+    plan: Optional[ManagementPlan]  # the latest plan "Compare plans" made, None before the first
 
 
 class VisitSummary(BaseModel):

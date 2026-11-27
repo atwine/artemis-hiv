@@ -99,6 +99,10 @@ CASES: List[Case] = [
     Case("GET", "/api/visits/{visit_id}", "local", "/api/visits/nope", DENY, "an unknown visit is 404"),
     Case("GET", "/api/visits/{visit_id}", "website", "/api/visits/{visit_id}", DENY, "website: visit_records = -"),
     Case("GET", "/api/visits/{visit_id}", "rebinding", "/api/visits/{visit_id}", DENY, "rebinding is refused by the Host check"),
+    Case("POST", "/api/visits/{visit_id}/plan", "local", "/api/visits/{visit_id}/plan", ALLOW, "local: visit_records = create(all)"),
+    Case("POST", "/api/visits/{visit_id}/plan", "local", "/api/visits/nope/plan", DENY, "no plan for a visit that doesn't exist"),
+    Case("POST", "/api/visits/{visit_id}/plan", "website", "/api/visits/{visit_id}/plan", DENY, "website: visit_records = - (no model money spent)"),
+    Case("POST", "/api/visits/{visit_id}/plan", "rebinding", "/api/visits/{visit_id}/plan", DENY, "rebinding is refused by the Host check"),
     Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/P001/visits", ALLOW, "local: visit_records = view(all)"),
     Case("GET", "/api/patients/{patient_id}/visits", "local", "/api/patients/NOPE/visits", DENY, "an unknown patient is 404"),
     Case("GET", "/api/patients/{patient_id}/visits", "website", "/api/patients/P001/visits", DENY, "website: visit_records = -"),
@@ -120,12 +124,13 @@ def _rows(api) -> Dict[str, int]:
     from backend.records import AlertDecision, VisitCheck
 
     with Session(api.engine) as s:
-        from backend.records import VisitFinalize
+        from backend.records import VisitFinalize, VisitPlan
 
         return {
             "checks": len(s.exec(select(VisitCheck)).all()),
             "decisions": len(s.exec(select(AlertDecision)).all()),
             "finalized": len(s.exec(select(VisitFinalize)).all()),
+            "plans": len(s.exec(select(VisitPlan)).all()),
         }
 
 

@@ -26,7 +26,7 @@ How it stays true:
 | `unreadable` | The reply could not be read as a list of alerts | Amber banner, same as `failed`, with its own reason | Failed: the reply could not be read | AI review failed |
 | `cut_off` | The reply stopped before it finished | Amber banner: AI review incomplete; the alerts read are shown, others may be missing | Incomplete: the reply was cut off | AI review incomplete |
 | `partly_read` | Part of the reply could not be read | Amber banner, same as `cut_off`, with its own reason | Incomplete: part of the reply could not be read | AI review incomplete |
-| `search_unavailable` | The guideline search model did not load (G33) | Red banner: guideline search unavailable, AI review off, check the search model setting. The plan step does not run either; rule alerts show no guideline references | Not run: guideline search unavailable | Guideline search unavailable |
+| `search_unavailable` | The guideline search model did not load (G33) | Red banner: guideline search unavailable, AI review off, check the search model setting. "Compare plans" makes no plan either (503); rule alerts show no guideline references | Not run: guideline search unavailable | Guideline search unavailable |
 
 The two labels are `AI_REVIEW_LABELS` and `AI_REVIEW_CARD_LABELS` in `artemis/screen_text.py` (owner,
 2026-11-26: the backend sends them, in `ai_review_label` and `ai_review_card_label`, on the visit
@@ -73,6 +73,25 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
   could not be saved, so its alerts cannot be decided here."), from `record_banners` (owner,
   2026-11-26). The API sends it in `banners`; the Streamlit screen keeps its own sentence, since
   there a Finalize still saves to the file.
+
+## 4b. The management plan ("Compare plans")
+
+Made only on demand for a saved visit (owner, 2026-11-27: "A, only Compare plans"), saved, and
+sent back on the saved visit (`plan`, null before the first). Read by `artemis/plan/view.py`:
+only what the AI actually said.
+
+| `outcome` | When | The screen must show |
+|---|---|---|
+| `made` | A readable plan came back | The regimen badge (`regimen.label`: Switch, Hold temporarily, Continue, or a grey "Needs review" with the AI's own words in `regimen.text`), its reason, then each problem with what the AI suggests and its `verdict_label`, then monitoring and counselling |
+| `made`, with `issues` | It is readable but failed the app's own checks | The same, under a warning: `PLAN_ISSUES_NOTE` ("This plan failed the app's own checks. Treat it with care.") in `issues_note` |
+| `failed` | No readable plan (the model server failed, or the reply could not be read after its retries) | `PLAN_FAILED` in `error` ("The management plan could not be produced."); never the details |
+
+- Verdict labels: "Matches your plan", "Differs from your plan", "Partly in your plan", "Not in
+  your plan", "Not assessed" (the AI gave none), and "No plan to compare" on every item when the
+  note had no plan.
+- No plan is made when the guideline search is unavailable (503, G33) or no model server is set
+  up (503). A plan counts toward the same limit as visit checks (6 a minute, 429).
+- `saved: false`: the plan is shown but could not be saved.
 
 ## 5. Always
 

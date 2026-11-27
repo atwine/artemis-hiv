@@ -92,7 +92,7 @@ def test_the_screen_and_the_visit_check_are_the_same_from_the_database(patient):
         # Each card's ids start with the new visit's random id: the same placeholder for both.
         visit = json.loads(check.text.replace(check.json()["visit_id"], "<visit>"))
         replies.append((detail.json(), listed.json(), visit["cards"],
-                        {k: visit[k] for k in ("status", "ai_review", "plan", "banners")}, box["model"].calls))
+                        {k: visit[k] for k in ("status", "ai_review", "banners")}, box["model"].calls))
     assert replies[1] == replies[0]
 
 

@@ -38,6 +38,10 @@ DISCLAIMER = "Decision support only. Clinician retains final authority. Syntheti
 RECORD_NOT_SAVED = "This check could not be saved, so its alerts cannot be decided here."
 FINALIZE_BLOCKED = ("Finalize is disabled until all alerts are acknowledged or overridden with a reason "
                     "(the reason 'Other (say why)' needs a comment).")
+# The management plan ("Compare plans"): a plan that came back unreadable, and the warning over a
+# plan that failed the app's own checks (the Streamlit screen's sentences, fixes 7 and D14).
+PLAN_FAILED = "The management plan could not be produced."
+PLAN_ISSUES_NOTE = "This plan failed the app's own checks. Treat it with care."
 
 
 # Citation fragments some texts carry inline: "[chunk_id: x, page_number: 3]", "(page=3)", "chunk_id: x".
