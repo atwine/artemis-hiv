@@ -412,7 +412,13 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       the same first (eval/phase4/golden-switch-4c6.txt). tests/test_no_streamlit.py fails if
       Streamlit comes back. Measured: 583 passed, 0 failed, with real Postgres; the Phase 4
       check MET; Semgrep clean.
-- [ ] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
+- [x] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
+      Done 2026-11-27: each new table's rules were approved when it was added (patients: "A, keep
+      the rules"; clinic days: "A, yes as written"; plans: "Yes, same rules"), so no cell of the
+      grid changed. ACCESS.md section 1 now names every table under its data kind. New tests in
+      tests/test_access.py: every table in the code belongs to a data kind with a grid row (a
+      planted table fails it), only GET and POST routes exist, and the backend never deletes or
+      updates a row. 66 access tests pass.
 - [ ] 4C.8 Owner decisions, asked one at a time: whether the evaluation's cases and results stay as
       files in git (research records) or go into the database; whether the guideline index stays in
       Chroma or moves into Postgres (pgvector); whether the check limit's count goes into Postgres;

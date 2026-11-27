@@ -15,7 +15,7 @@ off this laptop (for example to Railway): "this laptop only" means nothing on a 
 | Data | What it holds | Sensitivity |
 |---|---|---|
 | patients | the synthetic test patients: notes, lab results, medicines, past ART, visits. In the database since plan 4C.2 (tables `patient`, `patient_medicine`, `art_history`, `lab_result`, `lab_note`, `clinical_note`, `encounter`), loaded into a new database from the backup `backend/seed/patients.sql` by `scripts/patients_backup.py load` on this laptop. The demo answer keys stay with the evaluation, not in these tables | sensitive: health (synthetic only) |
-| visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome), each acknowledge/override decision, each Finalize, and each AI management plan "Compare plans" made | sensitive: health (synthetic only) |
+| visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome), each acknowledge/override decision, each Finalize, and each AI management plan "Compare plans" made (tables `visit_check`, `alert_decision`, `visit_finalize`, `visit_plan`); rows are only ever added | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
 | clinic_day | the clinic days and their appointments: made-up clinic, room, clinician, date, appointment times and patient ids. In the database since plan 4C.3 (tables `clinic_day`, `appointment`); the demo day is loaded from the backup with the patients | internal (synthetic only) |
 | form_choices | the add-case form's pick lists: ART combinations and drugs, lab tests with their names and units, visit types (from the code) | public |
@@ -53,7 +53,9 @@ except the health check (owner, 2026-11-26: "A, this laptop only"), so there is 
 keep track of.
 
 Nobody can edit or delete patients, visit records or the schedule through the backend
-(owner, 2026-11-26). Visit records are written once and never changed: a new decision is a new
+(owner, 2026-11-26): there are only GET and POST routes, and the backend never deletes or
+updates a row (`tests/test_access.py`, plan 4C.7). Every table belongs to a data kind in
+section 1, so a new table has no rules until it is added there. Visit records are written once and never changed: a new decision is a new
 row, and the latest one counts. Adding a patient adds a new case only: an id already in use is
 refused, and each case has size limits.
 
