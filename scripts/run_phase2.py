@@ -51,6 +51,9 @@ PRESETS: Dict[str, Dict[str, Any]] = {
                       "extra": {"reasoning": {"enabled": False}, "usage": {"include": True}}},
     "glm-5.2": {"openrouter": "z-ai/glm-5.2",
                 "extra": {"reasoning": {"enabled": False}, "usage": {"include": True}}},
+    # The thinking on/off experiment (owner, 2026-11-27): the same model, thinking at its default effort.
+    "glm-5.2-thinking": {"openrouter": "z-ai/glm-5.2",
+                         "extra": {"reasoning": {"enabled": True}, "usage": {"include": True}}},
     "claude-haiku-5.5": {"openrouter": "anthropic/claude-haiku-5.5",
                          "extra": {"reasoning": {"enabled": False}, "usage": {"include": True}}},
 }

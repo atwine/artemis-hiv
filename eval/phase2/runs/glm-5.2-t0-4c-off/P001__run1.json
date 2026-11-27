@@ -1,0 +1,238 @@
+{
+ "case_id": "P001",
+ "model": "glm-5.2-t0-4c-off",
+ "model_id": "z-ai/glm-5.2",
+ "repeat": 1,
+ "temperature": 0.0,
+ "seconds": 137.8,
+ "calls": [
+  {
+   "prompt_tokens": 649,
+   "completion_tokens": 47,
+   "total_tokens": 696,
+   "cost": 0.00051612,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00051612,
+    "upstream_inference_prompt_cost": 0.00040238,
+    "upstream_inference_completions_cost": 0.00011374
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 2318,
+   "completion_tokens": 475,
+   "total_tokens": 2793,
+   "cost": 0.00258666,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00258666,
+    "upstream_inference_prompt_cost": 0.00143716,
+    "upstream_inference_completions_cost": 0.0011495
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 1517,
+   "completion_tokens": 540,
+   "total_tokens": 2057,
+   "cost": 0.0020323,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 448,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0020323,
+    "upstream_inference_prompt_cost": 0.0007255,
+    "upstream_inference_completions_cost": 0.0013068
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 0,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ ],
+ "cost_usd": 0.00513508,
+ "status": "AMBER",
+ "screening_outcome": "ok",
+ "alerts": [
+  {
+   "alert_id": "tdf_creatinine_overdue",
+   "title": "Creatinine monitoring overdue while on TDF",
+   "message": "Creatinine last recorded 478 days ago for a patient on TDF. Consider ordering repeat renal function monitoring.",
+   "evidence": {
+    "regimen": [
+     "TDF",
+     "3TC",
+     "DTG"
+    ],
+    "days_since_creatinine": 478
+   },
+   "query_hint": "TDF renal function monitoring creatinine schedule",
+   "source": "rule"
+  },
+  {
+   "alert_id": "ALERT_001",
+   "title": "Overdue creatinine monitoring on TDF",
+   "message": "Guidelines require serum creatinine monitoring for patients on TDF-based ART. The patient's last creatinine was 478 days before this visit, over 15 months ago. No creatinine was ordered at today's encounter. TDF can cause renal toxicity, and regular renal function monitoring is essential for early detection of nephrotoxicity. The clinician's plan of routine follow-up with no issues does not include renal monitoring.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "monitoring_gap",
+    "severity": "moderate",
+    "recommended_action": "Order serum creatinine and eGFR at this visit to assess TDF renal safety, and establish routine renal monitoring per guideline intervals.",
+    "citations": [
+     {
+      "page_number": 260,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_001",
+     "title": "Overdue creatinine monitoring on TDF",
+     "message": "Guidelines require serum creatinine monitoring for patients on TDF-based ART. The patient's last creatinine was 478 days before this visit, over 15 months ago. No creatinine was ordered at today's encounter. TDF can cause renal toxicity, and regular renal function monitoring is essential for early detection of nephrotoxicity. The clinician's plan of routine follow-up with no issues does not include renal monitoring.",
+     "issue_type": "monitoring_gap",
+     "severity": "moderate",
+     "recommended_action": "Order serum creatinine and eGFR at this visit to assess TDF renal safety, and establish routine renal monitoring per guideline intervals.",
+     "citations": [
+      {
+       "page_number": 260,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  },
+  {
+   "alert_id": "ALERT_002",
+   "title": "Low-level viremia on DTG-based regimen",
+   "message": "Guidelines note that viral load >200 copies/mL is associated with risk of transmission and treatment failure, and that low-level viremia should be monitored. The patient's viral load was 40 copies/mL 113 days before this visit, which is detectable but below the suppression threshold. While on a DTG-based regimen (TLD), this low-level viremia warrants enhanced adherence counseling and repeat viral load testing to confirm whether suppression is achieved or viremia is progressing.",
+   "evidence": {
+    "type": "llm_screening",
+    "issue_type": "guideline_deviation",
+    "severity": "moderate",
+    "recommended_action": "Repeat viral load testing and provide enhanced adherence counseling; evaluate for potential treatment failure if viremia persists or increases.",
+    "citations": [
+     {
+      "page_number": 245,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+      "shown_to_ai": true
+     },
+     {
+      "page_number": 245,
+      "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+      "shown_to_ai": true
+     }
+    ],
+    "raw_issue": {
+     "alert_id": "ALERT_002",
+     "title": "Low-level viremia on DTG-based regimen",
+     "message": "Guidelines note that viral load >200 copies/mL is associated with risk of transmission and treatment failure, and that low-level viremia should be monitored. The patient's viral load was 40 copies/mL 113 days before this visit, which is detectable but below the suppression threshold. While on a DTG-based regimen (TLD), this low-level viremia warrants enhanced adherence counseling and repeat viral load testing to confirm whether suppression is achieved or viremia is progressing.",
+     "issue_type": "guideline_deviation",
+     "severity": "moderate",
+     "recommended_action": "Repeat viral load testing and provide enhanced adherence counseling; evaluate for potential treatment failure if viremia persists or increases.",
+     "citations": [
+      {
+       "page_number": 245,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2"
+      },
+      {
+       "page_number": 245,
+       "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1"
+      }
+     ]
+    }
+   },
+   "query_hint": "HIV regimen safety monitoring toxicities drug interactions",
+   "source": "ai"
+  }
+ ],
+ "retrieved": {
+  "tdf_creatinine_overdue": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p37_c1",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p5_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p22_c2",
+   "hiv_guidelines_co_infectionscreening.extraction__hiv_guidelines_co_infectionscreening.extraction__p38_c2"
+  ],
+  "ALERT_001": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2"
+  ],
+  "ALERT_002": [
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+   "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1"
+  ]
+ },
+ "screening": {
+  "search_questions": [
+   "How often should creatinine be monitored for patients on TDF?",
+   "Is a viral load of 40 copies/mL on DTG-based regimen considered suppressed?",
+   "What routine monitoring labs are due at this follow-up visit?"
+  ],
+  "raw_output": "[\n  {\n    \"alert_id\": \"ALERT_001\",\n    \"title\": \"Overdue creatinine monitoring on TDF\",\n    \"message\": \"Guidelines require serum creatinine monitoring for patients on TDF-based ART. The patient's last creatinine was 478 days before this visit, over 15 months ago. No creatinine was ordered at today's encounter. TDF can cause renal toxicity, and regular renal function monitoring is essential for early detection of nephrotoxicity. The clinician's plan of routine follow-up with no issues does not include renal monitoring.\",\n    \"issue_type\": \"monitoring_gap\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Order serum creatinine and eGFR at this visit to assess TDF renal safety, and establish routine renal monitoring per guideline intervals.\",\n    \"citations\": [\n      {\"page_number\": 260, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2\"}\n    ]\n  },\n  {\n    \"alert_id\": \"ALERT_002\",\n    \"title\": \"Low-level viremia on DTG-based regimen\",\n    \"message\": \"Guidelines note that viral load >200 copies/mL is associated with risk of transmission and treatment failure, and that low-level viremia should be monitored. The patient's viral load was 40 copies/mL 113 days before this visit, which is detectable but below the suppression threshold. While on a DTG-based regimen (TLD), this low-level viremia warrants enhanced adherence counseling and repeat viral load testing to confirm whether suppression is achieved or viremia is progressing.\",\n    \"issue_type\": \"guideline_deviation\",\n    \"severity\": \"moderate\",\n    \"recommended_action\": \"Repeat viral load testing and provide enhanced adherence counseling; evaluate for potential treatment failure if viremia persists or increases.\",\n    \"citations\": [\n      {\"page_number\": 245, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2\"},\n      {\"page_number\": 245, \"chunk_id\": \"hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1\"}\n    ]\n  }\n]",
+  "screening_bundle": [
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p27_c2",
+    "page_number": 260,
+    "quote": "any developing signs and symptoms. 3. Perform RBS every 3 months for those at high risk for hyperglycaemia in the first 12 months, then thereafter use clinical indication to determine need for tests. Isoniazid/ 3HP Prophylaxis 1. Screen using screening tool to identify any developing signs and symptoms. 2. Do Liver Function Tests based on clinical indication. TDF 1. Do Serum creatinine & eGFR for naïve patient initiating ART with TDF back borne at base 2. Do Serum creatinine "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c2",
+    "page_number": 245,
+    "quote": "ing and sustaining HIV epidemic control, as viral load of >200 copies/mL is associated with potential risk of sexual transmission as well as subsequent virologic non-suppression and treatment failure. Given the above background and taking into consider the 2021 World Health Organization guidance to monitor low-level viremia, the guidelines have been designed to carter for health facilities with capacity to utilize plasma and dried blood spot (DBS) samples at suppression cut o"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c2",
+    "page_number": 253,
+    "quote": "ites for active PV services delivery. b. Sentinel sites shall pro-actively follow-up patients to detect drug reactions and, conduct the following laboratory screening for all Recipients of Care (RoC): i) Baseline laboratory investigations for suspected adverse drug event in addition to clinical screening as per the guidelines ii) Routine laboratory investigations for suspected or confirmed adverse drug event in addition to clinical screening as per the guidelines iii) Both la"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p32_c1",
+    "page_number": 265,
+    "quote": "Parameter Grade 1: Mild Grade 2: Moderate Grade 3: Severe Grade 4: Potentially life threatening LFTs (Transaminases) ALT or SGPT and AST or SGOT 1.25 to < 2.5 x ULN (For any) *ULN=Upper limit of Normal 2.5 to < 5.0 x ULN (For any) to < 10.0 x ULN (For any) ≥ 10.0 x ULN (For any) RFTs (Creatinine) N/A < 90 to 60 ml/min or ml/min/1.73 m2 OR 10 to < 30% decrease from participant's baseline < 60 to 30 ml/min or ml/min/1.73 m2 OR 30 to < 50% decrease from participant's baseline < "
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p12_c1",
+    "page_number": 245,
+    "quote": "Consolidated Guidelines for the Prevention and Treatment of HIV and Aids in Uganda - 2022 virological monitoring provides an early and more accurate indication of treatment failure and indicates the need to switch from first line to second-line drugs, and from second- line to third-line drugs, toward reducing accumulation of drug-resistance mutations and improved clinical outcomes. Dolutegravir (DTG)-based regimens (e.g., tenofovir/lamivudine/dolutegravir [TLD]) have increase"
+   },
+   {
+    "chunk_id": "hiv_guidelines_art.extraction__hiv_guidelines_art.extraction__p20_c3",
+    "page_number": 253,
+    "quote": "events shall be transported to the nearby Hub using laboratory Hub transport system d. For each encounter, the health worker should screen for any suspected ADRs as per screening tool above at triage. e. Clinicians should further evaluate reported signs and symptoms. f. Where applicable the clinician should request for additional tests (including laboratory and radiological) for patients with signs or symptoms suggesting ADRs. 253"
+   }
+  ],
+  "parse_status": "parsed_nonempty",
+  "finish_reason": "stop",
+  "client_note": null,
+  "exact_repeats_dropped": 0
+ },
+ "plan_text": "{\"art_regimen_decision\":{\"decision\":\"Continue\",\"reason\":\"Patient has no complaints, appears well, has good adherence, and viral load is suppressed at 40 copies/mL; no signs of toxicity are evident.\"},\"problems\":[{\"problem\":\"Stale creatinine monitoring for TDF toxicity\",\"action\":\"Order serum creatinine and eGFR now; last creatinine was 478 days ago and guidelines require creatinine/eGFR screening for patients on TDF.\",\"reason\":\"Patient is on TDF and the most recent creatinine is over 15 months old, exceeding routine monitoring intervals per Uganda guidelines.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan of routine follow-up with no issues does not include ordering a creatinine/eGFR despite the last one being 478 days old.\"}},{\"problem\":\"Viral load of 40 copies/mL near detection threshold\",\"action\":\"Repeat viral load at next scheduled visit to confirm sustained suppression, as a value of 40 copies/mL is close to the low-level viremia threshold.\",\"reason\":\"Patient's viral load of 40 copies/mL is near the threshold for low-level viremia and guidelines emphasize repeat viral load monitoring to confirm suppression.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician's plan does not address the near-threshold viral load or mention a repeat test to confirm ongoing suppression.\"}},{\"problem\":\"Pharmacovigilance assessment for ART toxicity\",\"action\":\"Screen for TDF and DTG toxicity symptoms and signs at this visit using guideline-recommended pharmacovigilance practices.\",\"reason\":\"Uganda guidelines emphasize pharmacovigilance for all patients on ART, and this patient has been on TDF/3TC/DTG for 3 years without documented recent toxicity screening.\",\"clinician_plan_for_this_problem\":{\"decision\":\"Gap\",\"explanation\":\"The clinician documented routine follow-up with no issues but did not document any structured pharmacovigilance or toxicity screening per guidelines.\"}}],\"monitoring_plan\":[\"- Serum creatinine and eGFR: order now (overdue, last done 478 days ago)\",\"- Viral load: repeat at next routine visit to confirm suppression\",\"- Routine pharmacovigilance screening at every visit for TDF/3TC/DTG toxicity\"],\"patient_counselling\":[\"Report any new symptoms such as nausea, vomiting, abdominal pain, or changes in urination immediately as these may indicate TDF toxicity.\",\"Report any neuropsychiatric symptoms, sleep disturbances, or weight changes as these may relate to DTG.\",\"Continue good adherence to maintain viral suppression.\"]}",
+ "plan_issues": []
+}

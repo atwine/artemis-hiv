@@ -73,8 +73,11 @@ def test_reasoning_off_asks_the_server_to_skip_thinking(monkeypatch: pytest.Monk
     assert sent["reasoning"] == {"enabled": False}
 
 
-def test_without_the_setting_nothing_about_reasoning_is_sent(monkeypatch: pytest.MonkeyPatch) -> None:
-    assert not (_config_from(monkeypatch).extra_body or {}).get("reasoning")
+@pytest.mark.parametrize("env", [{}, {"LLM_REASONING": ""}, {"LLM_REASONING": "  "}])
+def test_without_the_setting_thinking_is_off(monkeypatch: pytest.MonkeyPatch, env) -> None:
+    # Owner, 2026-11-27: "Turn off the thinking completely". Thinking on spent every call's reply
+    # room on thinking (GLM 5.2, measured); the A100's vLLM accepts the switch and ignores it.
+    assert _config_from(monkeypatch, **env).extra_body == {"reasoning": {"enabled": False}}
 
 
 @pytest.mark.parametrize("value", ["OFF", " off "])
@@ -82,7 +85,12 @@ def test_off_is_read_whatever_its_case_or_spaces(monkeypatch: pytest.MonkeyPatch
     assert _config_from(monkeypatch, LLM_REASONING=value).extra_body == {"reasoning": {"enabled": False}}
 
 
-@pytest.mark.parametrize("value", ["on", "false", "yes", "disabled"])
+def test_reasoning_on_asks_the_server_to_think(monkeypatch: pytest.MonkeyPatch) -> None:
+    # The thinking on/off experiment (owner, 2026-11-27): GLM's own default effort, asked for outright.
+    assert _config_from(monkeypatch, LLM_REASONING=" On ").extra_body == {"reasoning": {"enabled": True}}
+
+
+@pytest.mark.parametrize("value", ["true", "false", "yes", "disabled", "of"])
 def test_any_other_value_is_refused_so_a_typo_cant_leave_thinking_on(monkeypatch: pytest.MonkeyPatch, value: str) -> None:
     with pytest.raises(ValueError, match="LLM_REASONING"):
         _config_from(monkeypatch, LLM_REASONING=value)

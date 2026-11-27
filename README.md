@@ -100,8 +100,9 @@ Ollama through its `/v1` endpoint). In `.env`:
 - `LLM_BASE_URL`: the server address up to and including `/v1`
 - `LLM_MODEL`: the model id (empty means the first model the server lists)
 - `LLM_API_KEY`: only if the server checks a key (OpenRouter does)
-- `LLM_REASONING`: `off` to switch the model's thinking off (set it for GLM on OpenRouter, as it
-  was measured); leave it empty for the A100
+- `LLM_REASONING`: the model's thinking is off unless this is `on` (empty or `off` asks the server
+  to skip it; the A100 ignores the switch). Keep it off: with GLM 5.2, thinking on used up every
+  reply's room before any answer was written
 
 The address stays in `.env`: replies, error messages and saved records never show it.
 

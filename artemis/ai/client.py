@@ -80,21 +80,23 @@ class OpenAICompatConfig:
 def openai_compat_config_from_env() -> Optional[OpenAICompatConfig]:
     """Read LLM_BASE_URL / LLM_MODEL / LLM_API_KEY / LLM_REASONING. None when LLM_BASE_URL is unset.
 
-    LLM_REASONING=off asks the server to skip the model's thinking ({"reasoning": {"enabled":
-    false}}, OpenRouter's switch), as GLM 5.2 was measured in Phase 2 (owner, 2026-11-27). Unset,
-    nothing about thinking is sent. Any other value is refused, so a typo can't leave it on."""
+    The model's thinking is off unless LLM_REASONING=on: the server is asked to skip it
+    ({"reasoning": {"enabled": false}}, OpenRouter's switch; the A100's vLLM accepts the field and
+    ignores it). Owner, 2026-11-27: "Turn off the thinking completely", after thinking on spent
+    every call's reply room on thinking (GLM 5.2, measured). =on asks for it ({"enabled": true}).
+    Any other value is refused, so a typo can't flip it."""
 
     base_url = (os.getenv("LLM_BASE_URL") or "").strip().rstrip("/")
     if not base_url:
         return None
     reasoning = (os.getenv("LLM_REASONING") or "").strip().lower()
-    if reasoning not in ("", "off"):
-        raise ValueError("LLM_REASONING must be 'off' or left empty")
+    if reasoning not in ("", "off", "on"):
+        raise ValueError("LLM_REASONING must be 'on', 'off' or left empty")
     return OpenAICompatConfig(
         base_url=base_url,
         model=(os.getenv("LLM_MODEL") or "").strip() or None,
         api_key=(os.getenv("LLM_API_KEY") or "").strip() or None,
-        extra_body={"reasoning": {"enabled": False}} if reasoning == "off" else None,
+        extra_body={"reasoning": {"enabled": reasoning == "on"}},
     )
 
 
