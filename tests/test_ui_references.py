@@ -30,8 +30,13 @@ def test_an_ai_alert_lists_its_cited_passages_and_marks_unseen_ones() -> None:
     assert lines == ["Guidelines · p. 7", "Guidelines · p. 99: not among the passages the AI was given"]
 
 
-def test_an_ai_alert_that_cited_nothing_says_so() -> None:
-    assert alert_references(_ai([]), [])[1] == ["The AI cited no guideline passage for this alert."]
+def test_an_ai_alert_that_cited_nothing_says_so_in_its_heading() -> None:
+    """Owner, 2026-11-27 ("A, say so"): the heading itself says it, and the website shows it as sent
+    (screen wording comes from the backend)."""
+    from artemis.screen_text import NO_PASSAGE_CITED
+
+    assert NO_PASSAGE_CITED == "No guideline passage cited"
+    assert alert_references(_ai([]), []) == (NO_PASSAGE_CITED, [])
 
 
 def test_a_rule_alerts_passages_are_labelled_as_search_results() -> None:
