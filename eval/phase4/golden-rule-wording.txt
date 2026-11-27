@@ -1,0 +1,12 @@
+2026-11-27: two fixed rules name the guideline's action (owner: "A, name the action").
+Compared with tests/golden/pipeline.json as saved before the change (stand-in model and search):
+
+Kintu-Test 001: unchanged
+P001: unchanged
+P002: unchanged
+P003: changed ['alerts', 'results'] -> alert efv_sleep_disturbance: ['message']; result efv_sleep_disturbance: ['retrieved', 'explanation']
+P004: unchanged
+P005: changed ['alerts', 'results'] -> alert tdf_nsaid_use: ['message']; result tdf_nsaid_use: ['retrieved', 'explanation']
+P006: unchanged
+
+Only the two rules' messages, their explanations (built from the message) and their passages in this test's stand-in word-overlap search changed. Nothing the AI reads changed, and no status. With the real Ugandan index no row of the search check changed (eval/phase2b/search-4c-search-baseline.json vs the same check after the change). The golden file was rewritten after this comparison.

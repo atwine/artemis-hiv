@@ -520,6 +520,18 @@ Everything that needs the doctor, done together once the app is built and runnin
 Check: the README's accuracy table rests on clinician-checked cases, and `python scripts/evaluate.py`
 reproduces it.
 
+### For the doctors and the final report
+
+Items the owner asked to be noted for the doctors' review and the final report (2026-11-27):
+
+- The fixed rules now cite the Uganda Clinical Guidelines 2023 as well as the HIV guidelines: the
+  NSAID-with-TDF rule cites UCG 2023 p. 452 ("Avoid nephrotoxic medicines, e.g. NSAIDs ...") and
+  p. 625 ("Do not use NSAIDS in renal impairment"), since the HIV guidelines don't cover NSAIDs. The
+  app's AI search still uses only the HIV guideline extracts. Is citing UCG appropriate, and
+  should the UCG be searched too? (Owner: "when the doctors begin to look through it, then they
+  will advise if it's really necessary or not.")
+- The answer-key changes and the rule wordings, with their questions: `eval/cases/KEY-CHANGES.md`.
+
 ## Later (set aside by the owner to reach a working first version)
 
 The goal first (owner, 2026-11-27): enough working app to prove the idea to the doctors, with

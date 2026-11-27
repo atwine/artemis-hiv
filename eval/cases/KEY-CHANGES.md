@@ -46,6 +46,27 @@ bone harm (the key's own action there is "consider replacing TDF", a softer call
 - **Doctor:** is there any case where adjusting the TDF dose is right in this clinic (for example
   TDF given on its own, outside TLD)? If so, the item should only apply to TLD.
 
+## Fixed-rule wording that now names the action (2026-11-27)
+
+The app's own fixed rules advised checking rather than acting, so the stricter key no longer
+counted them. The owner chose to name the action ("A, name the action"), still as advice for the
+clinician to decide, and grounded in the Ugandan guideline.
+
+| Rule | Before | Now | From |
+|---|---|---|---|
+| "Possible EFV neuropsychiatric side effects" (`efv_sleep_disturbance`) | Consider assessing EFV tolerance and reviewing guideline management options. | Reassure first. If the symptoms persist, consider substituting EFV with DTG (or LPV/r if a suitable DTG formulation is not available) (Uganda HIV Guidelines 2022, p. 269). | p. 269, the EFV row of the side-effects table: "Reassure, If symptoms persist, substitute EFV with DTG or LPV/r (if appropriate DTG formulation is not available)" |
+
+| "NSAID use mentioned while on TDF" (`tdf_nsaid_use`) | Consider reviewing renal risk and ensuring appropriate monitoring. | NSAIDs add to kidney harm. Consider stopping or avoiding the NSAID, especially if kidney function is falling (Uganda Clinical Guidelines 2023, p. 452 and p. 625), with paracetamol for pain instead. Check kidney function; if the GFR is below 60 ml/min, consider substituting TDF with ABC (Uganda HIV Guidelines 2022, p. 270). | UCG 2023 p. 452 (chronic kidney disease): "Avoid nephrotoxic medicines, e.g. NSAIDs, celecoxibs, aminoglycosides, contrast agents"; UCG 2023 p. 625 (pain management): "Do not use NSAIDS in renal impairment"; HIV Guidelines 2022 p. 270, the TDF row: "Do LFTs and RFTs. If deranged (elevated liver enzymes and/or GFR is < 60mls/min) then substitute with ABC If ABC is contraindicated: substitute with AZT" |
+
+- **Doctor:** is "reassure first, then consider substituting EFV with DTG if the symptoms persist"
+  how you would want it put for these patients?
+- **Doctor:** the NSAID rule cites the Uganda Clinical Guidelines 2023, which the HIV guidelines
+  don't replace (they don't mention NSAIDs). Is that appropriate, and should the app search the
+  UCG too? (Its AI search uses only the HIV guideline extracts.)
+- **Doctor:** paracetamol as the swap is general pain advice: UCG p. 625 lists it as a step-1
+  pain medicine and warns about high doses, but doesn't say "use paracetamol instead of NSAIDs
+  with TDF". Is it the right thing to suggest here?
+
 ## Effect on the saved runs
 
 Every saved run was scored again with the changed key; no model was called. The old and new
