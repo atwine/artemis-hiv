@@ -28,7 +28,7 @@ def test_a_reopened_visit_is_the_visit_as_it_was_shown(api):
     assert r.status_code == 200, r.text
     back = r.json()
     assert len(api.model.calls) == calls  # no new AI call
-    for key in ("visit_id", "patient_id", "visit_date", "saved_at", "status", "ai_review", "model", "cards", "plan", "banners", "disclaimer"):
+    for key in ("visit_id", "patient_id", "visit_date", "saved_at", "status", "ai_review", "model", "cards", "banners", "disclaimer"):
         assert back[key] == ran[key], key
     assert back["note"] == "Mild headache since Monday."
     assert back["decisions"] == []

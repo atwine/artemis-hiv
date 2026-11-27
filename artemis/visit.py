@@ -183,6 +183,39 @@ def _cited_passages(alert: Alert, shown: List[VectorSearchResult]) -> List[Vecto
     return out
 
 
+def _plan(patient_copy: Dict[str, Any], stage1_summary: Any, rag: RagEngine, llm_client: Any, top_k: int) -> Any:
+    """The plan step: the agentic planner with its own guideline searches, and the AI's management
+    plan. A failure comes back as {"error": ..., "type": ...}, never raised."""
+    try:
+        agentic_context = QueryContext(
+            question_text=AGENTIC_QUESTION,
+            patient_raw=patient_copy,
+            patient_summary=stage1_summary,
+            metadata={"top_k": top_k},
+        )
+        return run_agentic_flow(
+            agentic_context,
+            embedder=rag._embedder,
+            vector_store=rag._vector_store,
+            top_k=top_k,
+            llm_client=llm_client,
+        )
+    except Exception as exc:
+        return {"error": str(exc), "type": exc.__class__.__name__}
+
+
+def management_plan(*, patient: Dict[str, Any], today_note: str, rag: RagEngine, llm_client: Any,
+                    top_k: int = 5) -> Any:
+    """The AI management plan for a patient and the note a visit check ran on, made on its own
+    ("Compare plans", plan B1): the same plan step the visit check ran, with the same patient
+    summary. None when the guideline search isn't ready (G33): no plan rests on near-random passages."""
+    if not rag.search_ready:
+        return None
+    patient_copy = _with_note(patient, today_note)
+    context = build_patient_context(patient_copy)
+    return _plan(patient_copy, build_stage1_summary(patient=patient_copy, context=context), rag, llm_client, top_k)
+
+
 def run_visit_analysis(
     *,
     patient: Dict[str, Any],
@@ -214,22 +247,7 @@ def run_visit_analysis(
     agentic_result = None
     search_ready = rag.search_ready  # the plan step and the AI review both stop without it (G33)
     if options.agentic and search_ready:
-        try:
-            agentic_context = QueryContext(
-                question_text=AGENTIC_QUESTION,
-                patient_raw=patient_copy,
-                patient_summary=stage1_summary,
-                metadata={"top_k": top_k},
-            )
-            agentic_result = run_agentic_flow(
-                agentic_context,
-                embedder=rag._embedder,
-                vector_store=rag._vector_store,
-                top_k=top_k,
-                llm_client=llm_client,
-            )
-        except Exception as exc:
-            agentic_result = {"error": str(exc), "type": exc.__class__.__name__}
+        agentic_result = _plan(patient_copy, stage1_summary, rag, llm_client, top_k)
 
     llm_error: Optional[str] = None
 

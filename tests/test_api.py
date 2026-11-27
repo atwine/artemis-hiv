@@ -102,7 +102,7 @@ def test_visit_check_is_the_same_analysis_as_the_app(api):
     assert body["visit_date"] == "2026-01-22"
     assert body["model"] == "fake-model"
     assert body["record_saved"] is True
-    assert body["plan"] is None
+    assert "plan" not in body  # only "Compare plans" makes one (owner, 2026-11-27)
 
 
 def test_cards_take_the_cds_hooks_shape(api):
@@ -215,14 +215,6 @@ def test_alerts_and_results_out_of_step_are_an_error_not_lost_cards():
     entry = {"visit_id": "v1", "alerts": [{"alert_id": "a", "title": "t", "message": "m"}] * 2, "results": [{}]}
     with pytest.raises(ValueError):
         cards_from_entry(entry)
-
-
-def test_visit_check_with_the_plan(api):
-    body = _check(api, include_plan=True).json()
-    assert body["plan"] is not None
-    assert body["plan"]["error"] is None
-    assert body["plan"]["management_plan"]
-    assert "plan" in api.model.calls
 
 
 def test_visit_check_is_saved_once_as_written(api):
@@ -442,14 +434,14 @@ def test_ai_card_reference_names_the_guideline_and_printed_page(api):
 
 
 def test_search_model_not_loaded_turns_the_ai_off_and_says_so(api):
-    """docs/screen-checklist.md, search_unavailable: red banner, AI review and plan off, rule
-    alerts with no guideline references."""
+    """docs/screen-checklist.md, search_unavailable: red banner, AI review off, rule alerts with no
+    guideline references (Compare plans refuses too: tests/test_compare_plans.py)."""
     from artemis.visit import SEARCH_UNAVAILABLE
     from tests.api_fakes import fake_search
 
     broken = fake_search(ready=False)
     api.services.search = lambda: broken
-    r = _check(api, include_plan=True)
+    r = _check(api)
     assert r.status_code == 200, r.text
     body = r.json()
     assert body["ai_review"] == "search_unavailable"
@@ -458,19 +450,6 @@ def test_search_model_not_loaded_turns_the_ai_off_and_says_so(api):
     assert api.model.calls == []
     assert body["cards"] and all(c["extension"]["kind"] == "rule" for c in body["cards"])
     assert all(c["extension"]["passages"] == [] and c["extension"]["references"] == [] for c in body["cards"])
-    # The plan step didn't run, so there's no plan and no "could not be produced" message; the
-    # red banner says why, as on the Streamlit screen.
-    assert body["plan"] is None
-
-
-def test_a_plan_step_that_ran_and_failed_says_so():
-    from backend.cards import plan_from_entry
-
-    failed = plan_from_entry({"agentic_enabled": True, "plan": {"error": "boom", "type": "RuntimeError"}})
-    assert failed.error == "The management plan could not be produced."
-    assert "boom" not in failed.model_dump_json()
-    assert plan_from_entry({"agentic_enabled": True, "plan": None}) is None  # did not run
-    assert plan_from_entry({"agentic_enabled": False, "plan": None}) is None  # not asked for
 
 
 def test_finalize_note_clears_once_every_alert_is_decided(api):
@@ -561,16 +540,6 @@ def test_cards_carry_the_values_box_and_the_key_sentence(api):
     reopened = api.client.get(f"/api/visits/{visit['visit_id']}", headers=LOCAL).json()
     assert [c["extension"]["values"] for c in reopened["cards"]] == [c["extension"]["values"] for c in visit["cards"]]
     assert [c["extension"]["key_sentence"] for c in reopened["cards"]] == [c["extension"]["key_sentence"] for c in visit["cards"]]
-
-
-def test_a_plan_with_problems_comes_back_with_its_issue_codes(api):
-    """The plan step reports problems as short codes ("invalid_json", "cut_off"); found by the Phase 4
-    replay: the API's Plan type expected objects, so such a visit check failed with a 500."""
-    api.model = FakeModel({**replies_for("P001"), "plan": "not json at all"})
-    r = _check(api, include_plan=True)
-    assert r.status_code == 200, r.text
-    plan = r.json()["plan"]
-    assert plan["issues"] and all(isinstance(i, str) for i in plan["issues"])
 
 
 def test_replies_carry_the_ai_review_labels(api):

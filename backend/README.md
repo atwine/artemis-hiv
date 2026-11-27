@@ -13,12 +13,13 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 | GET | /api/health | `{"status": "ok"}` |
 | GET | /api/patients | the patient list, from the database (plan 4C.2) |
 | POST | /api/patients | add a new made-up case (201) to the database, booked at `appointment_time` (HH:MM) on its visit date, in one save; a date with no clinic day gets one; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
-| GET | /api/form-choices | the add-case form's pick lists: ART combinations and drugs, lab tests with units, visit types |
+| GET | /api/form-choices | the add-case form's pick lists: ART combinations and drugs, lab tests with units (each with `name` for sentences and `label` for lists), visit types |
 | GET | /api/patients/{patient_id} | one patient's record; `labs` maps each test to its results, each with `date`, `value`, `unit` and `source` in the unit it was recorded in (never converted); typed-in lab text comes apart as `lab_notes` |
-| POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
+| POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true}`; alerts come back as CDS Hooks cards and the run is saved; no plan (that is "Compare plans") |
+| POST | /api/visits/{visit_id}/plan | "Compare plans": the AI management plan for a saved visit, compared item by item with the note the check ran on, saved and sent in screen shape (`regimen` label/tone/text/reason, `items` with `verdict_label`, `monitoring`, `counselling`, `issues` with `issues_note`, `outcome` made/failed with a generic `error`); making one counts toward the same limit as visit checks; a plan that passed its checks is shown again with no AI call, any other is tried again; 503 when the guideline search is unavailable or no model server is set up (a model server that doesn't answer gives `outcome` failed) |
 | POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other (say why)", "comment": "..."}]}`; reasons are `artemis/review.py` `OVERRIDE_REASONS`; the reply says `finalized_at` (null while open) |
 | POST | /api/visits/{visit_id}/finalize | finalize once every alert is decided (422 with `FINALIZE_BLOCKED` otherwise); again with nothing changed returns the same; a later decision reopens the visit |
-| GET | /api/visits/{visit_id} | reopen a saved visit as it was shown, with its note, decisions and `finalized_at`; no new AI call |
+| GET | /api/visits/{visit_id} | reopen a saved visit as it was shown, with its note, decisions, `finalized_at` and its latest `plan` (null before the first); no new AI call |
 | GET | /api/patients/{patient_id}/visits | a patient's saved checks, newest first |
 | GET | /api/clinic-day | a clinic day's board from the database, appointments in time order, each with `state` waiting / needs_you / done from the patient's latest check, and the header counts; `?date=YYYY-MM-DD` picks the day (404 if there's none), otherwise today's or the most recent earlier one |
 

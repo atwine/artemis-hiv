@@ -32,8 +32,19 @@ def test_the_lab_tests_have_their_names_and_units_usual_first(api):
     tests = _choices(api)["lab_tests"]
     assert [t["test"] for t in tests] == list(TEST_UNITS)
     creatinine = next(t for t in tests if t["test"] == "creatinine")
-    assert creatinine == {"test": "creatinine", "name": "creatinine", "units": ["umol/L", "mg/dL"]}
+    assert creatinine == {"test": "creatinine", "name": "creatinine", "label": "Creatinine", "units": ["umol/L", "mg/dL"]}
     assert all(t["name"] == TEST_NAMES[t["test"]] for t in tests)
+
+
+def test_each_lab_test_has_a_list_ready_label(api):
+    """Owner, 2026-11-27 ("A, backend sends them"): a name with a leading capital for lists and
+    pick lists; abbreviations keep their own case. The lower-case name stays for sentences."""
+    labels = {t["test"]: t["label"] for t in _choices(api)["lab_tests"]}
+    assert labels["creatinine"] == "Creatinine"
+    assert labels["viral_load"] == "Viral load"
+    assert labels["hemoglobin"] == "Haemoglobin"
+    assert labels["fasting_glucose"] == "Fasting glucose"
+    assert (labels["egfr"], labels["hba1c"], labels["cd4"], labels["alt"]) == ("eGFR", "HbA1c", "CD4 count", "ALT")
 
 
 def test_every_choice_offered_is_one_the_add_case_route_accepts(api):
