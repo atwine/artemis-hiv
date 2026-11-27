@@ -17,7 +17,7 @@ from artemis.patient.new_case import MAX_NOTE, MAX_PREVIOUS_ART, VISIT_TYPES
 from artemis.review import OVERRIDE_REASONS
 from artemis.statuses import AI_REVIEW_OUTCOMES, STATUSES
 
-# Built from the one list the Streamlit screen uses too, so the two can't drift apart.
+# Built from the one list in artemis/review.py, which the decision rules use too, so the two can't drift apart.
 OverrideReason = Literal[tuple(OVERRIDE_REASONS)]  # type: ignore[valid-type]
 
 # Built from artemis/visit.py's lists, which docs/screen-checklist.md covers one by one (plan 4.7).
@@ -53,7 +53,7 @@ class PatientRecord(BaseModel):
 
     patient_id: str = Field(min_length=1, max_length=200)
     name: Optional[str] = ""
-    sex: Optional[str] = ""  # the Streamlit form saves null when it is left blank
+    sex: Optional[str] = ""  # saved as null when the form leaves it blank
     age_years: Optional[int] = None
     art_regimen_current: List[str] = []
     other_medications: List[str] = []
@@ -85,8 +85,8 @@ class PreviousArtIn(BaseModel):
 
 
 class NewCase(BaseModel):
-    """A new made-up patient case (owner, 2026-11-26: the Streamlit form's fields and rules, plus
-    an optional name). Checked again by artemis.patient.new_case, the builder both forms share."""
+    """A new made-up patient case (owner, 2026-11-26: the old Streamlit form's fields and rules,
+    plus an optional name). Checked again by artemis.patient.new_case, which builds the record."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -169,7 +169,7 @@ class Booking(BaseModel):
 
 
 class ClinicDaySchedule(BaseModel):
-    """Data/demo_clinic_day.json, checked when it is read."""
+    """A clinic day's schedule to load (the demo day, tests/fixtures/clinic_day.json), checked when it is read."""
 
     clinic: str
     room: str
@@ -236,7 +236,7 @@ class LabTestChoice(BaseModel):
 
 
 class FormChoices(BaseModel):
-    """The add-case form's lists, the same ones the Streamlit form uses (owner, 2026-11-26)."""
+    """The add-case form's lists, the same ones the add-case route accepts (owner, 2026-11-26)."""
 
     art_regimens: List[RegimenChoice]  # combinations first, then single drugs
     lab_tests: List[LabTestChoice]

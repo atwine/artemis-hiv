@@ -1,7 +1,7 @@
 """The words a visit's results are shown with, in one place for every screen (owner, 2026-11-26).
 
-The Streamlit app, the FastAPI backend (Phase 4) and the Next.js site (Phase 5) all take their
-wording from here, so they cannot say different things. `docs/screen-checklist.md` lists every
+The FastAPI backend sends this wording and the Next.js site shows it as it is, so the two cannot
+say different things. `docs/screen-checklist.md` lists every
 state a visit can end in and what the screen must show for it.
 """
 
@@ -17,8 +17,7 @@ from artemis.guidelines.vector_store import VectorSearchResult
 from artemis.rules.checks import Alert
 from artemis.visit import SEARCH_UNAVAILABLE
 
-# (level, text). The level names are Streamlit's: "success" green, "info" blue, "warning" amber,
-# "error" red.
+# (level, text). The levels: "success" green, "info" blue, "warning" amber, "error" red.
 Banner = Tuple[str, str]
 
 _FAILED_REASON = {
@@ -33,13 +32,12 @@ _PARTIAL_REASON = {
 NOT_SHOWN = "not among the passages the AI was given"
 DISCLAIMER = "Decision support only. Clinician retains final authority. Synthetic data only."
 # A visit check whose record couldn't be saved: the API can't take decisions on it (owner,
-# 2026-11-26; the website's wording). The Streamlit screen keeps its own sentence, since there
-# a Finalize still saves to the file.
+# 2026-11-26; the website's wording).
 RECORD_NOT_SAVED = "This check could not be saved, so its alerts cannot be decided here."
 FINALIZE_BLOCKED = ("Finalize is disabled until all alerts are acknowledged or overridden with a reason "
                     "(the reason 'Other (say why)' needs a comment).")
 # The management plan ("Compare plans"): a plan that came back unreadable, and the warning over a
-# plan that failed the app's own checks (the Streamlit screen's sentences, fixes 7 and D14).
+# plan that failed the app's own checks (the sentences of fixes 7 and D14).
 PLAN_FAILED = "The management plan could not be produced."
 PLAN_ISSUES_NOTE = "This plan failed the app's own checks. Treat it with care."
 

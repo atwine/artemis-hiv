@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
-import json
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from artemis.patient.labs import lab_section, latest_entries, read_lab_entries
@@ -54,13 +52,6 @@ class PatientContext:
     lab_section: str = "None recorded"
     art_regimen_as_entered: str = ""
     dated_notes: str = ""
-
-
-def load_mock_patients(path: Path) -> List[Dict[str, Any]]:
-    """Load demo patients from JSON."""
-
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def build_patient_context(patient: Dict[str, Any]) -> PatientContext:

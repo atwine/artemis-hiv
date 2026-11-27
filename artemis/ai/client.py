@@ -1,18 +1,17 @@
-"""LLM clients.
+"""The model client.
 
-Two backends share one interface (`.model`, and `.chat(...)`, which returns a `ChatReply`: the
-text with why it ended, any error, a note and the usage, all for that one call; plan item 4.6):
-- OllamaClient: a local Ollama server (the original setup).
-- OpenAICompatClient: any OpenAI-compatible server, such as vLLM on a remote GPU.
-  Selected by setting LLM_BASE_URL (see `openai_compat_config_from_env`).
+OpenAICompatClient talks to any OpenAI-compatible server: vLLM on the A100, OpenRouter, or a
+local Ollama through its OpenAI-compatible endpoint (for the fine-tuning experiments). It is
+selected by setting LLM_BASE_URL (see `openai_compat_config_from_env`). `.chat(...)` returns a
+`ChatReply`: the text with why it ended, any error, a note and the usage, all for that one call
+(plan item 4.6). The native Ollama client the Streamlit screen used went with it (plan 4C.6).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-import json
 import os
-from typing import Any, ClassVar, Dict, List, Optional, Tuple, TypedDict
+from typing import Any, ClassVar, Dict, List, Optional, Protocol, TypedDict
 from urllib.parse import urlsplit
 
 # The AI runs without added randomness, so the same record gets the same alerts (owner, G38,
@@ -54,165 +53,14 @@ def _hide_address(text: str, url: str) -> str:
     return text
 
 
-def ollama_host() -> str:
-    """The Ollama address from OLLAMA_HOST, as the client will use it.
-
-    OLLAMA_HOST is often a bind address such as 0.0.0.0:11434, which a client can't connect
-    to, so 0.0.0.0 becomes localhost; the scheme (http or https) is kept (fix 10, G28).
-    """
-    raw = (os.getenv("OLLAMA_HOST") or "").strip()
-    if not raw:
-        return "http://localhost:11434"
-    host = raw if "://" in raw else f"http://{raw}"
-    return host.replace("://0.0.0.0", "://localhost")
-
-
-def list_ollama_models() -> Tuple[List[str], Optional[str]]:
-    """The models installed on the local Ollama server, and an error message when it can't be reached."""
-    try:
-        from ollama import Client
-    except Exception:
-        return [], "the Python package 'ollama' is not installed"
-    try:
-        resp = Client(host=ollama_host(), timeout=5.0).list()
-    except Exception as exc:
-        return [], f"{type(exc).__name__}"
-    items: Any = getattr(resp, "models", None)
-    if items is None:
-        items = (resp.get("models") or resp.get("data") or []) if isinstance(resp, dict) else resp
-    names: List[str] = []
-    for item in items if isinstance(items, list) else []:
-        name = getattr(item, "name", None) or getattr(item, "model", None)
-        if name is None and isinstance(item, dict):
-            name = item.get("name") or item.get("model")
-        if name is None and isinstance(item, str):
-            name = item
-        if isinstance(name, str) and name:
-            names.append(name)
-    return names, None
-
-
-@dataclass(frozen=True)
-class OllamaConfig:
-    # Rationale: default to the locally pulled model tag to avoid mismatches.
-    model: str = "aadide/medgemma-1.5-4b-it-Q4_K_S"
-    # Rationale: allow setting the context window per request without changing server env.
-    # Matches Ollama `num_ctx` parameter. [src]
-    # - https://raw.githubusercontent.com/ollama/ollama/main/docs/modelfile.mdx#valid-parameters-and-values
-    # 8192, as on the settings panel; Ollama's own default is smaller and cuts long prompts (fix 10).
-    num_ctx: Optional[int] = 8192
-
-
-class OllamaClient:
-    def __init__(self, config: OllamaConfig | None = None) -> None:
-        cfg = config or OllamaConfig()
-
-        # Rationale: allow overriding via environment without changing code.
-        model_override = os.getenv("OLLAMA_MODEL")
-        self._model = model_override if model_override else cfg.model
-
-        self._host = ollama_host()
-
-        # Rationale: store num_ctx to pass via options when set.
-        self._num_ctx: Optional[int] = cfg.num_ctx
+class ChatClient(Protocol):
+    """What the analysis needs from a model client: its name, and one chat call."""
 
     @property
-    def model(self) -> str:
-        return self._model
+    def model(self) -> str: ...
 
-    def chat(
-        self,
-        messages: List[ChatMessage],
-        *,
-        format: Optional[Any] = None,
-        options_override: Optional[Dict[str, Any]] = None,
-    ) -> ChatReply:
-        """Call the local Ollama chat API.
-
-        Uses the Ollama Python library interface documented on Ollama model pages.
-        Example usage shown for `from ollama import chat ...`. [src]
-        - https://ollama.com/MedAIBase/MedGemma1.5
-        """
-
-        try:
-            from ollama import Client
-        except Exception:
-            # Rationale: if the Python client isn't installed, the app should still run
-            # with deterministic fallback explanations.
-            return ChatReply(None, error="Python package 'ollama' is not available in this environment")
-
-        try:
-            # Rationale: use an explicit client so we can control the host used for
-            # connectivity debugging. Allow up to 10 minutes for long-running
-            # local model calls before treating them as timeouts.
-            client = Client(host=self._host, timeout=600.0)
-            # Ollama supports passing generation parameters via `options` (e.g., temperature). [src]
-            # - https://raw.githubusercontent.com/ollama/ollama/main/docs/api.md
-            chat_options: Dict[str, Any] = {
-                "temperature": DEFAULT_TEMPERATURE,
-                "num_predict": 128,
-            }
-            if self._num_ctx is not None:
-                chat_options["num_ctx"] = int(self._num_ctx)
-
-            if options_override:
-                # Rationale: allow per-call overrides (e.g., higher num_predict for long JSON).
-                chat_options.update(options_override)
-
-            # Rationale: Ollama supports structured outputs via the `format` parameter
-            # (either `json` or a JSON schema). [src]
-            # - https://raw.githubusercontent.com/ollama/ollama/main/docs/api.md
-            try:
-                if format is not None:
-                    response = client.chat(
-                        model=self._model,
-                        messages=messages,
-                        options=chat_options,
-                        format=format,
-                    )
-                else:
-                    response = client.chat(
-                        model=self._model,
-                        messages=messages,
-                        options=chat_options,
-                    )
-            except TypeError:
-                # Rationale: older ollama-python client versions may not accept `format`.
-                response = client.chat(
-                    model=self._model,
-                    messages=messages,
-                    options=chat_options,
-                )
-            # Rationale: ollama-python supports both dict-style and object-style
-            # access for responses. [src]
-            # - https://raw.githubusercontent.com/ollama/ollama-python/main/README.md
-            if response is None:
-                return ChatReply(None, error="Ollama returned no response")
-            done_reason = (
-                response.get("done_reason") if isinstance(response, dict) else getattr(response, "done_reason", None)
-            )
-            finish = str(done_reason) if done_reason else None
-
-            if hasattr(response, "message") and getattr(response, "message") is not None:
-                content = getattr(response, "message").content
-            elif isinstance(response, dict) and isinstance(response.get("message"), dict):
-                content = response["message"].get("content")
-            else:
-                return ChatReply(None, finish_reason=finish, error=f"Unrecognized ollama response type: {type(response)}")
-            if not content:
-                return ChatReply(None, finish_reason=finish, error="Ollama returned an empty message content")
-            # Rationale: with structured outputs (`format`), `content` may already be a Python
-            # list/dict. Downstream callers (e.g. LLM screening) expect a JSON string, so non-string
-            # content is serialized here instead of using str(content), which would not be valid JSON.
-            if not isinstance(content, str):
-                try:
-                    content = json.dumps(content, ensure_ascii=False)
-                except TypeError:
-                    content = str(content)
-            return ChatReply(content, finish_reason=finish)
-        except Exception as e:
-            # Rationale: local model may not be pulled/served yet; we degrade gracefully.
-            return ChatReply(None, error=f"Ollama call failed: {type(e).__name__}: {_hide_address(str(e), self._host)}")
+    def chat(self, messages: List[ChatMessage], *, format: Optional[Any] = None,
+             options_override: Optional[Dict[str, Any]] = None) -> ChatReply: ...
 
 
 @dataclass(frozen=True)

@@ -2,7 +2,7 @@
 
 Added 2026-11-27 after review: plan 4C.1 gave the guideline-search module the name `config`,
 which main() also uses for the model settings, so every real run crashed before its first check.
-Importing the script (tests/test_no_streamlit_in_backend.py) couldn't catch that (lesson 23:
+Importing the script (tests/test_no_streamlit.py) couldn't catch that (lesson 23:
 scripts nobody runs break quietly).
 """
 

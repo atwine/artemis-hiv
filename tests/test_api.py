@@ -411,13 +411,12 @@ def test_card_heading_and_references_are_the_screens_own_words(api):
     from backend.records import VisitCheck
 
     with Session(api.engine) as s:
-        from artemis.visit_record import restore
-        from backend.records import entry_from_check
+        from backend.records import entry_from_check, saved_alerts
 
-        restored = restore(entry_from_check(s.get(VisitCheck, visit["visit_id"])))
-    for card, result in zip(visit["cards"], restored["analysis_results"]):
-        alert = result["alert"]
-        heading, lines = alert_references(alert, result["retrieved"])
+        restored = saved_alerts(entry_from_check(s.get(VisitCheck, visit["visit_id"])))
+    for card, result in zip(visit["cards"], restored):
+        alert = result.alert
+        heading, lines = alert_references(alert, result.retrieved)
         assert card["extension"]["heading"] == alert_heading(alert)
         assert card["extension"]["references_heading"] == heading
         assert card["extension"]["references"] == lines

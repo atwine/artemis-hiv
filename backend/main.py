@@ -21,7 +21,6 @@ from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session
 
-from artemis import visit_record
 from artemis.patient.labs import TEST_LABELS, TEST_NAMES, TEST_UNITS, read_lab_entries, read_lab_notes
 from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
 from artemis.patient.new_case import VISIT_TYPES, CaseForm, PreviousArt, build_case_record
@@ -221,7 +220,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             options=AnalysisOptions(top_k=services.top_k, use_llm=body.use_ai, agentic=False),
         )
         visit_id, saved_at = uuid.uuid4().hex, records.now()
-        entry = records.json_safe(visit_record.checks_entry(
+        entry = records.json_safe(records.checks_entry(
             result,
             note=body.note,
             visit_date=str((patient.get("today_encounter") or {}).get("date") or ""),
@@ -236,7 +235,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
                 records.save_check(session, entry, origin="api")
             saved = True
         except SQLAlchemyError as exc:
-            # The results are still shown, as on the Streamlit screen (fix 9).
+            # The results are still shown (fix 9), with a banner saying they weren't saved.
             logger.warning("Visit record not saved: %s", type(exc).__name__)
         return VisitCheckResponse(**_visit_reply(entry, record_saved=saved, labs=read_lab_entries(patient)))
 
@@ -252,8 +251,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             row = records.get_check(session, visit_id)
             if row is None:
                 raise HTTPException(status_code=404, detail="No such visit.")
-            # Read back through the same check the Streamlit app uses to reopen a saved visit.
-            alerts = visit_record.restore(records.entry_from_check(row))["analysis_alerts"]
+            alerts = [s.alert for s in records.saved_alerts(records.entry_from_check(row))]
             try:
                 rows = decision_rows(alerts, body.decisions)
             except BadDecision as exc:
@@ -281,7 +279,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             row = records.get_check(session, visit_id)
             if row is None:
                 raise HTTPException(status_code=404, detail="No such visit.")
-            alerts = visit_record.restore(records.entry_from_check(row))["analysis_alerts"]
+            alerts = [s.alert for s in records.saved_alerts(records.entry_from_check(row))]
             current = records.current_finalize(session, visit_id)
             if current is None:
                 latest = _latest(session, visit_id)

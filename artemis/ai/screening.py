@@ -5,7 +5,7 @@ import json
 import logging
 
 from artemis.rules.checks import Alert
-from artemis.ai.client import ChatMessage, OllamaClient
+from artemis.ai.client import ChatClient, ChatMessage
 from artemis.plan.plan_json import closing_index, strip_code_fences
 from artemis.patient.record import PatientContext
 from artemis.guidelines.vector_store import VectorSearchResult
@@ -151,7 +151,7 @@ def generate_llm_screening_alerts(
     patient_context: PatientContext,
     stage1_summary: Dict[str, Any],
     screening_chunks: List[VectorSearchResult],
-    llm_client: Optional[OllamaClient],
+    llm_client: Optional[ChatClient],
     debug: Optional[Dict[str, Any]] = None,
 ) -> List[Alert]:
     if llm_client is None:

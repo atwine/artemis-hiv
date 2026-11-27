@@ -1,10 +1,10 @@
 """The backend's real services, set up the way the server sets them up (backend/services.py).
 
-The other API tests swap in a stand-in search, so a name the Streamlit app renamed (Phase 2B
+The other API tests swap in a stand-in search, so a name the app renamed (Phase 2B
 renamed GUIDELINE_PDF_PATHS to GUIDELINE_PATHS) went unnoticed there and made every real visit
 check fail. These tests go through the real `_search` setup; only the engine builder itself
 (artemis.config.guideline_search, which loads the search model) is replaced, so nothing is loaded
-or built. Since plan 4C.1 the setup no longer comes from app.py, the Streamlit file.
+or built. Since plan 4C.1 the setup comes from artemis/config.py.
 """
 
 from __future__ import annotations

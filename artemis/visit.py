@@ -1,8 +1,8 @@
-"""The visit analysis behind the "Save encounter" button, with no Streamlit in it.
+"""The visit analysis behind "run checks", and the plan step behind "Compare plans".
 
 `run_visit_analysis` takes a patient, today's note, a guideline search engine and an LLM
-client, and returns an `AnalysisResult`. app.py builds the engine and the client, calls
-this, and copies the result into the screen's session state. Tests call it directly.
+client, and returns an `AnalysisResult`; `management_plan` makes the AI's plan on its own. The
+backend's routes call them (backend/main.py). Tests call them directly.
 
 Moved out of app.py's `_run_analysis` without changing behaviour (Phase 1, option B), and
 from modules/analysis.py to here in fix 3. tests/test_pipeline_golden.py checks its output;

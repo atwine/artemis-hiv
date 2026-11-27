@@ -13,7 +13,7 @@ never saves (the short outcome, `screening_outcome`, stays).
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
@@ -65,40 +65,51 @@ def _post(http: Any, path: str, **kw: Any) -> Any:
     return r
 
 
+def run_visit(patient: Dict[str, Any], note: str, client: Any, rag: Any) -> Tuple[Dict[str, Any], Optional[Dict[str, Any]]]:
+    """One visit through the backend: the patient into a throwaway database (refused there, before
+    anything runs, if the database can't hold it), "run checks", then "Compare plans". Returns the
+    saved check as its "checks_run" entry, and the saved plan's text and issues (None when no plan
+    was made: the guideline search was down)."""
+    engine = memory_engine()
+    try:
+        with Session(engine) as session:
+            patients_db.import_records(session, [patient], origin="seed")
+        with _backend(engine, rag, client) as http:
+            visit = _post(http, f"/api/patients/{patient['patient_id']}/visits", json={"note": note}).json()
+            _post(http, f"/api/visits/{visit['visit_id']}/plan")
+        with Session(engine) as session:
+            entry = records.entry_from_check(records.get_check(session, visit["visit_id"]))
+            plan = records.latest_plan(session, visit["visit_id"])
+            made = {"plan_text": plan.plan_text, "issues": list(plan.issues)} if plan else None
+    finally:
+        engine.dispose()
+    return entry, made
+
+
 def run_case(case: Case, client: Any, rag: Any, *, label: str, repeat: int, price_in: float = 0.0,
              price_out: float = 0.0, temperature: Optional[float] = None) -> Dict[str, Any]:
     """One visit of the case through the backend (the check, then its plan), as a JSON-ready record."""
-    engine = memory_engine()
-    with Session(engine) as session:  # refuses a case the database can't hold, before anything runs
-        patients_db.import_records(session, [case.patient], origin="seed")
     metered = MeteredClient(client)
     note = (case.patient.get("today_encounter") or {}).get("note") or ""
     t0 = time.perf_counter()
-    with _backend(engine, rag, metered) as http:
-        visit = _post(http, f"/api/patients/{case.patient['patient_id']}/visits", json={"note": note}).json()
-        _post(http, f"/api/visits/{visit['visit_id']}/plan")
+    check, plan = run_visit(case.patient, note, metered, rag)
     seconds = time.perf_counter() - t0
-    with Session(engine) as session:
-        check = records.get_check(session, visit["visit_id"])
-        plan = records.latest_plan(session, visit["visit_id"])
-        alerts = [{k: v for k, v in a.items() if k != "severity"} for a in check.alerts]  # severity: the API's copy
-        record = {
-            "case_id": case.case_id,
-            "model": label,
-            "model_id": getattr(client, "model", None),
-            "repeat": repeat,
-            "temperature": effective_temperature(temperature),
-            "seconds": round(seconds, 1),
-            "calls": metered.usages,
-            "cost_usd": cost_of(metered.usages, price_in, price_out),
-            "status": check.status,
-            "screening_outcome": check.ai_review,
-            "alerts": alerts,
-            "retrieved": {a["alert_id"]: [c["chunk_id"] for c in r.get("retrieved") or []]
-                          for a, r in zip(alerts, check.results)},
-            "screening": check.screening_debug,
-            "plan_text": plan.plan_text if plan else None,
-            "plan_issues": list(plan.issues) if plan else [],
-        }
-    engine.dispose()
-    return record
+    alerts = [{k: v for k, v in a.items() if k != "severity"} for a in check["alerts"]]  # severity: the API's copy
+    return {
+        "case_id": case.case_id,
+        "model": label,
+        "model_id": getattr(client, "model", None),
+        "repeat": repeat,
+        "temperature": effective_temperature(temperature),
+        "seconds": round(seconds, 1),
+        "calls": metered.usages,
+        "cost_usd": cost_of(metered.usages, price_in, price_out),
+        "status": check["status"],
+        "screening_outcome": check["ai_review"],
+        "alerts": alerts,
+        "retrieved": {a["alert_id"]: [c["chunk_id"] for c in r.get("retrieved") or []]
+                      for a, r in zip(alerts, check["results"])},
+        "screening": check["screening_debug"],
+        "plan_text": plan["plan_text"] if plan else None,
+        "plan_issues": plan["issues"] if plan else [],
+    }

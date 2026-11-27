@@ -1,9 +1,8 @@
 """The add-case form's visit details (plan for the add-case request, unit A1).
 
 Owner, 2026-11-26: the form also takes the visit date, the visit type (decision 1: "A, four
-choices"), previous ART with start and end dates, and today's clinical note. One shared builder
-(artemis/patient/new_case.py) makes the record for both forms. Tests never write
-Data/custom_patients.json.
+choices"), previous ART with start and end dates, and today's clinical note. The builder
+(artemis/patient/new_case.py) makes the record the API saves.
 """
 
 from __future__ import annotations
@@ -129,49 +128,16 @@ def test_the_form_offers_the_visit_types(api):
     assert choices["visit_types"] == list(VISIT_TYPES)
 
 
-# The Streamlit form's previous-ART table (decision 2, 2026-11-27: "A, both forms")
+# Previous ART the builder explains
 
 
-def test_the_streamlit_tables_rows_become_previous_art():
-    from artemis.patient.new_case import previous_art_from_rows
-
-    art, errors = previous_art_from_rows([
-        {"drugs": "tle", "start_date": "2018-03-01", "end_date": "2021-06-30"},
-        {"drugs": "AZT, 3TC , NVP", "start_date": "2012-01-05", "end_date": "2018-02-28"},
-        {"drugs": "", "start_date": "", "end_date": ""},  # the table's empty last row
-    ])
-    assert errors == []
-    assert art == [
-        PreviousArt(regimen=["TLE"], start_date=D(2018, 3, 1), end_date=D(2021, 6, 30)),
-        PreviousArt(regimen=["AZT", "3TC", "NVP"], start_date=D(2012, 1, 5), end_date=D(2018, 2, 28)),
-    ]
+def test_a_drug_not_on_the_list_is_explained():
+    art = [PreviousArt(regimen=["Aspirin"], start_date=D(2018, 3, 1), end_date=D(2021, 6, 30))]
+    _, errors = build_case_record(_form(previous_art=art), today=TODAY)
+    assert any("not on it" in e for e in errors)
 
 
-@pytest.mark.parametrize("row, message", [
-    ({"drugs": "TLE", "start_date": "2018-03-01", "end_date": ""}, "start and an end date"),
-    ({"drugs": "TLE", "start_date": "01/03/2018", "end_date": "2021-06-30"}, "YYYY-MM-DD"),
-])
-def test_a_bad_streamlit_row_is_explained(row, message):
-    from artemis.patient.new_case import previous_art_from_rows
-
-    art, errors = previous_art_from_rows([row])
-    assert art == []
-    assert any(message in e and "row 1" in e for e in errors), errors
-
-
-def test_a_drug_not_on_the_list_is_kept_for_the_builder_to_explain():
-    from artemis.patient.new_case import previous_art_from_rows
-
-    art, errors = previous_art_from_rows([{"drugs": "Aspirin", "start_date": "2018-03-01", "end_date": "2021-06-30"}])
-    assert errors == []
-    _, build_errors = build_case_record(_form(previous_art=art), today=TODAY)
-    assert any("not on it" in e for e in build_errors)
-
-
-def test_a_row_with_no_drugs_is_explained_by_the_builder():
-    from artemis.patient.new_case import previous_art_from_rows
-
-    art, errors = previous_art_from_rows([{"drugs": "", "start_date": "2018-03-01", "end_date": "2021-06-30"}])
-    assert errors == []
-    _, build_errors = build_case_record(_form(previous_art=art), today=TODAY)
-    assert any("pick at least one drug" in e and "row 1" in e for e in build_errors), build_errors
+def test_a_regimen_with_no_drugs_is_explained():
+    art = [PreviousArt(regimen=[], start_date=D(2018, 3, 1), end_date=D(2021, 6, 30))]
+    _, errors = build_case_record(_form(previous_art=art), today=TODAY)
+    assert any("pick at least one drug" in e and "row 1" in e for e in errors), errors

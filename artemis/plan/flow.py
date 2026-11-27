@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from modules.embedder import Embedder
-from artemis.ai.client import OllamaClient
+from artemis.ai.client import ChatClient
 from artemis.patient.record import build_patient_context
 from artemis.plan.plan_json import first_json_object, strip_code_fences, validate_plan
 from artemis.guidelines.vector_store import VectorStore, VectorSearchResult
@@ -273,7 +273,7 @@ def _reason_updated_management_plan(
     context: QueryContext,
     evidence_bundles: List[EvidenceBundle],
     *,
-    llm_client: Optional[OllamaClient] = None,
+    llm_client: Optional[ChatClient] = None,
 ) -> tuple:
     """(plan text or None, the checks it failed). The issues list is empty when the plan passed."""
     if llm_client is None:
@@ -510,7 +510,7 @@ def run_agentic_flow(
     embedder: Embedder,
     vector_store: VectorStore,
     top_k: int = 5,
-    llm_client: Optional[OllamaClient] = None,
+    llm_client: Optional[ChatClient] = None,
 ) -> AgenticResult:
     """Run the Phase 1 agentic flow skeleton.
 

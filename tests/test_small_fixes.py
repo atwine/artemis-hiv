@@ -3,12 +3,8 @@
 from __future__ import annotations
 
 import copy
-import json
-import os
-from pathlib import Path
 from typing import Any, Dict, List
 
-import pytest
 
 from artemis.ai.client import ChatReply
 from artemis.guidelines.processor import GuidelineChunk, _strip_markdown_noise as clean
@@ -95,13 +91,6 @@ def test_the_plan_step_reads_dated_lab_values_without_trend_labels() -> None:
         assert "2024-09-15" in text and "2025-09-15" in text  # both viral loads, with their dates
 
 
-# G23: status labels describe steps that ran
-
-def test_the_status_log_names_only_steps_that_ran() -> None:
-    log = h.run_patient(copy.deepcopy(next(x for x in h.patients() if x["patient_id"] == "P002")))["status_log"]
-    assert not any("audit checklist" in line for line in log)
-
-
 # G26: the model server's address stays off the screen
 
 def test_error_text_does_not_show_the_model_servers_address() -> None:
@@ -111,43 +100,3 @@ def test_error_text_does_not_show_the_model_servers_address() -> None:
     reply = client.chat([{"role": "user", "content": "hi"}])
     assert reply.text is None
     assert reply.error and "127.0.0.1" not in reply.error
-
-
-# G28: the Ollama fallback matches what the screen says
-
-def test_ollama_settings_match_the_screen(monkeypatch: pytest.MonkeyPatch) -> None:
-    from artemis.ai.client import OllamaConfig, ollama_host
-
-    monkeypatch.setenv("OLLAMA_HOST", "https://0.0.0.0:11434")
-    assert ollama_host() == "https://localhost:11434"
-    monkeypatch.setenv("OLLAMA_HOST", "0.0.0.0:11434")
-    assert ollama_host() == "http://localhost:11434"
-    monkeypatch.delenv("OLLAMA_HOST")
-    assert ollama_host() == "http://localhost:11434"
-    assert OllamaConfig().num_ctx == 8192  # the context size the settings panel uses
-
-
-# G16: saved files
-
-def test_a_damaged_saved_file_is_reported_not_read_as_empty(tmp_path: Path) -> None:
-    from artemis.patient.store import UnreadableFile, read_json_list, write_json_list
-
-    f = tmp_path / "cases.json"
-    assert read_json_list(f) == []  # no file yet: nothing saved
-    f.write_text('[{"patient_id": "A"},]', encoding="utf-8")
-    with pytest.raises(UnreadableFile):
-        read_json_list(f)
-    write_json_list(tmp_path / "new.json", [{"patient_id": "B"}])
-    assert read_json_list(tmp_path / "new.json") == [{"patient_id": "B"}]
-
-
-def test_edits_to_the_demo_patients_file_show_up(tmp_path: Path) -> None:
-    import app
-
-    f = tmp_path / "mock.json"
-    f.write_text(json.dumps([{"patient_id": "X1"}]), encoding="utf-8")
-    assert [p["patient_id"] for p in app._load_demo_patients(f)] == ["X1"]
-    f.write_text(json.dumps([{"patient_id": "X2"}]), encoding="utf-8")
-    later = f.stat().st_mtime + 5
-    os.utime(f, (later, later))
-    assert [p["patient_id"] for p in app._load_demo_patients(f)] == ["X2"]

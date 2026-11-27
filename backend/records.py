@@ -1,20 +1,19 @@
 """Visit records in the database (plan item 4.5): what was checked, and what the clinician decided.
 
-The same two events as the Phase 1 files (artemis/visit_record.py), as two tables:
-- visit_check: one row per run of the checks, holding the "checks_run" entry's fields.
+- visit_check: one row per run of the checks, holding the "checks_run" entry's fields
+  (checks_entry builds the entry; saved_alerts reads its alerts back).
 - alert_decision: one row per decision on one alert. Rows are only ever added; a changed mind
   is a new row, and the latest one for an alert counts (owner, 2026-11-26).
-Since then: visit_finalize (each Finalize) and visit_plan (each plan "Compare plans" made).
+- visit_finalize: each Finalize; visit_plan: each plan "Compare plans" made.
 
-The tables' history is in backend/migrations (Alembic). `import_folder` copies the old files
-in and can be run again safely: what is already there is skipped.
+The tables' history is in backend/migrations (Alembic).
 """
 
 from __future__ import annotations
 
 import datetime
 import json
-from pathlib import Path
+from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 
 from sqlalchemy import JSON, Column, DateTime, Text, UniqueConstraint
@@ -22,6 +21,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, Session, SQLModel, select
 
+from artemis.guidelines.vector_store import VectorSearchResult
+from artemis.rules.checks import Alert
 from artemis.statuses import status_name
 
 Json = JSON().with_variant(JSONB(), "postgresql")
@@ -65,7 +66,7 @@ class VisitCheck(SQLModel, table=True):
     patient_summary: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(Json))
     agentic_enabled: bool
     plan: Optional[Any] = Field(default=None, sa_column=Column(Json))
-    # "api" (run through the backend) or "file import" (copied from Data/visit_records).
+    # "api" (run through the backend); older rows may say "file import" (copied from the Phase 1 files).
     origin: str = Field(max_length=16)
 
 
@@ -144,6 +145,81 @@ def json_safe(value: Any) -> Any:
     return json.loads(json.dumps(value, ensure_ascii=False, default=str))
 
 
+def checks_entry(result: Any, *, note: str, visit_date: str, model: Optional[str], app_version: str,
+                 visit_id: str, saved_at: str) -> Dict[str, Any]:
+    """The "checks_run" entry for one visit check (result is artemis.visit.AnalysisResult): what
+    is saved, and what the reply is built from, so a fresh check and a reopened one read the same.
+    It holds no plan: only "Compare plans" makes one (owner, 2026-11-27); the two plan fields stay
+    for the records saved before."""
+    return {
+        "event": "checks_run",
+        "visit_id": visit_id,
+        "patient_id": str(result.patient_id or ""),
+        "visit_date": visit_date,
+        "saved_at": saved_at,
+        "note": note,
+        "model": model,
+        "app_version": app_version,
+        "status": result.status,
+        "ai_review": result.screening_outcome,
+        "ai_review_ran": bool(result.screening_ran),
+        "alerts": [{**asdict(a), "severity": (a.evidence or {}).get("severity")} for a in result.alerts],
+        # In alert order, so each one lines up with its alert when the visit is reopened.
+        "results": [
+            {
+                "retrieved": [
+                    {"chunk_id": c.chunk_id, "document": c.document, "metadata": c.metadata, "distance": c.distance}
+                    for c in r.get("retrieved") or []
+                ],
+                "explanation": {"text": r["explanation"].text},
+            }
+            for r in result.results
+        ],
+        "screening_debug": result.screening_debug,
+        "patient_summary": result.patient_summary,
+        "agentic_enabled": False,
+        "plan": None,
+    }
+
+
+@dataclass(frozen=True)
+class SavedAlert:
+    """One alert of a saved visit check, with the passages and explanation it was shown with."""
+
+    alert: Alert
+    retrieved: List[VectorSearchResult]
+    explanation: str
+    severity: Optional[str]
+
+
+def _saved_alert(a: Dict[str, Any]) -> Alert:
+    missing = [k for k in ("alert_id", "title", "message") if not isinstance(a.get(k), str)]
+    if missing:
+        raise ValueError(f"saved alert has no {', '.join(missing)}")
+    return Alert(
+        alert_id=a["alert_id"], title=a["title"], message=a["message"], evidence=a.get("evidence") or {},
+        query_hint=a.get("query_hint") or "", source=a.get("source") or "rule",
+    )
+
+
+def saved_alerts(entry: Dict[str, Any]) -> List[SavedAlert]:
+    """A saved check's alerts, rebuilt. Results that don't line up with the alerts, or an alert
+    that can't be rebuilt, raise ValueError rather than show some alerts and lose others."""
+    alerts = entry.get("alerts") or []
+    results = entry.get("results") or []
+    if len(results) != len(alerts):
+        raise ValueError("saved results don't line up with the saved alerts")
+    return [
+        SavedAlert(
+            alert=_saved_alert(a),
+            retrieved=[VectorSearchResult(**c) for c in r.get("retrieved") or []],
+            explanation=(r.get("explanation") or {}).get("text") or "",
+            severity=a.get("severity"),
+        )
+        for a, r in zip(alerts, results)
+    ]
+
+
 def check_from_entry(entry: Dict[str, Any], *, origin: str) -> VisitCheck:
     e = json_safe(entry)
     e["status"] = status_name(e.get("status"))  # an older file may say YELLOW (owner, 2026-11-26)
@@ -156,7 +232,7 @@ def check_from_entry(entry: Dict[str, Any], *, origin: str) -> VisitCheck:
 
 
 def entry_from_check(row: VisitCheck) -> Dict[str, Any]:
-    """The row back as a "checks_run" entry, the shape artemis.visit_record.restore reads."""
+    """The row back as a "checks_run" entry, the shape checks_entry writes."""
     return {
         "event": "checks_run",
         **{k: getattr(row, k) for k in _CHECK_FIELDS},
@@ -246,87 +322,3 @@ def add_finalize(session: Session, visit_id: str, decisions: List[Dict[str, Any]
             select(VisitFinalize).where(VisitFinalize.visit_id == visit_id, VisitFinalize.last_decision_id == covers)
         ).one()
     return row
-
-
-def _same_decision(session: Session, row: AlertDecision) -> bool:
-    return session.exec(
-        select(AlertDecision.id).where(
-            AlertDecision.visit_id == row.visit_id, AlertDecision.alert_id == row.alert_id,
-            AlertDecision.saved_at == row.saved_at, AlertDecision.action == row.action,
-            AlertDecision.reason == row.reason, AlertDecision.comment == row.comment,
-        )
-    ).first() is not None
-
-
-def import_folder(session: Session, folder: Path) -> Dict[str, int]:
-    """Copy the visit-record files (Data/visit_records/*.jsonl) into the database. The files are
-    only read. Safe to rerun: a run, decision or Finalize already in the database is not added again."""
-    report = {"checks_added": 0, "decisions_added": 0, "finalized_added": 0, "already_there": 0, "unreadable_lines": 0, "skipped": 0}
-    if not folder.is_dir():
-        return report
-    for path in sorted(folder.glob("*.jsonl")):
-        entries, unreadable = _read_file(path)
-        report["unreadable_lines"] += unreadable
-        for e in [e for e in entries if e.get("event") == "checks_run"]:
-            if not e.get("visit_id"):
-                report["skipped"] += 1
-            elif session.get(VisitCheck, str(e["visit_id"])) is not None:
-                report["already_there"] += 1
-            else:
-                session.add(check_from_entry(e, origin="file import"))
-                session.flush()
-                report["checks_added"] += 1
-        for e in [e for e in entries if e.get("event") == "finalized"]:
-            visit_id = e.get("visit_id")
-            if not visit_id or session.get(VisitCheck, str(visit_id)) is None:
-                report["skipped"] += 1  # an older Finalize with no run id, or a run not in the files
-                continue
-            for row in _decision_rows(str(visit_id), list(e.get("decisions") or []), e["saved_at"]):
-                if _same_decision(session, row):
-                    report["already_there"] += 1
-                else:
-                    session.add(row)
-                    session.flush()
-                    report["decisions_added"] += 1
-            when = _utc(e["saved_at"])
-            known = session.exec(
-                select(VisitFinalize.id).where(VisitFinalize.visit_id == str(visit_id), VisitFinalize.finalized_at == when)
-            ).first()
-            covers = _last_decision_id(session, str(visit_id)) or 0
-            same = session.exec(
-                select(VisitFinalize.id).where(VisitFinalize.visit_id == str(visit_id), VisitFinalize.last_decision_id == covers)
-            ).first()
-            if known is None and same is None:  # each Finalize line once, covering the decisions saved up to it
-                # In the shape the API saves, so a Finalize reads back the same either way.
-                session.add(VisitFinalize(
-                    visit_id=str(visit_id), finalized_at=when, last_decision_id=covers,
-                    decisions=[
-                        {"alert_id": str(d["alert_id"]), "action": str(d["action"]), "reason": str(d.get("reason") or ""),
-                         "comment": str(d.get("comment") or ""), "saved_at": iso(when)}
-                        for d in e.get("decisions") or []
-                    ],
-                ))
-                session.flush()
-                report["finalized_added"] += 1
-    session.commit()
-    return report
-
-
-def _read_file(path: Path):
-    """Every readable entry in one file, whatever patient id it carries (the file is named from it)."""
-    entries: List[Dict[str, Any]] = []
-    unreadable = 0
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
-        if not line.strip():
-            continue
-        try:
-            entry = json.loads(line)
-        except json.JSONDecodeError:
-            unreadable += 1
-            continue
-        if isinstance(entry, dict) and entry.get("patient_id"):
-            entries.append(entry)
-        else:
-            unreadable += 1
-    return entries, unreadable
-

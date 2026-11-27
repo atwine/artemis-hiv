@@ -14,7 +14,7 @@ off this laptop (for example to Railway): "this laptop only" means nothing on a 
 
 | Data | What it holds | Sensitivity |
 |---|---|---|
-| patients | the synthetic test patients: notes, lab results, medicines, past ART, visits. In the database since plan 4C.2 (tables `patient`, `patient_medicine`, `art_history`, `lab_result`, `lab_note`, `clinical_note`, `encounter`), loaded from the seed files in `Data/` by `scripts/load_patients.py` on this laptop. The demo answer keys stay with the evaluation, not in these tables | sensitive: health (synthetic only) |
+| patients | the synthetic test patients: notes, lab results, medicines, past ART, visits. In the database since plan 4C.2 (tables `patient`, `patient_medicine`, `art_history`, `lab_result`, `lab_note`, `clinical_note`, `encounter`), loaded into a new database from the backup `backend/seed/patients.sql` by `scripts/patients_backup.py load` on this laptop. The demo answer keys stay with the evaluation, not in these tables | sensitive: health (synthetic only) |
 | visit_records | each visit check that ran (note, alerts, cited passages, AI review outcome), each acknowledge/override decision, each Finalize, and each AI management plan "Compare plans" made | sensitive: health (synthetic only) |
 | guidelines | passages from the published Ugandan guidelines, returned inside a visit check's alerts | public |
 | clinic_day | the clinic days and their appointments: made-up clinic, room, clinician, date, appointment times and patient ids. In the database since plan 4C.3 (tables `clinic_day`, `appointment`); the demo day is loaded from the backup with the patients | internal (synthetic only) |
@@ -130,9 +130,9 @@ can cost money on OpenRouter. Its replies carry guideline passages (`guidelines`
   case's size limits (422).
 - Two adds with the same new id arrive at once. Covered by: the database refuses the second
   (the id is the table's key), answered as 409; nothing of the second case is saved.
-- The seed is loaded twice, or loaded into a database that already has added cases. Covered by:
-  `scripts/load_patients.py` adds only ids the database doesn't have; it is a command on this
-  laptop, never a route.
+- The backup is loaded twice, or loaded into a database that holds other patients. Covered by:
+  `scripts/patients_backup.py load` skips rows already there and refuses a database holding
+  patients the backup doesn't have; it is a command on this laptop, never a route.
 - A stuck page adds case after case, each opening a clinic day on a new date. Covered by: each
   add is one case with its size limits; a day is opened only by a case booked on it, and the board
   shows one day at a time.

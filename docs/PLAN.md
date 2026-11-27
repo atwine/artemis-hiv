@@ -396,12 +396,22 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       run whose model server didn't answer (`screening_outcome` "failed") is still not saved.
       Measured: the Phase 4 check MET through this path (33 runs, same alerts, passages and
       scores; 30 plans the same, the 3 that failed their checks never shown clean).
-- [ ] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
+- [x] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
       (`artemis/visit_record.py`, `Data/visit_records`), the screen's remembered values
       (`artemis/session_keys.py`), the candidate-rules file and button, the Ollama client settings only the
       Streamlit screen uses, the Streamlit screen tests, `streamlit` in the requirements, and
       the Streamlit fields added to its add-case form; README and "How the app works.md" rewritten
       for the website.
+      Done 2026-11-27: all of the above, with the candidate-rules code, the native Ollama client
+      (Ollama stays reachable through the OpenAI-style setting), the old patient and demo-day
+      files in Data/, scripts/load_patients.py, run_baseline.py and import_visit_records.py. The
+      backend's last borrowings moved into it first (saving and reopening a visit:
+      backend/records.py; the Finalize rules now read plain decisions: artemis/review.py).
+      streamlit, pandas and ollama came out of the requirements by hand ("A, by hand"), with the
+      7 packages only Streamlit needed. The golden test runs through the backend's path; proven
+      the same first (eval/phase4/golden-switch-4c6.txt). tests/test_no_streamlit.py fails if
+      Streamlit comes back. Measured: 583 passed, 0 failed, with real Postgres; the Phase 4
+      check MET; Semgrep clean.
 - [ ] 4C.7 Access rules redone (`access-guard`) for the new tables, with tests.
 - [ ] 4C.8 Owner decisions, asked one at a time: whether the evaluation's cases and results stay as
       files in git (research records) or go into the database; whether the guideline index stays in

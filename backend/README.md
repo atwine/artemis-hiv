@@ -1,7 +1,7 @@
 # ARTEMIS-HIV backend (Phase 4)
 
-A FastAPI shell around the visit check in `artemis/`. The Next.js frontend (Phase 5) calls it;
-the Streamlit app (`app.py`) keeps working on its own and doesn't use it.
+A FastAPI shell around the visit check and the plan step in `artemis/`. The Next.js website
+(`web/`) calls it; it is the app's only backend (the Streamlit app was removed in plan 4C.6).
 
 Who may call it: `ACCESS.md` at the repo root, proven by `tests/test_access.py`. In short, only
 the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other websites.
@@ -37,7 +37,7 @@ p. 255") on each passage; `finalize_note` on a decision reply until every alert 
 A card's `uuid` is unique per visit (`<visit_id>:<alert_id>`); decisions use the alert's own id,
 `extension.alert_id`. With no database set up, a visit check is refused (503) before any model
 call, since nothing could be saved or decided on. If saving fails partway, the results still
-come back with `record_saved: false`, as on the Streamlit screen.
+come back with `record_saved: false` and a banner saying so.
 
 With the server running, `http://127.0.0.1:8000/docs` lists every route and its fields. Its
 "Try it out" works for GET routes; POSTs from that page are refused, because the access rules
@@ -51,14 +51,13 @@ allow only the frontend's address (ACCESS.md).
 | `ARTEMIS_API_HOST` | `127.0.0.1` | where it listens; `0.0.0.0` would open it to the Wi-Fi (ACCESS.md says no) |
 | `ARTEMIS_API_PORT` | `8000` | |
 | `ARTEMIS_API_ORIGINS` | `http://localhost:3000,http://127.0.0.1:3000` | the frontend's address; every other web page is refused |
-| `LLM_BASE_URL`, `LLM_MODEL`, ... | | the model server, as for the Streamlit app |
+| `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY` | none | the model server (`.env.example`); without it, a check with the AI review and Compare plans answer 503 |
 
 ## Run it
 
 ```
 python -m alembic -c backend/alembic.ini upgrade head     # create or update the tables
 python scripts/patients_backup.py load                   # fill a new database with the made-up patients (safe to rerun)
-python scripts/import_visit_records.py                   # copy the Phase 1 visit-record files in (safe to rerun)
 python -m backend                                        # serve on 127.0.0.1:8000
 ```
 
@@ -70,8 +69,7 @@ The database itself: `docker compose -f backend/docker-compose.yml --env-file .e
 
 The first visit check sets up the guideline search (`artemis/config.py`): it loads the search
 model and opens the kept index in `storage/chroma`, embedding only passages it doesn't hold yet
-(normally none; `python scripts/build_index.py` builds it ahead of time). The backend doesn't load
-the Streamlit app (plan 4C.1).
+(normally none; `python scripts/build_index.py` builds it ahead of time).
 
 ## The patients' backup
 
@@ -88,8 +86,6 @@ end-to-end tests) can be filled; the app never reads it.
 - Make it again after the patients change: `python scripts/patients_backup.py make`, then commit
   the file. `tests/test_patients_backup.py` checks it holds the same patients as the tests'
   own copy (`tests/fixtures/patients.json`).
-- Until plan 4C.6 deletes the old patient and schedule files, `python scripts/load_patients.py`
-  loads them once.
 
 ## Tests
 
@@ -97,6 +93,13 @@ end-to-end tests) can be filled; the app never reads it.
 a stand-in model and guideline search and an in-memory database, so nothing is downloaded or
 spent. `test_on_real_postgres` runs too when `ARTEMIS_TEST_DATABASE_URL` points at a throwaway
 Postgres database (it creates and drops the tables there).
+
+## The evaluation
+
+`scripts/run_phase2.py` and the Phase 4 check (`scripts/check_phase4.py`) run each test case
+through the backend itself (`backend/evaluation.py`, plan 4C.5): the case's patient goes into a
+throwaway in-memory database, then "run checks" and "Compare plans" go through these routes, and
+the run record is read from what was saved.
 
 ## Changing the tables
 

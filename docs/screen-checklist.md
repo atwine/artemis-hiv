@@ -1,7 +1,7 @@
 # Screen checklist
 
-Every state a visit check can end in, and what any screen must show for it: the Streamlit app
-today, the FastAPI backend (Phase 4) and the Next.js site (Phase 5). The owner asked for this on
+Every state a visit check can end in, and what the screen must show for it: the FastAPI backend
+sends it and the Next.js site shows it (the Streamlit app was removed in plan 4C.6). The owner asked for this on
 2026-11-26 so the pieces fit together with nothing missing when they are joined.
 
 How it stays true:
@@ -71,8 +71,7 @@ The banner for every pair is `status_banners(status, ai_review_result, alert_cou
 
 - A visit check whose record could not be saved: an amber banner, `RECORD_NOT_SAVED` ("This check
   could not be saved, so its alerts cannot be decided here."), from `record_banners` (owner,
-  2026-11-26). The API sends it in `banners`; the Streamlit screen keeps its own sentence, since
-  there a Finalize still saves to the file.
+  2026-11-26). The API sends it in `banners`.
 
 ## 4b. The management plan ("Compare plans")
 

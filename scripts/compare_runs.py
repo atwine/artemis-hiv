@@ -1,4 +1,4 @@
-"""Compare two folders written by scripts/run_baseline.py, patient by patient.
+"""Compare two folders written by the old scripts/run_baseline.py (Phase 1, eval/), patient by patient.
 
     python scripts/compare_runs.py eval/baseline eval/after-phase1 > eval/after-phase1/compare.md
 
