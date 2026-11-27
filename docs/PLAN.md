@@ -503,6 +503,31 @@ Where it stands (Friday 2026-11-27, evening), for Monday:
   OpenRouter provider is being priced); raise the $5 cap and check the OpenRouter key's own limit
   before the doctor rounds (spent about $2.20); R.6, how doctors reach the app.
 - The app's .env now points at GLM (thinking off); the A100 settings are kept as comments.
+- Provider check (Phase 4, $0.057): every OpenRouter provider waited about 44 s before answering
+  today, so routing won't fix the speed; pinning Z.AI (fp8, about $1.97 per 100 visits, with
+  fallback) keeps one model copy for the doctors. Owner to choose on Monday.
+
+### Monday 2026-11-30: release to the doctors (owner, 2026-11-27)
+
+The owner's plan: "move from local to staging and then to the deployment version before we can
+share it with the doctors. It needs to be packaged somewhere." In order, one decision at a time:
+
+1. Land the weekend fixes (website: ID with a space, hidden add-case form, "Plan, to do" on a
+   finalized visit; backend: title-only passage), each checked here, then pushed on the owner's yes.
+   Answer the waiting questions: name required on add-case; the Uncertain-plan wording; pin Z.AI.
+2. development -> staging: code review and /security-review on the diff since staging (staging is
+   main is 32c952b, 2026-02-24; development is about 280 commits ahead), blast radius, fix or report
+   every finding, then the owner's yes to merge and push staging (no pull request into staging).
+3. staging -> main: a pull request only, merged by the owner. Before it: the OCR delegate review;
+   Cloudflare's security-audit, a full audit since this is the first production release (ask the
+   owner the profile and the most agents first); PR title and body through unslop, headings Why,
+   What changed, Scope, Tradeoffs, Blast radius, Verification.
+4. Packaging and hosting (R.6, the owner's call): where doctors reach it (for example Railway for
+   the website, the backend and Postgres, or the owner's laptop or a screen share), logins before
+   anything is online (the app has none yet, and ACCESS.md says this laptop only), the OpenRouter
+   key's own spend limit, raising the $5 cap (about $2.25 spent), and whether to install the
+   owner's security-kit (secure-start) before the first production push.
+5. After deploying: an end-to-end check against the live app, then Phase 7 with a couple of doctors.
 
 ## Phase 6: Showcase on GitHub Pages
 
