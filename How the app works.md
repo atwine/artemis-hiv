@@ -79,7 +79,8 @@ plan", "Partly in your plan", "Not in your plan"), or "No plan to compare" when 
 none. A plan that failed the app's own checks is shown with a warning. Pressing it again shows
 the same plan without asking the AI again, unless the last one failed or was flagged.
 
-(This screen is being built in the website; the rest of the app is ready for it.)
+It becomes the main button at the bottom once every alert has your answer. Finalize is still one
+tap away in the steps along the bottom, so a plan is never required.
 
 ### 6. Finalize
 

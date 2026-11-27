@@ -87,7 +87,7 @@ and open `http://127.0.0.1:3000`. Both listen on this laptop only (`ACCESS.md`).
    needs a comment.
 5. **Compare plans** makes the AI's management plan for the visit and compares each item with
    your note. A plan that passed the app's checks is kept and shown again without a new AI call.
-   (The backend's side is ready; the website's screen for it is being built.)
+   It is the main button once every alert has an answer; Finalize stays one step away in the tray.
 6. **Finalize** saves the visit once every alert is decided. A later decision reopens it.
 
 Checks and plans together are limited to 6 a minute, so a stuck page can't run up the model bill.

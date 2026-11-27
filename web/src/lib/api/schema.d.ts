@@ -444,7 +444,7 @@ export interface components {
         };
         /**
          * FormChoices
-         * @description The add-case form's lists, the same ones the Streamlit form uses (owner, 2026-11-26).
+         * @description The add-case form's lists, the same ones the add-case route accepts (owner, 2026-11-26).
          */
         FormChoices: {
             /** Art Regimens */
@@ -527,8 +527,8 @@ export interface components {
         };
         /**
          * NewCase
-         * @description A new made-up patient case (owner, 2026-11-26: the Streamlit form's fields and rules, plus
-         *     an optional name). Checked again by artemis.patient.new_case, the builder both forms share.
+         * @description A new made-up patient case (owner, 2026-11-26: the old Streamlit form's fields and rules,
+         *     plus an optional name). Checked again by artemis.patient.new_case, which builds the record.
          */
         NewCase: {
             /** Age Years */
