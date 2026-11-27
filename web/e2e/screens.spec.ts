@@ -99,6 +99,24 @@ test("the clinic day, in the design's states", async ({ page }) => {
   await page.goto("/?view=list");
   await expect(page.getByRole("list", { name: "Today's visits" })).toBeVisible();
   await page.screenshot({ path: path.join(OUT, "web-S1b-list.png") });
+  // Find a patient (owner, 2026-11-27: "A, a find box"), with two matches open.
+  await page.goto("/");
+  await page.getByRole("searchbox", { name: "Find a patient" }).fill("kato");
+  await expect(page.getByRole("list", { name: "Matching patients" })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S1-find-patient.png") });
+});
+
+// The note changed after the checks ran (owner, 2026-11-27: "A, a banner"), on John Doe's results.
+test("the note changed after the checks", async ({ page }) => {
+  await page.goto("/patients/P001");
+  await runRuleChecks(page);
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await tray.getByRole("button", { name: "Clinical notes, done" }).click();
+  await page.getByRole("textbox", { name: "Clinical notes" }).fill("Routine follow-up. No complaints. Stop ibuprofen.");
+  await tray.getByRole("button", { name: "Checks, done" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "The note changed after these checks ran." })).toBeVisible();
+  await page.screenshot({ path: path.join(OUT, "web-S4-note-changed.png") });
 });
 
 // Compare plans (S5) with the design's own plan as a stand-in reply (no model is called), on Jane

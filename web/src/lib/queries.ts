@@ -48,3 +48,11 @@ export function useFormChoices() {
     staleTime: Infinity,
   });
 }
+
+/** Every patient on record, for "Find a patient" on the day screen. */
+export function usePatients() {
+  return useQuery({
+    queryKey: ["patients"],
+    queryFn: async () => unwrap(await api.GET("/api/patients")),
+  });
+}

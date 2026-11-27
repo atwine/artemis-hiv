@@ -55,6 +55,10 @@ test("the clinic day: board and list", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("region", { name: "Waiting" })).toBeVisible();
   await audit(page, "board-fresh");
+  await page.getByRole("searchbox", { name: "Find a patient" }).fill("kato");
+  await expect(page.getByRole("list", { name: "Matching patients" })).toBeVisible();
+  await audit(page, "board-find-patient");
+  await page.getByRole("searchbox", { name: "Find a patient" }).fill("");
 
   await stubDesignDay(page); // finalized cards, one needing review, one AI review failed
   await page.goto("/");
@@ -63,6 +67,17 @@ test("the clinic day: board and list", async ({ page }) => {
   await page.goto("/?view=list");
   await expect(page.getByRole("list", { name: "Today's visits" })).toBeVisible();
   await audit(page, "list");
+});
+
+test("the note changed after the checks: the banner on the results", async ({ page }) => {
+  await page.goto("/patients/P001");
+  await runRuleChecks(page);
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible(CHECK_WAIT);
+  await tray(page).getByRole("button", { name: "Clinical notes, done" }).click();
+  await page.getByRole("textbox", { name: "Clinical notes" }).fill("Routine follow-up. Stop ibuprofen.");
+  await tray(page).getByRole("button", { name: "Checks, done" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "The note changed after these checks ran." })).toBeVisible();
+  await audit(page, "note-changed");
 });
 
 test("compare plans: a flagged plan, and a refusal", async ({ page }) => {

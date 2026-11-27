@@ -78,3 +78,36 @@ test("blue links above the date step to the clinic days around it, keeping the v
   await expect(page).toHaveURL(/\?date=2099-12-31$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Thursday 31 Dec.");
 });
+
+// "Find a patient" (owner, 2026-11-27: "A, a find box"): any patient on record by name or ID, each
+// match saying when it is booked on the day shown; a match opens the patient's visit. It works by
+// keyboard: Tab from the box to a match, Enter to open it.
+test("find a patient by name or ID, booked or not, with the mouse or the keyboard", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Thursday 26 Nov.");
+  const find = page.getByRole("searchbox", { name: "Find a patient" });
+  const matches = page.getByRole("list", { name: "Matching patients" });
+  await expect(matches).toHaveCount(0); // nothing until something is typed
+
+  await find.fill("kato");
+  await expect(matches.getByRole("link")).toHaveCount(2); // any part of the name: Sam Kato and Joan Nakato
+  await expect(matches).toContainText("Sam Kato");
+  await expect(matches).toContainText("Joan Nakato");
+  await expect(matches).toContainText("Thu 26 Nov 09:05");
+
+  await find.fill("p001");
+  await expect(matches).toContainText("John Doe");
+  await expect(matches).toContainText("not booked Thu 26 Nov");
+  await matches.getByRole("link", { name: /John Doe/ }).click();
+  await expect(page).toHaveURL(/\/patients\/P001$/);
+  await expect(page.getByRole("heading", { name: /John Doe/, level: 1 })).toBeVisible();
+
+  await page.goto("/");
+  await find.fill("nobody like this");
+  await expect(page.getByText("No patient matches.")).toBeVisible();
+  await find.fill("roe");
+  await find.press("Tab");
+  await expect(matches.getByRole("link", { name: /Jane Roe/ })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/patients\/P002$/);
+});

@@ -544,6 +544,9 @@ results they will value. These were raised and set aside, not dropped.
   today; the doctor uses the browser's Back (raised in the add-case review, 2026-11-27).
 - Compare plans: the AI quotes the doctor's note word for word for each problem; today the
   "About your plan" column shows the AI's own one-sentence note instead (owner, 2026-11-27).
+- Find and book walk-ins for today (option B3): a patient found with "Find a patient" but not
+  booked gets a time and "Book for today", so they join the day's board. Needs a backend route to
+  book an existing patient (owner chose the find box alone for now, 2026-11-27).
 - Move the guideline index from Chroma into Postgres with pgvector (owner chose it in 4C.8, then
   kept Chroma for the first version, 2026-11-27). The plan as agreed so far:
   - a table of the 236 guideline passages with their meaning vectors (384 numbers each), made

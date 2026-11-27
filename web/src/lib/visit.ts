@@ -23,3 +23,11 @@ export function stillToReview(alertIds: string[], decided: Set<string>): string 
   if (open.length === 1) return `Alert ${open[0]} still needs Accept or Override.`;
   return `Alerts ${open.slice(0, -1).join(", ")} and ${open[open.length - 1]} still need Accept or Override.`;
 }
+
+/**
+ * The note on screen is not the one the checks read (owner, 2026-11-27: "A, a banner"). Spaces at
+ * the ends don't count; any other change does.
+ */
+export function noteChanged(current: string, checked: string): boolean {
+  return current.trim() !== checked.trim();
+}

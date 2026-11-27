@@ -6,14 +6,17 @@
 // blue links above the date step to the clinic days around it (owner, 2026-11-27).
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 import { AppFrame } from "@/components/frame/app-frame";
 import { StatusChip } from "@/components/frame/status";
 import { errorText } from "@/lib/api/client";
-import { shortDay } from "@/lib/dates";
+import { shortDay, todayIso } from "@/lib/dates";
 import { appointmentLine, appointmentNote, dayHeadline, dayHref, nextForYou, type DayAppointment } from "@/lib/day";
 import { DISCLAIMER } from "@/lib/demo";
-import { useClinicDay, visitHref } from "@/lib/queries";
+import { findPatients, matchNote } from "@/lib/find";
+import { useClinicDay, usePatients, visitHref } from "@/lib/queries";
+import { patientLine } from "@/lib/record";
 import { cn } from "@/lib/utils";
 
 type Column = { state: DayAppointment["state"]; title: string; hint: string };
@@ -37,7 +40,7 @@ export function DayScreen() {
 
   return (
     <AppFrame disclaimer={DISCLAIMER}>
-      <div className="flex w-75 shrink-0 flex-col gap-6">
+      <div className="flex w-75 shrink-0 flex-col gap-6 self-start">
         {day.data && <DaySteps previous={day.data.previous_date ?? null} next={day.data.next_date ?? null} list={list} />}
         <h1 className="text-34 font-semibold tracking-[-0.025em] text-black">
           {first} <span className="text-muted-foreground">{rest}</span>
@@ -64,6 +67,7 @@ export function DayScreen() {
           </span>
           Add patient case
         </Link>
+        {day.data && <FindPatient appointments={appointments} dayDate={day.data.date} />}
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -72,6 +76,57 @@ export function DayScreen() {
         {day.data && (list ? <DayList appointments={appointments} next={next} /> : <DayBoard appointments={appointments} next={next} />)}
       </div>
     </AppFrame>
+  );
+}
+
+/**
+ * "Find a patient" (owner, 2026-11-27: "A, a find box"): any patient on record by name or ID, each
+ * match saying when it is booked on the day shown. The matches are links, so Tab moves from the box
+ * to them and Enter opens one.
+ */
+function FindPatient({ appointments, dayDate }: { appointments: DayAppointment[]; dayDate: string }) {
+  const [query, setQuery] = useState("");
+  const patients = usePatients();
+  const [today] = useState(todayIso);
+  const found = findPatients(patients.data ?? [], query);
+  return (
+    <div className="flex w-75 flex-col gap-2">
+      <label htmlFor="find-patient" className="text-14 font-medium text-ink-2">
+        Find a patient
+      </label>
+      <input
+        id="find-patient"
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Name or ID"
+        autoComplete="off"
+        maxLength={100}
+        className="h-10.5 rounded-md border border-line-strong bg-white px-3 text-15 text-black placeholder:text-muted-foreground focus:border-2 focus:border-blue focus:px-[11px] focus:outline-none"
+      />
+      {patients.isError && <p className="text-14 text-ink-2">{errorText(patients.error)}</p>}
+      {query.trim() && patients.data && found.length === 0 && <p className="text-14 text-ink-2">No patient matches.</p>}
+      {found.length > 0 && (
+        <ul aria-label="Matching patients" className="flex flex-col rounded-btn border border-line bg-white">
+          {found.map((p) => {
+            const booked = appointments.find((a) => a.patient_id === p.patient_id);
+            return (
+              <li key={p.patient_id} className="border-b border-line last:border-b-0">
+                <Link
+                  href={visitHref(p.patient_id, booked?.visit_id ?? null)}
+                  className="flex flex-col gap-0.5 px-3.5 py-2.5 hover:bg-surface focus-visible:bg-surface"
+                >
+                  <span className="text-15 leading-5 font-medium text-black">{p.name || p.patient_id}</span>
+                  <span className="text-13 leading-4 text-muted-foreground">
+                    {patientLine(p)} · {matchNote(p.patient_id, appointments, dayDate, today)}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
   );
 }
 
