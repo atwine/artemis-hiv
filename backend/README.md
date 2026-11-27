@@ -79,7 +79,11 @@ The database is the only copy of the app's patients (owner, 2026-11-27). Their b
 end-to-end tests) can be filled; the app never reads it.
 
 - Load it into a new database: `python scripts/patients_backup.py load`, after `alembic upgrade
-  head`. Safe to run again: rows already there are skipped.
+  head`. Safe to run again: rows already there are skipped. The file is read as data, never run:
+  anything but the inserts `make` writes is refused and nothing is loaded, so an edited backup
+  can't run commands on the database (security review, 2026-11-27).
+- It holds every patient in the database, including cases added through the website, and the
+  repo is public: made-up patients only (ACCESS.md).
 - Make it again after the patients change: `python scripts/patients_backup.py make`, then commit
   the file. `tests/test_patients_backup.py` checks it holds the same patients as the tests'
   own copy (`tests/fixtures/patients.json`).

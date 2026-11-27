@@ -27,7 +27,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Field, Session, SQLModel, func, select
 
-from artemis.patient.labs import read_lab_entries
+from artemis.patient.labs import LEGACY_VALUE_KEYS, read_lab_entries
 
 Json = JSON().with_variant(JSONB(), "postgresql")
 ANSWER_KEY = "expected_demo_outcome"
@@ -158,8 +158,18 @@ def _check_placed(record: Dict[str, Any]) -> None:
         if test == "labs_narrative":
             continue
         for r in results or []:
-            if (test, str((r or {}).get("date"))) not in readable:
+            r = r or {}
+            if (test, str(r.get("date"))) not in readable:
                 unplaced.append(f"labs.{test} (a result with no readable date)")
+            # One value per result: "value" (with its unit), or one older key that names the unit.
+            values = [k for k in r if k == "value" or k in LEGACY_VALUE_KEYS]
+            extra = sorted(set(r) - {"date", "unit", "source"} - set(values[:1]))
+            unplaced += [f"labs.{test}.{k}" for k in extra]
+    for field in ("complaints_symptoms", "examination_findings", "prior_history"):
+        if field in (record.get("intake") or {}) and not isinstance(record["intake"][field], str):
+            unplaced.append(f"intake.{field} (not text)")
+    for field in ("art_regimen_current", "other_medications"):
+        unplaced += [f"{field} (not text)" for m in record.get(field) or [] if not isinstance(m, str)]
     if unplaced:
         raise UnplacedField(f"{pid}: no place for {', '.join(unplaced)}")
 
@@ -291,15 +301,19 @@ def add(engine: Engine, record: Dict[str, Any]) -> None:
     """Add one new case, all its rows in one save. An id already in use raises PatientExists and
     saves nothing; so does a second add of the same new id racing this one (the id is the key)."""
     pid = str(record["patient_id"])
-    with Session(engine) as session:
-        if session.get(Patient, pid) is not None:
-            raise PatientExists(pid)
-        try:
-            _save(session, rows_for(record, position=_next_position(session), origin="added",
-                                    added_at=datetime.datetime.now(datetime.timezone.utc)))
-            session.commit()
-        except IntegrityError:
-            session.rollback()
+    for attempt in range(3):
+        with Session(engine) as session:
             if session.get(Patient, pid) is not None:
-                raise PatientExists(pid) from None
-            raise
+                raise PatientExists(pid)
+            try:
+                _save(session, rows_for(record, position=_next_position(session), origin="added",
+                                        added_at=datetime.datetime.now(datetime.timezone.utc)))
+                session.commit()
+                return
+            except IntegrityError:
+                session.rollback()
+                if session.get(Patient, pid) is not None:
+                    raise PatientExists(pid) from None
+                if attempt == 2:
+                    raise
+                # Another new case took the same list position at the same moment: try the next one.

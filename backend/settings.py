@@ -21,11 +21,10 @@ class Settings:
     allowed_origins: Tuple[str, ...] = DEFAULT_ORIGINS
     # The names this backend answers to. Any other Host is refused (DNS rebinding).
     allowed_hosts: Tuple[str, ...] = ("localhost", "127.0.0.1")
-    # SQLAlchemy address of the visit-record database, e.g.
+    # SQLAlchemy address of the database (patients and visit records), e.g.
     # postgresql+psycopg://artemis:...@127.0.0.1:5434/artemis
     database_url: Optional[str] = None
-    # The added patient cases, the same file (and setting) the Streamlit app uses; POST /api/patients adds to it.
-    # The design's demo-day patients P007-P009 (owner, 2026-11-26), and the demo day's schedule.
+    # The demo day's schedule (moves into the database in plan 4C.3).
     clinic_day_path: Path = PROJECT_ROOT / "Data" / "demo_clinic_day.json"
     # At most this many visit checks a minute; the next gets 429 (owner, 2026-11-26).
     visit_checks_per_minute: int = 6

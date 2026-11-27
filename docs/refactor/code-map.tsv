@@ -237,7 +237,10 @@ backend/records.py	latest_decisions	Gives the latest decision on each alert of a
 backend/records.py	save_check	Saves one visit check.	stays	stays
 backend/patients_backup.py	_literal	One value of a row as SQL, quoted by the Postgres driver (lists and records as JSON).	backend/patients_backup.py	moved
 backend/patients_backup.py	dump	Every row of the patient tables as SQL, parents first, then each table's counter moved past its rows.	backend/patients_backup.py	moved
-backend/patients_backup.py	load	Runs a backup on a Postgres database in one save.	backend/patients_backup.py	moved
+backend/patients_backup.py	_text	The text of one quoted value in a backup, undoing the driver's doubling of quotes and backslashes; any other escape is refused.	backend/patients_backup.py	moved
+backend/patients_backup.py	_value	One value read from a backup: null, true/false, a number, text, a date, a time or a JSON list.	backend/patients_backup.py	moved
+backend/patients_backup.py	read_backup	The rows a backup holds, accepting only the inserts dump writes; anything else raises BadBackup.	backend/patients_backup.py	moved
+backend/patients_backup.py	load	Fills a database from a backup read as data: each row inserted with bound values in one save, then the counters moved past the rows.	backend/patients_backup.py	moved
 backend/services.py	_model_client	Makes a client for the model server in .env, or none.	stays	stays
 backend/services.py	_search	Builds the guideline search the way the Streamlit app does, once (until plan item 4.3).	stays	stays
 backend/services.py	default_services	Builds the real patients, search, model and database the routes use.	stays	stays

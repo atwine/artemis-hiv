@@ -145,9 +145,3 @@ INSERT INTO "encounter" ("id", "patient_id", "date", "visit_type", "note", "orde
 INSERT INTO "encounter" ("id", "patient_id", "date", "visit_type", "note", "orders", "med_changes") VALUES (8, 'P007', '2026-11-26'::date, NULL, 'Routine refill visit. Feels well, no missed doses. Continue current regimen.', '[]'::jsonb, '[]'::jsonb) ON CONFLICT DO NOTHING;
 INSERT INTO "encounter" ("id", "patient_id", "date", "visit_type", "note", "orders", "med_changes") VALUES (9, 'P008', '2026-11-26'::date, NULL, 'Routine follow-up. No complaints. Taking ART daily. Continue current regimen.', '[]'::jsonb, '[]'::jsonb) ON CONFLICT DO NOTHING;
 INSERT INTO "encounter" ("id", "patient_id", "date", "visit_type", "note", "orders", "med_changes") VALUES (10, 'P009', '2026-11-26'::date, NULL, 'Routine refill visit. Feels well. Continue current regimen.', '[]'::jsonb, '[]'::jsonb) ON CONFLICT DO NOTHING;
-SELECT setval(pg_get_serial_sequence('patient_medicine', 'id'), (SELECT COALESCE(MAX("id"), 0) + 1 FROM "patient_medicine"), false);
-SELECT setval(pg_get_serial_sequence('art_history', 'id'), (SELECT COALESCE(MAX("id"), 0) + 1 FROM "art_history"), false);
-SELECT setval(pg_get_serial_sequence('lab_result', 'id'), (SELECT COALESCE(MAX("id"), 0) + 1 FROM "lab_result"), false);
-SELECT setval(pg_get_serial_sequence('lab_note', 'id'), (SELECT COALESCE(MAX("id"), 0) + 1 FROM "lab_note"), false);
-SELECT setval(pg_get_serial_sequence('clinical_note', 'id'), (SELECT COALESCE(MAX("id"), 0) + 1 FROM "clinical_note"), false);
-SELECT setval(pg_get_serial_sequence('encounter', 'id'), (SELECT COALESCE(MAX("id"), 0) + 1 FROM "encounter"), false);

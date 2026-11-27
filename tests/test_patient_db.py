@@ -187,3 +187,34 @@ def test_the_patients_on_real_postgres():
     finally:
         engine.dispose()
         command.downgrade(cfg, "base")
+
+
+def test_two_new_cases_taking_the_same_list_position_are_both_saved(monkeypatch):
+    """Review, 2026-11-27: two different new cases added at the same moment read the same next
+    position; the second tries the next one instead of failing."""
+    engine = _loaded_engine()
+    real = patients_db._next_position
+    stale = {"left": 1}
+
+    def racing(session):
+        if stale["left"]:
+            stale["left"] -= 1
+            return real(session) - 1  # the position the other case has just taken
+        return real(session)
+
+    monkeypatch.setattr(patients_db, "_next_position", racing)
+    patients_db.add(engine, {**copy.deepcopy(SEED[0]), "patient_id": "P201"})
+    with Session(engine) as s:
+        assert [p["patient_id"] for p in patients_db.load_all(s)][-1] == "P201"
+
+
+@pytest.mark.parametrize("change, field", [
+    ({"labs": {"creatinine": [{"date": "2025-01-01", "value_umol_per_l": 80, "note": "haemolysed"}]}}, "note"),
+    ({"labs": {"creatinine": [{"date": "2025-01-01", "value": "80", "unit": "umol/L", "value_umol_per_l": 80}]}}, "value_umol_per_l"),
+    ({"intake": {"complaints_symptoms": None, "examination_findings": "", "prior_history": ""}}, "complaints_symptoms"),
+    ({"other_medications": [None]}, "other_medications"),
+])
+def test_odd_parts_of_a_record_are_refused_not_dropped(change, field):
+    record = {**copy.deepcopy(SEED[0]), "patient_id": "X3", **change}
+    with Session(memory_engine()) as s, pytest.raises(patients_db.UnplacedField, match=field):
+        patients_db.import_records(s, [record], origin="seed")

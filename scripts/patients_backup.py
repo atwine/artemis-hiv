@@ -49,9 +49,12 @@ def main(argv: list) -> int:
         if argv[1] == "make":
             with Session(engine) as session:
                 _write(seed.SEED_SQL, seed.dump(session))
-            print(f"wrote {seed.SEED_SQL.relative_to(ROOT)}")
+                added = session.exec(select(func.count()).select_from(Patient).where(Patient.origin == "added")).one()
+            print(f"wrote {seed.SEED_SQL.relative_to(ROOT)}, including {added} case(s) added through the app: "
+                  "the repo is public, so made-up patients only")
         else:
-            seed.load(engine, seed.SEED_SQL.read_text(encoding="utf-8"))
+            added = seed.load(engine, seed.SEED_SQL.read_text(encoding="utf-8"))
+            print(f"{added} row(s) added")
         with Session(engine) as session:
             print(f"{session.exec(select(func.count()).select_from(Patient)).one()} patient(s) in the database")
     finally:

@@ -25,7 +25,6 @@ from artemis import visit_record
 from artemis.patient.labs import TEST_NAMES, TEST_UNITS, read_lab_entries, read_lab_notes
 from artemis.patient.medicines import COMBINATIONS, REGIMEN_CHOICES
 from artemis.patient.new_case import VISIT_TYPES, CaseForm, PreviousArt, build_case_record
-from artemis.patient.store import UnreadableFile
 from artemis.visit import AnalysisOptions, run_visit_analysis
 from backend import patients_db, records
 from backend.access import AccessMiddleware, require, role_of, visible_patients
@@ -67,7 +66,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class Loaded:
     record: PatientRecord  # checked once, when loaded
-    stored: Dict[str, Any]  # the record exactly as in the file, which the visit check reads
+    stored: Dict[str, Any]  # the record as read from the database, which the visit check reads
 
 
 def load_patients(services: Services) -> List[Loaded]:
@@ -78,7 +77,7 @@ def load_patients(services: Services) -> List[Loaded]:
         raise _no_database()
     try:
         raw = services.patients()
-    except (UnreadableFile, OSError, SQLAlchemyError) as exc:
+    except SQLAlchemyError as exc:
         logger.warning("Patient list not read: %s", type(exc).__name__)
         raise HTTPException(status_code=500, detail="The patient list could not be read.")
     out: List[Loaded] = []
@@ -205,9 +204,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         ],
     )
     def run_visit_check(patient_id: str, body: VisitCheckRequest) -> VisitCheckResponse:
-        patient = _find(services, patient_id).stored
-        if services.engine is None:
-            raise _no_database()  # nothing could be saved or decided on, so nothing is run or paid for
+        patient = _find(services, patient_id).stored  # 503 first when there's no database: nothing is run or paid for
         client = services.model_client() if body.use_ai else None
         if body.use_ai and client is None:
             raise HTTPException(status_code=503, detail="No AI model server is set up.")
@@ -330,9 +327,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
     ])
     def past_checks(patient_id: str) -> List[VisitSummary]:
         """A patient's saved checks, newest first."""
-        _find(services, patient_id)
-        if services.engine is None:
-            raise _no_database()
+        _find(services, patient_id)  # 503 first when there's no database
         with Session(services.engine) as session:
             return [
                 VisitSummary(
@@ -386,8 +381,8 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         Depends(require("patients", "create")),
     ])
     def add_case(body: NewCase) -> PatientDetail:
-        """Add a new made-up case where the Streamlit app keeps its added cases. Add only: an ID
-        already in use is refused (owner, 2026-11-26)."""
+        """Add a new made-up case to the database in one save. Add only: an ID already in use is
+        refused (owner, 2026-11-26)."""
         form = CaseForm(
             patient_id=body.patient_id, name=body.name or "", age_years=body.age_years, sex=body.sex or "",
             art_regimen=body.art_regimen, other_medications=body.other_medications, complaints=body.complaints,
@@ -405,7 +400,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             services.add_case(record)
         except patients_db.PatientExists:  # a second add of the same new id, racing this one
             raise HTTPException(status_code=409, detail="That patient ID is already in use.")
-        except (SQLAlchemyError, OSError) as exc:
+        except SQLAlchemyError as exc:
             logger.warning("Case not added: %s", type(exc).__name__)
             raise HTTPException(status_code=500, detail="The case could not be saved.")
         return _detail(_find(services, record["patient_id"]))
