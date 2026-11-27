@@ -1,0 +1,12 @@
+2026-11-27: a plan with an Uncertain regimen verdict, or no row the app can assess, is flagged (owner: "Yes, flag it").
+Compared with tests/golden/pipeline.json as saved before the change (stand-in model and search):
+
+Kintu-Test 001: changed fields ['plan_issues'] | plan_issues ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem', 'problem_2_missing_key:clinician_plan_for_this_problem'] -> ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem', 'problem_2_missing_key:clinician_plan_for_this_problem', 'flag:no_row_assessed']
+P001: changed fields []
+P002: changed fields ['plan_issues'] | plan_issues ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem'] -> ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem', 'flag:no_row_assessed']
+P003: changed fields ['plan_issues'] | plan_issues ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem'] -> ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem', 'flag:no_row_assessed']
+P004: changed fields ['plan_issues'] | plan_issues ['problem_0_missing_key:clinician_plan_for_this_problem'] -> ['problem_0_missing_key:clinician_plan_for_this_problem', 'flag:regimen_uncertain', 'flag:no_row_assessed']
+P005: changed fields ['plan_issues'] | plan_issues ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem'] -> ['problem_0_missing_key:clinician_plan_for_this_problem', 'problem_1_missing_key:clinician_plan_for_this_problem', 'flag:no_row_assessed']
+P006: changed fields []
+
+Only plan_issues changed, by the new flag: marks; the golden file was rewritten after this comparison.

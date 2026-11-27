@@ -328,3 +328,51 @@ def test_showing_a_saved_plan_does_not_use_up_the_limit(limited):
     for _ in range(5):
         assert _compare(limited, visit).status_code == 200  # the saved plan, nothing run
     assert _check(limited)["visit_id"]  # 3 of 3
+
+
+# An "Uncertain" plan is flagged (owner, 2026-11-27: "Yes, flag it"): found in a live visit, a plan
+# that said it lacked data was kept as good and never asked for again.
+
+
+def _uncertain_plan_text():
+    import json
+
+    plan = json.loads(replies_for("P001")["plan"])
+    plan["art_regimen_decision"] = {"decision": "Uncertain", "reason": "Not enough information."}
+    return json.dumps(plan)
+
+
+def test_an_uncertain_regimen_verdict_flags_the_plan():
+    import datetime
+
+    from artemis.plan.flow import AgenticResult
+    from artemis.screen_text import PLAN_ISSUES_NOTE
+    from backend.plans import is_good, plan_reply, plan_row
+
+    row = plan_row(AgenticResult(updated_management_plan_text=_uncertain_plan_text(), plan_issues=[]), visit_id="v1",
+                   model="m", made_at=datetime.datetime(2026, 11, 27, tzinfo=datetime.timezone.utc))
+    assert row.outcome == "made" and "flag:regimen_uncertain" in row.issues
+    assert not is_good(row)
+    reply = plan_reply(row, note=NOTE)
+    assert reply.regimen.label == "Needs review" and reply.issues_note == PLAN_ISSUES_NOTE
+
+
+def test_a_clear_regimen_verdict_is_not_flagged():
+    import datetime
+
+    from artemis.plan.flow import AgenticResult
+    from backend.plans import is_good, plan_row
+
+    row = plan_row(AgenticResult(updated_management_plan_text=replies_for("P001")["plan"], plan_issues=[]), visit_id="v1",
+                   model="m", made_at=datetime.datetime(2026, 11, 27, tzinfo=datetime.timezone.utc))
+    assert row.issues == [] and is_good(row)
+
+
+def test_pressing_again_after_an_uncertain_plan_asks_the_ai_again(api):
+    visit = _check(api)
+    api.model = FakeModel({**replies_for("P001"), "plan": _uncertain_plan_text()})
+    first = _compare(api, visit["visit_id"]).json()
+    assert first["outcome"] == "made" and "flag:regimen_uncertain" in first["issues"]
+    api.model.calls.clear()
+    _compare(api, visit["visit_id"])
+    assert "plan" in api.model.calls and len(_plans(api)) == 2

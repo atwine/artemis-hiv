@@ -9,9 +9,9 @@ screen shape is read from it each time, by artemis/plan/view.py, as the cards ar
 from __future__ import annotations
 
 import datetime
-from typing import Any, Optional
+from typing import Any, List, Optional
 
-from artemis.plan.view import read_plan
+from artemis.plan.view import PlanView, read_plan
 from artemis.screen_text import PLAN_FAILED, PLAN_ISSUES_NOTE
 from backend.models import ManagementPlan, PlanItem, PlanRegimen
 from backend.records import VisitPlan, iso
@@ -24,9 +24,22 @@ def plan_row(result: Any, *, visit_id: str, model: Optional[str], made_at: datet
     else:
         text = getattr(result, "updated_management_plan_text", None)
         issues, error_type = [str(i) for i in getattr(result, "plan_issues", None) or []], None
-    readable = isinstance(text, str) and read_plan(text, clinician_plan_written=True) is not None
-    return VisitPlan(visit_id=visit_id, made_at=made_at, model=model, outcome="made" if readable else "failed",
-                     plan_text=text, issues=issues, error_type=error_type)
+    view = read_plan(text, clinician_plan_written=True) if isinstance(text, str) else None
+    return VisitPlan(visit_id=visit_id, made_at=made_at, model=model, outcome="made" if view is not None else "failed",
+                     plan_text=text, issues=issues + (unsure_flags(view) if view is not None else []), error_type=error_type)
+
+
+def unsure_flags(view: PlanView) -> List[str]:
+    """What makes a readable plan one not to keep (owner, 2026-11-27: "Yes, flag it"): a regimen
+    verdict of "Uncertain", or no problem row with a verdict the app recognises. Marked "flag:" to
+    tell them from the plan step's own checks. A flagged plan is shown with its warning, and
+    pressing "Compare plans" again asks the AI again."""
+    flags = []
+    if view.regimen_label == "Needs review":  # the AI's decision was Uncertain, or not one of the four
+        flags.append("flag:regimen_uncertain")
+    if view.items and all(i.verdict_label == "Not assessed" for i in view.items):
+        flags.append("flag:no_row_assessed")
+    return flags
 
 
 def is_good(row: VisitPlan) -> bool:

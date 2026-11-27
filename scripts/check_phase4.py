@@ -90,7 +90,7 @@ def main() -> int:
     saved = [json.loads(Path(f).read_text(encoding="utf-8")) for f in sorted(glob.glob(str(RUNS / "*.json")))]
 
     replayed, problems = [], []
-    plans_made = plans_failed = 0
+    plans_made = plans_failed = plans_flagged = 0
     for record in saved:
         run = f"{record['case_id']} run {record['repeat']}"
         try:  # the evaluation's own path (plan 4C.5): the patient through the database, then the routes
@@ -100,6 +100,10 @@ def main() -> int:
             problems.append(f"{run}: {exc}")
             continue
         replayed.append(now)
+        # The plan step's own checks; the app's "flag:" marks (an Uncertain plan, 2026-11-27) are
+        # counted apart, since the saved runs were made before them.
+        step_issues = [i for i in now["plan_issues"] if not i.startswith("flag:")]
+        plans_flagged += len(step_issues) != len(now["plan_issues"])
         if [_same(a) for a in now["alerts"]] != [_same(a) for a in record["alerts"]]:
             problems.append(f"{run}: alerts differ")
         shown = [b["chunk_id"] for b in (now["screening"] or {}).get("screening_bundle") or []]
@@ -112,11 +116,11 @@ def main() -> int:
         if record.get("plan_issues"):
             plans_failed += 1
             readable = now["plan_text"] is not None and read_plan(now["plan_text"], clinician_plan_written=True)
-            if readable and not now["plan_issues"]:
+            if readable and not step_issues:
                 problems.append(f"{run}: a plan that failed its checks came back clean")
         else:
             plans_made += 1
-            if now["plan_text"] != record["plan_text"] or now["plan_issues"]:
+            if now["plan_text"] != record["plan_text"] or step_issues:
                 problems.append(f"{run}: the plan differs from the saved one")
 
     before = _summary(cases, saved)
@@ -131,12 +135,13 @@ def main() -> int:
         "Also compared per run: the passages the AI was shown, and each alert's passages (kept Chroma index).",
         f"Plans through Compare plans: {plans_made} the same as saved, {plans_failed} saved as failing their checks, none shown clean"
         " (any that differ count as runs with differences).",
+        f"Plans the app now flags (an Uncertain verdict or no row assessed; shown with their warning): {plans_flagged}",
         f"Keep rule (same alerts and passages in every run, identical scores): {'MET' if met else 'NOT MET'}",
         *problems[:30],
     ]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("\n".join(lines[:8]))
+    print("\n".join(lines[:9]))
     return 0 if met else 2
 
 
