@@ -56,6 +56,17 @@ class VectorStore:
         raise NotImplementedError
 
 
+def chroma_client(path: Path) -> Any:
+    """A Chroma client on a folder on this laptop, with Chroma's anonymous usage reporting off
+    (2026-11-27). The one place the app opens Chroma (tests/test_chroma_no_telemetry.py)."""
+    import chromadb
+    from chromadb.config import Settings
+
+    # PersistentClient is the recommended way to persist locally. [src]
+    # https://docs.trychroma.com/docs/run-chroma/persistent-client
+    return chromadb.PersistentClient(path=str(path), settings=Settings(anonymized_telemetry=False))
+
+
 class ChromaVectorStore(VectorStore):
     def __init__(
         self,
@@ -69,11 +80,7 @@ class ChromaVectorStore(VectorStore):
         # Rationale: ensure the directory exists before initializing the persistent client.
         self._persist_path.mkdir(parents=True, exist_ok=True)
 
-        import chromadb
-
-        # PersistentClient is the recommended way to persist locally. [src]
-        # https://docs.trychroma.com/docs/run-chroma/persistent-client
-        self._client = chromadb.PersistentClient(path=str(self._persist_path))
+        self._client = chroma_client(self._persist_path)
 
         # get_or_create_collection is documented for safe reuse. [src]
         # https://docs.trychroma.com/docs/collections/create-get-delete

@@ -26,9 +26,9 @@ def main() -> int:
     if not DB.exists():
         print(f"no search database at {DB.relative_to(ROOT)}; the app builds it on first use")
         return 0
-    import chromadb
+    from artemis.guidelines.vector_store import chroma_client
 
-    client = chromadb.PersistentClient(path=str(DB))
+    client = chroma_client(DB)
     bad = 0
     collections = client.list_collections()
     print(f"{len(collections)} collection(s) in {DB.relative_to(ROOT)}")
