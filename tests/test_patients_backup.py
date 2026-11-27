@@ -171,3 +171,44 @@ def test_loading_the_backup_fills_a_new_database_safely_twice():
     finally:
         engine.dispose()
         command.downgrade(cfg, "base")
+
+
+# Every seeded patient has what the screens show for them (owner, 2026-11-27: "A, fill in the
+# names"; P005 and P006 had their names only on their demo-day bookings).
+# Kintu-Test 001 has no name and no booking to take one from: the owner chooses one. This list
+# fails the test once it's no longer needed, so it can't quietly hide a patient.
+WAITING_FOR_A_NAME = {"Kintu-Test 001"}
+
+
+def _seeded_patients():
+    """The backup's patients as the app reads them: loaded into a new database and read back."""
+    engine = _empty_engine()
+    seed.load(engine, seed.SEED_SQL.read_text(encoding="utf-8"))
+    with Session(engine) as s:
+        return patients_db.load_all(s)
+
+
+def test_every_seeded_patient_has_a_name_and_what_the_screens_show():
+    patients = _seeded_patients()
+    assert patients
+    no_name = {p["patient_id"] for p in patients if not str(p.get("name") or "").strip()}
+    assert no_name == WAITING_FOR_A_NAME
+    for p in patients:
+        pid = p["patient_id"]
+        assert p.get("sex") in {"M", "F"}, pid
+        assert isinstance(p.get("age_years"), int) and 0 <= p["age_years"] <= 120, pid
+        assert p.get("art_regimen_current"), pid
+        assert (p.get("today_encounter") or {}).get("date"), pid
+
+
+def test_a_booked_patients_name_is_the_name_on_their_record():
+    """The demo day's bookings name each patient the way their record does."""
+    names = {p["patient_id"]: p.get("name") for p in _seeded_patients()}
+    for booking in read_clinic_day()["appointments"]:
+        if booking.get("name"):
+            assert names[booking["patient_id"]] == booking["name"], booking["patient_id"]
+
+
+def test_the_tests_patients_have_the_same_names_as_the_backup():
+    backup = {p["patient_id"]: p.get("name") for p in _seeded_patients()}
+    assert {p["patient_id"]: p.get("name") for p in read_patients()} == {k: backup[k] for k in (p["patient_id"] for p in read_patients())}
