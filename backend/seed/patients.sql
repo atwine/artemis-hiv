@@ -1,4 +1,4 @@
--- The app's made-up patients: the backup of the database's patient tables (plan 4C.2).
+-- The app's made-up patients and clinic days: the backup of those database tables (plan 4C.2, 4C.3).
 -- Made by `python scripts/patients_backup.py make`; loaded into a new database by
 -- `python scripts/patients_backup.py load` after `alembic upgrade head`. The app never reads it.
 

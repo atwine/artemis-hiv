@@ -138,7 +138,7 @@ def _latest(session: Session, visit_id: str) -> Dict[str, DecisionOut]:
     }
 
 
-def board_row(booking: clinic_db.Appointment, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
+def board_row(booking: clinic_db.AppointmentRow, record: PatientRecord, latest: Optional[records.VisitCheck], reviewed: int,
               finalized: Optional[str]) -> Appointment:
     """One row of the day board, from the booking, the patient and their latest saved check."""
     state = "waiting" if latest is None else ("done" if finalized else "needs_you")
@@ -353,6 +353,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             if found is None:
                 raise HTTPException(status_code=404, detail="There is no clinic day on that date.")
             day, appointments = found
+            before, after = clinic_db.neighbours(session, day.date)
             rows = []
             for a in appointments:
                 latest = next(iter(records.checks_for(session, a.patient_id)), None)
@@ -362,6 +363,7 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
         return ClinicDay(
             clinic=day.clinic, room=day.room, clinician=day.clinician,
             date=day.date.isoformat(), appointments=rows, counts=day_counts(rows),
+            previous_date=before.isoformat() if before else None, next_date=after.isoformat() if after else None,
         )
 
     @app.get("/api/form-choices", response_model=FormChoices, dependencies=[Depends(require("form_choices", "view"))])
@@ -397,8 +399,9 @@ def create_app(*, settings: Optional[Settings] = None, services: Optional[Servic
             services.add_case(record, datetime.date.fromisoformat(record["today_encounter"]["date"]), body.appointment_time)
         except patients_db.PatientExists:  # a second add of the same new id, racing this one
             raise HTTPException(status_code=409, detail="That patient ID is already in use.")
-        except clinic_db.NoClinic:
-            raise HTTPException(status_code=422, detail="There is no clinic to book this case into.")
+        except clinic_db.NoClinic:  # the database has no clinic day at all: the backup isn't loaded
+            logger.warning("Case not added: no clinic day to copy")
+            raise HTTPException(status_code=503, detail="No clinic day is set up yet.")
         except SQLAlchemyError as exc:
             logger.warning("Case not added: %s", type(exc).__name__)
             raise HTTPException(status_code=500, detail="The case could not be saved.")

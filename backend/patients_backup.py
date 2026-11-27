@@ -1,11 +1,12 @@
-"""The patients' backup (owner, 2026-11-27: "B, delete them" and "A, in the repo").
+"""The patients' and clinic days' backup (owner, 2026-11-27: "B, delete them" and "A, in the repo").
 
 The database is the only copy of the app's patients; backend/seed/patients.sql is its backup, kept
 in the repo so a new database (a fresh laptop, the website's end-to-end tests) can be filled. The
 app never reads it. `dump` writes every patient row as SQL, values quoted by the Postgres driver.
-`load` reads the file back as data, accepting only what `dump` writes, and inserts each row with
+It covers the patient tables and, since plan 4C.3, the clinic days and appointments. `load`
+reads the file back as data, accepting only what `dump` writes, and inserts each row with
 bound values in one save, safe to run again (a row already there is skipped). The file is never
-run as commands: an edited backup can add patient rows, nothing else (security review,
+run as commands: an edited backup can add patient and clinic rows, nothing else (security review,
 2026-11-27). Commands: scripts/patients_backup.py make | load.
 """
 
@@ -25,14 +26,13 @@ from sqlmodel import Session, select
 
 from backend import clinic_db, patients_db
 from backend.patients_db import Patient
+from backend.settings import PROJECT_ROOT
 
 # Parents before the rows that point to them: the patient tables, then the clinic days and appointments.
 TABLES = patients_db.TABLES + clinic_db.TABLES
-from backend.settings import PROJECT_ROOT
-
 SEED_SQL = PROJECT_ROOT / "backend" / "seed" / "patients.sql"
 HEADER = (
-    "-- The app's made-up patients: the backup of the database's patient tables (plan 4C.2).\n"
+    "-- The app's made-up patients and clinic days: the backup of those database tables (plan 4C.2, 4C.3).\n"
     "-- Made by `python scripts/patients_backup.py make`; loaded into a new database by\n"
     "-- `python scripts/patients_backup.py load` after `alembic upgrade head`. The app never reads it.\n"
 )
@@ -108,7 +108,7 @@ def _value(m: "re.Match[str]", at: int) -> Any:
 
 def read_backup(text: str) -> List[Tuple[Any, Dict[str, Any]]]:
     """The rows a backup holds, as (table, values), read as data: only the statements `dump` writes
-    are accepted (an insert into one of the patient tables with exactly its columns, or a
+    are accepted (an insert into one of the backed-up tables with exactly its columns, or a
     comment). Anything else raises BadBackup, so an edited file can never run commands."""
     tables = {m.__tablename__: m.__table__ for m in TABLES}
     rows: List[Tuple[Any, Dict[str, Any]]] = []

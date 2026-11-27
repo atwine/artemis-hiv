@@ -215,6 +215,9 @@ class ClinicDay(BaseModel):
     date: str  # YYYY-MM-DD
     appointments: List[Appointment]
     counts: DayCounts
+    # The clinic days just before and after this one, so the board can step between days.
+    previous_date: Optional[str] = None
+    next_date: Optional[str] = None
 
 
 # --- The add-case form's pick lists ------------------------------------------------------

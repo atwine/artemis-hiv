@@ -38,7 +38,8 @@ def upgrade() -> None:
     sa.Column('booked_at', sa.DateTime(timezone=True), nullable=False),
     sa.ForeignKeyConstraint(['date'], ['clinic_day.date'], ),
     sa.ForeignKeyConstraint(['patient_id'], ['patient.patient_id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('date', 'patient_id', name='uq_appointment_day_patient')
     )
     with op.batch_alter_table('appointment', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_appointment_date'), ['date'], unique=False)

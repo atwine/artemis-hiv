@@ -39,7 +39,8 @@ def test_the_demo_day_from_the_database_is_the_board_it_was():
     with api.client:
         r = _board(api)
     assert r.status_code == 200, r.text
-    assert r.json() == BEFORE
+    # The same board, plus the two links to the days around it (none: it is the only day).
+    assert r.json() == {**BEFORE, "previous_date": None, "next_date": None}
 
 
 def test_with_no_clinic_day_today_the_board_shows_the_most_recent_earlier_one(api):
@@ -147,3 +148,43 @@ def test_a_schedule_booking_an_unknown_patient_is_refused():
     bad["appointments"].append({"time": "11:00", "patient_id": "NOPE"})
     with Session(memory_engine()) as s, pytest.raises(clinic_db.BadSchedule, match="NOPE"):
         clinic_db.import_schedule(s, bad, origin="seed")
+
+
+def test_the_board_names_the_days_around_it(api):
+    """Review, 2026-11-27: once a case is booked for today the board moves to today; the website
+    reaches the demo day through previous_date."""
+    assert _add(api, visit_date="2026-11-27").status_code == 201
+    today = _board(api).json()
+    assert (today["date"], today["previous_date"], today["next_date"]) == ("2026-11-27", "2026-11-26", None)
+    demo = _board(api, today["previous_date"]).json()
+    assert (demo["date"], demo["previous_date"], demo["next_date"], demo["counts"]["booked"]) == (
+        "2026-11-26", None, "2026-11-27", 7)
+
+
+def test_without_any_clinic_day_a_case_cant_be_booked(api):
+    """A database whose backup was never loaded has no clinic to copy: the server isn't ready."""
+    from sqlmodel import delete
+
+    with Session(api.engine) as s:
+        s.exec(delete(clinic_db.AppointmentRow))
+        s.exec(delete(clinic_db.ClinicDayRow))
+        s.commit()
+    r = _add(api)
+    assert r.status_code == 503
+    assert r.json() == {"detail": "No clinic day is set up yet."}
+    assert api.client.get("/api/patients/P100", headers=LOCAL).status_code == 404
+
+
+def test_a_patient_is_booked_at_most_once_on_a_day():
+    from sqlalchemy.exc import IntegrityError
+    from tests.api_fakes import memory_engine, read_clinic_day, read_patients
+    from backend import patients_db
+
+    engine = memory_engine()
+    with Session(engine) as s:
+        patients_db.import_records(s, read_patients(), origin="seed")
+        clinic_db.import_schedule(s, read_clinic_day(), origin="seed")
+        s.add(clinic_db.AppointmentRow(date=datetime.date(2026, 11, 26), time="12:00", patient_id="P004",
+                                       origin="added", booked_at=datetime.datetime.now(datetime.timezone.utc)))
+        with pytest.raises(IntegrityError):
+            s.commit()
