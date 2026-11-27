@@ -387,8 +387,15 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       retried ("A, keep a good plan"); plans and checks share the 6-a-minute limit ("A, one shared
       limit"). Measured: the Phase 4 check MET, with 30 of 33 saved plans the same through the new
       route and the 3 that failed still failed.
-- [ ] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
+- [x] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
       app does. Check: the Phase 4 check still matches 2B's numbers.
+      Done 2026-11-27 (owner: "A, through the backend"): `backend/evaluation.py` puts each case's
+      patient into a throwaway database as the app stores it, presses "run checks" and "Compare
+      plans" through the backend's routes, and reads the record from what was saved;
+      `scripts/run_phase2.py` and the Phase 4 check both use it. Run records drop `llm_error`; a
+      run whose model server didn't answer (`screening_outcome` "failed") is still not saved.
+      Measured: the Phase 4 check MET through this path (33 runs, same alerts, passages and
+      scores; 30 plans the same, the 3 that failed their checks never shown clean).
 - [ ] 4C.6 Remove Streamlit: `app.py`, `ui/`, `agentic_demo.py`, the Streamlit visit-record files
       (`artemis/visit_record.py`, `Data/visit_records`), the screen's remembered values
       (`artemis/session_keys.py`), the candidate-rules file and button, the Ollama client settings only the

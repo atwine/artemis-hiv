@@ -170,7 +170,6 @@ artemis/evaluation/runner.py	cost_of	Dollars for a list of calls: the server's f
 artemis/evaluation/runner.py	check_budget	Refuses a run whose worst-case cost would pass the cap.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	run_file_name	The saved file name for one case and repeat.	artemis/evaluation/runner.py	moved
 artemis/evaluation/runner.py	pending_runs	Lists the case runs not saved yet, so a stopped run resumes.	artemis/evaluation/runner.py	moved
-artemis/evaluation/runner.py	run_case	Runs one case through the app's analysis with a model and returns the record to save.	artemis/evaluation/runner.py	moved
 artemis/evaluation/afrimedqa.py	load_questions	Reads the AfriMed-QA multiple-choice questions that are infectious disease or mention HIV.	artemis/evaluation/afrimedqa.py	moved
 artemis/evaluation/afrimedqa.py	messages	Builds the quiz prompt, saying how many options to pick.	artemis/evaluation/afrimedqa.py	moved
 artemis/evaluation/afrimedqa.py	answer_format	The quiz reply format: the right number of the question's own option keys.	artemis/evaluation/afrimedqa.py	moved
@@ -340,3 +339,7 @@ backend/plans.py	plan_reply	A saved plan in screen shape (regimen badge, items w
 backend/records.py	save_plan	Saves one plan row.	stays	stays
 backend/records.py	latest_plan	The plan shown for a visit: the latest one made.	stays	stays
 backend/plans.py	is_good	A plan worth keeping: readable and passing the app's own checks, so a second press shows it with nothing run.	stays	stays
+backend/evaluation.py	run_case	Runs one case through the backend itself (patient into a throwaway database, the check and its plan through the routes) and returns the record to save.	stays	stays
+backend/evaluation.py	memory_engine	A throwaway in-memory database with the app's tables, links checked as Postgres does; the tests use it too.	stays	stays
+backend/evaluation.py	_backend	The backend app around a throwaway database, a search and a model client, for one evaluation run.	stays	stays
+backend/evaluation.py	_post	One request to the backend from the app's own page; a refusal stops the run (the search being down is a result).	stays	stays
