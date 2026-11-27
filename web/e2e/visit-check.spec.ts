@@ -112,6 +112,10 @@ test("a clinician runs the checks, reviews the alert on its own screen and decid
   await tray.getByRole("button", { name: "Accept alert" }).click();
   await expect(row).toContainText("Accepted");
 
+  // Every alert answered: Compare plans is next (S5), and Finalize stays one step away in the tray.
+  await expect(tray.getByRole("button", { name: "Compare plans" })).toBeVisible();
+  await tray.getByRole("button", { name: /^Finalize, / }).click();
+
   // Finalize asks first (owner's decision 6): a one-line confirm in the tray; "Go back" changes nothing.
   await tray.getByRole("button", { name: "Finalize visit" }).click();
   await expect(tray).toContainText("Finalize John's visit? Decisions can't be changed after this.");

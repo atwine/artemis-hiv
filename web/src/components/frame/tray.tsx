@@ -29,7 +29,7 @@ export type TrayProps = {
   /** Shown in place of the buttons, e.g. while the checks run. */
   status?: React.ReactNode;
   /** Steps that can be opened from the tray (to go back to the notes, the results or an alert). */
-  go?: { notes?: () => void; checks?: () => void; alert?: (i: number) => void; finalize?: () => void };
+  go?: { notes?: () => void; checks?: () => void; alert?: (i: number) => void; plan?: () => void; finalize?: () => void };
 };
 
 export function Tray(props: TrayProps) {
@@ -52,7 +52,7 @@ export function Tray(props: TrayProps) {
               </ol>
             </li>
           )}
-          <TextStep label="Plan" step={props.plan} />
+          <TextStep label="Plan" step={props.plan} onOpen={props.go?.plan} />
           <TextStep label="Finalize" step={props.finalize} onOpen={props.go?.finalize} />
         </ol>
         <span aria-hidden className="h-8 w-px shrink-0 bg-white/15" />

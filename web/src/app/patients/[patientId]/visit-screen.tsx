@@ -12,6 +12,7 @@ import { firstName, nextToReview } from "@/lib/alerts";
 import { api, errorText, unwrap, type DecisionIn, type DecisionOut, type PatientDetail, type SavedVisit, type VisitCheck } from "@/lib/api/client";
 import { acceptDecision, NEEDS_COMMENT, overrideDecision, type Reason } from "@/lib/decisions";
 import { DISCLAIMER } from "@/lib/demo";
+import { planState, type ManagementPlan, type PlanState } from "@/lib/plan";
 import type { DayAppointment } from "@/lib/day";
 import { useClinicDay, useRailEntries, visitHref } from "@/lib/queries";
 import { nextPatient } from "@/lib/visit";
@@ -20,6 +21,7 @@ import { patientLine, possessive } from "@/lib/record";
 import { AlertView } from "./alert-view";
 import { FinalizeView, RecordView } from "./finalize-view";
 import { OverrideView } from "./override-view";
+import { PlanView } from "./plan-view";
 import { RecordPanel } from "./record-panel";
 import { Running, RunningTrayStatus } from "./running-view";
 import { decisionWords, ResultsView } from "./results-view";
@@ -151,6 +153,7 @@ type View =
   | { name: "results" }
   | { name: "alert"; i: number }
   | { name: "override"; i: number; other: boolean }
+  | { name: "plan" }
   | { name: "finalize"; confirming: boolean };
 
 function VisitView({
@@ -181,6 +184,18 @@ function VisitView({
   const [finalizeNote, setFinalizeNote] = useState<string | null>(reopened ? reopened.finalize_note : (result?.finalize_note ?? null));
   const [finalizedAt, setFinalizedAt] = useState<string | null>(reopened?.finalized_at ?? null);
   const [comment, setComment] = useState("");
+  // The AI's management plan, made only from "Compare plans" (owner, 2026-11-27); a reopened visit
+  // brings its latest one.
+  const [plan, setPlan] = useState<ManagementPlan | null>(reopened?.plan ?? null);
+  const compare = useMutation({
+    mutationFn: async () =>
+      unwrap(await api.POST("/api/visits/{visit_id}/plan", { params: { path: { visit_id: result!.visit_id } } })),
+    onMutate: () => setView({ name: "plan" }),
+    onSuccess: (made) => {
+      setPlan(made);
+      keepSaved(queryClient, visitId, { plan: made });
+    },
+  });
   const save = useMutation({
     mutationFn: async (decision: DecisionIn) =>
       unwrap(
@@ -235,6 +250,10 @@ function VisitView({
             result,
             savedByAlert,
             saving: save.isPending || finalize.isPending,
+            plan: planState(plan, compare.status),
+            comparePlans: () => {
+              if (!compare.isPending) compare.mutate();
+            },
             patientName: patient.name,
             comment,
             finalizedAt,
@@ -258,7 +277,7 @@ function VisitView({
     >
       <PaneHeader title={patient.name} meta={patientLine(patient)} aside={<StatusChip state={state} finalized={Boolean(finalizedAt)} />} />
       <PaneContent>
-        {result && finalizedAt ? (
+        {result && finalizedAt && view.name !== "plan" ? (
           <RecordView check={result} savedByAlert={savedByAlert} finalizedAt={finalizedAt} />
         ) : (
           <>
@@ -301,6 +320,9 @@ function VisitView({
                 }
                 onComment={setComment}
               />
+            )}
+            {result && view.name === "plan" && (
+              <PlanView plan={plan} pending={compare.isPending} error={compare.isError ? errorText(compare.error) : null} />
             )}
             {result && view.name === "finalize" && (
               <FinalizeView
@@ -357,6 +379,8 @@ function trayFor(t: {
   result: VisitCheck | undefined;
   savedByAlert: Map<string, DecisionOut>;
   saving: boolean;
+  plan: PlanState;
+  comparePlans: () => void;
   patientName: string;
   comment: string;
   finalizedAt: string | null;
@@ -391,8 +415,10 @@ function trayFor(t: {
       notes: "done",
       checks: "done",
       alerts: ids.map((): Step => "done"),
-      plan: "todo",
+      plan: view.name === "plan" ? "current" : t.plan === "good" ? "done" : "todo",
       finalize: "done",
+      // A finalized visit keeps its plan to read; the Finalize step goes back to the record.
+      go: { plan: t.plan === "none" ? undefined : () => go({ name: "plan" }), finalize: () => go({ name: "results" }) },
       lead: "Saved.",
       rest: next ? `Next: ${next.name}, ${next.time}.` : "Every visit today is finalized.",
       primary: next
@@ -406,15 +432,24 @@ function trayFor(t: {
     notes: (view.name === "notes" ? "current" : "done") as Step,
     checks: (view.name === "results" ? "current" : "done") as Step,
     alerts: ids.map((id, i): Step => (i === current ? "current" : decided.has(id) ? "done" : "todo")),
-    plan: "todo" as Step,
+    plan: (view.name === "plan" ? "current" : t.plan === "good" ? "done" : "todo") as Step,
     finalize: (view.name === "finalize" ? "current" : "todo") as Step,
     go: {
       notes: () => go({ name: "notes" }),
       checks: () => go({ name: "results" }),
       alert: (i: number) => go({ name: "alert", i }),
+      plan: t.plan === "none" ? undefined : () => go({ name: "plan" }),
       finalize: () => go({ name: "finalize", confirming: false }),
     },
   };
+  // A good plan is kept: pressing again shows it with no new AI call. A failed or flagged one, or a
+  // refusal, can be tried again (owner, 2026-11-27). A check that wasn't saved has no visit to plan.
+  const compareButton: TrayButton = {
+    label: "Compare plans",
+    onClick: t.plan === "good" ? () => go({ name: "plan" }) : t.comparePlans,
+    disabled: !result.record_saved,
+  };
+  const toFinalize: TrayButton = { label: "Go to finalize", onClick: () => go({ name: "finalize", confirming: false }) };
   const retry: TrayButton = { label: "Run the AI review again", onClick: t.retryAi };
   const of = (i: number) => `Alert ${i + 1} of ${ids.length}.`;
   const left = ids.filter((id) => !decided.has(id)).length;
@@ -435,6 +470,12 @@ function trayFor(t: {
     return left
       ? { ...steps, lead: "Finalize is locked.", rest: `${left} ${left === 1 ? "alert" : "alerts"} left to review.`, primary: finalizeButton }
       : { ...steps, lead: "Finalize.", rest: "Every alert has your answer.", primary: finalizeButton };
+  }
+  if (view.name === "plan") {
+    if (t.plan === "comparing") return { ...steps, lead: "Comparing plans." };
+    return t.plan === "good"
+      ? { ...steps, lead: "Plan.", rest: "To change it, go back to Clinical notes.", primary: toFinalize }
+      : { ...steps, lead: "Plan.", rest: "Try again, or go to finalize.", primary: toFinalize, secondary: compareButton };
   }
   if (view.name === "notes") {
     return { ...steps, lead: "Clinical notes.", rest: "Change the note, then run checks again.", primary: runChecks };
@@ -466,7 +507,9 @@ function trayFor(t: {
   // The results screen. With every alert answered (or none raised), the next step is Finalize.
   const firstOpen = ids.findIndex((id) => !decided.has(id));
   const review: TrayButton | undefined = firstOpen >= 0 ? { label: `Review alert ${firstOpen + 1}`, onClick: () => go({ name: "alert", i: firstOpen }) } : undefined;
-  const main = review ?? finalizeButton;
+  // Every alert answered: next is Compare plans (S5), except with no guideline search, when no
+  // plan can be made.
+  const main = review ?? (result.ai_review === "search_unavailable" ? finalizeButton : compareButton);
   switch (result.ai_review) {
     case "failed":
     case "unreadable":

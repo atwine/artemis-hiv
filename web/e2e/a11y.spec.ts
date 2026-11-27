@@ -9,7 +9,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 import { E2E } from "./ports";
-import { stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
+import { DESIGN_PLAN, standIn, stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
 
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const CHECK_WAIT = { timeout: 5 * 60 * 1000 };
@@ -61,6 +61,19 @@ test("the clinic day: board and list", async ({ page }) => {
   await page.goto("/?view=list");
   await expect(page.getByRole("list", { name: "Today's visits" })).toBeVisible();
   await audit(page, "list");
+});
+
+test("compare plans: a flagged plan, and a refusal", async ({ page }) => {
+  await page.goto("/patients/P002");
+  await runChecks(page);
+  await tray(page).getByRole("button", { name: "Compare plans" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toBeVisible(); // the real backend: no model server
+  await audit(page, "plan-refused");
+
+  await standIn(page, { json: { ...DESIGN_PLAN, issues: ["missing_monitoring"], issues_note: "This plan failed the app's own checks. Treat it with care." } });
+  await tray(page).getByRole("button", { name: "Compare plans" }).click();
+  await expect(page.getByRole("list", { name: "Counselling" })).toBeVisible();
+  await audit(page, "plan-flagged");
 });
 
 test("adding a case: both parts, with a problem shown, and the day links it makes", async ({ page }) => {
@@ -129,6 +142,8 @@ test("a visit: notes, checks running, results, alert, override, finalize and the
   await audit(page, "finalize-locked");
   await page.getByRole("button", { name: /^Review alert 1/ }).click();
   await tray(page).getByRole("button", { name: "Accept alert" }).click();
+  // Every alert answered: Compare plans is next, so Finalize is reached from the tray's step.
+  await tray(page).getByRole("button", { name: /^Finalize, / }).click();
   await tray(page).getByRole("button", { name: "Finalize visit" }).click();
   await expect(tray(page)).toContainText("Decisions can't be changed after this.");
   await audit(page, "finalize-confirm");

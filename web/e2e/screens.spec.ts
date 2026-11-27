@@ -5,7 +5,7 @@ import path from "node:path";
 
 import { expect, test } from "@playwright/test";
 
-import { stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
+import { DESIGN_PLAN, standIn, stubDesignDay, stubOutcome, type AiOutcome } from "./stubs";
 
 const OUT = path.resolve(__dirname, "..", "..", "docs", "design", "exports", "phase5");
 
@@ -99,6 +99,20 @@ test("the clinic day, in the design's states", async ({ page }) => {
   await page.screenshot({ path: path.join(OUT, "web-S1b-list.png") });
 });
 
+// Compare plans (S5) with the design's own plan as a stand-in reply (no model is called), on Jane
+// Roe's visit (no alerts); then the same screen scrolled to the monitoring and counselling lists.
+test("compare plans", async ({ page }) => {
+  await page.goto("/patients/P002");
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Run checks" }).click();
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await standIn(page, { json: DESIGN_PLAN });
+  await page.getByRole("region", { name: "Visit steps" }).getByRole("button", { name: "Compare plans" }).click();
+  await expect(page.getByRole("list", { name: "Counselling" })).toBeAttached();
+  await page.screenshot({ path: path.join(OUT, "web-S5-plan.png") });
+  await page.getByRole("list", { name: "Counselling" }).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(OUT, "web-S5-plan-lists.png") });
+});
+
 // Adding a case (S8a, S8b), filled in as the design draws Grace Atim; not saved.
 test("adding a case, both parts", async ({ page }) => {
   await page.goto("/cases/new");
@@ -139,6 +153,8 @@ test("finalize, the confirm and the record", async ({ page }) => {
   await page.screenshot({ path: path.join(OUT, "web-S6a-finalize-locked.png") });
   await page.getByRole("button", { name: /^Review alert 1/ }).click();
   await tray.getByRole("button", { name: "Accept alert" }).click();
+  // Every alert answered: Compare plans is next, so Finalize is reached from the tray's step.
+  await tray.getByRole("button", { name: /^Finalize, / }).click();
   await tray.getByRole("button", { name: "Finalize visit" }).click();
   await expect(tray).toContainText("Decisions can't be changed after this.");
   await page.screenshot({ path: path.join(OUT, "web-S6-confirm.png") });

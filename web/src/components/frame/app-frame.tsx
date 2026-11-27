@@ -108,5 +108,10 @@ export function PaneHeader({
 
 /** The pane's working area under the header; it scrolls on its own when it is too tall. */
 export function PaneContent({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-0 flex-1 overflow-y-auto px-8 py-7">{children}</div>;
+  // Reachable with the keyboard, so a long pane with nothing to tab to (a plan) can still scroll.
+  return (
+    <div tabIndex={0} className="min-h-0 flex-1 overflow-y-auto px-8 py-7 focus-visible:outline-2 focus-visible:outline-blue">
+      {children}
+    </div>
+  );
 }

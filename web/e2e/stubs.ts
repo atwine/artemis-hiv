@@ -6,6 +6,7 @@ import path from "node:path";
 import type { Page } from "@playwright/test";
 
 import type { VisitCheck } from "../src/lib/api/client";
+import type { ManagementPlan } from "../src/lib/plan";
 
 // The AI-review states the design doesn't draw (owner's decision 5). Each is a real reply to a
 // rule-checks-only visit check (no model call), with the AI outcome, status and banners the API
@@ -46,3 +47,48 @@ export async function stubDesignDay(page: Page) {
     await route.fulfill({ response: reply, json: day });
   });
 }
+
+// A management plan as Compare plans sends it (S5's own example), so no model is called; and the
+// stand-in that answers POST /api/visits/{id}/plan with it (or a refusal). Returns the calls made.
+export const PLAN: ManagementPlan = {
+  visit_id: "stand-in",
+  made_at: "2026-11-27T09:40:00Z",
+  model: "stand-in",
+  outcome: "made",
+  regimen: { label: "Switch", tone: "red", text: "Switch", reason: "Substitute TDF with ABC (ABC/3TC/DTG) once viral load suppression is confirmed." },
+  items: [
+    { problem: "Kidney function falling on TDF", action: "Substitute TDF with ABC after confirming VL", reason: "eGFR fell.", verdict_label: "Differs from your plan", explanation: "Your plan continues TLD." },
+    { problem: "Refill and review", action: "3-month refill, review in 3 months", reason: "Stable.", verdict_label: "Matches your plan", explanation: "Same refill and review." },
+    { problem: "Weight", action: "Weigh at each visit", reason: "On DTG.", verdict_label: "Not assessed", explanation: "Something the screen leaves out." },
+  ],
+  monitoring: ["Viral load now, before any switch", "Creatinine and eGFR in 4-6 weeks"],
+  counselling: ["Avoid ibuprofen; paracetamol for pain"],
+  issues: [],
+  issues_note: null,
+  error: null,
+  saved: true,
+};
+
+export async function standIn(page: Page, reply: { status?: number; json: object }) {
+  const calls: string[] = [];
+  await page.route("**/api/visits/*/plan", async (route) => {
+    calls.push(route.request().url());
+    await route.fulfill({ status: reply.status ?? 200, json: reply.json });
+  });
+  return calls;
+}
+
+// S5's own content, for the screenshot and the accessibility audit: the design's five problems,
+// with the AI's notes as the owner chose to show them ("About your plan").
+export const DESIGN_PLAN: ManagementPlan = {
+  ...PLAN,
+  items: [
+    { problem: "Kidney function falling on TDF", action: "Substitute TDF with ABC after confirming VL", reason: "", verdict_label: "Differs from your plan", explanation: "Your plan continues TLD." },
+    { problem: "Viral load before switching", action: "Repeat VL now (last May 2026)", reason: "", verdict_label: "Partly in your plan", explanation: "Notes VL suppressed; no repeat ordered." },
+    { problem: "Ibuprofen", action: "Stop; paracetamol instead", reason: "", verdict_label: "Partly in your plan", explanation: "Adds paracetamol; ibuprofen not stopped." },
+    { problem: "Kidney follow-up", action: "Repeat creatinine, eGFR, urine protein in 4–6 weeks", reason: "", verdict_label: "Not in your plan", explanation: "Kidney follow-up isn't mentioned." },
+    { problem: "Refill and review", action: "3-month refill, review in 3 months", reason: "", verdict_label: "Matches your plan", explanation: "Same refill and review." },
+  ],
+  monitoring: ["Viral load now, before any switch", "Creatinine and eGFR in 4–6 weeks", "Urine protein at the next visit"],
+  counselling: ["Why the switch waits for the viral load result", "Avoid ibuprofen; paracetamol for pain"],
+};
