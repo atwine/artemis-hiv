@@ -73,7 +73,7 @@ function Visit({ patient, reopened, onCreated }: { patient: PatientDetail; reope
       unwrap(
         await api.POST("/api/patients/{patient_id}/visits", {
           params: { path: { patient_id: patient.patient_id } },
-          body: { note: req.note, use_ai: req.useAi, include_plan: false },
+          body: { note: req.note, use_ai: req.useAi },
         }),
       ),
     onSuccess: (done, req) => {
@@ -85,6 +85,7 @@ function Visit({ patient, reopened, onCreated }: { patient: PatientDetail; reope
         all_resolved: done.cards.length === 0,
         unresolved: done.cards.map((c) => c.extension.alert_id),
         finalized_at: null,
+        plan: null, // plans are made only from Compare plans
       };
       queryClient.setQueryData(["visit", done.visit_id], asSaved);
       refreshDay(queryClient, patient.patient_id);

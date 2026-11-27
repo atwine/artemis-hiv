@@ -775,6 +775,10 @@
       },
       "LabTestChoice": {
         "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
           "name": {
             "title": "Name",
             "type": "string"
@@ -794,9 +798,121 @@
         "required": [
           "test",
           "name",
+          "label",
           "units"
         ],
         "title": "LabTestChoice",
+        "type": "object"
+      },
+      "ManagementPlan": {
+        "properties": {
+          "counselling": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Counselling",
+            "type": "array"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "issues": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Issues",
+            "type": "array"
+          },
+          "issues_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issues Note"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "made_at": {
+            "title": "Made At",
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "monitoring": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Monitoring",
+            "type": "array"
+          },
+          "outcome": {
+            "enum": [
+              "made",
+              "failed"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "regimen": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlanRegimen"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "saved": {
+            "title": "Saved",
+            "type": "boolean"
+          },
+          "visit_id": {
+            "title": "Visit Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "visit_id",
+          "made_at",
+          "model",
+          "outcome",
+          "regimen",
+          "items",
+          "monitoring",
+          "counselling",
+          "issues",
+          "issues_note",
+          "error",
+          "saved"
+        ],
+        "title": "ManagementPlan",
         "type": "object"
       },
       "NewCase": {
@@ -1200,40 +1316,73 @@
         "title": "PatientSummary",
         "type": "object"
       },
-      "Plan": {
+      "PlanItem": {
+        "description": "One problem: what the AI suggests, and how it compares with the clinician's note.",
         "properties": {
-          "error": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Error"
+          "action": {
+            "title": "Action",
+            "type": "string"
           },
-          "issues": {
-            "default": [],
-            "items": {
-              "type": "string"
-            },
-            "title": "Issues",
-            "type": "array"
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
           },
-          "management_plan": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Management Plan"
+          "problem": {
+            "title": "Problem",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "verdict_label": {
+            "title": "Verdict Label",
+            "type": "string"
           }
         },
-        "title": "Plan",
+        "required": [
+          "problem",
+          "action",
+          "reason",
+          "verdict_label",
+          "explanation"
+        ],
+        "title": "PlanItem",
+        "type": "object"
+      },
+      "PlanRegimen": {
+        "description": "The ART regimen decision: its badge (label and tone) and the AI's own words.",
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "tone": {
+            "enum": [
+              "red",
+              "amber",
+              "green",
+              "grey"
+            ],
+            "title": "Tone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "tone",
+          "text",
+          "reason"
+        ],
+        "title": "PlanRegimen",
         "type": "object"
       },
       "PreviousArtIn": {
@@ -1393,7 +1542,7 @@
           "plan": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Plan"
+                "$ref": "#/components/schemas/ManagementPlan"
               },
               {
                 "type": "null"
@@ -1445,7 +1594,6 @@
           "ai_review_card_label",
           "model",
           "cards",
-          "plan",
           "record_saved",
           "banners",
           "disclaimer",
@@ -1454,7 +1602,8 @@
           "decisions",
           "all_resolved",
           "unresolved",
-          "finalized_at"
+          "finalized_at",
+          "plan"
         ],
         "title": "SavedVisit",
         "type": "object"
@@ -1550,11 +1699,6 @@
       "VisitCheckRequest": {
         "additionalProperties": false,
         "properties": {
-          "include_plan": {
-            "default": false,
-            "title": "Include Plan",
-            "type": "boolean"
-          },
           "note": {
             "maxLength": 20000,
             "title": "Note",
@@ -1646,16 +1790,6 @@
             "title": "Patient Id",
             "type": "string"
           },
-          "plan": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Plan"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "record_saved": {
             "title": "Record Saved",
             "type": "boolean"
@@ -1694,7 +1828,6 @@
           "ai_review_card_label",
           "model",
           "cards",
-          "plan",
           "record_saved",
           "banners",
           "disclaimer",
@@ -2239,6 +2372,52 @@
           }
         },
         "summary": "Finalize Visit"
+      }
+    },
+    "/api/visits/{visit_id}/plan": {
+      "post": {
+        "description": "The AI's management plan for a saved visit, compared with the clinician's note the check\nran on, and saved (owner, 2026-11-26: \"Compare plans\"). Making one counts toward the visit\nchecks' limit (owner, 2026-11-27: \"A, one shared limit\"); showing a saved one doesn't.",
+        "operationId": "compare_plans_api_visits__visit_id__plan_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "visit_id",
+            "required": true,
+            "schema": {
+              "title": "Visit Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementPlan"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "description": "Too many visit checks and plans this minute; wait the Retry-After seconds."
+          },
+          "503": {
+            "description": "No database, no AI model server, or the guideline search is unavailable."
+          }
+        },
+        "summary": "Compare Plans"
       }
     }
   }

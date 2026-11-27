@@ -416,7 +416,7 @@ function PartTwo({ draft, choices, edit }: EditProps) {
                     <option value="">Pick a test</option>
                     {choices.lab_tests.map((t) => (
                       <option key={t.test} value={t.test}>
-                        {t.name}
+                        {t.label}
                       </option>
                     ))}
                   </select>

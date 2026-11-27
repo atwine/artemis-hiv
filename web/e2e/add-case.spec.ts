@@ -65,7 +65,7 @@ test("a new case: part 1, a reload keeps the draft, part 2, then it is saved and
   await expect(page.getByRole("heading", { level: 1 })).toContainText("P100 · 41 F · TDF/3TC/DTG");
   await expect(tray(page)).toContainText("Adds Grace to the clinic day on Mon 5 Jan.");
 
-  await page.getByLabel("Result 1 test").selectOption("creatinine");
+  await page.getByLabel("Result 1 test").selectOption({ label: "Creatinine" }); // the API's list-ready name
   await page.getByLabel("Result 1 date").fill("2098-12-20");
   await page.getByLabel("Result 1 value").fill("0.8");
   await page.getByLabel("Result 1 unit").selectOption("mg/dL");

@@ -178,6 +178,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/visits/{visit_id}/plan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Compare Plans
+         * @description The AI's management plan for a saved visit, compared with the clinician's note the check
+         *     ran on, and saved (owner, 2026-11-26: "Compare plans"). Making one counts toward the visit
+         *     checks' limit (owner, 2026-11-27: "A, one shared limit"); showing a saved one doesn't.
+         */
+        post: operations["compare_plans_api_visits__visit_id__plan_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -465,12 +487,43 @@ export interface components {
         };
         /** LabTestChoice */
         LabTestChoice: {
+            /** Label */
+            label: string;
             /** Name */
             name: string;
             /** Test */
             test: string;
             /** Units */
             units: string[];
+        };
+        /** ManagementPlan */
+        ManagementPlan: {
+            /** Counselling */
+            counselling: string[];
+            /** Error */
+            error: string | null;
+            /** Issues */
+            issues: string[];
+            /** Issues Note */
+            issues_note: string | null;
+            /** Items */
+            items: components["schemas"]["PlanItem"][];
+            /** Made At */
+            made_at: string;
+            /** Model */
+            model: string | null;
+            /** Monitoring */
+            monitoring: string[];
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "made" | "failed";
+            regimen: components["schemas"]["PlanRegimen"] | null;
+            /** Saved */
+            saved: boolean;
+            /** Visit Id */
+            visit_id: string;
         };
         /**
          * NewCase
@@ -634,17 +687,38 @@ export interface components {
             /** Visit Date */
             visit_date: string;
         };
-        /** Plan */
-        Plan: {
-            /** Error */
-            error?: string | null;
+        /**
+         * PlanItem
+         * @description One problem: what the AI suggests, and how it compares with the clinician's note.
+         */
+        PlanItem: {
+            /** Action */
+            action: string;
+            /** Explanation */
+            explanation: string;
+            /** Problem */
+            problem: string;
+            /** Reason */
+            reason: string;
+            /** Verdict Label */
+            verdict_label: string;
+        };
+        /**
+         * PlanRegimen
+         * @description The ART regimen decision: its badge (label and tone) and the AI's own words.
+         */
+        PlanRegimen: {
+            /** Label */
+            label: string;
+            /** Reason */
+            reason: string;
+            /** Text */
+            text: string;
             /**
-             * Issues
-             * @default []
+             * Tone
+             * @enum {string}
              */
-            issues: string[];
-            /** Management Plan */
-            management_plan?: string | null;
+            tone: "red" | "amber" | "green" | "grey";
         };
         /**
          * PreviousArtIn
@@ -705,7 +779,7 @@ export interface components {
             note: string;
             /** Patient Id */
             patient_id: string;
-            plan: components["schemas"]["Plan"] | null;
+            plan: components["schemas"]["ManagementPlan"] | null;
             /** Record Saved */
             record_saved: boolean;
             /** Saved At */
@@ -758,11 +832,6 @@ export interface components {
         };
         /** VisitCheckRequest */
         VisitCheckRequest: {
-            /**
-             * Include Plan
-             * @default false
-             */
-            include_plan: boolean;
             /** Note */
             note: string;
             /**
@@ -794,7 +863,6 @@ export interface components {
             model: string | null;
             /** Patient Id */
             patient_id: string;
-            plan: components["schemas"]["Plan"] | null;
             /** Record Saved */
             record_saved: boolean;
             /** Saved At */
@@ -1187,6 +1255,51 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    compare_plans_api_visits__visit_id__plan_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                visit_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagementPlan"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Too many visit checks and plans this minute; wait the Retry-After seconds. */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No database, no AI model server, or the guideline search is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
