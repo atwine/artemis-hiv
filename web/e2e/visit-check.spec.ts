@@ -229,3 +229,35 @@ test("the AI review starts on; with no model server the check is refused, nothin
   await expect(notes).toHaveValue("A note kept through the refusal.");
   await expect(ai).toBeChecked();
 });
+
+// The note changed after the checks ran (owner, 2026-11-27: "A, a banner"): the results, alert,
+// plan and finalize screens say these results are for the earlier note, with "Run checks again";
+// the doctor can still decide and finalize.
+test("a note changed after the checks: a banner on the results, and Run checks again checks the new note", async ({ page }) => {
+  await page.goto("/patients/P001");
+  const notes = page.getByRole("textbox", { name: "Clinical notes" });
+  await notes.fill("Routine follow-up. Continue TLD.");
+  await runRuleChecks(page);
+  const tray = page.getByRole("region", { name: "Visit steps" });
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  const banner = page.getByRole("status").filter({ hasText: "The note changed after these checks ran." });
+  await expect(banner).toHaveCount(0);
+
+  // Back to the note, change it, and the results say so; so does an alert, and Finalize.
+  await tray.getByRole("button", { name: "Clinical notes, done" }).click();
+  await notes.fill("Routine follow-up. Continue TLD. Stop ibuprofen.");
+  await tray.getByRole("button", { name: "Checks, done" }).click();
+  await expect(banner).toContainText("These results are for the earlier note.");
+  await tray.getByRole("button", { name: "Review alert 1" }).click();
+  await expect(banner).toBeVisible();
+  await expect(tray.getByRole("button", { name: "Accept alert" })).toBeEnabled(); // still free to decide
+  await tray.getByRole("button", { name: /^Finalize, / }).click();
+  await expect(banner).toBeVisible();
+
+  // Run checks again: the new note is checked, and the banner goes.
+  const reply = page.waitForResponse((r) => r.url().endsWith("/api/patients/P001/visits") && r.request().method() === "POST");
+  await banner.getByRole("button", { name: "Run checks again" }).click();
+  expect((await reply).request().postDataJSON()).toEqual({ note: "Routine follow-up. Continue TLD. Stop ibuprofen.", use_ai: false });
+  await expect(page.getByRole("region", { name: "Check results" })).toBeVisible({ timeout: 5 * 60 * 1000 });
+  await expect(banner).toHaveCount(0);
+});

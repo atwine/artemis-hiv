@@ -15,7 +15,7 @@ import { DISCLAIMER } from "@/lib/demo";
 import { planState, type ManagementPlan, type PlanState } from "@/lib/plan";
 import type { DayAppointment } from "@/lib/day";
 import { useClinicDay, useRailEntries, visitHref } from "@/lib/queries";
-import { nextPatient } from "@/lib/visit";
+import { nextPatient, noteChanged } from "@/lib/visit";
 import { patientLine, possessive } from "@/lib/record";
 
 import { AlertView } from "./alert-view";
@@ -141,8 +141,10 @@ function Visit({ patient, reopened, onCreated }: { patient: PatientDetail; reope
       patient={patient}
       check={check}
       notesForm={notesForm}
+      note={note}
       aiThisRun={aiThisRun}
       retryAi={() => check.mutate({ note, useAi: true })}
+      rerun={() => check.mutate({ note, useAi })}
     />
   );
 }
@@ -162,8 +164,10 @@ function VisitView({
   result,
   reopened,
   notesForm,
+  note,
   aiThisRun,
   retryAi,
+  rerun,
 }: {
   patient: PatientDetail;
   check: CheckMutation;
@@ -172,8 +176,12 @@ function VisitView({
   /** Set when the visit on screen is a saved one reopened: its decisions so far. */
   reopened: SavedVisit | undefined;
   notesForm: React.ReactNode;
+  /** The note on screen now, which may differ from the one the checks read. */
+  note: string;
   aiThisRun: boolean;
   retryAi: () => void;
+  /** Run the checks again on the note on screen. */
+  rerun: () => void;
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -231,6 +239,9 @@ function VisitView({
   const state: VisitState = check.isPending ? "checking" : (result?.status ?? "not_checked");
   const card = (view.name === "alert" || view.name === "override") && result ? result.cards[view.i] : undefined;
   const next = day ? nextPatient(day.appointments, patient.patient_id) : null;
+  // The results on screen were made from an earlier note than the one in the box.
+  const noteSent = check.variables?.note ?? reopened?.note ?? "";
+  const stale = Boolean(result) && !finalizedAt && !check.isPending && view.name !== "notes" && noteChanged(note, noteSent);
 
   const decide = (decision: DecisionIn | null) => {
     if (decision && !save.isPending) save.mutate(decision);
@@ -292,11 +303,12 @@ function VisitView({
                 )}
               </>
             )}
+            {stale && <NoteChangedBanner onRunAgain={rerun} />}
             {result && view.name === "results" && (
               <ResultsView
                 check={result}
                 patient={patient}
-                noteSent={check.variables?.note ?? reopened?.note ?? ""}
+                noteSent={noteSent}
                 savedByAlert={savedByAlert}
                 finalizeNote={finalizeNote}
                 saveError={save.isError ? errorText(save.error) : null}
@@ -342,6 +354,24 @@ function VisitView({
         )}
       </PaneContent>
     </Frame>
+  );
+}
+
+/** The results are for an earlier note (owner, 2026-11-27: "A, a banner"); the doctor can still decide. */
+function NoteChangedBanner({ onRunAgain }: { onRunAgain: () => void }) {
+  return (
+    <div role="status" className="mb-6 flex items-center justify-between gap-4 rounded-btn bg-amber-wash py-2.5 pr-2.5 pl-4">
+      <p className="text-15 leading-[21px] text-amber">
+        <span className="font-semibold">The note changed after these checks ran.</span> These results are for the earlier note.
+      </p>
+      <button
+        type="button"
+        onClick={onRunAgain}
+        className="h-9 shrink-0 cursor-pointer rounded-btn border border-line-strong bg-white px-3.5 text-15 font-semibold text-ink"
+      >
+        Run checks again
+      </button>
+    </div>
   );
 }
 

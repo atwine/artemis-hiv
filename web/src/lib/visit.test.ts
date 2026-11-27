@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import type { DayAppointment } from "./day.ts";
-import { decisionLine, nextPatient, stillToReview } from "./visit.ts";
+import { decisionLine, nextPatient, noteChanged, stillToReview } from "./visit.ts";
 
 const appt = (patient_id: string, time: string, state: DayAppointment["state"]): DayAppointment => ({
   time, patient_id, name: `${patient_id} Name`, age_years: 30, sex: "F", regimen: "TLD", state,
@@ -29,4 +29,11 @@ test("which alerts still need an answer, by number", () => {
   assert.equal(stillToReview(["a", "b", "c", "d", "e"], new Set(["a", "d"])), "Alerts 2, 3 and 5 still need Accept or Override.");
   assert.equal(stillToReview(["a"], new Set()), "Alert 1 still needs Accept or Override.");
   assert.equal(stillToReview(["a"], new Set(["a"])), null);
+});
+
+test("the note changed after the checks ran: any change in the words, not spaces at the ends", () => {
+  assert.equal(noteChanged("Continue TLD.", "Continue TLD."), false);
+  assert.equal(noteChanged("Continue TLD.  \n", "Continue TLD."), false);
+  assert.equal(noteChanged("Continue TLD. Stop ibuprofen.", "Continue TLD."), true);
+  assert.equal(noteChanged("", "Continue TLD."), true);
 });
