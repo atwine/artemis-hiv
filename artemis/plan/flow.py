@@ -440,6 +440,9 @@ def _reason_updated_management_plan(
                     f"Question: {question}\n\n"
                     f"Patient summary (recorded facts; not_recorded lists empty fields):\n{summary_text}\n\n"
                     f"Patient notes, oldest first:\n{notes_text}\n\n"
+                    # The same lab results the AI screening reads, typed-in lab text included
+                    # (owner, 2026-11-27: the plan had said "no lab results are provided").
+                    f"Laboratory results (age counted from the visit date):\n{ctx.lab_section}\n\n"
                     f"Doctor's current plan:\n{doctors_plan}\n\n"
                     f"Guideline excerpts:\n{evidence_text}"
                 ),
