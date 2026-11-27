@@ -41,7 +41,8 @@ npm run test:e2e       # the whole visit in a real browser
 ```
 
 The browser tests drive the installed Chrome against the real backend and a throwaway Postgres
-in Docker (`e2e/stack.ts`): their own ports (web 3100, API 8100, database 5435), a fresh
+in Docker (`e2e/stack.ts`), filled with the made-up patients and the 26 Nov demo day
+(`scripts/patients_backup.py load`): their own ports (web 3100, API 8100, database 5435), a fresh
 password each run, removed afterwards. No AI review runs, so nothing is spent. They need Docker
 Desktop open and the search model on disk (`ARTEMIS_MODEL_DIR` in `../.env`). The first check of
 a run loads the search model, so a run takes a minute or two.

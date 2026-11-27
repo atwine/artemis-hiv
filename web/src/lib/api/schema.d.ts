@@ -10,8 +10,9 @@ export interface paths {
         };
         /**
          * Clinic Day
-         * @description The demo day's board: each booking with the state of the patient's latest saved check,
-         *     whenever it ran (owner, 2026-11-26).
+         * @description A clinic day's board: each appointment, in time order, with the state of the patient's
+         *     latest saved check, whenever it ran (owner, 2026-11-26). Without `date`: today's clinic
+         *     day, else the most recent earlier one (owner, 2026-11-27).
          */
         get: operations["clinic_day_api_clinic_day_get"];
         put?: never;
@@ -71,8 +72,8 @@ export interface paths {
         put?: never;
         /**
          * Add Case
-         * @description Add a new made-up case where the Streamlit app keeps its added cases. Add only: an ID
-         *     already in use is refused (owner, 2026-11-26).
+         * @description Add a new made-up case to the database, booked at `appointment_time` on its visit date,
+         *     in one save (owner, 2026-11-27). Add only: an ID already in use is refused (2026-11-26).
          */
         post: operations["add_case_api_patients_post"];
         delete?: never;
@@ -325,6 +326,10 @@ export interface components {
             counts: components["schemas"]["DayCounts"];
             /** Date */
             date: string;
+            /** Next Date */
+            next_date?: string | null;
+            /** Previous Date */
+            previous_date?: string | null;
             /** Room */
             room: string;
         };
@@ -475,6 +480,8 @@ export interface components {
         NewCase: {
             /** Age Years */
             age_years?: number | null;
+            /** Appointment Time */
+            appointment_time: string;
             /**
              * Art Regimen
              * @default []
@@ -847,7 +854,9 @@ export type $defs = Record<string, never>;
 export interface operations {
     clinic_day_api_clinic_day_get: {
         parameters: {
-            query?: never;
+            query?: {
+                date?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -861,6 +870,22 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ClinicDay"];
+                };
+            };
+            /** @description There is no clinic day on that date. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

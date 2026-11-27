@@ -381,6 +381,28 @@
             "title": "Date",
             "type": "string"
           },
+          "next_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Date"
+          },
+          "previous_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Date"
+          },
           "room": {
             "title": "Room",
             "type": "string"
@@ -792,6 +814,11 @@
             ],
             "title": "Age Years"
           },
+          "appointment_time": {
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "title": "Appointment Time",
+            "type": "string"
+          },
           "art_regimen": {
             "default": [],
             "items": {
@@ -917,7 +944,8 @@
           }
         },
         "required": [
-          "patient_id"
+          "patient_id",
+          "appointment_time"
         ],
         "title": "NewCase",
         "type": "object"
@@ -1785,8 +1813,27 @@
   "paths": {
     "/api/clinic-day": {
       "get": {
-        "description": "The demo day's board: each booking with the state of the patient's latest saved check,\nwhenever it ran (owner, 2026-11-26).",
+        "description": "A clinic day's board: each appointment, in time order, with the state of the patient's\nlatest saved check, whenever it ran (owner, 2026-11-26). Without `date`: today's clinic\nday, else the most recent earlier one (owner, 2026-11-27).",
         "operationId": "clinic_day_api_clinic_day_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -1797,6 +1844,19 @@
               }
             },
             "description": "Successful Response"
+          },
+          "404": {
+            "description": "There is no clinic day on that date."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
         "summary": "Clinic Day"
@@ -1865,7 +1925,7 @@
         "summary": "List Patients"
       },
       "post": {
-        "description": "Add a new made-up case where the Streamlit app keeps its added cases. Add only: an ID\nalready in use is refused (owner, 2026-11-26).",
+        "description": "Add a new made-up case to the database, booked at `appointment_time` on its visit date,\nin one save (owner, 2026-11-27). Add only: an ID already in use is refused (2026-11-26).",
         "operationId": "add_case_api_patients_post",
         "requestBody": {
           "content": {

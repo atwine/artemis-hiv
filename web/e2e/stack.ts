@@ -94,6 +94,11 @@ async function start(password: string, databaseUrl: string): Promise<ChildProces
   execFileSync(PYTHON, ["-m", "alembic", "-c", "backend/alembic.ini", "upgrade", "head"], {
     cwd: REPO_ROOT, env, stdio: ["ignore", "ignore", "inherit"],
   });
+  // The made-up patients and the 26 Nov demo day (backend/seed/patients.sql); without them the
+  // patient list is empty and the board answers 404.
+  execFileSync(PYTHON, ["scripts/patients_backup.py", "load"], {
+    cwd: REPO_ROOT, env, stdio: ["ignore", "ignore", "inherit"],
+  });
 
   const backend = spawn(PYTHON, ["-m", "backend"], { cwd: REPO_ROOT, env, stdio: ["ignore", "inherit", "inherit"] });
   let exited = false;
