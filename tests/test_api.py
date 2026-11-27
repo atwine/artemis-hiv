@@ -205,7 +205,7 @@ def test_no_database_set_is_503_before_any_model_call(api):
     api.services.engine = None
     r = _check(api)
     assert r.status_code == 503
-    assert r.json() == {"detail": "The visit-record database is not set up."}
+    assert r.json() == {"detail": "The database is not set up."}
     assert api.model.calls == []
 
 
@@ -245,9 +245,11 @@ def test_visit_check_is_saved_once_as_written(api):
 
 
 def test_a_failed_save_still_returns_the_results(api):
-    from sqlmodel import SQLModel
+    from backend.records import AlertDecision, VisitCheck, VisitFinalize
 
-    SQLModel.metadata.drop_all(api.engine)  # the database is there but has no tables
+    # The database is there, with the patients, but the visit-record tables are gone.
+    for table in (VisitFinalize, AlertDecision, VisitCheck):
+        table.__table__.drop(api.engine)
     r = _check(api)
     assert r.status_code == 200
     assert r.json()["record_saved"] is False

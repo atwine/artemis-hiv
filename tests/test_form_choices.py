@@ -44,13 +44,15 @@ def test_every_choice_offered_is_one_the_add_case_route_accepts(api):
          "when": "previous"}
         for t in choices["lab_tests"] for unit in t["units"]
     ]
-    body = {"patient_id": "P100", "art_regimen": [r["choice"] for r in choices["art_regimens"]], "labs": labs}
+    body = {"patient_id": "P100", "art_regimen": [r["choice"] for r in choices["art_regimens"]], "labs": labs,
+            "appointment_time": "11:30"}
     r = api.client.post("/api/patients", json=body, headers=LOCAL)
     assert r.status_code == 201, r.text
 
 
 def test_a_combination_is_saved_as_its_drugs(api):
-    r = api.client.post("/api/patients", json={"patient_id": "P100", "art_regimen": ["TLD"]}, headers=LOCAL)
+    r = api.client.post("/api/patients", json={"patient_id": "P100", "art_regimen": ["TLD"], "appointment_time": "11:30"},
+                        headers=LOCAL)
     assert r.status_code == 201, r.text
     tld = next(c["drugs"] for c in _choices(api)["art_regimens"] if c["choice"] == "TLD")
     assert r.json()["art_regimen_current"] == tld

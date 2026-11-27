@@ -11,15 +11,16 @@ the app's own pages on this laptop; it listens on 127.0.0.1 and refuses other we
 | Method | Route | What it does |
 |---|---|---|
 | GET | /api/health | `{"status": "ok"}` |
-| GET | /api/patients | the patient list (from `Data/mock_patients.json`, `Data/custom_patients.json` and `Data/demo_day_patients.json`, read only) |
-| POST | /api/patients | add a new made-up case (201), written where the Streamlit app keeps added cases; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
+| GET | /api/patients | the patient list, from the database (plan 4C.2) |
+| POST | /api/patients | add a new made-up case (201) to the database, booked at `appointment_time` (HH:MM) on its visit date, in one save; a date with no clinic day gets one; an ID in use is 409; the form's rules (`artemis/patient/new_case.py`) |
+| GET | /api/form-choices | the add-case form's pick lists: ART combinations and drugs, lab tests with units, visit types |
 | GET | /api/patients/{patient_id} | one patient's record; `labs` maps each test to its results, each with `date`, `value`, `unit` and `source` in the unit it was recorded in (never converted); typed-in lab text comes apart as `lab_notes` |
 | POST | /api/patients/{patient_id}/visits | run the visit check: `{"note": "...", "use_ai": true, "include_plan": false}`; alerts come back as CDS Hooks cards and the run is saved |
 | POST | /api/visits/{visit_id}/decisions | acknowledge or override alerts: `{"decisions": [{"alert_id": "...", "action": "Override", "reason": "Other (say why)", "comment": "..."}]}`; reasons are `artemis/review.py` `OVERRIDE_REASONS`; the reply says `finalized_at` (null while open) |
 | POST | /api/visits/{visit_id}/finalize | finalize once every alert is decided (422 with `FINALIZE_BLOCKED` otherwise); again with nothing changed returns the same; a later decision reopens the visit |
 | GET | /api/visits/{visit_id} | reopen a saved visit as it was shown, with its note, decisions and `finalized_at`; no new AI call |
 | GET | /api/patients/{patient_id}/visits | a patient's saved checks, newest first |
-| GET | /api/clinic-day | the demo day board (`Data/demo_clinic_day.json`): each booking with `state` waiting / needs_you / done from the patient's latest check, and the header counts |
+| GET | /api/clinic-day | a clinic day's board from the database, appointments in time order, each with `state` waiting / needs_you / done from the patient's latest check, and the header counts; `?date=YYYY-MM-DD` picks the day (404 if there's none), otherwise today's or the most recent earlier one |
 
 The API's published shape is saved in `docs/api/openapi.json` (the website builds its types from
 it); `tests/test_openapi_snapshot.py` fails when it changes by accident. After a deliberate change:
@@ -45,7 +46,7 @@ allow only the frontend's address (ACCESS.md).
 
 | Setting | Default | Meaning |
 |---|---|---|
-| `ARTEMIS_DATABASE_URL` | none | the visit-record database, e.g. `postgresql+psycopg://artemis:<password>@127.0.0.1:5434/artemis` |
+| `ARTEMIS_DATABASE_URL` | none | the database (patients and visit records), e.g. `postgresql+psycopg://artemis:<password>@127.0.0.1:5434/artemis`; without it the patient and visit routes answer 503 |
 | `ARTEMIS_API_HOST` | `127.0.0.1` | where it listens; `0.0.0.0` would open it to the Wi-Fi (ACCESS.md says no) |
 | `ARTEMIS_API_PORT` | `8000` | |
 | `ARTEMIS_API_ORIGINS` | `http://localhost:3000,http://127.0.0.1:3000` | the frontend's address; every other web page is refused |
@@ -55,6 +56,7 @@ allow only the frontend's address (ACCESS.md).
 
 ```
 python -m alembic -c backend/alembic.ini upgrade head     # create or update the tables
+python scripts/patients_backup.py load                   # fill a new database with the made-up patients (safe to rerun)
 python scripts/import_visit_records.py                   # copy the Phase 1 visit-record files in (safe to rerun)
 python -m backend                                        # serve on 127.0.0.1:8000
 ```
@@ -69,6 +71,24 @@ The first visit check sets up the guideline search (`artemis/config.py`): it loa
 model and opens the kept index in `storage/chroma`, embedding only passages it doesn't hold yet
 (normally none; `python scripts/build_index.py` builds it ahead of time). The backend doesn't load
 the Streamlit app (plan 4C.1).
+
+## The patients' backup
+
+The database is the only copy of the app's patients (owner, 2026-11-27). Their backup is
+`backend/seed/patients.sql`, kept in the repo so a new database (a fresh laptop, the website's
+end-to-end tests) can be filled; the app never reads it.
+
+- Load it into a new database: `python scripts/patients_backup.py load`, after `alembic upgrade
+  head`. Safe to run again: rows already there are skipped. The file is read as data, never run:
+  anything but the inserts `make` writes is refused and nothing is loaded, so an edited backup
+  can't run commands on the database (security review, 2026-11-27).
+- It holds every patient in the database, including cases added through the website, and the
+  repo is public: made-up patients only (ACCESS.md).
+- Make it again after the patients change: `python scripts/patients_backup.py make`, then commit
+  the file. `tests/test_patients_backup.py` checks it holds the same patients as the tests'
+  own copy (`tests/fixtures/patients.json`).
+- Until plan 4C.6 deletes the old patient and schedule files, `python scripts/load_patients.py`
+  loads them once.
 
 ## Tests
 

@@ -1,4 +1,5 @@
-"""The demo clinic day board (plan step 2, unit 5).
+"""The demo clinic day board (plan step 2, unit 5); in the database since plan 4C.3
+(tests/test_clinic_day_db.py).
 
 Owner, 2026-11-26: the design's day (docs/design/content-kit.md), with P007-P009 added as drafted
 stable patients; each patient's state comes from their latest saved check, whenever it ran.
@@ -93,23 +94,9 @@ def test_every_booked_patient_has_a_record(api):
     assert {a["patient_id"] for a in _day(api)["appointments"]} <= ids
 
 
-def test_a_booking_for_an_unknown_patient_is_reported(api):
-    from tests.api_fakes import read_clinic_day
-
-    bad = read_clinic_day()
-    bad["appointments"].append({"time": "11:00", "patient_id": "NOPE"})
-    api.services.clinic_day = lambda: bad
-    r = api.client.get("/api/clinic-day", headers=LOCAL)
-    assert r.status_code == 500
-    assert r.json() == {"detail": "The clinic day could not be read."}
-
-
-def test_a_malformed_schedule_is_reported(api):
-    api.services.clinic_day = lambda: {"clinic": "x"}
-    assert api.client.get("/api/clinic-day", headers=LOCAL).status_code == 500
-
-
-def test_the_board_works_without_a_database(api):
+def test_the_board_needs_the_database(api):
+    """Patients live in the database since plan 4C.2, so without one the board can't be drawn."""
     api.services.engine = None
-    day = _day(api)
-    assert {a["state"] for a in day["appointments"]} == {"waiting"}
+    r = api.client.get("/api/clinic-day", headers={"Origin": "http://localhost:3000"})
+    assert r.status_code == 503
+    assert r.json() == {"detail": "The database is not set up."}

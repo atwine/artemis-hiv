@@ -76,7 +76,8 @@ def test_a_bad_case_is_explained_and_not_built(change, message):
 def _body(**kw):
     body = {"patient_id": "P100", "name": "Grace Auma", "age_years": 40, "sex": "F", "art_regimen": ["TLD"],
             "other_medications": [], "complaints": "", "examination_findings": "", "prior_history": "",
-            "labs": [{"test": "viral_load", "date": "2026-08-01", "value": "<50", "unit": "copies/mL", "when": "previous"}]}
+            "labs": [{"test": "viral_load", "date": "2026-08-01", "value": "<50", "unit": "copies/mL", "when": "previous"}],
+            "appointment_time": "11:30"}
     body.update(kw)
     return body
 
@@ -124,39 +125,16 @@ def test_a_case_saved_without_a_sex_still_loads(api):
     assert api.client.get("/api/patients", headers=LOCAL).status_code == 200
 
 
-def test_the_real_writer_adds_to_the_file_and_keeps_the_rest(tmp_path):
-    from backend.services import custom_case_writer
-    from backend.settings import Settings
-
-    path = tmp_path / "custom_patients.json"
-    path.write_text(json.dumps([{"patient_id": "OLD"}]), encoding="utf-8")
-    write = custom_case_writer(Settings(custom_patients_path=path))
-    write({"patient_id": "NEW"})
-    assert [p["patient_id"] for p in json.loads(path.read_text(encoding="utf-8"))] == ["OLD", "NEW"]
-
-
-def test_the_real_writer_never_overwrites_an_unreadable_file(tmp_path):
-    from artemis.patient.store import UnreadableFile
-    from backend.services import custom_case_writer
-    from backend.settings import Settings
-
-    path = tmp_path / "custom_patients.json"
-    path.write_text("{not json", encoding="utf-8")
-    with pytest.raises(UnreadableFile):
-        custom_case_writer(Settings(custom_patients_path=path))({"patient_id": "NEW"})
-    assert path.read_text(encoding="utf-8") == "{not json"
-
-
 def test_each_medicine_line_has_a_length_limit(api):
     assert api.client.post("/api/patients", json=_body(other_medications=["a" * 201]), headers=LOCAL).status_code == 422
     record, errors = build_case_record(_form(other_medications=["a" * 201]), today=TODAY)
     assert record is None and any("200" in e for e in errors)
 
 
-def test_services_built_without_a_writer_never_write_the_real_file():
-    """Only default_services wires the real file; any other Services refuses to add a case."""
+def test_services_built_without_a_writer_never_add_to_the_real_database():
+    """Only default_services wires the real database; any other Services refuses to add a case."""
     from backend.services import Services
 
     services = Services(patients=list, search=lambda: None, model_client=lambda: None, engine=None, app_version="x")
     with pytest.raises(RuntimeError):
-        services.add_case({"patient_id": "NEW"})
+        services.add_case({"patient_id": "NEW"}, datetime.date(2026, 11, 27), "11:30")

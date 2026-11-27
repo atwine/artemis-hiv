@@ -84,10 +84,10 @@ def test_a_case_without_an_answer_key_yet_loads_but_says_so(tmp_path: Path) -> N
 def test_the_seven_test_patients_have_case_files_with_frozen_records() -> None:
     from artemis.evaluation.cases import load_cases
 
-    sources = {}
-    for name in ("mock_patients.json", "custom_patients.json"):
-        for p in json.loads((ROOT / "Data" / name).read_text(encoding="utf-8")):
-            sources[p["patient_id"]] = p
+    from tests.api_fakes import read_patients
+
+    seven = {"P001", "P002", "P003", "P004", "P005", "P006", "Kintu-Test 001"}
+    sources = {p["patient_id"]: p for p in read_patients() if p["patient_id"] in seven}
     cases = {c.case_id: c for c in load_cases(ROOT / "eval" / "cases")}
     for pid, patient in sources.items():
         assert pid in cases, pid

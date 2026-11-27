@@ -12,6 +12,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List
 
+from sqlalchemy import event
 from sqlalchemy.pool import StaticPool
 from sqlmodel import SQLModel, create_engine
 
@@ -21,10 +22,11 @@ from modules.rag_engine import RagEngine
 
 ROOT = Path(__file__).resolve().parents[1]
 GOLDEN = ROOT / "tests" / "golden"
-MOCK_PATIENTS = ROOT / "Data" / "mock_patients.json"
-CUSTOM_PATIENTS = ROOT / "Data" / "custom_patients.json"
-DEMO_DAY_PATIENTS = ROOT / "Data" / "demo_day_patients.json"
-CLINIC_DAY = ROOT / "Data" / "demo_clinic_day.json"
+# The tests' own made-up patients: a copy of the app's seed patients (P001-P009, Kintu-Test 001),
+# so tests never depend on the app's data (owner, 2026-11-27: the app's patients live only in the
+# database).
+FIXTURE_PATIENTS = ROOT / "tests" / "fixtures" / "patients.json"
+CLINIC_DAY = ROOT / "tests" / "fixtures" / "clinic_day.json"  # the tests' copy of the demo day
 
 
 def _words(text: str) -> set:
@@ -97,23 +99,24 @@ def replies_for(patient_id: str) -> Dict[str, str]:
 
 
 def read_patients() -> List[Dict[str, Any]]:
-    """The demo patients, read (never written) from Data/."""
-    out: List[Dict[str, Any]] = []
-    for path in (MOCK_PATIENTS, CUSTOM_PATIENTS, DEMO_DAY_PATIENTS):
-        if path.exists():
-            out.extend(json.loads(path.read_text(encoding="utf-8")))
-    return out
+    """The tests' made-up patients (tests/fixtures/patients.json), read, never written."""
+    return json.loads(FIXTURE_PATIENTS.read_text(encoding="utf-8"))
 
 
 def read_clinic_day() -> Dict[str, Any]:
-    """The demo day's schedule, read (never written) from Data/."""
+    """The tests' copy of the demo day's schedule, read, never written."""
     return json.loads(CLINIC_DAY.read_text(encoding="utf-8"))
 
 
 def memory_engine():
     """A throwaway SQLite database in memory, with the tables made from the models."""
-    import backend.records  # noqa: F401  (registers the tables)
+    import backend.clinic_db  # noqa: F401  (registers the tables)
+    import backend.patients_db  # noqa: F401
+    import backend.records  # noqa: F401
 
     engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    # Check the links between tables as Postgres does (SQLite skips them unless told), so a row
+    # saved before the row it points to fails here too, not only on the real database.
+    event.listen(engine, "connect", lambda conn, _: conn.execute("PRAGMA foreign_keys=ON"))
     SQLModel.metadata.create_all(engine)
     return engine

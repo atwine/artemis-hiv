@@ -21,14 +21,9 @@ class Settings:
     allowed_origins: Tuple[str, ...] = DEFAULT_ORIGINS
     # The names this backend answers to. Any other Host is refused (DNS rebinding).
     allowed_hosts: Tuple[str, ...] = ("localhost", "127.0.0.1")
-    # SQLAlchemy address of the visit-record database, e.g.
+    # SQLAlchemy address of the database (patients and visit records), e.g.
     # postgresql+psycopg://artemis:...@127.0.0.1:5434/artemis
     database_url: Optional[str] = None
-    # The added patient cases, the same file (and setting) the Streamlit app uses; POST /api/patients adds to it.
-    custom_patients_path: Path = PROJECT_ROOT / "Data" / "custom_patients.json"
-    # The design's demo-day patients P007-P009 (owner, 2026-11-26), and the demo day's schedule.
-    demo_day_patients_path: Path = PROJECT_ROOT / "Data" / "demo_day_patients.json"
-    clinic_day_path: Path = PROJECT_ROOT / "Data" / "demo_clinic_day.json"
     # At most this many visit checks a minute; the next gets 429 (owner, 2026-11-26).
     visit_checks_per_minute: int = 6
 
@@ -57,7 +52,6 @@ def settings_from_env() -> Settings:
         port=int(os.getenv("ARTEMIS_API_PORT") or 8000),
         allowed_origins=_list(os.getenv("ARTEMIS_API_ORIGINS"), DEFAULT_ORIGINS),
         database_url=(os.getenv("ARTEMIS_DATABASE_URL") or "").strip() or None,
-        custom_patients_path=Path(os.getenv("ARTEMIS_CUSTOM_PATIENTS_PATH") or PROJECT_ROOT / "Data" / "custom_patients.json"),
         visit_checks_per_minute=_at_least_one("ARTEMIS_VISIT_CHECKS_PER_MINUTE", os.getenv("ARTEMIS_VISIT_CHECKS_PER_MINUTE"),
                                               Settings.visit_checks_per_minute),
     )

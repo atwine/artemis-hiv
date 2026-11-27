@@ -47,7 +47,7 @@ TEST_NAMES: Dict[str, str] = {
 }
 
 # Older records keep the unit in the value's key name.
-_LEGACY_VALUE_KEYS: Dict[str, str] = {
+LEGACY_VALUE_KEYS: Dict[str, str] = {
     "value_umol_per_l": "umol/L",
     "value_copies_per_ml": "copies/mL",
     "value_mg_dl": "mg/dL",
@@ -115,9 +115,9 @@ def read_lab_entries(patient: Dict[str, Any]) -> List[LabEntry]:
             if "value" in r:
                 value, unit = r.get("value"), r.get("unit") or ""
             else:
-                key = next((k for k in r if k in _LEGACY_VALUE_KEYS), None)
+                key = next((k for k in r if k in LEGACY_VALUE_KEYS), None)
                 value = r.get(key) if key else next((v for k, v in r.items() if k not in {"date", "source"}), None)
-                unit = _LEGACY_VALUE_KEYS.get(key or "", "")
+                unit = LEGACY_VALUE_KEYS.get(key or "", "")
             out.append(LabEntry(test=test, date=d, value=str(value), unit=unit, source=r.get("source") or "record"))
     return sorted(out, key=lambda e: (e.date, e.test))
 

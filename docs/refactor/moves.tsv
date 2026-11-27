@@ -174,3 +174,9 @@ date	fix	what	from	to	proof	note
 2026-11-27	4C.1	rewrite	app.py:_get_rag_engine	artemis/config.py:guideline_search	app.py keeps the name for its own callers until 4C.6; it now calls artemis.config.guideline_search (one per process, no Streamlit cache)	same as above
 2026-11-27	4C.1	move	scripts/run_baseline.py:_scrub	artemis/evaluation/scrub.py:scrub	run_phase2.py uses it without loading run_baseline (which loads Streamlit); tests/test_run_baseline.py still passes through the old name	same as above
 2026-11-27	4C.1	move	scripts/run_baseline.py:_server_strings	artemis/evaluation/scrub.py:server_strings	same as above	same as above
+2026-11-27	4C.2	delete	backend/services.py:demo_patients	-	the backend reads patients only from the database (backend/services.py database_patients); tests/test_patient_db.py proves every seed patient reads back the same	patients in Postgres (owner, 2026-11-27)
+2026-11-27	4C.2	delete	backend/services.py:demo_patients.read	-	same as above	same as above
+2026-11-27	4C.2	delete	backend/services.py:custom_case_writer	-	adding a case is one database save (backend/patients_db.py add); its file tests are replaced by tests/test_patient_db.py	same as above
+2026-11-27	4C.2	delete	backend/services.py:custom_case_writer.add	-	same as above	same as above
+2026-11-27	4C.3	delete	backend/services.py:clinic_day_file	-	the board reads the clinic day from the database (backend/clinic_db.py day_on); tests/test_clinic_day_db.py proves the demo day's board is the one the file gave	the clinic day in Postgres (owner, 2026-11-27)
+2026-11-27	4C.3	delete	backend/services.py:clinic_day_file.read	-	same as above	same as above

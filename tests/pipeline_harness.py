@@ -130,10 +130,10 @@ def _load(name: str) -> Any:
 
 
 def patients() -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for path in (app.MOCK_PATIENTS_PATH, app.CUSTOM_PATIENTS_PATH):
-        out.extend(json.loads(path.read_text(encoding="utf-8")))
-    return out
+    """The patients the golden output covers: the tests' made-up patients with recorded replies."""
+    replies = _load("replies.json")
+    fixtures = json.loads((ROOT / "tests" / "fixtures" / "patients.json").read_text(encoding="utf-8"))
+    return [p for p in fixtures if str(p["patient_id"]) in replies]
 
 
 def _plain(obj: Any) -> Any:

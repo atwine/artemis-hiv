@@ -15,7 +15,9 @@ from dotenv import load_dotenv  # noqa: E402
 from sqlalchemy import engine_from_config, pool  # noqa: E402
 from sqlmodel import SQLModel  # noqa: E402
 
-import backend.records  # noqa: F401,E402  (registers the tables on SQLModel.metadata)
+import backend.clinic_db  # noqa: F401,E402  (registers the tables on SQLModel.metadata)
+import backend.patients_db  # noqa: F401,E402
+import backend.records  # noqa: F401,E402
 
 config = context.config
 target_metadata = SQLModel.metadata

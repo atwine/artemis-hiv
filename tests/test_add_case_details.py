@@ -91,7 +91,7 @@ def test_bad_visit_details_are_explained_and_not_built(change, message):
 
 
 def _body(**kw):
-    body = {"patient_id": "P100", "art_regimen": ["TLD"]}
+    body = {"patient_id": "P100", "art_regimen": ["TLD"], "appointment_time": "11:30"}
     body.update(kw)
     return body
 

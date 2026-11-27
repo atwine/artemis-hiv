@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 from artemis.rules.checks import run_alerts
-from artemis.patient.record import build_patient_context, load_mock_patients
+from artemis.patient.record import build_patient_context
+from tests.api_fakes import read_patients
 
 
 def test_mock_patients_rule_expectations_smoke() -> None:
-    data_path = Path(__file__).resolve().parents[1] / "Data" / "mock_patients.json"
-    patients = load_mock_patients(data_path)
+    patients = [p for p in read_patients() if p["patient_id"] in {"P001", "P002", "P003", "P004"}]
 
     # Rationale: this is a lightweight smoke test to ensure rules are wired correctly
     # to the demo data.

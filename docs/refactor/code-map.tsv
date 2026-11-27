@@ -212,6 +212,16 @@ backend/main.py	create_app.record_decisions	Route: saves acknowledge/override de
 backend/main.py	create_app.run_visit_check	Route: runs the visit check, saves it and returns the alerts as cards.	stays	stays
 backend/main.py	load_patients	Reads every patient and checks each record once; a bad one is reported, not skipped.	stays	stays
 backend/models.py	TodayEncounter._iso_date	Refuses a visit date that isn't YYYY-MM-DD.	stays	stays
+backend/patients_db.py	_date	Reads an optional YYYY-MM-DD text as a date.	backend/patients_db.py	moved
+backend/patients_db.py	_check_placed	Refuses a record holding anything the patient tables have no place for (the demo answer key aside).	backend/patients_db.py	moved
+backend/patients_db.py	rows_for	The rows of the seven patient tables that hold one patient record.	backend/patients_db.py	moved
+backend/patients_db.py	_save	Saves a patient's own row first, then the rows that point to it.	backend/patients_db.py	moved
+backend/patients_db.py	_lab_entries_in_record_order	Each structured lab result once, in the record's order, read the one way results are read.	backend/patients_db.py	moved
+backend/patients_db.py	_record	One patient's rows rebuilt as the record shape the rules, the search and the AI read.	backend/patients_db.py	moved
+backend/patients_db.py	load_all	Every patient from the database, in the order they were loaded or added.	backend/patients_db.py	moved
+backend/patients_db.py	_next_position	The list position the next patient gets.	backend/patients_db.py	moved
+backend/patients_db.py	import_records	Loads the records whose id the database doesn't have yet, in one save; safe to run again.	backend/patients_db.py	moved
+backend/patients_db.py	add	Adds one new case, all its rows in one save; an id in use raises PatientExists.	backend/patients_db.py	moved
 backend/records.py	_decision_rows	Builds decision rows for the database.	stays	stays
 backend/records.py	_read_file	Reads one visit-record file, counting lines it can't read.	stays	stays
 backend/records.py	_same_decision	Tells whether a decision is already in the database, so an import can be rerun.	stays	stays
@@ -225,11 +235,24 @@ backend/records.py	iso	Writes a time as ISO text in UTC, with microseconds when 
 backend/records.py	json_safe	Makes a JSON-safe copy, with dates as text, as the files have.	stays	stays
 backend/records.py	latest_decisions	Gives the latest decision on each alert of a visit.	stays	stays
 backend/records.py	save_check	Saves one visit check.	stays	stays
+backend/clinic_db.py	day_on	A clinic day and its appointments in time order, ties in booking order.	backend/clinic_db.py	moved
+backend/clinic_db.py	board_date	The day the board shows: today's clinic day, else the most recent earlier one.	backend/clinic_db.py	moved
+backend/clinic_db.py	neighbours	The clinic days just before and after a date, so the board can step between days.	backend/clinic_db.py	moved
+backend/clinic_db.py	booking_rows	The rows that book a new case: its appointment, and its clinic day when the date has none (the demo day's clinic, room and clinician).	backend/clinic_db.py	moved
+backend/clinic_db.py	import_schedule	Loads a day's schedule if its date has no clinic day yet, in one save; every booked patient must have a record.	backend/clinic_db.py	moved
+backend/patients_backup.py	_literal	One value of a row as SQL, quoted by the Postgres driver (lists and records as JSON).	backend/patients_backup.py	moved
+backend/patients_backup.py	dump	Every row of the patient tables as SQL, parents first, then each table's counter moved past its rows.	backend/patients_backup.py	moved
+backend/patients_backup.py	_text	The text of one quoted value in a backup, undoing the driver's doubling of quotes and backslashes; any other escape is refused.	backend/patients_backup.py	moved
+backend/patients_backup.py	_value	One value read from a backup: null, true/false, a number, text, a date, a time or a JSON list.	backend/patients_backup.py	moved
+backend/patients_backup.py	read_backup	The rows a backup holds, accepting only the inserts dump writes; anything else raises BadBackup.	backend/patients_backup.py	moved
+backend/patients_backup.py	load	Fills a database from a backup read as data: each row inserted with bound values in one save, then the counters moved past the rows.	backend/patients_backup.py	moved
 backend/services.py	_model_client	Makes a client for the model server in .env, or none.	stays	stays
 backend/services.py	_search	Builds the guideline search the way the Streamlit app does, once (until plan item 4.3).	stays	stays
 backend/services.py	default_services	Builds the real patients, search, model and database the routes use.	stays	stays
-backend/services.py	demo_patients	Gives a reader for the demo patient files, the demo day's P007-P009 included.	stays	stays
-backend/services.py	demo_patients.read	Reads the demo patient files.	stays	stays
+backend/services.py	database_patients	Reads every patient from the database for the routes (plan 4C.2).	stays	stays
+backend/services.py	database_patients.read	Opens a database session and loads every patient.	stays	stays
+backend/services.py	database_case_writer	Adds one new case to the database in one save; an id in use raises PatientExists.	stays	stays
+backend/services.py	database_case_writer.add	Adds the case through patients_db.add.	stays	stays
 backend/settings.py	_list	Reads a comma-separated setting.	stays	stays
 backend/settings.py	settings_from_env	Reads the backend's settings from the environment.	stays	stays
 artemis/config.py	guideline_search	The guideline search, one per process: the search model and the kept Chroma index named after the model and the guideline text.	artemis/config.py	moved
@@ -288,8 +311,6 @@ backend/records.py	now	Gives this moment to the microsecond, so checks saved in 
 backend/main.py	board_row	Builds one row of the day board from the booking, the patient and their latest saved check.	stays	stays
 backend/main.py	create_app.clinic_day	Route: the demo day's board, each booking with its patient's latest check state.	stays	stays
 backend/main.py	day_counts	Counts the day board's booked, checked, finalized and left-in-red patients.	stays	stays
-backend/services.py	clinic_day_file	Gives a reader for the demo day's schedule file.	stays	stays
-backend/services.py	clinic_day_file.read	Reads the demo day's schedule file.	stays	stays
 artemis/patient/new_case.py	previous_art_from_rows	Reads the Streamlit form's previous-ART table (drugs separated by commas, start and end dates), or explains what's wrong.	stays	stays
 artemis/patient/new_case.py	_previous_art_errors	Lists what's wrong with the form's previous ART rows (drugs from the list, dates in order, ended by the visit).	stays	stays
 artemis/patient/new_case.py	_form_errors	Lists what's wrong with an add-case form, before any lab row is read.	stays	stays
@@ -297,8 +318,6 @@ artemis/patient/new_case.py	_labs	Reads the form's today and previous lab rows i
 artemis/patient/new_case.py	build_case_record	Builds the record for a new case from the add-case form, for the Streamlit form and the API.	stays	stays
 backend/main.py	create_app.add_case	Route: adds a new made-up case; an ID already in use is refused.	stays	stays
 backend/main.py	create_app.form_choices	Route: the add-case form's pick lists (ART combinations and drugs, lab tests with names and units).	stays	stays
-backend/services.py	custom_case_writer	Gives the function that adds a case to the added-cases file.	stays	stays
-backend/services.py	custom_case_writer.add	Adds one case to the added-cases file in one step, never over an unreadable file.	stays	stays
 artemis/screen_text.py	alert_values	Gives the patient values an alert is about, each as recorded, for the value box.	stays	stays
 artemis/screen_text.py	_words	Gives a text's longer words, reading VL as viral load, for matching.	stays	stays
 artemis/screen_text.py	key_sentence	Picks the guideline sentence closest to an alert from its passages.	stays	stays

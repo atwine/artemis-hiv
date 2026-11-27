@@ -365,12 +365,20 @@ What does not use Postgres today (checked 2026-11-27 on `development` bc14bd0):
       evaluation scripts with no streamlit loaded (`tests/test_no_streamlit_in_backend.py`); the
       kept index keeps its name; the Phase 4 check MET, report unchanged. `scripts/run_baseline.py`
       (the Streamlit screen's own runner) still loads Streamlit and goes in 4C.6.
-- [ ] 4C.2 Patients in Postgres: tables for a patient and their labs, medicines, ART history and
+- [x] 4C.2 Patients in Postgres: tables for a patient and their labs, medicines, ART history and
       notes; the made-up patients imported once (safe to rerun); the API reads and adds patients
       only through the database; adding a case is one database save.
-- [ ] 4C.3 The clinic day in Postgres: clinic, clinician, day and appointments as tables; the demo
+      Done 2026-11-27: seven tables (migration 0004); the backup `backend/seed/patients.sql`, read as
+      data, never run (`scripts/patients_backup.py`); tests keep `tests/fixtures/patients.json`.
+      Measured: every seed patient reads back with the same context, screen record and visit check;
+      real-Postgres tests run; the Phase 4 check MET. The old JSON files go in 4C.6.
+- [x] 4C.3 The clinic day in Postgres: clinic, clinician, day and appointments as tables; the demo
       day imported once; adding a case books its appointment in the same save; the board reads the
       database. (Replaces decision 3 of the add-case work.)
+      Done 2026-11-27 with A2: tables clinic_day and appointment (migration 0005), the demo day in the
+      backup; adding a case takes `appointment_time` and books it on its visit date in the same
+      save; the board shows today's day, else the most recent earlier one, takes `?date=`, and
+      names the days before and after. Measured: the demo day's board equals the file's.
 - [ ] 4C.4 The AI plan made on demand ("Compare plans") is saved in Postgres (already planned).
 - [ ] 4C.5 The evaluation runs the backend's code path (no `app.py`) and reads patients the way the
       app does. Check: the Phase 4 check still matches 2B's numbers.
@@ -450,6 +458,10 @@ results they will value. These were raised and set aside, not dropped.
 
 - Changing a patient's record after it is added, with a history of every change (owner chose
   add-only for now, 4C.2).
+- Moving or cancelling an appointment, and changing a clinic day's clinic, room or clinician
+  (owner chose booking only through adding a case, 4C.3).
+- Making new evaluation cases from patients in the database: `scripts/make_cases.py` built
+  `eval/cases/` from the old patient files and went with them (4C.2); the cases are kept.
 - The guideline index fingerprint reads line endings as they are on disk, so a Windows laptop and a
   Linux server name the same text differently and each builds its own index; the test pins only the
   model and version (owner chose "fix the test only", 2026-11-27).
