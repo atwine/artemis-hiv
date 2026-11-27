@@ -180,3 +180,4 @@ date	fix	what	from	to	proof	note
 2026-11-27	4C.2	delete	backend/services.py:custom_case_writer.add	-	same as above	same as above
 2026-11-27	4C.3	delete	backend/services.py:clinic_day_file	-	the board reads the clinic day from the database (backend/clinic_db.py day_on); tests/test_clinic_day_db.py proves the demo day's board is the one the file gave	the clinic day in Postgres (owner, 2026-11-27)
 2026-11-27	4C.3	delete	backend/services.py:clinic_day_file.read	-	same as above	same as above
+2026-11-27	B1/B2	rewrite	artemis/visit.py:run_visit_analysis	artemis/visit.py:_plan	tests/test_pipeline_golden.py unchanged (9 passed)	The plan step moved out of run_visit_analysis into _plan, so management_plan can make a plan without re-running the visit check.
