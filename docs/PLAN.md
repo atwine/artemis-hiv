@@ -597,6 +597,9 @@ way to demonstrate interoperability once there is a reason to.
 - [ ] 8.5 One record per guideline recommendation (medicine, condition, action, printed page),
       drafted by an AI from the Ugandan extracts and checked by the doctor (Phase 7), so the app finds
       rules by medicine name and simple code can check some without the AI (from 2B.7, 2026-11-26).
+      The planned bigger step for the guideline search (owner, 2026-11-27): the two small Phase R
+      fixes (pieces that fit the search model, rule alerts searching with their own words) both
+      failed their pass marks, so this is the next search change, with the doctor in Phase 7.
 
 ## Ideas borrowed
 
